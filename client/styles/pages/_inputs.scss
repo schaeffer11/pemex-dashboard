@@ -1,0 +1,221 @@
+.input-forms {
+	height: 100%;
+	display: grid;
+	margin: 15px;
+
+	grid-template-rows: 100px 75px 40px 500px;
+	grid-template-areas: 	"tabs"
+							"subtabs"
+							"title"
+							"forms";
+
+	.tabs {
+		grid-area: tabs;
+		padding-top: 10px;
+		z-index: 2;
+		.tab {
+			height: calc(100% + 1px);
+			display: inline-block;
+			border: solid 1px green;
+			border-radius: 10px 10px 0px 0px;
+			width: 200px;
+			padding: 10px;
+			color: white;
+			background: green;
+			margin-right: 10px;
+			cursor: pointer;
+		}
+
+		.tab-active {
+			height: calc(100% + 1px);
+			display: inline-block;
+			border: solid 1px green;
+			border-radius: 10px 10px 0px 0px;
+			border-bottom: solid 1px white;
+			width: 200px;
+			padding: 10px;
+			margin-right: 10px;
+		}
+	}
+
+	.subtabs {
+		grid-area: subtabs;
+		border-left: solid 1px green;
+		border-right: solid 1px green;
+		border-top: solid 1px green;
+		border-radius: 0px 10px 0px 0px;
+		cursor: pointer;
+
+		.subtab {
+			display: inline-block;
+			width: 70px;
+			height: 40px;
+			border: solid 1px;
+			border-radius: 5px;
+			text-align: center;
+			line-height: 40px;
+			margin-left: 12px;
+			margin-top: 20px;
+
+		}
+
+		.subtab-active {
+			display: inline-block;
+			width: 70px;
+			height: 40px;
+			background: #9ACD32;
+			border: solid 1px;
+			border-radius: 5px;
+			text-align: center;
+			line-height: 40px;
+			margin-left: 12px;
+			margin-top: 20px;
+
+		}
+	}
+
+	.title-container {
+		grid-area: title;
+		background: #c6c6c6;
+		border-left: solid 1px green;
+		border-right: solid 1px green;
+
+		.title {
+			font-size: 24px;
+			font-weight: bold;
+			margin-left: 10px;
+		}
+	}
+
+	.form {
+		grid-area: forms;
+		border-left: solid 1px green;
+		border-right: solid 1px green;
+		border-bottom: solid 1px green;
+	}
+
+
+
+
+
+	//FORMS
+	.tecnica-del-pozo-high-level {
+		.main-form {
+			width: 33%;
+		}
+
+	}
+
+	.tecnica-del-pozo {
+		display: grid;
+		grid-template-columns: 25% 25% 25% 25%;
+		grid-column-gap: 10px;
+		grid-template-areas: "formacion pozo intervenciones geomecanica";
+		
+		.formacion-form {
+			grid-area: formacion;
+		}
+
+		.pozo-form {
+			grid-area: pozo;
+		}
+
+		.intervenciones-form {
+			grid-area: intervenciones;
+		}
+
+		.geomecanica-form {
+			grid-area: geomecanica;
+		}
+	}
+
+	.tecnica-del-campo {
+		display: grid;
+		grid-template-columns: 33% 33% 33%;
+		grid-column-gap: 10px;
+		grid-template-areas: 	"left middle right";
+		
+		.left {
+			grid-area: left;			
+		}
+
+		.middle {
+			grid-area: middle;
+		}
+		.right {
+			grid-area: right;
+		}
+		
+		.generales-form {
+			grid-area: generales;
+			padding-bottom: 10px;
+		}
+
+		.explotacion-form {
+			grid-area: explotacion;
+		}
+
+		.fluido-form {
+			grid-area: fluido;
+			padding-bottom: 10px;
+		}
+
+		.formacion-form {
+			grid-area: formacion;
+		}
+
+		.produccion-form {
+			grid-area: produccion;
+		}
+	}
+
+	.sistemas-artificiales-de-produccion {
+
+		.select-sistema {
+			width: 33%;
+		}
+
+		.sistemas-artificiales-form {
+			width: 33%;
+		}
+	}
+
+	.mecanico-y-aparejo {
+		display: grid;
+		grid-template-columns: 50% 50%;
+		grid-column-gap: 10px;
+		grid-template-areas: 'terminacion capacidad';
+
+        .terminacion-form {
+        	grid-area: terminacion;
+        }
+
+        .capacidad-form {
+        	grid-area: capacidad;
+
+        }
+	}
+
+	.historico-de-produccion {
+		display: grid;
+		grid-template-columns: 33% 67%;
+		grid-column-gap: 10px;
+		grid-template-areas: 'aforo .';
+
+		.aforo-form {
+			grid-area: aforo;
+		}
+	}
+
+	.analisis-del-agua {
+		display: grid;
+		grid-template-columns: 50% 50%;
+		grid-column-gap: 10px;
+		grid-template-areas: 'valores .';
+
+		.valores-form {
+			grid-area: valores;
+		}
+	}
+}
+

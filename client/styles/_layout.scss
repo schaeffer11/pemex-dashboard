@@ -1,0 +1,15 @@
+@mixin pinned {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+}
+
+.pemex-app {
+	display: grid;
+	grid-template-rows: 3em calc(100% - 3em);
+	grid-template-areas: "header"
+						 "body"
+
+}

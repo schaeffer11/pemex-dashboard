@@ -1,0 +1,150 @@
+$textColor: white;
+$shortNameColor: #fa0;
+$productBarHeight: 3em;
+$colorCepahalopod: #fa0;
+
+.productbar {
+  background-color: #222;
+  color: $textColor;
+  grid-area: header;
+  top: 0;
+  left: 0;
+  right: 0;
+  z-index: 9999;
+  padding: 0 0.7em;
+  box-shadow: 0 0.1em 1em rgba(0, 0, 0, 1); // font-family: sans-serif;
+  >* {
+    display: inline-block;
+    vertical-align: middle;
+  }
+
+  &:before {
+    content: '';
+    display: inline-block;
+    width: 0;
+    height: 100%;
+    vertical-align: middle;
+  }
+
+  .title {
+    padding-left: 3.3em;
+    position: relative;
+
+    &:before {
+      content: '';
+      position: absolute;
+      height: 120%;
+      top: -25%;
+      width: 3em;
+      left: 0;
+      background: url('/images/qri-logo.white.png') no-repeat;
+      background-position: center;
+      background-size: 95%;
+    }
+
+
+    span {
+      cursor: default;
+      font-size: 1.3em;
+      font-weight: lighter;
+      margin-right: 0.2em;
+      color: $colorCepahalopod;
+
+      strong {
+        font-weight: lighter;
+
+        &:after {
+          font-size: 0.6em; // content: '\00ae';
+          vertical-align: bottom;
+          margin-bottom: -0.5em;
+        }
+      }
+
+      em {
+        transition: all 0.2s ease;
+        display: inline-block;
+        overflow: hidden;
+        font-style: normal;
+        opacity: 0.7;
+        max-width: 0;
+        vertical-align: bottom;
+      }
+
+      &:hover {
+        em {
+          max-width: 30em;
+          margin-right: 0.3em;
+
+          &:last-child {
+            margin-right: 0;
+          }
+        }
+      }
+    }
+
+    img {
+      float: left;
+    }
+
+    .version {
+      transition: all 0.6s;
+      opacity: 0.3;
+      display: inline-block;
+      top: 50%;
+      font-size: 0.55em;
+      font-weight: lighter;
+      margin-left: 0.3em;
+
+      &:before {
+        content: ' BETA v';
+      }
+
+      &:hover {
+        opacity: 1;
+        color: #fff;
+      }
+    }
+  }
+
+  .actions {
+    float: right;
+    font-size: 0.9em;
+    font-weight: lighter;
+    height: 100%;
+
+    .rc-slider {
+      display: inline-block;
+      width: 10em;
+      margin-right: 3em;
+      line-height: 0.6em;
+      vertical-align: middle;
+    }
+
+    .active {
+      font-weight: bold;
+    }
+
+    &:before {
+      content: '';
+      display: inline-block;
+      width: 0;
+      height: 100%;
+      background-color: transparent;
+      vertical-align: middle;
+    }
+
+    >a {
+      color: $colorCepahalopod;
+      margin-left: 1em;
+    }
+
+    .logout {
+      border-left: 1px solid #ccc;
+      padding: 0.2em 0 0.2em 1.1em;
+      opacity: 0.5;
+      margin-left: 0.7em;
+    }
+  }
+}
+
+

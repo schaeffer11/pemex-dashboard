@@ -1,0 +1,120 @@
+// Local variables
+$baseTextColor: #222;
+$inverseTextColor: #fff;
+// $baseFontFamily: Arial;
+
+body {
+  // font-family: $baseFontFamily;
+  color: $baseTextColor;
+  margin: 0;
+  padding: 0;
+}
+
+a {
+  text-decoration: none;
+  color: $baseTextColor;
+  opacity: 0.9;
+  cursor: pointer;
+
+  &:hover {
+    text-decoration: underline;
+    opacity: 1;
+  }
+}
+
+li {
+  margin: 0 2em 0.7em 0;
+}
+
+.dark a {
+  color: $inverseTextColor;
+}
+
+.reg {
+  &:after {
+    content: '\00ae';
+    font-size: 0.6em;
+    top: -0.5em;
+    font-weight: lighter;
+    position: relative;
+  }
+}
+
+.isLoading {
+  overflow: hidden !important;
+
+  &:before, &:after {
+    content: ' ';
+    display: block;
+    position: absolute;
+    top: 0;
+    left: 0;
+    height: 100%;
+    width: 100%;
+  }
+
+  &:before {
+    background-color: #f5f5f5;
+    background-color: #fff;
+    z-index: 1;
+    opacity: 0.95;
+  }
+
+  &:after {
+    content: 'loading...';
+    color: #999;
+    font-size: 0.9em;
+    top: 48%;
+    margin-top: -0.5em;
+    text-align: center;
+    z-index: 2;
+  }
+}
+
+.isRestoring {
+  &:after {
+    content: 'restoring previous session...';
+    font-size: 1.4em;
+    font-weight: lighter;
+  }
+}
+
+.disabled {
+  cursor: default;
+  color: #333 !important;
+  opacity: 0.5 !important;
+
+  &:hover {
+    text-decoration: none;
+  }
+}
+
+.logo {
+  height: 2.5em;
+  padding: 0.5em 0 0 0.5em;
+}
+
+.swatch {
+  height: 0.8em;
+  width: 0.8em;
+  display: block;
+  position: absolute;
+  left: 0;
+  margin-top: -0.06em;
+  border: 1px solid rgba(0,0,0,0.3);
+  border-radius: 1em;
+  opacity: 0.5;
+}
+
+.active {
+  .swatch {
+    opacity: 1;
+  }
+}
+
+@import 'components/forms';
+@import './layout';
+@import './productbar';
+@import './productspace';
+@import './components/inputRows';
+@import './pages/inputs.scss';

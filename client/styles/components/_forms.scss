@@ -1,0 +1,98 @@
+$buttonBorderRadius: 0.3em;
+
+input[type=text], input[type=password], {
+  font-size: 1.2em;
+  padding: 0.2em 0.4em;
+  border-radius: 0.3em;
+  border: 1px solid #ddd;
+  font-weight: 200;
+  outline: none;
+
+  &:focus {
+    box-shadow: 0 0 0.05em 0.15em #def
+  }
+}
+
+.actions {
+  & > * {
+    margin-right: 0.4em;
+  }
+
+  &.grouped {
+    & > * {
+      margin-right: 0;
+    }
+  }
+}
+
+.login-form {
+  top: 30%;
+  width: 20em;
+  margin-left: -10em;
+  position: absolute;
+  left: 50%;
+
+  &:before {
+    content: '';
+    display: block;
+    position: absolute;
+    right: 3%;
+    bottom: 0;
+    width: 4em;
+    height: 3em;
+    // background: url('/images/qri-logo.hires.png') no-repeat;
+    background-size: 100%;
+  }
+
+  input {
+    font-size: 1.8em;
+    margin-bottom: 0.6em;
+    width: 90%;
+    padding: 0.25em 0.4em;
+  }
+
+  &.error {
+    input {
+      border: 1px solid #d99;
+      background-color: #fee;
+
+      &:focus {
+        box-shadow: 0 0 0.05em 0.15em #fee
+      }
+    }
+  }
+
+  button {
+    font-size: 1.2em;
+    margin-top: 0.5em;
+    padding: 0.4em 1em;
+
+    &.verifying {
+      width: 45%;
+      background-color: #e5e5e5;
+
+      &:focus {
+        box-shadow: 0 0 0.05em 0.15em #eee
+      }
+    }
+  }
+
+  label {
+    display: block;
+
+    span {
+      font-size: 1.1em;
+      font-weight: 400;
+      text-transform: uppercase;
+      display: block;
+      margin-bottom: 0.2em;
+      color: #666;
+
+      small {
+        text-transform: lowercase;
+        letter-spacing: 0.04em;
+        opacity: 0.5;
+      }
+    }
+  }
+}
