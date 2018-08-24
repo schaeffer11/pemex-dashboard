@@ -98,7 +98,7 @@
 
 
 
-	//FORMS
+	//WELL FORMS
 	.tecnica-del-pozo-high-level {
 		.main-form {
 			width: 33%;
@@ -217,5 +217,191 @@
 			grid-area: valores;
 		}
 	}
+
+	//INTERVENTION FORMS
+	.base-intervenciones {
+		width: 50%;
+	}
+
+	.propuesta-de-estimulacion {
+		display: grid;
+		grid-template-columns: 50% 50%;
+		grid-column-gap: 10px;
+		grid-template-areas: 'left right';
+	
+		.left {
+			grid-area: left;
+
+		}
+
+		.right {
+			grid-area: right;
+		}
+	}
+
+	.pruebas-de-laboratorio-estimulacion {
+		.generales-form {
+			width: 25%;
+		}
+		.obervaciones {
+			width: 50%;
+		}
+	}
+
+	.resultados-de-simulacion {
+		display: grid;
+		grid-template-columns: 50% 50%;
+		grid-column-gap: 10px;
+		grid-template-areas: 'limpieza matricial';
+
+		.limpieza-form {
+			grid-area: limpieza;
+		}
+
+		.matricial-form {
+			grid-area: matricial;
+		}
+	}
+
+	.estimacion-inc-produccion-estimulacion {
+		display: grid;
+		grid-template-columns: 50% 50%;
+		grid-column-gap: 10px;
+		grid-template-areas: 'left right';
+
+		.left {
+			grid-area: left;
+		}
+
+		.right {
+			grid-area: right;
+		}
+	}
+
+	.estimacion-costos-estimulacion {
+		.costos-form {
+			width: 50%;
+		}
+
+	}
+
+	.propuesta-de-acido {
+		display: grid;
+		grid-template-columns: 50% 50%;
+		grid-column-gap: 10px;
+		grid-template-areas: 'left right';
+	
+		.left {
+			grid-area: left;
+
+		}
+
+		.right {
+			grid-area: right;
+		}
+	}
+
+	.pruebas-de-laboratorio-acido-extra {
+		display: grid;
+		grid-template-columns: 50% 50%;
+		grid-column-gap: 10px;
+		grid-template-areas: 'left right';
+	
+		.left {
+			grid-area: left;
+
+		}
+
+		.right {
+			grid-area: right;
+		}
+	}
+
+	.resultados-de-simulacion-acido {
+		.result-form {
+			width: 50%;
+		}
+	}
+
+	.estimacion-inc-produccion-estimulacion-acido {
+		display: grid;
+		grid-template-columns: 50% 50%;
+		grid-column-gap: 10px;
+		grid-template-areas: 'left right';
+
+		.left {
+			grid-area: left;
+		}
+
+		.right {
+			grid-area: right;
+		}
+	}
+
+	.estimacion-costos-acido {
+		.costos-form {
+			width: 50%;
+		}
+	}
+
+	.propuesta-de-apuntalado {
+		display: grid;
+		grid-template-columns: 50% 50%;
+		grid-column-gap: 10px;
+		grid-template-areas: 'left right';
+	
+		.left {
+			grid-area: left;
+
+		}
+
+		.right {
+			grid-area: right;
+		}
+	}
+
+	.pruebas-de-laboratorio-apuntalado-extra {
+		display: grid;
+		grid-template-columns: 50% 50%;
+		grid-column-gap: 10px;
+		grid-template-areas: 'left right';
+	
+		.left {
+			grid-area: left;
+
+		}
+
+		.right {
+			grid-area: right;
+		}
+	}
+
+	.resultados-de-simulacion-apuntalado {
+		.result-form {
+			width: 50%;
+		}
+	}
+
+	.estimacion-inc-produccion-estimulacion-apuntalado {
+		display: grid;
+		grid-template-columns: 50% 50%;
+		grid-column-gap: 10px;
+		grid-template-areas: 'left right';
+
+		.left {
+			grid-area: left;
+		}
+
+		.right {
+			grid-area: right;
+		}
+	}
+
+	.estimacion-costos-apuntalado {
+		.costos-form {
+			width: 50%;
+		}
+	}
+
 }
 

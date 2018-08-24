@@ -30,14 +30,29 @@ export const InputRowUnitless = ({ header, name, unit }) => {
     )
 }
 
-export const InputRowSelectUnitless = ({ header, name, options, callback }) => {
+export const InputRowSelectUnitless = ({ header, name, value, options, callback }) => {
 
   return (
     <div className='input-row-unitless'>
       <div className='header'>
         {header}
       </div>
-      <Select className='input' options={options} onChange={callback || null} />
+      <Select className='input' options={options} value={value} onChange={callback} />
+    </div>
+    )
+}
+
+export const TextAreaUnitless = ({ header, name, unit, className, subheader }) => {
+
+  return (
+    <div className={`input-row-unitless ${className}`}>
+      <div className='header'>
+        {header}
+        {subheader ? <br></br>: null}
+        {subheader ? subheader : null}
+      </div>
+      <textarea type='text' style={{height: '130px'}} name={name}>
+      </textarea>
     </div>
     )
 }

@@ -22,11 +22,12 @@ import { pagesPozo, pagesIntervenciones } from '../../../../lib/maps'
     handleSelectSubtab(i)
   }
 
-  makeSubtabs(selectedTab, selectedSubtab) {
+  makeSubtabs(selectedTab, selectedSubtab, intervencionesType) {
     let { handleSelectSubtab } = this.props
 
     if (selectedTab === 'Pozo') {
       return Object.keys(pagesPozo).map((i, index) => {
+
         let className = 'subtab'
 
         if (selectedSubtab === i) {
@@ -38,7 +39,25 @@ import { pagesPozo, pagesIntervenciones } from '../../../../lib/maps'
 
     }
     else if (selectedTab === 'Intervenciones') {
-      console.log('inver ')
+
+      if (intervencionesType) {
+
+
+        return Object.keys(pagesIntervenciones[intervencionesType.value]).map((i, index) => {
+          let className = 'subtab'
+
+          if (selectedSubtab === i) {
+            className += '-active'
+          }
+
+          return <div className={className} key={i} onClick={() => this.handleClick(i)}> {index + 2} </div>
+        })
+
+      }
+
+
+
+
     }
   }
 
@@ -47,11 +66,15 @@ import { pagesPozo, pagesIntervenciones } from '../../../../lib/maps'
 
 
   render() {
-    let { selectedTab, selectedSubtab } = this.props
+    let { selectedTab, selectedSubtab, handleSelectSubtab, intervencionesType } = this.props
+
+    let className = selectedSubtab === 'objectivoYAlcances' ? 'subtab-active' : 'subtab'
 
     return (
       <div className="subtabs">
-        { this.makeSubtabs(selectedTab, selectedSubtab) }
+        { selectedTab === 'Pozo' ? null : <div className={className} onClick={() => handleSelectSubtab('objectivoYAlcances')}>  1 </div>}
+        { this.makeSubtabs(selectedTab, selectedSubtab, intervencionesType) }
+        
       </div>
     )
   }

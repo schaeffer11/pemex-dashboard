@@ -1,24 +1,28 @@
 import React, { Component } from 'react'
 import autobind from 'autobind-decorator'
 
-import TecnicaDelPozo from './PozoForms/TecnicaDelPozo'
 import Tabs from './Components/Tabs'
 import Subtabs from './Components/Subtabs'
 import { pagesPozo, pagesIntervenciones } from '../../../lib/maps'
+import BaseIntervenciones from './IntervencionesForms/BaseIntervenciones'
 
 @autobind class InputsUI extends Component {
   constructor(props) {
     super(props)
     this.state = { 
       selectedTab: 'Pozo',
-      selectedSubtab: null
+      selectedSubtab: 'tecnicaDelPozoHighLevel',
+      intervencionesType: null,
     }
   }
 
 
   handleSelectTab(val) {
+    let selectedSub = val === 'Pozo' ? Object.keys(pagesPozo)[0] : 'objectivoYAlcances'
+
     this.setState({
-      selectedTab: val
+      selectedTab: val,
+      selectedSubtab: selectedSub
     })
   }
 
@@ -29,6 +33,11 @@ import { pagesPozo, pagesIntervenciones } from '../../../lib/maps'
     })
   }
 
+  handleSelectIntervencionesType(val) {
+    this.setState({
+      intervencionesType: val
+    })
+  }
 
   componentDidMount() {
   }
@@ -45,25 +54,31 @@ import { pagesPozo, pagesIntervenciones } from '../../../lib/maps'
   }
 
   render() {
-    let { selectedTab, selectedSubtab } = this.state
+    let { selectedTab, selectedSubtab, intervencionesType } = this.state
 
     let title = null
     let form = null
+
 
     if (selectedTab === 'Pozo' && pagesPozo[selectedSubtab]) {
       title = pagesPozo[selectedSubtab].title
       form = pagesPozo[selectedSubtab].form
     }
-    else if (selectedTab === 'Intervenciones' && pagesIntervenciones[selectedSubtab]) {
-      title = pagesIntervenciones[selectedSubtab].title
-      form = pagesIntervenciones[selectedSubtab].form 
+    else if (selectedTab === 'Intervenciones') {
+      if (selectedSubtab === 'objectivoYAlcances') {
+        title = 'Objetivo y Alcances de la Intervencion'
+        form = < BaseIntervenciones intervencionesType={intervencionesType} handleSelectIntervencionesType={this.handleSelectIntervencionesType}/>
+      }
+      else if (pagesIntervenciones[intervencionesType.value] && pagesIntervenciones[intervencionesType.value][selectedSubtab]) {
+        title = pagesIntervenciones[intervencionesType.value][selectedSubtab].title
+        form = pagesIntervenciones[intervencionesType.value][selectedSubtab].form 
+      }
     }
-
 
     return (
       <div className="input-forms">
         <Tabs handleSelectTab={this.handleSelectTab} selectedTab={selectedTab} />
-        <Subtabs handleSelectSubtab={this.handleSelectSubtab} selectedSubtab={selectedSubtab} selectedTab={selectedTab} />
+        <Subtabs handleSelectSubtab={this.handleSelectSubtab} selectedSubtab={selectedSubtab} selectedTab={selectedTab} intervencionesType={intervencionesType} />
         <div className="title-container" >
           <div className="title">
             { title }
