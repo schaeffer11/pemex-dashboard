@@ -14,6 +14,12 @@ app.get('/ping', (req, res) => {
   res.json({ response: 'pong' })
 })
 
+
+app.post('/storeWellData', (req, res) => {
+	console.log('req.body', req.body)
+  res.json({ success: true })
+})
+
 app.get('*', (req, res) => {
   res.status(404).send(`No API endpoint found for "${req.url}"`)
 })

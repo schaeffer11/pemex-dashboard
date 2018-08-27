@@ -1,5 +1,6 @@
 import React, { Component } from 'react'
 import autobind from 'autobind-decorator'
+import axios from 'axios';
 
 import Tabs from './Components/Tabs'
 import Subtabs from './Components/Subtabs'
@@ -53,6 +54,33 @@ import BaseIntervenciones from './IntervencionesForms/BaseIntervenciones'
     // }
   }
 
+
+
+  submitForms() {
+    console.log('hihih')
+
+    axios({
+        method: "POST",
+        url: "api/ping",
+        data: {
+          test: 1
+        },
+        headers: {
+            "Content-Type": "application/json"
+        },
+        withCredentials: true
+    }).then(function(res) {
+        console.log(res)
+        
+        return;
+    })
+
+  }
+
+
+
+
+
   render() {
     let { selectedTab, selectedSubtab, intervencionesType } = this.state
 
@@ -85,6 +113,7 @@ import BaseIntervenciones from './IntervencionesForms/BaseIntervenciones'
           </div>
         </div>
         { form }
+        <button onClick={this.submitForms}>Click Me!</button>
       </div>
     )
   }

@@ -2,44 +2,40 @@ import React, { Component } from 'react'
 import autobind from 'autobind-decorator'
 import { InputRow, InputRowUnitless, InputRowSelectUnitless } from '../../Common/InputRow'
 import Select from 'react-select'
+import { connect } from 'react-redux'
+import { setSubdireccion, setBloque, setActivo, setCampo, setPozo, setFormacion } from '../../../../redux/actions/fichaTecnicaDelPozoHighLevel'
 
 @autobind class TechnicaDelPozoHighLevel extends Component {
   constructor(props) {
     super(props)
     this.state = { 
-      subdireccion: null,
-      bloque: null
     }
   }
 
-  componentDidMount() {
-  }
-
-  componentDidUpdate(prevProps) {
-
-  }
-
   handleSelectSubdireccion(val) {
-    let { subdireccion } = this.state
+    let { subdireccion, setSubdireccion, setBloque } = this.props
 
-
-
-    if (subdireccion !== val) {
-      this.setState({
-        subdireccion: val,
-        bloque: null
-      })      
+    if (subdireccion !== val.value) {
+      setSubdireccion(val.value)
+      setBloque('')   
     }
   }
 
   handleSelectBloque(val) {
-    this.setState({
-      bloque: val
-    })
+    let { setBloque } = this.props
+
+    setBloque(val.value)
   }
 
+
   render() {
-    let { subdireccion, bloque } = this.state
+
+    let { setActivo, setCampo, setPozo, setFormacion, formData } = this.props
+
+    formData = formData.toJS()
+
+    let { subdireccion, bloque, activo, campo, pozo, formacion } = formData
+
 
     let subdireccionOptions = [
       {label: 'Subdireccion de Especialidad Tecnica de Explotacion (SETE)', value: 'SETE'},
@@ -75,19 +71,17 @@ import Select from 'react-select'
     }
 
 
-
-    let bloqueOptions = subdireccion ? bloqueOptionsMap[subdireccion.value] : []
-
+    let bloqueOptions = subdireccion ? bloqueOptionsMap[subdireccion] : []
 
     return (
       <form className="form tecnica-del-pozo-high-level">
         <div className='main-form'>
           <InputRowSelectUnitless header='Subdireccion' value={subdireccion} options={subdireccionOptions} callback={this.handleSelectSubdireccion} />
           <InputRowSelectUnitless header='Bloque' value={bloque} options={bloqueOptions} callback={this.handleSelectBloque} />
-          <InputRowUnitless header="Activo" name='activo' />
-          <InputRowUnitless header="Campo" name='campo' />
-          <InputRowUnitless header="Pozo" name='pozo' />
-          <InputRowUnitless header="Formacion" name='formacion' />
+          <InputRowUnitless header="Activo" value={activo} onChange={setActivo} name='activo' />
+          <InputRowUnitless header="Campo" value={campo} onChange={setCampo} name='campo' />
+          <InputRowUnitless header="Pozo" value={pozo} onChange={setPozo} name='pozo' />
+          <InputRowUnitless header="Formacion" value={formacion} onChange={setFormacion} name='formacion' />
           <div style={{color: 'red'}}>TODO: add logic for new proposal/upload results</div>
           <div style={{color: 'red'}}>TODO: add new well/select well? </div>
         </div>
@@ -97,5 +91,19 @@ import Select from 'react-select'
 }
 
 
-export default TechnicaDelPozoHighLevel
+
+const mapStateToProps = state => ({
+  formData: state.get('fichaTecnicaDelPozoHighLevel'),
+})
+
+const mapDispatchToProps = dispatch => ({
+  setSubdireccion: val => dispatch(setSubdireccion(val)), 
+  setBloque: val => dispatch(setBloque(val)), 
+  setActivo: val => dispatch(setActivo(val)), 
+  setCampo: val => dispatch(setCampo(val)), 
+  setPozo: val => dispatch(setPozo(val)), 
+  setFormacion: val => dispatch(setFormacion(val)),
+})
+
+export default connect(mapStateToProps, mapDispatchToProps)(TechnicaDelPozoHighLevel)
 
