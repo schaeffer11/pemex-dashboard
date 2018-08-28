@@ -48,39 +48,6 @@ app.post('/storeWellData', (req, res) => {
 	 ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, 
 	 ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, 
 	 ?, ?, ?, ?, ?, ?)`
-	
- // 	intervaloProductor = parseInt(intervaloProductor)
-	// espesorBruto = parseInt(espesorBruto)
-	// espesorNeto = parseInt(espesorNeto)
-	// caliza = parseInt(caliza)
-	// dolomia = parseInt(dolomia)
-	// arcilla = parseInt(arcilla)
-	// porosidad = parseInt(porosidad)
-	// permeabilidad = parseInt(permeabilidad)
-	// sw = parseInt(sw)
-	// caa = parseInt(caa)
-	// cga = parseInt(cga)
-	// pwsFecha = parseInt(pwsFecha)
-	// pwfFecha = parseInt(pwfFecha)
-	// deltaPPerMes = parseInt(deltaPPerMes)
-	// tyac = parseInt(tyac)
-	// pvt = parseInt(pvt)
-	// profEmpacador = parseInt(profEmpacador)
-	// profSensorPYT = parseInt(profSensorPYT)
-	// moduloYoungArena = parseInt(moduloYoungArena)
-	// moduloYoungLutitas = parseInt(moduloYoungLutitas)
-	// relacPoissonArena = parseInt(relacPoissonArena)
-	// relacPoissonLutatas = parseInt(relacPoissonLutatas)
-	// gradienteDeFractura = parseInt(gradienteDeFractura)
-	// densidadDeDisparos = parseInt(densidadDeDisparos)
-	// densidadDeDisparos = parseInt(densidadDeDisparos)
-
-	// console.log(subdireccion, bloque, activo, campo, pozo, formacion, intervaloProductor, espesorBruto, 
- //    	espesorNeto, caliza, dolomia, arcilla, porosidad, permeabilidad, sw, caa, cga, tipoDePozo,
- //    	pwsFecha, pwfFecha, deltaPPerMes, tyac, pvt, aparejoDeProduccion, profEmpacador, profSensorPYT, tipoDeSap, moduloYoungArena, 
- //    	moduloYoungLutitas, relacPoissonArena, relacPoissonLutatas, gradienteDeFractura, densidadDeDisparos, diametroDeDisparos)
-
-
 
   try {
     return db_con.query(query, [
