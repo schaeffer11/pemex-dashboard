@@ -2,8 +2,8 @@ export default {
   theme: 'light',
   title: 'Pemex Data Inputs',
   users: {
-  	database: 'lazard-public',
-  	table: '_users'
+  	database: 'DataInput',
+  	table: 'Users'
   },
   ports: {
     http: 8080,

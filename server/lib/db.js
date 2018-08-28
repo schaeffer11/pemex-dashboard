@@ -13,7 +13,6 @@ export default {
       message('alias not defined, using default', alias)
     }
     let db = databases[alias]
-
     let { user, password, host, database } = db
     let dbConfig = Object.assign(
       {

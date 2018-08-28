@@ -1,6 +1,7 @@
 import React, { Component } from 'react'
 import autobind from 'autobind-decorator'
 import axios from 'axios';
+import { connect } from 'react-redux'
 
 import Tabs from './Components/Tabs'
 import Subtabs from './Components/Subtabs'
@@ -57,14 +58,61 @@ import BaseIntervenciones from './IntervencionesForms/BaseIntervenciones'
 
 
   submitForms() {
-    console.log('hihih')
+    let { fichaTecnicaDelPozo, fichaTecnicaDelPozoHighLevel } = this.props
+
+    fichaTecnicaDelPozo = fichaTecnicaDelPozo.toJS()
+    fichaTecnicaDelPozoHighLevel = fichaTecnicaDelPozoHighLevel.toJS()
+
+
+    let { subdireccion, bloque, activo, campo, pozo, formacion } = fichaTecnicaDelPozoHighLevel
+    let { intervaloProductor, espesorBruto, espesorNeto, caliza, dolomia, arcilla, porosidad, permeabilidad, 
+      sw, caa, cga, tipoDePozo, pwsFecha, pwfFecha, deltaPPerMes, tyac, pvt, aparejoDeProduccion, profEmpacador, 
+      profSensorPYT, tipoDeSap, moduloYoungArena, moduloYoungLutitas, relacPoissonArena, relacPoissonLutatas, 
+      gradienteDeFractura, densidadDeDisparos, diametroDeDisparos } = fichaTecnicaDelPozo
+
+
+    let data = {
+      subdireccion: subdireccion,
+      bloque: bloque,
+      activo: activo, 
+      campo: campo, 
+      pozo: pozo, 
+      formacion: formacion, 
+      intervaloProductor: intervaloProductor, 
+      espesorBruto: espesorBruto, 
+      espesorNeto: espesorNeto, 
+      caliza: caliza,
+      dolomia: dolomia, 
+      arcilla: arcilla, 
+      porosidad: porosidad, 
+      permeabilidad: permeabilidad, 
+      sw: sw, 
+      caa: caa, 
+      cga: cga, 
+      tipoDePozo: tipoDePozo, 
+      pwsFecha: pwsFecha, 
+      pwfFecha: pwfFecha, 
+      deltaPPerMes: deltaPPerMes, 
+      tyac: tyac,
+      pvt: pvt, 
+      aparejoDeProduccion: aparejoDeProduccion, 
+      profEmpacador: profEmpacador, 
+      profSensorPYT: profSensorPYT, 
+      tipoDeSap: tipoDeSap, 
+      moduloYoungArena: moduloYoungArena, 
+      moduloYoungLutitas: moduloYoungLutitas,
+      relacPoissonArena: relacPoissonArena, 
+      relacPoissonLutatas: relacPoissonLutatas, 
+      gradienteDeFractura: gradienteDeFractura, 
+      densidadDeDisparos: densidadDeDisparos, 
+      diametroDeDisparos: diametroDeDisparos,
+    }
+
 
     axios({
         method: "POST",
-        url: "api/ping",
-        data: {
-          test: 1
-        },
+        url: "api/storeWellData",
+        data: data,
         headers: {
             "Content-Type": "application/json"
         },
@@ -119,5 +167,12 @@ import BaseIntervenciones from './IntervencionesForms/BaseIntervenciones'
   }
 }
 
+const mapStateToProps = state => ({
+  fichaTecnicaDelPozoHighLevel: state.get('fichaTecnicaDelPozoHighLevel'),
+  fichaTecnicaDelPozo: state.get('fichaTecnicaDelPozo'),
+})
 
-export default InputsUI
+const mapDispatchToProps = dispatch => ({
+})
+
+export default connect(mapStateToProps, mapDispatchToProps)(InputsUI)

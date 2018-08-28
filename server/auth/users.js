@@ -61,7 +61,6 @@ export const validate = (userData, cb) => {
 }
 
 export const getUser = (username, cb) => {
-
   if (!username) return cb({ message: 'user lookup requires a username' })
 
     let db_con = db.get(appConfig.users.database)
