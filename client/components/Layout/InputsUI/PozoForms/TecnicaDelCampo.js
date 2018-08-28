@@ -3,6 +3,7 @@ import autobind from 'autobind-decorator'
 import { InputRow, InputRowUnitless, InputRowSelectUnitless } from '../../Common/InputRow'
 import { connect } from 'react-redux'
 import { setDescubrimientoField, setFechaDeExplotacionField, setNumeroDePozosOperandoField, setPInicialAnoField, setPActualFechaField, setDpPerAnoField, setTyacField, setPrField, setDensidadDelAceiteField, setPSatField, setRgaFluidoField, setSalinidadField, setPvtRepresentativoField, setLitologiaField, setEspesorNetoField, setPorosidadField, setSwField, setKPromedioField, setCaaField, setCgaField, setQoField, setQgField, setRgaField, setFwField, setNpField, setGpField, setWpField, setRraField, setRrgField, setRrpceField, setH2sField, setCo2Field, setN2Field } from '../../../../redux/actions/fichaTecnicaDelCampo'
+
 @autobind class TecnicaDelCampo extends Component {
   constructor(props) {
     super(props)
@@ -96,9 +97,9 @@ import { setDescubrimientoField, setFechaDeExplotacionField, setNumeroDePozosOpe
   }
 
   makeProduccionForm() {
-      let { setQoField, setQgField, setRgaField, setFwField, setNpField, setGpField, setWpField, setRraField, setRrgField, setRrpceField, setH2sField, setCo2Field, setN2Field, formData } = this.props
-      formData = formData.toJS()
-      let { qoField, qgField, rgaField, fwField, npField, gpField, wpField, rraField, rrgField, rrpceField, h2sField, co2Field, n2Field } = formData
+    let { setQoField, setQgField, setRgaField, setFwField, setNpField, setGpField, setWpField, setRraField, setRrgField, setRrpceField, setH2sField, setCo2Field, setN2Field, formData } = this.props
+    formData = formData.toJS()
+    let { qoField, qgField, rgaField, fwField, npField, gpField, wpField, rraField, rrgField, rrpceField, h2sField, co2Field, n2Field } = formData
 
     return (
       <div className='produccion-form' >
