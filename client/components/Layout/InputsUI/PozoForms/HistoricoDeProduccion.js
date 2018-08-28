@@ -49,6 +49,7 @@ import { InputRow, InputRowUnitless, InputRowSelectUnitless } from '../../Common
       <div className="form historico-de-produccion">
         { this.makeAforoForm() }
         <div style={{color: 'red'}}>TODO: add upload los datos de pozo (image or csv??)</div>
+        <div style={{color: 'red'}}>TODO: this could be multiple rows (should be) handle this differantly</div>
       </div>
     )
   }

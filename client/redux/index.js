@@ -5,6 +5,8 @@ import fichaTecnicaDelPozoHighLevel from './reducers/fichaTecnicaDelPozoHighLeve
 import fichaTecnicaDelPozo from './reducers/fichaTecnicaDelPozo'
 import fichaTecnicaDelCampo from './reducers/fichaTecnicaDelCampo'
 import sistemasArtificialesDeProduccion from './reducers/sistemasArtificialesDeProduccion'
+import mecanicoYAparejoDeProduccion from './reducers/mecanicoYAparejoDeProduccion'
+import analisisDelAgua from './reducers/analisisDelAgua'
 
 export default combineReducers({
   app,
@@ -12,5 +14,7 @@ export default combineReducers({
   fichaTecnicaDelPozoHighLevel,
   fichaTecnicaDelPozo,
   fichaTecnicaDelCampo,
-  sistemasArtificialesDeProduccion
+  sistemasArtificialesDeProduccion,
+  mecanicoYAparejoDeProduccion,
+  analisisDelAgua
 })
