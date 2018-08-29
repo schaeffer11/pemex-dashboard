@@ -8,10 +8,7 @@ const Productbar = ({ app, user, logoutAction }) => {
   return (
     <div className="productbar">
       <div className="title">
-        <span>
-          <strong>{title}</strong>
-          <small className="version">{app.get('version')}</small>
-        </span>
+        <span></span>
       </div>
       <ProductbarActions user={user} logoutAction={logoutAction} />
     </div>

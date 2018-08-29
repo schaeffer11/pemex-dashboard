@@ -155,13 +155,13 @@ import BaseIntervenciones from './IntervencionesForms/BaseIntervenciones'
       <div className="input-forms">
         <Tabs handleSelectTab={this.handleSelectTab} selectedTab={selectedTab} />
         <Subtabs handleSelectSubtab={this.handleSelectSubtab} selectedSubtab={selectedSubtab} selectedTab={selectedTab} intervencionesType={intervencionesType} />
-        <div className="title-container" >
+        <div class="tab-content">
           <div className="title">
             { title }
           </div>
+          { form }
         </div>
-        { form }
-        <button onClick={this.submitForms}>Click Me!</button>
+        <button class="submit" onClick={this.submitForms}>Enviar</button>
       </div>
     )
   }

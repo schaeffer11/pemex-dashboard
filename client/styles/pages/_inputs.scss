@@ -1,62 +1,104 @@
 .input-forms {
 	height: 100%;
-	display: grid;
+	/*display: grid;*/
 	margin: 15px;
 
+/*
 	grid-template-rows: 100px 75px 40px 500px;
 	grid-template-areas: 	"tabs"
 							"subtabs"
 							"title"
 							"forms";
-
+*/
 	.tabs {
 		grid-area: tabs;
-		padding-top: 10px;
+		padding: 10px 40px 0;
 		z-index: 2;
 		.tab {
 			height: calc(100% + 1px);
 			display: inline-block;
-			border: solid 1px green;
+			border: solid 1px $primary-green;
+                        border-bottom: none;
 			border-radius: 10px 10px 0px 0px;
 			width: 200px;
 			padding: 10px;
-			color: white;
-			background: green;
+			color: $primary-font-color;
+			background: $white;
 			margin-right: 10px;
 			cursor: pointer;
-		}
+                        text-align: center;
+                        font-weight: bold;
+                        font-size: 1.2em;
 
-		.tab-active {
-			height: calc(100% + 1px);
-			display: inline-block;
-			border: solid 1px green;
-			border-radius: 10px 10px 0px 0px;
-			border-bottom: solid 1px white;
-			width: 200px;
-			padding: 10px;
-			margin-right: 10px;
+                        &.active {
+                          color: $white;
+                          background: $primary-green;
+                          border-color: $primary-green;
+                          border-bottom: none;
+                        }
 		}
 	}
 
 	.subtabs {
+                background: $primary-green;
 		grid-area: subtabs;
 		border-left: solid 1px green;
 		border-right: solid 1px green;
 		border-top: solid 1px green;
 		border-radius: 0px 10px 0px 0px;
 		cursor: pointer;
+                text-align: center;
 
 		.subtab {
+                        position: relative;
 			display: inline-block;
-			width: 70px;
-			height: 40px;
-			border: solid 1px;
-			border-radius: 5px;
+			width: calc(100vw / 10);
+                        vertical-align: top;
 			text-align: center;
-			line-height: 40px;
-			margin-left: 12px;
-			margin-top: 20px;
+                        margin: 20px auto 40px;
+                        color: $white;
+                        font-weight: 100;
 
+                        &:before {
+                            display: block;
+                            content: "";
+                            height: 2px;
+                            width: 100%;
+                            background: white;
+                            top: 17px;
+                            position: absolute;
+                        }
+
+                        span {
+                          display: block;
+                          height: 24px;
+                          width: 24px;
+                          background: $white;
+                          border-radius: 50%;
+                          margin: 5px auto;
+                        }
+
+                        &.active {
+                           font-size: 1.2em;
+                           font-weight: 500;
+
+                           span {
+                             height: 34px;
+                             width: 34px;
+                             margin-top: 0;
+
+                             &:after {
+                               display: block;
+                               content: '';
+                               width: 20px;
+                               height: 20px;
+                               border-radius: 50%;
+                               position: absolute;
+                               margin: 7px;
+                               background: $active-green;
+                             }
+                           }
+                        }
 		}
 
 		.subtab-active {
@@ -74,24 +116,48 @@
 		}
 	}
 
-	.title-container {
-		grid-area: title;
-		background: #c6c6c6;
-		border-left: solid 1px green;
-		border-right: solid 1px green;
+        .tab-content {
+                border-width: 0 1px 1px 1px; 
+                border-style: solid;
+		border-color: $primary-green;   
+                padding: 40px;
 
 		.title {
 			font-size: 24px;
 			font-weight: bold;
 			margin-left: 10px;
 		}
-	}
+
+        }
+
 
 	.form {
 		grid-area: forms;
-		border-left: solid 1px green;
-		border-right: solid 1px green;
-		border-bottom: solid 1px green;
+
+                .header {
+                     font-weight: 600;
+                     font-size: 1.4em;
+                     color: $primary-green;
+                     margin-left: 0;
+                }
+
+
+            .input-row {
+                background: $table-row-color;
+                padding: 10px;
+                margin-bottom: 4px;
+                align-items: center;
+
+                .label {
+                    color:$table-row-font-color;
+                    font-weight: 100;
+                    font-size: .875em;
+                }
+
+                &:nth-child(even) {
+                   background: $table-row-alt-color;
+                }
+            }
 	}
 
 

@@ -3,8 +3,11 @@ $shortNameColor: #fa0;
 $productBarHeight: 3em;
 $colorCepahalopod: #fa0;
 
+$white: #fff;
+$grey: #fbfbfb;
+
 .productbar {
-  background-color: #222;
+  @include linear-gradient($white, $grey);
   color: $textColor;
   grid-area: header;
   top: 0;
@@ -12,7 +15,7 @@ $colorCepahalopod: #fa0;
   right: 0;
   z-index: 9999;
   padding: 0 0.7em;
-  box-shadow: 0 0.1em 1em rgba(0, 0, 0, 1); // font-family: sans-serif;
+
   >* {
     display: inline-block;
     vertical-align: middle;
@@ -30,58 +33,15 @@ $colorCepahalopod: #fa0;
     padding-left: 3.3em;
     position: relative;
 
-    &:before {
-      content: '';
-      position: absolute;
-      height: 120%;
-      top: -25%;
-      width: 3em;
-      left: 0;
-      background: url('/images/qri-logo.white.png') no-repeat;
-      background-position: center;
-      background-size: 95%;
-    }
-
-
     span {
-      cursor: default;
-      font-size: 1.3em;
-      font-weight: lighter;
-      margin-right: 0.2em;
-      color: $colorCepahalopod;
-
-      strong {
-        font-weight: lighter;
-
-        &:after {
-          font-size: 0.6em; // content: '\00ae';
-          vertical-align: bottom;
-          margin-bottom: -0.5em;
-        }
-      }
-
-      em {
-        transition: all 0.2s ease;
-        display: inline-block;
-        overflow: hidden;
-        font-style: normal;
-        opacity: 0.7;
-        max-width: 0;
-        vertical-align: bottom;
-      }
-
-      &:hover {
-        em {
-          max-width: 30em;
-          margin-right: 0.3em;
-
-          &:last-child {
-            margin-right: 0;
-          }
-        }
-      }
-    }
-
+      background: url('/images/pemex-logo-fpo.png') no-repeat;
+      background-size: contain;
+      height: 40px;
+      width: 200px;
+      display: inline-block;
+      overflow: hidden;
+      outline: none;
+    } 
     img {
       float: left;
     }
@@ -137,10 +97,13 @@ $colorCepahalopod: #fa0;
       color: $colorCepahalopod;
       margin-left: 1em;
     }
+    
+    button {
+      padding: 0.2em 1.1em;
+    }
 
     .logout {
       border-left: 1px solid #ccc;
-      padding: 0.2em 0 0.2em 1.1em;
       opacity: 0.5;
       margin-left: 0.7em;
     }

@@ -58,6 +58,7 @@ import { setIntervaloProductor, setEspesorBruto, setEspesorNeto, setCaliza, setD
       <div className='pozo-form' >
         <div className='header'>
           Los Datos de Pozo
+        </div>
           <InputRowSelectUnitless header="Tipo de Pozo" value={tipoDePozo} onChange={setTipoDePozo} name='' options={wellOptions} />
           <InputRow header="Pws (Fecha)" name='pws' value={pwsFecha} onChange={setPwsFecha} unit='Kg/cm2' />
           <InputRow header="Pwf (Fecha)" name='pwf' value={pwfFecha} onChange={setPwfFecha} unit='Kg/cm2' />
@@ -68,8 +69,6 @@ import { setIntervaloProductor, setEspesorBruto, setEspesorNeto, setCaliza, setD
           <InputRow header="Prof. Empacador" name='profEmpacador' value={profEmpacador} onChange={setProfEmpacador} unit='md' />
           <InputRow header="Prof. Sensor P y T" name='profSensorPYT' value={profSensorPYT} onChange={setProfSensorPYT} unit='md' />
           <InputRowUnitless header="Tipo de SAP" name='TipoDeSap' value={tipoDeSap} onChange={setTipoDeSap} />
-        </div>
-
       </div>
     )
   }

@@ -31,10 +31,10 @@ import { pagesPozo, pagesIntervenciones } from '../../../../lib/maps'
         let className = 'subtab'
 
         if (selectedSubtab === i) {
-          className += '-active'
+          className += ' active'
         }
 
-        return <div className={className} key={i} onClick={() => this.handleClick(i)}> {index + 1} </div>
+        return <div className={className} key={i} onClick={() => this.handleClick(i)}><span></span> {index + 1} </div>
       })
 
     }
@@ -47,7 +47,7 @@ import { pagesPozo, pagesIntervenciones } from '../../../../lib/maps'
           let className = 'subtab'
 
           if (selectedSubtab === i) {
-            className += '-active'
+            className += ' active'
           }
 
           return <div className={className} key={i} onClick={() => this.handleClick(i)}> {index + 2} </div>
