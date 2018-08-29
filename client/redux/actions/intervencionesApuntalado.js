@@ -17,10 +17,10 @@ export const setLongitudDeIntervalo = value => ({ type: 'set_longitudDeIntervalo
 export const setVolAparejo = value => ({ type: 'set_volAparejo', value})
 export const setCapacidadTotalDelPozo = value => ({ type: 'set_capacidadTotalDelPozo', value})
 export const setVolumenPrecolchonN2 = value => ({ type: 'set_volumenPrecolchonN2', value})
-export const selVolumenDeApuntalante = value => ({ type: 'set_volumenDeApuntalante', value})
-export const selVolumenDeGelDeFractura = value => ({ type: 'set_volumenDeGelDeFractura', value})
-export const selVolumenDesplazamiento = value => ({ type: 'set_volumenDesplazamiento', value})
-export const selVolumenTotalDeLiquido = value => ({ type: 'set_volumenTotalDeLiquido', value})
+export const setVolumenDeApuntalante = value => ({ type: 'set_volumenDeApuntalante', value})
+export const setVolumenDeGelDeFractura = value => ({ type: 'set_volumenDeGelDeFractura', value})
+export const setVolumenDesplazamiento = value => ({ type: 'set_volumenDesplazamiento', value})
+export const setVolumenTotalDeLiquido = value => ({ type: 'set_volumenTotalDeLiquido', value})
 
 
 export const setContenidoDeAceite = value => ({ type: 'set_contenidoDeAceite', value})

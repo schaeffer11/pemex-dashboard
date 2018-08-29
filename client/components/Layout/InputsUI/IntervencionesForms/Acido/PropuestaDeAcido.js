@@ -4,7 +4,7 @@ import { InputRow, InputRowUnitless, InputRowSelectUnitless } from '../../../Com
 import { setEtapa, setSistema, setTipoDeApuntalante, setConcentraciDeApuntalante, setVolLiquid, setGastoN2, setGastoLiqudo, setGastoEnFondo, setCalidad, setVolN2, setVolLiquidoAcum, setVolN2Acum, setRelN2Liq, setTiempo, setIntervalo, setLongitudDeIntervalo, setVolAparejo, setCapacidadTotalDelPozo, setVolumenPrecolchonN2, setVolumenSistemaNoReativo, setVolumenSistemaReactivo, setVolumenSistemaDivergente, setVolumenDesplazamientoLiquido, setVolumenDesplazamientoGelLineal } from '../../../../../redux/actions/intervencionesAcido'
 import { connect } from 'react-redux'
 
-@autobind class PropuestaDeEstimulacion extends Component {
+@autobind class PropuestaDeAcido extends Component {
   constructor(props) {
     super(props)
     this.state = { 
@@ -133,4 +133,4 @@ const mapDispatchToProps = dispatch => ({
   setVolumenDesplazamientoGelLineal: val => dispatch(setVolumenDesplazamientoGelLineal(val)),
 })
 
-export default connect(mapStateToProps, mapDispatchToProps)(PropuestaDeEstimulacion)
+export default connect(mapStateToProps, mapDispatchToProps)(PropuestaDeAcido)

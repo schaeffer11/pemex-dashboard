@@ -26,7 +26,6 @@ const initialState = Map({
     volumenTotalDeLiquido: '',    
 })
 
-
 const propuestaApuntalado = (state = initialState, action) => {
   switch (action.type) {
 
@@ -68,8 +67,8 @@ const propuestaApuntalado = (state = initialState, action) => {
         return state.set('capacidadTotalDelPozo', fromJS(action.value))
     case 'set_volumenPrecolchonN2':
         return state.set('volumenPrecolchonN2', fromJS(action.value))
-    case 'set_vvolumenDeApuntalante':
-        return state.set('vvolumenDeApuntalante', fromJS(action.value))
+    case 'set_volumenDeApuntalante':
+        return state.set('volumenDeApuntalante', fromJS(action.value))
     case 'set_volumenDeGelDeFractura':
         return state.set('volumenDeGelDeFractura', fromJS(action.value))
     case 'set_volumenDesplazamiento':
