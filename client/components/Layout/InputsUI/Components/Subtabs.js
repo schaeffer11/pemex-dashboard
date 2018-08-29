@@ -43,7 +43,7 @@ import { pagesPozo, pagesIntervenciones } from '../../../../lib/maps'
       if (intervencionesType) {
 
 
-        return Object.keys(pagesIntervenciones[intervencionesType.value]).map((i, index) => {
+        return Object.keys(pagesIntervenciones[intervencionesType]).map((i, index) => {
           let className = 'subtab'
 
           if (selectedSubtab === i) {

@@ -59,11 +59,9 @@ import { InputRow, InputRowUnitless, InputRowSelectUnitless } from '../../../Com
           Detalles
         </div>
         <InputRow header="Volumen Precolchon N2" name='' unit='m3' />
-        <InputRow header="Volumen Sistema No. Reactivo" name='' unit='m3' />
-        <InputRow header="Volumen Sistema Reactivo" name='' unit='m3' />
-        <InputRow header="Volumen Sistema Divergente" name='' unit='m3' />
-        <InputRow header="Volumen Desplazamiento Liquido" name='' unit='m3' />
-        <InputRow header="Volumen Desplazamiento N2" name='' unit='m3' />
+        <InputRow header="Volumen De apuntalante" name='' unit='m3' />
+        <InputRow header="Volumen de gel de fractura" name='' unit='m3' />
+        <InputRow header="Volumen Desplazamiento" name='' unit='m3' />
         <InputRow header="Volumen Total de Liqudo" name='' unit='m3' />
       </div>
     )

@@ -14,7 +14,6 @@ import BaseIntervenciones from './IntervencionesForms/BaseIntervenciones'
     this.state = { 
       selectedTab: 'Pozo',
       selectedSubtab: 'tecnicaDelPozoHighLevel',
-      intervencionesType: null,
     }
   }
 
@@ -32,12 +31,6 @@ import BaseIntervenciones from './IntervencionesForms/BaseIntervenciones'
 
     this.setState({
       selectedSubtab: val,
-    })
-  }
-
-  handleSelectIntervencionesType(val) {
-    this.setState({
-      intervencionesType: val
     })
   }
 
@@ -130,7 +123,10 @@ import BaseIntervenciones from './IntervencionesForms/BaseIntervenciones'
 
 
   render() {
-    let { selectedTab, selectedSubtab, intervencionesType } = this.state
+    let { selectedTab, selectedSubtab } = this.state
+    let { objetivoYAlcancesIntervencion } = this.props
+    objetivoYAlcancesIntervencion = objetivoYAlcancesIntervencion.toJS()
+    let { tipoDeIntervenciones } = objetivoYAlcancesIntervencion
 
     let title = null
     let form = null
@@ -143,18 +139,18 @@ import BaseIntervenciones from './IntervencionesForms/BaseIntervenciones'
     else if (selectedTab === 'Intervenciones') {
       if (selectedSubtab === 'objectivoYAlcances') {
         title = 'Objetivo y Alcances de la Intervencion'
-        form = < BaseIntervenciones intervencionesType={intervencionesType} handleSelectIntervencionesType={this.handleSelectIntervencionesType}/>
+        form = <BaseIntervenciones />
       }
-      else if (pagesIntervenciones[intervencionesType.value] && pagesIntervenciones[intervencionesType.value][selectedSubtab]) {
-        title = pagesIntervenciones[intervencionesType.value][selectedSubtab].title
-        form = pagesIntervenciones[intervencionesType.value][selectedSubtab].form 
+      else if (pagesIntervenciones[tipoDeIntervenciones] && pagesIntervenciones[tipoDeIntervenciones][selectedSubtab]) {
+        title = pagesIntervenciones[tipoDeIntervenciones][selectedSubtab].title
+        form = pagesIntervenciones[tipoDeIntervenciones][selectedSubtab].form 
       }
     }
 
     return (
       <div className="input-forms">
         <Tabs handleSelectTab={this.handleSelectTab} selectedTab={selectedTab} />
-        <Subtabs handleSelectSubtab={this.handleSelectSubtab} selectedSubtab={selectedSubtab} selectedTab={selectedTab} intervencionesType={intervencionesType} />
+        <Subtabs handleSelectSubtab={this.handleSelectSubtab} selectedSubtab={selectedSubtab} selectedTab={selectedTab} intervencionesType={tipoDeIntervenciones} />
         <div className="title-container" >
           <div className="title">
             { title }
@@ -170,6 +166,7 @@ import BaseIntervenciones from './IntervencionesForms/BaseIntervenciones'
 const mapStateToProps = state => ({
   fichaTecnicaDelPozoHighLevel: state.get('fichaTecnicaDelPozoHighLevel'),
   fichaTecnicaDelPozo: state.get('fichaTecnicaDelPozo'),
+  objetivoYAlcancesIntervencion: state.get('objetivoYAlcancesIntervencion'),
 })
 
 const mapDispatchToProps = dispatch => ({
