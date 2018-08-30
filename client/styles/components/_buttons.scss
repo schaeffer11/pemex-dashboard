@@ -1,9 +1,28 @@
 button {
+  &.cta {
+    border-radius: 4px;
+    border: none;
+    padding: 6px 30px;
+    font-size: .8em;
+    min-width: 100px;
+  }
+  &.prev {
+    border: 1px solid $active-green;
+    color: $active-green;
+    float:right;
+  }
+  &.next {
+    border: 1px solid $active-green;
+    margin-left: 20px;
+    background: $active-green;
+    color: white;
+    float:right;
+  }
   &.submit{
     border-radius: 4px;
     border: none;
     background: $active-green;
-    padding: 10px 30px;
+    padding: 6px 30px;
     font-size: 1.2em;
     color: white;
     min-width: 100px;

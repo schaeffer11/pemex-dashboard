@@ -1,7 +1,7 @@
 .input-forms {
 	height: 100%;
 	/*display: grid;*/
-	margin: 15px;
+	margin: 15px 0;
 
 /*
 	grid-template-rows: 100px 75px 40px 500px;
@@ -42,10 +42,6 @@
 	.subtabs {
                 background: $primary-green;
 		grid-area: subtabs;
-		border-left: solid 1px green;
-		border-right: solid 1px green;
-		border-top: solid 1px green;
-		border-radius: 0px 10px 0px 0px;
 		cursor: pointer;
                 text-align: center;
 
@@ -120,12 +116,13 @@
                 border-width: 0 1px 1px 1px; 
                 border-style: solid;
 		border-color: $primary-green;   
-                padding: 40px;
 
-		.title {
-			font-size: 24px;
+		.tab-title {
+			font-size: 2em;
 			font-weight: bold;
-			margin-left: 10px;
+                        padding-bottom: 1em;
+                        margin-bottom: 1em;
+                        border-bottom: 1px solid #000;
 		}
 
         }
@@ -160,7 +157,11 @@
             }
 	}
 
-
+        .multistep-form {
+          .content {
+            padding: 40px;
+          }
+        }
 
 
 
