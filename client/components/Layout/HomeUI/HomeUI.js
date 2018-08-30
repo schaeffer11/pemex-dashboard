@@ -45,8 +45,8 @@ const LinkButton = ({ text, disabled , src}) => {
             Pemex Exploracion y Produccion
           </div>
           <div className='sub-text'>
-            Subdireccion de Especialidad<br></br>
-            Tecnica de Explotacion
+            Subdirección de Especialidad<br></br>
+            Técnica de Explotación
           </div>
         </div>
         <div className="backdrop">
@@ -54,9 +54,9 @@ const LinkButton = ({ text, disabled , src}) => {
 
 
           <div className="buttons">
-            <LinkButton text={'insercion de datos'} src={'./images/input.png'}/>
+            <LinkButton text={'inserción de datos'} src={'./images/input.png'}/>
             <LinkButton text={'tablero de control'} src={'./images/analysis.png'} disabled={true}/>
-            <LinkButton text={'diagnostico de productividad'} src={'./images/diagnostics.png'} disabled={true}/>
+            <LinkButton text={'diagnóstico de productividad'} src={'./images/diagnostics.png'} disabled={true}/>
             <LinkButton text={'seguimiento de compromisos'} src={'./images/checklist.png'} disabled={true}/>
           </div>
 

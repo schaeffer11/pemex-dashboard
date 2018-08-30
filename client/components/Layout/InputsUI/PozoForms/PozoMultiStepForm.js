@@ -22,15 +22,15 @@ import AnalisisDelAgua from './AnalisisDelAgua'
     }
 
     this.forms = [
-      {'title' : 'Ficha Tecnica del Pozo' , 'content':<TecnicaDelPozoHighLevel/>},
-      {'title' : 'Ficha Tecnica del Pozo' , 'content':<TecnicaDelPozo/>},
-      {'title' : 'Ficha Tecnica del Campo', 'content': <TecnicaDelCampo/>},
-      {'title' : 'Informacion de Sistemas Artificiales de Produccion', 'content': <SistemasArtificialesDeProduccion /> },
-      {'title' : 'Evaluacion Petrofisica', 'content': <EvaluacionPetrofisica /> },
-      {'title' : 'Edo. Mecanico y Aparejo de Produccion', 'content': <MecanicoYAparejo /> },
-      {'title' : 'Historico de Presion', 'content': <HistoricoDePresion />},
-      {'title' : 'Historico de Produccion', 'content': <HistoricoDeProduccion /> },
-      {'title' : 'Analisis del Agua', 'content': <AnalisisDelAgua /> }	
+      {'title' : 'Ficha Técnica del Pozo' , 'content':<TecnicaDelPozoHighLevel/>},
+      {'title' : 'Ficha Técnica del Pozo' , 'content':<TecnicaDelPozo/>},
+      {'title' : 'Ficha Técnica del Campo', 'content': <TecnicaDelCampo/>},
+      {'title' : 'Información de Sistemas Artificiales de Producción', 'content': <SistemasArtificialesDeProduccion /> },
+      {'title' : 'Evaluación Petrofísica', 'content': <EvaluacionPetrofisica /> },
+      {'title' : 'Edo. Mecánico y Aparejo de Producción', 'content': <MecanicoYAparejo /> },
+      {'title' : 'Histórico de Presión', 'content': <HistoricoDePresion />},
+      {'title' : 'Histórico de Producción', 'content': <HistoricoDeProduccion /> },
+      {'title' : 'Análisis del Agua', 'content': <AnalisisDelAgua /> }	
     ];
 
     this.handleClick
