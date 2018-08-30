@@ -69,6 +69,10 @@ app.get('/version', (req, res) => {
 })
 
 
+app.get('*', (req, res) => {
+  res.sendFile(path.join(__dirname, (!isProduction ? '../dist-dev/client' : '/client'), 'index.html'))
+});
+
 var httpServer = app.listen(PORT, () => {
   console.log(`Running "${pkg.name}" in ${process.env.NODE_ENV || 'development'} mode...`)
   console.log(`Magic happens on port ${httpServer.address().port} using Node Version ${process.version}`)

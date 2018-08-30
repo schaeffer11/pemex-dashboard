@@ -3,6 +3,7 @@ import React, { Component } from 'react'
 import autobind from 'autobind-decorator'
 import InputsUI from './InputsUI/InputsUI'
 import HomeUI from './HomeUI/HomeUI'
+import { BrowserRouter, Route } from 'react-router-dom'
 
 @autobind class Productspace extends Component {
   constructor(props) {
@@ -25,9 +26,13 @@ import HomeUI from './HomeUI/HomeUI'
     // }
 
     return (
-      <div className="productspace">
-        <InputsUI />
-      </div>
+      <BrowserRouter>
+        <div className="productspace">
+          <Route exact path="/inputs" component={InputsUI} />
+          <Route exact path="/" component={HomeUI} />
+          {/* <InputsUI /> */}
+        </div>
+      </BrowserRouter>
     )
   }
 }

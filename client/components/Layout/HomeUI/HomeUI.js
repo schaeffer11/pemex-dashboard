@@ -1,18 +1,19 @@
 import React, { Component } from 'react'
 import autobind from 'autobind-decorator'
+import { Link } from 'react-router-dom'
 
-const LinkButton = ({ text, disabled , src}) => {
+const LinkButton = ({ text, disabled , src, to}) => {
   console.log(text)
 
-    let className='link' 
+    let className='link'
 
     disabled ? className += ' disabled' : null
     return (
     <div className='link-button'>
     <img className='img' src={src}></img>
-    <button className={className}>
+    <Link to={to} className={className}>
         {text}
-      </button>
+      </Link>
     </div>
     )
 }
@@ -54,10 +55,10 @@ const LinkButton = ({ text, disabled , src}) => {
 
 
           <div className="buttons">
-            <LinkButton text={'inserción de datos'} src={'./images/input.png'}/>
-            <LinkButton text={'tablero de control'} src={'./images/analysis.png'} disabled={true}/>
-            <LinkButton text={'diagnóstico de productividad'} src={'./images/diagnostics.png'} disabled={true}/>
-            <LinkButton text={'seguimiento de compromisos'} src={'./images/checklist.png'} disabled={true}/>
+            <LinkButton to="/inputs" text={'inserción de datos'} src={'./images/input.png'}/>
+            <LinkButton to="/" text={'tablero de control'} src={'./images/analysis.png'} disabled={true}/>
+            <LinkButton to="/" text={'diagnóstico de productividad'} src={'./images/diagnostics.png'} disabled={true}/>
+            <LinkButton to="/" text={'seguimiento de compromisos'} src={'./images/checklist.png'} disabled={true}/>
           </div>
 
           </div>

@@ -2,7 +2,7 @@ import 'babel-polyfill'
 
 import { applyMiddleware, compose, createStore } from 'redux'
 import { createBrowserHistory } from 'history'
-import { routerMiddleware, connectRouter } from 'connected-react-router/immutable'
+import { routerMiddleware, connectRouter, ConnectedRouter } from 'connected-react-router/immutable'
 import { Provider } from 'react-redux'
 import { Map } from 'immutable'
 import React from 'react'
@@ -61,7 +61,9 @@ const bootstrap = () => {
   document.getElementById('app').classList.remove('isLoading', 'isRestoring')
   ReactDOM.render(
     <Provider store={store}>
-      <App history={history} />
+      <ConnectedRouter history={history}>
+        <App />
+      </ConnectedRouter>
     </Provider>,
     document.getElementById('app'),
   )
