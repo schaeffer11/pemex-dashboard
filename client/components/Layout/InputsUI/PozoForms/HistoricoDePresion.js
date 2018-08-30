@@ -20,9 +20,9 @@ import autobind from 'autobind-decorator'
 
     return (
       <div className="form">
-        I am a formmmmm HistoricoDePresion
-        <div style={{color: 'red'}}>TODO: add upload campo pws vs tiempo (image or csv??)</div>
-        <div style={{color: 'red'}}>TODO: add upload pozo pws vs tiempo (image or csv??)</div>
+        I am a form HistoricoDePresion
+        <div style={{color: 'red'}}>TODO: agregar opcion para subir campo pws vs tiempo (add upload campo pws vs tiempo) (image or csv??)</div>
+        <div style={{color: 'red'}}>TODO: agregar opcion para subir pozo pws vs tiempo (add upload pozo pws vs tiempo) (image or csv??)</div>
       </div>
     )
   }

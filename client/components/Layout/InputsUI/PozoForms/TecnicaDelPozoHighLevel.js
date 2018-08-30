@@ -38,30 +38,30 @@ import { setSubdireccion, setBloque, setActivo, setCampo, setPozo, setFormacion 
 
 
     let subdireccionOptions = [
-      {label: 'Subdireccion de Especialidad Tecnica de Explotacion (SETE)', value: 'SETE'},
-      {label: 'Subdirector Produccion Bloques Aguas Someras AS-01', value: 'AS-01'},
-      {label: 'Subdirector Produccion Bloques Aguas Someras AS-02', value: 'AS-02'},
-      {label: 'Subdireccion de Produccion Bloques Sur', value: 'SUR'},
-      {label: 'Subdireccion de Produccion Bloques Norte', value: 'NORTE'},
+      {label: 'Subdirección de Especialidad Técnica de Explotación (SETE)', value: 'SETE'},
+      {label: 'Subdirección de producción Bloques Aguas Someras AS-01', value: 'AS-01'},
+      {label: 'Subdirección de producción Bloques Aguas Someras AS-02', value: 'AS-02'},
+      {label: 'Subdirección de producción Bloques Sur', value: 'SUR'},
+      {label: 'Subdirección de producción Bloques Norte', value: 'NORTE'},
     ]
 
     let bloqueOptionsMap = {
       'SETE': [
-        {label: 'Gerencia de Produccion (GP)', value: 'GP'}
+        {label: 'Gerencia de Producción (GP)', value: 'GP'}
       ],
       'AS-01': [
-        {label: 'Activo Integral Produccion Bloque AS01-01', value: 'AS01-01'},
-        {label: 'Activo Integral Produccion Bloque AS01-02', value: 'AS01-02'},
+        {label: 'Activo Integral Producción Bloque AS01-01', value: 'AS01-01'},
+        {label: 'Activo Integral Producción Bloque AS01-02', value: 'AS01-02'},
       ],
       'AS-02': [
-        {label: 'Activo Integral Produccion Bloque AS01-03', value: 'AS01-03'},
-        {label: 'Activo Integral Produccion Bloque AS01-04', value: 'AS01-04'},
+        {label: 'Activo Integral Producción Bloque AS01-03', value: 'AS01-03'},
+        {label: 'Activo Integral Producción Bloque AS01-04', value: 'AS01-04'},
       ],
       'SUR': [
-        {label: 'Activeo Integral Produccion Bloque S01', value: 'S01'},
-        {label: 'Activeo Integral Produccion Bloque S02', value: 'S02'},
-        {label: 'Activeo Integral Produccion Bloque S03', value: 'S03'},
-        {label: 'Activeo Integral Produccion Bloque S04', value: 'S04'},
+        {label: 'Activo Integral Producción Bloque S01', value: 'S01'},
+        {label: 'Activo Integral Producción Bloque S02', value: 'S02'},
+        {label: 'Activo Integral Producción Bloque S03', value: 'S03'},
+        {label: 'Activo Integral Producción Bloque S04', value: 'S04'},
       ],
       'NORTE': [
         {label: 'Activo Integral Bloques N01', value: 'N01'},
@@ -76,14 +76,14 @@ import { setSubdireccion, setBloque, setActivo, setCampo, setPozo, setFormacion 
     return (
       <form className="form tecnica-del-pozo-high-level">
         <div className='main-form'>
-          <InputRowSelectUnitless header='Subdireccion' value={subdireccion} options={subdireccionOptions} callback={this.handleSelectSubdireccion} />
+          <InputRowSelectUnitless header='Subdirección' value={subdireccion} options={subdireccionOptions} callback={this.handleSelectSubdireccion} />
           <InputRowSelectUnitless header='Bloque' value={bloque} options={bloqueOptions} callback={this.handleSelectBloque} />
           <InputRowUnitless header="Activo" value={activo} onChange={setActivo} name='activo' />
           <InputRowUnitless header="Campo" value={campo} onChange={setCampo} name='campo' />
           <InputRowUnitless header="Pozo" value={pozo} onChange={setPozo} name='pozo' />
-          <InputRowUnitless header="Formacion" value={formacion} onChange={setFormacion} name='formacion' />
-          <div style={{color: 'red'}}>TODO: add logic for new proposal/upload results</div>
-          <div style={{color: 'red'}}>TODO: add new well/select well? </div>
+          <InputRowUnitless header="Formación" value={formacion} onChange={setFormacion} name='formacion' />
+          <div style={{color: 'red'}}>TODO: agregar logica para nueva propuesta y opcion para subir resultados (add logic for new proposal/upload results)</div>
+          <div style={{color: 'red'}}>TODO: agregar opcion de pozo nuevo o seleccionar pozo excistente (add new well/select well?)</div>
         </div>
       </form>
     )

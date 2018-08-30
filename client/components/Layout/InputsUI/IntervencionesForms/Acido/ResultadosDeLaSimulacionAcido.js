@@ -28,15 +28,15 @@ import { connect } from 'react-redux'
       <div className='result-form' >
         <div className='header'>
         </div>
-        <InputRow header="Longitud Total" name='' unit="m" value={longitudTotal} onChange={setLongitudTotal}/>
-        <InputRow header="Longitud Efectiva Grabada" name='' unit="m" value={longitudEfectivaGrabada} onChange={setLongitudEfectivaGrabada}/>
-        <InputRow header="Altura Grabada" name='' unit="m" value={alturaGrabada} onChange={setAlturaGrabada}/>
-        <InputRow header="Ancho Promedio" name='' unit="pg." value={anchoPromedio} onChange={setAnchoPromedio}/>
-        <InputRow header="Concentracion del Acido" name='' unit="lb/pg2" value={concentracionDelAcido} onChange={setConcentracionDelAcido}/>
+        <InputRow header="Longitud total" name='' unit="m" value={longitudTotal} onChange={setLongitudTotal}/>
+        <InputRow header="Longitud efectiva grabada" name='' unit="m" value={longitudEfectivaGrabada} onChange={setLongitudEfectivaGrabada}/>
+        <InputRow header="Altura grabada" name='' unit="m" value={alturaGrabada} onChange={setAlturaGrabada}/>
+        <InputRow header="Ancho promedio" name='' unit="pg." value={anchoPromedio} onChange={setAnchoPromedio}/>
+        <InputRow header="Concentración del ácido" name='' unit="lb/pg2" value={concentracionDelAcido} onChange={setConcentracionDelAcido}/>
         <InputRow header="Conductividad" name='' unit="mD*ft" value={conductividad} onChange={setConductividad}/>
         <InputRow header="FCD" name='' unit="adim." value={fcd} onChange={setFcd}/>
-        <InputRow header="Presion Neta" name='' unit="psi" value={presionNeta} onChange={setPresionNeta}/>
-        <InputRow header="Eficiencia de Fluido de Fractura" name='' unit="%" value={eficienciaDeFluidoDeFractura} onChange={setEficienciaDeFluidoDeFractura}/>
+        <InputRow header="Presión neta" name='' unit="psi" value={presionNeta} onChange={setPresionNeta}/>
+        <InputRow header="Eficiencia de fluido de fractura" name='' unit="%" value={eficienciaDeFluidoDeFractura} onChange={setEficienciaDeFluidoDeFractura}/>
       </div>
     )
   }
@@ -47,7 +47,7 @@ import { connect } from 'react-redux'
     return (
       <div className="form resultados-de-simulacion-acido">
           { this.makeResultForm() }
-          <div style={{color: 'red'}}>TODO add uevidence of simulation</div>
+          <div style={{color: 'red'}}>TODO: agregar opcion para subir evidencia de simulacion (add evidence of simulation)</div>
 
       </div>
     )

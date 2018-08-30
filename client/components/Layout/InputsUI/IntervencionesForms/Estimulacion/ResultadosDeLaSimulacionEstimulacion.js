@@ -27,9 +27,9 @@ import { connect } from 'react-redux'
         <div className='header'>
           Limpieza
         </div>
-        <InputRow header="Volumen del sistema acido" name='' unit="m3" value={volumenDelSistemaAcidoLimpieza} onChange={setVolumenDelSistemaAcidoLimpieza}/>
-        <InputRow header="Volumen del sistema no acido" name='' unit="m3" value={volumenDelSistemaNoAcidoLimpieza} onChange={setVolumenDelSistemaNoAcidoLimpieza}/>
-        <InputRowUnitless header="Tipo de colocacion" name='' value={tipoDeColocacion} onChange={setTipoDeColocacion}/>
+        <InputRow header="Volumen del sistema ácido" name='' unit="m3" value={volumenDelSistemaAcidoLimpieza} onChange={setVolumenDelSistemaAcidoLimpieza}/>
+        <InputRow header="Volumen del sistema no ácido" name='' unit="m3" value={volumenDelSistemaNoAcidoLimpieza} onChange={setVolumenDelSistemaNoAcidoLimpieza}/>
+        <InputRowUnitless header="Tipo de colocación" name='' value={tipoDeColocacion} onChange={setTipoDeColocacion}/>
         <InputRow header="Tiempo de contacto" name='' unit="min" value={tiempoDeContacto} onChange={setTiempoDeContacto}/>
       </div>
     )
@@ -44,15 +44,15 @@ import { connect } from 'react-redux'
         <div className='header'>
           Matricial
         </div>
-        <InputRow header="Numero de etapas" name='' unit="Numero" value={numeroDeEtapas} onChange={setNumeroDeEtapas}/>
-        <InputRow header="Volumen del sistema acido" name='' unit="m3" value={volumenDelSistemAcido} onChange={setVolumenDelSistemAcido}/>
-        <InputRow header="Volumen del sistema no acido" name='' unit="m3" value={volumenDelSistemNoAcido} onChange={setVolumenDelSistemNoAcido}/>
+        <InputRow header="Número de etapas" name='' unit="Numero" value={numeroDeEtapas} onChange={setNumeroDeEtapas}/>
+        <InputRow header="Volumen del sistema ácido" name='' unit="m3" value={volumenDelSistemAcido} onChange={setVolumenDelSistemAcido}/>
+        <InputRow header="Volumen del sistema no ácido" name='' unit="m3" value={volumenDelSistemNoAcido} onChange={setVolumenDelSistemNoAcido}/>
         <InputRow header="Volumen de divergente" name='' unit="m3" value={volumenDeDivergente} onChange={setVolumenDeDivergente}/>
         <InputRow header="Volumen de N2" name='' unit="m3" value={volumenDeN2} onChange={setVolumenDeN2}/>
-        <InputRow header="Calidad de Espuma" name='' unit="%" value={calidadDeEspuma} onChange={setCalidadDeEspuma}/>
-        <InputRow header="Volumen de precolchon N2" name='' unit="m3" value={volumenDePrecolchonN2} onChange={setVolumenDePrecolchonN2}/>
-        <InputRow header="Volumen de desplazamiento (N2 o liquido)" name='' unit="m3" value={volumenDeDesplazamiento} onChange={setVolumenDeDesplazamiento}/>
-        <InputRow header="Penetracion radial" name='' unit="pg" value={penetracionRadial} onChange={setPenetracionRadial}/>
+        <InputRow header="Calidad de espuma" name='' unit="%" value={calidadDeEspuma} onChange={setCalidadDeEspuma}/>
+        <InputRow header="Volumen de precolchón N2" name='' unit="m3" value={volumenDePrecolchonN2} onChange={setVolumenDePrecolchonN2}/>
+        <InputRow header="Volumen de desplazamiento (N2 o líquido)" name='' unit="m3" value={volumenDeDesplazamiento} onChange={setVolumenDeDesplazamiento}/>
+        <InputRow header="Penetración radial" name='' unit="pg" value={penetracionRadial} onChange={setPenetracionRadial}/>
         <InputRow header="Longitud de agujero de gusano" name='' unit="pg" value={longitudDeAgujeroDeGusano} onChange={setLongitudDeAgujeroDeGusano}/>
       </div>
     )
@@ -65,7 +65,7 @@ import { connect } from 'react-redux'
       <div className="form resultados-de-simulacion">
           { this.makeLimpiezaForm() }
           { this.makeMatricialForm() }
-          <div style={{color: 'red'}}>TODO add uevidence of simulation</div>
+          <div style={{color: 'red'}}>TODO: agregar opcion para subir evidencia de simulacion (add evidence of simulation)</div>
 
       </div>
     )

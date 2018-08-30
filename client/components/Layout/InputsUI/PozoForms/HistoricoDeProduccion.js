@@ -24,7 +24,7 @@ import { InputRow, InputRowUnitless, InputRowSelectUnitless } from '../../Common
         </div>
         <InputRow header="Fecha" name='' unit='dd/mmm/aa' />
         <InputRow header="Tiempo" name='' unit='hrs' />
-        <InputRowUnitless header="Tipo de Yac." name=''/>
+        <InputRowUnitless header="Tipo de yac." name=''/>
         <InputRow header="Estrangulador" name='' unit='pg' />
         <InputRow header="PTP" name='' unit='Kg/cm2' />
         <InputRow header="TTP" name='' unit='°C' />
@@ -48,8 +48,8 @@ import { InputRow, InputRowUnitless, InputRowSelectUnitless } from '../../Common
     return (
       <div className="form historico-de-produccion">
         { this.makeAforoForm() }
-        <div style={{color: 'red'}}>TODO: add upload los datos de pozo (image or csv??)</div>
-        <div style={{color: 'red'}}>TODO: this could be multiple rows (should be) handle this differantly</div>
+        <div style={{color: 'red'}}>TODO: agregar opcion para subir los datos del pozo (add upload well data) (image or csv??)</div>
+        <div style={{color: 'red'}}>TODO: esto podria o deberia ser varias lineas maneja esto de manera diferente (this could be multiple rows (should be) handle this differantly)</div>
       </div>
     )
   }

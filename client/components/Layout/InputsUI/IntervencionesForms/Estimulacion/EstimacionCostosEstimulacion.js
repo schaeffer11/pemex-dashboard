@@ -28,10 +28,10 @@ import { connect } from 'react-redux'
         <div className='header'>
           Costos
         </div>
-        <InputRowUnitless header="Compania de Servicio" name='' value={estCostCompaniaDeServicio} onChange={setEstCostCompaniaDeServicio}/>
+        <InputRowUnitless header="Compañía de servicio" name='' value={estCostCompaniaDeServicio} onChange={setEstCostCompaniaDeServicio}/>
         <InputRow header="Costo de renta de barco" name='' unit="MNX" value={estCostoDeRentaDeBarco} onChange={setEstCostoDeRentaDeBarco}/>
         <InputRow header="Costo de sistema reactivo" name='' unit="MNX" value={estCostDeSistemaReactivo} onChange={setEstCostDeSistemaReactivo}/>
-        <InputRow header="Costo de sistema no reactive" name='' unit="MNX" value={estCostDeSistemaNoReactivo} onChange={setEstCostDeSistemaNoReactivo}/>
+        <InputRow header="Costo de sistema no reactivo" name='' unit="MNX" value={estCostDeSistemaNoReactivo} onChange={setEstCostDeSistemaNoReactivo}/>
         <InputRow header="Costo de divergentes" name='' unit="MNX" value={estCostDeDivergenes} onChange={setEstCostDeDivergenes}/>
         <InputRow header="Costo de N2" name='' unit="MNX" value={estCostDeN2} onChange={setEstCostDeN2}/>
         <InputRow header="Costo de HCl" name='' unit="MNX" value={estCostHCL} onChange={setEstCostHCL}/>
@@ -45,7 +45,7 @@ import { connect } from 'react-redux'
     return (
       <div className="form estimacion-costos-estimulacion">
             { this.makeCostosForm() }
-          <div style={{color: 'red'}}>TODO summation as total at bottom</div>
+          <div style={{color: 'red'}}>TODO: suma total abajo (summation as total at bottom)</div>
 
       </div>
     )

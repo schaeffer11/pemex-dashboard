@@ -26,23 +26,23 @@ import { connect } from 'react-redux'
     return (
       <div className='terminacion-form' >
         <div className='header'>
-          Terminacion
+          Terminación
         </div>
         TIPO
-        <InputRowUnitless header="Tipo de Terminacion" value={tipoDeTerminacion} onChange={setTipoDeTerminacion} name='' />
+        <InputRowUnitless header="Tipo de terminación" value={tipoDeTerminacion} onChange={setTipoDeTerminacion} name='' />
         <InputRow header="h (intervalo productor)" value={hIntervaloProductor} onChange={setHIntervaloProductor} name='' unit='m' />
         <InputRow header="Empacador" name='' value={empacador} onChange={setEmpacador} unit='m' />
-        <InputRow header="Presion Dif. Empacador" name='' value={presionDifEmpacador} onChange={setPresionDifEmpacador} unit='psi' />
+        <InputRow header="Presión dif. empacador" name='' value={presionDifEmpacador} onChange={setPresionDifEmpacador} unit='psi' />
         <InputRow header="Sensor P y T" name='' value={sensorPyt} onChange={setSensorPyt} unit='m' />
         LINER
-        <InputRowUnitless header="Tipo de Liner" name='' value={tipoDeLiner} onChange={setTipoDeLiner} />
-        <InputRow header="Diametro de Liner" name='' value={diametroDeLiner} onChange={setDiametroDeLiner} unit='pg' />
+        <InputRowUnitless header="Tipo de liner" name='' value={tipoDeLiner} onChange={setTipoDeLiner} />
+        <InputRow header="Diámetro de liner" name='' value={diametroDeLiner} onChange={setDiametroDeLiner} unit='pg' />
         DISPAROS
-        <InputRowUnitless header="Tipo de Pistolas" name='' value={tipoDePistolas} onChange={setTipoDePistolas}  />
-        <InputRow header="Densidad de Disparos" name='' value={densidadDeDisparos} onChange={setDensidadDeDisparos} unit='c/m' />
+        <InputRowUnitless header="Tipo de pistolas" name='' value={tipoDePistolas} onChange={setTipoDePistolas}  />
+        <InputRow header="Densidad de disparos" name='' value={densidadDeDisparos} onChange={setDensidadDeDisparos} unit='c/m' />
         <InputRow header="Fase" name='' value={fase} onChange={setFase} unit='Grados' />
-        <InputRow header="Diametro de Orificio" name='' value={diametroDeOrificio} onChange={setDiametroDeOrificio} unit='pg' />
-        <InputRow header="Penetracion" name='' value={penetracion} onChange={setPenetracion} unit='pg' />
+        <InputRow header="Diámetro de orificio" name='' value={diametroDeOrificio} onChange={setDiametroDeOrificio} unit='pg' />
+        <InputRow header="Penetración" name='' value={penetracion} onChange={setPenetracion} unit='pg' />
         SAP
         <InputRowUnitless header="Tipo de SAP" name='' value={tipoDeSAP} onChange={setTipoDeSAP}/>
 
@@ -62,10 +62,10 @@ import { connect } from 'react-redux'
         </div>
         VOLUMEN
         <InputRow header="Tratamiento por" name='' value={tratamientoPor} onChange={setTratamientoPor} unit='(ej- TP, TR-TP, EA)' />
-        <InputRow header="Volumen Aparejo de Produccion" name='' value={volumenAparejoDeProduccion} onChange={setVolumenAparejoDeProduccion} unit='m3' />
-        <InputRow header="Volumen @ Cima de Intervalo" name='' value={volumenCimaDeIntervalo} onChange={setVolumenCimaDeIntervalo} unit='m3' />
-        <InputRow header="Volumen @ Base de Intervalo" name='' value={volumenBaseDeIntervalo} onChange={setVolumenBaseDeIntervalo} unit='m3' />
-        <InputRow header="Volumen de Espacio Anular (EA)" name='' value={volumenDeEspacioAnular} onChange={setVolumenDeEspacioAnular} unit='m3' />
+        <InputRow header="Volumen aparejo de producción" name='' value={volumenAparejoDeProduccion} onChange={setVolumenAparejoDeProduccion} unit='m3' />
+        <InputRow header="Volumen @ cima de intervalo" name='' value={volumenCimaDeIntervalo} onChange={setVolumenCimaDeIntervalo} unit='m3' />
+        <InputRow header="Volumen @ base de intervalo" name='' value={volumenBaseDeIntervalo} onChange={setVolumenBaseDeIntervalo} unit='m3' />
+        <InputRow header="Volumen de espacio anular (EA)" name='' value={volumenDeEspacioAnular} onChange={setVolumenDeEspacioAnular} unit='m3' />
 
       </div>
     )
@@ -77,8 +77,8 @@ import { connect } from 'react-redux'
       <div className="form mecanico-y-aparejo">
         { this.makeTerminacionForm() }
         { this.makeCapacidadForm() }
-        <div style={{color: 'red'}}>TODO: add upload well bore diagram file (image)</div>
-        <div style={{color: 'red'}}>TODO: add upload aparejo de produccion (image or csv)??</div>
+        <div style={{color: 'red'}}>TODO: agregar opcion para subir archivo del estado mecanico (add upload well bore diagram) (image)</div>
+        <div style={{color: 'red'}}>TODO: agregar opcion para subir aparedjo de produccion (add upload aparejo de produccion) (image or csv)??</div>
       </div>
     )
   }

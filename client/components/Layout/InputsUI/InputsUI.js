@@ -142,7 +142,7 @@ import PozoMultiStepForm from './PozoForms/PozoMultiStepForm'
     }
     else if (selectedTab === 'Intervenciones') {
       if (selectedSubtab === 'objectivoYAlcances') {
-        title = 'Objetivo y Alcances de la Intervencion'
+        title = 'Objetivo y alcances de la intervención'
         form = <BaseIntervenciones />
       }
       else if (pagesIntervenciones[tipoDeIntervenciones] && pagesIntervenciones[tipoDeIntervenciones][selectedSubtab]) {

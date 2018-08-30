@@ -29,15 +29,15 @@ import { setPH, setTemperaturaDeConductividad, setResistividad, setSalinidadConC
           Valores
         </div>
         <InputRow header="pH" name='' value={pH} onChange={setPH} unit='Adim.' />
-        <InputRow header="Temperatura de Conductividad" name='' value={temperaturaDeConductividad} onChange={setTemperaturaDeConductividad} unit='°C' />
+        <InputRow header="Temperatura de conductividad" name='' value={temperaturaDeConductividad} onChange={setTemperaturaDeConductividad} unit='°C' />
         <InputRow header="Resistividad" name='' value={resistividad} onChange={setResistividad} unit='Ohm*m' />
         <InputRow header="Salinidad con conductimetro" name='' value={salinidadConConductimetro} onChange={setSalinidadConConductimetro} unit='mg/L o PPM' />
-        <InputRow header="Solidos Disueltos Totales" name='' value={solidosDisueltosTotales} onChange={setSolidosDisueltosTotales} unit='mg/L o PPM' />
-        <InputRow header="Dureza Total como CaCO3" name='' value={durezaTotalComoCaCO3} onChange={setDurezaTotalComoCaCO3} unit='mg/L o PPM' />
-        <InputRow header="Dureza de Calcio como CaCO3" name='' value={durezaDeCalcioComoCaCO3} onChange={setDurezaDeCalcioComoCaCO3} unit='mg/L o PPM' />
-        <InputRow header="Dureza de Magnesio como CaCO3" name='' value={durezaDeMagnesioComoCaCO3} onChange={setDurezaDeMagnesioComoCaCO3} unit='mg/L o PPM' />
-        <InputRow header="Alcalinidad Total como CaCO3" name='' value={alcalinidadTotalComoCaCO3} onChange={setAlcalinidadTotalComoCaCO3} unit='mg/L o PPM' />
-        <InputRow header="Alcalinidad a la Fenolftaleinacomo CaCoO3" name='' value={alcalinidadALaFenolftaleinaComoCaCO3} onChange={setAlcalinidadALaFenolftaleinaComoCaCO3} unit='mg/L o PPM' />
+        <InputRow header="Solidos disueltos totales" name='' value={solidosDisueltosTotales} onChange={setSolidosDisueltosTotales} unit='mg/L o PPM' />
+        <InputRow header="Dureza total como CaCO3" name='' value={durezaTotalComoCaCO3} onChange={setDurezaTotalComoCaCO3} unit='mg/L o PPM' />
+        <InputRow header="Dureza de calcio como CaCO3" name='' value={durezaDeCalcioComoCaCO3} onChange={setDurezaDeCalcioComoCaCO3} unit='mg/L o PPM' />
+        <InputRow header="Dureza de magnesio como CaCO3" name='' value={durezaDeMagnesioComoCaCO3} onChange={setDurezaDeMagnesioComoCaCO3} unit='mg/L o PPM' />
+        <InputRow header="Alcalinidad total como CaCO3" name='' value={alcalinidadTotalComoCaCO3} onChange={setAlcalinidadTotalComoCaCO3} unit='mg/L o PPM' />
+        <InputRow header="Alcalinidad a la fenolftaleína como CaCoO3" name='' value={alcalinidadALaFenolftaleinaComoCaCO3} onChange={setAlcalinidadALaFenolftaleinaComoCaCO3} unit='mg/L o PPM' />
         <InputRow header="Salinidad como NaCl" name='' value={salinidadComoNaCl} onChange={setSalinidadComoNaCl} unit='mg/L o PPM' />
         <InputRow header="Sodio" name='' value={sodio} onChange={setSodio} unit='mg/L o PPM' />
         <InputRow header="Calcio" name='' value={calcio} onChange={setCalcio} unit='mg/L o PPM' />

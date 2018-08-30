@@ -26,20 +26,20 @@ import { connect } from 'react-redux'
     return (
       <div className='cedula-form' >
         <div className='header'>
-          Cedula
+          Cédula
         </div>
-        <InputRowUnitless header="Etapa" name='' value={etapa} onChange={setEtapa}/>
-        <InputRowUnitless header="Sistema (NR-R-D)" name='' value={sistema} onChange={setSistema}/>
-        <InputRow header="Vol. líquido" name='' unit='m3' value={tipoDeApuntalante} onChange={setTipoDeApuntalante}/>
-        <InputRow header="Gasto N2" name='' unit='m3/min' value={gastoN2} onChange={setGastoN2}/>
-        <InputRow header="Gasto líquido" name='' unit='bpm' value={gastoLiqudo} onChange={setGastoLiqudo}/>
-        <InputRow header="Gasto en fondo" name='' unit='bpm' value={gastoEnFondo} onChange={setGastoEnFondo}/>
-        <InputRow header="Calidad" name='' unit='%' value={calidad} onChange={setCalidad}/>
-        <InputRow header="Vol. N2" name='' unit='m3 std' value={volN2} onChange={setVolN2}/>
-        <InputRow header="Vol. líquido acum." name='' unit='m3' value={volLiquidoAcum} onChange={setVolLiquidoAcum}/>
-        <InputRow header="Vol. N2 acum." name='' unit='m3 std' value={volN2Acum} onChange={setVolN2Acum}/>
-        <InputRow header="Rel. N2/Liq" name='' unit='m3 std/m3' value={relN2Liq} onChange={setRelN2Liq}/>
-        <InputRow header="Tiempo" name='' unit='min' value={tiempo} onChange={setTiempo}/>
+        <InputRowUnitless header="Etapa" name='' />
+        <InputRowUnitless header="Sistema (NR-R-D)" name='' />
+        <InputRow header="Vol. Liquid" name='' unit='m3' />
+        <InputRow header="Gasto N2" name='' unit='m3/min' />
+        <InputRow header="Gasto Liquido" name='' unit='bpm' />
+        <InputRow header="Gasto en fondo" name='' unit='bpm' />
+        <InputRow header="Calidad" name='' unit='%' />
+        <InputRow header="Vol. N2" name='' unit='m3 std' />
+        <InputRow header="Vol. Liquido Acum." name='' unit='m3' />
+        <InputRow header="Vol. N2 Acum." name='' unit='m3 std' />
+        <InputRow header="Rel. N2/Liq" name='' unit='m3 std/m3' />
+        <InputRow header="Tiempo" name='' unit='min' />
       </div>
     )
   }
@@ -54,10 +54,10 @@ import { connect } from 'react-redux'
         <div className='header'>
           General
         </div>
-        <InputRowUnitless header="Intervalo(s)" name='' value={intervalo} onChange={setIntervalo}/>
-        <InputRow header="Longitud de intervalo a tratar" name='' unit='m' value={longitudDeIntervalo} onChange={setLongitudDeIntervalo}/>
-        <InputRow header="Vol. Aparejo (VAP)" name='' unit='m3' value={volAparejo} onChange={setVolAparejo}/>
-        <InputRow header="Capacidad total del pozo (cima/base)" name='' unit='m3/m3' value={capacidadTotalDelPozo} onChange={setCapacidadTotalDelPozo}/>
+        <InputRowUnitless header="Intervalo(s)" name='' />
+        <InputRow header="Longitud de intervalo a tratar" name='' unit='m' />
+        <InputRow header="Vol. Aparejo (VAP)" name='' unit='m3' />
+        <InputRow header="Capacidad total del pozo (cima/base)" name='' unit='m3/m3' />
       </div>
     )
   }
@@ -72,11 +72,11 @@ import { connect } from 'react-redux'
         <div className='header'>
           Detalles
         </div>
-        <InputRow header="Volumen Precolchon N2" name='' unit='m3' value={volumenPrecolchonN2} onChange={setVolumenPrecolchonN2}/>
-        <InputRow header="Volumen De apuntalante" name='' unit='m3' value={volumenDeApuntalante} onChange={setVolumenDeApuntalante}/>
-        <InputRow header="Volumen de gel de fractura" name='' unit='m3' value={volumenDeGelDeFractura} onChange={setVolumenDeGelDeFractura}/>
-        <InputRow header="Volumen Desplazamiento" name='' unit='m3' value={volumenDesplazamiento} onChange={setVolumenDesplazamiento}/>
-        <InputRow header="Volumen Total de Liqudo" name='' unit='m3' value={volumenTotalDeLiquido} onChange={setVolumenTotalDeLiquido}/>
+        <InputRow header="Volumen Precolchon N2" name='' unit='m3' />
+        <InputRow header="Volumen De apuntalante" name='' unit='m3' />
+        <InputRow header="Volumen de gel de fractura" name='' unit='m3' />
+        <InputRow header="Volumen Desplazamiento" name='' unit='m3' />
+        <InputRow header="Volumen Total de Liqudo" name='' unit='m3' />
       </div>
     )
   }

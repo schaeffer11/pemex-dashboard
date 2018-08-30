@@ -24,9 +24,9 @@ import { setTipoDeSistemo, setPresionDeCabeza, setPresionDeLineaODeSeparador, se
 
     return (
       <div className='sistemas-artificiales-form' >
-        <InputRow header="Presion de Cabeza" name='' value={presionDeCabeza} onChange={setPresionDeCabeza} unit='Kg/cm2'/>
-        <InputRow header="Presion de linea o de separador" name='' value={presionDeLineaODeSeparador} onChange={setPresionDeLineaODeSeparador} unit='kg/cm2'/>
-        <InputRowUnitless header="Numero de descargas o ciclos" name='' value={numeroDeDescargasOCiclosEV} onChange={setNumeroDeDescargasOCiclosEV} />
+        <InputRow header="Presión de cabeza" name='' value={presionDeCabeza} onChange={setPresionDeCabeza} unit='Kg/cm2'/>
+        <InputRow header="Presión de linea o de separador" name='' value={presionDeLineaODeSeparador} onChange={setPresionDeLineaODeSeparador} unit='kg/cm2'/>
+        <InputRowUnitless header="Número de descargas o ciclos" name='' value={numeroDeDescargasOCiclosEV} onChange={setNumeroDeDescargasOCiclosEV} />
         <InputRowUnitless header="Volumen desplazado por ciclo" name='' value={volumenDesplazadoPorCircloEV} onChange={setVolumenDesplazadoPorCircloEV} />
       </div>
     )
@@ -39,12 +39,12 @@ import { setTipoDeSistemo, setPresionDeCabeza, setPresionDeLineaODeSeparador, se
     
     return (
       <div className='sistemas-artificiales-form' >
-        <InputRow header="Presion de Cabeza" name='' value={presionDeCabeza} onChange={setPresionDeCabeza} unit='Kg/cm2'/>
-        <InputRow header="Presion de linea o de separador" name='' value={presionDeLineaODeSeparador} onChange={setPresionDeLineaODeSeparador} unit='Kg/cm2'/>
-        <InputRow header="Presion de Inyeccion" name='' value={presionDeInyeccionBN} onChange={setPresionDeInyeccionBN} unit='Kg/cm2'/>
-        <InputRow header="Presion de descarga" name='' value={presionDeDescargaBN} onChange={setPresionDeDescargaBN} unit='Kg/cm2'/>
-        <InputRowUnitless header="Numero de valvulas" value={numeroDeValvulasBN} onChange={setNumeroDeValvulasBN} name='' />
-        <InputRow header="Profundidad de la vulvula operante" name='' value={profundidadDeLaVulvulaOperanteBN} onChange={setProfundidadDeLaVulvulaOperanteBN} unit='m'/>
+        <InputRow header="Presión de cabeza" name='' value={presionDeCabeza} onChange={setPresionDeCabeza} unit='Kg/cm2'/>
+        <InputRow header="Presión de linea o de separador" name='' value={presionDeLineaODeSeparador} onChange={setPresionDeLineaODeSeparador} unit='Kg/cm2'/>
+        <InputRow header="Presión de inyección" name='' value={presionDeInyeccionBN} onChange={setPresionDeInyeccionBN} unit='Kg/cm2'/>
+        <InputRow header="Presión de descarga" name='' value={presionDeDescargaBN} onChange={setPresionDeDescargaBN} unit='Kg/cm2'/>
+        <InputRowUnitless header="Número de válvulas" value={numeroDeValvulasBN} onChange={setNumeroDeValvulasBN} name='' />
+        <InputRow header="Profundidad de la válvula operante" name='' value={profundidadDeLaVulvulaOperanteBN} onChange={setProfundidadDeLaVulvulaOperanteBN} unit='m'/>
         <InputRow header="Orificio" name='' value={orificioBN} onChange={setOrificioBN} unit='pg'/>
         <InputRow header="Volumen de gas inyectado" name='' value={volumenDeGasInyectadoBN} onChange={setVolumenDeGasInyectadoBN} unit='m3'/>
       </div>
@@ -58,14 +58,14 @@ import { setTipoDeSistemo, setPresionDeCabeza, setPresionDeLineaODeSeparador, se
     
     return (
       <div className='sistemas-artificiales-form' >
-        <InputRow header="Presion de Cabeza" name='' value={presionDeCabeza} onChange={setPresionDeCabeza} unit='Kg/cm2'/>
-        <InputRow header="Presion de linea o de separador" name='' value={presionDeLineaODeSeparador} onChange={setPresionDeLineaODeSeparador} unit='Kg/cm2'/>
+        <InputRow header="Presión de cabeza" name='' value={presionDeCabeza} onChange={setPresionDeCabeza} unit='Kg/cm2'/>
+        <InputRow header="Presión de linea o de separador" name='' value={presionDeLineaODeSeparador} onChange={setPresionDeLineaODeSeparador} unit='Kg/cm2'/>
         <InputRow header="Profundidad de la bomba" name='' value={profundidadDeLaBombaBH} onChange={setProfundidadDeLaBombaBH} unit='m'/>
-        <InputRowUnitless header="Tipo y marca de Bomba" value={tipoYMarcaDeBombaBH} onChange={setTipoYMarcaDeBombaBH} name='' />
+        <InputRowUnitless header="Tipo y marca de bomba" value={tipoYMarcaDeBombaBH} onChange={setTipoYMarcaDeBombaBH} name='' />
         <InputRow header="Orificio" name='' value={orificioBH} onChange={setOrificioBH} unit='pg'/>
         <InputRow header="Tipo de camisa" name='' value={tipoDeCamisaBH} onChange={setTipoDeCamisaBH} unit='pg'/>
         <InputRowUnitless header="Fluido motriz" value={fluidoMotrizBH} onChange={setFluidoMotrizBH} name='' />
-        <InputRow header="Equipo Superficial" name='' value={equipoSuperficialBH} onChange={setEquipoSuperficialBH} unit='HP'/>
+        <InputRow header="Equipo superficial" name='' value={equipoSuperficialBH} onChange={setEquipoSuperficialBH} unit='HP'/>
       </div>
     )
   }
@@ -77,14 +77,14 @@ import { setTipoDeSistemo, setPresionDeCabeza, setPresionDeLineaODeSeparador, se
     
     return (
       <div className='sistemas-artificiales-form' >
-        <InputRow header="Presion de Cabeza" name='' value={presionDeCabeza} onChange={setPresionDeCabeza} unit='Kg/cm2'/>
-        <InputRow header="Presion de linea o de separador" name='' value={presionDeLineaODeSeparador} onChange={setPresionDeLineaODeSeparador} unit='Kg/cm2'/>
-        <InputRowUnitless header="Motor y Tipo de motor" name='' value={motorYTipoDeMotorBCP} onChange={setMotorYTipoDeMotorBCP} />
-        <InputRowUnitless header="Profunidad del motor" name='' value={profunidadDelMotorBCP} onChange={setProfunidadDelMotorBCP} />
+        <InputRow header="Presión de cabeza" name='' value={presionDeCabeza} onChange={setPresionDeCabeza} unit='Kg/cm2'/>
+        <InputRow header="Presión de linea o de separador" name='' value={presionDeLineaODeSeparador} onChange={setPresionDeLineaODeSeparador} unit='Kg/cm2'/>
+        <InputRowUnitless header="Motor y tipo de motor" name='' value={motorYTipoDeMotorBCP} onChange={setMotorYTipoDeMotorBCP} />
+        <InputRowUnitless header="Profundidad del motor" name='' value={profunidadDelMotorBCP} onChange={setProfunidadDelMotorBCP} />
         <InputRow header="Velocidad" name='' unit='' value={velocidadBCP} onChange={setVelocidadBCP}/>
         <InputRow header="HP" name='' unit='' value={hpBCP} onChange={setHpBCP}/>
         <InputRow header="Arreglo de varillas" name='' unit='' value={arregloDeVarillasBCP} onChange={setArregloDeVarillasBCP}/>
-        <InputRow header="Tipo de elastomero (compoicion quimica)" name='' unit='' value={tipoDeElastomeroBCP} onChange={setTipoDeElastomeroBCP}/>
+        <InputRow header="Tipo de elastomero (composición quimica)" name='' unit='' value={tipoDeElastomeroBCP} onChange={setTipoDeElastomeroBCP}/>
         <InputRow header="Profundidad del ancla antitorque" name='' unit='' value={profundidadDelAnclaAntitorqueBCP} onChange={setProfundidadDelAnclaAntitorqueBCP}/>
 
       </div>
@@ -98,13 +98,13 @@ import { setTipoDeSistemo, setPresionDeCabeza, setPresionDeLineaODeSeparador, se
     
     return (
       <div className='sistemas-artificiales-form' >
-        <InputRow header="Presion de Cabeza" name='' value={presionDeCabeza} onChange={setPresionDeCabeza} unit='Kg/cm2'/>
-        <InputRow header="Presion de linea o de separador" name='' value={presionDeLineaODeSeparador} onChange={setPresionDeLineaODeSeparador} unit='Kg/cm2'/>
+        <InputRow header="Presión de cabeza" name='' value={presionDeCabeza} onChange={setPresionDeCabeza} unit='Kg/cm2'/>
+        <InputRow header="Presión de linea o de separador" name='' value={presionDeLineaODeSeparador} onChange={setPresionDeLineaODeSeparador} unit='Kg/cm2'/>
         <InputRow header="Profundidad del motor" name='' value={profundidadDelMotorBE} onChange={setProfundidadDelMotorBE} unit='m'/>
-        <InputRow header="Diametro" name='' value={diametroBE} onChange={setDiametroBE} unit='pg'/>
+        <InputRow header="Diámetro" name='' value={diametroBE} onChange={setDiametroBE} unit='pg'/>
         <InputRow header="Volts" name='' value={voltsBE} onChange={setVoltsBE} unit='V'/>
-        <InputRow header="Amparaje" name='' value={amparajeBE} onChange={setAmparajeBE} unit='A'/>
-        <InputRowUnitless header="Armadura (Bomba)" name='' value={armaduraBE} onChange={setArmaduraBE} />
+        <InputRow header="Amperaje" name='' value={amparajeBE} onChange={setAmparajeBE} unit='A'/>
+        <InputRowUnitless header="Armadura (bomba)" name='' value={armaduraBE} onChange={setArmaduraBE} />
         <InputRowUnitless header="Tipo de cable" name='' value={tipoDeCableBE} onChange={setTipoDeCableBE} />
         <InputRow header="Longitud de cable" name='' value={longitudDeCableBE} onChange={setLongitudDeCableBE} unit='m'/>
         <InputRowUnitless header="RPM" name='' value={rmpBE} onChange={setRmpBE} />
@@ -119,18 +119,18 @@ import { setTipoDeSistemo, setPresionDeCabeza, setPresionDeLineaODeSeparador, se
     let { presionDeCabeza, presionDeLineaODeSeparador, tipoDeUnidadBM, velocidadBM, longitudDeCareraBM, tipoDeBombaSubsuperficialBM, tamanoDeBombaSubsuperficialBM, profundidadDeLaBombaBM, arregloDeVarillasBM, cuantaConAnclaBM, nivelDinamico, nivelEstatico } = formData
     return (
       <div className='sistemas-artificiales-form' >
-        <InputRow header="Presion de Cabeza" name='' value={presionDeCabeza} onChange={setPresionDeCabeza} unit='Kg/cm2'/>
-        <InputRow header="Presion de linea o de separador" name='' value={presionDeLineaODeSeparador} onChange={setPresionDeLineaODeSeparador} unit='Kg/cm2'/>
+        <InputRow header="Presión de cabeza" name='' value={presionDeCabeza} onChange={setPresionDeCabeza} unit='Kg/cm2'/>
+        <InputRow header="Presión de linea o de separador" name='' value={presionDeLineaODeSeparador} onChange={setPresionDeLineaODeSeparador} unit='Kg/cm2'/>
         <InputRowUnitless header="Tipo de unidad" name='' value={tipoDeUnidadBM} onChange={setTipoDeUnidadBM}/>
         <InputRow header="Velocidad" name='' value={velocidadBM} onChange={setVelocidadBM} unit='EPM'/>
         <InputRow header="Longitud de carera" name='' value={longitudDeCareraBM} onChange={setLongitudDeCareraBM} unit='pg'/>
         <InputRowUnitless header="Tipo de bomba subsuperficial" name='' value={tipoDeBombaSubsuperficialBM} onChange={setTipoDeBombaSubsuperficialBM}/>
-        <InputRowUnitless header="Tamano de Bomba Subsuperficial" name='' value={tamanoDeBombaSubsuperficialBM} onChange={setTamanoDeBombaSubsuperficialBM}/>
+        <InputRowUnitless header="Tamaño de bomba subsuperficial" name='' value={tamanoDeBombaSubsuperficialBM} onChange={setTamanoDeBombaSubsuperficialBM}/>
         <InputRow header="Profundidad de la bomba" name='' value={profundidadDeLaBombaBM} onChange={setProfundidadDeLaBombaBM} unit='m'/>
         <InputRowUnitless header="Arreglo de varillas" name='' value={arregloDeVarillasBM} onChange={setArregloDeVarillasBM}/>
-        <InputRowUnitless header="Cuanta con Ancla mecanico o empacador" name='' value={cuantaConAnclaBM} onChange={setCuantaConAnclaBM}/>
-        <InputRow header="Nivel dinamico" name='' value={nivelDinamico} onChange={setNivelDinamico} unit='m'/>
-        <InputRow header="Nivel estatico" name='' value={nivelEstatico} onChange={setNivelEstatico} unit='m'/>
+        <InputRowUnitless header="Cuenta con ancla mecanica o empacador" name='' value={cuantaConAnclaBM} onChange={setCuantaConAnclaBM}/>
+        <InputRow header="Nivel dinámico" name='' value={nivelDinamico} onChange={setNivelDinamico} unit='m'/>
+        <InputRow header="Nivel estático" name='' value={nivelEstatico} onChange={setNivelEstatico} unit='m'/>
       </div>
     )
   }
@@ -148,12 +148,12 @@ import { setTipoDeSistemo, setPresionDeCabeza, setPresionDeLineaODeSeparador, se
 
     let options = [
       { label: 'Ninguna', value: 'none' },
-      { label: 'Embolo Viajero', value: 'emboloViajero' },
-      { label: 'Bombeo Neumatico', value: 'bombeoNeumatico' },
-      { label: 'Bombeo Hidraulico', value: 'bombeoHidraulico' },
-      { label: 'Bombeo Cavidades Progresivas', value: 'bombeoCavidadesProgresivas' },
-      { label: 'Bombeo Electrocentrifugo', value: 'bombeoElectrocentrifugo' },
-      { label: 'Bombeo Mecanico', value: 'bombeoMecanico' },
+      { label: 'Embolo viajero', value: 'emboloViajero' },
+      { label: 'Bombeo neumatico', value: 'bombeoNeumatico' },
+      { label: 'Bombeo hidráulico', value: 'bombeoHidraulico' },
+      { label: 'Bombeo cavidades progresivas', value: 'bombeoCavidadesProgresivas' },
+      { label: 'Bombeo electrocentrífugo', value: 'bombeoElectrocentrifugo' },
+      { label: 'Bombeo mecánico', value: 'bombeoMecanico' },
     ]
 
     let forms = {
@@ -169,7 +169,7 @@ import { setTipoDeSistemo, setPresionDeCabeza, setPresionDeLineaODeSeparador, se
     return (
       <div className="form sistemas-artificiales-de-produccion">
         <div className='select-sistema' >
-          <InputRowSelectUnitless header='Tipo de Sistemo' value={tipoDeSistemo} options={options} callback={this.handleSelectSistema} />
+          <InputRowSelectUnitless header='Tipo de sistema' value={tipoDeSistemo} options={options} callback={this.handleSelectSistema} />
         </div>
         { forms[tipoDeSistemo]}
       </div>

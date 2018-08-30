@@ -30,8 +30,8 @@ import { setDescubrimientoField, setFechaDeExplotacionField, setNumeroDePozosOpe
           Generales
         </div>
         <InputRowUnitless header="Descubrimiento" name='descubrimiento' value={descubrimientoField} onChange={setDescubrimientoField}/>
-        <InputRowUnitless header="Fecha de Explotacion" name='fechaDeExplotacion' value={fechaDeExplotacionField} onChange={setFechaDeExplotacionField}/>
-        <InputRowUnitless header="No. de Pozo Operando" name='noDePozoOperando' value={numeroDePozosOperandoField} onChange={setNumeroDePozosOperandoField}/>
+        <InputRowUnitless header="Fecha de explotación" name='fechaDeExplotacion' value={fechaDeExplotacionField} onChange={setFechaDeExplotacionField}/>
+        <InputRowUnitless header="No. de pozo operando" name='noDePozoOperando' value={numeroDePozosOperandoField} onChange={setNumeroDePozosOperandoField}/>
       </div>
     )
   }
@@ -46,9 +46,9 @@ import { setDescubrimientoField, setFechaDeExplotacionField, setNumeroDePozosOpe
         <div className='header'>
           Explotacion
         </div>
-        <InputRow header="P. Inicial (ANO)" name='pInicialAno' value={pInicialAnoField} onChange={setPInicialAnoField} unit='Kg/cm2' />
-        <InputRow header="P. Actual (FECHA)" name='pActualFecha' value={pActualFechaField} onChange={setPActualFechaField} unit='Kg/cm2' />
-        <InputRow header="DP/ano" name='dpPerAno' value={dpPerAnoField} onChange={setDpPerAnoField} unit='Kg/cm2/ano' />
+        <InputRow header="P. inicial (año)" name='pInicialAno' value={pInicialAnoField} onChange={setPInicialAnoField} unit='Kg/cm2' />
+        <InputRow header="P. actual (fecha)" name='pActualFecha' value={pActualFechaField} onChange={setPActualFechaField} unit='Kg/cm2' />
+        <InputRow header="DP/año" name='dpPerAno' value={dpPerAnoField} onChange={setDpPerAnoField} unit='Kg/cm2/año' />
         <InputRow header="T yac" name='tyac' value={tyacField} onChange={setTyacField} unit='°C' />
         <InputRow header="P.R." name='pr' value={prField} onChange={setPrField} unit='mvbnm' />
 
@@ -85,8 +85,8 @@ import { setDescubrimientoField, setFechaDeExplotacionField, setNumeroDePozosOpe
         <div className='header'>
           Formacion
         </div>
-        <InputRowUnitless header="Litologia" name='litologia' value={litologiaField} onChange={setLitologiaField} />
-        <InputRow header="Espesor Neto" name='espesorNeto'value={espesorNetoField} onChange={setEspesorNetoField} unit='m' />
+        <InputRowUnitless header="Litología" name='litologia' value={litologiaField} onChange={setLitologiaField} />
+        <InputRow header="Espesor neto" name='espesorNeto'value={espesorNetoField} onChange={setEspesorNetoField} unit='m' />
         <InputRow header="Porosidad" name='porosidad' value={porosidadField} onChange={setPorosidadField} unit='m' />
         <InputRow header="Sw" name='Sw' value={swField} onChange={setSwField} unit='%' />
         <InputRow header="K promedio" name='kPromedio' value={kPromedioField} onChange={setKPromedioField} unit='mD' />

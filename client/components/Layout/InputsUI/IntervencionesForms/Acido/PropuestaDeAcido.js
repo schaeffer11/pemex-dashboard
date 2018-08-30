@@ -26,19 +26,19 @@ import { connect } from 'react-redux'
     return (
       <div className='cedula-form' >
         <div className='header'>
-          Cedula
+          Cédula
         </div>
         <InputRowUnitless header="Etapa" name='' value={etapa} onChange={setEtapa}/>
         <InputRowUnitless header="Sistema (NR-R-D)" name='' value={sistema} onChange={setSistema}/>
         <InputRowUnitless header="Tipo de apuntalante" name='' value={tipoDeApuntalante} onChange={setTipoDeApuntalante}/>
-        <InputRow header="Concentracion de apuntalante" name='' unit='lbm/gal' value={concentraciDeApuntalante} onChange={setConcentraciDeApuntalante}/>
-        <InputRow header="Vol. Liquid" name='' unit='m3' value={volLiquid} onChange={setVolLiquid}/>
+        <InputRow header="Concentración de apuntalante" name='' unit='lbm/gal' value={concentraciDeApuntalante} onChange={setConcentraciDeApuntalante}/>
+        <InputRow header="Vol. Líquido" name='' unit='m3' value={volLiquid} onChange={setVolLiquid}/>
         <InputRow header="Gasto N2" name='' unit='m3/min' value={gastoN2} onChange={setGastoN2}/>
-        <InputRow header="Gasto Liquido" name='' unit='bpm' value={gastoLiquid} onChange={setGastoLiqudo}/>
+        <InputRow header="Gasto Líquido" name='' unit='bpm' value={gastoLiquid} onChange={setGastoLiqudo}/>
         <InputRow header="Gasto en fondo" name='' unit='bpm' value={gastoEnFondo} onChange={setGastoEnFondo}/>
         <InputRow header="Calidad" name='' unit='%' value={calidad} onChange={setCalidad}/>
         <InputRow header="Vol. N2" name='' unit='m3 std' value={volN2} onChange={setVolN2}/>
-        <InputRow header="Vol. Liquid Acum." name='' unit='m3' value={volLiquidoAcum} onChange={setVolLiquidoAcum}/>
+        <InputRow header="Vol. Líquido Acum." name='' unit='m3' value={volLiquidoAcum} onChange={setVolLiquidoAcum}/>
         <InputRow header="Vol. N2 Acum." name='' unit='m3 std' value={volN2Acum} onChange={setVolN2Acum}/>
         <InputRow header="Rel. N2/Liq" name='' unit='m3 std/m3' value={relN2Liq} onChange={setRelN2Liq}/>
         <InputRow header="Tiempo" name='' unit='min' value={tiempo} onChange={setTiempo}/>
@@ -74,12 +74,12 @@ import { connect } from 'react-redux'
         <div className='header'>
           Detalles
         </div>
-        <InputRow header="Volumen Precolchon (gel lineal o N2)" name='' unit='m3' value={volumenPrecolchonN2} onChange={setVolumenPrecolchonN2}/>
-        <InputRow header="Volumen Sistema No. Reactivo" name='' unit='m3' value={volumenSistemaNoReativo} onChange={setVolumenSistemaNoReativo}/>
-        <InputRow header="Volumen Sistema Reactivo" name='' unit='m3' value={volumenSistemaReactivo} onChange={setVolumenSistemaReactivo}/>
-        <InputRow header="Volumen Sistema Divergente" name='' unit='m3' value={volumenSistemaDivergente} onChange={setVolumenSistemaDivergente}/>
-        <InputRow header="Volumen Desplazamiento Liquido" name='' unit='m3' value={volumenDesplazamientoLiquido} onChange={setVolumenDesplazamientoLiquido}/>
-        <InputRow header="Volumen Desplazamiento gel lineal" name='' unit='m3' value={volumenDesplazamientoGelLineal} onChange={setVolumenDesplazamientoGelLineal}/>
+        <InputRow header="Volumen precolchón (gel lineal o N2)" name='' unit='m3' value={volumenPrecolchonN2} onChange={setVolumenPrecolchonN2}/>
+        <InputRow header="Volumen sistema no reactivo" name='' unit='m3' value={volumenSistemaNoReativo} onChange={setVolumenSistemaNoReativo}/>
+        <InputRow header="Volumen sistema reactivo" name='' unit='m3' value={volumenSistemaReactivo} onChange={setVolumenSistemaReactivo}/>
+        <InputRow header="Volumen sistema divergente" name='' unit='m3' value={volumenSistemaDivergente} onChange={setVolumenSistemaDivergente}/>
+        <InputRow header="Volumen desplazamiento líquido" name='' unit='m3' value={volumenDesplazamientoLiquido} onChange={setVolumenDesplazamientoLiquido}/>
+        <InputRow header="Volumen desplazamiento gel lineal" name='' unit='m3' value={volumenDesplazamientoGelLineal} onChange={setVolumenDesplazamientoGelLineal}/>
       </div>
     )
   }

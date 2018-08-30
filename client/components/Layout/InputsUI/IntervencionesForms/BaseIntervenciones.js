@@ -33,9 +33,9 @@ import { setObjetivo, setAlcances, setTipoDeIntervenciones } from '../../../../r
     return (
       <form className="form base-intervenciones">
         <div className='main-form'>
-          <TextAreaUnitless header="Objetivo - Describir el objetive de la intervencion indicando la cause principal, tipo de tratamineto a aplicar y tecnica de colocacion de los sistemas." name='' className={'objetivo'} value={objetivo} onChange={setObjetivo} />
-          <TextAreaUnitless header="Alcances - Describir los alcances que se pretenden obtener con las intervencion programada a ejecutar." name='' className={'alcances'} value={alcances} onChange={setAlcances}/>
-          <InputRowSelectUnitless header='Tipo de Intervenciones' value={tipoDeIntervenciones} options={tipoDeIntervencionesOptions} callback={this.handleSelectIntervencionesType} />
+          <TextAreaUnitless header="Objetivo - Describir el objetivo de la intervención indicando la causa principal, tipo de tratamiento a aplicar y técnica de colocación de los sistemas." name='' className={'objetivo'} value={objetivo} onChange={setObjetivo} />
+          <TextAreaUnitless header="Alcances - Describir los alcances que se pretenden obtener con la intervención programada a ejecutar." name='' className={'alcances'} value={alcances} onChange={setAlcances}/>
+          <InputRowSelectUnitless header='Tipo de intervenciones' value={tipoDeIntervenciones} options={tipoDeIntervencionesOptions} callback={this.handleSelectIntervencionesType} />
         </div>
       </form>
     )
