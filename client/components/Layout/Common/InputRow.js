@@ -58,7 +58,12 @@ export const InputRowSelectUnitless = ({ header, name, value, options, callback 
     )
 }
 
-export const TextAreaUnitless = ({ header, name, unit, className, subheader }) => {
+export const TextAreaUnitless = ({ header, name, unit, className, subheader, value, onChange }) => {
+  
+  let handleChange = (e) => {
+    console.log(e.target.value)
+    onChange(e.target.value)
+  }
 
   return (
     <div className={`input-row input-row-unitless ${className}`}>
@@ -67,7 +72,7 @@ export const TextAreaUnitless = ({ header, name, unit, className, subheader }) =
         {subheader ? <br></br>: null}
         {subheader ? subheader : null}
       </div>
-      <textarea type='text' style={{height: '130px'}} name={name}>
+      <textarea type='text' style={{height: '130px'}} value={value} onChange={handleChange} name={name}>
       </textarea>
     </div>
     )

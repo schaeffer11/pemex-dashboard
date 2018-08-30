@@ -1,6 +1,8 @@
 import React, { Component } from 'react'
 import autobind from 'autobind-decorator'
 import { InputRow, InputRowUnitless, InputRowSelectUnitless } from '../../Common/InputRow'
+import { connect } from 'react-redux'
+import { setPH, setTemperaturaDeConductividad, setResistividad, setSalinidadConConductimetro, setSolidosDisueltosTotales, setDurezaTotalComoCaCO3, setDurezaDeCalcioComoCaCO3, setDurezaDeMagnesioComoCaCO3, setAlcalinidadTotalComoCaCO3, setAlcalinidadALaFenolftaleinaComoCaCO3, setSalinidadComoNaCl, setSodio, setCalcio, setMagnesio, setFierro, setCloruros, setBicarbonatos, setSulfatos, setCarbonatos, setDensidadAt15, setDensidadAt20 } from '../../../../redux/actions/analisisDelAgua'
 
 @autobind class AnalisisDelAgua extends Component {
   constructor(props) {
@@ -17,33 +19,36 @@ import { InputRow, InputRowUnitless, InputRowSelectUnitless } from '../../Common
   }
 
   makeValoresForm() {
+    let { setPH, setTemperaturaDeConductividad, setResistividad, setSalinidadConConductimetro, setSolidosDisueltosTotales, setDurezaTotalComoCaCO3, setDurezaDeCalcioComoCaCO3, setDurezaDeMagnesioComoCaCO3, setAlcalinidadTotalComoCaCO3, setAlcalinidadALaFenolftaleinaComoCaCO3, setSalinidadComoNaCl, setSodio, setCalcio, setMagnesio, setFierro, setCloruros, setBicarbonatos, setSulfatos, setCarbonatos, setDensidadAt15, setDensidadAt20, formData } = this.props
+    formData = formData.toJS()
+    let { pH, temperaturaDeConductividad, resistividad, salinidadConConductimetro, solidosDisueltosTotales, durezaTotalComoCaCO3, durezaDeCalcioComoCaCO3, durezaDeMagnesioComoCaCO3, alcalinidadTotalComoCaCO3, alcalinidadALaFenolftaleinaComoCaCO3, salinidadComoNaCl, sodio, calcio, magnesio, fierro, cloruros, bicarbonatos, sulfatos, carbonatos, densidadAt15, densidadAt20 } = formData
+    
     return (
       <div className='valores-form' >
         <div className='header'>
           Valores
         </div>
-        <InputRow header="pH" name='' unit='Adim.' />
-        <InputRow header="Temperatura de Conductividad" name='' unit='°C' />
-        <InputRow header="Resistividad" name='' unit='Ohm*m' />
-        <InputRow header="Salinidad con conductimetro" name='' unit='mg/L o PPM' />
-        <InputRow header="Solidos Disueltos Totales" name='' unit='mg/L o PPM' />
-        <InputRow header="Dureza Total como CaCO3" name='' unit='mg/L o PPM' />
-        <InputRow header="Dureza de Calcio como CaCO3" name='' unit='mg/L o PPM' />
-        <InputRow header="Dureza de Magnesio como CaCO3" name='' unit='mg/L o PPM' />
-        <InputRow header="Alcalinimg/L o PPMd Total como CaCO3" name='' unit='mg/L o PPM' />
-        <InputRow header="Alcalinimg/L o PPMd a la Fenolftaleinacomo CaCoO3" name='' unit='mg/L o PPM' />
-        <InputRow header="Salinimg/L o PPMd como NaCl" name='' unit='mg/L o PPM' />
-        <InputRow header="Sodio" name='' unit='mg/L o PPM' />
-        <InputRow header="Calcio" name='' unit='mg/L o PPM' />
-        <InputRow header="Magnesio" name='' unit='mg/L o PPM' />
-        <InputRow header="Fierro" name='' unit='mg/L o PPM' />
-        <InputRow header="Cloruros" name='' unit='mg/L o PPM' />
-        <InputRow header="Bicarbonatos" name='' unit='mg/L o PPM' />
-        <InputRow header="Sulfatos" name='' unit='mg/L o PPM' />
-        <InputRow header="Carbonatos" name='' unit='mg/L o PPM' />
-        <InputRow header="Densidad @ 15.5 °C" name='' unit='g/cm3' />
-        <InputRow header="Densig/cm3d @ 20 °C" name='' unit='da' />
-
+        <InputRow header="pH" name='' value={pH} onChange={setPH} unit='Adim.' />
+        <InputRow header="Temperatura de Conductividad" name='' value={temperaturaDeConductividad} onChange={setTemperaturaDeConductividad} unit='°C' />
+        <InputRow header="Resistividad" name='' value={resistividad} onChange={setResistividad} unit='Ohm*m' />
+        <InputRow header="Salinidad con conductimetro" name='' value={salinidadConConductimetro} onChange={setSalinidadConConductimetro} unit='mg/L o PPM' />
+        <InputRow header="Solidos Disueltos Totales" name='' value={solidosDisueltosTotales} onChange={setSolidosDisueltosTotales} unit='mg/L o PPM' />
+        <InputRow header="Dureza Total como CaCO3" name='' value={durezaTotalComoCaCO3} onChange={setDurezaTotalComoCaCO3} unit='mg/L o PPM' />
+        <InputRow header="Dureza de Calcio como CaCO3" name='' value={durezaDeCalcioComoCaCO3} onChange={setDurezaDeCalcioComoCaCO3} unit='mg/L o PPM' />
+        <InputRow header="Dureza de Magnesio como CaCO3" name='' value={durezaDeMagnesioComoCaCO3} onChange={setDurezaDeMagnesioComoCaCO3} unit='mg/L o PPM' />
+        <InputRow header="Alcalinidad Total como CaCO3" name='' value={alcalinidadTotalComoCaCO3} onChange={setAlcalinidadTotalComoCaCO3} unit='mg/L o PPM' />
+        <InputRow header="Alcalinidad a la Fenolftaleinacomo CaCoO3" name='' value={alcalinidadALaFenolftaleinaComoCaCO3} onChange={setAlcalinidadALaFenolftaleinaComoCaCO3} unit='mg/L o PPM' />
+        <InputRow header="Salinidad como NaCl" name='' value={salinidadComoNaCl} onChange={setSalinidadComoNaCl} unit='mg/L o PPM' />
+        <InputRow header="Sodio" name='' value={sodio} onChange={setSodio} unit='mg/L o PPM' />
+        <InputRow header="Calcio" name='' value={calcio} onChange={setCalcio} unit='mg/L o PPM' />
+        <InputRow header="Magnesio" name='' value={magnesio} onChange={setMagnesio} unit='mg/L o PPM' />
+        <InputRow header="Fierro" name='' value={fierro} onChange={setFierro} unit='mg/L o PPM' />
+        <InputRow header="Cloruros" name='' value={cloruros} onChange={setCloruros} unit='mg/L o PPM' />
+        <InputRow header="Bicarbonatos" name='' value={bicarbonatos} onChange={setBicarbonatos} unit='mg/L o PPM' />
+        <InputRow header="Sulfatos" name='' value={sulfatos} onChange={setSulfatos} unit='mg/L o PPM' />
+        <InputRow header="Carbonatos" name='' value={carbonatos} onChange={setCarbonatos} unit='mg/L o PPM' />
+        <InputRow header="Densidad @ 15.5 °C" name='' value={densidadAt15} onChange={setDensidadAt15} unit='g/cm3' />
+        <InputRow header="Densidad @ 20 °C" name='' value={densidadAt20} onChange={setDensidadAt20} unit='g/cm3' />
       </div>
     )
   }
@@ -58,5 +63,34 @@ import { InputRow, InputRowUnitless, InputRowSelectUnitless } from '../../Common
   }
 }
 
+const mapStateToProps = state => ({
+  formData: state.get('analisisDelAgua'),
+})
 
-export default AnalisisDelAgua
+const mapDispatchToProps = dispatch => ({
+  setSubdireccion: val => dispatch(setSubdireccion(val)), 
+  setPH: val => dispatch(setPH(val)),
+  setTemperaturaDeConductividad: val => dispatch(setTemperaturaDeConductividad(val)),
+  setResistividad: val => dispatch(setResistividad(val)),
+  setSalinidadConConductimetro: val => dispatch(setSalinidadConConductimetro(val)),
+  setSolidosDisueltosTotales: val => dispatch(setSolidosDisueltosTotales(val)),
+  setDurezaTotalComoCaCO3: val => dispatch(setDurezaTotalComoCaCO3(val)),
+  setDurezaDeCalcioComoCaCO3: val => dispatch(setDurezaDeCalcioComoCaCO3(val)),
+  setDurezaDeMagnesioComoCaCO3: val => dispatch(setDurezaDeMagnesioComoCaCO3(val)),
+  setAlcalinidadTotalComoCaCO3: val => dispatch(setAlcalinidadTotalComoCaCO3(val)),
+  setAlcalinidadALaFenolftaleinaComoCaCO3: val => dispatch(setAlcalinidadALaFenolftaleinaComoCaCO3(val)),
+  setSalinidadComoNaCl: val => dispatch(setSalinidadComoNaCl(val)),
+  setSodio: val => dispatch(setSodio(val)),
+  setCalcio: val => dispatch(setCalcio(val)),
+  setMagnesio: val => dispatch(setMagnesio(val)),
+  setFierro: val => dispatch(setFierro(val)),
+  setCloruros: val => dispatch(setCloruros(val)),
+  setBicarbonatos: val => dispatch(setBicarbonatos(val)),
+  setSulfatos: val => dispatch(setSulfatos(val)),
+  setCarbonatos: val => dispatch(setCarbonatos(val)),
+  setDensidadAt15: val => dispatch(setDensidadAt15(val)),
+  setDensidadAt20: val => dispatch(setDensidadAt20(val)),
+
+})
+
+export default connect(mapStateToProps, mapDispatchToProps)(AnalisisDelAgua)
