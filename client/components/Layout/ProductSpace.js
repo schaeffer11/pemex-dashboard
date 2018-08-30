@@ -2,6 +2,7 @@
 import React, { Component } from 'react'
 import autobind from 'autobind-decorator'
 import InputsUI from './InputsUI/InputsUI'
+import HomeUI from './HomeUI/HomeUI'
 
 @autobind class Productspace extends Component {
   constructor(props) {

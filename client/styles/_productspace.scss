@@ -9,7 +9,8 @@ html {
 
 .productspace {
 	grid-area: body;
-  padding: .7em;
+  overflow-y: scroll;
+  height: 100%;
 }
 
 
