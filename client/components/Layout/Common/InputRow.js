@@ -11,7 +11,7 @@ export const InputRow = ({ header, name, unit, value, onChange }) => {
 
   return (
     <div className='input-row'>
-      <div className='header'>
+      <div className='label'>
         {header}
       </div>
       <input className='input' value={value} onChange={handleChange} type='text' name={name}>
@@ -32,8 +32,8 @@ export const InputRowUnitless = ({ header, name, unit, value, onChange }) => {
 
 
   return (
-    <div className='input-row-unitless'>
-      <div className='header'>
+    <div className='input-row input-row-unitless'>
+      <div className='label'>
         {header}
       </div>
       <input className='input' type='text' value={value} onChange={handleChange} name={name}>
@@ -49,8 +49,8 @@ export const InputRowSelectUnitless = ({ header, name, value, options, callback 
   }
 
   return (
-    <div className='input-row-unitless'>
-      <div className='header'>
+    <div className='input-row input-row-unitless'>
+      <div className='label'>
         {header}
       </div>
       <Select className='input' simpleValue={true} options={options} value={options.find(i=>i.value === value)} onChange={callback} />
@@ -66,8 +66,8 @@ export const TextAreaUnitless = ({ header, name, unit, className, subheader, val
   }
 
   return (
-    <div className={`input-row-unitless ${className}`}>
-      <div className='header'>
+    <div className={`input-row input-row-unitless ${className}`}>
+      <div className='label'>
         {header}
         {subheader ? <br></br>: null}
         {subheader ? subheader : null}

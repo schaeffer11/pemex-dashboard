@@ -112,9 +112,13 @@ li {
   }
 }
 
+@import './settings';
+@import './mixins';
 @import 'components/forms';
+@import 'components/buttons';
 @import './layout';
 @import './productbar';
 @import './productspace';
 @import './components/inputRows';
 @import './pages/inputs.scss';
+

@@ -16,7 +16,7 @@ const ProductbarActions = ({ user, logoutAction }) => {
   }
 
   const logoutLink = user
-    ? <button to="/" className="logout" onClick={logOut}>Log Out</button>
+    ? <button to="/" className="logout" onClick={logOut}>Cerrar Sesión</button>
     : null
 
 

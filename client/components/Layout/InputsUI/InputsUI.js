@@ -7,6 +7,7 @@ import Tabs from './Components/Tabs'
 import Subtabs from './Components/Subtabs'
 import { pagesPozo, pagesIntervenciones } from '../../../lib/maps'
 import BaseIntervenciones from './IntervencionesForms/BaseIntervenciones'
+import PozoMultiStepForm from './PozoForms/PozoMultiStepForm'
 
 @autobind class InputsUI extends Component {
   constructor(props) {
@@ -133,8 +134,11 @@ import BaseIntervenciones from './IntervencionesForms/BaseIntervenciones'
 
 
     if (selectedTab === 'Pozo' && pagesPozo[selectedSubtab]) {
+/*
       title = pagesPozo[selectedSubtab].title
       form = pagesPozo[selectedSubtab].form
+*/
+      form = <PozoMultiStepForm />
     }
     else if (selectedTab === 'Intervenciones') {
       if (selectedSubtab === 'objectivoYAlcances') {
@@ -150,14 +154,10 @@ import BaseIntervenciones from './IntervencionesForms/BaseIntervenciones'
     return (
       <div className="input-forms">
         <Tabs handleSelectTab={this.handleSelectTab} selectedTab={selectedTab} />
-        <Subtabs handleSelectSubtab={this.handleSelectSubtab} selectedSubtab={selectedSubtab} selectedTab={selectedTab} intervencionesType={tipoDeIntervenciones} />
-        <div className="title-container" >
-          <div className="title">
-            { title }
-          </div>
+        <div class="tab-content">
+          { form }
         </div>
-        { form }
-        <button onClick={this.submitForms}>Click Me!</button>
+        <button class="submit" onClick={this.submitForms}>Enviar</button>
       </div>
     )
   }
