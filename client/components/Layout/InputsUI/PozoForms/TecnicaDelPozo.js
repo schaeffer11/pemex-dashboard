@@ -26,11 +26,11 @@ import { setIntervaloProductor, setEspesorBruto, setEspesorNeto, setCaliza, setD
     return (
       <div className='formacion-form' >
         <div className='header'>
-          Los Datos de Formacion
+          Los Datos de Formación
         </div>
-        <InputRow header="Intervalos(s) Productor(es)" name='intervalosProductores' value={intervaloProductor} onChange={setIntervaloProductor} unit='md/mv' />
-        <InputRow header="Espesor Bruto" name='espesorBruto' value={espesorBruto} onChange={setEspesorBruto} unit='m' />
-        <InputRow header="Espesor Neto" name='espesorNeto' value={espesorNeto} onChange={setEspesorNeto} unit='m' />
+        <InputRow header="Intervalos(s) productor(es)" name='intervalosProductores' value={intervaloProductor} onChange={setIntervaloProductor} unit='md/mv' />
+        <InputRow header="Espesor bruto" name='espesorBruto' value={espesorBruto} onChange={setEspesorBruto} unit='m' />
+        <InputRow header="Espesor neto" name='espesorNeto' value={espesorNeto} onChange={setEspesorNeto} unit='m' />
         <InputRow header="Caliza" name='caliza' value={caliza} onChange={setCaliza} unit='%' />
         <InputRow header="Dolomia" name='dolomia' value={dolomia} onChange={setDolomia} unit='%' />
         <InputRow header="Arcilla" name='arcilla' value={arcilla} onChange={setArcilla} unit='%' />
@@ -59,15 +59,15 @@ import { setIntervaloProductor, setEspesorBruto, setEspesorNeto, setCaliza, setD
         <div className='header'>
           Los Datos de Pozo
         </div>
-          <InputRowSelectUnitless header="Tipo de Pozo" value={tipoDePozo} onChange={setTipoDePozo} name='' options={wellOptions} />
-          <InputRow header="Pws (Fecha)" name='pws' value={pwsFecha} onChange={setPwsFecha} unit='Kg/cm2' />
-          <InputRow header="Pwf (Fecha)" name='pwf' value={pwfFecha} onChange={setPwfFecha} unit='Kg/cm2' />
+          <InputRowSelectUnitless header="Tipo de pozo" value={tipoDePozo} onChange={setTipoDePozo} name='' options={wellOptions} />
+          <InputRow header="Pws (fecha)" name='pws' value={pwsFecha} onChange={setPwsFecha} unit='Kg/cm2' />
+          <InputRow header="Pwf (fecha)" name='pwf' value={pwfFecha} onChange={setPwfFecha} unit='Kg/cm2' />
           <InputRow header="Δp/mes" name='deltaPperMes' value={deltaPPerMes} onChange={setDeltaPPerMes} unit='Kg/cm2/mes' />
           <InputRow header="Tyac" name='tyac' value={tyac} onChange={setTyac} unit='°C' />
           <InputRow header="PVT" name='pvt' value={pvt} onChange={setPvt} unit='Pozo' />
-          <InputRow header="Aparejo de Produccion" value={aparejoDeProduccion} onChange={setAparejoDeProduccion} name='aparejoDeProduccion' unit='pg' />
-          <InputRow header="Prof. Empacador" name='profEmpacador' value={profEmpacador} onChange={setProfEmpacador} unit='md' />
-          <InputRow header="Prof. Sensor P y T" name='profSensorPYT' value={profSensorPYT} onChange={setProfSensorPYT} unit='md' />
+          <InputRow header="Aparejo de producción" value={aparejoDeProduccion} onChange={setAparejoDeProduccion} name='aparejoDeProduccion' unit='pg' />
+          <InputRow header="Prof. empacador" name='profEmpacador' value={profEmpacador} onChange={setProfEmpacador} unit='md' />
+          <InputRow header="Prof. sensor P y T" name='profSensorPYT' value={profSensorPYT} onChange={setProfSensorPYT} unit='md' />
           <InputRowUnitless header="Tipo de SAP" name='TipoDeSap' value={tipoDeSap} onChange={setTipoDeSap} />
       </div>
     )
@@ -78,7 +78,7 @@ import { setIntervaloProductor, setEspesorBruto, setEspesorNeto, setCaliza, setD
       <div className='intervenciones-form' >
         <div className='header'>
           Historial de Intervenciones
-          <div style={{color: 'red'}}>TODO: add user input? or is this pulled from db?</div>
+          <div style={{color: 'red'}}>TODO: agregar aportaciones de usario (add user input)</div>
         </div>
 
       </div>
@@ -93,15 +93,15 @@ import { setIntervaloProductor, setEspesorBruto, setEspesorNeto, setCaliza, setD
     return (
       <div className='geomecanica-form' >
         <div className='header'>
-          Informacion de Geomecanica
+          Informacion de Geomecánica
         </div>
-        <InputRow header="Modulo Young Arena" name='moduloYoungArena' value={moduloYoungArena} onChange={setModuloYoungArena} unit='psi' />
-        <InputRow header="Modulo Young Lutitas" name='moduloYoungLutitas' value={moduloYoungLutitas} onChange={setModuloYoungLutitas} unit='psi' />
-        <InputRow header="Relac. Poisson Arena" name='relacPoissonArena' value={relacPoissonArena} onChange={setRelacPoissonArena} unit='adim' />
-        <InputRow header="Relac. Poisson Lutatas" name='relacPoissonLutatas' value={relacPoissonLutatas} onChange={setRelacPoissonLutatas} unit='adim' />
-        <InputRow header="Gradiente de Fractura" name='gradienteDeFractura' value={gradienteDeFractura} onChange={setGradienteDeFractura} unit='psi/ft' />
-        <InputRow header="Densidad de Disparos" name='densidadDeDisparos' value={densidadDeDisparos} onChange={setDensidadDeDisparos} unit='c/m' />
-        <InputRow header="Diametro de disparos" name='diametroDeDisparos' value={diametroDeDisparos} onChange={setDiametroDeDisparos} unit='pg' />
+        <InputRow header="Modulo young arena" name='moduloYoungArena' value={moduloYoungArena} onChange={setModuloYoungArena} unit='psi' />
+        <InputRow header="Modulo young lutitas" name='moduloYoungLutitas' value={moduloYoungLutitas} onChange={setModuloYoungLutitas} unit='psi' />
+        <InputRow header="Relac. poisson arena" name='relacPoissonArena' value={relacPoissonArena} onChange={setRelacPoissonArena} unit='adim' />
+        <InputRow header="Relac. aoisson lutatas" name='relacPoissonLutatas' value={relacPoissonLutatas} onChange={setRelacPoissonLutatas} unit='adim' />
+        <InputRow header="Gradiente de fractura" name='gradienteDeFractura' value={gradienteDeFractura} onChange={setGradienteDeFractura} unit='psi/ft' />
+        <InputRow header="Densidad de disparos" name='densidadDeDisparos' value={densidadDeDisparos} onChange={setDensidadDeDisparos} unit='c/m' />
+        <InputRow header="Diámetro de disparos" name='diametroDeDisparos' value={diametroDeDisparos} onChange={setDiametroDeDisparos} unit='pg' />
       </div>
     )
   }

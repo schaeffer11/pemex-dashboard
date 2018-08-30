@@ -30,14 +30,14 @@ import { connect } from 'react-redux'
         </div>
         <InputRowUnitless header="Etapa" name='' value={etapa} onChange={setEtapa}/>
         <InputRowUnitless header="Sistema (NR-R-D)" name='' value={sistema} onChange={setSistema}/>
-        <InputRow header="Vol. Liquid" name='' unit='m3' value={tipoDeApuntalante} onChange={setTipoDeApuntalante}/>
+        <InputRow header="Vol. líquido" name='' unit='m3' value={tipoDeApuntalante} onChange={setTipoDeApuntalante}/>
         <InputRow header="Gasto N2" name='' unit='m3/min' value={gastoN2} onChange={setGastoN2}/>
-        <InputRow header="Gasto Liquido" name='' unit='bpm' value={gastoLiqudo} onChange={setGastoLiqudo}/>
+        <InputRow header="Gasto líquido" name='' unit='bpm' value={gastoLiqudo} onChange={setGastoLiqudo}/>
         <InputRow header="Gasto en fondo" name='' unit='bpm' value={gastoEnFondo} onChange={setGastoEnFondo}/>
         <InputRow header="Calidad" name='' unit='%' value={calidad} onChange={setCalidad}/>
         <InputRow header="Vol. N2" name='' unit='m3 std' value={volN2} onChange={setVolN2}/>
-        <InputRow header="Vol. Liquido Acum." name='' unit='m3' value={volLiquidoAcum} onChange={setVolLiquidoAcum}/>
-        <InputRow header="Vol. N2 Acum." name='' unit='m3 std' value={volN2Acum} onChange={setVolN2Acum}/>
+        <InputRow header="Vol. líquido acum." name='' unit='m3' value={volLiquidoAcum} onChange={setVolLiquidoAcum}/>
+        <InputRow header="Vol. N2 acum." name='' unit='m3 std' value={volN2Acum} onChange={setVolN2Acum}/>
         <InputRow header="Rel. N2/Liq" name='' unit='m3 std/m3' value={relN2Liq} onChange={setRelN2Liq}/>
         <InputRow header="Tiempo" name='' unit='min' value={tiempo} onChange={setTiempo}/>
       </div>

@@ -28,14 +28,14 @@ import { connect } from 'react-redux'
       <div className='result-form' >
         <div className='header'>
         </div>
-        <InputRow header="Longitud Apuntalada" name='' unit="m" value={longitudApuntalada} onChange={setLongitudApuntalada} />
-        <InputRow header="Altura Total de Fractura" name='' unit="m" value={alturaTotalDeFractura} onChange={setAlturaTotalDeFractura} />
-        <InputRow header="Ancho Promedio" name='' unit="pg." value={anchoPromedio} onChange={setAnchoPromedio} />
-        <InputRow header="Concentracion Areal" name='' unit="lb/pg2" value={concentractionAreal} onChange={setConcentractionAreal} />
+        <InputRow header="Longitud apuntalada" name='' unit="m" value={longitudApuntalada} onChange={setLongitudApuntalada} />
+        <InputRow header="Altura total de fractura" name='' unit="m" value={alturaTotalDeFractura} onChange={setAlturaTotalDeFractura} />
+        <InputRow header="Ancho promedio" name='' unit="pg." value={anchoPromedio} onChange={setAnchoPromedio} />
+        <InputRow header="Concentración Areal" name='' unit="lb/pg2" value={concentractionAreal} onChange={setConcentractionAreal} />
         <InputRow header="Conductividad" name='' unit="mD*ft" value={conductividad} onChange={setConductividad} />
         <InputRow header="FCD" name='' unit="adim." value={fcd} onChange={setFcd} />
-        <InputRow header="Presion Neta" name='' unit="psi" value={presionNeta} onChange={setPresionNeta} />
-        <InputRow header="Eficiencia de Fluido  de Fractura" name='' unit="%" value={eficienciaDeFluidoDeFractura} onChange={setEficienciaDeFluidoDeFractura} />
+        <InputRow header="Presión neta" name='' unit="psi" value={presionNeta} onChange={setPresionNeta} />
+        <InputRow header="Eficiencia de fluido  de fractura" name='' unit="%" value={eficienciaDeFluidoDeFractura} onChange={setEficienciaDeFluidoDeFractura} />
       </div>
     )
   }
@@ -46,7 +46,7 @@ import { connect } from 'react-redux'
     return (
       <div className="form resultados-de-simulacion-apuntalado">
           { this.makeResultForm() }
-          <div style={{color: 'red'}}>TODO add uevidence of simulation</div>
+          <div style={{color: 'red'}}>TODO: agregar opcion para subir evidencia de simulacion (add evidence of simulation)</div>
 
       </div>
     )

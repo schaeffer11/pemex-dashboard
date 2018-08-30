@@ -28,10 +28,10 @@ import { connect } from 'react-redux'
         <div className='header'>
           Datos Generales
         </div>
-        <InputRowUnitless header="Tipo de Analisis" name='' value={tipoDeAnalisis} onChange={setTipoDeAnalisis}/>
-        <InputRow header="Fecha de Muestreo" name='' unit="dd/mm/aa" value={fechaDeMuestreo} onChange={setFechaDeMuestreo}/>
+        <InputRowUnitless header="Tipo de análisis" name='' value={tipoDeAnalisis} onChange={setTipoDeAnalisis}/>
+        <InputRow header="Fecha de muestreo" name='' unit="dd/mm/aa" value={fechaDeMuestreo} onChange={setFechaDeMuestreo}/>
         <InputRow header="Fecha de prueba" name='' unit="dd/mm/aa" value={fechaDePrueba} onChange={setFechaDePrueba}/>
-        <InputRowUnitless header="Compania" name='' value={compania} onChange={setCompania}/>
+        <InputRowUnitless header="Compañía" name='' value={compania} onChange={setCompania}/>
         <InputRowUnitless header="Personal de Pemex que superviso" name='' value={personalDePemexQueSuperViso} onChange={setPersonalDePemexQueSuperViso}/>
       </div>
     )
@@ -46,10 +46,9 @@ import { connect } from 'react-redux'
     return (
       <div className="form pruebas-de-laboratorio-estimulacion">
           { this.makeGeneralesForm() }
-          <div style={{color: 'red'}}>TODO add table to add differant lab tests?</div>
+          <div style={{color: 'red'}}>TODO: agregar tabla para agregar diferentes pruebas de laboratorio? (add table to add differant lab tests?)</div>
           <TextAreaUnitless header="Observaciones" name='' className={'obervaciones'} value={obervacionesLab} onChange={setObervacionesLab}/>
-          <div style={{color: 'red'}}>TODO add upload evidence of lab test</div>
-
+          <div style={{color: 'red'}}>TODO: agregar opcion para subir evidencia de prueba de laboratorio. (add upload evidence of lab test)</div>
       </div>
     )
   }

@@ -26,21 +26,21 @@ import { connect } from 'react-redux'
     return (
       <div className='caracterizacion-form' >
         <div className='header'>
-          Caracterizacion de los Fluidos Producidos
+          Caracterización de los Fluidos Producidos
         </div>
         <InputRow header="Contenido de aceite" name='' unit="%" value={contenidoDeAceite} onChange={setContenidoDeAceite} />
         <InputRow header="Contenido de agua" name='' unit="%" value={contenidoDeAgua} onChange={setContenidoDeAgua} />
-        <InputRow header="Contenido de emulsion" name='' unit="%" value={contenidoDeEmulsion} onChange={setContenidoDeEmulsion} />
+        <InputRow header="Contenido de emulsión" name='' unit="%" value={contenidoDeEmulsion} onChange={setContenidoDeEmulsion} />
         <InputRow header="Contenido de solidos" name='' unit="%" value={contenidoDeSolidos} onChange={setContenidoDeSolidos} />
-        <InputRow header="Tipo de solidossssssssssssssssssss" name='' value={tipoDeSolidos} onChange={setTipoDeSolidos} />
+        <InputRow header="Tipo de solidos" name='' value={tipoDeSolidos} onChange={setTipoDeSolidos} />
         <InputRow header="Densidad del aceite" name='' unit="g/cm3" value={densidadDelAceite} onChange={setDensidadDelAceite} />
         <InputRow header="Densidad del agua" name='' unit="g/cm3" value={densidadDelAgua} onChange={setDensidadDelAgua} />
         <InputRow header="Densidad de la emulsion" name='' unit="g/cm3" value={densidadDeLaEmulsion} onChange={setDensidadDeLaEmulsion} />
         <InputRow header="Contenido de asfaltenos" name='' unit="%" value={contenidoDeAsfaltenos} onChange={setContenidoDeAsfaltenos} />
         <InputRow header="Contenido de parafinas" name='' unit="%" value={contenidoDeParafinas} onChange={setContenidoDeParafinas} />
         <InputRow header="Contenido de resinas" name='' unit="%" value={contenidoDeResinas} onChange={setContenidoDeResinas} />
-        <InputRow header="Indice de estabilidad coloidal" name='' unit="adim" value={indiceDeEstabilidadDelColoidal} onChange={setIndiceDeEstabilidadDelColoidal} />
-        <InputRow header="Indice de estabilidad del agua" name='' unit="adim" value={indiceDeEstabilidadDelAgua} onChange={setIndiceDeEstabilidadDelAgua} />
+        <InputRow header="Índice de estabilidad coloidal" name='' unit="adim" value={indiceDeEstabilidadDelColoidal} onChange={setIndiceDeEstabilidadDelColoidal} />
+        <InputRow header="Índice de estabilidad del agua" name='' unit="adim" value={indiceDeEstabilidadDelAgua} onChange={setIndiceDeEstabilidadDelAgua} />
         <InputRow header="pH" name='' unit="adim" value={pH} onChange={setPH} />
         <InputRow header="Salinidad" name='' unit="ppm" value={salinidad} onChange={setSalinidad} />
         <InputRow header="Viscosidad del aceite" name='' unit="cp" value={viscosidadDelAceite} onChange={setViscosidadDelAceite} />
@@ -59,9 +59,9 @@ import { connect } from 'react-redux'
         <div className='header'>
           Prueba Para Gel Lineal
         </div>
-        <InputRowUnitless header="Tipo de Gel Lineal" name='' value={tipoDeGelLineal} onChange={setTipoDeGelLineal} />
-        <InputRow header="Viscosidad del Gel Lineal" name='' unit="cp" value={viscosidadDelGelLineal} onChange={setViscosidadDelGelLineal} />
-        <InputRow header="Tiempo de reticulacion" name='' unit="min" value={tiempoDeReticulacion} onChange={setTiempoDeReticulacion} />
+        <InputRowUnitless header="Tipo de gel lineal" name='' value={tipoDeGelLineal} onChange={setTipoDeGelLineal} />
+        <InputRow header="Viscosidad del gel lineal" name='' unit="cp" value={viscosidadDelGelLineal} onChange={setViscosidadDelGelLineal} />
+        <InputRow header="Tiempo de reticulación" name='' unit="min" value={tiempoDeReticulacion} onChange={setTiempoDeReticulacion} />
         <InputRow header="pH gel lineal" name='' unit="adim" value={pHGelLineal} onChange={setPHGelLineal} />
         <InputRow header="Tiempo de rompedor del gel" name='' unit="min" value={tiempoDeRompedorDelGel} onChange={setTiempoDeRompedorDelGel} />
       </div>
@@ -79,13 +79,13 @@ import { connect } from 'react-redux'
         <div className='header'>
           Prueba Para Apuntalante
         </div>
-        <InputRow header="Tamano del apuntalante" name='' unit="malla" value={tamanoDelApuntalante} onChange={setTamanoDelApuntalante} />
-        <InputRow header="Gravedad especifica" name='' unit="adim" value={gravedadEspecifica} onChange={setGravedadEspecifica} />
+        <InputRow header="Tamaño del apuntalante" name='' unit="malla" value={tamanoDelApuntalante} onChange={setTamanoDelApuntalante} />
+        <InputRow header="Gravedad específica" name='' unit="adim" value={gravedadEspecifica} onChange={setGravedadEspecifica} />
         <InputRow header="Esfericidad" name='' unit="adim" value={esfericidad} onChange={setEsfericidad} />
         <InputRow header="Redondeo" name='' unit="adim" value={redondeo} onChange={setRedondeo} />
         <InputRow header="Turbidez" name='' unit="FTU" value={turbidez} onChange={setTurbidez} />
         <InputRow header="Resistencia" name='' unit="psi" value={resistencia} onChange={setResistencia} />
-        <InputRow header="Prueba de solubilidad con acida" name='' unit="%" value={pruebaDeSolubilidadConAcida} onChange={setPruebaDeSolubilidadConAcida} />
+        <InputRow header="Prueba de solubilidad con ácido" name='' unit="%" value={pruebaDeSolubilidadConAcida} onChange={setPruebaDeSolubilidadConAcida} />
       </div>
     )
   }
@@ -107,7 +107,7 @@ import { connect } from 'react-redux'
             <TextAreaUnitless header="Observaciones" name='' className={'obervaciones'}  value={obervacionesPruebasLabApuntalado} onChange={setObervacionesPruebasLabApuntalado} /> 
           </div>
 
-          <div style={{color: 'red'}}>TODO add upload evidence of lab test</div>
+          <div style={{color: 'red'}}>TODO: agregar opcion para subir evidencia de prueba de laboratorio. (add upload evidence of lab test)</div>
 
       </div>
     )
