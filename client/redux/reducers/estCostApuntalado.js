@@ -6,7 +6,7 @@ const initialState = Map({
     estCostUnidadesDeAltaPresion: '',
     estCostDelGelDeFractura: '',
     estCostDeSistemoRactivo: '',
-    estCostDeSistemaNoReactive: '',
+    estCostDeSistemaNoRactivo: '',
     estCostDeDivergentes: '',
     estCostDeN2: '',
     estCostDeHCL: '',
@@ -33,6 +33,8 @@ const estCostApuntalado = (state = initialState, action) => {
         return state.set('estCostDelGelDeFractura', fromJS(action.value))
     case 'set_estCostDeSistemoRactivo':
         return state.set('estCostDeSistemoRactivo', fromJS(action.value))
+    case 'set_estCostDeSistemoNoRactivo':
+        return state.set('estCostDeSistemoNoRactivo', fromJS(action.value))
     case 'set_estCostDeDivergentes':
         return state.set('estCostDeDivergentes', fromJS(action.value))
     case 'set_estCostDeN2':
@@ -57,7 +59,6 @@ const estCostApuntalado = (state = initialState, action) => {
         return state.set('estCostProtectorDeArbol', fromJS(action.value))
 
 
-   
     default:
       return state
   }

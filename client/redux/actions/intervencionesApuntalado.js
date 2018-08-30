@@ -88,6 +88,7 @@ export const setEstCostoDeRentaDeBarco = value => ({ type: 'set_estCostoDeRentaD
 export const setEstCostUnidadesDeAltaPresion = value => ({ type: 'set_estCostUnidadesDeAltaPresion', value})
 export const setEstCostDelGelDeFractura = value => ({ type: 'set_estCostDelGelDeFractura', value})
 export const setEstCostDeSistemoRactivo = value => ({ type: 'set_estCostDeSistemoRactivo', value})
+export const setEstCostDeSistemoNoRactivo = value => ({ type: 'set_estCostDeSistemoNoRactivo', value})
 export const setEstCostDeDivergentes = value => ({ type: 'set_estCostDeDivergentes', value})
 export const setEstCostDeN2 = value => ({ type: 'set_estCostDeN2', value})
 export const setEstCostDeHCL = value => ({ type: 'set_estCostDeHCL', value})
