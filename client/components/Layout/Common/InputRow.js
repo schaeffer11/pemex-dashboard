@@ -53,7 +53,7 @@ export const InputRowSelectUnitless = ({ header, name, value, options, callback 
       <div className='label'>
         {header}
       </div>
-      <Select className='input' simpleValue={true} options={options} value={options.find(i=>i.value === value)} onChange={callback} />
+      <Select className='input' simpleValue={true} options={options} value={options.find(i=>i.value === value)} onChange={callback} name={name} />
     </div>
     )
 }

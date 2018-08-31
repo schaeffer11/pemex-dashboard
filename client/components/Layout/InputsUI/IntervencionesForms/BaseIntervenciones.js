@@ -5,11 +5,16 @@ import Select from 'react-select'
 import { connect } from 'react-redux'
 import { setObjetivo, setAlcances, setTipoDeIntervenciones } from '../../../../redux/actions/intervencionesEstimulacion'
 
+import AcidoMultiStepForm from './Acido/AcidoMultiStepForm'
+import ApuntaladoMultiStepForm from './Apuntalado/ApuntaladoMultiStepForm'
+import EstimulacionMultiStepForm from './Estimulacion/EstimulacionMultiStepForm'
+
 
 @autobind class BaseIntervenciones extends Component {
   constructor(props) {
     super(props)
     this.state = { 
+      form: null
     }
   }
 
@@ -17,6 +22,14 @@ import { setObjetivo, setAlcances, setTipoDeIntervenciones } from '../../../../r
     let { setTipoDeIntervenciones } = this.props
 
     setTipoDeIntervenciones(val.value)
+  }
+
+  handleSubmit(event){
+    event.preventDefault();
+    let {formData} = this.props
+    this.setState({
+      form: 'test'
+    })
   }
 
   render() {
@@ -30,14 +43,47 @@ import { setObjetivo, setAlcances, setTipoDeIntervenciones } from '../../../../r
       {label: 'Fracturamiento Apuntalado', value: 'apuntalado'},
     ]
 
-    return (
-      <form className="form base-intervenciones">
-        <div className='main-form'>
-          <TextAreaUnitless header="Objetivo - Describir el objetivo de la intervención indicando la causa principal, tipo de tratamiento a aplicar y técnica de colocación de los sistemas." name='' className={'objetivo'} value={objetivo} onChange={setObjetivo} />
-          <TextAreaUnitless header="Alcances - Describir los alcances que se pretenden obtener con la intervención programada a ejecutar." name='' className={'alcances'} value={alcances} onChange={setAlcances}/>
-          <InputRowSelectUnitless header='Tipo de intervenciones' value={tipoDeIntervenciones} options={tipoDeIntervencionesOptions} callback={this.handleSelectIntervencionesType} />
+    
+    if(this.state.form === null){
+      return (
+        <div>
+          <div class="subtabs"></div>
+          <div class="tab-content">
+          <div class="multistep-form">
+          <div class="content">
+          <form className="form base-intervenciones" onSubmit={this.handleSubmit}>
+            <div className='main-form'>
+              <TextAreaUnitless header="Objetivo - Describir el objetivo de la intervención indicando la causa principal, tipo de tratamiento a aplicar y técnica de colocación de los sistemas." name='objetivo' className={'objetivo'} value={objetivo} onChange={setObjetivo} />
+              <TextAreaUnitless header="Alcances - Describir los alcances que se pretenden obtener con la intervención programada a ejecutar." name='alcances' className={'alcances'} value={alcances} onChange={setAlcances}/>
+              <InputRowSelectUnitless header='Tipo de intervenciones' name='intervencion' value={tipoDeIntervenciones} options={tipoDeIntervencionesOptions} callback={this.handleSelectIntervencionesType} />
+              <button class="submit">Enviar</button>
+            </div>
+          </form>
+          </div>
+          </div>
+          </div>
         </div>
-      </form>
+      )
+    }
+
+    let form;
+    switch(formData.tipoDeIntervenciones){
+            case 'estimulacion': 
+              form = <EstimulacionMultiStepForm/>
+              break;
+            case 'acido':
+              form = <AcidoMultiStepForm/>
+              break;
+            case 'apuntalado':
+              form = <ApuntaladoMultiStepForm/>
+              break; 
+    }
+
+
+    return (
+          <div>
+            {form}
+          </div>
     )
   }
 }

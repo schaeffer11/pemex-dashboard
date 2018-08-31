@@ -134,13 +134,11 @@ import PozoMultiStepForm from './PozoForms/PozoMultiStepForm'
 
 
     if (selectedTab === 'Pozo' && pagesPozo[selectedSubtab]) {
-/*
-      title = pagesPozo[selectedSubtab].title
-      form = pagesPozo[selectedSubtab].form
-*/
       form = <PozoMultiStepForm />
     }
     else if (selectedTab === 'Intervenciones') {
+      form = <BaseIntervenciones />
+/*
       if (selectedSubtab === 'objectivoYAlcances') {
         title = 'Objetivo y alcances de la intervención'
         form = <BaseIntervenciones />
@@ -149,6 +147,7 @@ import PozoMultiStepForm from './PozoForms/PozoMultiStepForm'
         title = pagesIntervenciones[tipoDeIntervenciones][selectedSubtab].title
         form = pagesIntervenciones[tipoDeIntervenciones][selectedSubtab].form 
       }
+*/
     }
 
     return (
@@ -157,7 +156,6 @@ import PozoMultiStepForm from './PozoForms/PozoMultiStepForm'
         <div class="tab-content">
           { form }
         </div>
-        <button class="submit" onClick={this.submitForms}>Enviar</button>
       </div>
     )
   }

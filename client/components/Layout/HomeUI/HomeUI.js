@@ -64,10 +64,12 @@ const LinkButton = ({ text, disabled , src, to}) => {
           </div>
           <div className="text">
             <div className="text-inner">
-              Optimizar. Estandiarizar. Sustentar. Excelencia.
+              Homologación de Procesos de Estimulación y Fracturamiento
             </div>
           </div>
           <div className="footer">
+            <span className="left">Optimizar. Estandiarizar. Sustentar. Excelencia.</span>
+            <span className="right">Gerencia de Producción <br/> Productividad de Pozos</span>
           </div>
         </div>
       </div>
