@@ -14,7 +14,7 @@ export const InputRow = ({ header, name, unit, value, onChange }) => {
       <div className='label'>
         {header}
       </div>
-      <input className='input' value={value} onChange={handleChange} type='text' name={name}>
+      <input className='input' value={value} onChange={handleChange} name={name}>
       </input>
       <div className='unit'>
         {unit}

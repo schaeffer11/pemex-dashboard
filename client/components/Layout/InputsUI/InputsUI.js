@@ -24,7 +24,8 @@ import PozoMultiStepForm from './PozoForms/PozoMultiStepForm'
 
     this.setState({
       selectedTab: val,
-      selectedSubtab: selectedSub
+      selectedSubtab: selectedSub,
+      error: ''
     })
   }
 
@@ -52,11 +53,16 @@ import PozoMultiStepForm from './PozoForms/PozoMultiStepForm'
 
 
   submitForms() {
-    let { fichaTecnicaDelPozo, fichaTecnicaDelPozoHighLevel, fichaTecnicaDelCampo } = this.props
+    let { fichaTecnicaDelPozo, fichaTecnicaDelPozoHighLevel, fichaTecnicaDelCampo, sistemasArtificialesDeProduccion, mecanicoYAparejoDeProduccion, analisisDelAgua } = this.props
+    let self = this
+
 
     fichaTecnicaDelPozo = fichaTecnicaDelPozo.toJS()
     fichaTecnicaDelPozoHighLevel = fichaTecnicaDelPozoHighLevel.toJS()
     fichaTecnicaDelCampo = fichaTecnicaDelCampo.toJS()
+    sistemasArtificialesDeProduccion = sistemasArtificialesDeProduccion.toJS()
+    mecanicoYAparejoDeProduccion = mecanicoYAparejoDeProduccion.toJS()
+    analisisDelAgua = analisisDelAgua.toJS()
 
     //Ficha Technica Del Pozo High Level
     let { subdireccion, bloque, activo, campo, pozo, formacion } = fichaTecnicaDelPozoHighLevel
@@ -76,8 +82,29 @@ import PozoMultiStepForm from './PozoForms/PozoMultiStepForm'
       gpField, wpField, rraField, rrgField, rrpceField, 
       h2sField, co2Field, n2Field } = fichaTecnicaDelCampo
 
+    //Informacion de Sistemas Artificiales De Produccion
+    let {tipoDeSistemo, presionDeCabeza, presionDeLineaODeSeparador, numeroDeDescargasOCiclosEV, volumenDesplazadoPorCircloEV, 
+      presionDeInyeccionBN, presionDeDescargaBN, numeroDeValvulasBN, profundidadDeLaVulvulaOperanteBN, orificioBN, 
+      volumenDeGasInyectadoBN, profundidadDeLaBombaBH, tipoYMarcaDeBombaBH, orificioBH, tipoDeCamisaBH, 
+      fluidoMotrizBH, equipoSuperficialBH, motorYTipoDeMotorBCP, profunidadDelMotorBCP, velocidadBCP, 
+      hpBCP, arregloDeVarillasBCP, tipoDeElastomeroBCP, profundidadDelAnclaAntitorqueBCP, profundidadDelMotorBE, 
+      diametroBE, voltsBE, amparajeBE, armaduraBE, tipoDeCableBE, 
+      longitudDeCableBE, rmpBE, tipoDeUnidadBM, velocidadBM, longitudDeCareraBM, 
+      tipoDeBombaSubsuperficialBM, tamanoDeBombaSubsuperficialBM, profundidadDeLaBombaBM, arregloDeVarillasBM, CuantaConAnclaBM, 
+      nivelDinamico, nivelEstatico } = sistemasArtificialesDeProduccion
 
-      console.log(fichaTecnicaDelCampo)
+    //Edo Mecanico y Aparejo De Produccion
+    let { tipoDeTerminacion, hIntervaloProductor, empacador, presionDifEmpacador, sensorPyt, 
+      tipoDeLiner, diametroDeLiner, tipoDePistolas, densidadDeDisparosMechanico, fase, 
+      diametroDeOrificio, penetracion, tipoDeSAP, tratamientoPor, volumenAparejoDeProduccion, 
+      volumenCimaDeIntervalo, volumenBaseDeIntervalo, volumenDeEspacioAnular} = mecanicoYAparejoDeProduccion
+
+    //Analisis Del Agua
+    let { pH, temperaturaDeConductividad, resistividad, salinidadConConductimetro, solidosDisueltosTotales, 
+      durezaTotalComoCaCO3, durezaDeCalcioComoCaCO3, durezaDeMagnesioComoCaCO3, alcalinidadTotalComoCaCO3, alcalinidadALaFenolftaleinaComoCaCO3, 
+      salinidadComoNaCl, sodio, calcio, magnesio, fierro, 
+      cloruros, bicarbonatos, sulfatos, carbonatos, densidadAt15, 
+      densidadAt20} = analisisDelAgua
 
     let data = {
       subdireccion: subdireccion,
@@ -146,9 +173,99 @@ import PozoMultiStepForm from './PozoForms/PozoMultiStepForm'
       rrpceField: rrpceField,
       h2sField: h2sField,
       co2Field: co2Field,
-      n2Field: n2Field
+      n2Field: n2Field,
+      tipoDeSistemo: tipoDeSistemo,
+      presionDeCabeza: presionDeCabeza,
+      presionDeLineaODeSeparador: presionDeLineaODeSeparador,
+      tipoDeTerminacion: tipoDeTerminacion,
+      hIntervaloProductor: hIntervaloProductor,
+      empacador: empacador,
+      presionDifEmpacador: presionDifEmpacador,
+      sensorPyt: sensorPyt,
+      tipoDeLiner: tipoDeLiner,
+      diametroDeLiner: diametroDeLiner,
+      tipoDePistolas: tipoDePistolas,
+      densidadDeDisparosMechanico: densidadDeDisparosMechanico,
+      fase: fase,
+      diametroDeOrificio: diametroDeOrificio,
+      penetracion: penetracion,
+      tipoDeSAP: tipoDeSAP,
+      tratamientoPor: tratamientoPor,
+      volumenAparejoDeProduccion: volumenAparejoDeProduccion,
+      volumenCimaDeIntervalo: volumenCimaDeIntervalo,
+      volumenBaseDeIntervalo: volumenBaseDeIntervalo,
+      volumenDeEspacioAnular: volumenDeEspacioAnular,
+      pH: pH,
+      temperaturaDeConductividad: temperaturaDeConductividad,
+      resistividad: resistividad,
+      salinidadConConductimetro: salinidadConConductimetro,
+      solidosDisueltosTotales: solidosDisueltosTotales,
+      durezaTotalComoCaCO3: durezaTotalComoCaCO3,
+      durezaDeCalcioComoCaCO3: durezaDeCalcioComoCaCO3,
+      durezaDeMagnesioComoCaCO3: durezaDeMagnesioComoCaCO3,
+      alcalinidadTotalComoCaCO3: alcalinidadTotalComoCaCO3,
+      alcalinidadALaFenolftaleinaComoCaCO3: alcalinidadALaFenolftaleinaComoCaCO3,
+      salinidadComoNaCl: salinidadComoNaCl,
+      sodio: sodio,
+      calcio: calcio,
+      magnesio: magnesio,
+      fierro: fierro,
+      cloruros: cloruros,
+      bicarbonatos: bicarbonatos,
+      sulfatos: sulfatos,
+      carbonatos: carbonatos,
+      densidadAt15: densidadAt15,
+      densidadAt20: densidadAt20,
     }
 
+    switch(tipoDeSistemo) {
+      case 'emboloViajero':
+        data.numeroDeDescargasOCiclosEV = numeroDeDescargasOCiclosEV
+        data.volumenDesplazadoPorCircloEV = volumenDesplazadoPorCircloEV
+        break
+      case 'bombeoNeumatico':
+        data.presionDeInyeccionBN = presionDeInyeccionBN
+        data.presionDeDescargaBN = presionDeDescargaBN
+        data.numeroDeValvulasBN = numeroDeValvulasBN
+        data.profundidadDeLaVulvulaOperanteBN = profundidadDeLaVulvulaOperanteBN
+        data.orificioBN = orificioBN
+        data.volumenDeGasInyectadoBN = volumenDeGasInyectadoBN
+      case 'bombeoHidraulico':
+        data.profundidadDeLaBombaBH = profundidadDeLaBombaBH
+        data.tipoYMarcaDeBombaBH = tipoYMarcaDeBombaBH
+        data.orificioBH = orificioBH
+        data.tipoDeCamisaBH = tipoDeCamisaBH
+        data.fluidoMotrizBH = fluidoMotrizBH
+        data.equipoSuperficialBH = equipoSuperficialBH
+      case 'bombeoCavidadesProgresivas':
+        data.motorYTipoDeMotorBCP = motorYTipoDeMotorBCP
+        data.profunidadDelMotorBCP = profunidadDelMotorBCP
+        data.velocidadBCP = velocidadBCP
+        data.hpBCP = hpBCP
+        data.arregloDeVarillasBCP = arregloDeVarillasBCP
+        data.tipoDeElastomeroBCP = tipoDeElastomeroBCP
+        data.profundidadDelAnclaAntitorqueBCP = profundidadDelAnclaAntitorqueBCP
+      case 'bombeoElectrocentrifugo':
+        data.profundidadDelMotorBE = profundidadDelMotorBE
+        data.diametroBE = diametroBE
+        data.voltsBE = voltsBE 
+        data.amparajeBE = amparajeBE
+        data.armaduraBE = armaduraBE
+        data.tipoDeCableBE = tipoDeCableBE
+        data.longitudDeCableBE = longitudDeCableBE
+        data.rmpBE = rmpBE
+      case 'bombeoMecanico':
+        data.tipoDeUnidadBM = tipoDeUnidadBM
+        data.velocidadBM = velocidadBM
+        data.longitudDeCareraBM = longitudDeCareraBM
+        data.tipoDeBombaSubsuperficialBM = tipoDeBombaSubsuperficialBM
+        data.tamanoDeBombaSubsuperficialBM = tamanoDeBombaSubsuperficialBM
+        data.profundidadDeLaBombaBM = profundidadDeLaBombaBM
+        data.arregloDeVarillasBM = arregloDeVarillasBM
+        data.CuantaConAnclaBM = CuantaConAnclaBM
+        data.nivelDinamico = nivelDinamico
+        data.nivelEstatico = nivelEstatico
+    }
 
     axios({
         method: "POST",
@@ -160,7 +277,17 @@ import PozoMultiStepForm from './PozoForms/PozoMultiStepForm'
         withCredentials: true
     }).then(function(res) {
         console.log(res)
-        
+        if (res.data.err) {
+          self.setState({
+            error: res.data.err.sqlMessage
+          })  
+        }
+        else {
+          self.setState({
+            error: ''
+          })
+        }
+
         return;
     })
 
@@ -171,7 +298,7 @@ import PozoMultiStepForm from './PozoForms/PozoMultiStepForm'
 
 
   render() {
-    let { selectedTab, selectedSubtab } = this.state
+    let { selectedTab, selectedSubtab, error } = this.state
     let { objetivoYAlcancesIntervencion } = this.props
     objetivoYAlcancesIntervencion = objetivoYAlcancesIntervencion.toJS()
     let { tipoDeIntervenciones } = objetivoYAlcancesIntervencion
@@ -194,6 +321,7 @@ import PozoMultiStepForm from './PozoForms/PozoMultiStepForm'
           { form }
         </div>
         <button className='submit-button' onClick={this.submitForms}> Submit </button>
+        <div style={{color: 'red'}}>{error}</div>
       </div>
     )
   }
@@ -204,6 +332,9 @@ const mapStateToProps = state => ({
   fichaTecnicaDelPozo: state.get('fichaTecnicaDelPozo'),
   fichaTecnicaDelCampo: state.get('fichaTecnicaDelCampo'),
   objetivoYAlcancesIntervencion: state.get('objetivoYAlcancesIntervencion'),
+  sistemasArtificialesDeProduccion: state.get('sistemasArtificialesDeProduccion'),
+  mecanicoYAparejoDeProduccion: state.get('mecanicoYAparejoDeProduccion'),
+  analisisDelAgua: state.get('analisisDelAgua')
 })
 
 const mapDispatchToProps = dispatch => ({

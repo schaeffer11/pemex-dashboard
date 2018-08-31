@@ -28,7 +28,7 @@ import { setIntervaloProductor, setEspesorBruto, setEspesorNeto, setCaliza, setD
         <div className='header'>
           Los Datos de Formación
         </div>
-        <InputRow header="Intervalos(s) productor(es)" name='intervalosProductores' value={intervaloProductor} onChange={setIntervaloProductor} unit='md/mv' />
+        <InputRow header="Intervalos(s) productor(es)" type='number' name='intervalosProductores' value={intervaloProductor} onChange={setIntervaloProductor} unit='md/mv' />
         <InputRow header="Espesor bruto" name='espesorBruto' value={espesorBruto} onChange={setEspesorBruto} unit='m' />
         <InputRow header="Espesor neto" name='espesorNeto' value={espesorNeto} onChange={setEspesorNeto} unit='m' />
         <InputRow header="Caliza" name='caliza' value={caliza} onChange={setCaliza} unit='%' />

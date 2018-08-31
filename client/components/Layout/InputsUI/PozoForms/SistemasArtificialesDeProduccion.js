@@ -116,7 +116,7 @@ import { setTipoDeSistemo, setPresionDeCabeza, setPresionDeLineaODeSeparador, se
   makeBombeoMecanicoForm() {
     let { setPresionDeCabeza, setPresionDeLineaODeSeparador, setTipoDeUnidadBM, setVelocidadBM, setLongitudDeCareraBM, setTipoDeBombaSubsuperficialBM, setTamanoDeBombaSubsuperficialBM, setProfundidadDeLaBombaBM, setArregloDeVarillasBM, setCuantaConAnclaBM, setNivelDinamico, setNivelEstatico, formData } = this.props
     formData = formData.toJS()
-    let { presionDeCabeza, presionDeLineaODeSeparador, tipoDeUnidadBM, velocidadBM, longitudDeCareraBM, tipoDeBombaSubsuperficialBM, tamanoDeBombaSubsuperficialBM, profundidadDeLaBombaBM, arregloDeVarillasBM, cuantaConAnclaBM, nivelDinamico, nivelEstatico } = formData
+    let { presionDeCabeza, presionDeLineaODeSeparador, tipoDeUnidadBM, velocidadBM, longitudDeCareraBM, tipoDeBombaSubsuperficialBM, tamanoDeBombaSubsuperficialBM, profundidadDeLaBombaBM, arregloDeVarillasBM, CuantaConAnclaBM, nivelDinamico, nivelEstatico } = formData
     return (
       <div className='sistemas-artificiales-form' >
         <InputRow header="Presión de cabeza" name='' value={presionDeCabeza} onChange={setPresionDeCabeza} unit='Kg/cm2'/>
@@ -128,7 +128,7 @@ import { setTipoDeSistemo, setPresionDeCabeza, setPresionDeLineaODeSeparador, se
         <InputRowUnitless header="Tamaño de bomba subsuperficial" name='' value={tamanoDeBombaSubsuperficialBM} onChange={setTamanoDeBombaSubsuperficialBM}/>
         <InputRow header="Profundidad de la bomba" name='' value={profundidadDeLaBombaBM} onChange={setProfundidadDeLaBombaBM} unit='m'/>
         <InputRowUnitless header="Arreglo de varillas" name='' value={arregloDeVarillasBM} onChange={setArregloDeVarillasBM}/>
-        <InputRowUnitless header="Cuenta con ancla mecanica o empacador" name='' value={cuantaConAnclaBM} onChange={setCuantaConAnclaBM}/>
+        <InputRowUnitless header="Cuenta con ancla mecanica o empacador" name='' value={CuantaConAnclaBM} onChange={setCuantaConAnclaBM}/>
         <InputRow header="Nivel dinámico" name='' value={nivelDinamico} onChange={setNivelDinamico} unit='m'/>
         <InputRow header="Nivel estático" name='' value={nivelEstatico} onChange={setNivelEstatico} unit='m'/>
       </div>

@@ -58,7 +58,6 @@ import { setPH, setTemperaturaDeConductividad, setResistividad, setSalinidadConC
     return (
       <div className="form analisis-del-agua">
         { this.makeValoresForm() }
-        <button> Test</button>
       </div>
     )
   }

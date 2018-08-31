@@ -31,7 +31,7 @@ import { setDescubrimientoField, setFechaDeExplotacionField, setNumeroDePozosOpe
         </div>
         <InputRowUnitless header="Descubrimiento" name='descubrimiento' value={descubrimientoField} onChange={setDescubrimientoField}/>
         <InputRowUnitless header="Fecha de explotación" name='fechaDeExplotacion' value={fechaDeExplotacionField} onChange={setFechaDeExplotacionField}/>
-        <InputRowUnitless header="No. de pozo operando" name='noDePozoOperando' value={numeroDePozosOperandoField} onChange={setNumeroDePozosOperandoField}/>
+        <InputRowUnitless header="No. de pozo operando" type='number' name='noDePozoOperando' value={numeroDePozosOperandoField} onChange={setNumeroDePozosOperandoField}/>
       </div>
     )
   }
