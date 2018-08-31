@@ -52,18 +52,32 @@ import PozoMultiStepForm from './PozoForms/PozoMultiStepForm'
 
 
   submitForms() {
-    let { fichaTecnicaDelPozo, fichaTecnicaDelPozoHighLevel } = this.props
+    let { fichaTecnicaDelPozo, fichaTecnicaDelPozoHighLevel, fichaTecnicaDelCampo } = this.props
 
     fichaTecnicaDelPozo = fichaTecnicaDelPozo.toJS()
     fichaTecnicaDelPozoHighLevel = fichaTecnicaDelPozoHighLevel.toJS()
+    fichaTecnicaDelCampo = fichaTecnicaDelCampo.toJS()
 
-
+    //Ficha Technica Del Pozo High Level
     let { subdireccion, bloque, activo, campo, pozo, formacion } = fichaTecnicaDelPozoHighLevel
+
+    //Ficha Techinca Del Pozo 
     let { intervaloProductor, espesorBruto, espesorNeto, caliza, dolomia, arcilla, porosidad, permeabilidad, 
       sw, caa, cga, tipoDePozo, pwsFecha, pwfFecha, deltaPPerMes, tyac, pvt, aparejoDeProduccion, profEmpacador, 
       profSensorPYT, tipoDeSap, moduloYoungArena, moduloYoungLutitas, relacPoissonArena, relacPoissonLutatas, 
       gradienteDeFractura, densidadDeDisparos, diametroDeDisparos } = fichaTecnicaDelPozo
 
+    //Ficha Tecnica Del Campo
+    let { descubrimientoField, fechaDeExplotacionField, numeroDePozosOperandoField, pInicialAnoField, pActualFechaField, 
+      dpPerAnoField, tyacField, prField, densidadDelAceiteField, pSatField, 
+      rgaFluidoField, salinidadField, pvtRepresentativoField, litologiaField, espesorNetoField, 
+      porosidadField, swField, kPromedioField, caaField, cgaField, 
+      qoField, qgField, rgaField, fwField, npField, 
+      gpField, wpField, rraField, rrgField, rrpceField, 
+      h2sField, co2Field, n2Field } = fichaTecnicaDelCampo
+
+
+      console.log(fichaTecnicaDelCampo)
 
     let data = {
       subdireccion: subdireccion,
@@ -100,6 +114,39 @@ import PozoMultiStepForm from './PozoForms/PozoMultiStepForm'
       gradienteDeFractura: gradienteDeFractura, 
       densidadDeDisparos: densidadDeDisparos, 
       diametroDeDisparos: diametroDeDisparos,
+      descubrimientoField: descubrimientoField,
+      fechaDeExplotacionField: fechaDeExplotacionField,
+      numeroDePozosOperandoField: numeroDePozosOperandoField,
+      pInicialAnoField: pInicialAnoField,
+      pActualFechaField: pActualFechaField,
+      dpPerAnoField: dpPerAnoField,
+      tyacField: tyacField,
+      prField: prField,
+      densidadDelAceiteField: densidadDelAceiteField,
+      pSatField: pSatField,
+      rgaFluidoField: rgaFluidoField,
+      salinidadField: salinidadField,
+      pvtRepresentativoField: pvtRepresentativoField,
+      litologiaField: litologiaField,
+      espesorNetoField: espesorNetoField,
+      porosidadField: porosidadField,
+      swField: swField,
+      kPromedioField: kPromedioField,
+      caaField: caaField,
+      cgaField: cgaField,
+      qoField: qoField,
+      qgField: qgField,
+      rgaField: rgaField,
+      fwField: fwField,
+      npField: npField,
+      gpField: gpField,
+      wpField: wpField,
+      rraField: rraField,
+      rrgField: rrgField,
+      rrpceField: rrpceField,
+      h2sField: h2sField,
+      co2Field: co2Field,
+      n2Field: n2Field
     }
 
 
@@ -138,16 +185,6 @@ import PozoMultiStepForm from './PozoForms/PozoMultiStepForm'
     }
     else if (selectedTab === 'Intervenciones') {
       form = <BaseIntervenciones />
-/*
-      if (selectedSubtab === 'objectivoYAlcances') {
-        title = 'Objetivo y alcances de la intervención'
-        form = <BaseIntervenciones />
-      }
-      else if (pagesIntervenciones[tipoDeIntervenciones] && pagesIntervenciones[tipoDeIntervenciones][selectedSubtab]) {
-        title = pagesIntervenciones[tipoDeIntervenciones][selectedSubtab].title
-        form = pagesIntervenciones[tipoDeIntervenciones][selectedSubtab].form 
-      }
-*/
     }
 
     return (
@@ -156,6 +193,7 @@ import PozoMultiStepForm from './PozoForms/PozoMultiStepForm'
         <div class="tab-content">
           { form }
         </div>
+        <button className='submit-button' onClick={this.submitForms}> Submit </button>
       </div>
     )
   }
@@ -164,6 +202,7 @@ import PozoMultiStepForm from './PozoForms/PozoMultiStepForm'
 const mapStateToProps = state => ({
   fichaTecnicaDelPozoHighLevel: state.get('fichaTecnicaDelPozoHighLevel'),
   fichaTecnicaDelPozo: state.get('fichaTecnicaDelPozo'),
+  fichaTecnicaDelCampo: state.get('fichaTecnicaDelCampo'),
   objetivoYAlcancesIntervencion: state.get('objetivoYAlcancesIntervencion'),
 })
 

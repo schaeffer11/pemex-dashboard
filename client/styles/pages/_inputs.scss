@@ -40,6 +40,15 @@
 		}
 	}
 
+	.submit-button {
+		width: 100px;
+		left: calc(50% - 50px);
+		position: relative;
+		margin-top: 40px;
+		padding-bot: 40px;
+		color: $primary-green;
+	}
+
 	.subtabs {
                 min-height: 50px;
                 background: $primary-green;
