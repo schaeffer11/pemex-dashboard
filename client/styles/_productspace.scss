@@ -11,6 +11,28 @@ html {
 	grid-area: body;
   overflow-y: scroll;
   height: 100%;
+
+  .login {  
+    display: flex;
+    position: fixed;
+    width: 100%;
+    height: 100%;
+    top: 0;
+    left: 0;
+    background: rgba(0,0,0,0.5);
+    z-index: 10;
+    flex: 1;
+    align-items: center;
+
+    .login-form {
+      position: initial;
+      min-width: 400px;
+      display: inline-block;
+      background: #fff;
+      padding: 50px;
+      margin: auto;
+    }
+  }
 }
 
 

@@ -10,7 +10,9 @@ const Productbar = ({ app, user, logoutAction }) => {
       <div className="title">
         <span></span>
       </div>
-      <ProductbarActions user={user} logoutAction={logoutAction} />
+      { user !== null && (
+        <ProductbarActions user={user} logoutAction={logoutAction} />
+      )} 
     </div>
   )
 }

@@ -17,7 +17,7 @@ const App = ({ children, user, username, loginAction, logoutAction, userActions,
   return (
     <div className={classnames('pemex-app', { 'logged-in': !!user }, { 'logged-out': !user })}>
       <Productbar app={app} user={user} logoutAction={logoutAction} />
-      { body }
+      <Productspace app={app} user={user} loginAction={loginAction} />
     </div>
   )
 }

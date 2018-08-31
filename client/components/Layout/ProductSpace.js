@@ -4,6 +4,8 @@ import autobind from 'autobind-decorator'
 import InputsUI from './InputsUI/InputsUI'
 import HomeUI from './HomeUI/HomeUI'
 import { BrowserRouter, Route } from 'react-router-dom'
+import LoginForm from '../User/LoginForm'
+
 
 @autobind class Productspace extends Component {
   constructor(props) {
@@ -31,6 +33,12 @@ import { BrowserRouter, Route } from 'react-router-dom'
           <Route exact path="/inputs" component={InputsUI} />
           <Route exact path="/" component={HomeUI} />
           {/* <InputsUI /> */}
+
+          { this.props.user === null && (
+            <div className="login">
+              <LoginForm loginAction={this.props.loginAction} user={this.props.user} />
+            </div>
+          )}
         </div>
       </BrowserRouter>
     )
