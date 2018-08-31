@@ -20,7 +20,6 @@ import autobind from 'autobind-decorator'
 
     return (
       <div className="form">
-        I am a formmmmm EvaluacionPetrofisica
         <div style={{color: 'red'}}>TODO: agregar manera de agregar una capa a la vez (add way to add one layer at a time)</div>
         <div style={{color: 'red'}}>TODO: agregar opcion para la evaluacion petrofisica (add upload well log file) (image upload)</div>
       </div>

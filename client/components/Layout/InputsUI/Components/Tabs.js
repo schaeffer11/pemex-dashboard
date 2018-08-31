@@ -14,8 +14,11 @@ import autobind from 'autobind-decorator'
     let className = 'tab'
 
     let selectedState = selectedTab === val ? 'active' : ''
+    let displayedVal = val.slice()
 
-    return <div className={`${className} ${selectedState}`} onClick={() => handleSelectTab(val)}>{val}</div>
+    displayedVal === 'Intervenciones' ? displayedVal = 'Intervenciónes' : null
+
+    return <div className={`${className} ${selectedState}`} onClick={() => handleSelectTab(val)}>{displayedVal}</div>
   }
 
 
