@@ -27,4 +27,7 @@ button {
     color: white;
     min-width: 100px;
   }
+  &[disabled]{
+    background: #C0C0C0;
+  }
 }

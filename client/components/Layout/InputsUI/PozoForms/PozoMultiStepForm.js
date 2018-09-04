@@ -1,6 +1,8 @@
 import React, { Component } from 'react'
 import autobind from 'autobind-decorator'
-import axios from 'axios';
+import { connect } from 'react-redux'
+
+import {submitForm} from '../../../../redux/actions/pozoFormActions'
 
 import TecnicaDelPozoHighLevel from './TecnicaDelPozoHighLevel'
 import TecnicaDelPozo from './TecnicaDelPozo'
@@ -33,7 +35,6 @@ import AnalisisDelAgua from './AnalisisDelAgua'
       {'title' : 'Análisis del Agua', 'content': <AnalisisDelAgua /> }	
     ];
 
-    this.handleClick
   }
 
   handleClick(i){
@@ -58,12 +59,18 @@ import AnalisisDelAgua from './AnalisisDelAgua'
     }
   }
 
+  handleSubmit(){
+    this.props.submitPozoForm(this.props)
+  }
+
   render() {
      let className = 'subtab'
      let title = this.forms[this.state.currentStep].title
+     let pozoFormSubmitting = this.props.forms.get('pozoFormSubmitting')
+     let submitting = pozoFormSubmitting ? 'submitting' : ''
 
      return (
-         <div className='multistep-form'>
+         <div className={`multistep-form ${submitting}`}>
           <div className="subtabs">
               {this.forms.map( (tab, index) => {
                  let active = this.state.currentStep === index ? 'active' : ''; 
@@ -80,9 +87,29 @@ import AnalisisDelAgua from './AnalisisDelAgua'
 
             {this.forms[this.state.currentStep].content}
           </div>
+
+          <button className="submit" disabled={pozoFormSubmitting} onClick={this.handleSubmit}>{pozoFormSubmitting ? 'Enviando...' : 'Enviar'}</button>
+
          </div>
      );
   }
 }
 
-export default PozoMultiStepForm;
+const mapDispatchToProps = dispatch => ({
+  submitPozoForm: values => {dispatch(submitForm(values))}
+})
+
+const mapStateToProps = state => ({
+  forms: state.get('forms'),
+  fichaTecnicaDelPozoHighLevel: state.get('fichaTecnicaDelPozoHighLevel'),
+  fichaTecnicaDelPozo: state.get('fichaTecnicaDelPozo'),
+  fichaTecnicaDelCampo: state.get('fichaTecnicaDelCampo'),
+  objetivoYAlcancesIntervencion: state.get('objetivoYAlcancesIntervencion'),
+  sistemasArtificialesDeProduccion: state.get('sistemasArtificialesDeProduccion'),
+  mecanicoYAparejoDeProduccion: state.get('mecanicoYAparejoDeProduccion'),
+  analisisDelAgua: state.get('analisisDelAgua')
+
+})
+
+
+export default connect(mapStateToProps, mapDispatchToProps)(PozoMultiStepForm)

@@ -23,11 +23,12 @@ import estIncProduccionApuntalado from './reducers/estIncProduccionApuntalado'
 import estCostEstimulacion from './reducers/estCostEstimulacion'
 import estCostAcido from './reducers/estCostAcido'
 import estCostApuntalado from './reducers/estCostApuntalado'
-
+import forms from './reducers/forms'
 
 export default combineReducers({
   app,
   user,
+  forms,
   fichaTecnicaDelPozoHighLevel,
   fichaTecnicaDelPozo,
   fichaTecnicaDelCampo,
