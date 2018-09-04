@@ -64,17 +64,28 @@ import classNames from 'classnames'
 
     return (
       <form className={classNames('login-form', { error })} onSubmit={this.attemptLogin}>
-        <label>
-          <span>User ID <small>(usually an email address)</small></span>
-          <input type="text" ref="userid" placeholder="Enter a user ID" disabled={isVerifying} />
-        </label>
+        <div className="heading">
+          <h2>Iniciar sesión</h2>
+        </div>
+        <div className="body">
+          <div className="field">
+            <label>
+              <span>Usuario:</span>
+              <input type="text" ref="userid" placeholder="" disabled={isVerifying} />
+            </label>
+          </div>
 
-        <label>
-          <span>Password</span>
-          <input type="password" ref="userpwd" placeholder="Enter your password" disabled={isVerifying} />
-        </label>
+          <div className="field">
+            <label>
+              <span>Contraseña:</span>
+              <input type="password" ref="userpwd" placeholder="" disabled={isVerifying} />
+            </label>
+          </div>
+        </div>
 
-        <button className={isVerifying ? 'verifying' : ''}>{ isVerifying ? 'Verifying...' : 'Login' }</button>
+        <div className="footer">
+          <button className={classNames(isVerifying ? 'verifying' : '', 'submit')}>{ isVerifying ? 'Verifying...' : 'Iniciar sesión' }</button>
+        </div>
 
         {errorMessage}
       </form>

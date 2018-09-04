@@ -36,7 +36,9 @@ import LoginForm from '../User/LoginForm'
 
           { this.props.user === null && (
             <div className="login">
-              <LoginForm loginAction={this.props.loginAction} user={this.props.user} />
+              <div className="loginModal">
+                <LoginForm loginAction={this.props.loginAction} user={this.props.user} />
+              </div>
             </div>
           )}
         </div>
