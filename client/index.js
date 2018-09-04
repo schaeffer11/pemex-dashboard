@@ -1,6 +1,7 @@
 import 'babel-polyfill'
 
 import { applyMiddleware, compose, createStore } from 'redux'
+import thunk from 'redux-thunk'
 import { createBrowserHistory } from 'history'
 import { routerMiddleware, connectRouter, ConnectedRouter } from 'connected-react-router/immutable'
 import { Provider } from 'react-redux'
@@ -24,8 +25,9 @@ const store = createStore(
   connectRouter(history)(rootReducer),
   persistedState,
   composeEnhancer(
-    applyMiddleware(
-      routerMiddleware(history),
+    applyMiddleware( 
+      thunk,
+      routerMiddleware(history)
     ),
   ),
 )
