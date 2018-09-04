@@ -300,7 +300,6 @@ import PozoMultiStepForm from './PozoForms/PozoMultiStepForm'
       propuestaAcido, pruebasDeLaboratorioAcido, resultadosSimulacionAcido, estIncProduccionAcido, estCostAcido,
       propuestaApuntalado, pruebasDeLaboratorioApuntalado, resultadosSimulacionApuntalado, estIncProduccionApuntalado, estCostApuntalado } = this.props
 
-
     objetivoYAlcancesIntervencion = objetivoYAlcancesIntervencion.toJS()
     propuestaEstimulacion = propuestaEstimulacion.toJS()
     pruebasDeLaboratorio = pruebasDeLaboratorio.toJS()
@@ -312,7 +311,11 @@ import PozoMultiStepForm from './PozoForms/PozoMultiStepForm'
     resultadosSimulacionAcido = resultadosSimulacionAcido.toJS()
     estIncProduccionAcido = estIncProduccionAcido.toJS()
     estCostAcido = estCostAcido.toJS()
-
+    propuestaApuntalado = propuestaApuntalado.toJS() 
+    pruebasDeLaboratorioApuntalado = pruebasDeLaboratorioApuntalado.toJS()
+    resultadosSimulacionApuntalado = resultadosSimulacionApuntalado.toJS()
+    estIncProduccionApuntalado = estIncProduccionApuntalado.toJS()
+    estCostApuntalado = estCostApuntalado.toJS()
 
     //ObjetivoYAlcancesIntervencion
     let { objetivo, alcances, tipoDeIntervenciones } = objetivoYAlcancesIntervencion
@@ -323,7 +326,6 @@ import PozoMultiStepForm from './PozoForms/PozoMultiStepForm'
       alcances: alcances,
       tipoDeIntervenciones: tipoDeIntervenciones
     }
-
 
     if (tipoDeIntervenciones === 'estimulacion') {
       let { etapa, sistema, volLiquid, gastoN2, gastoLiquido, gastoEnFondo, calidad, volN2, volLiquidoAcum, volN2Acum, relN2Liq, tiempo, intervalo, longitudDeIntervalo, volAparejo, capacidadTotalDelPozo, volumenPrecolchonN2, volumenSistemaNoReativo, volumenSistemaReactivo, volumenSistemaDivergente, volumenDesplazamientoLiquido, volumenDesplazamientoN2, volumenTotalDeLiquido } = propuestaEstimulacion
@@ -412,7 +414,6 @@ import PozoMultiStepForm from './PozoForms/PozoMultiStepForm'
       let { estIncEstrangulador, estIncPtp, estIncTtp, estIncPbaj, estIncTbaj, estIncPtr, estIncQl, estIncQo, estIncQg, estIncQw, estIncRGA, estIncSalinidad, estIncIP, estIncDeltaP, estIncGastoCompromisoQo, estIncGastoCompromisoQg, obervacionesEstIncAcido} = estIncProduccionAcido
       let { estCostCompaniaDeServicio, estCostoDeRentaDeBarco, estCostUnidadesDeAltaPresion, estCostDelGelDeFractura, estCostDeSistemoRactivo, estCostDeSistemoNoRactivo, estCostDeDivergentes, estCostDeN2, estCostDeHCL, estCostDeSistemasAcidosRetardados, estCostDeCostoEquipoDeFacturamientoDePozos, estCostGelLineal, estCostTrabajosDeBombeoDiversos, estCostLlenadoDePozoYPruebaDeAdmision, estCostMinifrac, estCostBacheNeutralizador, estCostProtectorDeArbol, estCostApuntalante} = estCostAcido
  
-
       data = {
         objetivo: objetivo,
         alcances: alcances,
@@ -518,12 +519,113 @@ import PozoMultiStepForm from './PozoForms/PozoMultiStepForm'
       }
     }
     else if (tipoDeIntervenciones === 'apuntalado') {
+      let { etapa, sistema, tipoDeApuntalante, concentraciDeApuntalante, volLiquid, gastoN2, gastoLiqudo, gastoEnFondo, calidad, volN2, volLiquidoAcum, volN2Acum, relN2Liq, tiempo, intervalo, longitudDeIntervalo, volAparejo, capacidadTotalDelPozo, volumenPrecolchonN2, volumenDeApuntalante, volumenDeGelDeFractura, volumenDesplazamiento, volumenTotalDeLiquido} = propuestaApuntalado
+      let { contenidoDeAceite, contenidoDeAgua, contenidoDeEmulsion, contenidoDeSolidos, tipoDeSolidos, densidadDelAceite, densidadDelAgua, densidadDeLaEmulsion, contenidoDeAsfaltenos, contenidoDeParafinas, contenidoDeResinas, indiceDeEstabilidadDelColoidal, indiceDeEstabilidadDelAgua, pH, salinidad, viscosidadDelAceite, tipoDeGelLineal, viscosidadDelGelLineal, tiempoDeReticulacion, pHGelLineal, tiempoDeRompedorDelGel, tamanoDelApuntalante, gravedadEspecifica, esfericidad, redondeo, turbidez, resistencia, pruebaDeSolubilidadConAcida, obervacionesPruebasLabApuntalado} = pruebasDeLaboratorioApuntalado
+      let { longitudApuntalada, alturaTotalDeFractura, anchoPromedio, concentractionAreal, conductividad, fcd, presionNeta, eficienciaDeFluidoDeFractura} = resultadosSimulacionApuntalado
+      let { estIncEstrangulador, estIncPtp, estIncTtp, estIncPbaj, estIncTbaj, estIncPtr, estIncQl, estIncQo, estIncQg, estIncQw, estIncRGA, estIncSalinidad, estIncIP, estIncDeltaP, estIncGastoCompromisoQo, estIncGastoCompromisoQg, obervacionesEstIncApuntalado} = estIncProduccionApuntalado
+      let { estCostCompaniaDeServicio, estCostoDeRentaDeBarco, estCostUnidadesDeAltaPresion, estCostDelGelDeFractura, estCostDeSistemoRactivo, estCostDeSistemaNoRactivo, estCostDeDivergentes, estCostDeN2, estCostDeHCL, estCostDeSistemasAcidosRetardados, estCostDeCostoEquipoDeFacturamientoDePozos, estCostGelLineal, estCostTrabajosDeBombeoDiversos, estCostLlenadoDePozoYPruebaDeAdmision, estCostMinifrac, estCostBacheNeutralizador, estCostProtectorDeArbol} = estCostApuntalado
 
+      data = {
+        objetivo: objetivo,
+        alcances: alcances,
+        tipoDeIntervenciones: tipoDeIntervenciones,
+        etapa: etapa,
+        sistema: sistema,
+        tipoDeApuntalante: tipoDeApuntalante,
+        concentraciDeApuntalante: concentraciDeApuntalante,
+        volLiquid: volLiquid,
+        gastoN2: gastoN2,
+        gastoLiqudo: gastoLiqudo,
+        gastoEnFondo: gastoEnFondo,
+        calidad: calidad,
+        volN2: volN2,
+        volLiquidoAcum: volLiquidoAcum,
+        volN2Acum: volN2Acum,
+        relN2Liq: relN2Liq,
+        tiempo: tiempo,
+        intervalo: intervalo,
+        longitudDeIntervalo: longitudDeIntervalo,
+        volAparejo: volAparejo,
+        capacidadTotalDelPozo: capacidadTotalDelPozo,
+        volumenPrecolchonN2: volumenPrecolchonN2,
+        volumenDeApuntalante: volumenDeApuntalante,
+        volumenDeGelDeFractura: volumenDeGelDeFractura,
+        volumenDesplazamiento: volumenDesplazamiento,
+        volumenTotalDeLiquido: volumenTotalDeLiquido,
+        tipoDeAnalisis: tipoDeAnalisis,
+        contenidoDeAceite: contenidoDeAceite,
+        contenidoDeAgua: contenidoDeAgua,
+        contenidoDeEmulsion: contenidoDeEmulsion,
+        contenidoDeSolidos: contenidoDeSolidos,
+        tipoDeSolidos: tipoDeSolidos,
+        densidadDelAceite: densidadDelAceite,
+        densidadDelAgua: densidadDelAgua,
+        densidadDeLaEmulsion: densidadDeLaEmulsion,
+        contenidoDeAsfaltenos: contenidoDeAsfaltenos,
+        contenidoDeParafinas: contenidoDeParafinas,
+        contenidoDeResinas: contenidoDeResinas,
+        indiceDeEstabilidadDelColoidal: indiceDeEstabilidadDelColoidal,
+        indiceDeEstabilidadDelAgua: indiceDeEstabilidadDelAgua,
+        pH: pH,
+        salinidad: salinidad,
+        viscosidadDelAceite: viscosidadDelAceite,
+        tipoDeGelLineal: tipoDeGelLineal,
+        viscosidadDelGelLineal: viscosidadDelGelLineal,
+        tiempoDeReticulacion: tiempoDeReticulacion,
+        pHGelLineal: pHGelLineal,
+        tiempoDeRompedorDelGel: tiempoDeRompedorDelGel,
+        tamanoDelApuntalante: tamanoDelApuntalante,
+        gravedadEspecifica: gravedadEspecifica,
+        esfericidad: esfericidad,
+        redondeo: redondeo,
+        turbidez: turbidez,
+        resistencia: resistencia,
+        pruebaDeSolubilidadConAcida: pruebaDeSolubilidadConAcida,
+        obervacionesPruebasLabApuntalado: obervacionesPruebasLabApuntalado,
+        longitudApuntalada: longitudApuntalada,
+        alturaTotalDeFractura: alturaTotalDeFractura,
+        anchoPromedio: anchoPromedio,
+        concentractionAreal: concentractionAreal,
+        conductividad: conductividad,
+        fcd: fcd,
+        presionNeta: presionNeta,
+        eficienciaDeFluidoDeFractura: eficienciaDeFluidoDeFractura,
+        estIncEstrangulador: estIncEstrangulador,
+        estIncPtp: estIncPtp,
+        estIncTtp: estIncTtp,
+        estIncPbaj: estIncPbaj,
+        estIncTbaj: estIncTbaj,
+        estIncPtr: estIncPtr,
+        estIncQl: estIncQl,
+        estIncQo: estIncQo,
+        estIncQg: estIncQg,
+        estIncQw: estIncQw,
+        estIncRGA: estIncRGA,
+        estIncSalinidad: estIncSalinidad,
+        estIncIP: estIncIP,
+        estIncDeltaP: estIncDeltaP,
+        estIncGastoCompromisoQo: estIncGastoCompromisoQo,
+        estIncGastoCompromisoQg: estIncGastoCompromisoQg,
+        obervacionesEstIncApuntalado: obervacionesEstIncApuntalado,
+        estCostCompaniaDeServicio: estCostCompaniaDeServicio,
+        estCostoDeRentaDeBarco: estCostoDeRentaDeBarco,
+        estCostUnidadesDeAltaPresion: estCostUnidadesDeAltaPresion,
+        estCostDelGelDeFractura: estCostDelGelDeFractura,
+        estCostDeSistemoRactivo: estCostDeSistemoRactivo,
+        estCostDeSistemaNoRactivo: estCostDeSistemaNoRactivo,
+        estCostDeDivergentes: estCostDeDivergentes,
+        estCostDeN2: estCostDeN2,
+        estCostDeHCL: estCostDeHCL,
+        estCostDeSistemasAcidosRetardados: estCostDeSistemasAcidosRetardados,
+        estCostDeCostoEquipoDeFacturamientoDePozos: estCostDeCostoEquipoDeFacturamientoDePozos,
+        estCostGelLineal: estCostGelLineal,
+        estCostTrabajosDeBombeoDiversos: estCostTrabajosDeBombeoDiversos,
+        estCostLlenadoDePozoYPruebaDeAdmision: estCostLlenadoDePozoYPruebaDeAdmision,
+        estCostMinifrac: estCostMinifrac,
+        estCostBacheNeutralizador: estCostBacheNeutralizador,
+        estCostProtectorDeArbol: estCostProtectorDeArbol,
+      }
     }
-
-
-
-
 
 
     // switch(tipoDeSistemo) {
@@ -615,6 +717,11 @@ const mapStateToProps = state => ({
   resultadosSimulacionAcido: state.get('resultadosSimulacionAcido'),
   estIncProduccionAcido: state.get('estIncProduccionAcido'),
   estCostAcido: state.get('estCostAcido'),
+  propuestaApuntalado: state.get('propuestaApuntalado'),
+  pruebasDeLaboratorioApuntalado: state.get('pruebasDeLaboratorioApuntalado'),
+  resultadosSimulacionApuntalado: state.get('resultadosSimulacionApuntalado'),
+  estIncProduccionApuntalado: state.get('estIncProduccionApuntalado'),
+  estCostApuntalado: state.get('estCostApuntalado'),
 })
 
 const mapDispatchToProps = dispatch => ({

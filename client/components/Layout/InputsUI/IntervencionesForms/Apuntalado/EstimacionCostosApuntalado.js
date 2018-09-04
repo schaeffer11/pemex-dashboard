@@ -29,23 +29,23 @@ import { connect } from 'react-redux'
         <div className='header'>
           Costos
         </div>
-        <InputRowUnitless header="Compania de Servicio" name='' />
-        <InputRow header="Costo de renta de barco" name='' unit="MNX"/>
-        <InputRow header="Costo Unidades de alta presion" name='' unit="MNX"/>
-        <InputRow header="Costo del gel de fractura" name='' unit="MNX"/>
-        <InputRow header="Costo de sistema reactivo" name='' unit="MNX"/>
-        <InputRow header="Costo de sistema no reactivo" name='' unit="MNX"/>
-        <InputRow header="Costo de divergentes" name='' unit="MNX"/>
-        <InputRow header="Costo de N2" name='' unit="MNX"/>
-        <InputRow header="Costo de HCL" name='' unit="MNX"/>
-        <InputRow header="Costo de sistemas acidos retardados" name='' unit="MNX"/>
-        <InputRow header="Costo equipo de fracturamiento de pozos" name='' unit="MNX"/>
-        <InputRow header="Costo gel lineal" name='' unit="MNX"/>
-        <InputRow header="Costo de trabajos de bombeo diversos" name='' unit="MNX"/>
-        <InputRow header="Costo de llenado de pozo y prueba de admision" name='' unit="MNX"/>
-        <InputRow header="Costo del Minifrac" name='' unit="MNX"/>
-        <InputRow header="Costo de Bache neutralizador" name='' unit="MNX"/>
-        <InputRow header="Protector de arbol" name='' unit="MNX"/>
+        <InputRowUnitless header="Compania de Servicio" name='' value={estCostCompaniaDeServicio} onChange={estCostCompaniaDeServicio}/>
+        <InputRow header="Costo de renta de barco" name='' unit="MNX" value={estCostoDeRentaDeBarco} onChange={setEstCostoDeRentaDeBarco}/>
+        <InputRow header="Costo Unidades de alta presion" name='' unit="MNX" value={estCostUnidadesDeAltaPresion} onChange={setEstCostUnidadesDeAltaPresion}/>
+        <InputRow header="Costo del gel de fractura" name='' unit="MNX" value={estCostDelGelDeFractura} onChange={setEstCostDelGelDeFractura}/>
+        <InputRow header="Costo de sistema reactivo" name='' unit="MNX" value={estCostDeSistemoRactivo} onChange={setEstCostDeSistemoRactivo}/>
+        <InputRow header="Costo de sistema no reactivo" name='' unit="MNX" value={estCostDeSistemoNoRactivo} onChange={setEstCostDeSistemoNoRactivo} />
+        <InputRow header="Costo de divergentes" name='' unit="MNX" value={estCostDeDivergentes} onChange={setEstCostDeDivergentes}/>
+        <InputRow header="Costo de N2" name='' unit="MNX" value={estCostDeN2} onChange={setEstCostDeN2}/>
+        <InputRow header="Costo de HCL" name='' unit="MNX" value={estCostDeHCL} onChange={setEstCostDeHCL}/>
+        <InputRow header="Costo de sistemas acidos retardados" name='' unit="MNX" value={estCostDeSistemasAcidosRetardados} onChange={setEstCostDeSistemasAcidosRetardados}/>
+        <InputRow header="Costo equipo de fracturamiento de pozos" name='' unit="MNX" value={estCostDeCostoEquipoDeFacturamientoDePozos} onChange={setEstCostDeCostoEquipoDeFacturamientoDePozos}/>
+        <InputRow header="Costo gel lineal" name='' unit="MNX" value={estCostGelLineal} onChange={setEstCostGelLineal}/>
+        <InputRow header="Costo de trabajos de bombeo diversos" name='' unit="MNX" value={estCostTrabajosDeBombeoDiversos} onChange={setEstCostTrabajosDeBombeoDiversos}/>
+        <InputRow header="Costo de llenado de pozo y prueba de admision" name='' unit="MNX" value={estCostLlenadoDePozoYPruebaDeAdmision} onChange={setEstCostLlenadoDePozoYPruebaDeAdmision}/>
+        <InputRow header="Costo del Minifrac" name='' unit="MNX" value={estCostMinifrac} onChange={setEstCostMinifrac}/>
+        <InputRow header="Costo de Bache neutralizador" name='' unit="MNX" value={estCostBacheNeutralizador} onChange={setEstCostBacheNeutralizador}/>
+        <InputRow header="Protector de arbol" name='' unit="MNX" value={estCostProtectorDeArbol} onChange={setEstCostProtectorDeArbol}/>
       </div>
     )
   }

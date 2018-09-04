@@ -23,11 +23,11 @@ app.get('/ping', (req, res) => {
 
 app.post('/storeInterventionData', (req, res) => {
   let { objetivo, alcances, tipoDeIntervenciones } = req.body
+  //Pruebas De Laboratoro
+  let { tipoDeAnalisis, fechaDeMuestreo, fechaDePrueba, compania, personalDePemexQueSuperViso, obervacionesLab } = req.body
 
   let query = ''
   let data = []
-
-
 
   if (tipoDeIntervenciones === 'estimulacion') {
 
@@ -37,9 +37,6 @@ app.post('/storeInterventionData', (req, res) => {
         relN2Liq, tiempo, intervalo, longitudDeIntervalo, volAparejo, 
         capacidadTotalDelPozo, volumenPrecolchonN2, volumenSistemaNoReativo, volumenSistemaReactivo, volumenSistemaDivergente, 
         volumenDesplazamientoLiquido, volumenDesplazamientoN2, volumenTotalDeLiquido } = req.body
-
-      //Pruebas De Laboratoro
-      let { tipoDeAnalisis, fechaDeMuestreo, fechaDePrueba, compania, personalDePemexQueSuperViso, obervacionesLab } = req.body
 
       //Simulacion Resultados Estimulacion
       let { volumenDelSistemaAcidoLimpieza, volumenDelSistemaNoAcidoLimpieza, tipoDeColocacion, tiempoDeContacto, numeroDeEtapas, 
@@ -102,16 +99,8 @@ app.post('/storeInterventionData', (req, res) => {
         longitudDeIntervalo, volAparejo, capacidadTotalDelPozo, volumenPrecolchonN2, volumenSistemaNoReativo, 
         volumenSistemaReactivo, volumenSistemaDivergente, volumenDesplazamientoLiquido, volumenDesplazamientoGelLineal } = req.body
 
-        console.log(etapa, sistema, tipoDeApuntalante, concentraciDeApuntalante, volLiquid, 
-        gastoN2, gastoLiqudo, gastoEnFondo, calidad, volN2, 
-        volLiquidoAcum, volN2Acum, relN2Liq, tiempo, intervalo, 
-        longitudDeIntervalo, volAparejo, capacidadTotalDelPozo, volumenPrecolchonN2, volumenSistemaNoReativo, 
-        volumenSistemaReactivo, volumenSistemaDivergente, volumenDesplazamientoLiquido, volumenDesplazamientoGelLineal)
-
       //Pruebas De Laboratoro
       let { tipoDeAnalisis, fechaDeMuestreo, fechaDePrueba, compania, personalDePemexQueSuperViso, obervacionesLab } = req.body
-
-      console.log(tipoDeAnalisis, fechaDeMuestreo, fechaDePrueba, compania, personalDePemexQueSuperViso, obervacionesLab)
 
       //Pruebas De laboratorio Acido
       let { contenidoDeAceite, contenidoDeAgua, contenidoDeEmulsion, contenidoDeSolidos, tipoDeSolidos, 
@@ -121,22 +110,9 @@ app.post('/storeInterventionData', (req, res) => {
         sistemaAcidoGrabado, nucleoDeFormacion, grabado, tipoDeGelLineal, viscosidadDelGelLineal, 
         tiempoDeReticulacion, pHGelLineal, tiempoDeRompedorDelGel, obervacionesPruebasLabAcido } = req.body
 
-        console.log(contenidoDeAceite, contenidoDeAgua, contenidoDeEmulsion, contenidoDeSolidos, tipoDeSolidos, 
-        densidadDelAceite, densidadDelAgua, densidadDeLaEmulsion, contenidoDeAsfaltenos, contenidoDeParafinas, 
-        contenidoDeResinas, indiceDeEstabilidadDelColoidal, indiceDeEstabilidadDelAgua, pH, salinidad, 
-        viscosidadDelAceite, sistemAcido, pesoMuestraInicial, pesoMuestraFinal, solubilidad, 
-        sistemaAcidoGrabado, nucleoDeFormacion, grabado, tipoDeGelLineal, viscosidadDelGelLineal, 
-        tiempoDeReticulacion, pHGelLineal, tiempoDeRompedorDelGel, obervacionesPruebasLabAcido)
-
-
       //Resultados De La Simulacion
       let { longitudTotal, longitudEfectivaGrabada, alturaGrabada, anchoPromedio, concentracionDelAcido, 
         conductividad, fcd, presionNeta, eficienciaDeFluidoDeFractura } = req.body
-
-
-        console.log(longitudTotal, longitudEfectivaGrabada, alturaGrabada, anchoPromedio, concentracionDelAcido, 
-        conductividad, fcd, presionNeta, eficienciaDeFluidoDeFractura)
-
 
       //Estimacion Del Incremento De Produccion
       let { estIncEstrangulador, estIncPtp, estIncTtp, estIncPbaj, estIncTbaj, 
@@ -144,25 +120,12 @@ app.post('/storeInterventionData', (req, res) => {
         estIncRGA, estIncSalinidad, estIncIP, estIncDeltaP, estIncGastoCompromisoQo, 
         estIncGastoCompromisoQg, obervacionesEstIncAcido } = req.body
 
-
-        console.log(estIncEstrangulador, estIncPtp, estIncTtp, estIncPbaj, estIncTbaj, 
-        estIncPtr, estIncQl, estIncQo, estIncQg, estIncQw, 
-        estIncRGA, estIncSalinidad, estIncIP, estIncDeltaP, estIncGastoCompromisoQo, 
-        estIncGastoCompromisoQg, obervacionesEstIncAcido)
-
-
       //Estimacion De Costos
       let { estCostCompaniaDeServicio, estCostoDeRentaDeBarco, estCostUnidadesDeAltaPresion, estCostDelGelDeFractura, estCostDeSistemoRactivo, 
         estCostDeSistemoNoRactivo, estCostDeDivergentes, estCostDeN2, estCostDeHCL, estCostDeSistemasAcidosRetardados, 
         estCostDeCostoEquipoDeFacturamientoDePozos, estCostGelLineal, estCostTrabajosDeBombeoDiversos, estCostLlenadoDePozoYPruebaDeAdmision, estCostMinifrac, 
         estCostBacheNeutralizador, estCostProtectorDeArbol, estCostApuntalante  } = req.body
  
-        console.log(estCostCompaniaDeServicio, estCostoDeRentaDeBarco, estCostUnidadesDeAltaPresion, estCostDelGelDeFractura, estCostDeSistemoRactivo, 
-        estCostDeSistemoNoRactivo, estCostDeDivergentes, estCostDeN2, estCostDeHCL, estCostDeSistemasAcidosRetardados, 
-        estCostDeCostoEquipoDeFacturamientoDePozos, estCostGelLineal, estCostTrabajosDeBombeoDiversos, estCostLlenadoDePozoYPruebaDeAdmision, estCostMinifrac, 
-        estCostBacheNeutralizador, estCostProtectorDeArbol, estCostApuntalante)
-
-
       query = `INSERT INTO InterventionsFractuarmientosAcido (
         INTERVENTION_ID, DATE, OBJETIVO, ALCANCES, ETAPA,
         SISTEMA, TIPO_DE_APUNTALANTE, CONCENTRACION_DE_APUNTALANTE, VOLUME_LIQUID, GASTO_N2,
@@ -202,6 +165,84 @@ app.post('/storeInterventionData', (req, res) => {
         estCostBacheNeutralizador, estCostProtectorDeArbol, estCostApuntalante]
   }
   else if (tipoDeIntervenciones === 'apuntalado') {
+      console.log('here')
+      //Propuesta De Fracturamiento Apuntalado
+      let { etapa, sistema, tipoDeApuntalante, concentraciDeApuntalante, volLiquid, 
+        gastoN2, gastoLiqudo, gastoEnFondo, calidad, volN2, 
+        volLiquidoAcum, volN2Acum, relN2Liq, tiempo, intervalo, 
+        longitudDeIntervalo, volAparejo, capacidadTotalDelPozo, volumenPrecolchonN2, volumenDeApuntalante, 
+        volumenDeGelDeFractura, volumenDesplazamiento, volumenTotalDeLiquido } = req.body
+
+      //Pruebas De Laboratorio Apuntalado
+      let { contenidoDeAceite, contenidoDeAgua, contenidoDeEmulsion, contenidoDeSolidos, tipoDeSolidos, 
+        densidadDelAceite, densidadDelAgua, densidadDeLaEmulsion, contenidoDeAsfaltenos, contenidoDeParafinas, 
+        contenidoDeResinas, indiceDeEstabilidadDelColoidal, indiceDeEstabilidadDelAgua, pH, salinidad, 
+        viscosidadDelAceite, tipoDeGelLineal, viscosidadDelGelLineal, tiempoDeReticulacion, pHGelLineal, 
+        tiempoDeRompedorDelGel, tamanoDelApuntalante, gravedadEspecifica, esfericidad, redondeo, 
+        turbidez, resistencia, pruebaDeSolubilidadConAcida, obervacionesPruebasLabApuntalado } = req.body
+
+      //Resultados de simulacion Apuntalado
+      let { longitudApuntalada, alturaTotalDeFractura, anchoPromedio, concentractionAreal, conductividad, 
+        fcd, presionNeta, eficienciaDeFluidoDeFractura  } = req.body
+
+
+      //Est Inc Produccion
+      let { estIncEstrangulador, estIncPtp, estIncTtp, estIncPbaj, estIncTbaj, 
+        estIncPtr, estIncQl, estIncQo, estIncQg, estIncQw, 
+        estIncRGA, estIncSalinidad, estIncIP, estIncDeltaP, estIncGastoCompromisoQo, 
+        estIncGastoCompromisoQg, obervacionesEstIncApuntalado } = req.body
+
+
+      //Est Cost Apuntalado
+      let { estCostCompaniaDeServicio, estCostoDeRentaDeBarco, estCostUnidadesDeAltaPresion, estCostDelGelDeFractura, estCostDeSistemoRactivo, 
+        estCostDeSistemaNoRactivo, estCostDeDivergentes, estCostDeN2, estCostDeHCL, estCostDeSistemasAcidosRetardados, 
+        estCostDeCostoEquipoDeFacturamientoDePozos, estCostGelLineal, estCostTrabajosDeBombeoDiversos, estCostLlenadoDePozoYPruebaDeAdmision, estCostMinifrac, 
+        estCostBacheNeutralizador, estCostProtectorDeArbol } = req.body
+
+        console.log(req.body)
+
+      query = `INSERT INTO InterventionsFractuarmientosApuntalado (
+        INTERVENTION_ID, DATE, OBJETIVO, ALCANCES, ETAPA,
+        SISTEMA, TIPO_DE_APUNTALANTE, CONCENTRACION_DE_APUNTALANTE, VOLUME_LIQUID, GASTO_N2,
+        GASTO_LIQUIDO, GASTO_EN_FONDA, CALIDAD, VOLUME_N2, VOLUME_LIQUID_ACUM, VOLUME_N2_ACUM,
+        REL_N2_PER_LIQ, TIEMPO, INTERVALO, LONGITUD_DE_INTERVALO_A_TRATAR, VOLUME_APAREJO,
+        CAPACIDAD_TOTAL_DEL_POZO, VOLUMEN_PRECOLCHON_N2, VOLUMEN_DE_APUNTALANTE, VOLUMEN_DE_GEL_DE_FRACTURA, VOLUMEN_DESPLAZAMIENTO, 
+        VOLUMEN_TOTAL_DE_LIQUIDO, INSERTLABTESTSHERE, LONGITUD_APUNTALADA, ALTURA_TOTAL_DE_FRACTURA, ANCHO_PROMEDIO, 
+        CONCENTRACION_AREAL, CONDUCTIVIDAD, FCD, PRESION_NETA, EFICIENCIA_DE_FLUIDO_DE_FRACTURA,
+        EST_INC_ESTRANGULADOR, EST_INC_Ptp, EST_INC_Ttp, EST_INC_Pbaj,
+        EST_INC_Tbaj, EST_INC_Ptr, EST_INC_Qi, EST_INC_Qo, EST_INC_Qq,
+        EST_INC_Qw, EST_INC_RGA, EST_INC_SALINIDAD, EST_INC_IP, EST_INC_DELTA_P,
+        EST_INC_GASTO_COMPROMISO_Qo, EST_INC_GASTO_COMPROMISO_Qg, OBSERVACIONES, EST_COSTO_COMPANIA_DE_SERVICIO, EST_COSTO_DE_RENTA_DE_BARCO, EST_COSTO_UNIDADES_DE_ALTA_PRESION,
+        EST_COSTO_DEL_GEL_DE_FRACTURA, EST_COSTO_DE_SISTEMA_REACTIVO, EST_COSTO_DE_SISTEMA_NO_REACTIVO, EST_COSTO_DE_DIVERGENTES, EST_COSTO_DE_N2,
+        EST_COSTO_DE_HCL, EST_COSTO_DE_SISTEMAS_ACIDOS_RETARDADOS, EST_COSTO_EQUIPO_DE_FRACTURAMIENTO_DE_POZOS, EST_COSTO_GEL_LINEAL, EST_COSTO_DE_TRABAJOS_DE_BOMBEO_DIVERSOS,
+        EST_COSTO_DE_LLENADO_DE_POZO_Y_PRUEBA_DE_ADMISION, EST_COSTO_DEL_MINIFRAC, EST_COSTO_DE_BACHE_NEUTRALIZADOR, EST_COSTO_DE_PROTECTOR_DE_ARBOL) VALUES
+        (1, 1, ?, ?, ?, ?, ?, ?, ?, ?,
+         ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, 
+         ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, 
+         ?, ?, ?, ?, ?, ?, ?, ?, ?, ?,
+         ?, ?, ?, ?, ?, ?, ?, ?, ?, ?,
+         ?, ?, ?, ?, ?, ?, ?, ?, ?, ?,
+         ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`
+
+
+        data = [
+        objetivo, alcances, etapa, sistema, tipoDeApuntalante, concentraciDeApuntalante, volLiquid, 
+        gastoN2, gastoLiqudo, gastoEnFondo, calidad, volN2, 
+        volLiquidoAcum, volN2Acum, relN2Liq, tiempo, intervalo, 
+        longitudDeIntervalo, volAparejo, capacidadTotalDelPozo, volumenPrecolchonN2, volumenDeApuntalante, 
+        volumenDeGelDeFractura, volumenDesplazamiento, volumenTotalDeLiquido,
+        tipoDeApuntalante,
+        longitudApuntalada, alturaTotalDeFractura, anchoPromedio, concentractionAreal, conductividad, 
+        fcd, presionNeta, eficienciaDeFluidoDeFractura,
+        estIncEstrangulador, estIncPtp, estIncTtp, estIncPbaj, estIncTbaj, 
+        estIncPtr, estIncQl, estIncQo, estIncQg, estIncQw, 
+        estIncRGA, estIncSalinidad, estIncIP, estIncDeltaP, estIncGastoCompromisoQo, 
+        estIncGastoCompromisoQg, obervacionesEstIncApuntalado,
+        estCostCompaniaDeServicio, estCostoDeRentaDeBarco, estCostUnidadesDeAltaPresion, estCostDelGelDeFractura, estCostDeSistemoRactivo, 
+        estCostDeSistemaNoRactivo, estCostDeDivergentes, estCostDeN2, estCostDeHCL, estCostDeSistemasAcidosRetardados, 
+        estCostDeCostoEquipoDeFacturamientoDePozos, estCostGelLineal, estCostTrabajosDeBombeoDiversos, estCostLlenadoDePozoYPruebaDeAdmision, estCostMinifrac, 
+        estCostBacheNeutralizador, estCostProtectorDeArbol 
+        ]
 
   }
 
