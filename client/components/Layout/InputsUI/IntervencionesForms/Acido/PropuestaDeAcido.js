@@ -19,9 +19,9 @@ import { connect } from 'react-redux'
   }
 
   makeCedulaForm() {
-    let { setEtapa, setSistema, setTipoDeApuntalante, setConcentraciDeApuntalante, setVolLiquid, setGastoN2, setGastoLiquid, setGastoEnFondo, setCalidad, setVolN2, setVolLiquidoAcum, setVolN2Acum, setRelN2Liq, setTiempo, formData } = this.props
+    let { setEtapa, setSistema, setTipoDeApuntalante, setConcentraciDeApuntalante, setVolLiquid, setGastoN2, setGastoLiqudo, setGastoEnFondo, setCalidad, setVolN2, setVolLiquidoAcum, setVolN2Acum, setRelN2Liq, setTiempo, formData } = this.props
     formData = formData.toJS()
-    let { etapa, sistema, tipoDeApuntalante, concentraciDeApuntalante, volLiquid, gastoN2, gastoLiquid, gastoEnFondo, calidad, volN2, volLiquidoAcum, volN2Acum, relN2Liq, tiempo } = formData
+    let { etapa, sistema, tipoDeApuntalante, concentraciDeApuntalante, volLiquid, gastoN2, gastoLiqudo, gastoEnFondo, calidad, volN2, volLiquidoAcum, volN2Acum, relN2Liq, tiempo } = formData
 
     return (
       <div className='cedula-form' >
@@ -34,7 +34,7 @@ import { connect } from 'react-redux'
         <InputRow header="Concentración de apuntalante" name='' unit='lbm/gal' value={concentraciDeApuntalante} onChange={setConcentraciDeApuntalante}/>
         <InputRow header="Vol. Líquido" name='' unit='m3' value={volLiquid} onChange={setVolLiquid}/>
         <InputRow header="Gasto N2" name='' unit='m3/min' value={gastoN2} onChange={setGastoN2}/>
-        <InputRow header="Gasto Líquido" name='' unit='bpm' value={gastoLiquid} onChange={setGastoLiqudo}/>
+        <InputRow header="Gasto Líquido" name='' unit='bpm' value={gastoLiqudo} onChange={setGastoLiqudo}/>
         <InputRow header="Gasto en fondo" name='' unit='bpm' value={gastoEnFondo} onChange={setGastoEnFondo}/>
         <InputRow header="Calidad" name='' unit='%' value={calidad} onChange={setCalidad}/>
         <InputRow header="Vol. N2" name='' unit='m3 std' value={volN2} onChange={setVolN2}/>
