@@ -13,6 +13,16 @@ input[type=text], input[type=password], {
   }
 }
 
+.select-input {
+  & > div {
+    min-height: unset !important;
+    
+    div[aria-hidden] {
+      padding: 5px !important;
+    }
+  }
+}
+
 .actions {
   & > * {
     margin-right: 0.4em;
@@ -25,30 +35,40 @@ input[type=text], input[type=password], {
   }
 }
 
-.login-form {
-  top: 30%;
-  width: 20em;
-  margin-left: -10em;
-  position: absolute;
-  left: 50%;
+.loginModal {
+  min-width: 450px;
+  max-width: 100%;
+  margin: auto;
 
-  &:before {
-    content: '';
-    display: block;
-    position: absolute;
-    right: 3%;
-    bottom: 0;
-    width: 4em;
-    height: 3em;
-    // background: url('/images/qri-logo.hires.png') no-repeat;
-    background-size: 100%;
+  .login-form {
+    border-radius: 5px;
+  }
+}
+
+.login-form {
+
+  &> div {
+    padding: 15px;
   }
 
-  input {
-    font-size: 1.8em;
-    margin-bottom: 0.6em;
-    width: 90%;
-    padding: 0.25em 0.4em;
+  .heading {
+    border-bottom: 1px solid $primary-border-color;
+
+    h2 {
+      font-size: 1.2em;
+      font-weight: 500;
+      margin-bottom: 0;
+    }
+  }
+
+  .body {
+    padding: 40px;
+  }
+
+  .footer {
+    padding: 10px 15px;
+    border-top: 1px solid $primary-border-color;
+    text-align: right;
   }
 
   &.error {
@@ -63,8 +83,7 @@ input[type=text], input[type=password], {
   }
 
   button {
-    font-size: 1.2em;
-    margin-top: 0.5em;
+    font-size: 1em !important;
     padding: 0.4em 1em;
 
     &.verifying {
@@ -78,15 +97,18 @@ input[type=text], input[type=password], {
   }
 
   label {
-    display: block;
+    display: inline-block;
+    width: 100%;
+    margin: .5rem 0;
 
     span {
-      font-size: 1.1em;
+      font-size: 1em;
       font-weight: 400;
-      text-transform: uppercase;
       display: block;
-      margin-bottom: 0.2em;
-      color: #666;
+      width: 115px;
+      padding: 0.25em 20px 0.25em 0;
+      text-align: right;
+      float: left;
 
       small {
         text-transform: lowercase;
@@ -94,5 +116,27 @@ input[type=text], input[type=password], {
         opacity: 0.5;
       }
     }
+
+    input {
+      font-size: 1em;
+      width: calc(100% - 115px);
+      padding: 0.25em 0.4em;
+      float: left;
+    }
+  }
+
+  p.error {
+    display: block;
+    clear: both;
+    color: red;
+    padding: 10px 0;
+  }
+}
+
+
+.multistep-form {
+  button.submit {
+    display: block;
+    margin: 20px auto;
   }
 }

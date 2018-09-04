@@ -28,8 +28,8 @@
 			margin-right: 10px;
 			cursor: pointer;
                         text-align: center;
-                        font-weight: bold;
-                        font-size: 1.2em;
+                        font-weight: 500;
+                        font-size: 1.1em;
 
                         &.active {
                           color: $white;
@@ -65,6 +65,7 @@
 			text-align: center;
                         margin: 20px auto 40px;
                         color: $white;
+                        font-size: .925rem;
                         font-weight: 100;
 
                         &:before {
@@ -77,22 +78,36 @@
                             position: absolute;
                         }
 
+                        &:first-child {
+                            &:before {
+                                     width: 50%;
+                                     margin-left: 50%;
+                            }
+                        }
+
+                        &:last-child {
+                            &:before {
+                                     width: 50%;
+                                     margin-left: 0%;
+                            }
+                        }
+
                         span {
                           display: block;
-                          height: 24px;
-                          width: 24px;
+                          height: 20px;
+                          width: 20px;
                           background: $white;
                           border-radius: 50%;
-                          margin: 5px auto;
+                          margin: 8px auto 10px;
                         }
 
                         &.active {
-                           font-size: 1.2em;
+                           font-size: 1.1em;
                            font-weight: 500;
 
                            span {
-                             height: 34px;
-                             width: 34px;
+                             height: 30px;
+                             width: 30px;
                              margin-top: 0;
 
                              &:after {
@@ -102,7 +117,7 @@
                                height: 20px;
                                border-radius: 50%;
                                position: absolute;
-                               margin: 7px;
+                               margin: 5px;
                                background: $active-green;
                              }
                            }
@@ -132,11 +147,12 @@
 				*/
 
 		.tab-title {
-			font-size: 2em;
+			font-size: 1.5em;
 			font-weight: bold;
                         padding-bottom: 1em;
                         margin-bottom: 1em;
-                        border-bottom: 1px solid #000;
+                        color: $primary-font-color;
+                        border-bottom: 1px solid $primary-font-color;
 		}
 
         }
@@ -173,7 +189,7 @@
 
         .multistep-form {
           .content {
-            padding: 40px;
+            padding: 20px 40px;
             border: solid;
             border-width: 0px 1px 1px 1px;
             border-color: $primary-green;   
