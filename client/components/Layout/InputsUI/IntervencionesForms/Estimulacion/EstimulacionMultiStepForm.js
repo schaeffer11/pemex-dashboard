@@ -1,6 +1,9 @@
 import React, { Component } from 'react'
+import { connect } from 'react-redux'
 import autobind from 'autobind-decorator'
 import axios from 'axios'
+
+import {submitForm} from '../../../../../redux/actions/estimulacionFormActions'
 
 import PropuestaDeEstimulacion from './PropuestaDeEstimulacion'
 import PruebasDeLaboratorioEstimulacion from './PruebasDeLaboratorioEstimulacion'
@@ -48,12 +51,18 @@ import EstimacionCostosEstimulacion from './EstimacionCostosEstimulacion'
     }
   }
 
+  handleSubmit(){
+    this.props.submitEstimulacionForm(this.props)
+  }
+
   render() {
      let className = 'subtab'
      let title = this.forms[this.state.currentStep].title
+     let estimulacionFormSubmitting = this.props.forms.get('estimulacionFormSubmitting')
+     let submitting = estimulacionFormSubmitting ? 'submitting':''
 
      return (
-         <div className='multistep-form'>
+         <div className={`multistep-form ${submitting}`}>
           <div className="subtabs">
               {this.forms.map( (tab, index) => {
                  let active = this.state.currentStep === index ? 'active' : ''; 
@@ -70,9 +79,25 @@ import EstimacionCostosEstimulacion from './EstimacionCostosEstimulacion'
 
             {this.forms[this.state.currentStep].content}
           </div>
+          <button className="submit" disabled={estimulacionFormSubmitting} onClick={this.handleSubmit}>{estimulacionFormSubmitting ? 'Enviando...' : 'Enviar'}</button>
          </div>
      );
   }
 }
 
-export default EstimulacionMultiStepForm;
+const mapDispatchToProps = dispatch => ({
+  submitEstimulacionForm: values => {dispatch(submitForm(values))}
+})
+
+const mapStateToProps = state => ({
+  forms: state.get('forms'),
+  objetivoYAlcancesIntervencion: state.get('objetivoYAlcancesIntervencion'),
+  pruebasDeLaboratorio: state.get('pruebasDeLaboratorio'),
+  propuestaEstimulacion: state.get('propuestaEstimulacion'),
+  resultadosSimulacionEstimulacion: state.get('resultadosSimulacionEstimulacion'),
+  estIncProduccionEstimulacion: state.get('estIncProduccionEstimulacion'),
+  estCostEstimulacion: state.get('estCostEstimulacion')
+})
+
+export default connect(mapStateToProps, mapDispatchToProps)(EstimulacionMultiStepForm);
+

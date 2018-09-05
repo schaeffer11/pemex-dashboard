@@ -1,6 +1,9 @@
 import React, { Component } from 'react'
+import { connect } from 'react-redux'
 import autobind from 'autobind-decorator'
 import axios from 'axios'
+
+import {submitForm} from '../../../../../redux/actions/acidoFormActions'
 
 import EstimacionCostosAcido from './EstimacionCostosAcido'
 import EstimacionIncProduccionAcido from './EstimacionIncProduccionAcido'
@@ -50,12 +53,18 @@ import ResultadosDeLaSimulacionAcido from './ResultadosDeLaSimulacionAcido'
     }
   }
 
+  handleSubmit(){
+    this.props.submitAcidoForm(this.props)
+  }
+
   render() {
      let className = 'subtab'
      let title = this.forms[this.state.currentStep].title
+     let acidoFormSubmitting = this.props.forms.get('acidoFormSubmitting')
+     let submitting = acidoFormSubmitting ? 'submitting' : ''
 
      return (
-         <div className='multistep-form'>
+         <div className={`multistep-form ${submitting}`}>
           <div className="subtabs">
               {this.forms.map( (tab, index) => {
                  let active = this.state.currentStep === index ? 'active' : ''; 
@@ -72,9 +81,28 @@ import ResultadosDeLaSimulacionAcido from './ResultadosDeLaSimulacionAcido'
 
             {this.forms[this.state.currentStep].content}
           </div>
+
+          <button className="submit" disabled={acidoFormSubmitting} onClick={this.handleSubmit}>{acidoFormSubmitting ? 'Enviando...' : 'Enviar'}</button>
          </div>
      );
   }
 }
 
-export default AcidoMultiStepForm;
+
+const mapDispatchToProps = dispatch => ({
+  submitAcidoForm: values => {dispatch(submitForm(values))}
+})
+
+const mapStateToProps = state => ({
+  forms: state.get('forms'),
+  objetivoYAlcancesIntervencion: state.get('objetivoYAlcancesIntervencion'),
+  pruebasDeLaboratorio: state.get('pruebasDeLaboratorio'),
+  propuestaAcido: state.get('propuestaAcido'),
+  pruebasDeLaboratorioAcido: state.get('pruebasDeLaboratorioAcido'),
+  resultadosSimulacionAcido: state.get('resultadosSimulacionAcido'),
+  estIncProduccionAcido: state.get('estIncProduccionAcido'),
+  estCostAcido: state.get('estCostAcido')
+})
+
+
+export default connect(mapStateToProps, mapDispatchToProps)(AcidoMultiStepForm);

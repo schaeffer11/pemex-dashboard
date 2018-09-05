@@ -1,6 +1,9 @@
 import React, { Component } from 'react'
+import { connect } from 'react-redux'
 import autobind from 'autobind-decorator'
 import axios from 'axios'
+
+import {submitForm} from '../../../../../redux/actions/apuntaladoFormActions'
 
 import PropuestaDeApuntalado from './PropuestaDeApuntalado'
 import PruebasDeLaboratorioApuntalado from './PruebasDeLaboratorioApuntalado'
@@ -42,6 +45,10 @@ import EstimacionCostosApuntalado from './EstimacionCostosApuntalado'
     }
   }
 
+  handleSubmit(){
+    this.props.submitApuntaladoForm(this.props)
+  }
+
   handlePrevSubtab(){
     if( this.state.currentStep - 1 >= 0){
       this.setState({
@@ -53,9 +60,11 @@ import EstimacionCostosApuntalado from './EstimacionCostosApuntalado'
   render() {
      let className = 'subtab'
      let title = this.forms[this.state.currentStep].title
+     let apuntaladoFormSubmitting = this.props.forms.get('apuntaladoFormSubmitting')
+     let submitting = apuntaladoFormSubmitting ? 'submitting' : ''
 
      return (
-         <div className='multistep-form'>
+         <div className={`multistep-form ${submitting}`}>
           <div className="subtabs">
               {this.forms.map( (tab, index) => {
                  let active = this.state.currentStep === index ? 'active' : ''; 
@@ -72,9 +81,28 @@ import EstimacionCostosApuntalado from './EstimacionCostosApuntalado'
 
             {this.forms[this.state.currentStep].content}
           </div>
+
+          <button className="submit" disabled={apuntaladoFormSubmitting} onClick={this.handleSubmit}>{apuntaladoFormSubmitting ? 'Enviando...' : 'Enviar'}</button>
          </div>
      );
   }
 }
 
-export default ApuntaladoMultiStepForm;
+
+const mapDispatchToProps = dispatch => ({
+  submitApuntaladoForm: values => {dispatch(submitForm(values))}
+})
+
+const mapStateToProps = state => ({
+  forms: state.get('forms'),
+  objetivoYAlcancesIntervencion: state.get('objetivoYAlcancesIntervencion'),
+  pruebasDeLaboratorio: state.get('pruebasDeLaboratorio'),
+  propuestaApuntalado: state.get('propuestaApuntalado'),
+  pruebasDeLaboratorioApuntalado: state.get('pruebasDeLaboratorioApuntalado'),
+  resultadosSimulacionApuntalado: state.get('resultadosSimulacionApuntalado'),
+  estIncProduccionApuntalado: state.get('estIncProduccionApuntalado'),
+  estCostApuntalado: state.get('estCostApuntalado')
+})
+
+
+export default connect(mapStateToProps, mapDispatchToProps)(ApuntaladoMultiStepForm);
