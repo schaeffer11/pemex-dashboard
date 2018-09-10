@@ -1,6 +1,6 @@
 import React, { Component } from 'react'
 import autobind from 'autobind-decorator'
-import { Link } from 'react-router-dom'
+import { Link, Redirect } from 'react-router-dom'
 
 const LinkButton = ({ text, disabled , src, to}) => {
   console.log(text)
@@ -24,7 +24,6 @@ const LinkButton = ({ text, disabled , src, to}) => {
   constructor(props) {
     super(props)
     this.state = { 
-
     }
   }
 
@@ -39,6 +38,12 @@ const LinkButton = ({ text, disabled , src, to}) => {
 
 
   render() {
+    const { referer } = this.props.location.state || {}
+/*
+    if(referrer){
+      return <Redirect to={referrer} />
+    }
+*/
     return (
       <div className="home">
         <div className='title'>

@@ -152,8 +152,17 @@ input[type=text], input[type=password], {
     }
   }
 
+  &.error {
+    .error {
+      width: 100%;
+      text-align: center;
+      color: red;
+    }
+  }
+
   button.submit {
     display: block;
     margin: 20px auto;
   }
+
 }

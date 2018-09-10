@@ -29,5 +29,25 @@ export default {
     let connection = comysql(pool)
 
     return connection
-  }
+  },
+   getConnection(alias) {
+      if (!alias) {
+        var alias = Object.keys(databases)[0]
+        message('alias not defined, using default', alias)
+      }
+      let db = databases[alias]
+      let { user, password, host, database } = db
+      let dbConfig = Object.assign(
+        {
+          connectionLimit: 10,
+          host,
+          database,
+          multipleStatements: true,
+          debug: false
+        },
+        { user, password }
+      )
+      let pool = mysql.createConnection(dbConfig)
+      return pool
+   }
 }

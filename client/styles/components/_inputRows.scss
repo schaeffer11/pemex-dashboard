@@ -23,6 +23,16 @@
   	text-align: center;
   	line-height: 30px;
   }
+
+  .error {
+    grid-row: 2;
+    grid-column-start: 1;
+    grid-column-end: 3;
+    text-align: center;
+    padding: 5px 0;
+    color: red;
+    font-size: .875rem;
+  }
 }
 
 .input-row-unitless {
