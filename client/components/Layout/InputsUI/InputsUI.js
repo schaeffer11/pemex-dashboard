@@ -13,7 +13,7 @@ import PozoMultiStepForm from './PozoForms/PozoMultiStepForm'
   constructor(props) {
     super(props)
     this.state = { 
-      selectedTab: 'Pozo',
+      selectedTab: 'Intervenciones',
       selectedSubtab: 'tecnicaDelPozoHighLevel',
     }
   }
@@ -319,9 +319,9 @@ import PozoMultiStepForm from './PozoForms/PozoMultiStepForm'
 
     //ObjetivoYAlcancesIntervencion
     let { objetivo, alcances, tipoDeIntervenciones } = objetivoYAlcancesIntervencion
-    let { tipoDeAnalisis, fechaDeMuestreo, fechaDePrueba, compania, personalDePemexQueSuperViso, obervacionesLab } = pruebasDeLaboratorio
+    let { pruebasDeLaboratorioData } = pruebasDeLaboratorio
  
-    let data = {
+   let data = {
       objetivo: objetivo,
       alcances: alcances,
       tipoDeIntervenciones: tipoDeIntervenciones
@@ -367,12 +367,7 @@ import PozoMultiStepForm from './PozoForms/PozoMultiStepForm'
         volumenDesplazamientoLiquido: volumenDesplazamientoLiquido,
         volumenDesplazamientoN2: volumenDesplazamientoN2,
         volumenTotalDeLiquido : volumenTotalDeLiquido,
-        tipoDeAnalisis: tipoDeAnalisis,
-        fechaDeMuestreo: fechaDeMuestreo,
-        fechaDePrueba: fechaDePrueba,
-        compania: compania,
-        personalDePemexQueSuperViso: personalDePemexQueSuperViso,
-        obervacionesLab: obervacionesLab,
+        //INSERT LAB DATA HERE
         volumenDelSistemaAcidoLimpieza: volumenDelSistemaAcidoLimpieza,
         volumenDelSistemaNoAcidoLimpieza: volumenDelSistemaNoAcidoLimpieza,
         tipoDeColocacion: tipoDeColocacion,
@@ -457,7 +452,7 @@ estCostMinifrac, estCostBacheNeutralizador, estCostProtectorDeArbol, estCostApun
         volumenSistemaDivergente: volumenSistemaDivergente, 
         volumenDesplazamientoLiquido: volumenDesplazamientoLiquido, 
         volumenDesplazamientoGelLineal: volumenDesplazamientoGelLineal, 
-        tipoDeAnalisis: tipoDeAnalisis, 
+        //INSERT LAB DATA HERE
         contenidoDeAceite: contenidoDeAceite, 
         contenidoDeAgua: contenidoDeAgua, 
         contenidoDeEmulsion: contenidoDeEmulsion, 
@@ -576,7 +571,7 @@ estCostMinifrac, estCostBacheNeutralizador, estCostProtectorDeArbol, estCostApun
         volumenDeGelDeFractura: volumenDeGelDeFractura,
         volumenDesplazamiento: volumenDesplazamiento,
         volumenTotalDeLiquido: volumenTotalDeLiquido,
-        tipoDeAnalisis: tipoDeAnalisis,
+        //INSERT LAB DATA HERE
         contenidoDeAceite: contenidoDeAceite,
         contenidoDeAgua: contenidoDeAgua,
         contenidoDeEmulsion: contenidoDeEmulsion,
@@ -711,7 +706,7 @@ estCostMinifrac, estCostBacheNeutralizador, estCostProtectorDeArbol, estCostApun
     return (
       <div className="input-forms">
         <Tabs handleSelectTab={this.handleSelectTab} selectedTab={selectedTab} />
-        <div class="tab-content">
+        <div className="tab-content">
           { form }
         </div>
       </div>

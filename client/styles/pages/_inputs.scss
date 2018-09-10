@@ -1,7 +1,7 @@
 .input-forms {
 	height: 100%;
-	/*display: grid;*/
 	margin: 15px 0;
+	min-width: 1000px;
 	padding: .7em;
 
 /*
@@ -345,10 +345,21 @@
 
 	.pruebas-de-laboratorio-estimulacion {
 		.generales-form {
-			width: 25%;
+			width: 100%;
 		}
 		.obervaciones {
 			width: 50%;
+		}
+		.new-row-button {
+			position: relative;
+			left: calc(50% - 15px);
+			width: 30px;
+			height: 30px;
+			margin-top: 10px;
+			border-radius: 5px;
+		}
+		.new-row-button:focus {
+			outline: 0 !important;
 		}
 	}
 

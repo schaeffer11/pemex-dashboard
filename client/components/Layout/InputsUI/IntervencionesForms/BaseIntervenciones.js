@@ -47,16 +47,16 @@ import EstimulacionMultiStepForm from './Estimulacion/EstimulacionMultiStepForm'
     if(this.state.form === null){
       return (
         <div>
-          <div class="subtabs"></div>
-          <div class="tab-content">
-          <div class="multistep-form">
-          <div class="content">
+          <div className="subtabs"></div>
+          <div className="tab-content">
+          <div className="multistep-form">
+          <div className="content">
           <form className="form base-intervenciones" onSubmit={this.handleSubmit}>
             <div className='main-form'>
               <TextAreaUnitless header="Objetivo - Describir el objetivo de la intervención indicando la causa principal, tipo de tratamiento a aplicar y técnica de colocación de los sistemas." name='objetivo' className={'objetivo'} value={objetivo} onChange={setObjetivo} />
               <TextAreaUnitless header="Alcances - Describir los alcances que se pretenden obtener con la intervención programada a ejecutar." name='alcances' className={'alcances'} value={alcances} onChange={setAlcances}/>
               <InputRowSelectUnitless header='Tipo de intervenciones' name='intervencion' value={tipoDeIntervenciones} options={tipoDeIntervencionesOptions} callback={this.handleSelectIntervencionesType} />
-              <button class="submit">Enviar</button>
+              <button className="submit">Enviar</button>
             </div>
           </form>
           </div>

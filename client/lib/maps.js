@@ -12,21 +12,20 @@ import HistoricoDeProduccion from '../components/Layout/InputsUI/PozoForms/Histo
 import AnalisisDelAgua from '../components/Layout/InputsUI/PozoForms/AnalisisDelAgua'
 
 //Intervention Forms
+import PruebasDeLaboratorio from '../components/Layout/InputsUI/IntervencionesForms/PruebasDeLaboratorio'
+
 import PropuestaDeEstimulacion from '../components/Layout/InputsUI/IntervencionesForms/Estimulacion/PropuestaDeEstimulacion'
-import PruebasDeLaboratorioEstimulacion from '../components/Layout/InputsUI/IntervencionesForms/Estimulacion/PruebasDeLaboratorioEstimulacion'
 import ResultadosDeLaSimulacionEstimulacion from '../components/Layout/InputsUI/IntervencionesForms/Estimulacion/ResultadosDeLaSimulacionEstimulacion'
 import EstimacionIncProduccionEstimulacion from '../components/Layout/InputsUI/IntervencionesForms/Estimulacion/EstimacionIncProduccionEstimulacion'
 import EstimacionCostosEstimulacion from '../components/Layout/InputsUI/IntervencionesForms/Estimulacion/EstimacionCostosEstimulacion'
 
 import PropuestaDeAcido from '../components/Layout/InputsUI/IntervencionesForms/Acido/PropuestaDeAcido'
-import PruebasDeLaboratorioAcido from '../components/Layout/InputsUI/IntervencionesForms/Acido/PruebasDeLaboratorioAcido'
 import PruebasDeLaboratorioAcidoExtra from '../components/Layout/InputsUI/IntervencionesForms/Acido/PruebasDeLaboratorioAcidoExtra'
 import ResultadosDeLaSimulacionAcido from '../components/Layout/InputsUI/IntervencionesForms/Acido/ResultadosDeLaSimulacionAcido'
 import EstimacionIncProduccionAcido from '../components/Layout/InputsUI/IntervencionesForms/Acido/EstimacionIncProduccionAcido'
 import EstimacionCostosAcido from '../components/Layout/InputsUI/IntervencionesForms/Acido/EstimacionCostosAcido'
 
 import PropuestaDeApuntalado from '../components/Layout/InputsUI/IntervencionesForms/Apuntalado/PropuestaDeApuntalado'
-import PruebasDeLaboratorioApuntalado from '../components/Layout/InputsUI/IntervencionesForms/Apuntalado/PruebasDeLaboratorioApuntalado'
 import PruebasDeLaboratorioApuntaladoExtra from '../components/Layout/InputsUI/IntervencionesForms/Apuntalado/PruebasDeLaboratorioApuntaladoExtra'
 import ResultadosDeLaSimulacionApuntalado from '../components/Layout/InputsUI/IntervencionesForms/Apuntalado/ResultadosDeLaSimulacionApuntalado'
 import EstimacionIncProduccionApuntalado from '../components/Layout/InputsUI/IntervencionesForms/Apuntalado/EstimacionIncProduccionApuntalado'
@@ -91,7 +90,7 @@ export const pagesIntervenciones = {
             },
             pruebasDeLaboratorio: {
               key: 'pruebasDeLaboratorio',
-              form: <PruebasDeLaboratorioEstimulacion />,
+              form: <PruebasDeLaboratorio />,
               title: 'Pruebas de Laboratorio'
             },
             resultadosDeLaSimulacion: {
@@ -118,7 +117,7 @@ export const pagesIntervenciones = {
             },
             pruebasDeLaboratorio: {
               key: 'pruebasDeLaboratorio',
-              form: <PruebasDeLaboratorioAcido />,
+              form: <PruebasDeLaboratorio />,
               title: 'Pruebas de Laboratorio'
             },
             pruebasDeLaboratorioExtra: {
@@ -150,7 +149,7 @@ export const pagesIntervenciones = {
             },
             pruebasDeLaboratorio: {
               key: 'pruebasDeLaboratorio',
-              form: <PruebasDeLaboratorioApuntalado />,
+              form: <PruebasDeLaboratorio/>,
               title: 'Pruebas de Laboratorio'
             },
             pruebasDeLaboratorioExtra: {

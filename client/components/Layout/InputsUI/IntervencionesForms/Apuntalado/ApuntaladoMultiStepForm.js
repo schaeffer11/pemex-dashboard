@@ -6,7 +6,7 @@ import axios from 'axios'
 import {submitForm} from '../../../../../redux/actions/apuntaladoFormActions'
 
 import PropuestaDeApuntalado from './PropuestaDeApuntalado'
-import PruebasDeLaboratorioApuntalado from './PruebasDeLaboratorioApuntalado'
+import PruebasDeLaboratorio from '../PruebasDeLaboratorio'
 import PruebasDeLaboratorioApuntaladoExtra from './PruebasDeLaboratorioApuntaladoExtra'
 import ResultadosDeLaSimulacionApuntalado from './ResultadosDeLaSimulacionApuntalado'
 import EstimacionIncProduccionApuntalado from './EstimacionIncProduccionApuntalado'
@@ -22,7 +22,7 @@ import EstimacionCostosApuntalado from './EstimacionCostosApuntalado'
 
     this.forms = [
       {'title' : 'Propuesta de Fracturamiento Apuntalado', 'content': <PropuestaDeApuntalado/> },  
-      {'title' : 'Pruebas de Laboratorio', 'content': <PruebasDeLaboratorioApuntalado/> },
+      {'title' : 'Pruebas de Laboratorio', 'content': <PruebasDeLaboratorio/> },
       {'title' : 'Pruebas de Laboratorio de Fracturamiento Apuntalado', 'content': <PruebasDeLaboratorioApuntaladoExtra/> },
       {'title' : 'Resultados de la Simulacion de Fracturamiento Apuntalado', 'content': <ResultadosDeLaSimulacionApuntalado/> },
       {'title' : 'Estimacion del Incremento de Produccion', 'content': <EstimacionIncProduccionApuntalado/> },

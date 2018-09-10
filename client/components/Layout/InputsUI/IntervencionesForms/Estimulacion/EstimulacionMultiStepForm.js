@@ -6,7 +6,7 @@ import axios from 'axios'
 import {submitForm} from '../../../../../redux/actions/estimulacionFormActions'
 
 import PropuestaDeEstimulacion from './PropuestaDeEstimulacion'
-import PruebasDeLaboratorioEstimulacion from './PruebasDeLaboratorioEstimulacion'
+import PruebasDeLaboratorio from '../PruebasDeLaboratorio'
 import ResultadosDeLaSimulacionEstimulacion from './ResultadosDeLaSimulacionEstimulacion'
 import EstimacionIncProduccionEstimulacion from './EstimacionIncProduccionEstimulacion'
 import EstimacionCostosEstimulacion from './EstimacionCostosEstimulacion'
@@ -21,7 +21,7 @@ import EstimacionCostosEstimulacion from './EstimacionCostosEstimulacion'
 
     this.forms = [
       {'title' : 'Propuesta de Tratamiento de Estimulacion', 'content': <PropuestaDeEstimulacion/> },  
-      {'title' : 'Pruebas de Laboratorio', 'content': <PruebasDeLaboratorioEstimulacion/> },
+      {'title' : 'Pruebas de Laboratorio', 'content': <PruebasDeLaboratorio/> },
       {'title' : 'Resultados de la Simulacion de Estimulacion', 'content': <ResultadosDeLaSimulacionEstimulacion/> },
       {'title' : 'Estimacion del Incremento de Produccion', 'content': <EstimacionIncProduccionEstimulacion/> },
       {'title' : 'Estimacion de Costos de Estimulacion', 'content': <EstimacionCostosEstimulacion/> }
@@ -70,11 +70,11 @@ import EstimacionCostosEstimulacion from './EstimacionCostosEstimulacion'
                  }
               )}
           </div>
-          <div class="content">
+          <div className="content">
             <div className="tab-title">
               { title }
-              <button class="cta next" onClick={this.handleNextSubtab}>Siguiente</button>
-              <button class="cta prev" onClick={this.handlePrevSubtab}>Anterior</button> 
+              <button className="cta next" onClick={this.handleNextSubtab}>Siguiente</button>
+              <button className="cta prev" onClick={this.handlePrevSubtab}>Anterior</button> 
             </div>
 
             {this.forms[this.state.currentStep].content}

@@ -74,8 +74,9 @@ const INSERT_APUNTALADO_QUERY = `INSERT INTO InterventionsFractuarmientosApuntal
 
 exports.create = function(req, res, next){
   let { objetivo, alcances, tipoDeIntervenciones } = req.body
-  //Pruebas De Laboratoro
-  let { tipoDeAnalisis, fechaDeMuestreo, fechaDePrueba, compania, personalDePemexQueSuperViso, obervacionesLab } = req.body
+  //Pruebas De Laboratoro 
+  //TODO add lab tests
+  // let { tipoDeAnalisis } = req.body
 
   let query = ''
   let data = []
@@ -111,7 +112,7 @@ exports.create = function(req, res, next){
         relN2Liq, tiempo, intervalo, longitudDeIntervalo, volAparejo,
         capacidadTotalDelPozo, volumenPrecolchonN2, volumenSistemaNoReativo, volumenSistemaReactivo, volumenSistemaDivergente,
         volumenDesplazamientoLiquido, volumenDesplazamientoN2, volumenTotalDeLiquido,
-        tipoDeAnalisis,
+        'need to add',
         volumenDelSistemaAcidoLimpieza, volumenDelSistemaNoAcidoLimpieza, tipoDeColocacion, tiempoDeContacto, numeroDeEtapas,
         volumenDelSistemAcido, volumenDelSistemNoAcido, volumenDeDivergente, volumenDeN2, calidadDeEspuma,
         volumenDePrecolchonN2, volumenDeDesplazamiento, penetracionRadial, longitudDeAgujeroDeGusano,
@@ -129,9 +130,6 @@ exports.create = function(req, res, next){
         volLiquidoAcum, volN2Acum, relN2Liq, tiempo, intervalo,
         longitudDeIntervalo, volAparejo, capacidadTotalDelPozo, volumenPrecolchonN2, volumenSistemaNoReativo,
         volumenSistemaReactivo, volumenSistemaDivergente, volumenDesplazamientoLiquido, volumenDesplazamientoGelLineal } = req.body
-
-      //Pruebas De Laboratoro
-      let { tipoDeAnalisis, fechaDeMuestreo, fechaDePrueba, compania, personalDePemexQueSuperViso, obervacionesLab } = req.body
 
       //Pruebas De laboratorio Acido
       let { contenidoDeAceite, contenidoDeAgua, contenidoDeEmulsion, contenidoDeSolidos, tipoDeSolidos,
@@ -164,7 +162,7 @@ exports.create = function(req, res, next){
         volLiquidoAcum, volN2Acum, relN2Liq, tiempo, intervalo,
         longitudDeIntervalo, volAparejo, capacidadTotalDelPozo, volumenPrecolchonN2, volumenSistemaNoReativo,
         volumenSistemaReactivo, volumenSistemaDivergente, volumenDesplazamientoLiquido, volumenDesplazamientoGelLineal,
-        tipoDeAnalisis, longitudTotal, longitudEfectivaGrabada, alturaGrabada, anchoPromedio, concentracionDelAcido,
+        'need to add', longitudTotal, longitudEfectivaGrabada, alturaGrabada, anchoPromedio, concentracionDelAcido,
         conductividad, fcd, presionNeta, eficienciaDeFluidoDeFractura, estIncEstrangulador, estIncPtp, estIncTtp, estIncPbaj, estIncTbaj,
         estIncPtr, estIncQl, estIncQo, estIncQg, estIncQw,
         estIncRGA, estIncSalinidad, estIncIP, estIncDeltaP, estIncGastoCompromisoQo,
@@ -217,7 +215,7 @@ exports.create = function(req, res, next){
         volLiquidoAcum, volN2Acum, relN2Liq, tiempo, intervalo,
         longitudDeIntervalo, volAparejo, capacidadTotalDelPozo, volumenPrecolchonN2, volumenDeApuntalante,
         volumenDeGelDeFractura, volumenDesplazamiento, volumenTotalDeLiquido,
-        tipoDeApuntalante,
+        'need to add',
         longitudApuntalada, alturaTotalDeFractura, anchoPromedio, concentractionAreal, conductividad,
         fcd, presionNeta, eficienciaDeFluidoDeFractura,
         estIncEstrangulador, estIncPtp, estIncTtp, estIncPbaj, estIncTbaj,

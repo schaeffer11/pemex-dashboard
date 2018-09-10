@@ -28,13 +28,7 @@ export const setVolumenDesplazamientoN2 = value => ({ type: 'set_volumenDesplaza
 export const setVolumenTotalDeLiquido = value => ({ type: 'set_volumenTotalDeLiquido', value})
 
 
-export const setTipoDeAnalisis = value => ({ type: 'set_tipoDeAnalisis', value})
-export const setFechaDeMuestreo = value => ({ type: 'set_fechaDeMuestreo', value})
-export const setFechaDePrueba = value => ({ type: 'set_fechaDePrueba', value})
-export const setCompania = value => ({ type: 'set_compania', value})
-export const setPersonalDePemexQueSuperViso = value => ({ type: 'set_personalDePemexQueSuperViso', value})
-export const setObervacionesLab = value => ({ type: 'set_obervacionesLab', value})
-
+export const setPruebasDeLaboratorioData = value => ({ type: 'set_pruebasDeLaboratorioData', value})
 
 export const setVolumenDelSistemaAcidoLimpieza = value => ({ type: 'set_volumenDelSistemaAcidoLimpieza', value})
 export const setVolumenDelSistemaNoAcidoLimpieza = value => ({ type: 'set_volumenDelSistemaNoAcidoLimpieza', value})

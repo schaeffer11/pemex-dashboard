@@ -8,7 +8,7 @@ import {submitForm} from '../../../../../redux/actions/acidoFormActions'
 import EstimacionCostosAcido from './EstimacionCostosAcido'
 import EstimacionIncProduccionAcido from './EstimacionIncProduccionAcido'
 import PropuestaDeAcido from './PropuestaDeAcido'
-import PruebasDeLaboratorioAcido from './PruebasDeLaboratorioAcido'
+import PruebasDeLaboratorio from '../PruebasDeLaboratorio'
 import PruebasDeLaboratorioAcidoExtra from './PruebasDeLaboratorioAcidoExtra'
 import ResultadosDeLaSimulacionAcido from './ResultadosDeLaSimulacionAcido'
 
@@ -22,7 +22,7 @@ import ResultadosDeLaSimulacionAcido from './ResultadosDeLaSimulacionAcido'
 
     this.forms = [
       {'title' : 'Propuesta de Fracturamiento Acido', 'content': < PropuestaDeAcido/> },  
-      {'title' : 'Pruebas de Laboratorio', 'content': <PruebasDeLaboratorioAcido/> },
+      {'title' : 'Pruebas de Laboratorio', 'content': <PruebasDeLaboratorio/> },
       {'title' : 'Pruebas de Laboratorio - Fracturamiento Acido', 'content': <PruebasDeLaboratorioAcidoExtra/> },
       {'title' : 'Resultados de la Simulacion de Fracturamiento Acido', 'content': <ResultadosDeLaSimulacionAcido/> },
       {'title' : 'Estimacion del Incremento de Produccion', 'content': <EstimacionIncProduccionAcido/> },

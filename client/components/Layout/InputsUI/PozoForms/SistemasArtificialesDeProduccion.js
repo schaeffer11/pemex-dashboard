@@ -29,11 +29,7 @@ import { setTipoDeSistemo, setPresionDeCabeza, setPresionDeLineaODeSeparador, se
     const errors = forms.get('pozoFormError')
 
     var foundErrors = errors.find(error => {
-      return ['descubrimiento', 'fechaDeExplotacion', 'noDePozoOperando',
-              'pInicialAno', 'pActualFecha', 'dpPerAnoField', 'tyacField', 'prField',
-              'densidadDelAceite','pSatField','rgaFluidoField','salinidadField','pvtRepresentativo',
-              'litologiaField','espesorNetoField','porosidadField','SwField', 'kPromedioField', 'caa','cga',
-              'qo','qg','rgaProd','fw','np','gp','wp','rra','rrg','rrpce','h2s','co2','n2'].includes(error.field)
+      return [].includes(error.field)
     })
 
     foundErrors = foundErrors === undefined ? false : true
@@ -188,6 +184,8 @@ import { setTipoDeSistemo, setPresionDeCabeza, setPresionDeLineaODeSeparador, se
     let { formData } = this.props
     formData = formData.toJS()
     let { tipoDeSistemo } = formData
+
+    console.log('renderrrrr')
 
     let options = [
       { label: 'Ninguna', value: 'none' },

@@ -1,0 +1,31 @@
+.table {
+  position: relative;
+
+  .ReactTable {
+
+    .rt-table {
+      overflow: visible;
+
+      .rt-tbody {
+        overflow: visible;
+
+        .rt-tr-group {
+          overflow: visible;
+
+          .rt-tr {
+            overflow: visible;
+          }
+        }
+      }
+    }
+
+    .rt-td {
+      overflow: visable;
+      white-space: normal;
+    }
+    .rt-th {
+      overflow: visable;
+      white-space: normal;
+    }
+  }
+}

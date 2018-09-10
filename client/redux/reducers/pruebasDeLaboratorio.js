@@ -1,29 +1,23 @@
 import { Map, fromJS } from 'immutable'
 
 const initialState = Map({ 
-    tipoDeAnalisis: '',
-    fechaDeMuestreo: '',
-    fechaDePrueba: '',
-    compania: '',
-    personalDePemexQueSuperViso: '',
-    obervacionesLab: '',
+    pruebasDeLaboratorioData: [{
+        index: 0,
+        type: null,
+        fechaMuestero: '',
+        fechaPrueba: '',
+        compania: '',
+        superviso: '',
+        length: 1
+    }],
 })
 
 
 const pruebasDeLaboratorio = (state = initialState, action) => {
   switch (action.type) {
-    case 'set_tipoDeAnalisis':
-        return state.set('tipoDeAnalisis', fromJS(action.value))
-    case 'set_fechaDeMuestreo':
-        return state.set('fechaDeMuestreo', fromJS(action.value))
-    case 'set_fechaDePrueba':
-        return state.set('fechaDePrueba', fromJS(action.value))
-    case 'set_compania':
-        return state.set('compania', fromJS(action.value))
-    case 'set_personalDePemexQueSuperViso':
-        return state.set('personalDePemexQueSuperViso', fromJS(action.value))
-    case 'set_obervacionesLab':
-        return state.set('obervacionesLab', fromJS(action.value))
+    case 'set_pruebasDeLaboratorioData':
+        return state.set('pruebasDeLaboratorioData', fromJS(action.value))
+
    
     default:
       return state
