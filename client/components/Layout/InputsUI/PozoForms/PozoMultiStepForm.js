@@ -1,9 +1,9 @@
 import React, { Component } from 'react'
 import autobind from 'autobind-decorator'
 import { connect } from 'react-redux'
+import axios from 'axios';
 
 import {submitForm} from '../../../../redux/actions/pozoFormActions'
-
 import TecnicaDelPozoHighLevel from './TecnicaDelPozoHighLevel'
 import TecnicaDelPozo from './TecnicaDelPozo'
 import TecnicaDelCampo from './TecnicaDelCampo'
@@ -71,6 +71,21 @@ import AnalisisDelAgua from './AnalisisDelAgua'
     this.props.submitPozoForm(this.props)
   }
 
+  downloadMasterTemplate() {
+    axios({
+      // method: "GET",
+      url: "api/getTemplate",
+      // headers: {
+      //     "Content-Type": "application/json"
+      // },
+      withCredentials: true
+    }).then(function(res) {
+      console.log(res)
+
+      return;
+    })
+
+  }
   render() {
      let className = 'subtab'
      let title = this.forms[this.state.currentStep].title
@@ -99,7 +114,7 @@ import AnalisisDelAgua from './AnalisisDelAgua'
 
             {this.forms[this.state.currentStep].content}
           </div>
-
+          <button className="submit" disabled={false} onClick={this.downloadMasterTemplate}>{false ? 'Downloading...' : 'Get Master Template'}</button>
           <button className="submit" disabled={pozoFormSubmitting} onClick={this.handleSubmit}>{pozoFormSubmitting ? 'Enviando...' : 'Enviar'}</button>
           { errors.length > 0 &&
               <div className="error">Se han encontrado errores en la forma.</div>

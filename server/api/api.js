@@ -3,7 +3,7 @@ import express from 'express'
 // import objectPath from 'object-path'
 import db from '../lib/db'
 import appConfig from '../../app-config.js'
-
+import path from 'path'
 
 var well = require('./pozo')
 var intervencion = require('./intervenciones')
@@ -22,6 +22,11 @@ app.get('/ping', (req, res) => {
 })
 
 
+app.get('/getTemplate', (req, res) => {
+  let localPath = path.join(__dirname, '../tempFile.xlsx')
+
+  res.sendFile(localPath)
+})
 
 
 app.post('/well', well.create);

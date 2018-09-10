@@ -157,7 +157,6 @@ import { setPruebasDeLaboratorioData } from '../../../../redux/actions/intervenc
       column.cell === 'renderEditable' ? column.Cell = this.renderEditable : null
     })
 
-    console.log(' hererer', pruebasDeLaboratorioData)
     return (
       <div className='generales-form' >
         <div className='table'>

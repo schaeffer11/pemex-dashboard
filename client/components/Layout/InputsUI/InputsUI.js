@@ -13,7 +13,7 @@ import PozoMultiStepForm from './PozoForms/PozoMultiStepForm'
   constructor(props) {
     super(props)
     this.state = { 
-      selectedTab: 'Intervenciones',
+      selectedTab: 'Pozo',
       selectedSubtab: 'tecnicaDelPozoHighLevel',
     }
   }
