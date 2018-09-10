@@ -4,6 +4,10 @@ import express from 'express'
 import db from '../lib/db'
 import appConfig from '../../app-config.js'
 
+
+var well = require('./pozo')
+var intervencion = require('./intervenciones')
+
 const db_con = db.get(appConfig.users.database)
 const app = express()
 
@@ -18,6 +22,11 @@ app.get('/ping', (req, res) => {
 })
 
 
+
+
+app.post('/well', well.create);
+
+app.post('/intervencion', intervencion.create);
 
 
 
@@ -448,7 +457,6 @@ app.post('/storeWellData', (req, res) => {
 
 
           return db_con.query(query, vals, (err, results) => {
-            console.log('res3', results)
             if (err) {
               console.log('err', err)
               return res.json({ err: err})
