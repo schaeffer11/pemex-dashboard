@@ -24,15 +24,15 @@ import AnalisisDelAgua from './AnalisisDelAgua'
     }
 
     this.forms = [
-      {'title' : 'Ficha Técnica del Pozo' , 'content':<TecnicaDelPozoHighLevel/>},
-      {'title' : 'Ficha Técnica del Pozo' , 'content':<TecnicaDelPozo/>},
-      {'title' : 'Ficha Técnica del Campo', 'content': <TecnicaDelCampo/>},
-      {'title' : 'Información de Sistemas Artificiales de Producción', 'content': <SistemasArtificialesDeProduccion /> },
-      {'title' : 'Evaluación Petrofísica', 'content': <EvaluacionPetrofisica /> },
-      {'title' : 'Edo. Mecánico y Aparejo de Producción', 'content': <MecanicoYAparejo /> },
-      {'title' : 'Histórico de Presión', 'content': <HistoricoDePresion />},
-      {'title' : 'Histórico de Producción', 'content': <HistoricoDeProduccion /> },
-      {'title' : 'Análisis del Agua', 'content': <AnalisisDelAgua /> }	
+      {'title' : 'Ficha Técnica del Pozo' , 'content':<TecnicaDelPozoHighLevel containsErrors={this.containsErrors}/>},
+      {'title' : 'Ficha Técnica del Pozo' , 'content':<TecnicaDelPozo containsErrors={this.containsErrors}/>},
+      {'title' : 'Ficha Técnica del Campo', 'content': <TecnicaDelCampo containsErrors={this.containsErrors}/>},
+      {'title' : 'Información de Sistemas Artificiales de Producción', 'content': <SistemasArtificialesDeProduccion containsErrors={this.containsErrors} /> },
+      {'title' : 'Evaluación Petrofísica', 'content': <EvaluacionPetrofisica containsErrors={this.containsErrors} /> },
+      {'title' : 'Edo. Mecánico y Aparejo de Producción', 'content': <MecanicoYAparejo containsErrors={this.containsErrors} /> },
+      {'title' : 'Histórico de Presión', 'content': <HistoricoDePresion containsErrors={this.containsErrors} />},
+      {'title' : 'Histórico de Producción', 'content': <HistoricoDeProduccion containsErrors={this.containsErrors} /> },
+      {'title' : 'Análisis del Agua', 'content': <AnalisisDelAgua containsErrors={this.containsErrors} /> }	
     ];
 
   }
@@ -41,6 +41,14 @@ import AnalisisDelAgua from './AnalisisDelAgua'
     this.setState({
       currentStep: i
     })
+  }
+
+  containsErrors(el, errors){
+    if(el === undefined) return false
+
+    var found = this.forms.findIndex((form) => form.content.type.WrappedComponent.name == el._reactInternalFiber.type.name)
+    if(found !== -1)
+      this.forms[found]['error'] = errors
   }
 
   handleNextSubtab(){
@@ -66,15 +74,19 @@ import AnalisisDelAgua from './AnalisisDelAgua'
   render() {
      let className = 'subtab'
      let title = this.forms[this.state.currentStep].title
-     let pozoFormSubmitting = this.props.forms.get('pozoFormSubmitting')
-     let submitting = pozoFormSubmitting ? 'submitting' : ''
+     let pozoFormSubmitting = this.props.formsState.get('pozoFormSubmitting')
+     const submitting = pozoFormSubmitting ? 'submitting' : ''
+     const errors = this.props.formsState.get('pozoFormError')
+
+     const errorClass = errors.length ? 'error' : ''
 
      return (
-         <div className={`multistep-form ${submitting}`}>
+         <div className={`multistep-form ${submitting} ${errorClass}`}>
           <div className="subtabs">
               {this.forms.map( (tab, index) => {
-                 let active = this.state.currentStep === index ? 'active' : ''; 
-                   return <div className={`${className} ${active}`} onClick={() => this.handleClick(index)} key={index}><span></span> {tab.title} </div>
+                 const active = this.state.currentStep === index ? 'active' : ''; 
+                 const tabError = tab.error ? 'error' : ''
+                 return <div className={`${className} ${active} ${tabError}`} onClick={() => this.handleClick(index)} key={index}><span></span> {tab.title} </div>
                  }
               )}
           </div>
@@ -89,7 +101,9 @@ import AnalisisDelAgua from './AnalisisDelAgua'
           </div>
 
           <button className="submit" disabled={pozoFormSubmitting} onClick={this.handleSubmit}>{pozoFormSubmitting ? 'Enviando...' : 'Enviar'}</button>
-
+          { errors.length > 0 &&
+              <div className="error">Se han encontrado errores en la forma.</div>
+          }
          </div>
      );
   }
@@ -100,7 +114,7 @@ const mapDispatchToProps = dispatch => ({
 })
 
 const mapStateToProps = state => ({
-  forms: state.get('forms'),
+  formsState: state.get('forms'),
   fichaTecnicaDelPozoHighLevel: state.get('fichaTecnicaDelPozoHighLevel'),
   fichaTecnicaDelPozo: state.get('fichaTecnicaDelPozo'),
   fichaTecnicaDelCampo: state.get('fichaTecnicaDelCampo'),

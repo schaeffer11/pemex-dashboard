@@ -9,7 +9,18 @@ import { setSubdireccion, setBloque, setActivo, setCampo, setPozo, setFormacion 
   constructor(props) {
     super(props)
     this.state = { 
+      containsErrors: false
     }
+  }
+
+  componentDidMount(){
+    this.containsErrors()
+    this.props.containsErrors(this, this.state.containsErrors)
+  }
+
+  componentDidUpdate(){
+    this.containsErrors()
+    this.props.containsErrors(this, this.state.containsErrors)
   }
 
   handleSelectSubdireccion(val) {
@@ -27,15 +38,31 @@ import { setSubdireccion, setBloque, setActivo, setCampo, setPozo, setFormacion 
     setBloque(val.value)
   }
 
+  containsErrors(){
+    const {forms} = this.props
+    const errors = forms.get('pozoFormError')
+
+    var foundErrors = errors.find(error => {
+      return ['subdireccion', 'bloque', 'activo', 'campo', 'pozo', 'formacion'].includes(error.field)
+    })
+
+    foundErrors = foundErrors === undefined ? false : true
+
+    if(foundErrors !== this.state.containsErrors){
+      this.setState({
+        containsErrors: foundErrors
+      })
+    } 
+  }
 
   render() {
-
-    let { setActivo, setCampo, setPozo, setFormacion, formData } = this.props
+    let { setActivo, setCampo, setPozo, setFormacion, formData, forms } = this.props
 
     formData = formData.toJS()
+    forms = forms.toJS()
 
     let { subdireccion, bloque, activo, campo, pozo, formacion } = formData
-
+    const errors = forms.pozoFormError
 
     let subdireccionOptions = [
       {label: 'Subdirección de Especialidad Técnica de Explotación (SETE)', value: 'SETE'},
@@ -76,12 +103,14 @@ import { setSubdireccion, setBloque, setActivo, setCampo, setPozo, setFormacion 
     return (
       <form className="form tecnica-del-pozo-high-level">
         <div className='main-form'>
-          <InputRowSelectUnitless header='Subdirección' value={subdireccion} options={subdireccionOptions} callback={this.handleSelectSubdireccion} />
-          <InputRowSelectUnitless header='Bloque' value={bloque} options={bloqueOptions} callback={this.handleSelectBloque} />
-          <InputRowUnitless header="Activo" value={activo} onChange={setActivo} name='activo' />
-          <InputRowUnitless header="Campo" value={campo} onChange={setCampo} name='campo' />
-          <InputRowUnitless header="Pozo" value={pozo} onChange={setPozo} name='pozo' />
-          <InputRowUnitless header="Formación" value={formacion} onChange={setFormacion} name='formacion' />
+
+          <InputRowSelectUnitless header='Subdirección' name="subdireccion" value={subdireccion} options={subdireccionOptions} callback={this.handleSelectSubdireccion} errors={errors} />
+          <InputRowSelectUnitless header='Bloque' name="bloque" value={bloque} options={bloqueOptions} callback={this.handleSelectBloque} errors={errors} />
+          <InputRowUnitless header="Activo" name="activo" value={activo} onChange={setActivo} name='activo' errors={errors} />
+          <InputRowUnitless header="Campo" value={campo} onChange={setCampo} name='campo' errors={errors} />
+          <InputRowUnitless header="Pozo" value={pozo} onChange={setPozo} name='pozo' errors={errors} />
+          <InputRowUnitless header="Formación" value={formacion} onChange={setFormacion} name='formacion' errors={errors} />
+
           <div style={{color: 'red'}}>TODO: agregar logica para nueva propuesta y opcion para subir resultados (add logic for new proposal/upload results)</div>
           <div style={{color: 'red'}}>TODO: agregar opcion de pozo nuevo o seleccionar pozo excistente (add new well/select well?)</div>
         </div>
@@ -94,6 +123,7 @@ import { setSubdireccion, setBloque, setActivo, setCampo, setPozo, setFormacion 
 
 const mapStateToProps = state => ({
   formData: state.get('fichaTecnicaDelPozoHighLevel'),
+  forms: state.get('forms')
 })
 
 const mapDispatchToProps = dispatch => ({
@@ -103,6 +133,7 @@ const mapDispatchToProps = dispatch => ({
   setCampo: val => dispatch(setCampo(val)), 
   setPozo: val => dispatch(setPozo(val)), 
   setFormacion: val => dispatch(setFormacion(val)),
+  
 })
 
 export default connect(mapStateToProps, mapDispatchToProps)(TechnicaDelPozoHighLevel)

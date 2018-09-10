@@ -8,129 +8,172 @@ import { setTipoDeSistemo, setPresionDeCabeza, setPresionDeLineaODeSeparador, se
 @autobind class SistemasArtificialesDeProduccion extends Component {
   constructor(props) {
     super(props)
+    this.state = {
+     containsErrors: false
+    }
+
   }
 
-  componentDidMount() {
+  componentDidMount(){
+    this.containsErrors()
+    this.props.containsErrors(this, this.state.containsErrors)
   }
 
-  componentDidUpdate(prevProps) {
+  componentDidUpdate(){
+    this.containsErrors()
+    this.props.containsErrors(this, this.state.containsErrors)
+  }
 
+  containsErrors(){
+    const {forms} = this.props
+    const errors = forms.get('pozoFormError')
+
+    var foundErrors = errors.find(error => {
+      return ['descubrimiento', 'fechaDeExplotacion', 'noDePozoOperando',
+              'pInicialAno', 'pActualFecha', 'dpPerAnoField', 'tyacField', 'prField',
+              'densidadDelAceite','pSatField','rgaFluidoField','salinidadField','pvtRepresentativo',
+              'litologiaField','espesorNetoField','porosidadField','SwField', 'kPromedioField', 'caa','cga',
+              'qo','qg','rgaProd','fw','np','gp','wp','rra','rrg','rrpce','h2s','co2','n2'].includes(error.field)
+    })
+
+    foundErrors = foundErrors === undefined ? false : true
+
+    if(foundErrors !== this.state.containsErrors){     
+      this.setState({
+        containsErrors: foundErrors === undefined
+      })
+    }
   }
 
   makeEmboloViajeroForm() {
-    let { setTipoDeSistemo, setPresionDeCabeza, setPresionDeLineaODeSeparador, setNumeroDeDescargasOCiclosEV, setVolumenDesplazadoPorCircloEV, formData } = this.props
+    let { setTipoDeSistemo, setPresionDeCabeza, setPresionDeLineaODeSeparador, setNumeroDeDescargasOCiclosEV, setVolumenDesplazadoPorCircloEV, forms, formData } = this.props
+    forms = forms.toJS()
     formData = formData.toJS()
     let { presionDeCabeza, presionDeLineaODeSeparador, numeroDeDescargasOCiclosEV, volumenDesplazadoPorCircloEV } = formData
+    const errors = forms.pozoFormError
 
     return (
       <div className='sistemas-artificiales-form' >
-        <InputRow header="Presión de cabeza" name='' value={presionDeCabeza} onChange={setPresionDeCabeza} unit='Kg/cm2'/>
-        <InputRow header="Presión de linea o de separador" name='' value={presionDeLineaODeSeparador} onChange={setPresionDeLineaODeSeparador} unit='kg/cm2'/>
-        <InputRowUnitless header="Número de descargas o ciclos" name='' value={numeroDeDescargasOCiclosEV} onChange={setNumeroDeDescargasOCiclosEV} />
-        <InputRowUnitless header="Volumen desplazado por ciclo" name='' value={volumenDesplazadoPorCircloEV} onChange={setVolumenDesplazadoPorCircloEV} />
+        <InputRow header="Presión de cabeza" name='' value={presionDeCabeza} onChange={setPresionDeCabeza} unit='Kg/cm2' errors={errors}/>
+        <InputRow header="Presión de linea o de separador" name='' value={presionDeLineaODeSeparador} onChange={setPresionDeLineaODeSeparador} unit='kg/cm2' errors={errors}/>
+        <InputRowUnitless header="Número de descargas o ciclos" name='' value={numeroDeDescargasOCiclosEV} onChange={setNumeroDeDescargasOCiclosEV} errors={errors}/>
+        <InputRowUnitless header="Volumen desplazado por ciclo" name='' value={volumenDesplazadoPorCircloEV} onChange={setVolumenDesplazadoPorCircloEV} errors={errors}/>
       </div>
     )
   }
 
   makeBombeoNeumaticoForm() {
-    let { setPresionDeCabeza, setPresionDeLineaODeSeparador, setPresionDeInyeccionBN, setPresionDeDescargaBN, setNumeroDeValvulasBN, setProfundidadDeLaVulvulaOperanteBN, setOrificioBN, setVolumenDeGasInyectadoBN, formData } = this.props
+    let { setPresionDeCabeza, setPresionDeLineaODeSeparador, setPresionDeInyeccionBN, setPresionDeDescargaBN, setNumeroDeValvulasBN, setProfundidadDeLaVulvulaOperanteBN, setOrificioBN, setVolumenDeGasInyectadoBN, forms, formData } = this.props
+
+    forms = forms.toJS()
     formData = formData.toJS()
+
     let { presionDeCabeza, presionDeLineaODeSeparador, presionDeInyeccionBN, presionDeDescargaBN, numeroDeValvulasBN, profundidadDeLaVulvulaOperanteBN, orificioBN, volumenDeGasInyectadoBN } = formData
+    const errors = forms.pozoFormError
     
     return (
       <div className='sistemas-artificiales-form' >
-        <InputRow header="Presión de cabeza" name='' value={presionDeCabeza} onChange={setPresionDeCabeza} unit='Kg/cm2'/>
-        <InputRow header="Presión de linea o de separador" name='' value={presionDeLineaODeSeparador} onChange={setPresionDeLineaODeSeparador} unit='Kg/cm2'/>
-        <InputRow header="Presión de inyección" name='' value={presionDeInyeccionBN} onChange={setPresionDeInyeccionBN} unit='Kg/cm2'/>
-        <InputRow header="Presión de descarga" name='' value={presionDeDescargaBN} onChange={setPresionDeDescargaBN} unit='Kg/cm2'/>
-        <InputRowUnitless header="Número de válvulas" value={numeroDeValvulasBN} onChange={setNumeroDeValvulasBN} name='' />
-        <InputRow header="Profundidad de la válvula operante" name='' value={profundidadDeLaVulvulaOperanteBN} onChange={setProfundidadDeLaVulvulaOperanteBN} unit='m'/>
-        <InputRow header="Orificio" name='' value={orificioBN} onChange={setOrificioBN} unit='pg'/>
-        <InputRow header="Volumen de gas inyectado" name='' value={volumenDeGasInyectadoBN} onChange={setVolumenDeGasInyectadoBN} unit='m3'/>
+        <InputRow header="Presión de cabeza" name='' value={presionDeCabeza} onChange={setPresionDeCabeza} unit='Kg/cm2' errors={errors}/>
+        <InputRow header="Presión de linea o de separador" name='' value={presionDeLineaODeSeparador} onChange={setPresionDeLineaODeSeparador} unit='Kg/cm2' errors={errors}/>
+        <InputRow header="Presión de inyección" name='' value={presionDeInyeccionBN} onChange={setPresionDeInyeccionBN} unit='Kg/cm2' errors={errors}/>
+        <InputRow header="Presión de descarga" name='' value={presionDeDescargaBN} onChange={setPresionDeDescargaBN} unit='Kg/cm2' errors={errors}/>
+        <InputRowUnitless header="Número de válvulas" value={numeroDeValvulasBN} onChange={setNumeroDeValvulasBN} name='' errors={errors} />
+        <InputRow header="Profundidad de la válvula operante" name='' value={profundidadDeLaVulvulaOperanteBN} onChange={setProfundidadDeLaVulvulaOperanteBN} unit='m' errors={errors}/>
+        <InputRow header="Orificio" name='' value={orificioBN} onChange={setOrificioBN} unit='pg' errors={errors}/>
+        <InputRow header="Volumen de gas inyectado" name='' value={volumenDeGasInyectadoBN} onChange={setVolumenDeGasInyectadoBN} unit='m3' errors={errors}/>
       </div>
     )
   }
 
   makeBombeoHidraulicoForm() {
-    let { setPresionDeCabeza, setPresionDeLineaODeSeparador, setProfundidadDeLaBombaBH, setTipoYMarcaDeBombaBH, setOrificioBH, setTipoDeCamisaBH, setFluidoMotrizBH, setEquipoSuperficialBH, formData } = this.props
+    let { setPresionDeCabeza, setPresionDeLineaODeSeparador, setProfundidadDeLaBombaBH, setTipoYMarcaDeBombaBH, setOrificioBH, setTipoDeCamisaBH, setFluidoMotrizBH, setEquipoSuperficialBH, forms, formData } = this.props
+    forms = forms.toJS()
     formData = formData.toJS()
     let { presionDeCabeza, presionDeLineaODeSeparador, profundidadDeLaBombaBH, tipoYMarcaDeBombaBH, orificioBH, tipoDeCamisaBH, fluidoMotrizBH, equipoSuperficialBH } = formData
-    
+    const errors = forms.pozoFormError    
+
     return (
       <div className='sistemas-artificiales-form' >
-        <InputRow header="Presión de cabeza" name='' value={presionDeCabeza} onChange={setPresionDeCabeza} unit='Kg/cm2'/>
-        <InputRow header="Presión de linea o de separador" name='' value={presionDeLineaODeSeparador} onChange={setPresionDeLineaODeSeparador} unit='Kg/cm2'/>
-        <InputRow header="Profundidad de la bomba" name='' value={profundidadDeLaBombaBH} onChange={setProfundidadDeLaBombaBH} unit='m'/>
-        <InputRowUnitless header="Tipo y marca de bomba" value={tipoYMarcaDeBombaBH} onChange={setTipoYMarcaDeBombaBH} name='' />
-        <InputRow header="Orificio" name='' value={orificioBH} onChange={setOrificioBH} unit='pg'/>
-        <InputRow header="Tipo de camisa" name='' value={tipoDeCamisaBH} onChange={setTipoDeCamisaBH} unit='pg'/>
-        <InputRowUnitless header="Fluido motriz" value={fluidoMotrizBH} onChange={setFluidoMotrizBH} name='' />
-        <InputRow header="Equipo superficial" name='' value={equipoSuperficialBH} onChange={setEquipoSuperficialBH} unit='HP'/>
+        <InputRow header="Presión de cabeza" name='' value={presionDeCabeza} onChange={setPresionDeCabeza} unit='Kg/cm2' errors={errors}/>
+        <InputRow header="Presión de linea o de separador" name='' value={presionDeLineaODeSeparador} onChange={setPresionDeLineaODeSeparador} unit='Kg/cm2' errors={errors}/>
+        <InputRow header="Profundidad de la bomba" name='' value={profundidadDeLaBombaBH} onChange={setProfundidadDeLaBombaBH} unit='m' errors={errors}/>
+        <InputRowUnitless header="Tipo y marca de bomba" value={tipoYMarcaDeBombaBH} onChange={setTipoYMarcaDeBombaBH} name='' errors={errors} />
+        <InputRow header="Orificio" name='' value={orificioBH} onChange={setOrificioBH} unit='pg' errors={errors}/>
+        <InputRow header="Tipo de camisa" name='' value={tipoDeCamisaBH} onChange={setTipoDeCamisaBH} unit='pg' errors={errors}/>
+        <InputRowUnitless header="Fluido motriz" value={fluidoMotrizBH} onChange={setFluidoMotrizBH} name='' errors={errors}/>
+        <InputRow header="Equipo superficial" name='' value={equipoSuperficialBH} onChange={setEquipoSuperficialBH} unit='HP' errors={errors}/>
       </div>
     )
   }
 
   makeBombeoCavidadesProgresivasForm() {
-    let { setPresionDeCabeza, setPresionDeLineaODeSeparador, setMotorYTipoDeMotorBCP, setProfunidadDelMotorBCP, setVelocidadBCP, setHpBCP, setArregloDeVarillasBCP, setTipoDeElastomeroBCP, setProfundidadDelAnclaAntitorqueBCP, formData } = this.props
+    let { setPresionDeCabeza, setPresionDeLineaODeSeparador, setMotorYTipoDeMotorBCP, setProfunidadDelMotorBCP, setVelocidadBCP, setHpBCP, setArregloDeVarillasBCP, setTipoDeElastomeroBCP, setProfundidadDelAnclaAntitorqueBCP, forms, formData } = this.props
+    forms = forms.toJS()
     formData = formData.toJS() 
     let { presionDeCabeza, presionDeLineaODeSeparador, motorYTipoDeMotorBCP, profunidadDelMotorBCP, velocidadBCP, hpBCP, arregloDeVarillasBCP, tipoDeElastomeroBCP, profundidadDelAnclaAntitorqueBCP } = formData
-    
+    const errors = forms.pozoFormError
+
     return (
       <div className='sistemas-artificiales-form' >
-        <InputRow header="Presión de cabeza" name='' value={presionDeCabeza} onChange={setPresionDeCabeza} unit='Kg/cm2'/>
-        <InputRow header="Presión de linea o de separador" name='' value={presionDeLineaODeSeparador} onChange={setPresionDeLineaODeSeparador} unit='Kg/cm2'/>
-        <InputRowUnitless header="Motor y tipo de motor" name='' value={motorYTipoDeMotorBCP} onChange={setMotorYTipoDeMotorBCP} />
-        <InputRowUnitless header="Profundidad del motor" name='' value={profunidadDelMotorBCP} onChange={setProfunidadDelMotorBCP} />
-        <InputRow header="Velocidad" name='' unit='' value={velocidadBCP} onChange={setVelocidadBCP}/>
-        <InputRow header="HP" name='' unit='' value={hpBCP} onChange={setHpBCP}/>
-        <InputRow header="Arreglo de varillas" name='' unit='' value={arregloDeVarillasBCP} onChange={setArregloDeVarillasBCP}/>
-        <InputRow header="Tipo de elastomero (composición quimica)" name='' unit='' value={tipoDeElastomeroBCP} onChange={setTipoDeElastomeroBCP}/>
-        <InputRow header="Profundidad del ancla antitorque" name='' unit='' value={profundidadDelAnclaAntitorqueBCP} onChange={setProfundidadDelAnclaAntitorqueBCP}/>
+        <InputRow header="Presión de cabeza" name='' value={presionDeCabeza} onChange={setPresionDeCabeza} unit='Kg/cm2' errors={errors}/>
+        <InputRow header="Presión de linea o de separador" name='' value={presionDeLineaODeSeparador} onChange={setPresionDeLineaODeSeparador} unit='Kg/cm2' errors={errors}/>
+        <InputRowUnitless header="Motor y tipo de motor" name='' value={motorYTipoDeMotorBCP} onChange={setMotorYTipoDeMotorBCP} errors={errors}/>
+        <InputRowUnitless header="Profundidad del motor" name='' value={profunidadDelMotorBCP} onChange={setProfunidadDelMotorBCP} errors={errors}/>
+        <InputRow header="Velocidad" name='' unit='' value={velocidadBCP} onChange={setVelocidadBCP} errors={errors}/>
+        <InputRow header="HP" name='' unit='' value={hpBCP} onChange={setHpBCP} errors={errors}/>
+        <InputRow header="Arreglo de varillas" name='' unit='' value={arregloDeVarillasBCP} onChange={setArregloDeVarillasBCP} errors={errors}/>
+        <InputRow header="Tipo de elastomero (composición quimica)" name='' unit='' value={tipoDeElastomeroBCP} onChange={setTipoDeElastomeroBCP} errors={errors}/>
+        <InputRow header="Profundidad del ancla antitorque" name='' unit='' value={profundidadDelAnclaAntitorqueBCP} onChange={setProfundidadDelAnclaAntitorqueBCP} errors={errors}/>
 
       </div>
     )
   }
 
   makeBombeoElectrocentrifugoForm() {
-    let { setPresionDeCabeza, setPresionDeLineaODeSeparador, setProfundidadDelMotorBE, setDiametroBE, setVoltsBE, setAmparajeBE, setArmaduraBE, setTipoDeCableBE, setLongitudDeCableBE, setRmpBE, formData } = this.props
+    let { setPresionDeCabeza, setPresionDeLineaODeSeparador, setProfundidadDelMotorBE, setDiametroBE, setVoltsBE, setAmparajeBE, setArmaduraBE, setTipoDeCableBE, setLongitudDeCableBE, setRmpBE, forms, formData } = this.props
+    forms = forms.toJS()
     formData = formData.toJS()
     let { presionDeCabeza, presionDeLineaODeSeparador, profundidadDelMotorBE, diametroBE, voltsBE, amparajeBE, armaduraBE, tipoDeCableBE, longitudDeCableBE, rmpBE } = formData
-    
+    const errors = forms.pozoFormError
+
     return (
       <div className='sistemas-artificiales-form' >
-        <InputRow header="Presión de cabeza" name='' value={presionDeCabeza} onChange={setPresionDeCabeza} unit='Kg/cm2'/>
-        <InputRow header="Presión de linea o de separador" name='' value={presionDeLineaODeSeparador} onChange={setPresionDeLineaODeSeparador} unit='Kg/cm2'/>
-        <InputRow header="Profundidad del motor" name='' value={profundidadDelMotorBE} onChange={setProfundidadDelMotorBE} unit='m'/>
-        <InputRow header="Diámetro" name='' value={diametroBE} onChange={setDiametroBE} unit='pg'/>
-        <InputRow header="Volts" name='' value={voltsBE} onChange={setVoltsBE} unit='V'/>
-        <InputRow header="Amperaje" name='' value={amparajeBE} onChange={setAmparajeBE} unit='A'/>
-        <InputRowUnitless header="Armadura (bomba)" name='' value={armaduraBE} onChange={setArmaduraBE} />
-        <InputRowUnitless header="Tipo de cable" name='' value={tipoDeCableBE} onChange={setTipoDeCableBE} />
-        <InputRow header="Longitud de cable" name='' value={longitudDeCableBE} onChange={setLongitudDeCableBE} unit='m'/>
-        <InputRowUnitless header="RPM" name='' value={rmpBE} onChange={setRmpBE} />
+        <InputRow header="Presión de cabeza" name='' value={presionDeCabeza} onChange={setPresionDeCabeza} unit='Kg/cm2' errors={errors}/>
+        <InputRow header="Presión de linea o de separador" name='' value={presionDeLineaODeSeparador} onChange={setPresionDeLineaODeSeparador} unit='Kg/cm2' errors={errors}/>
+        <InputRow header="Profundidad del motor" name='' value={profundidadDelMotorBE} onChange={setProfundidadDelMotorBE} unit='m' errors={errors}/>
+        <InputRow header="Diámetro" name='' value={diametroBE} onChange={setDiametroBE} unit='pg' errors={errors}/>
+        <InputRow header="Volts" name='' value={voltsBE} onChange={setVoltsBE} unit='V' errors={errors}/>
+        <InputRow header="Amperaje" name='' value={amparajeBE} onChange={setAmparajeBE} unit='A' errors={errors}/>
+        <InputRowUnitless header="Armadura (bomba)" name='' value={armaduraBE} onChange={setArmaduraBE} errors={errors}/>
+        <InputRowUnitless header="Tipo de cable" name='' value={tipoDeCableBE} onChange={setTipoDeCableBE} errors={errors}/>
+        <InputRow header="Longitud de cable" name='' value={longitudDeCableBE} onChange={setLongitudDeCableBE} unit='m' errors={errors}/>
+        <InputRowUnitless header="RPM" name='' value={rmpBE} onChange={setRmpBE} errors={errors} />
 
       </div>
     )
   }
 
   makeBombeoMecanicoForm() {
-    let { setPresionDeCabeza, setPresionDeLineaODeSeparador, setTipoDeUnidadBM, setVelocidadBM, setLongitudDeCareraBM, setTipoDeBombaSubsuperficialBM, setTamanoDeBombaSubsuperficialBM, setProfundidadDeLaBombaBM, setArregloDeVarillasBM, setCuantaConAnclaBM, setNivelDinamico, setNivelEstatico, formData } = this.props
+    let { setPresionDeCabeza, setPresionDeLineaODeSeparador, setTipoDeUnidadBM, setVelocidadBM, setLongitudDeCareraBM, setTipoDeBombaSubsuperficialBM, setTamanoDeBombaSubsuperficialBM, setProfundidadDeLaBombaBM, setArregloDeVarillasBM, setCuantaConAnclaBM, setNivelDinamico, setNivelEstatico, forms, formData } = this.props
+    forms = forms.toJS()
     formData = formData.toJS()
     let { presionDeCabeza, presionDeLineaODeSeparador, tipoDeUnidadBM, velocidadBM, longitudDeCareraBM, tipoDeBombaSubsuperficialBM, tamanoDeBombaSubsuperficialBM, profundidadDeLaBombaBM, arregloDeVarillasBM, CuantaConAnclaBM, nivelDinamico, nivelEstatico } = formData
+    const errors = forms.pozoFormError
+
     return (
       <div className='sistemas-artificiales-form' >
-        <InputRow header="Presión de cabeza" name='' value={presionDeCabeza} onChange={setPresionDeCabeza} unit='Kg/cm2'/>
-        <InputRow header="Presión de linea o de separador" name='' value={presionDeLineaODeSeparador} onChange={setPresionDeLineaODeSeparador} unit='Kg/cm2'/>
-        <InputRowUnitless header="Tipo de unidad" name='' value={tipoDeUnidadBM} onChange={setTipoDeUnidadBM}/>
-        <InputRow header="Velocidad" name='' value={velocidadBM} onChange={setVelocidadBM} unit='EPM'/>
-        <InputRow header="Longitud de carera" name='' value={longitudDeCareraBM} onChange={setLongitudDeCareraBM} unit='pg'/>
-        <InputRowUnitless header="Tipo de bomba subsuperficial" name='' value={tipoDeBombaSubsuperficialBM} onChange={setTipoDeBombaSubsuperficialBM}/>
-        <InputRowUnitless header="Tamaño de bomba subsuperficial" name='' value={tamanoDeBombaSubsuperficialBM} onChange={setTamanoDeBombaSubsuperficialBM}/>
-        <InputRow header="Profundidad de la bomba" name='' value={profundidadDeLaBombaBM} onChange={setProfundidadDeLaBombaBM} unit='m'/>
-        <InputRowUnitless header="Arreglo de varillas" name='' value={arregloDeVarillasBM} onChange={setArregloDeVarillasBM}/>
-        <InputRowUnitless header="Cuenta con ancla mecanica o empacador" name='' value={CuantaConAnclaBM} onChange={setCuantaConAnclaBM}/>
-        <InputRow header="Nivel dinámico" name='' value={nivelDinamico} onChange={setNivelDinamico} unit='m'/>
-        <InputRow header="Nivel estático" name='' value={nivelEstatico} onChange={setNivelEstatico} unit='m'/>
+        <InputRow header="Presión de cabeza" name='' value={presionDeCabeza} onChange={setPresionDeCabeza} unit='Kg/cm2' errors={errors}/>
+        <InputRow header="Presión de linea o de separador" name='' value={presionDeLineaODeSeparador} onChange={setPresionDeLineaODeSeparador} unit='Kg/cm2' errors={errors}/>
+        <InputRowUnitless header="Tipo de unidad" name='' value={tipoDeUnidadBM} onChange={setTipoDeUnidadBM} errors={errors}/>
+        <InputRow header="Velocidad" name='' value={velocidadBM} onChange={setVelocidadBM} unit='EPM' errors={errors}/>
+        <InputRow header="Longitud de carera" name='' value={longitudDeCareraBM} onChange={setLongitudDeCareraBM} unit='pg' errors={errors}/>
+        <InputRowUnitless header="Tipo de bomba subsuperficial" name='' value={tipoDeBombaSubsuperficialBM} onChange={setTipoDeBombaSubsuperficialBM} errors={errors}/>
+        <InputRowUnitless header="Tamaño de bomba subsuperficial" name='' value={tamanoDeBombaSubsuperficialBM} onChange={setTamanoDeBombaSubsuperficialBM} errors={errors}/>
+        <InputRow header="Profundidad de la bomba" name='' value={profundidadDeLaBombaBM} onChange={setProfundidadDeLaBombaBM} unit='m' errors={errors}/>
+        <InputRowUnitless header="Arreglo de varillas" name='' value={arregloDeVarillasBM} onChange={setArregloDeVarillasBM} errors={errors}/>
+        <InputRowUnitless header="Cuenta con ancla mecanica o empacador" name='' value={CuantaConAnclaBM} onChange={setCuantaConAnclaBM} errors={errors}/>
+        <InputRow header="Nivel dinámico" name='' value={nivelDinamico} onChange={setNivelDinamico} unit='m' errors={errors}/>
+        <InputRow header="Nivel estático" name='' value={nivelEstatico} onChange={setNivelEstatico} unit='m' errors={errors}/>
       </div>
     )
   }
@@ -178,6 +221,7 @@ import { setTipoDeSistemo, setPresionDeCabeza, setPresionDeLineaODeSeparador, se
 }
 
 const mapStateToProps = state => ({
+  forms: state.get('forms'),
   formData: state.get('sistemasArtificialesDeProduccion'),
 })
 

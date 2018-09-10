@@ -8,14 +8,35 @@ import { connect } from 'react-redux'
   constructor(props) {
     super(props)
     this.state = { 
+      containsErrors: false
     }
   }
 
-  componentDidMount() {
+  componentDidMount(){
+    this.containsErrors()
+    this.props.containsErrors(this, this.state.containsErrors)
   }
 
-  componentDidUpdate(prevProps) {
+  componentDidUpdate(){
+    this.containsErrors()
+    this.props.containsErrors(this, this.state.containsErrors)
+  }
 
+  containsErrors(){
+    const {forms} = this.props
+    const errors = forms.get('pozoFormError')
+
+    var foundErrors = errors.find(error => {
+      return [].includes(error.field)
+    })
+
+    foundErrors = foundErrors === undefined ? false : true
+
+    if(foundErrors !== this.state.containsErrors){
+      this.setState({
+        containsErrors: foundErrors === undefined
+      })
+    }
   }
 
   makeTerminacionForm() {
@@ -85,6 +106,7 @@ import { connect } from 'react-redux'
 }
 
 const mapStateToProps = state => ({
+  forms: state.get('forms'),
   formData: state.get('mecanicoYAparejoDeProduccion'),
 })
 

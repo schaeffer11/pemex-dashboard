@@ -8,37 +8,64 @@ import { setIntervaloProductor, setEspesorBruto, setEspesorNeto, setCaliza, setD
   constructor(props) {
     super(props)
     this.state = { 
+      containsErrors: false
     }
   }
 
-  componentDidMount() {
+  componentDidMount(){
+    this.containsErrors()
+    this.props.containsErrors(this, this.state.containsErrors)
   }
 
-  componentDidUpdate(prevProps) {
+  componentDidUpdate(){
+    this.containsErrors()
+    this.props.containsErrors(this, this.state.containsErrors)
+  }
 
+  containsErrors(){
+    const {forms} = this.props
+    const errors = forms.get('pozoFormError')
+
+    var foundErrors = errors.find(error => {
+      return ['intervalosProductores', 'espesorBruto', 'espesorNeto', 'caliza', 'dolomia', 'arcilla', 'porosidad', 
+       'permeabilidad', 'sw', 'caa', 'cga', 
+       'tipoDePozo', 'pwsFecha', 'pwfFecha', 'deltaPPerMes', 'setTyac', 'setPvt', 'aparejoDeProduccion',
+       'profEmpacador', 'profSensorPYT','tipoDeSap',
+       'moduloYoungArena', 'moduloYoungLutitas', 'relacPoissonArena', 'relacPoissonLutatas', 'gradienteDeFractura',
+       'densidadDeDisparos', 'diametroDeDisparos'].includes(error.field)
+    })
+
+    foundErrors = foundErrors === undefined ? false : true
+
+    if(foundErrors !== this.state.containsErrors){
+      this.setState({
+        containsErrors: foundErrors
+      })
+     }
   }
 
   makeFormacionForm() {
     let { setIntervaloProductor, setEspesorBruto, setEspesorNeto, setCaliza, setDolomia, setArcilla, setPorosidad, setPermeabilidad, setSw, setCaa, setCga, formData } = this.props 
     formData = formData.toJS()
     let { intervaloProductor, espesorBruto, espesorNeto, caliza, dolomia, arcilla, porosidad, permeabilidad, sw, caa, cga } = formData
+    const errors = []
 
     return (
       <div className='formacion-form' >
         <div className='header'>
           Los Datos de Formación
         </div>
-        <InputRow header="Intervalos(s) productor(es)" type='number' name='intervalosProductores' value={intervaloProductor} onChange={setIntervaloProductor} unit='md/mv' />
-        <InputRow header="Espesor bruto" name='espesorBruto' value={espesorBruto} onChange={setEspesorBruto} unit='m' />
-        <InputRow header="Espesor neto" name='espesorNeto' value={espesorNeto} onChange={setEspesorNeto} unit='m' />
-        <InputRow header="Caliza" name='caliza' value={caliza} onChange={setCaliza} unit='%' />
-        <InputRow header="Dolomia" name='dolomia' value={dolomia} onChange={setDolomia} unit='%' />
-        <InputRow header="Arcilla" name='arcilla' value={arcilla} onChange={setArcilla} unit='%' />
-        <InputRow header="Porosidad" name='porosidad' value={porosidad} onChange={setPorosidad} unit='%' />
-        <InputRow header="Permeabilidad" name='permeabilidad' value={permeabilidad} onChange={setPermeabilidad} unit='mD' />
-        <InputRow header="Sw" name='sw' value={sw} onChange={setSw} unit='%' />
-        <InputRow header="CAA" name='caa' value={caa} onChange={setCaa} unit='mvbnm' />
-        <InputRow header="CGA" name='cga' value={cga} onChange={setCga} unit='mvbnm' />
+        <InputRow header="Intervalos(s) productor(es)" type='number' name='intervalosProductores' value={intervaloProductor}  onChange={setIntervaloProductor} unit='md/mv' errors={errors} />
+        <InputRow header="Espesor bruto" name='espesorBruto' value={espesorBruto} onChange={setEspesorBruto} unit='m' errors={errors} />
+        <InputRow header="Espesor neto" name='espesorNeto' value={espesorNeto} onChange={setEspesorNeto} unit='m' errors={errors} />
+        <InputRow header="Caliza" name='caliza' value={caliza} onChange={setCaliza} unit='%' errors={errors} />
+        <InputRow header="Dolomia" name='dolomia' value={dolomia} onChange={setDolomia} unit='%' errors={errors} />
+        <InputRow header="Arcilla" name='arcilla' value={arcilla} onChange={setArcilla} unit='%' errors={errors} />
+        <InputRow header="Porosidad" name='porosidad' value={porosidad} onChange={setPorosidad} unit='%' errors={errors} />
+        <InputRow header="Permeabilidad" name='permeabilidad' value={permeabilidad} onChange={setPermeabilidad} unit='mD' errors={errors} />
+        <InputRow header="Sw" name='sw' value={sw} onChange={setSw} unit='%' errors={errors} />
+        <InputRow header="CAA" name='caa' value={caa} onChange={setCaa} unit='mvbnm' errors={errors} />
+        <InputRow header="CGA" name='cga' value={cga} onChange={setCga} unit='mvbnm' errors={errors} />
       </div>
     )
   }
@@ -121,6 +148,7 @@ import { setIntervaloProductor, setEspesorBruto, setEspesorNeto, setCaliza, setD
 
 
 const mapStateToProps = state => ({
+  forms: state.get('forms'),
   formData: state.get('fichaTecnicaDelPozo'),
 })
 

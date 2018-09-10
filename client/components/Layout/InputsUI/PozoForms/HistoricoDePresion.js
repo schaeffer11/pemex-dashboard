@@ -1,18 +1,40 @@
 import React, { Component } from 'react'
+import { connect } from 'react-redux'
 import autobind from 'autobind-decorator'
 
 @autobind class HistoricoDePresion extends Component {
   constructor(props) {
     super(props)
     this.state = { 
+      containsErrors: false
     }
   }
 
-  componentDidMount() {
+  componentDidMount(){
+    this.containsErrors()
+    this.props.containsErrors(this, this.state.containsErrors)
   }
 
-  componentDidUpdate(prevProps) {
+  componentDidUpdate(){
+    this.containsErrors()
+    this.props.containsErrors(this, this.state.containsErrors)
+  }
 
+  containsErrors(){
+    const {forms} = this.props
+    const errors = forms.get('pozoFormError')
+
+    var foundErrors = errors.find(error => {
+      return [].includes(error.field)
+    })
+
+    foundErrors = foundErrors === undefined ? false : true
+
+    if(foundErrors !== this.state.containsErrors){
+      this.setState({
+        containsErrors: foundErrors === undefined
+      })
+    }
   }
 
   render() {
@@ -28,5 +50,12 @@ import autobind from 'autobind-decorator'
   }
 }
 
+const mapStateToProps = state => ({
+  forms: state.get('forms'),
+  formData: state.get('historicoDePresion'),
+})
 
-export default HistoricoDePresion
+const mapDispatchToProps = dispatch => ({
+})
+
+export default connect(mapStateToProps, mapDispatchToProps)(HistoricoDePresion)
