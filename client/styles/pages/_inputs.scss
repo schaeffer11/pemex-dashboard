@@ -324,10 +324,14 @@
 		display: grid;
 		grid-template-columns: 33% 67%;
 		grid-column-gap: 10px;
-		grid-template-areas: 'aforo .';
+		grid-template-areas: 'aforo prod';
 
 		.aforo-form {
 			grid-area: aforo;
+		}
+
+		.historico-produccion {
+			grid-area: prod;
 		}
 	}
 

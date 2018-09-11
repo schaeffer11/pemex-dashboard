@@ -28,9 +28,12 @@ const initialState = Map({
 	relacPoissonLutatas: '',
 	gradienteDeFractura: '',
 	densidadDeDisparos: '',
-	diametroDeDisparos: ''
+	diametroDeDisparos: '',
+    historialIntervencionesData: [{
+        fecha: '',
+        intervenciones: ''
+    }]
 })
-
 
 const fichaTecnicaDelPozo = (state = initialState, action) => {
   switch (action.type) {
@@ -90,7 +93,8 @@ const fichaTecnicaDelPozo = (state = initialState, action) => {
     	return state.set('densidadDeDisparos', fromJS(action.value))
     case 'set_diametroDeDisparos':
     	return state.set('diametroDeDisparos', fromJS(action.value))
-
+    case 'set_historialIntervencionesData':
+        return state.set('historialIntervencionesData', fromJS(action.value))
     default:
       return state
   }

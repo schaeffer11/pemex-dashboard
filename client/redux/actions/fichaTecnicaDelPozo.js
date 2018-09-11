@@ -26,3 +26,4 @@ export const setRelacPoissonLutatas = value => ({ type: 'set_relacPoissonLutatas
 export const setGradienteDeFractura = value => ({ type: 'set_gradienteDeFractura', value})
 export const setDensidadDeDisparos = value => ({ type: 'set_densidadDeDisparos', value})
 export const setDiametroDeDisparos = value => ({ type: 'set_diametroDeDisparos', value})
+export const setHistorialIntervencionesData = value => ({ type: 'set_historialIntervencionesData', value})

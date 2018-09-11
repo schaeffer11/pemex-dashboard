@@ -1,8 +1,32 @@
 import React, { Component } from 'react'
 import autobind from 'autobind-decorator'
-import { InputRow, InputRowUnitless, InputRowSelectUnitless } from '../../Common/InputRow'
 import { connect } from 'react-redux'
-import { setIntervaloProductor, setEspesorBruto, setEspesorNeto, setCaliza, setDolomia, setArcilla, setPorosidad, setPermeabilidad, setSw, setCaa, setCga, setTipoDePozo, setPwsFecha, setPwfFecha, setDeltaPPerMes, setTyac, setPvt, setAparejoDeProduccion, setProfEmpacador, setProfSensorPYT, setTipoDeSap, setModuloYoungArena, setModuloYoungLutitas, setRelacPoissonArena, setRelacPoissonLutatas, setGradienteDeFractura, setDensidadDeDisparos, setDiametroDeDisparos, formData } from '../../../../redux/actions/fichaTecnicaDelPozo'
+import ReactTable from 'react-table'
+
+import { InputRow, InputRowUnitless, InputRowSelectUnitless } from '../../Common/InputRow'
+import { setHistorialIntervencionesData, setIntervaloProductor, setEspesorBruto, setEspesorNeto, setCaliza, setDolomia, setArcilla, setPorosidad, setPermeabilidad, setSw, setCaa, setCga, setTipoDePozo, setPwsFecha, setPwfFecha, setDeltaPPerMes, setTyac, setPvt, setAparejoDeProduccion, setProfEmpacador, setProfSensorPYT, setTipoDeSap, setModuloYoungArena, setModuloYoungLutitas, setRelacPoissonArena, setRelacPoissonLutatas, setGradienteDeFractura, setDensidadDeDisparos, setDiametroDeDisparos, formData } from '../../../../redux/actions/fichaTecnicaDelPozo'
+
+let columns = [
+  {
+    Header: '',
+    accessor: 'delete',
+    width: 35,
+    resizable: false,
+    Cell: row => {
+      if (row.original.length > 1) {
+        return (<div style={{color: 'white', background: 'red', borderRadius: '4px', textAlign: 'center', cursor: 'pointer'}}>X</div>)
+      }
+    }
+  }, { 
+    Header: 'Fecha',
+    accessor: 'fecha',
+    cell: 'renderEditable',
+  }, { 
+    Header: 'Hisorial de Intervenciones',
+    accessor: 'intervenciones',
+    cell: 'renderEditable',
+  }
+]
 
 @autobind class TechnicaDelPozo extends Component {
   constructor(props) {
@@ -100,18 +124,6 @@ import { setIntervaloProductor, setEspesorBruto, setEspesorNeto, setCaliza, setD
     )
   }
 
-  makeIntervencionesForm() {
-    return (
-      <div className='intervenciones-form' >
-        <div className='header'>
-          Historial de Intervenciones
-          <div style={{color: 'red'}}>TODO: agregar aportaciones de usario (add user input)</div>
-        </div>
-
-      </div>
-    )
-  }
-
   makeGeomecanicaForm() {
     let { setModuloYoungArena, setModuloYoungLutitas, setRelacPoissonArena, setRelacPoissonLutatas, setGradienteDeFractura, setDensidadDeDisparos, setDiametroDeDisparos, formData } = this.props
     formData = formData.toJS()
@@ -133,13 +145,94 @@ import { setIntervaloProductor, setEspesorBruto, setEspesorNeto, setCaliza, setD
     )
   }
 
+  renderEditable(cellInfo) {
+    let { setHistorialIntervencionesData, formData } = this.props
+    formData = formData.toJS()
+    let { historialIntervencionesData } = formData
+
+    return (
+      <div
+        style={{ backgroundColor: "#fafafa" }}
+        contentEditable
+        suppressContentEditableWarning
+        onBlur={e => {
+          historialIntervencionesData[cellInfo.index][cellInfo.column.id] = e.target.innerHTML;
+          setHistorialIntervencionesData(historialIntervencionesData)
+        }}
+      >{historialIntervencionesData[cellInfo.index][cellInfo.column.id]}</div>
+    );
+  }
+
+  addNewRow() {
+    let { formData, setHistorialIntervencionesData } = this.props
+    formData = formData.toJS()
+    let { historialIntervencionesData } = formData
+
+    historialIntervencionesData[0].length = 2
+
+    setHistorialIntervencionesData([...historialIntervencionesData, {index: historialIntervencionesData.length, type: '', fechaMuestreo: '', fechaPrueba: '', compania: '', superviso: '', length: historialIntervencionesData.length + 1, 'edited': false}])
+  }
+
+
+  deleteRow(state, rowInfo, column, instance) {
+    let { formData, setHistorialIntervencionesData } = this.props
+    formData = formData.toJS()
+    let { historialIntervencionesData } = formData
+
+    return {
+      onClick: e => {
+        if (column.id === 'delete' && historialIntervencionesData.length > 1) {
+          historialIntervencionesData.splice(rowInfo.original.index, 1)
+
+          historialIntervencionesData.forEach((i, index) => {
+            i.index = index
+            i.length = historialIntervencionesData.length
+          }) 
+
+          setHistorialIntervencionesData(historialIntervencionesData)
+        }
+      }
+    }
+  }
+
+
+  makeHistoricalInterventionsInput() {
+    let { setHistorialIntervencionesData, formData } = this.props
+    formData = formData.toJS()
+    let { historialIntervencionesData } = formData
+
+    columns.forEach(column => {
+      column.cell === 'renderEditable' ? column.Cell = this.renderEditable : null
+    })
+
+    return (
+      <div className='intervenciones-form' >
+        <div className='header'>
+          Historial De Intervenciones
+        </div>
+        <div className='table-select'>
+          <ReactTable
+            className="-striped"
+            data={historialIntervencionesData}
+            columns={columns}
+            showPagination={false}
+            showPageSizeOptions={false}
+            pageSize={historialIntervencionesData.length}
+            sortable={false}
+            getTdProps={this.deleteRow}
+          />
+        </div>
+        <button className='new-row-button' onClick={this.addNewRow}> + </button>
+      </div>
+    )
+  }
   render() {
 
     return (
       <div className="form tecnica-del-pozo">
         { this.makeFormacionForm() }
         { this.makePozoForm() }
-        { this.makeIntervencionesForm() }
+        { this.makeHistoricalInterventionsInput() }
         { this.makeGeomecanicaForm() }
       </div>
     )
@@ -181,6 +274,7 @@ const mapDispatchToProps = dispatch => ({
   setGradienteDeFractura: val => dispatch(setGradienteDeFractura(val)),
   setDensidadDeDisparos: val => dispatch(setDensidadDeDisparos(val)),
   setDiametroDeDisparos: val => dispatch(setDiametroDeDisparos(val)),
+  setHistorialIntervencionesData: val => dispatch(setHistorialIntervencionesData(val)),
 })
 
 export default connect(mapStateToProps, mapDispatchToProps)(TechnicaDelPozo)

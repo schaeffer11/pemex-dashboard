@@ -65,13 +65,19 @@ import { InputRow, InputRowUnitless, InputRowSelectUnitless } from '../../Common
     )
   }
 
+  makeHistoricoDeProduccionInput() {
+    return (
+      <div className='historico-produccion'>
+        fdksfjdskfjdslf
+      </div>
+      )
+  }
   render() {
 
     return (
       <div className="form historico-de-produccion">
         { this.makeAforoForm() }
-        <div style={{color: 'red'}}>TODO: agregar opcion para subir los datos del pozo (add upload well data) (image or csv??)</div>
-        <div style={{color: 'red'}}>TODO: esto podria o deberia ser varias lineas maneja esto de manera diferente (this could be multiple rows (should be) handle this differantly)</div>
+        { this.makeHistoricoDeProduccionInput() }
       </div>
     )
   }

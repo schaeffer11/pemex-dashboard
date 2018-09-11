@@ -304,7 +304,6 @@ let mudLossColumns = [
     let { files } = e.target
     let localImgUrl = window.URL.createObjectURL(files[0])
 
-
     setImgURL(localImgUrl)
   }
 
@@ -312,7 +311,7 @@ let mudLossColumns = [
     let { formData } = this.props
     formData = formData.toJS()
     let { imgURL } = formData
-    console.log(imgURL)
+
     return (
       <div style={{marginBot: '20px'}}>
         <div className='header'>

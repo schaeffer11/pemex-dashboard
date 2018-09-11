@@ -235,7 +235,7 @@ const resultadoOptions = [
           { this.makeSistemaTable() }
           <TextAreaUnitless header="Observaciones" name='' className={'obervaciones'}/> 
              {/*<TextAreaUnitless header="Observaciones" name='' className={'obervaciones'}  value={obervacionesPruebasLabApuntalado} {onChange={setObervacionesPruebasLabApuntalado}} /> */}
-
+          <div style={{color: 'red'}}>TODO: add upload evidence of lab </div>
       </div>
     )
   }
