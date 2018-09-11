@@ -15,6 +15,7 @@ const initialState = Map({
     volumenDeDesplazamiento: '',
     penetracionRadial: '',
     longitudDeAgujeroDeGusano: '',
+    evidenceSimulationImgURL: null
 })
 
 
@@ -48,6 +49,8 @@ const resultadosSimulacionEstimulacion = (state = initialState, action) => {
         return state.set('penetracionRadial', fromJS(action.value))
     case 'set_longitudDeAgujeroDeGusano':
         return state.set('longitudDeAgujeroDeGusano', fromJS(action.value))
+    case 'set_evidenceSimulationImgURL':
+        return state.set('evidenceSimulationImgURL', fromJS(action.value))
     default:
       return state
   }

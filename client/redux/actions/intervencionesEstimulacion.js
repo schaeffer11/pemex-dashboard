@@ -34,6 +34,7 @@ export const setVolumenDelSistemaAcidoLimpieza = value => ({ type: 'set_volumenD
 export const setVolumenDelSistemaNoAcidoLimpieza = value => ({ type: 'set_volumenDelSistemaNoAcidoLimpieza', value})
 export const setTipoDeColocacion = value => ({ type: 'set_tipoDeColocacion', value})
 export const setTiempoDeContacto = value => ({ type: 'set_tiempoDeContacto', value})
+export const setEvidenceSimulationImgURL = value => ({ type: 'set_evidenceSimulationImgURL', value})
 export const setNumeroDeEtapas = value => ({ type: 'set_numeroDeEtapas', value})
 export const setVolumenDelSistemAcido = value => ({ type: 'set_volumenDelSistemAcido', value})
 export const setVolumenDelSistemNoAcido = value => ({ type: 'set_volumenDelSistemNoAcido', value})

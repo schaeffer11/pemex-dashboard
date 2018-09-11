@@ -3,17 +3,33 @@
 
   .ReactTable {
 
+    .rt-td {
+      overflow: visable;
+      white-space: normal;
+    }
+    .rt-th {
+      overflow: visable;
+      white-space: normal;
+    }
+  }
+}
+
+.table-select {
+  position: relative;
+
+  .ReactTable {
+
     .rt-table {
-      overflow-y: visible;
+      overflow: visible;
 
       .rt-tbody {
-        overflow-y: visible;
+        overflow: visible;
 
         .rt-tr-group {
-          overflow-y: visible;
+          overflow: visible;
 
           .rt-tr {
-            overflow-y: visible;
+            overflow: visible;
           }
         }
       }

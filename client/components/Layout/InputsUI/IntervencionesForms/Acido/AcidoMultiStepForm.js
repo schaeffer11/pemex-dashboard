@@ -23,7 +23,7 @@ import ResultadosDeLaSimulacionAcido from './ResultadosDeLaSimulacionAcido'
     this.forms = [
       {'title' : 'Propuesta de Fracturamiento Acido', 'content': < PropuestaDeAcido/> },  
       {'title' : 'Pruebas de Laboratorio', 'content': <PruebasDeLaboratorio/> },
-      {'title' : 'Pruebas de Laboratorio - Fracturamiento Acido', 'content': <PruebasDeLaboratorioAcidoExtra/> },
+      {'title' : 'Pruebas de Laboratorio de Fracturamiento Acido', 'content': <PruebasDeLaboratorioAcidoExtra/> },
       {'title' : 'Resultados de la Simulacion de Fracturamiento Acido', 'content': <ResultadosDeLaSimulacionAcido/> },
       {'title' : 'Estimacion del Incremento de Produccion', 'content': <EstimacionIncProduccionAcido/> },
       {'title' : 'Estimacion de Costos de Fracturamiento Acido', 'content': <EstimacionCostosAcido/> }

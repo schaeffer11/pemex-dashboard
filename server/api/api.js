@@ -23,7 +23,7 @@ app.get('/ping', (req, res) => {
 
 
 app.get('/getTemplate', (req, res) => {
-  let localPath = path.join(__dirname, '../tempFile.xlsx')
+  let localPath = path.join(__dirname, '../tempFile.xlsm')
 
   res.sendFile(localPath)
 })

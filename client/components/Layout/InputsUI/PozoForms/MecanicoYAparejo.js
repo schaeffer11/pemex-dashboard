@@ -1,7 +1,7 @@
 import React, { Component } from 'react'
 import autobind from 'autobind-decorator'
 import { InputRow, InputRowUnitless, InputRowSelectUnitless } from '../../Common/InputRow'
-import { setTipoDeTerminacion, setHIntervaloProductor, setEmpacador, setPresionDifEmpacador, setSensorPyt, setTipoDeLiner, setDiametroDeLiner, setTipoDePistolas, setDensidadDeDisparos, setFase, setDiametroDeOrificio, setPenetracion, setTipoDeSAP, setTratamientoPor, setVolumenAparejoDeProduccion, setVolumenCimaDeIntervalo, setVolumenBaseDeIntervalo, setVolumenDeEspacioAnular} from '../../../../redux/actions/mecanicoYAparejoDeProduccion'
+import { setTipoDeTerminacion, setHIntervaloProductor, setEmpacador, setPresionDifEmpacador, setSensorPyt, setTipoDeLiner, setDiametroDeLiner, setTipoDePistolas, setDensidadDeDisparos, setFase, setDiametroDeOrificio, setPenetracion, setTipoDeSAP, setTratamientoPor, setVolumenAparejoDeProduccion, setVolumenCimaDeIntervalo, setVolumenBaseDeIntervalo, setVolumenDeEspacioAnular, setImgBoreDiagramURL, setImgAparejoDeProduccionURL} from '../../../../redux/actions/mecanicoYAparejoDeProduccion'
 import { connect } from 'react-redux'
 
 @autobind class MecanicoYAparejo extends Component {
@@ -91,15 +91,59 @@ import { connect } from 'react-redux'
       </div>
     )
   }
+  
+  handleFileUpload(e, setURL) {
+    console.log('herehrhehre', e, setURL)
+    e.preventDefault()
+    let { files } = e.target
+    let localImgUrl = window.URL.createObjectURL(files[0])
+
+    setURL(localImgUrl)
+  }
+
+  makeBoreDiagramInput() {
+    let { formData, setImgBoreDiagramURL} = this.props
+    formData = formData.toJS()
+    let { imgBoreDiagramURL } = formData
+    return (
+      <div style={{marginBot: '20px'}}>
+        <div className='header'>
+          Upload Well Bore Diagram (spanish)
+        </div>
+        <input type='file' accept="image/*" onChange={(e) => this.handleFileUpload(e, setImgBoreDiagramURL)}></input>
+        {imgBoreDiagramURL ? <img className='img-preview' src={imgBoreDiagramURL}></img> : null }
+      </div>
+    )
+  }
+
+  makeAparejoDeProduccionInput() {
+    let { formData, setImgAparejoDeProduccionURL } = this.props
+    formData = formData.toJS()
+    let { imgAparejoDeProduccionURL } = formData
+
+    return (
+      <div style={{marginBot: '20px'}}>
+        <div className='header'>
+          Upload Aparejo De Produccion (spanish)
+        </div>
+        <input type='file' accept="image/*" onChange={(e) => this.handleFileUpload(e, setImgAparejoDeProduccionURL)}></input>
+        {imgAparejoDeProduccionURL ? <img className='img-preview' src={imgAparejoDeProduccionURL}></img> : null }
+      </div>
+    )
+  }
 
   render() {
 
     return (
       <div className="form mecanico-y-aparejo">
-        { this.makeTerminacionForm() }
-        { this.makeCapacidadForm() }
-        <div style={{color: 'red'}}>TODO: agregar opcion para subir archivo del estado mecanico (add upload well bore diagram) (image)</div>
-        <div style={{color: 'red'}}>TODO: agregar opcion para subir aparedjo de produccion (add upload aparejo de produccion) (image or csv)??</div>
+        <div className='left'>
+          { this.makeTerminacionForm() }
+        </div>
+        <div className='right'>
+          { this.makeCapacidadForm() }
+          { this.makeBoreDiagramInput() }
+          { this.makeAparejoDeProduccionInput() }
+        </div>
       </div>
     )
   }
@@ -129,6 +173,8 @@ const mapDispatchToProps = dispatch => ({
   setVolumenCimaDeIntervalo: val => dispatch(setVolumenCimaDeIntervalo(val)),
   setVolumenBaseDeIntervalo: val => dispatch(setVolumenBaseDeIntervalo(val)),
   setVolumenDeEspacioAnular: val => dispatch(setVolumenDeEspacioAnular(val)),
+  setImgBoreDiagramURL: val => dispatch(setImgBoreDiagramURL(val)),
+  setImgAparejoDeProduccionURL: val => dispatch(setImgAparejoDeProduccionURL(val)),
 })
 
 export default connect(mapStateToProps, mapDispatchToProps)(MecanicoYAparejo)

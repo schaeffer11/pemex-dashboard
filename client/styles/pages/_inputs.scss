@@ -60,7 +60,7 @@
 		.subtab {
                         position: relative;
 			display: inline-block;
-			width: calc(100vw / 10);
+			width: calc(100vw / 11);
                         vertical-align: top;
 			text-align: center;
                         margin: 20px auto 40px;
@@ -161,6 +161,22 @@
 
         }
 
+	.img-preview {
+		max-width: 200px;
+		max-height: 400px;
+	}
+	
+	.new-row-button {
+		position: relative;
+		left: calc(50% - 15px);
+		width: 30px;
+		height: 30px;
+		margin-top: 10px;
+		border-radius: 5px;
+	}
+	.new-row-button:focus {
+		outline: 0 !important;
+	}
 
 	.form {
 		grid-area: forms;
@@ -285,36 +301,21 @@
 	}
 
 	.evaluacionPetrofisica {
-		.new-row-button {
-			position: relative;
-			left: calc(50% - 15px);
-			width: 30px;
-			height: 30px;
-			margin-top: 10px;
-			border-radius: 5px;
-		}
-		.new-row-button:focus {
-			outline: 0 !important;
-		}
 
-		.img-preview {
-			max-width: 200px;
-			max-height: 400px;
-		}
 
 	}
 	.mecanico-y-aparejo {
 		display: grid;
 		grid-template-columns: 50% 50%;
 		grid-column-gap: 10px;
-		grid-template-areas: 'terminacion capacidad';
+		grid-template-areas: 'left right';
 
-        .terminacion-form {
-        	grid-area: terminacion;
+        .left {
+        	grid-area: left;
         }
 
-        .capacidad-form {
-        	grid-area: capacidad;
+        .right {
+        	grid-area: right;
 
         }
 	}
@@ -369,31 +370,23 @@
 		.obervaciones {
 			width: 50%;
 		}
-		.new-row-button {
-			position: relative;
-			left: calc(50% - 15px);
-			width: 30px;
-			height: 30px;
-			margin-top: 10px;
-			border-radius: 5px;
-		}
-		.new-row-button:focus {
-			outline: 0 !important;
-		}
+	}
+
+	.pruebas-de-laboratorio-estimulacion-extra {
 	}
 
 	.resultados-de-simulacion {
 		display: grid;
 		grid-template-columns: 50% 50%;
 		grid-column-gap: 10px;
-		grid-template-areas: 'limpieza matricial';
+		grid-template-areas: 'left right';
 
-		.limpieza-form {
-			grid-area: limpieza;
+		.left {
+			grid-area: left;
 		}
 
-		.matricial-form {
-			grid-area: matricial;
+		.right {
+			grid-area: right;
 		}
 	}
 
@@ -495,19 +488,22 @@
 	}
 
 	.pruebas-de-laboratorio-apuntalado-extra {
-		display: grid;
-		grid-template-columns: 50% 50%;
-		grid-column-gap: 10px;
-		grid-template-areas: 'left right';
-	
-		.left {
-			grid-area: left;
+		.top{
+			display: grid;
+			grid-template-columns: 50% 50%;
+			grid-column-gap: 10px;
+			grid-template-areas: 'left right';
+		
+			.left {
+				grid-area: left;
 
+			}
+
+			.right {
+				grid-area: right;
+			}
 		}
 
-		.right {
-			grid-area: right;
-		}
 	}
 
 	.resultados-de-simulacion-apuntalado {

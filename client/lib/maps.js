@@ -7,7 +7,8 @@ import TecnicaDelCampo from '../components/Layout/InputsUI/PozoForms/TecnicaDelC
 import SistemasArtificialesDeProduccion from '../components/Layout/InputsUI/PozoForms/SistemasArtificialesDeProduccion'
 import EvaluacionPetrofisica from '../components/Layout/InputsUI/PozoForms/EvaluacionPetrofisica'
 import MecanicoYAparejo from '../components/Layout/InputsUI/PozoForms/MecanicoYAparejo'
-import HistoricoDePresion from '../components/Layout/InputsUI/PozoForms/HistoricoDePresion'
+import HistoricoDePresionCampo from '../components/Layout/InputsUI/PozoForms/HistoricoDePresionCampo'
+import HistoricoDePresionPozo from '../components/Layout/InputsUI/PozoForms/HistoricoDePresionPozo'
 import HistoricoDeProduccion from '../components/Layout/InputsUI/PozoForms/HistoricoDeProduccion'
 import AnalisisDelAgua from '../components/Layout/InputsUI/PozoForms/AnalisisDelAgua'
 
@@ -64,10 +65,15 @@ export const pagesPozo = {
         form: <MecanicoYAparejo />,
         title: 'Edo. Mecanico y Aparejo de Produccion'
       },
-      historicoDePresion: {
-        key: 'historicoDePresion',
-        form: <HistoricoDePresion />,
-        title: 'Historico de Presion'
+      historicoDePresionCampo: {
+        key: 'historicoDePresionCampo',
+        form: <HistoricoDePresionCampo />,
+        title: 'Historico de Presion Campo'
+      },
+      historicoDePresionPozo: {
+        key: 'historicoDePresionPozo',
+        form: <HistoricoDePresionPozo />,
+        title: 'Historico de Presion Pozo'
       },
       historicoDeProduccion: {
         key: 'historicoDeProduccion',

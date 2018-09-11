@@ -7,6 +7,7 @@ import {submitForm} from '../../../../../redux/actions/estimulacionFormActions'
 
 import PropuestaDeEstimulacion from './PropuestaDeEstimulacion'
 import PruebasDeLaboratorio from '../PruebasDeLaboratorio'
+import PruebasDeLaboratorioEstimulacionExtra from './PruebasDeLaboratorioEstimulacionExtra'
 import ResultadosDeLaSimulacionEstimulacion from './ResultadosDeLaSimulacionEstimulacion'
 import EstimacionIncProduccionEstimulacion from './EstimacionIncProduccionEstimulacion'
 import EstimacionCostosEstimulacion from './EstimacionCostosEstimulacion'
@@ -22,6 +23,7 @@ import EstimacionCostosEstimulacion from './EstimacionCostosEstimulacion'
     this.forms = [
       {'title' : 'Propuesta de Tratamiento de Estimulacion', 'content': <PropuestaDeEstimulacion/> },  
       {'title' : 'Pruebas de Laboratorio', 'content': <PruebasDeLaboratorio/> },
+      {'title' : 'Pruebas de Laboratorio de Estimulacion', 'content': <PruebasDeLaboratorioEstimulacionExtra/> },
       {'title' : 'Resultados de la Simulacion de Estimulacion', 'content': <ResultadosDeLaSimulacionEstimulacion/> },
       {'title' : 'Estimacion del Incremento de Produccion', 'content': <EstimacionIncProduccionEstimulacion/> },
       {'title' : 'Estimacion de Costos de Estimulacion', 'content': <EstimacionCostosEstimulacion/> }

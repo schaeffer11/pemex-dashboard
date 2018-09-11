@@ -16,3 +16,5 @@ export const setVolumenAparejoDeProduccion = value => ({ type: 'set_volumenApare
 export const setVolumenCimaDeIntervalo = value => ({ type: 'set_volumenCimaDeIntervalo', value})
 export const setVolumenBaseDeIntervalo = value => ({ type: 'set_volumenBaseDeIntervalo', value})
 export const setVolumenDeEspacioAnular = value => ({ type: 'set_volumenDeEspacioAnular', value})
+export const setImgBoreDiagramURL = value => ({ type: 'set_imgBoreDiagramURL', value})
+export const setImgAparejoDeProduccionURL = value => ({ type: 'set_imgAparejoDeProduccionURL', value})

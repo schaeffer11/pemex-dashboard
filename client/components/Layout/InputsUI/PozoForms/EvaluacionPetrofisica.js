@@ -318,7 +318,7 @@ let mudLossColumns = [
         <div className='header'>
           Upload Well Log File (spanish)
         </div>
-        <input type='file' onChange={this.handleFileUpload}></input>
+        <input type='file' accept="image/*" onChange={this.handleFileUpload}></input>
         {imgURL ? <img className='img-preview' src={imgURL}></img> : null }
       </div>
     )

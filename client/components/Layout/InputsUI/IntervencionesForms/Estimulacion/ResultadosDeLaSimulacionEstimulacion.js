@@ -1,7 +1,7 @@
 import React, { Component } from 'react'
 import autobind from 'autobind-decorator'
 import { InputRow, InputRowUnitless, InputRowSelectUnitless, TextAreaUnitless } from '../../../Common/InputRow'
-import { setVolumenDelSistemaAcidoLimpieza, setVolumenDelSistemaNoAcidoLimpieza, setTipoDeColocacion, setTiempoDeContacto, setNumeroDeEtapas, setVolumenDelSistemAcido, setVolumenDelSistemNoAcido, setVolumenDeDivergente, setVolumenDeN2, setCalidadDeEspuma, setVolumenDePrecolchonN2, setVolumenDeDesplazamiento, setPenetracionRadial, setLongitudDeAgujeroDeGusano } from '../../../../../redux/actions/intervencionesEstimulacion'
+import { setVolumenDelSistemaAcidoLimpieza, setVolumenDelSistemaNoAcidoLimpieza, setTipoDeColocacion, setTiempoDeContacto, setNumeroDeEtapas, setVolumenDelSistemAcido, setVolumenDelSistemNoAcido, setVolumenDeDivergente, setVolumenDeN2, setCalidadDeEspuma, setVolumenDePrecolchonN2, setVolumenDeDesplazamiento, setPenetracionRadial, setLongitudDeAgujeroDeGusano, setEvidenceSimulationImgURL } from '../../../../../redux/actions/intervencionesEstimulacion'
 import { connect } from 'react-redux'
 
 @autobind class ResultadosDeLaSimulacionEstimulacion extends Component {
@@ -58,15 +58,44 @@ import { connect } from 'react-redux'
     )
   }
 
+  handleFileUpload(e, setURL) {
+    let { files } = e.target
+
+    console.log(files)
+
+    let localImgUrl = window.URL.createObjectURL(files[0])
+
+    setURL(localImgUrl)
+  }
+
+  makeEvidenceSimulationInput() {
+    let { formData, setEvidenceSimulationImgURL } = this.props
+    formData = formData.toJS()
+    let { evidenceSimulationImgURL } = formData
+    return (
+      <div style={{marginBot: '20px'}}>
+        <div className='header'>
+          Upload Evidence of Simulation (sim results) (spanish)
+        </div>
+        <input type='file' accept="image/*"  onChange={(e) => this.handleFileUpload(e, setEvidenceSimulationImgURL)} multiple></input>
+        {evidenceSimulationImgURL ? <img className='img-preview' src={evidenceSimulationImgURL}></img> : null }
+      </div>
+    )
+  }
+
+
 
   render() {
 
     return (
       <div className="form resultados-de-simulacion">
+        <div className='left'>
           { this.makeLimpiezaForm() }
+          { this.makeEvidenceSimulationInput() }
+        </div>
+        <div className='right'>
           { this.makeMatricialForm() }
-          <div style={{color: 'red'}}>TODO: agregar opcion para subir evidencia de simulacion (add evidence of simulation)</div>
-
+        </div>
       </div>
     )
   }
@@ -92,6 +121,7 @@ const mapDispatchToProps = dispatch => ({
   setVolumenDeDesplazamiento: val => dispatch(setVolumenDeDesplazamiento(val)),
   setPenetracionRadial: val => dispatch(setPenetracionRadial(val)),
   setLongitudDeAgujeroDeGusano: val => dispatch(setLongitudDeAgujeroDeGusano(val)),
+  setEvidenceSimulationImgURL: val => dispatch(setEvidenceSimulationImgURL(val)),
 
 })
 

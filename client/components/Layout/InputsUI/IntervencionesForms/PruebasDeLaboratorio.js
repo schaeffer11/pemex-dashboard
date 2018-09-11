@@ -8,6 +8,12 @@ import Select from 'react-select'
 import { InputRow, InputRowUnitless, InputRowSelectUnitless, TextAreaUnitless } from '../../Common/InputRow'
 import { setPruebasDeLaboratorioData } from '../../../../redux/actions/intervencionesEstimulacion'
 
+const options = [
+  { label: 'Caracterización de Agua', value: 'caracterizacinAgua' },
+  { label: 'Caracterización Físico-Química de Solubilidad', value: 'caracterizacinSolubilidad' },
+  { label: 'Compatibilidad por Emulsión', value: 'emulsion' }
+]
+
 @autobind class PruebasDeLaboratorioEstimulacion extends Component {
   constructor(props) {
     super(props)
@@ -90,11 +96,7 @@ import { setPruebasDeLaboratorioData } from '../../../../redux/actions/intervenc
     formData = formData.toJS()
     let { pruebasDeLaboratorioData } = formData
 
-    let options = [
-      { label: 'Caracterización de Agua', value: 'caracterizacinAgua' },
-      { label: 'Caracterización Físico-Química de Solubilidad', value: 'caracterizacinSolubilidad' },
-      { label: 'Compatibilidad por Emulsión', value: 'emulsion' }
-    ]
+
 
 
           let columns = [{
@@ -158,7 +160,7 @@ import { setPruebasDeLaboratorioData } from '../../../../redux/actions/intervenc
 
     return (
       <div className='generales-form' >
-        <div className='table'>
+        <div className='table-select'>
           <ReactTable
             className="-striped"
             data={pruebasDeLaboratorioData}
