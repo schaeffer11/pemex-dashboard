@@ -48,8 +48,7 @@ import { setPruebasDeLaboratorioData } from '../../../../redux/actions/intervenc
 
     pruebasDeLaboratorioData[0].length = 2
 
-    setPruebasDeLaboratorioData([...pruebasDeLaboratorioData, {index: pruebasDeLaboratorioData.length, type: '', fechaMuestreo: '', fechaPrueba: '', compania: '', superviso: '', length: pruebasDeLaboratorioData.length + 1}])
-
+    setPruebasDeLaboratorioData([...pruebasDeLaboratorioData, {index: pruebasDeLaboratorioData.length, type: '', fechaMuestreo: '', fechaPrueba: '', compania: '', superviso: '', length: pruebasDeLaboratorioData.length + 1, 'edited': false}])
   }
 
 
@@ -178,12 +177,14 @@ import { setPruebasDeLaboratorioData } from '../../../../redux/actions/intervenc
   render() {
     let { setObervacionesLab, formData } = this.props
     formData = formData.toJS()
-    let { obervacionesLab } = formData
+    let { pruebasDeLaboratorioData, obervacionesLab } = formData
 
     return (
       <div className="form pruebas-de-laboratorio-estimulacion">
           { this.makeGeneralesForm() }
           <button className='new-row-button' onClick={this.addNewRow}> + </button>
+
+           {pruebasDeLaboratorioData.length}
           
 {/*These both need to be moved to estimulation extra form */}
 {/*          <TextAreaUnitless header="Observaciones" name='' className={'obervaciones'} value={obervacionesLab} onChange={setObervacionesLab}/>

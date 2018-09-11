@@ -8,19 +8,14 @@ const generateErrorElements = ( name = '', errors = [] ) => {
     return ( <div className="error">{rowError.message}</div> )
   }
 
-/*
-  rowErrors.forEach(error => {
-    errorElements.push(<div className="error">{error.message}</div>)
-  })
-*/
   return ''
 }
 
-export const InputRow = ({ header, name, unit, value, onChange, errors = [] }) => {
+export const InputRow = ({ header, name, unit, value, onChange, index, errors = [] }) => {
 
   let handleChange = (e) => {
     console.log(e.target.value)
-    onChange(e.target.value)
+    onChange(e.target.value, e)
   }
 
   const errorElements = generateErrorElements(name, errors)
@@ -30,7 +25,7 @@ export const InputRow = ({ header, name, unit, value, onChange, errors = [] }) =
       <div className='label'>
         {header}
       </div>
-      <input className='input' value={value} onChange={handleChange} name={name} required>
+      <input className='input' value={value} onChange={handleChange} name={name} index={index} required>
       </input>
       <div className='unit'>
         {unit}
@@ -39,11 +34,11 @@ export const InputRow = ({ header, name, unit, value, onChange, errors = [] }) =
     )
 }
 
-export const InputRowUnitless = ({ header, name, unit, value, onChange, errors = [] }) => {
+export const InputRowUnitless = ({ header, name, unit, value, onChange, index={index}, errors = [] }) => {
 
   let handleChange = (e) => {
     console.log(e.target.value)
-    onChange(e.target.value)
+    onChange(e.target.value, e)
   }
 
   const errorElements = generateErrorElements(name, errors)
@@ -53,13 +48,13 @@ export const InputRowUnitless = ({ header, name, unit, value, onChange, errors =
       <div className='label'>
         {header}
       </div>
-      <input className='input' type='text' value={value} onChange={handleChange} name={name}/>
+      <input className='input' type='text' value={value} onChange={handleChange} name={name} index={index}/>
       { errorElements }
     </div>
     )
 }
 
-export const InputRowSelectUnitless = ({ header, name, value, options, callback, errors=[] }) => {
+export const InputRowSelectUnitless = ({ header, name, value, options, callback, index, errors=[] }) => {
 
   if (!options) {
     options = []
@@ -82,7 +77,7 @@ export const TextAreaUnitless = ({ header, name, unit, className, subheader, val
   
   let handleChange = (e) => {
     console.log(e.target.value)
-    onChange(e.target.value)
+    onChange(e.target.value,e)
   }
 
   return (
