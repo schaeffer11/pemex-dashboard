@@ -114,7 +114,7 @@ import AnalisisDelAgua from './AnalisisDelAgua'
 
             {this.forms[this.state.currentStep].content}
           </div>
-          <button className="submit" disabled={false} onClick={this.downloadMasterTemplate}>{false ? 'Downloading...' : 'Get Master Template'}</button>
+          <button className="submit" onClick={this.downloadMasterTemplate}>{'Descarga el Formato General'}</button>
           <button className="submit" disabled={pozoFormSubmitting} onClick={this.handleSubmit}>{pozoFormSubmitting ? 'Enviando...' : 'Enviar'}</button>
           { errors.length > 0 &&
               <div className="error">Se han encontrado errores en la forma.</div>

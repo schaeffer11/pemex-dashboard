@@ -23,6 +23,7 @@ import estIncProduccionApuntalado from './reducers/estIncProduccionApuntalado'
 import estCostEstimulacion from './reducers/estCostEstimulacion'
 import estCostAcido from './reducers/estCostAcido'
 import estCostApuntalado from './reducers/estCostApuntalado'
+import evaluacionPetrofisica from './reducers/evaluacionPetrofisica'
 import forms from './reducers/forms'
 
 export default combineReducers({
@@ -51,4 +52,5 @@ export default combineReducers({
 	estCostEstimulacion,
 	estCostAcido,
 	estCostApuntalado,
+	evaluacionPetrofisica
 })

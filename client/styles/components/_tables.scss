@@ -4,16 +4,16 @@
   .ReactTable {
 
     .rt-table {
-      overflow: visible;
+      overflow-y: visible;
 
       .rt-tbody {
-        overflow: visible;
+        overflow-y: visible;
 
         .rt-tr-group {
-          overflow: visible;
+          overflow-y: visible;
 
           .rt-tr {
-            overflow: visible;
+            overflow-y: visible;
           }
         }
       }

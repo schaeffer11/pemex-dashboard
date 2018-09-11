@@ -9,7 +9,7 @@
 .pemex-app {
 	display: grid;
 	grid-template-rows: 3em calc(100vh - 3em);
-	grid-template-areas: "header"
-						 "body"
+	grid-template-areas: 	"header"
+						 	"body";
 
 }
