@@ -1,7 +1,7 @@
 import React, { Component } from 'react'
 import autobind from 'autobind-decorator'
 import { InputRow, InputRowUnitless, InputRowSelectUnitless, TextAreaUnitless } from '../../../Common/InputRow'
-import { setEstIncEstrangulador, setEstIncPtp, setEstIncTtp, setEstIncPbaj, setEstIncTbaj, setEstIncPtr, setEstIncQl, setEstIncQo, setEstIncQg, setEstIncQw, setEstIncRGA, setEstIncSalinidad, setEstIncIP, setEstIncDeltaP, setEstIncGastoCompromisoQo, setEstIncGastoCompromisoQg, setObervacionesEstIncEstim } from '../../../../../redux/actions/intervencionesEstimulacion'
+import { setEstIncProdEstimulationImgURL, setEstIncEstrangulador, setEstIncPtp, setEstIncTtp, setEstIncPbaj, setEstIncTbaj, setEstIncPtr, setEstIncQl, setEstIncQo, setEstIncQg, setEstIncQw, setEstIncRGA, setEstIncSalinidad, setEstIncIP, setEstIncDeltaP, setEstIncGastoCompromisoQo, setEstIncGastoCompromisoQg, setObervacionesEstIncEstim } from '../../../../../redux/actions/intervencionesEstimulacion'
 import { connect } from 'react-redux'
 
 @autobind class EstimacionIncProduccionEstimulacion extends Component {
@@ -78,6 +78,29 @@ import { connect } from 'react-redux'
     )
   }
 
+  handleFileUpload(e, setURL) {
+    e.preventDefault()
+    let { files } = e.target
+    let localImgUrl = window.URL.createObjectURL(files[0])
+
+    setURL(localImgUrl)
+  }
+
+  makeImageInput() {
+    let { formData, setEstIncProdEstimulationImgURL } = this.props
+    formData = formData.toJS()
+    let { estIncProdEstimulationImgURL } = formData
+    return (
+      <div style={{marginBot: '20px'}}>
+        <div className='header'>
+          Upload Est Inc Prod Estimulation (spanish)
+        </div>
+        <input type='file' accept="image/*" onChange={(e) => this.handleFileUpload(e, setEstIncProdEstimulationImgURL)}></input>
+        {estIncProdEstimulationImgURL ? <img className='img-preview' src={estIncProdEstimulationImgURL}></img> : null }
+      </div>
+    )
+  }
+  
   render() {
 
     return (
@@ -88,10 +111,8 @@ import { connect } from 'react-redux'
           <div className='right'>
             { this.makeGastoCompromisoForm() }
             { this.makeObservacionesForm() }
+            { this.makeImageInput() }
           </div>
-          
-          <div style={{color: 'red'}}>TODO: agregar opcion para subir evidencia de aumento de estimado (add evidence of estimation of increase) (csv/image)</div>
-
       </div>
     )
   }
@@ -120,7 +141,7 @@ const mapDispatchToProps = dispatch => ({
   setEstIncGastoCompromisoQo: val => dispatch(setEstIncGastoCompromisoQo(val)),
   setEstIncGastoCompromisoQg: val => dispatch(setEstIncGastoCompromisoQg(val)),
   setObervacionesEstIncEstim: val => dispatch(setObervacionesEstIncEstim(val)),
-
+  setEstIncProdEstimulationImgURL: val => dispatch(setEstIncProdEstimulationImgURL(val)),
 })
 
 export default connect(mapStateToProps, mapDispatchToProps)(EstimacionIncProduccionEstimulacion)

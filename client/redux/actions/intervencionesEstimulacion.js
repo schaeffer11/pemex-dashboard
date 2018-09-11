@@ -30,6 +30,8 @@ export const setVolumenTotalDeLiquido = value => ({ type: 'set_volumenTotalDeLiq
 
 export const setPruebasDeLaboratorioData = value => ({ type: 'set_pruebasDeLaboratorioData', value})
 
+export const setLabEvidenceImgURL = value => ({ type: 'set_labEvidenceImgURL', value})
+
 export const setVolumenDelSistemaAcidoLimpieza = value => ({ type: 'set_volumenDelSistemaAcidoLimpieza', value})
 export const setVolumenDelSistemaNoAcidoLimpieza = value => ({ type: 'set_volumenDelSistemaNoAcidoLimpieza', value})
 export const setTipoDeColocacion = value => ({ type: 'set_tipoDeColocacion', value})
@@ -64,7 +66,7 @@ export const setEstIncDeltaP = value => ({ type: 'set_estIncDeltaP', value})
 export const setEstIncGastoCompromisoQo = value => ({ type: 'set_estIncGastoCompromisoQo', value})
 export const setEstIncGastoCompromisoQg = value => ({ type: 'set_estIncGastoCompromisoQg', value})
 export const setObervacionesEstIncEstim = value => ({ type: 'set_obervacionesEstIncEstim', value})
-
+export const setEstIncProdEstimulationImgURL = value => ({ type: 'set_estIncProdEstimulationImgURL', value})
 
 export const setEstCostCompaniaDeServicio = value => ({ type: 'set_estCostCompaniaDeServicio', value})
 export const setEstCostoDeRentaDeBarco = value => ({ type: 'set_estCostoDeRentaDeBarco', value})

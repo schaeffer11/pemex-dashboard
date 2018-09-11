@@ -14,6 +14,7 @@ import propuestaApuntalado from './reducers/propuestaApuntalado'
 import pruebasDeLaboratorio from './reducers/pruebasDeLaboratorio'
 import pruebasDeLaboratorioAcido from './reducers/pruebasDeLaboratorioAcido'
 import pruebasDeLaboratorioApuntalado from './reducers/pruebasDeLaboratorioApuntalado'
+import pruebasDeLaboratorioEstimulacion from './reducers/pruebasDeLaboratorioEstimulacion'
 import resultadosSimulacionEstimulacion from './reducers/resultadosSimulacionEstimulacion'
 import resultadosSimulacionAcido from './reducers/resultadosSimulacionAcido'
 import resultadosSimulacionApuntalado from './reducers/resultadosSimulacionApuntalado'
@@ -45,6 +46,7 @@ export default combineReducers({
 	pruebasDeLaboratorio,
 	pruebasDeLaboratorioAcido,
 	pruebasDeLaboratorioApuntalado,
+	pruebasDeLaboratorioEstimulacion,
 	resultadosSimulacionEstimulacion,
 	resultadosSimulacionAcido,
 	resultadosSimulacionApuntalado,

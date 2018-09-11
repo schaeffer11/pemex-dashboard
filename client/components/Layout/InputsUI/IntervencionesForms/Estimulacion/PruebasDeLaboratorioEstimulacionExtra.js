@@ -1,7 +1,7 @@
 import React, { Component } from 'react'
 import autobind from 'autobind-decorator'
 import { InputRow, InputRowUnitless, InputRowSelectUnitless, TextAreaUnitless } from '../../../Common/InputRow'
-// import { setContenidoDeAceite, setContenidoDeAgua, setContenidoDeEmulsion, setContenidoDeSolidos, setTipoDeSolidos, setDensidadDelAceite, setDensidadDelAgua, setDensidadDeLaEmulsion, setContenidoDeAsfaltenos, setContenidoDeParafinas, setContenidoDeResinas, setIndiceDeEstabilidadDelColoidal, setIndiceDeEstabilidadDelAgua, setPH, setSalinidad, setViscosidadDelAceite, setTipoDeGelLineal, setViscosidadDelGelLineal, setTiempoDeReticulacion, setPHGelLineal, setTiempoDeRompedorDelGel, setTamanoDelApuntalante, setGravedadEspecifica, setEsfericidad, setRedondeo, setTurbidez, setResistencia, setPruebaDeSolubilidadConAcida, setObervacionesPruebasLabApuntalado } from '../../../../../redux/actions/intervencionesApuntalado'
+import { setLabEvidenceImgURL } from '../../../../../redux/actions/intervencionesEstimulacion'
 import { connect } from 'react-redux'
 import ReactTable from 'react-table'
 import Select from 'react-select'
@@ -223,6 +223,29 @@ const resultadoOptions = [
   }
 
 
+  handleFileUpload(e, setURL) {
+    e.preventDefault()
+    let { files } = e.target
+    let localImgUrl = window.URL.createObjectURL(files[0])
+
+    setURL(localImgUrl)
+  }
+
+  makeImageInput() {
+    let { formData, setLabEvidenceImgURL } = this.props
+    formData = formData.toJS()
+    let { labEvidenceImgURL } = formData
+    return (
+      <div style={{marginBot: '20px'}}>
+        <div className='header'>
+          Upload Lab Evidence (spanish)
+        </div>
+        <input type='file' accept="image/*" onChange={(e) => this.handleFileUpload(e, setLabEvidenceImgURL)}></input>
+        {labEvidenceImgURL ? <img className='img-preview' src={labEvidenceImgURL}></img> : null }
+      </div>
+    )
+  }
+  
 
 
   render() {
@@ -235,7 +258,7 @@ const resultadoOptions = [
           { this.makeSistemaTable() }
           <TextAreaUnitless header="Observaciones" name='' className={'obervaciones'}/> 
              {/*<TextAreaUnitless header="Observaciones" name='' className={'obervaciones'}  value={obervacionesPruebasLabApuntalado} {onChange={setObervacionesPruebasLabApuntalado}} /> */}
-          <div style={{color: 'red'}}>TODO: add upload evidence of lab </div>
+          { this.makeImageInput() }
       </div>
     )
   }
@@ -243,11 +266,11 @@ const resultadoOptions = [
 
 
 const mapStateToProps = state => ({
-  // formData: state.get('pruebasDeLaboratorioApuntalado'),
+  formData: state.get('pruebasDeLaboratorioEstimulacion')
 })
 
 const mapDispatchToProps = dispatch => ({
-
+    setLabEvidenceImgURL: val => dispatch(setLabEvidenceImgURL(val))
 })
 
 export default connect(mapStateToProps, mapDispatchToProps)(PruebasDeLaboratorioEstimulacionExtra)

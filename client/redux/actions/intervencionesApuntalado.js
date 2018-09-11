@@ -52,7 +52,7 @@ export const setTurbidez = value => ({ type: 'set_turbidez', value})
 export const setResistencia = value => ({ type: 'set_resistencia', value})
 export const setPruebaDeSolubilidadConAcida = value => ({ type: 'set_pruebaDeSolubilidadConAcida', value})
 export const setObervacionesPruebasLabApuntalado = value => ({ type: 'set_obervacionesPruebasLabApuntalado', value})
-
+export const setEstIncProdApuntaladoImgURL = value => ({ type: 'set_estIncProdApuntaladoImgURL', value})
 
 export const setLongitudApuntalada = value => ({ type: 'set_longitudApuntalada', value})
 export const setAlturaTotalDeFractura = value => ({ type: 'set_alturaTotalDeFractura', value})

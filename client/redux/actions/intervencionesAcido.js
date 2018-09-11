@@ -83,7 +83,7 @@ export const setEstIncDeltaP = value => ({ type: 'set_estIncDeltaP', value})
 export const setEstIncGastoCompromisoQo = value => ({ type: 'set_estIncGastoCompromisoQo', value})
 export const setEstIncGastoCompromisoQg = value => ({ type: 'set_estIncGastoCompromisoQg', value})
 export const setObervacionesEstIncAcido = value => ({ type: 'set_obervacionesEstIncAcido', value})
-
+export const setEstIncProdAcidoImgURL = value => ({ type: 'set_estIncProdAcidoImgURL', value})
 
 export const setEstCostCompaniaDeServicio = value => ({ type: 'set_estCostCompaniaDeServicio', value})
 export const setEstCostoDeRentaDeBarco = value => ({ type: 'set_estCostoDeRentaDeBarco', value})
