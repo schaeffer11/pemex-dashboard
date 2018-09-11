@@ -1,7 +1,7 @@
 import React, { Component } from 'react'
 import { connect } from 'react-redux'
 import autobind from 'autobind-decorator'
-import { setPresionDataCampo } from '../../../../redux/actions/historicoDePresion'
+import { setPresionDataCampo } from '../../../../redux/actions/pozo'
 import ReactTable from 'react-table'
 
 let columns = [

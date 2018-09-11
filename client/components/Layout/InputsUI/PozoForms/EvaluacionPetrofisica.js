@@ -1,7 +1,7 @@
 import React, { Component } from 'react'
 import autobind from 'autobind-decorator'
 import { connect } from 'react-redux'
-import { setImgURL, setLayerData, setMudLossData } from '../../../../redux/actions/evaluacionPetrofisica'
+import { setImgURL, setLayerData, setMudLossData } from '../../../../redux/actions/pozo'
 import ReactTable from 'react-table'
 
 let layerColumns = [

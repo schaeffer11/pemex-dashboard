@@ -3,7 +3,7 @@ import autobind from 'autobind-decorator'
 import { InputRow, InputRowUnitless, InputRowSelectUnitless } from '../../Common/InputRow'
 import Select from 'react-select'
 import { connect } from 'react-redux'
-import { setSubdireccion, setBloque, setActivo, setCampo, setPozo, setFormacion } from '../../../../redux/actions/fichaTecnicaDelPozoHighLevel'
+import { setSubdireccion, setBloque, setActivo, setCampo, setPozo, setFormacion } from '../../../../redux/actions/pozo'
 
 @autobind class TechnicaDelPozoHighLevel extends Component {
   constructor(props) {

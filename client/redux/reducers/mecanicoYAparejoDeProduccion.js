@@ -9,7 +9,7 @@ const initialState = Map({
     tipoDeLiner: '',
     diametroDeLiner: '',
     tipoDePistolas: '',
-    densidadDeDisparos: '',
+    densidadDeDisparosMecanico: '',
     fase: '',
     diametroDeOrificio: '',
     penetracion: '',
@@ -43,8 +43,8 @@ const mecanicoYAparejoDeProduccion = (state = initialState, action) => {
         return state.set('diametroDeLiner', fromJS(action.value))
     case 'set_tipoDePistolas':
         return state.set('tipoDePistolas', fromJS(action.value))
-    case 'set_densidadDeDisparos':
-        return state.set('densidadDeDisparos', fromJS(action.value))
+    case 'set_densidadDeDisparosMecanico':
+        return state.set('densidadDeDisparosMecanico', fromJS(action.value))
     case 'set_fase':
         return state.set('fase', fromJS(action.value))
     case 'set_diametroDeOrificio':

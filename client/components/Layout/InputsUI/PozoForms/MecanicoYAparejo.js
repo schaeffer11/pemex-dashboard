@@ -1,7 +1,7 @@
 import React, { Component } from 'react'
 import autobind from 'autobind-decorator'
 import { InputRow, InputRowUnitless, InputRowSelectUnitless } from '../../Common/InputRow'
-import { setTipoDeTerminacion, setHIntervaloProductor, setEmpacador, setPresionDifEmpacador, setSensorPyt, setTipoDeLiner, setDiametroDeLiner, setTipoDePistolas, setDensidadDeDisparos, setFase, setDiametroDeOrificio, setPenetracion, setTipoDeSAP, setTratamientoPor, setVolumenAparejoDeProduccion, setVolumenCimaDeIntervalo, setVolumenBaseDeIntervalo, setVolumenDeEspacioAnular, setImgBoreDiagramURL, setImgAparejoDeProduccionURL} from '../../../../redux/actions/mecanicoYAparejoDeProduccion'
+import { setTipoDeTerminacion, setHIntervaloProductor, setEmpacador, setPresionDifEmpacador, setSensorPyt, setTipoDeLiner, setDiametroDeLiner, setTipoDePistolas, setDensidadDeDisparosMecanico, setFase, setDiametroDeOrificio, setPenetracion, setTipoDeSAP, setTratamientoPor, setVolumenAparejoDeProduccion, setVolumenCimaDeIntervalo, setVolumenBaseDeIntervalo, setVolumenDeEspacioAnular, setImgBoreDiagramURL, setImgAparejoDeProduccionURL} from '../../../../redux/actions/pozo'
 import { connect } from 'react-redux'
 
 @autobind class MecanicoYAparejo extends Component {
@@ -40,9 +40,9 @@ import { connect } from 'react-redux'
   }
 
   makeTerminacionForm() {
-    let { setTipoDeTerminacion, setHIntervaloProductor, setEmpacador, setPresionDifEmpacador, setSensorPyt, setTipoDeLiner, setDiametroDeLiner, setTipoDePistolas, setDensidadDeDisparos, setFase, setDiametroDeOrificio, setPenetracion, setTipoDeSAP, formData } = this.props
+    let { setTipoDeTerminacion, setHIntervaloProductor, setEmpacador, setPresionDifEmpacador, setSensorPyt, setTipoDeLiner, setDiametroDeLiner, setTipoDePistolas, setDensidadDeDisparosMecanico, setFase, setDiametroDeOrificio, setPenetracion, setTipoDeSAP, formData } = this.props
     formData = formData.toJS()
-    let { tipoDeTerminacion, hIntervaloProductor, empacador, presionDifEmpacador, sensorPyt, tipoDeLiner, diametroDeLiner, tipoDePistolas, densidadDeDisparos, fase, diametroDeOrificio, penetracion, tipoDeSAP } = formData
+    let { tipoDeTerminacion, hIntervaloProductor, empacador, presionDifEmpacador, sensorPyt, tipoDeLiner, diametroDeLiner, tipoDePistolas, densidadDeDisparosMecanico, fase, diametroDeOrificio, penetracion, tipoDeSAP } = formData
     
     return (
       <div className='terminacion-form' >
@@ -60,7 +60,7 @@ import { connect } from 'react-redux'
         <InputRow header="Diámetro de liner" name='' value={diametroDeLiner} onChange={setDiametroDeLiner} unit='pg' />
         DISPAROS
         <InputRowUnitless header="Tipo de pistolas" name='' value={tipoDePistolas} onChange={setTipoDePistolas}  />
-        <InputRow header="Densidad de disparos" name='' value={densidadDeDisparos} onChange={setDensidadDeDisparos} unit='c/m' />
+        <InputRow header="Densidad de disparos" name='' value={densidadDeDisparosMecanico} onChange={setDensidadDeDisparosMecanico} unit='c/m' />
         <InputRow header="Fase" name='' value={fase} onChange={setFase} unit='Grados' />
         <InputRow header="Diámetro de orificio" name='' value={diametroDeOrificio} onChange={setDiametroDeOrificio} unit='pg' />
         <InputRow header="Penetración" name='' value={penetracion} onChange={setPenetracion} unit='pg' />
@@ -163,7 +163,7 @@ const mapDispatchToProps = dispatch => ({
   setTipoDeLiner: val => dispatch(setTipoDeLiner(val)),
   setDiametroDeLiner: val => dispatch(setDiametroDeLiner(val)),
   setTipoDePistolas: val => dispatch(setTipoDePistolas(val)),
-  setDensidadDeDisparos: val => dispatch(setDensidadDeDisparos(val)),
+  setDensidadDeDisparosMecanico: val => dispatch(setDensidadDeDisparosMecanico(val)),
   setFase: val => dispatch(setFase(val)),
   setDiametroDeOrificio: val => dispatch(setDiametroDeOrificio(val)),
   setPenetracion: val => dispatch(setPenetracion(val)),
