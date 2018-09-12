@@ -4,7 +4,7 @@ import { connect } from 'react-redux'
 import ReactTable from 'react-table'
 
 import { InputRow, InputRowUnitless, InputRowSelectUnitless } from '../../Common/InputRow'
-import { setTipoDeSistemo, setHistorialIntervencionesData, setIntervaloProductor, setEspesorBruto, setEspesorNeto, setCaliza, setDolomia, setArcilla, setPorosidad, setPermeabilidad, setSw, setCaa, setCga, setTipoDePozo, setPwsFecha, setPwfFecha, setDeltaPPerMes, setTyac, setPvt, setAparejoDeProduccion, setProfEmpacador, setProfSensorPYT, setTipoDeSap, setModuloYoungArena, setModuloYoungLutitas, setRelacPoissonArena, setRelacPoissonLutatas, setGradienteDeFractura, setDensidadDeDisparos, setDiametroDeDisparos, formData } from '../../../../redux/actions/pozo'
+import { setTipoDeSistemo, setHistorialIntervencionesData, setIntervaloProductor, setEspesorBruto, setEspesorNeto, setCaliza, setDolomia, setArcilla, setPorosidad, setPermeabilidad, setSw, setCaa, setCga, setTipoDePozo, setPwsFecha, setPwfFecha, setDeltaPPerMes, setTyac, setPvt, setAparejoDeProduccion, setProfEmpacador, setProfSensorPYT, setTipoDeSap, formData } from '../../../../redux/actions/pozo'
 
 let columns = [
   {
@@ -20,6 +20,7 @@ let columns = [
   }, { 
     Header: 'Fecha',
     accessor: 'fecha',
+    width: 150,
     cell: 'renderEditable',
   }, { 
     Header: 'Hisorial de Intervenciones',
@@ -134,27 +135,6 @@ let columns = [
     )
   }
 
-  makeGeomecanicaForm() {
-    let { setModuloYoungArena, setModuloYoungLutitas, setRelacPoissonArena, setRelacPoissonLutatas, setGradienteDeFractura, setDensidadDeDisparos, setDiametroDeDisparos, formData } = this.props
-    formData = formData.toJS()
-    let { moduloYoungArena, moduloYoungLutitas, relacPoissonArena, relacPoissonLutatas, gradienteDeFractura, densidadDeDisparos, diametroDeDisparos } = formData
-    
-    return (
-      <div className='geomecanica-form' >
-        <div className='header'>
-          Informacion de Geomecánica
-        </div>
-        <InputRow header="Modulo young arena" name='moduloYoungArena' value={moduloYoungArena} onChange={setModuloYoungArena} unit='psi' />
-        <InputRow header="Modulo young lutitas" name='moduloYoungLutitas' value={moduloYoungLutitas} onChange={setModuloYoungLutitas} unit='psi' />
-        <InputRow header="Relac. poisson arena" name='relacPoissonArena' value={relacPoissonArena} onChange={setRelacPoissonArena} unit='adim' />
-        <InputRow header="Relac. poisson lutatas" name='relacPoissonLutatas' value={relacPoissonLutatas} onChange={setRelacPoissonLutatas} unit='adim' />
-        <InputRow header="Gradiente de fractura" name='gradienteDeFractura' value={gradienteDeFractura} onChange={setGradienteDeFractura} unit='psi/ft' />
-        <InputRow header="Densidad de disparos" name='densidadDeDisparos' value={densidadDeDisparos} onChange={setDensidadDeDisparos} unit='c/m' />
-        <InputRow header="Diámetro de disparos" name='diametroDeDisparos' value={diametroDeDisparos} onChange={setDiametroDeDisparos} unit='pg' />
-      </div>
-    )
-  }
-
   renderEditable(cellInfo) {
     let { setHistorialIntervencionesData, formData } = this.props
     formData = formData.toJS()
@@ -243,7 +223,6 @@ let columns = [
         { this.makeFormacionForm() }
         { this.makePozoForm() }
         { this.makeHistoricalInterventionsInput() }
-        { this.makeGeomecanicaForm() }
       </div>
     )
   }
@@ -278,13 +257,6 @@ const mapDispatchToProps = dispatch => ({
   setProfEmpacador: val => dispatch(setProfEmpacador(val)),
   setProfSensorPYT: val => dispatch(setProfSensorPYT(val)),
   setTipoDeSistemo: val => dispatch(setTipoDeSistemo(val)),
-  setModuloYoungArena: val => dispatch(setModuloYoungArena(val)),
-  setModuloYoungLutitas: val => dispatch(setModuloYoungLutitas(val)),
-  setRelacPoissonArena: val => dispatch(setRelacPoissonArena(val)),
-  setRelacPoissonLutatas: val => dispatch(setRelacPoissonLutatas(val)),
-  setGradienteDeFractura: val => dispatch(setGradienteDeFractura(val)),
-  setDensidadDeDisparos: val => dispatch(setDensidadDeDisparos(val)),
-  setDiametroDeDisparos: val => dispatch(setDiametroDeDisparos(val)),
   setHistorialIntervencionesData: val => dispatch(setHistorialIntervencionesData(val)),
 })
 

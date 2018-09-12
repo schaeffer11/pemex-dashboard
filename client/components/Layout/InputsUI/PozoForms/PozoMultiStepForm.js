@@ -25,8 +25,8 @@ import AnalisisDelAgua from './AnalisisDelAgua'
     }
 
     this.forms = [
+      {'title' : 'Información General de la Asignación' , 'content':<TecnicaDelPozoHighLevel containsErrors={this.containsErrors}/>},
       {'title' : 'Ficha Técnica del Campo', 'content': <TecnicaDelCampo containsErrors={this.containsErrors}/>},
-      {'title' : 'Ficha Técnica del Pozo' , 'content':<TecnicaDelPozoHighLevel containsErrors={this.containsErrors}/>},
       {'title' : 'Ficha Técnica del Pozo' , 'content':<TecnicaDelPozo containsErrors={this.containsErrors}/>},
       {'title' : 'Evaluación Petrofísica', 'content': <EvaluacionPetrofisica containsErrors={this.containsErrors} /> },
       {'title' : 'Edo. Mecánico y Aparejo de Producción', 'content': <MecanicoYAparejo containsErrors={this.containsErrors} /> },

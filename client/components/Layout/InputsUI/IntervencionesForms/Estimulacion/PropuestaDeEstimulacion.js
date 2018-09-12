@@ -87,12 +87,17 @@ import { connect } from 'react-redux'
 
     return (
       <div className="form propuesta-de-estimulacion">
-        <div className="left">
-          { this.makeCedulaForm() }
+        <div className='top'>
+          <div className="left">
+            { this.makeGeneralForm() }
+          </div>
+          <div className="right">
+ 
+            { this.makeDetallesForm() }
+          </div>
         </div>
-        <div className="right">
-          { this.makeGeneralForm() }
-          { this.makeDetallesForm() }
+        <div className='bot'>
+          <div style={{color: 'red'}}>TODO: add cedula table</div>
         </div>
       </div>
     )

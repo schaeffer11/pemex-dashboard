@@ -230,7 +230,7 @@
 		display: grid;
 		grid-template-columns: 25% 25% 25% 25%;
 		grid-column-gap: 10px;
-		grid-template-areas: "pozo formacion intervenciones geomecanica";
+		grid-template-areas: "pozo formacion intervenciones intervenciones";
 		
 		.formacion-form {
 			grid-area: formacion;
@@ -356,19 +356,22 @@
 	}
 
 	.propuesta-de-estimulacion {
-		display: grid;
-		grid-template-columns: 50% 50%;
-		grid-column-gap: 10px;
-		grid-template-areas: 'left right';
-	
-		.left {
-			grid-area: left;
+		.top {
+			display: grid;
+			grid-template-columns: 50% 50%;
+			grid-column-gap: 10px;
+			grid-template-areas: 'left right';
+		
+			.left {
+				grid-area: left;
 
+			}
+
+			.right {
+				grid-area: right;
+			}
 		}
 
-		.right {
-			grid-area: right;
-		}
 	}
 
 	.pruebas-de-laboratorio-estimulacion {
@@ -421,19 +424,22 @@
 	}
 
 	.propuesta-de-acido {
-		display: grid;
-		grid-template-columns: 50% 50%;
-		grid-column-gap: 10px;
-		grid-template-areas: 'left right';
-	
-		.left {
-			grid-area: left;
+		.top {
+			display: grid;
+			grid-template-columns: 50% 50%;
+			grid-column-gap: 10px;
+			grid-template-areas: 'left right';
+		
+			.left {
+				grid-area: left;
 
+			}
+
+			.right {
+				grid-area: right;
+			}
 		}
 
-		.right {
-			grid-area: right;
-		}
 	}
 
 	.pruebas-de-laboratorio-acido-extra {
@@ -489,18 +495,20 @@
 	}
 
 	.propuesta-de-apuntalado {
-		display: grid;
-		grid-template-columns: 50% 50%;
-		grid-column-gap: 10px;
-		grid-template-areas: 'left right';
-	
-		.left {
-			grid-area: left;
+		.top {
+			display: grid;
+			grid-template-columns: 50% 50%;
+			grid-column-gap: 10px;
+			grid-template-areas: 'left right';
+		
+			.left {
+				grid-area: left;
 
-		}
+			}
 
-		.right {
-			grid-area: right;
+			.right {
+				grid-area: right;
+			}
 		}
 	}
 

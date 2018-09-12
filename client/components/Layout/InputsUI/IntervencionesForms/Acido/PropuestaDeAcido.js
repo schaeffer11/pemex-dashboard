@@ -4,6 +4,9 @@ import { InputRow, InputRowUnitless, InputRowSelectUnitless } from '../../../Com
 import { setEtapa, setSistema, setTipoDeApuntalante, setConcentraciDeApuntalante, setVolLiquid, setGastoN2, setGastoLiqudo, setGastoEnFondo, setCalidad, setVolN2, setVolLiquidoAcum, setVolN2Acum, setRelN2Liq, setTiempo, setIntervalo, setLongitudDeIntervalo, setVolAparejo, setCapacidadTotalDelPozo, setVolumenPrecolchonN2, setVolumenSistemaNoReativo, setVolumenSistemaReactivo, setVolumenSistemaDivergente, setVolumenDesplazamientoLiquido, setVolumenDesplazamientoGelLineal } from '../../../../../redux/actions/intervencionesAcido'
 import { connect } from 'react-redux'
 
+import { setModuloYoungArena, setModuloYoungLutitas, setRelacPoissonArena, setRelacPoissonLutatas, setGradienteDeFractura, setDensidadDeDisparos, setDiametroDeDisparos } from '../../../../../redux/actions/pozo'
+
+
 @autobind class PropuestaDeAcido extends Component {
   constructor(props) {
     super(props)
@@ -84,16 +87,43 @@ import { connect } from 'react-redux'
     )
   }
 
+  makeGeomecanicaForm() {
+    let { setModuloYoungArena, setModuloYoungLutitas, setRelacPoissonArena, setRelacPoissonLutatas, setGradienteDeFractura, setDensidadDeDisparos, setDiametroDeDisparos, pozoFormData } = this.props
+    pozoFormData = pozoFormData.toJS()
+    let { moduloYoungArena, moduloYoungLutitas, relacPoissonArena, relacPoissonLutatas, gradienteDeFractura, densidadDeDisparos, diametroDeDisparos } = pozoFormData
+    
+    return (
+      <div className='geomecanica-form' >
+        <div className='header'>
+          Informacion de Geomecánica
+        </div>
+        <InputRow header="Modulo young arena" name='moduloYoungArena' value={moduloYoungArena} onChange={setModuloYoungArena} unit='psi' />
+        <InputRow header="Modulo young lutitas" name='moduloYoungLutitas' value={moduloYoungLutitas} onChange={setModuloYoungLutitas} unit='psi' />
+        <InputRow header="Relac. poisson arena" name='relacPoissonArena' value={relacPoissonArena} onChange={setRelacPoissonArena} unit='adim' />
+        <InputRow header="Relac. poisson lutatas" name='relacPoissonLutatas' value={relacPoissonLutatas} onChange={setRelacPoissonLutatas} unit='adim' />
+        <InputRow header="Gradiente de fractura" name='gradienteDeFractura' value={gradienteDeFractura} onChange={setGradienteDeFractura} unit='psi/ft' />
+        <InputRow header="Densidad de disparos" name='densidadDeDisparos' value={densidadDeDisparos} onChange={setDensidadDeDisparos} unit='c/m' />
+        <InputRow header="Diámetro de disparos" name='diametroDeDisparos' value={diametroDeDisparos} onChange={setDiametroDeDisparos} unit='pg' />
+      </div>
+    )
+  }
+
+
   render() {
 
     return (
       <div className="form propuesta-de-acido">
-        <div className="left">
-          { this.makeCedulaForm() }
+        <div className='top'>
+          <div className="left">
+            { this.makeGeneralForm() }
+            { this.makeDetallesForm() }
+          </div>
+          <div className="right">
+            { this.makeGeomecanicaForm() }
+          </div>
         </div>
-        <div className="right">
-          { this.makeGeneralForm() }
-          { this.makeDetallesForm() }
+        <div className='bot'>
+          <div style={{color: 'red'}}>TODO: add cedula table</div>
         </div>
       </div>
     )
@@ -104,6 +134,7 @@ import { connect } from 'react-redux'
 
 const mapStateToProps = state => ({
   formData: state.get('propuestaAcido'),
+  pozoFormData: state.get('fichaTecnicaDelPozo')
 })
 
 const mapDispatchToProps = dispatch => ({
@@ -131,6 +162,14 @@ const mapDispatchToProps = dispatch => ({
   setVolumenSistemaDivergente: val => dispatch(setVolumenSistemaDivergente(val)),
   setVolumenDesplazamientoLiquido: val => dispatch(setVolumenDesplazamientoLiquido(val)),
   setVolumenDesplazamientoGelLineal: val => dispatch(setVolumenDesplazamientoGelLineal(val)),
+
+  setModuloYoungArena: val => dispatch(setModuloYoungArena(val)),
+  setModuloYoungLutitas: val => dispatch(setModuloYoungLutitas(val)),
+  setRelacPoissonArena: val => dispatch(setRelacPoissonArena(val)),
+  setRelacPoissonLutatas: val => dispatch(setRelacPoissonLutatas(val)),
+  setGradienteDeFractura: val => dispatch(setGradienteDeFractura(val)),
+  setDensidadDeDisparos: val => dispatch(setDensidadDeDisparos(val)),
+  setDiametroDeDisparos: val => dispatch(setDiametroDeDisparos(val)),
 })
 
 export default connect(mapStateToProps, mapDispatchToProps)(PropuestaDeAcido)

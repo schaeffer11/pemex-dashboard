@@ -692,7 +692,6 @@ estCostMinifrac, estCostBacheNeutralizador, estCostProtectorDeArbol, estCostApun
     objetivoYAlcancesIntervencion = objetivoYAlcancesIntervencion.toJS()
     let { tipoDeIntervenciones } = objetivoYAlcancesIntervencion
 
-    let title = null
     let form = null
 
 

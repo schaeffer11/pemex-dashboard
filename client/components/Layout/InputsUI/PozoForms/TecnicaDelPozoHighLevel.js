@@ -3,7 +3,7 @@ import autobind from 'autobind-decorator'
 import { InputRow, InputRowUnitless, InputRowSelectUnitless } from '../../Common/InputRow'
 import Select from 'react-select'
 import { connect } from 'react-redux'
-import { setSubdireccion, setBloque, setActivo, setCampo, setPozo, setFormacion } from '../../../../redux/actions/pozo'
+import { setSubdireccion, setActivo, setCampo, setPozo, setFormacion } from '../../../../redux/actions/pozo'
 
 @autobind class TechnicaDelPozoHighLevel extends Component {
   constructor(props) {
@@ -24,14 +24,14 @@ import { setSubdireccion, setBloque, setActivo, setCampo, setPozo, setFormacion 
   }
 
   handleSelectSubdireccion(val) {
-    let { subdireccion, setSubdireccion, setBloque } = this.props
+    let { subdireccion, setSubdireccion, setActivo } = this.props
 
     if (subdireccion !== val.value) {
       setSubdireccion(val.value)
-      setBloque('')   
+      setActivo('')   
     }
   }
-
+  
   handleSelectFormacion(val) {
     let { formacion, setFormacion } = this.props
 
@@ -40,10 +40,10 @@ import { setSubdireccion, setBloque, setActivo, setCampo, setPozo, setFormacion 
     }
   }
 
-  handleSelectBloque(val) {
-    let { setBloque } = this.props
+  handleSelectActivo(val) {
+    let { setActivo } = this.props
 
-    setBloque(val.value)
+    setActivo(val.value)
   }
 
   containsErrors(){
@@ -51,7 +51,7 @@ import { setSubdireccion, setBloque, setActivo, setCampo, setPozo, setFormacion 
     const errors = forms.get('pozoFormError')
 
     var foundErrors = errors.find(error => {
-      return ['subdireccion', 'bloque', 'activo', 'campo', 'pozo', 'formacion'].includes(error.field)
+      return ['subdireccion', 'activo', 'campo', 'pozo', 'formacion'].includes(error.field)
     })
 
     foundErrors = foundErrors === undefined ? false : true
@@ -69,7 +69,7 @@ import { setSubdireccion, setBloque, setActivo, setCampo, setPozo, setFormacion 
     formData = formData.toJS()
     forms = forms.toJS()
 
-    let { subdireccion, bloque, activo, campo, pozo, formacion } = formData
+    let { subdireccion, activo, campo, pozo, formacion } = formData
     const errors = forms.pozoFormError
 
     let subdireccionOptions = [
@@ -80,7 +80,7 @@ import { setSubdireccion, setBloque, setActivo, setCampo, setPozo, setFormacion 
       {label: 'Subdirección de producción Bloques Norte', value: 'NORTE'},
     ]
 
-    let bloqueOptionsMap = {
+    let activoOptionsMap = {
       'SETE': [
         {label: 'Gerencia de Producción (GP)', value: 'GP'}
       ],
@@ -116,15 +116,14 @@ import { setSubdireccion, setBloque, setActivo, setCampo, setPozo, setFormacion 
       {label: 'Eoceno', value: 'eoceno'},
     ]
 
-    let bloqueOptions = subdireccion ? bloqueOptionsMap[subdireccion] : []
+    let activoOptions = subdireccion ? activoOptionsMap[subdireccion] : []
 
     return (
       <form className="form tecnica-del-pozo-high-level">
         <div className='main-form'>
 
           <InputRowSelectUnitless header='Subdirección' name="subdireccion" value={subdireccion} options={subdireccionOptions} callback={this.handleSelectSubdireccion} errors={errors} />
-          <InputRowSelectUnitless header='Bloque' name="bloque" value={bloque} options={bloqueOptions} callback={this.handleSelectBloque} errors={errors} />
-          <InputRowUnitless header="Activo" name="activo" value={activo} onChange={setActivo} name='activo' errors={errors} />
+          <InputRowSelectUnitless header='Activo' name="activo" value={activo} options={activoOptions} callback={this.handleSelectActivo} errors={errors} />
           <InputRowUnitless header="Campo" value={campo} onChange={setCampo} name='campo' errors={errors} />
           <InputRowUnitless header="Pozo" value={pozo} onChange={setPozo} name='pozo' errors={errors} />
           <InputRowSelectUnitless header="Formación" value={formacion} options={formacionOptions} callback={this.handleSelectFormacion} name='formacion' errors={errors} />
@@ -146,7 +145,6 @@ const mapStateToProps = state => ({
 
 const mapDispatchToProps = dispatch => ({
   setSubdireccion: val => dispatch(setSubdireccion(val)), 
-  setBloque: val => dispatch(setBloque(val)), 
   setActivo: val => dispatch(setActivo(val)), 
   setCampo: val => dispatch(setCampo(val)), 
   setPozo: val => dispatch(setPozo(val)), 

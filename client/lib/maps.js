@@ -38,7 +38,7 @@ export const pagesPozo = {
       tecnicaDelPozoHighLevel: {
         key: 'tecnicaDelPozoHighLevel',
         form: <TecnicaDelPozoHighLevel />,
-        title: 'Ficha Tecnica del Pozo'
+        title: 'Overview'
       },
       tecnicaDelPozo: {
         key: 'tecnicaDelPozo',
