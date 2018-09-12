@@ -53,7 +53,6 @@ app.get('/deleteobj', async (req, res) => {
   res.send('done')
 })
 
-<<<<<<< HEAD
 app.post('/inputTest', async (req, res) => {
   console.log('what are we here?', req.body)
   const allKeys = Object.keys(req.body)
@@ -70,8 +69,6 @@ app.post('/inputTest', async (req, res) => {
   }
 })
 
-=======
->>>>>>> cae6827e285dba8f982d9d35dd86792d5b5dbd61
 app.post('/testing', (req, res) => {
   // console.log('this is about to get fucked', req.body)
   const buf = Buffer.from(req.body.file, 'base64')

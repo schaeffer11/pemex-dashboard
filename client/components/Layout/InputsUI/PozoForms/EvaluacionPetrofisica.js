@@ -304,10 +304,6 @@ let mudLossColumns = [
     e.preventDefault()
     let { files } = e.target
     let localImgUrl = window.URL.createObjectURL(files[0])
-<<<<<<< HEAD
-=======
-    console.log(localImgUrl)
->>>>>>> cae6827e285dba8f982d9d35dd86792d5b5dbd61
 
     setImgURL(localImgUrl)
   }

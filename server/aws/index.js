@@ -31,12 +31,7 @@ export const deleteObject = Key => new Promise((resolve, reject) => {
   })
 })
 
-<<<<<<< HEAD
 export const addObject = (buf, Key) => new Promise((resolve, reject) => {
-=======
-export const addObject = (buf) => {
-  const Key = 'some_test_key'
->>>>>>> cae6827e285dba8f982d9d35dd86792d5b5dbd61
   const params = {
     Bucket: 'qdca-generated-content',
     Key,
@@ -46,17 +41,9 @@ export const addObject = (buf) => {
   }
   s3.putObject(params, (err, data) => {
     if (err) {
-<<<<<<< HEAD
       reject(err)
     } else {
       resolve({ Key, data })
     }
   })
 })
-=======
-      console.log('da error', err)
-    }
-    console.log('uploaded something', params.Key, data)
-  })
-}
->>>>>>> cae6827e285dba8f982d9d35dd86792d5b5dbd61
