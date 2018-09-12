@@ -90,7 +90,7 @@ const resultadoOptions = [
   }
 
   renderEditable(cellInfo) {
-    let { formData, pruebasDeLaboratorio, setPruebasDeLaboratorioData } = this.props
+    let { pruebasDeLaboratorio, setPruebasDeLaboratorioData } = this.props
     pruebasDeLaboratorio = pruebasDeLaboratorio.toJS()
     let { pruebasDeLaboratorioData } = pruebasDeLaboratorio
 
@@ -109,7 +109,7 @@ const resultadoOptions = [
   }
 
   addNewRow(event) {
-    let { formData, pruebasDeLaboratorio, setPruebasDeLaboratorioData } = this.props
+    let { pruebasDeLaboratorio, setPruebasDeLaboratorioData } = this.props
     pruebasDeLaboratorio = pruebasDeLaboratorio.toJS()
     let { pruebasDeLaboratorioData } = pruebasDeLaboratorio
 
@@ -157,8 +157,7 @@ const resultadoOptions = [
   }
 
   makeSistemaTable(index) {
-    let { formData, pruebasDeLaboratorio } = this.props
-    formData = formData.toJS()
+    let { pruebasDeLaboratorio } = this.props
     pruebasDeLaboratorio = pruebasDeLaboratorio.toJS()
     let { pruebasDeLaboratorioData } = pruebasDeLaboratorio
 
@@ -292,9 +291,7 @@ const resultadoOptions = [
 
 
   render() {
-    let { setObervacionesPruebasLabApuntalado, formData, pruebasDeLaboratorio } = this.props
-    formData = formData.toJS()
-    let { obervacionesPruebasLabApuntalado } = formData
+    let { pruebasDeLaboratorio } = this.props
     pruebasDeLaboratorio = pruebasDeLaboratorio.toJS()
     let { pruebasDeLaboratorioData } = pruebasDeLaboratorio
 
@@ -310,7 +307,7 @@ const resultadoOptions = [
 
 
 const mapStateToProps = state => ({
-  formData: state.get('pruebasDeLaboratorioEstimulacion'),
+  // formData: state.get('pruebasDeLaboratorioEstimulacion'),
   pruebasDeLaboratorio: state.get('pruebasDeLaboratorio')
 })
 
