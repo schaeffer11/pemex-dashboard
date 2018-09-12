@@ -24,7 +24,14 @@ const initialState = Map({
     volumenSistemaReactivo: '',
     volumenSistemaDivergente: '',
     volumenDesplazamientoLiquido: '',
-    volumenDesplazamientoGelLineal: '',    
+    volumenDesplazamientoGelLineal: '',  
+        moduloYoungArena: '',
+    moduloYoungLutitas: '',
+    relacPoissonArena: '',
+    relacPoissonLutatas: '',
+    gradienteDeFractura: '',
+    densidadDeDisparos: '',
+    diametroDeDisparos: '',  
 })
 
 
@@ -78,7 +85,20 @@ const propuestaAcido = (state = initialState, action) => {
         return state.set('volumenDesplazamientoLiquido', fromJS(action.value))
     case 'set_volumenDesplazamientoGelLineal':
         return state.set('volumenDesplazamientoGelLineal', fromJS(action.value))
-   
+    case 'set_moduloYoungArena':
+        return state.set('moduloYoungArena', fromJS(action.value))
+    case 'set_moduloYoungLutitas':
+        return state.set('moduloYoungLutitas', fromJS(action.value))
+    case 'set_relacPoissonArena':
+        return state.set('relacPoissonArena', fromJS(action.value))
+    case 'set_relacPoissonLutatas':
+        return state.set('relacPoissonLutatas', fromJS(action.value))
+    case 'set_gradienteDeFractura':
+        return state.set('gradienteDeFractura', fromJS(action.value))
+    case 'set_densidadDeDisparos':
+        return state.set('densidadDeDisparos', fromJS(action.value))
+    case 'set_diametroDeDisparos':
+        return state.set('diametroDeDisparos', fromJS(action.value))
     default:
       return state
   }

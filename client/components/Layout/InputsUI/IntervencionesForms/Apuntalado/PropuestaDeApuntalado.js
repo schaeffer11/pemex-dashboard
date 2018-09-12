@@ -1,10 +1,8 @@
 import React, { Component } from 'react'
 import autobind from 'autobind-decorator'
 import { InputRow, InputRowUnitless, InputRowSelectUnitless } from '../../../Common/InputRow'
-import { setEtapa, setSistema, setTipoDeApuntalante, setConcentraciDeApuntalante, setVolLiquid, setGastoN2, setGastoLiqudo, setGastoEnFondo, setCalidad, setVolN2, setVolLiquidoAcum, setVolN2Acum, setRelN2Liq, setTiempo, setIntervalo, setLongitudDeIntervalo, setVolAparejo, setCapacidadTotalDelPozo, setVolumenPrecolchonN2, setVolumenDeApuntalante, setVolumenDeGelDeFractura, setVolumenDesplazamiento, setVolumenTotalDeLiquido } from '../../../../../redux/actions/intervencionesApuntalado'
+import { setModuloYoungArena, setModuloYoungLutitas, setRelacPoissonArena, setRelacPoissonLutatas, setGradienteDeFractura, setDensidadDeDisparos, setDiametroDeDisparos, setEtapa, setSistema, setTipoDeApuntalante, setConcentraciDeApuntalante, setVolLiquid, setGastoN2, setGastoLiqudo, setGastoEnFondo, setCalidad, setVolN2, setVolLiquidoAcum, setVolN2Acum, setRelN2Liq, setTiempo, setIntervalo, setLongitudDeIntervalo, setVolAparejo, setCapacidadTotalDelPozo, setVolumenPrecolchonN2, setVolumenDeApuntalante, setVolumenDeGelDeFractura, setVolumenDesplazamiento, setVolumenTotalDeLiquido } from '../../../../../redux/actions/intervencionesApuntalado'
 import { connect } from 'react-redux'
-
-import { setModuloYoungArena, setModuloYoungLutitas, setRelacPoissonArena, setRelacPoissonLutatas, setGradienteDeFractura, setDensidadDeDisparos, setDiametroDeDisparos } from '../../../../../redux/actions/pozo'
 
 
 @autobind class PropuestaDeApuntalado extends Component {
@@ -85,9 +83,9 @@ import { setModuloYoungArena, setModuloYoungLutitas, setRelacPoissonArena, setRe
   }
 
   makeGeomecanicaForm() {
-    let { setModuloYoungArena, setModuloYoungLutitas, setRelacPoissonArena, setRelacPoissonLutatas, setGradienteDeFractura, setDensidadDeDisparos, setDiametroDeDisparos, pozoFormData } = this.props
-    pozoFormData = pozoFormData.toJS()
-    let { moduloYoungArena, moduloYoungLutitas, relacPoissonArena, relacPoissonLutatas, gradienteDeFractura, densidadDeDisparos, diametroDeDisparos } = pozoFormData
+    let { setModuloYoungArena, setModuloYoungLutitas, setRelacPoissonArena, setRelacPoissonLutatas, setGradienteDeFractura, setDensidadDeDisparos, setDiametroDeDisparos, formData } = this.props
+    formData = formData.toJS()
+    let { moduloYoungArena, moduloYoungLutitas, relacPoissonArena, relacPoissonLutatas, gradienteDeFractura, densidadDeDisparos, diametroDeDisparos } = formData
     
     return (
       <div className='geomecanica-form' >
@@ -129,7 +127,6 @@ import { setModuloYoungArena, setModuloYoungLutitas, setRelacPoissonArena, setRe
 
 const mapStateToProps = state => ({
   formData: state.get('propuestaApuntalado'),
-  pozoFormData: state.get('fichaTecnicaDelPozo')
 })
 
 const mapDispatchToProps = dispatch => ({

@@ -22,13 +22,6 @@ const initialState = Map({
 	profEmpacador: '',
 	profSensorPYT: '',
 	tipoDeSap: '',
-	moduloYoungArena: '',
-	moduloYoungLutitas: '',
-	relacPoissonArena: '',
-	relacPoissonLutatas: '',
-	gradienteDeFractura: '',
-	densidadDeDisparos: '',
-	diametroDeDisparos: '',
     historialIntervencionesData: [{
         fecha: '',
         intervenciones: ''
@@ -79,20 +72,6 @@ const fichaTecnicaDelPozo = (state = initialState, action) => {
     	return state.set('profSensorPYT', fromJS(action.value))
     case 'set_tipoDeSap':
     	return state.set('tipoDeSap', fromJS(action.value))
-    case 'set_moduloYoungArena':
-    	return state.set('moduloYoungArena', fromJS(action.value))
-    case 'set_moduloYoungLutitas':
-    	return state.set('moduloYoungLutitas', fromJS(action.value))
-    case 'set_relacPoissonArena':
-    	return state.set('relacPoissonArena', fromJS(action.value))
-    case 'set_relacPoissonLutatas':
-    	return state.set('relacPoissonLutatas', fromJS(action.value))
-    case 'set_gradienteDeFractura':
-    	return state.set('gradienteDeFractura', fromJS(action.value))
-    case 'set_densidadDeDisparos':
-    	return state.set('densidadDeDisparos', fromJS(action.value))
-    case 'set_diametroDeDisparos':
-    	return state.set('diametroDeDisparos', fromJS(action.value))
     case 'set_historialIntervencionesData':
         return state.set('historialIntervencionesData', fromJS(action.value))
     default:

@@ -29,13 +29,6 @@ export const setAparejoDeProduccion = value => ({ type: 'set_aparejoDeProduccion
 export const setProfEmpacador = value => ({ type: 'set_profEmpacador', value})
 export const setProfSensorPYT = value => ({ type: 'set_profSensorPYT', value})
 export const setTipoDeSap = value => ({ type: 'set_tipoDeSap', value})
-export const setModuloYoungArena = value => ({ type: 'set_moduloYoungArena', value})
-export const setModuloYoungLutitas = value => ({ type: 'set_moduloYoungLutitas', value})
-export const setRelacPoissonArena = value => ({ type: 'set_relacPoissonArena', value})
-export const setRelacPoissonLutatas = value => ({ type: 'set_relacPoissonLutatas', value})
-export const setGradienteDeFractura = value => ({ type: 'set_gradienteDeFractura', value})
-export const setDensidadDeDisparos = value => ({ type: 'set_densidadDeDisparos', value})
-export const setDiametroDeDisparos = value => ({ type: 'set_diametroDeDisparos', value})
 export const setHistorialIntervencionesData = value => ({ type: 'set_historialIntervencionesData', value})
 
 

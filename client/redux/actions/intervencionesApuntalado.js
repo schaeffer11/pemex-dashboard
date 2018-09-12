@@ -21,7 +21,13 @@ export const setVolumenDeApuntalante = value => ({ type: 'set_volumenDeApuntalan
 export const setVolumenDeGelDeFractura = value => ({ type: 'set_volumenDeGelDeFractura', value})
 export const setVolumenDesplazamiento = value => ({ type: 'set_volumenDesplazamiento', value})
 export const setVolumenTotalDeLiquido = value => ({ type: 'set_volumenTotalDeLiquido', value})
-
+export const setModuloYoungArena = value => ({ type: 'set_moduloYoungArena', value})
+export const setModuloYoungLutitas = value => ({ type: 'set_moduloYoungLutitas', value})
+export const setRelacPoissonArena = value => ({ type: 'set_relacPoissonArena', value})
+export const setRelacPoissonLutatas = value => ({ type: 'set_relacPoissonLutatas', value})
+export const setGradienteDeFractura = value => ({ type: 'set_gradienteDeFractura', value})
+export const setDensidadDeDisparos = value => ({ type: 'set_densidadDeDisparos', value})
+export const setDiametroDeDisparos = value => ({ type: 'set_diametroDeDisparos', value})
 
 export const setContenidoDeAceite = value => ({ type: 'set_contenidoDeAceite', value})
 export const setContenidoDeAgua = value => ({ type: 'set_contenidoDeAgua', value})
