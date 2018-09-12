@@ -299,7 +299,7 @@ const resultadoOptions = [
     let { pruebasDeLaboratorioData } = pruebasDeLaboratorio
 
     return pruebasDeLaboratorioData.map((form, i) =>
-      <div className="form pruebas-de-laboratorio-estimulacion-extra">
+      <div className="form pruebas-de-laboratorio-estimulacion-extra" key={Math.random()}>
           { this.makeSistemaTable(i) }
           <TextAreaUnitless header="Observaciones" name='obervaciones' className={'obervaciones'} value={form.obervaciones} onChange={this.updateValue} index={i}/> 
           { this.makeImageInput(i) }

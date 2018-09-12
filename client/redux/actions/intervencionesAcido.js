@@ -64,7 +64,7 @@ export const setConductividad = value => ({ type: 'set_conductividad', value})
 export const setFcd = value => ({ type: 'set_fcd', value})
 export const setPresionNeta = value => ({ type: 'set_presionNeta', value})
 export const setEficienciaDeFluidoDeFractura = value => ({ type: 'set_eficienciaDeFluidoDeFractura', value})
-
+export const setEvidenceSimulationAcidoImgURL = value => ({ type: 'set_evidenceSimulationAcidoImgURL', value})
 
 export const setEstIncEstrangulador = value => ({ type: 'set_estIncEstrangulador', value})
 export const setEstIncPtp = value => ({ type: 'set_estIncPtp', value})

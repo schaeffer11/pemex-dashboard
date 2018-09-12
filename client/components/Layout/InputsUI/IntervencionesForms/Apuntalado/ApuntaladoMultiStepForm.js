@@ -72,11 +72,11 @@ import EstimacionCostosApuntalado from './EstimacionCostosApuntalado'
                  }
               )}
           </div>
-          <div class="content">
+          <div className="content">
             <div className="tab-title">
               { title }
-              <button class="cta next" onClick={this.handleNextSubtab}>Siguiente</button>
-              <button class="cta prev" onClick={this.handlePrevSubtab}>Anterior</button> 
+              <button className="cta next" onClick={this.handleNextSubtab}>Siguiente</button>
+              <button className="cta prev" onClick={this.handlePrevSubtab}>Anterior</button> 
             </div>
 
             {this.forms[this.state.currentStep].content}

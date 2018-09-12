@@ -355,6 +355,24 @@ const resultadoOptions = [
     )
   }
 
+  makeImageInput(index) {
+    let { pruebasDeLaboratorio } = this.props
+    pruebasDeLaboratorio = pruebasDeLaboratorio.toJS()
+    let { pruebasDeLaboratorioData } = pruebasDeLaboratorio
+
+    let imageURL = pruebasDeLaboratorioData[index].imageURL
+
+    return (
+      <div style={{marginBot: '20px'}}>
+        <div className='header'>
+          Upload Lab Evidence (spanish)
+        </div>
+        <input type='file' name='imageURL' accept="image/*" onChange={(e) => this.handleFileUpload(e, this.updateValue)} index={index}></input>
+        {imageURL ? <img className='img-preview' src={imageURL}></img> : null }
+      </div>
+    )
+  }
+  
   render() {
     let { setObervacionesPruebasLabApuntalado, formData, pruebasDeLaboratorio } = this.props
     formData = formData.toJS()
@@ -363,7 +381,7 @@ const resultadoOptions = [
     let { pruebasDeLaboratorioData } = pruebasDeLaboratorio
 
     return pruebasDeLaboratorioData.map((form, i) => 
-      <div className="form pruebas-de-laboratorio-apuntalado-extra">
+      <div key={Math.random()} className="form pruebas-de-laboratorio-apuntalado-extra">
         <div className='top'>
             <div className='left'>
               { this.makeCaracterizacionForm(i) }
@@ -376,6 +394,7 @@ const resultadoOptions = [
         <div className='bot'>
           { this.makeSistemaTable(i) }
           <TextAreaUnitless header="Observaciones" name='' className={'obervaciones'}/>
+          { this.makeImageInput(i) }
         </div>
       </div>
     )

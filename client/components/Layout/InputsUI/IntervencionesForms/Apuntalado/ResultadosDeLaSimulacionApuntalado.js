@@ -1,7 +1,7 @@
 import React, { Component } from 'react'
 import autobind from 'autobind-decorator'
 import { InputRow, InputRowUnitless, InputRowSelectUnitless, TextAreaUnitless } from '../../../Common/InputRow'
-import { setLongitudApuntalada, setAlturaTotalDeFractura, setAnchoPromedio, setConcentractionAreal, setConductividad, setFcd, setPresionNeta, setEficienciaDeFluidoDeFractura } from '../../../../../redux/actions/intervencionesApuntalado'
+import { setEvidenceSimulationApuntaladoImgURL, setLongitudApuntalada, setAlturaTotalDeFractura, setAnchoPromedio, setConcentractionAreal, setConductividad, setFcd, setPresionNeta, setEficienciaDeFluidoDeFractura } from '../../../../../redux/actions/intervencionesApuntalado'
 import { connect } from 'react-redux'
 
 @autobind class ResultadosDeLaSimulacionApuntalado extends Component {
@@ -40,14 +40,43 @@ import { connect } from 'react-redux'
     )
   }
 
+  handleFileUpload(e, setURL) {
+    let { files } = e.target
+
+    console.log(files)
+
+    let localImgUrl = window.URL.createObjectURL(files[0])
+
+    setURL(localImgUrl)
+  }
+
+  makeEvidenceSimulationInput() {
+    let { formData, setEvidenceSimulationApuntaladoImgURL } = this.props
+    formData = formData.toJS()
+    let { evidenceSimulationApuntaladoImgURL } = formData
+    return (
+      <div style={{marginBot: '20px'}}>
+        <div className='header'>
+          Upload Evidence of Simulation (sim results) (spanish)
+        </div>
+        <input type='file' accept="image/*"  onChange={(e) => this.handleFileUpload(e, setEvidenceSimulationApuntaladoImgURL)} multiple></input>
+        {evidenceSimulationApuntaladoImgURL ? <img className='img-preview' src={evidenceSimulationApuntaladoImgURL}></img> : null }
+      </div>
+    )
+  }
+
+
 
   render() {
 
     return (
       <div className="form resultados-de-simulacion-apuntalado">
+        <div className='left'>
           { this.makeResultForm() }
-          <div style={{color: 'red'}}>TODO: agregar opcion para subir evidencia de simulacion (add evidence of simulation)</div>
-
+        </div>
+        <div className='right'>
+          { this.makeEvidenceSimulationInput() }
+        </div>
       </div>
     )
   }
@@ -67,6 +96,7 @@ const mapDispatchToProps = dispatch => ({
   setFcd: val => dispatch(setFcd(val)),
   setPresionNeta: val => dispatch(setPresionNeta(val)),
   setEficienciaDeFluidoDeFractura: val => dispatch(setEficienciaDeFluidoDeFractura(val)),
+  setEvidenceSimulationApuntaladoImgURL: val => dispatch(setEvidenceSimulationApuntaladoImgURL(val)),
 })
 
 export default connect(mapStateToProps, mapDispatchToProps)(ResultadosDeLaSimulacionApuntalado)

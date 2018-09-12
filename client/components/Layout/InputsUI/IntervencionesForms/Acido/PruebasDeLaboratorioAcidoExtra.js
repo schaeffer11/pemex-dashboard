@@ -392,7 +392,7 @@ const resultadoOptions = [
     let { pruebasDeLaboratorioData } = pruebasDeLaboratorio
 
     return pruebasDeLaboratorioData.map((form, i) =>      
-      <div className="form pruebas-de-laboratorio-apuntalado-extra">
+      <div className="form pruebas-de-laboratorio-apuntalado-extra" key={Math.random()}>
         <div className='top'>
           <div className='left'>
           { this.makeCaracterizacionForm(i) }
