@@ -350,6 +350,14 @@ const resultadoOptions = [
       </div>
     )
   }
+  
+  handleFileUpload(e, setURL) {
+    e.preventDefault()
+    let { files } = e.target
+    let localImgUrl = window.URL.createObjectURL(files[0])
+
+    setURL(localImgUrl, e)
+  }
 
   makeImageInput(index) {
     let { pruebasDeLaboratorio } = this.props
