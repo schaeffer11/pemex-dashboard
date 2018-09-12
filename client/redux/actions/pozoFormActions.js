@@ -1,24 +1,87 @@
 import axios from 'axios'
 import {validatePozo} from '../../../common/utils/validation/pozoValidator'
+import Immutable from 'immutable'
+
+function bufferToBase64(buf) {
+  console.log('buffer to 64')
+  var binstr = Array.prototype.map.call(buf, function (ch) {
+      return String.fromCharCode(ch);
+  }).join('');
+  return btoa(binstr);
+}
+
+function getBase64FromURL(imgURL) {
+  return new Promise((resolve, reject) => {
+    const xhr = new XMLHttpRequest()
+    xhr.open('GET', imgURL, true)
+    xhr.responseType = 'arraybuffer'
+  
+    xhr.onload = function(e) {
+      if (this.status == 200) {
+        var uInt8Array = new Uint8Array(this.response);
+        var byte3 = uInt8Array[4]; 
+        console.log('uint8', uInt8Array)
+        const base64 = bufferToBase64(uInt8Array)
+        resolve(base64)
+      } else {
+        reject('no image')
+      }
+    }
+    xhr.send()
+  })
+}
 
 export function submitForm(fields) {
-  return (dispatch, getState) => {
-    const data = getFieldsAsDataObject(fields)
-    const errors = validateForm(data)
-
-    dispatch({type: 'POZO_FORM_SUBMIT'})
-    if(errors.length === 0){
-      return postForm(data)
-       .then(
-          res  => dispatch({type: 'POZO_FORM_SUCCESS', response: res}),
-          error => dispatch({type: 'POZO_FORM_ERROR', error: error})
-       )
-    }else {
-      dispatch({type: 'POZO_FORM_ERROR', errors: errors})
-      dispatch({type: 'POZO_FORM_SUCCESS', response: ""})
+  return async (dispatch, getState) => {
+    console.log('heheheheh', fields)
+    const ignore = {
+      app: true,
+      user: true,
+      router: true,
     }
+    const errors = []
+    const formData = new FormData()
+    const convertedFields = fields.toJS()
+    const allKeys = Object.keys(convertedFields)
+
+    for(let k of allKeys) {
+      if(!ignore[k]) {
+        const innerObj = convertedFields[k]
+        if (innerObj.hasOwnProperty('imgURL')) {
+          console.log('i need to do something here', k)
+          const img = await getBase64FromURL(innerObj.imgURL)
+          innerObj.img = img
+        }
+        formData.append(k, JSON.stringify(innerObj))
+      }
+    }
+
+    console.log('done')
+    fetch('/api/inputTest', {
+      method: 'POST',
+      body: formData,
+    })
   }
 }
+
+// export function submitForm(fields) {
+//   return (dispatch, getState) => {
+//     const data = getFieldsAsDataObject(fields)
+//     const errors = validateForm(data)
+
+//     dispatch({type: 'POZO_FORM_SUBMIT'})
+//     if(errors.length === 0){
+//       return postForm(data)
+//        .then(
+//           res  => dispatch({type: 'POZO_FORM_SUCCESS', response: res}),
+//           error => dispatch({type: 'POZO_FORM_ERROR', error: error})
+//        )
+//     }else {
+//       dispatch({type: 'POZO_FORM_ERROR', errors: errors})
+//       dispatch({type: 'POZO_FORM_SUCCESS', response: ""})
+//     }
+//   }
+// }
 
 function validateForm(data){
     let errors =  []

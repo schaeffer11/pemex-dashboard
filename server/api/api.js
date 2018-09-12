@@ -53,6 +53,22 @@ app.get('/deleteobj', async (req, res) => {
   res.send('done')
 })
 
+app.post('/inputTest', async (req, res) => {
+  console.log('what are we here?', req.body)
+  const allKeys = Object.keys(req.body)
+  const { pozo } = JSON.parse(req.body.fichaTecnicaDelPozo)
+  for(let key of allKeys) {
+    const innerObj = JSON.parse(req.body[key])
+    if (innerObj.img) {
+      console.log('ok i have something here')
+      const buf = Buffer.from(innerObj.img, 'base64')
+      const Key = `${pozo}.${key}`
+      const t = await addObject(buf, Key).catch(reason => console.log('something went wrong', reason))
+      console.log('uploaded', t)
+    }
+  }
+})
+
 app.post('/testing', (req, res) => {
   // console.log('this is about to get fucked', req.body)
   const buf = Buffer.from(req.body.file, 'base64')
