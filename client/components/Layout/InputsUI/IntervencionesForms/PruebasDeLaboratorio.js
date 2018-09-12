@@ -54,7 +54,7 @@ const options = [
 
     pruebasDeLaboratorioData[0].length = 2
 
-    setPruebasDeLaboratorioData([...pruebasDeLaboratorioData, {index: pruebasDeLaboratorioData.length, type: '', fechaMuestreo: '', fechaPrueba: '', compania: '', superviso: '', length: pruebasDeLaboratorioData.length + 1, 'edited': false}])
+    setPruebasDeLaboratorioData([...pruebasDeLaboratorioData, {index: pruebasDeLaboratorioData.length, type: '', fechaMuestreo: '', fechaPrueba: '', compania: '', superviso: '', length: pruebasDeLaboratorioData.length + 1}])
   }
 
 

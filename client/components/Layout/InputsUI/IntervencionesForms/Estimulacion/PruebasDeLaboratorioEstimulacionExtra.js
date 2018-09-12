@@ -1,6 +1,7 @@
 import React, { Component } from 'react'
 import autobind from 'autobind-decorator'
 import { InputRow, InputRowUnitless, InputRowSelectUnitless, TextAreaUnitless } from '../../../Common/InputRow'
+import { setPruebasDeLaboratorioData } from '../../../../../redux/actions/intervencionesEstimulacion'
 import { setLabEvidenceImgURL } from '../../../../../redux/actions/intervencionesEstimulacion'
 import { connect } from 'react-redux'
 import ReactTable from 'react-table'
@@ -36,6 +37,33 @@ const resultadoOptions = [
         resultado: '',
       }]
     }
+
+    let { setPruebasDeLaboratorioData, pruebasDeLaboratorio } = props
+    pruebasDeLaboratorio = pruebasDeLaboratorio.toJS()
+    let { pruebasDeLaboratorioData } = pruebasDeLaboratorio
+
+    let pruebas = []
+
+    pruebasDeLaboratorioData.map((prueba, i) => {
+      if(!prueba.hasOwnProperty('edited')){
+        pruebas.push({ ...prueba,
+          edited: true,
+          obervaciones: '',
+          imageURL:'',
+          sistemasTable: [{
+            sistem: '',
+            tiempoRompimiento: '',
+            interfase: '',
+            solidosFiltrar: '',
+            resultado: '',
+          }]
+        })
+      }else {
+        pruebas.push(prueba)
+      }
+
+      setPruebasDeLaboratorioData(pruebas)
+    })
   }
 
 
@@ -47,11 +75,24 @@ const resultadoOptions = [
 
   }
 
+  updateValue(value, event){
+    if(event === undefined)
+      return
+
+    let { setPruebasDeLaboratorioData, pruebasDeLaboratorio } = this.props
+    pruebasDeLaboratorio = pruebasDeLaboratorio.toJS()
+
+    let index = event.target.getAttribute('index')
+    let pruebas = {...pruebasDeLaboratorio}
+    pruebas.pruebasDeLaboratorioData[index][event.target.name] = value
+
+    setPruebasDeLaboratorioData(pruebas.pruebasDeLaboratorioData)
+  }
+
   renderEditable(cellInfo) {
-    let { data } = this.state
-    // let { setLayerData, formData } = this.props
-    // formData = formData.toJS()
-    // let { layerData } = formData
+    let { formData, pruebasDeLaboratorio, setPruebasDeLaboratorioData } = this.props
+    pruebasDeLaboratorio = pruebasDeLaboratorio.toJS()
+    let { pruebasDeLaboratorioData } = pruebasDeLaboratorio
 
     return (
       <div
@@ -59,35 +100,28 @@ const resultadoOptions = [
         contentEditable
         suppressContentEditableWarning
         onBlur={e => {
-          let copy = JSON.parse(JSON.stringify(data))
-          copy[cellInfo.index][cellInfo.column.id] = e.target.innerHTML;
-          // layerData[cellInfo.index][cellInfo.column.id] = e.target.innerHTML;
-
-          this.setState({
-            data: copy
-          })
-          // setLayerData(layerData)
-
-        }}>
-{/*        {layerData[cellInfo.index][cellInfo.column.id]}*/}
+          let copy = JSON.parse(JSON.stringify(pruebasDeLaboratorioData))
+          copy[cellInfo.column.tableIndex]["sistemasTable"][cellInfo.index][cellInfo.column.id] = e.target.innerHTML;
+          setPruebasDeLaboratorioData(copy)
+        }}>{pruebasDeLaboratorioData[cellInfo.column.tableIndex]["sistemasTable"][cellInfo.index][cellInfo.column.id]}
         </div>
     );
   }
 
-  addNewRow() {
-    let { data } = this.state
-    // let { setLayerData, formData } = this.props
-    // formData = formData.toJS()
-    // let { layerData } = formData
+  addNewRow(event) {
+    let { formData, pruebasDeLaboratorio, setPruebasDeLaboratorioData } = this.props
+    pruebasDeLaboratorio = pruebasDeLaboratorio.toJS()
+    let { pruebasDeLaboratorioData } = pruebasDeLaboratorio
 
+    let index = event.target.getAttribute('index')
+    let data = pruebasDeLaboratorioData[index].sistemasTable
     let copy = JSON.parse(JSON.stringify(data))
-    copy[0].length = 2
-    // layerData[0].length = 2
 
-    this.setState({
-      data: ([...copy, {index: copy.length, interval: '', cimaMD: '', baseMD: '', cimaMV: '', baseMV: '', vArc: '', porosity: '', sw: '', dens: '', resis: '', perm: '', length: copy.length + 1}])
-    })
-    // setLayerData([...layerData, {index: layerData.length, interval: '', cimaMD: '', baseMD: '', cimaMV: '', baseMV: '', vArc: '', porosity: '', sw: '', dens: '', resis: '', perm: '', length: layerData.length + 1}])
+    copy[0].length = 2
+
+    let val =  ([...copy, {index: copy.length, sistem: '', tiempoRompimiento: '', interfase: '', solidosFiltrar: '', resultado: '' , length: copy.length + 1}])
+    pruebasDeLaboratorioData[index].sistemasTable = val
+    setPruebasDeLaboratorioData(pruebasDeLaboratorioData)
   }
 
   deleteRow(state, rowInfo, column, instance) {
@@ -122,11 +156,16 @@ const resultadoOptions = [
     }
   }
 
-  makeSistemaTable() {
-    // let { formData } = this.props
-    // formData = formData.toJS()
-    // let { } = formData
-    let { data } = this.state
+  makeSistemaTable(index) {
+    let { formData, pruebasDeLaboratorio } = this.props
+    formData = formData.toJS()
+    pruebasDeLaboratorio = pruebasDeLaboratorio.toJS()
+    let { pruebasDeLaboratorioData } = pruebasDeLaboratorio
+
+    let data = pruebasDeLaboratorioData[index].sistemasTable
+
+    if(data == undefined)
+      return null
 
     let columns = [
       {
@@ -195,6 +234,7 @@ const resultadoOptions = [
 
     columns.forEach(column => {
       column.cell === 'renderEditable' ? column.Cell = this.renderEditable : null
+      column.tableIndex = index
     })
 
 
@@ -217,7 +257,7 @@ const resultadoOptions = [
           />
 
         </div>
-        <button className='new-row-button' onClick={this.addNewRow}> + </button>
+        <button className='new-row-button' index={index} onClick={this.addNewRow}> + </button>
       </div>
     )
   }
@@ -228,20 +268,23 @@ const resultadoOptions = [
     let { files } = e.target
     let localImgUrl = window.URL.createObjectURL(files[0])
 
-    setURL(localImgUrl)
+    setURL(localImgUrl, e)
   }
 
-  makeImageInput() {
-    let { formData, setLabEvidenceImgURL } = this.props
-    formData = formData.toJS()
-    let { labEvidenceImgURL } = formData
+  makeImageInput(index) {
+    let { pruebasDeLaboratorio } = this.props
+    pruebasDeLaboratorio = pruebasDeLaboratorio.toJS()
+    let { pruebasDeLaboratorioData } = pruebasDeLaboratorio
+
+    let imageURL = pruebasDeLaboratorioData[index].imageURL
+
     return (
       <div style={{marginBot: '20px'}}>
         <div className='header'>
           Upload Lab Evidence (spanish)
         </div>
-        <input type='file' accept="image/*" onChange={(e) => this.handleFileUpload(e, setLabEvidenceImgURL)}></input>
-        {labEvidenceImgURL ? <img className='img-preview' src={labEvidenceImgURL}></img> : null }
+        <input type='file' name='imageURL' accept="image/*" onChange={(e) => this.handleFileUpload(e, this.updateValue)} index={index}></input>
+        {imageURL ? <img className='img-preview' src={imageURL}></img> : null }
       </div>
     )
   }
@@ -249,16 +292,17 @@ const resultadoOptions = [
 
 
   render() {
-    // let { setObervacionesPruebasLabApuntalado, formData } = this.props
-    // formData = formData.toJS()
-    // let { obervacionesPruebasLabApuntalado } = formData
+    let { setObervacionesPruebasLabApuntalado, formData, pruebasDeLaboratorio } = this.props
+    formData = formData.toJS()
+    let { obervacionesPruebasLabApuntalado } = formData
+    pruebasDeLaboratorio = pruebasDeLaboratorio.toJS()
+    let { pruebasDeLaboratorioData } = pruebasDeLaboratorio
 
-    return (
+    return pruebasDeLaboratorioData.map((form, i) =>
       <div className="form pruebas-de-laboratorio-estimulacion-extra">
-          { this.makeSistemaTable() }
-          <TextAreaUnitless header="Observaciones" name='' className={'obervaciones'}/> 
-             {/*<TextAreaUnitless header="Observaciones" name='' className={'obervaciones'}  value={obervacionesPruebasLabApuntalado} {onChange={setObervacionesPruebasLabApuntalado}} /> */}
-          { this.makeImageInput() }
+          { this.makeSistemaTable(i) }
+          <TextAreaUnitless header="Observaciones" name='obervaciones' className={'obervaciones'} value={form.obervaciones} onChange={this.updateValue} index={i}/> 
+          { this.makeImageInput(i) }
       </div>
     )
   }
@@ -266,11 +310,13 @@ const resultadoOptions = [
 
 
 const mapStateToProps = state => ({
-  formData: state.get('pruebasDeLaboratorioEstimulacion')
+  formData: state.get('pruebasDeLaboratorioEstimulacion'),
+  pruebasDeLaboratorio: state.get('pruebasDeLaboratorio')
 })
 
 const mapDispatchToProps = dispatch => ({
-    setLabEvidenceImgURL: val => dispatch(setLabEvidenceImgURL(val))
+    setLabEvidenceImgURL: val => dispatch(setLabEvidenceImgURL(val)),
+    setPruebasDeLaboratorioData: val => dispatch(setPruebasDeLaboratorioData(val))
 })
 
 export default connect(mapStateToProps, mapDispatchToProps)(PruebasDeLaboratorioEstimulacionExtra)
