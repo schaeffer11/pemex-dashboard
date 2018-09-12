@@ -46,6 +46,7 @@ tempFiles
 *.bak
 credentials.json
 databases.json
+aws.config.json
 
 # deploy script
 deploy.sh
