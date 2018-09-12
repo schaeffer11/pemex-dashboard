@@ -67,13 +67,13 @@ export const InputRowSelectUnitless = ({ header, name, value, options, callback,
       <div className='label'>
         {header}
       </div>
-      <Select className='input' simpleValue={true} options={options} value={options.find(i=>i.value === value)} onChange={callback} name={name} />
+      <Select className='input' simpleValue={true} options={options} value={options.find(i=>i.value === value)} onChange={callback} name={name} index={index} />
       { errorElements }
     </div>
     )
 }
 
-export const TextAreaUnitless = ({ header, name, unit, className, subheader, value, onChange, errors =[] }) => {
+export const TextAreaUnitless = ({ header, name, unit, className, subheader, value, onChange, index, errors =[] }) => {
   
   let handleChange = (e) => {
     console.log(e.target.value)
@@ -87,7 +87,7 @@ export const TextAreaUnitless = ({ header, name, unit, className, subheader, val
         {subheader ? <br></br>: null}
         {subheader ? subheader : null}
       </div>
-      <textarea type='text' style={{height: '130px'}} value={value} onChange={handleChange} name={name}>
+      <textarea type='text' style={{height: '130px'}} value={value} onChange={handleChange} name={name} index={index}>
       </textarea>
     </div>
     )

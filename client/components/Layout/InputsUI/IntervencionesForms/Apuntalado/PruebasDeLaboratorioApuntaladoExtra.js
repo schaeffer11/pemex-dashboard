@@ -1,7 +1,7 @@
 import React, { Component } from 'react'
 import autobind from 'autobind-decorator'
 import { InputRow, InputRowUnitless, InputRowSelectUnitless, TextAreaUnitless } from '../../../Common/InputRow'
-import { setContenidoDeAceite, setContenidoDeAgua, setContenidoDeEmulsion, setContenidoDeSolidos, setTipoDeSolidos, setDensidadDelAceite, setDensidadDelAgua, setDensidadDeLaEmulsion, setContenidoDeAsfaltenos, setContenidoDeParafinas, setContenidoDeResinas, setIndiceDeEstabilidadDelColoidal, setIndiceDeEstabilidadDelAgua, setPH, setSalinidad, setViscosidadDelAceite, setTipoDeGelLineal, setViscosidadDelGelLineal, setTiempoDeReticulacion, setPHGelLineal, setTiempoDeRompedorDelGel, setTamanoDelApuntalante, setGravedadEspecifica, setEsfericidad, setRedondeo, setTurbidez, setResistencia, setPruebaDeSolubilidadConAcida, setObervacionesPruebasLabApuntalado } from '../../../../../redux/actions/intervencionesApuntalado'
+import { setPruebasDeLaboratorioData } from '../../../../../redux/actions/intervencionesEstimulacion'
 import { connect } from 'react-redux'
 import ReactTable from 'react-table'
 import Select from 'react-select'
@@ -36,6 +36,59 @@ const resultadoOptions = [
         resultado: '',
       }]
     }
+
+    let { setPruebasDeLaboratorioData, pruebasDeLaboratorio } = props
+    pruebasDeLaboratorio = pruebasDeLaboratorio.toJS()
+    let { pruebasDeLaboratorioData } = pruebasDeLaboratorio
+
+    let pruebas = []
+
+    pruebasDeLaboratorioData.map((prueba, i) => {
+      if(!prueba.hasOwnProperty('edited')){
+        pruebas.push({ ...prueba,
+          edited: true,
+          contenidoDeAceite:'',
+          contenidoDeAgua:'',
+          contenidoDeEmulsion:'',
+          contenidoDeSolidos:'',
+          tipoDeSolidos:'',
+          densidadDelAceite:'',
+          densidadDelAgua:'',
+          densidadDeLaEmulsion:'',
+          contenidoDeAsfaltenos:'',
+          contenidoDeParafinas:'',
+          contenidoDeResinas:'',
+          indiceDeEstabilidadDelColoidal:'',
+          indiceDeEstabilidadDelAgua:'',
+          pH:'',
+          salinidad:'',
+          viscosidadDelAceite:'',
+          tipoDeGelLineal:'',
+          viscosidadDelGelLineal:'',
+          tiempoDeReticulacion:'',
+          pHGelLineal:'',
+          tiempoDeRompedorDelGel:'',
+          tamanoDelApuntalante: '',
+          gravedadEspecifica: '',
+          esfericidad: '',
+          redondeo: '',
+          turbidez: '',
+          psi: '',
+          pruebaDeSolubilidadConAcida: '',
+          sistemasTable: [{
+            sistem: '',
+            tiempoRompimiento: '',
+            interfase: '',
+            solidosFiltrar: '',
+            resultado: '',
+          }]
+        })
+      }else {
+        pruebas.push(prueba)
+      }
+    })
+
+    setPruebasDeLaboratorioData(pruebas)
   }
 
   componentDidMount() {
@@ -45,81 +98,100 @@ const resultadoOptions = [
 
   }
 
-  makeCaracterizacionForm() {
-    let { setContenidoDeAceite, setContenidoDeAgua, setContenidoDeEmulsion, setContenidoDeSolidos, setTipoDeSolidos, setDensidadDelAceite, setDensidadDelAgua, setDensidadDeLaEmulsion, setContenidoDeAsfaltenos, setContenidoDeParafinas, setContenidoDeResinas, setIndiceDeEstabilidadDelColoidal, setIndiceDeEstabilidadDelAgua, setPH, setSalinidad, setViscosidadDelAceite, formData } = this.props
+  updateValue(value, event){
+    if(event === undefined)
+      return
+
+    let { setPruebasDeLaboratorioData, pruebasDeLaboratorio } = this.props
+    pruebasDeLaboratorio = pruebasDeLaboratorio.toJS()
+
+    let index = event.target.getAttribute('index')
+    let pruebas = {...pruebasDeLaboratorio}
+    pruebas.pruebasDeLaboratorioData[index][event.target.name] = event.target.value
+
+    setPruebasDeLaboratorioData(pruebas.pruebasDeLaboratorioData)
+  }
+
+  makeCaracterizacionForm(index) {
+    let { formData, pruebasDeLaboratorio } = this.props
     formData = formData.toJS()
-    let { contenidoDeAceite, contenidoDeAgua, contenidoDeEmulsion, contenidoDeSolidos, tipoDeSolidos, densidadDelAceite, densidadDelAgua, densidadDeLaEmulsion, contenidoDeAsfaltenos, contenidoDeParafinas, contenidoDeResinas, indiceDeEstabilidadDelColoidal, indiceDeEstabilidadDelAgua, pH, salinidad, viscosidadDelAceite } = formData
+    pruebasDeLaboratorio = pruebasDeLaboratorio.toJS()
+    let { pruebasDeLaboratorioData } = pruebasDeLaboratorio
 
     return (
       <div className='caracterizacion-form' >
         <div className='header'>
           Caracterización de los Fluidos Producidos
         </div>
-        <InputRow header="Contenido de aceite" name='' unit="%" value={contenidoDeAceite} onChange={setContenidoDeAceite} />
-        <InputRow header="Contenido de agua" name='' unit="%" value={contenidoDeAgua} onChange={setContenidoDeAgua} />
-        <InputRow header="Contenido de emulsión" name='' unit="%" value={contenidoDeEmulsion} onChange={setContenidoDeEmulsion} />
-        <InputRow header="Contenido de solidos" name='' unit="%" value={contenidoDeSolidos} onChange={setContenidoDeSolidos} />
-        <InputRow header="Tipo de solidos" name='' value={tipoDeSolidos} onChange={setTipoDeSolidos} />
-        <InputRow header="Densidad del aceite" name='' unit="g/cm3" value={densidadDelAceite} onChange={setDensidadDelAceite} />
-        <InputRow header="Densidad del agua" name='' unit="g/cm3" value={densidadDelAgua} onChange={setDensidadDelAgua} />
-        <InputRow header="Densidad de la emulsion" name='' unit="g/cm3" value={densidadDeLaEmulsion} onChange={setDensidadDeLaEmulsion} />
-        <InputRow header="Contenido de asfaltenos" name='' unit="%" value={contenidoDeAsfaltenos} onChange={setContenidoDeAsfaltenos} />
-        <InputRow header="Contenido de parafinas" name='' unit="%" value={contenidoDeParafinas} onChange={setContenidoDeParafinas} />
-        <InputRow header="Contenido de resinas" name='' unit="%" value={contenidoDeResinas} onChange={setContenidoDeResinas} />
-        <InputRow header="Índice de estabilidad coloidal" name='' unit="adim" value={indiceDeEstabilidadDelColoidal} onChange={setIndiceDeEstabilidadDelColoidal} />
-        <InputRow header="Índice de estabilidad del agua" name='' unit="adim" value={indiceDeEstabilidadDelAgua} onChange={setIndiceDeEstabilidadDelAgua} />
-        <InputRow header="pH" name='' unit="adim" value={pH} onChange={setPH} />
-        <InputRow header="Salinidad" name='' unit="ppm" value={salinidad} onChange={setSalinidad} />
-        <InputRow header="Viscosidad del aceite" name='' unit="cp" value={viscosidadDelAceite} onChange={setViscosidadDelAceite} />
+        <InputRow header="Contenido de aceite" name='contenidoDeAceite' unit="%" value={pruebasDeLaboratorioData[index].contenidoDeAceite} onChange={this.updateValue} index={index} />
+        <InputRow header="Contenido de agua" name='contenidoDeAgua' unit="%" value={pruebasDeLaboratorioData[index].contenidoDeAgua} onChange={this.updateValue} index={index} />
+        <InputRow header="Contenido de emulsión" name='contenidoDeEmulsion' unit="%" value={pruebasDeLaboratorioData[index].contenidoDeEmulsion} onChange={this.updateValue} index={index} />
+        <InputRow header="Contenido de solidos" name='contenidoDeSolidos' unit="%" value={pruebasDeLaboratorioData[index].contenidoDeSolidos} onChange={this.updateValue} index={index} />
+        <InputRow header="Tipo de solidos" name='tipoDeSolidos' value={pruebasDeLaboratorioData[index].tipoDeSolidos} onChange={this.updateValue} index={index} />
+        <InputRow header="Densidad del aceite" name='densidadDelAceite' unit="g/cm3" value={pruebasDeLaboratorioData[index].densidadDelAceite} onChange={this.updateValue} index={index} />
+        <InputRow header="Densidad del agua" name='densidadDelAgua' unit="g/cm3" value={pruebasDeLaboratorioData[index].densidadDelAgua} onChange={this.updateValue} index={index} />
+        <InputRow header="Densidad de la emulsion" name='densidadDeLaEmulsion' unit="g/cm3" value={pruebasDeLaboratorioData[index].densidadDeLaEmulsion} onChange={this.updateValue} index={index} />
+        <InputRow header="Contenido de asfaltenos" name='contenidoDeAsfaltenos' unit="%" value={pruebasDeLaboratorioData[index].contenidoDeAsfaltenos} onChange={this.updateValue} index={index} />
+        <InputRow header="Contenido de parafinas" name='contenidoDeParafinas' unit="%" value={pruebasDeLaboratorioData[index].contenidoDeParafinas} onChange={this.updateValue} index={index} />
+        <InputRow header="Contenido de resinas" name='contenidoDeResinas' unit="%" value={pruebasDeLaboratorioData[index].contenidoDeResinas} onChange={this.updateValue} index={index} />
+        <InputRow header="Índice de estabilidad coloidal" name='indiceDeEstabilidadDelColoidal' unit="adim" value={pruebasDeLaboratorioData[index].indiceDeEstabilidadDelColoidal} onChange={this.updateValue} index={index} />
+        <InputRow header="Índice de estabilidad del agua" name='indiceDeEstabilidadDelAgua' unit="adim" value={pruebasDeLaboratorioData[index].indiceDeEstabilidadDelAgua} onChange={this.updateValue} index={index} />
+        <InputRow header="pH" name='pH' unit="adim" value={pruebasDeLaboratorioData[index].pH} onChange={this.updateValue} index={index} />
+        <InputRow header="Salinidad" name='salinidad' unit="ppm" value={pruebasDeLaboratorioData[index].salinidad} onChange={this.updateValue} index={index} />
+        <InputRow header="Viscosidad del aceite" name='viscosidadDelAceite' unit="cp" value={pruebasDeLaboratorioData[index].viscosidadDelAceite} onChange={this.updateValue} index={index} />
       </div>
     )
   }
 
 
-  makeGelLinealForm() {
-    let { setTipoDeGelLineal, setViscosidadDelGelLineal, setTiempoDeReticulacion, setPHGelLineal, setTiempoDeRompedorDelGel, formData } = this.props
+  makeGelLinealForm(index) {
+    let { formData, pruebasDeLaboratorio } = this.props
     formData = formData.toJS()
-    let { tipoDeGelLineal, viscosidadDelGelLineal, tiempoDeReticulacion, pHGelLineal, tiempoDeRompedorDelGel } = formData
+    pruebasDeLaboratorio = pruebasDeLaboratorio.toJS()
+    let { pruebasDeLaboratorioData } = pruebasDeLaboratorio
 
     return (
       <div className='gel-lineal-form' >
         <div className='header'>
           Prueba Para Gel Lineal
         </div>
-        <InputRowUnitless header="Tipo de gel lineal" name='' value={tipoDeGelLineal} onChange={setTipoDeGelLineal} />
-        <InputRow header="Viscosidad del gel lineal" name='' unit="cp" value={viscosidadDelGelLineal} onChange={setViscosidadDelGelLineal} />
-        <InputRow header="Tiempo de reticulación" name='' unit="min" value={tiempoDeReticulacion} onChange={setTiempoDeReticulacion} />
-        <InputRow header="pH gel lineal" name='' unit="adim" value={pHGelLineal} onChange={setPHGelLineal} />
-        <InputRow header="Tiempo de rompedor del gel" name='' unit="min" value={tiempoDeRompedorDelGel} onChange={setTiempoDeRompedorDelGel} />
+        <InputRowUnitless header="Tipo de gel lineal" name='tipoDeGelLineal' value={pruebasDeLaboratorioData[index].tipoDeGelLineal} onChange={this.updateValue} index={index} />
+        <InputRow header="Viscosidad del gel lineal" name='viscosidadDelGelLineal' unit="cp" value={pruebasDeLaboratorioData[index].viscosidadDelGelLineal} onChange={this.updateValue} index={index} />
+        <InputRow header="Tiempo de reticulación" name='tiempoDeReticulacion' unit="min" value={pruebasDeLaboratorioData[index].tiempoDeReticulacion} onChange={this.updateValue} index={index} />
+        <InputRow header="pH gel lineal" name='pHGelLineal' unit="adim" value={pruebasDeLaboratorioData[index].pHGelLineal} onChange={this.updateValue} index={index} />
+        <InputRow header="Tiempo de rompedor del gel" name='tiempoDeRompedorDelGel' unit="min" value={pruebasDeLaboratorioData[index].tiempoDeRompedorDelGel} onChange={this.updateValue} index={index} />
       </div>
     )
   }
 
 
-  makeApuntalanteForm() {
-    let { setTamanoDelApuntalante, setGravedadEspecifica, setEsfericidad, setRedondeo, setTurbidez, setResistencia, setPruebaDeSolubilidadConAcida, formData } = this.props
-    formData = formData.toJS()
-    let { tamanoDelApuntalante, gravedadEspecifica, esfericidad, redondeo, turbidez, resistencia, pruebaDeSolubilidadConAcida } = formData
+  makeApuntalanteForm(index) {
+    let { formData, pruebasDeLaboratorio } = this.props
+	    formData = formData.toJS()
+    pruebasDeLaboratorio = pruebasDeLaboratorio.toJS()
+    let { pruebasDeLaboratorioData } = pruebasDeLaboratorio
 
     return (
       <div className='grabado-nucleos-form' >
         <div className='header'>
           Prueba Para Apuntalante
         </div>
-        <InputRow header="Tamaño del apuntalante" name='' unit="malla" value={tamanoDelApuntalante} onChange={setTamanoDelApuntalante} />
-        <InputRow header="Gravedad específica" name='' unit="adim" value={gravedadEspecifica} onChange={setGravedadEspecifica} />
-        <InputRow header="Esfericidad" name='' unit="adim" value={esfericidad} onChange={setEsfericidad} />
-        <InputRow header="Redondeo" name='' unit="adim" value={redondeo} onChange={setRedondeo} />
-        <InputRow header="Turbidez" name='' unit="FTU" value={turbidez} onChange={setTurbidez} />
-        <InputRow header="Resistencia" name='' unit="psi" value={resistencia} onChange={setResistencia} />
-        <InputRow header="Prueba de solubilidad con ácido" name='' unit="%" value={pruebaDeSolubilidadConAcida} onChange={setPruebaDeSolubilidadConAcida} />
+        <InputRow header="Tamaño del apuntalante" name='tamanoDelApuntalante' unit="malla" value={pruebasDeLaboratorioData[index].tamanoDelApuntalante} onChange={this.updateValue} index={index} />
+        <InputRow header="Gravedad específica" name='gravedadEspecifica' unit="adim" value={pruebasDeLaboratorioData[index].gravedadEspecifica} onChange={this.updateValue} index={index} />
+        <InputRow header="Esfericidad" name='esfericidad' unit="adim" value={pruebasDeLaboratorioData[index].esfericidad} onChange={this.updateValue} index={index} />
+        <InputRow header="Redondeo" name='redondeo' unit="adim" value={pruebasDeLaboratorioData[index].redondeo} onChange={this.updateValue} index={index} />
+        <InputRow header="Turbidez" name='turbidez' unit="FTU" value={pruebasDeLaboratorioData[index].turbidez} onChange={this.updateValue} index={index} />
+        <InputRow header="Resistencia" name='psi' unit="psi" value={pruebasDeLaboratorioData[index].resistencia} onChange={this.updateValue} index={index} />
+        <InputRow header="Prueba de solubilidad con ácido" name='pruebaDeSolubilidadConAcida' unit="%" value={pruebasDeLaboratorioData[index].pruebaDeSolubilidadConAcida} onChange={this.updateValue} index={index} />
       </div>
     )
   }
 
 
   renderEditable(cellInfo) {
-    let { data } = this.state
+    let { formData, pruebasDeLaboratorio, setPruebasDeLaboratorioData } = this.props
+    pruebasDeLaboratorio = pruebasDeLaboratorio.toJS()
+    let { pruebasDeLaboratorioData } = pruebasDeLaboratorio
 
     return (
       <div
@@ -127,31 +199,36 @@ const resultadoOptions = [
         contentEditable
         suppressContentEditableWarning
         onBlur={e => {
-          let copy = JSON.parse(JSON.stringify(data))
-          copy[cellInfo.index][cellInfo.column.id] = e.target.innerHTML;
-
-          this.setState({
-            data: copy
-          })
-
-        }}>
+          let copy = JSON.parse(JSON.stringify(pruebasDeLaboratorioData))
+          copy[cellInfo.column.tableIndex]["sistemasTable"][cellInfo.index][cellInfo.column.id] = e.target.innerHTML;
+          setPruebasDeLaboratorioData(copy)
+        }}>{pruebasDeLaboratorioData[cellInfo.column.tableIndex]["sistemasTable"][cellInfo.index][cellInfo.column.id]}
         </div>
     );
   }
 
-  addNewRow() {
-    let { data } = this.state
+  addNewRow(event) {
+    let { formData, pruebasDeLaboratorio, setPruebasDeLaboratorioData } = this.props
+    pruebasDeLaboratorio = pruebasDeLaboratorio.toJS()
+    let { pruebasDeLaboratorioData } = pruebasDeLaboratorio
+ 
+    let index = event.target.getAttribute('index')   
+    let data = pruebasDeLaboratorioData[index].sistemasTable
     let copy = JSON.parse(JSON.stringify(data))
 
     copy[0].length = 2
-
-    this.setState({
-      data: ([...copy, {index: copy.length, interval: '', cimaMD: '', baseMD: '', cimaMV: '', baseMV: '', vArc: '', porosity: '', sw: '', dens: '', resis: '', perm: '', length: copy.length + 1}])
-    })
+    
+    let val =  ([...copy, {index: copy.length, sistem: '', tiempoRompimiento: '', interfase: '', solidosFiltrar: '', resultado: '' , length: copy.length + 1}])
+    pruebasDeLaboratorioData[index].sistemasTable = val
+    setPruebasDeLaboratorioData(pruebasDeLaboratorioData)
   }
 
   deleteRow(state, rowInfo, column, instance) {
-    let { data } = this.state
+    let { formData, pruebasDeLaboratorio } = this.props
+    pruebasDeLaboratorio = pruebasDeLaboratorio.toJS()
+    let { pruebasDeLaboratorioData } = pruebasDeLaboratorio
+
+    let data = pruebasDeLaboratorioData[0].sistemasTable 
     let copy = JSON.parse(JSON.stringify(data))
 
     return {
@@ -174,8 +251,17 @@ const resultadoOptions = [
 
 
 
-  makeSistemaTable() {
-    let { data } = this.state
+  makeSistemaTable(index) {
+    let { formData, pruebasDeLaboratorio } = this.props
+    formData = formData.toJS()
+    pruebasDeLaboratorio = pruebasDeLaboratorio.toJS()
+    let { pruebasDeLaboratorioData } = pruebasDeLaboratorio
+
+    let data = pruebasDeLaboratorioData[index].sistemasTable
+
+    if(data == undefined)
+      return null
+
     let columns = [
       {
         Header: '',
@@ -242,6 +328,7 @@ const resultadoOptions = [
 
     columns.forEach(column => {
       column.cell === 'renderEditable' ? column.Cell = this.renderEditable : null
+      column.tableIndex = index	
     })
 
     return (
@@ -251,6 +338,7 @@ const resultadoOptions = [
         </div>
         <div className='table-select'>
           <ReactTable
+            name="sistemasTable"
             className="-striped"
             data={data}
             columns={columns}
@@ -258,37 +346,37 @@ const resultadoOptions = [
             showPageSizeOptions={false}
             pageSize={data.length}
             sortable={false}
+            index={index}
             getTdProps={this.deleteRow}
           />
         </div>
-        <button className='new-row-button' onClick={this.addNewRow}> + </button>
+        <button className='new-row-button' index={index} onClick={this.addNewRow}> + </button>
       </div>
     )
   }
 
   render() {
-    let { setObervacionesPruebasLabApuntalado, formData } = this.props
+    let { setObervacionesPruebasLabApuntalado, formData, pruebasDeLaboratorio } = this.props
     formData = formData.toJS()
     let { obervacionesPruebasLabApuntalado } = formData
+    pruebasDeLaboratorio = pruebasDeLaboratorio.toJS()
+    let { pruebasDeLaboratorioData } = pruebasDeLaboratorio
 
-    return (
+    return pruebasDeLaboratorioData.map((form, i) => 
       <div className="form pruebas-de-laboratorio-apuntalado-extra">
-          <div className='top'>
+        <div className='top'>
             <div className='left'>
-              { this.makeCaracterizacionForm() }
+              { this.makeCaracterizacionForm(i) }
             </div>
             <div className='right'>
-              { this.makeGelLinealForm() }
-              { this.makeApuntalanteForm() }
-              <TextAreaUnitless header="Observaciones" name='' className={'obervaciones'}  value={obervacionesPruebasLabApuntalado} onChange={setObervacionesPruebasLabApuntalado} /> 
+              { this.makeGelLinealForm(i) }
+              { this.makeApuntalanteForm(i) }
             </div>
-          </div>
-          <div className='bot'>
-            { this.makeSistemaTable() }
-            <TextAreaUnitless header="Observaciones" name='' className={'obervaciones'}/> 
-          </div>
-          <div style={{color: 'red'}}>TODO: agregar opcion para subir evidencia de prueba de laboratorio. (add upload evidence of lab test)</div>
-
+        </div>
+        <div className='bot'>
+          { this.makeSistemaTable(i) }
+          <TextAreaUnitless header="Observaciones" name='' className={'obervaciones'}/>
+        </div>
       </div>
     )
   }
@@ -297,38 +385,11 @@ const resultadoOptions = [
 
 const mapStateToProps = state => ({
   formData: state.get('pruebasDeLaboratorioApuntalado'),
+  pruebasDeLaboratorio: state.get('pruebasDeLaboratorio')
 })
 
 const mapDispatchToProps = dispatch => ({
-  setContenidoDeAceite: val => dispatch(setContenidoDeAceite(val)),
-  setContenidoDeAgua: val => dispatch(setContenidoDeAgua(val)),
-  setContenidoDeEmulsion: val => dispatch(setContenidoDeEmulsion(val)),
-  setContenidoDeSolidos: val => dispatch(setContenidoDeSolidos(val)),
-  setTipoDeSolidos: val => dispatch(setTipoDeSolidos(val)),
-  setDensidadDelAceite: val => dispatch(setDensidadDelAceite(val)),
-  setDensidadDelAgua: val => dispatch(setDensidadDelAgua(val)),
-  setDensidadDeLaEmulsion: val => dispatch(setDensidadDeLaEmulsion(val)),
-  setContenidoDeAsfaltenos: val => dispatch(setContenidoDeAsfaltenos(val)),
-  setContenidoDeParafinas: val => dispatch(setContenidoDeParafinas(val)),
-  setContenidoDeResinas: val => dispatch(setContenidoDeResinas(val)),
-  setIndiceDeEstabilidadDelColoidal: val => dispatch(setIndiceDeEstabilidadDelColoidal(val)),
-  setIndiceDeEstabilidadDelAgua: val => dispatch(setIndiceDeEstabilidadDelAgua(val)),
-  setPH: val => dispatch(setPH(val)),
-  setSalinidad: val => dispatch(setSalinidad(val)),
-  setViscosidadDelAceite: val => dispatch(setViscosidadDelAceite(val)),
-  setTipoDeGelLineal: val => dispatch(setTipoDeGelLineal(val)),
-  setViscosidadDelGelLineal: val => dispatch(setViscosidadDelGelLineal(val)),
-  setTiempoDeReticulacion: val => dispatch(setTiempoDeReticulacion(val)),
-  setPHGelLineal: val => dispatch(setPHGelLineal(val)),
-  setTiempoDeRompedorDelGel: val => dispatch(setTiempoDeRompedorDelGel(val)),
-  setTamanoDelApuntalante: val => dispatch(setTamanoDelApuntalante(val)),
-  setGravedadEspecifica: val => dispatch(setGravedadEspecifica(val)),
-  setEsfericidad: val => dispatch(setEsfericidad(val)),
-  setRedondeo: val => dispatch(setRedondeo(val)),
-  setTurbidez: val => dispatch(setTurbidez(val)),
-  setResistencia: val => dispatch(setResistencia(val)),
-  setPruebaDeSolubilidadConAcida: val => dispatch(setPruebaDeSolubilidadConAcida(val)),
-  setObervacionesPruebasLabApuntalado: val => dispatch(setObervacionesPruebasLabApuntalado(val)),
+  setPruebasDeLaboratorioData: val => dispatch(setPruebasDeLaboratorioData(val))
 })
 
 export default connect(mapStateToProps, mapDispatchToProps)(PruebasDeLaboratorioApuntaladoExtra)
