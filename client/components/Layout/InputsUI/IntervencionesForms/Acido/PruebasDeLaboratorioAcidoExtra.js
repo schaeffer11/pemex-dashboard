@@ -1,9 +1,28 @@
 import React, { Component } from 'react'
 import autobind from 'autobind-decorator'
 import { InputRow, InputRowUnitless, InputRowSelectUnitless, TextAreaUnitless } from '../../../Common/InputRow'
-import { setContenidoDeAceite, setContenidoDeAgua, setContenidoDeEmulsion, setContenidoDeSolidos, setTipoDeSolidos, setDensidadDelAceite, setDensidadDelAgua, setDensidadDeLaEmulsion, setContenidoDeAsfaltenos, setContenidoDeParafinas, setContenidoDeResinas, setIndiceDeEstabilidadDelColoidal, setIndiceDeEstabilidadDelAgua, setPH, setSalinidad, setViscosidadDelAceite, setSistemAcido, setPesoMuestraInicial, setPesoMuestraFinal, setSolubilidad, setSistemaAcidoGrabado, setNucleoDeFormacion, setGrabado, setTipoDeGelLineal, setViscosidadDelGelLineal, setTiempoDeReticulacion, setPHGelLineal, setTiempoDeRompedorDelGel, setObervacionesPruebasLabAcido } from '../../../../../redux/actions/intervencionesAcido'
 import { setPruebasDeLaboratorioData } from '../../../../../redux/actions/intervencionesEstimulacion'
+import ReactTable from 'react-table'
 import { connect } from 'react-redux'
+import Select from 'react-select'
+
+const interfaseOptions = [
+  { label: 'Definida', value: 'definida' },
+  { label: 'Difusa', value: 'difusa' },
+  { label: 'Obscura', value: 'obscura' }
+]
+
+const solidosFiltrarOptions = [
+  { label: '0', value: 'none'},
+  { label: 'Trazas', value: 'trazas'},
+  { label: 'Moderada Sedimentacion', value: 'moderadaSedimentacion'},
+  { label: 'Alta Sedimentacion', value: 'altaSedientacion'},
+]
+
+const resultadoOptions = [
+  { label: 'Compatible', value: 'compatible'},
+  { label: 'No Compatible', value: 'noCompatible'},
+]
 
 @autobind class PruebasDeLaboratorioAcidoExtra extends Component {
   constructor(props) {
@@ -46,7 +65,15 @@ import { connect } from 'react-redux'
           viscosidadDelGelLineal: '',
           tiempoDeReticulacion: '',
           pHGelLineal: '',
-          tiempoDeRompedorDelGel: ''          
+          tiempoDeRompedorDelGel: '',
+          sistemasTable: [{
+            sistem: '',
+            tiempoRompimiento: '',
+            interfase: '',
+            solidosFiltrar: '',
+            resultado: '',
+          }],
+          obervaciones: ''
         })
       }else {
         pruebas.push(prueba)
@@ -85,7 +112,6 @@ import { connect } from 'react-redux'
     formData = formData.toJS()
     pruebasDeLaboratorio = pruebasDeLaboratorio.toJS()
     let { pruebasDeLaboratorioData } = pruebasDeLaboratorio
-    let { contenidoDeAceite, contenidoDeAgua, contenidoDeEmulsion, contenidoDeSolidos, tipoDeSolidos, densidadDelAceite, densidadDelAgua, densidadDeLaEmulsion, contenidoDeAsfaltenos, contenidoDeParafinas, contenidoDeResinas, indiceDeEstabilidadDelColoidal, indiceDeEstabilidadDelAgua, pH, salinidad, viscosidadDelAceite } = formData
 
     return (
       <div className='caracterizacion-form' >
@@ -166,6 +192,197 @@ import { connect } from 'react-redux'
     )
   }
 
+  renderEditable(cellInfo) {
+    let { formData, pruebasDeLaboratorio, setPruebasDeLaboratorioData } = this.props
+    pruebasDeLaboratorio = pruebasDeLaboratorio.toJS()
+    let { pruebasDeLaboratorioData } = pruebasDeLaboratorio
+
+    return (
+      <div
+        style={{ backgroundColor: "#fafafa" }}
+        contentEditable
+        suppressContentEditableWarning
+        onBlur={e => {
+          let copy = JSON.parse(JSON.stringify(pruebasDeLaboratorioData))
+          copy[cellInfo.column.tableIndex]["sistemasTable"][cellInfo.index][cellInfo.column.id] = e.target.innerHTML;
+          setPruebasDeLaboratorioData(copy)
+        }}>{pruebasDeLaboratorioData[cellInfo.column.tableIndex]["sistemasTable"][cellInfo.index][cellInfo.column.id]}
+        </div>
+    );
+  }
+
+  addNewRow(event) {
+    let { formData, pruebasDeLaboratorio, setPruebasDeLaboratorioData } = this.props
+    pruebasDeLaboratorio = pruebasDeLaboratorio.toJS()
+    let { pruebasDeLaboratorioData } = pruebasDeLaboratorio
+
+    let index = event.target.getAttribute('index')
+    let data = pruebasDeLaboratorioData[index].sistemasTable
+    let copy = JSON.parse(JSON.stringify(data))
+
+    copy[0].length = 2
+
+    let val =  ([...copy, {index: copy.length, sistem: '', tiempoRompimiento: '', interfase: '', solidosFiltrar: '', resultado: '' , length: copy.length + 1}])
+    pruebasDeLaboratorioData[index].sistemasTable = val
+    setPruebasDeLaboratorioData(pruebasDeLaboratorioData)
+  }
+
+  deleteRow(state, rowInfo, column, instance) {
+    let { formData, pruebasDeLaboratorio } = this.props
+    pruebasDeLaboratorio = pruebasDeLaboratorio.toJS()
+    let { pruebasDeLaboratorioData } = pruebasDeLaboratorio
+
+    let data = pruebasDeLaboratorioData[0].sistemasTable
+    let copy = JSON.parse(JSON.stringify(data))
+
+    return {
+      onClick: e => {
+        if (column.id === 'delete' && copy.length > 1) {
+          copy.splice(rowInfo.original.index, 1)
+
+          copy.forEach((i, index) => {
+            i.index = index
+            i.length = copy.length
+          })
+
+          this.setState({
+            data: copy
+          })
+        }
+      }
+    }
+  }
+
+  makeSistemaTable(index) {
+    let { formData, pruebasDeLaboratorio } = this.props
+    formData = formData.toJS()
+    pruebasDeLaboratorio = pruebasDeLaboratorio.toJS()
+    let { pruebasDeLaboratorioData } = pruebasDeLaboratorio
+
+    let data = pruebasDeLaboratorioData[index].sistemasTable
+
+    if(data == undefined)
+      return null
+
+    let columns = [
+      {
+        Header: '',
+        accessor: 'delete',
+        width: 35,
+        resizable: false,
+        Cell: row => {
+          if (row.original.length > 1) {
+            return (<div style={{color: 'white', background: 'red', borderRadius: '4px', textAlign: 'center', cursor: 'pointer'}}>X</div>)
+          }
+        }
+      }, {
+        Header: 'Sistema',
+        accessor: 'sistem',
+        cell: 'renderEditable',
+      }, {
+        Header: 'Tiempo de rompimiento (Min)',
+        accessor: 'tiempoRompimiento',
+        cell: 'renderEditable',
+      }, {
+        Header: 'Interfase',
+        accessor: 'interfase',
+        style: {overflow: 'visible'},
+        Cell: row => {
+          return (<div>
+            <Select
+            className='input'
+            simpleValue={true}
+            options={interfaseOptions}
+            name={name}
+          />
+          </div>)
+        }
+      }, {
+        Header: 'Solidos despues de filtrar',
+        accessor: 'solidosFiltrar',
+        style: {overflow: 'visible'},
+        Cell: row => {
+           return (<div>
+            <Select
+            className='input'
+            simpleValue={true}
+            options={solidosFiltrarOptions}
+            name={name}
+          />
+          </div>)
+        }
+      }, {
+        Header: 'Resultado',
+        accessor: 'resultado',
+        style: {overflow: 'visible'},
+        Cell: row => {
+           return (<div>
+            <Select
+            className='input'
+            simpleValue={true}
+            options={resultadoOptions}
+            name={name}
+          />
+          </div>)
+        }
+      }
+    ]
+
+    columns.forEach(column => {
+      column.cell === 'renderEditable' ? column.Cell = this.renderEditable : null
+      column.tableIndex = index
+    })
+
+    return (
+      <div style={{marginBot: '20px'}}>
+        <div className='header'>
+          Lab Test Results (spanish)
+        </div>
+        <div className='table-select'>
+          <ReactTable
+            name="sistemasTable"
+            className="-striped"
+            data={data}
+            columns={columns}
+            showPagination={false}
+            showPageSizeOptions={false}
+            pageSize={data.length}
+            sortable={false}
+            index={index}
+            getTdProps={this.deleteRow}
+          />
+        </div>
+        <button className='new-row-button' index={index} onClick={this.addNewRow}> + </button>
+      </div>
+    )
+  }
+
+  handleFileUpload(e, setURL) {
+    e.preventDefault()
+    let { files } = e.target
+    let localImgUrl = window.URL.createObjectURL(files[0])
+
+    setURL(localImgUrl, e)
+  }
+
+  makeImageInput(index) {
+    let { pruebasDeLaboratorio } = this.props
+    pruebasDeLaboratorio = pruebasDeLaboratorio.toJS()
+    let { pruebasDeLaboratorioData } = pruebasDeLaboratorio
+
+    let imageURL = pruebasDeLaboratorioData[index].imageURL
+
+    return (
+      <div style={{marginBot: '20px'}}>
+        <div className='header'>
+          Upload Lab Evidence (spanish)
+        </div>
+        <input type='file' name='imageURL' accept="image/*" onChange={(e) => this.handleFileUpload(e, this.updateValue)} index={index}></input>
+        {imageURL ? <img className='img-preview' src={imageURL}></img> : null }
+      </div>
+    )
+  }
+
   render() {
     let { setObervacionesPruebasLabAcido, formData, pruebasDeLaboratorio } = this.props
     formData = formData.toJS()
@@ -175,7 +392,8 @@ import { connect } from 'react-redux'
     let { pruebasDeLaboratorioData } = pruebasDeLaboratorio
 
     return pruebasDeLaboratorioData.map((form, i) =>      
-      <div className="form pruebas-de-laboratorio-acido-extra">
+      <div className="form pruebas-de-laboratorio-apuntalado-extra">
+        <div className='top'>
           <div className='left'>
           { this.makeCaracterizacionForm(i) }
           </div>
@@ -183,10 +401,13 @@ import { connect } from 'react-redux'
           { this.makeSolubilidadForm(i) }
           { this.makeGrabadoNucleosForm(i) }
           { this.makeGelLinealForm(i) }
-            <TextAreaUnitless header="Observaciones" name='' className={'obervaciones'} value={obervacionesPruebasLabAcido} onChange={setObervacionesPruebasLabAcido}/> 
           </div>
-
-          <div style={{color: 'red'}}>TODO: agregar opcion para subir evidencia de la prueba de laboratorio (add upload evidence of lab test)</div>
+        </div>
+        <div className='bot'>
+          { this.makeSistemaTable(i) }
+          <TextAreaUnitless header="Observaciones" name='obervaciones' className={'obervaciones'} value={form.obervaciones} onChange={this.updateValue} index={i}/> 
+          { this.makeImageInput(i) }
+        </div>
       </div>
     )
   }
@@ -200,35 +421,6 @@ const mapStateToProps = state => ({
 
 const mapDispatchToProps = dispatch => ({
   setPruebasDeLaboratorioData: val => dispatch(setPruebasDeLaboratorioData(val)),
-  setContenidoDeAceite: val => dispatch(setContenidoDeAceite(val)),
-  setContenidoDeAgua: val => dispatch(setContenidoDeAgua(val)),
-  setContenidoDeEmulsion: val => dispatch(setContenidoDeEmulsion(val)),
-  setContenidoDeSolidos: val => dispatch(setContenidoDeSolidos(val)),
-  setTipoDeSolidos: val => dispatch(setTipoDeSolidos(val)),
-  setDensidadDelAceite: val => dispatch(setDensidadDelAceite(val)),
-  setDensidadDelAgua: val => dispatch(setDensidadDelAgua(val)),
-  setDensidadDeLaEmulsion: val => dispatch(setDensidadDeLaEmulsion(val)),
-  setContenidoDeAsfaltenos: val => dispatch(setContenidoDeAsfaltenos(val)),
-  setContenidoDeParafinas: val => dispatch(setContenidoDeParafinas(val)),
-  setContenidoDeResinas: val => dispatch(setContenidoDeResinas(val)),
-  setIndiceDeEstabilidadDelColoidal: val => dispatch(setIndiceDeEstabilidadDelColoidal(val)),
-  setIndiceDeEstabilidadDelAgua: val => dispatch(setIndiceDeEstabilidadDelAgua(val)),
-  setPH: val => dispatch(setPH(val)),
-  setSalinidad: val => dispatch(setSalinidad(val)),
-  setViscosidadDelAceite: val => dispatch(setViscosidadDelAceite(val)),
-  setSistemAcido: val => dispatch(setSistemAcido(val)),
-  setPesoMuestraInicial: val => dispatch(setPesoMuestraInicial(val)),
-  setPesoMuestraFinal: val => dispatch(setPesoMuestraFinal(val)),
-  setSolubilidad: val => dispatch(setSolubilidad(val)),
-  setSistemaAcidoGrabado: val => dispatch(setSistemaAcidoGrabado(val)),
-  setNucleoDeFormacion: val => dispatch(setNucleoDeFormacion(val)),
-  setGrabado: val => dispatch(setGrabado(val)),
-  setTipoDeGelLineal: val => dispatch(setTipoDeGelLineal(val)),
-  setViscosidadDelGelLineal: val => dispatch(setViscosidadDelGelLineal(val)),
-  setTiempoDeReticulacion: val => dispatch(setTiempoDeReticulacion(val)),
-  setPHGelLineal: val => dispatch(setPHGelLineal(val)),
-  setTiempoDeRompedorDelGel: val => dispatch(setTiempoDeRompedorDelGel(val)),
-  setObervacionesPruebasLabAcido: val => dispatch(setObervacionesPruebasLabAcido(val)),
 })
 
 export default connect(mapStateToProps, mapDispatchToProps)(PruebasDeLaboratorioAcidoExtra)
