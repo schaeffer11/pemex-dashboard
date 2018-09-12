@@ -25,16 +25,18 @@ import AnalisisDelAgua from './AnalisisDelAgua'
     }
 
     this.forms = [
+      {'title' : 'Ficha Técnica del Campo', 'content': <TecnicaDelCampo containsErrors={this.containsErrors}/>},
       {'title' : 'Ficha Técnica del Pozo' , 'content':<TecnicaDelPozoHighLevel containsErrors={this.containsErrors}/>},
       {'title' : 'Ficha Técnica del Pozo' , 'content':<TecnicaDelPozo containsErrors={this.containsErrors}/>},
-      {'title' : 'Ficha Técnica del Campo', 'content': <TecnicaDelCampo containsErrors={this.containsErrors}/>},
-      {'title' : 'Información de Sistemas Artificiales de Producción', 'content': <SistemasArtificialesDeProduccion containsErrors={this.containsErrors} /> },
       {'title' : 'Evaluación Petrofísica', 'content': <EvaluacionPetrofisica containsErrors={this.containsErrors} /> },
       {'title' : 'Edo. Mecánico y Aparejo de Producción', 'content': <MecanicoYAparejo containsErrors={this.containsErrors} /> },
+      {'title' : 'Análisis del Agua', 'content': <AnalisisDelAgua containsErrors={this.containsErrors} /> }, 
+      {'title' : 'Información de Sistemas Artificiales de Producción', 'content': <SistemasArtificialesDeProduccion containsErrors={this.containsErrors} /> },
       {'title' : 'Histórico de Presión - Campo', 'content': <HistoricoDePresionCampo containsErrors={this.containsErrors} />},
-       {'title' : 'Histórico de Presión - Pozo', 'content': <HistoricoDePresionPozo containsErrors={this.containsErrors} />},
+      {'title' : 'Histórico de Presión - Pozo', 'content': <HistoricoDePresionPozo containsErrors={this.containsErrors} />},
       {'title' : 'Histórico de Producción', 'content': <HistoricoDeProduccion containsErrors={this.containsErrors} /> },
-      {'title' : 'Análisis del Agua', 'content': <AnalisisDelAgua containsErrors={this.containsErrors} /> }	
+
+
     ];
 
   }

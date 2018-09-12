@@ -2,7 +2,7 @@ import React, { Component } from 'react'
 import autobind from 'autobind-decorator'
 import { connect } from 'react-redux'
 import { InputRow, InputRowUnitless, InputRowSelectUnitless } from '../../Common/InputRow'
-import { setFecha, setTiempo, setTipoDeYac, setEstrangulado, setPtp, setTtp, setPbaj, setTbaj, setPsep, setTsep, setQl, setQo, setQg, setQw, setRga, setSalinidad, setPh, setProduccionData } from '../../../../redux/actions/pozo'
+import { setFecha, setTiempo, setEstrangulado, setPtp, setTtp, setPbaj, setTbaj, setPsep, setTsep, setQl, setQo, setQg, setQw, setRga, setSalinidad, setPh, setProduccionData } from '../../../../redux/actions/pozo'
 import ReactTable from 'react-table'
 
 let columns = [
@@ -109,9 +109,9 @@ let columns = [
   }
 
   makeAforoForm() {
-    let { setFecha, setTiempo, setTipoDeYac, setEstrangulado, setPtp, setTtp, setPbaj, setTbaj, setPsep, setTsep, setQl, setQo, setQg, setQw, setRga, setSalinidad, setPh, setProduccionData, formData } = this.props
+    let { setFecha, setTiempo, setEstrangulado, setPtp, setTtp, setPbaj, setTbaj, setPsep, setTsep, setQl, setQo, setQg, setQw, setRga, setSalinidad, setPh, setProduccionData, formData } = this.props
     formData = formData.toJS()
-    let { fecha, tiempo, tipoDeYac, estrangulado, ptp, ttp, pbaj, tbaj, psep, tsep, ql, qo, qg, qw, rga, salinidad, ph, produccionData } = formData 
+    let { fecha, tiempo, estrangulado, ptp, ttp, pbaj, tbaj, psep, tsep, ql, qo, qg, qw, rga, salinidad, ph, produccionData } = formData 
 
     return (
       <div className='aforo-form' >
@@ -120,7 +120,6 @@ let columns = [
         </div>
         <InputRow header="Fecha" name='' unit='dd/mmm/aa' value={fecha} onChange={setFecha} />
         <InputRow header="Tiempo" name='' unit='hrs' value={tiempo} onChange={setTiempo} />
-        <InputRowUnitless header="Tipo de yac." name='' value={tipoDeYac} onChange={setTipoDeYac} />
         <InputRow header="Estrangulador" name='' unit='pg' value={estrangulado} onChange={setEstrangulado} />
         <InputRow header="PTP" name='' unit='Kg/cm2' value={ptp} onChange={setPtp} />
         <InputRow header="TTP" name='' unit='°C' value={ttp} onChange={setTtp} />
@@ -235,7 +234,6 @@ const mapStateToProps = state => ({
 const mapDispatchToProps = dispatch => ({
     setFecha: val => dispatch(setFecha(val)),
     setTiempo: val => dispatch(setTiempo(val)),
-    setTipoDeYac: val => dispatch(setTipoDeYac(val)),
     setEstrangulado: val => dispatch(setEstrangulado(val)),
     setPtp: val => dispatch(setPtp(val)),
     setTtp: val => dispatch(setTtp(val)),

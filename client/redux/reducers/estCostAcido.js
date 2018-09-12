@@ -1,31 +1,78 @@
 import { Map, fromJS } from 'immutable'
 
 const initialState = Map({ 
-    estCostCompaniaDeServicio: '',
-    estCostoDeRentaDeBarco: '',
-    estCostUnidadesDeAltaPresion: '',
-    estCostDelGelDeFractura: '',
-    estCostDeSistemoRactivo: '',
-    estCostDeSistemaNoRactivo: '',
-    estCostDeDivergentes: '',
-    estCostDeN2: '',
-    estCostDeHCL: '',
-    estCostDeSistemasAcidosRetardados: '',
-    estCostDeCostoEquipoDeFacturamientoDePozos: '',
-    estCostGelLineal: '',
-    estCostTrabajosDeBombeoDiversos: '',
-    estCostLlenadoDePozoYPruebaDeAdmision: '',
-    estCostMinifrac: '',
-    estCostBacheNeutralizador: '',
-    estCostProtectorDeArbol: '',
-    estCostApuntalante: '',
+    estCostoDeRentaDeBarco: {
+        cost: '',
+        company: ''
+    },
+    estCostUnidadesDeAltaPresion: {
+        cost: '',
+        company: ''
+    },
+    estCostDelGelDeFractura: {
+        cost: '',
+        company: ''
+    },
+    estCostDeSistemoRactivo: {
+        cost: '',
+        company: ''
+    },
+    estCostDeSistemoNoRactivo: {
+        cost: '',
+        company: ''
+    },
+    estCostDeDivergentes: {
+        cost: '',
+        company: ''
+    },
+    estCostDeN2: {
+        cost: '',
+        company: ''
+    },
+    estCostDeHCL: {
+        cost: '',
+        company: ''
+    },
+    estCostDeSistemasAcidosRetardados: {
+        cost: '',
+        company: ''
+    },
+    estCostDeCostoEquipoDeFacturamientoDePozos: {
+        cost: '',
+        company: ''
+    },
+    estCostGelLineal: {
+        cost: '',
+        company: ''
+    },
+    estCostTrabajosDeBombeoDiversos: {
+        cost: '',
+        company: ''
+    },
+    estCostLlenadoDePozoYPruebaDeAdmision: {
+        cost: '',
+        company: ''
+    },
+    estCostMinifrac: {
+        cost: '',
+        company: ''
+    },
+    estCostBacheNeutralizador: {
+        cost: '',
+        company: ''
+    },
+    estCostProtectorDeArbol: {
+        cost: '',
+        company: ''
+    },
+    estCostApuntalante: {
+        cost: '',
+        company: ''
+    },
 })
-
 
 const estCostAcido = (state = initialState, action) => {
   switch (action.type) {
-    case 'set_estCostCompaniaDeServicio':
-        return state.set('estCostCompaniaDeServicio', fromJS(action.value))
     case 'set_estCostoDeRentaDeBarco':
         return state.set('estCostoDeRentaDeBarco', fromJS(action.value))
     case 'set_estCostUnidadesDeAltaPresion':

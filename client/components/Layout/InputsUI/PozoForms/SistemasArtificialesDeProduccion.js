@@ -3,7 +3,7 @@ import autobind from 'autobind-decorator'
 import Select from 'react-select'
 import { InputRow, InputRowUnitless, InputRowSelectUnitless } from '../../Common/InputRow'
 import { connect } from 'react-redux'
-import { setTipoDeSistemo, setPresionDeCabeza, setPresionDeLineaODeSeparador, setNumeroDeDescargasOCiclosEV, setVolumenDesplazadoPorCircloEV, setPresionDeInyeccionBN, setPresionDeDescargaBN, setNumeroDeValvulasBN, setProfundidadDeLaVulvulaOperanteBN, setOrificioBN, setVolumenDeGasInyectadoBN, setProfundidadDeLaBombaBH, setTipoYMarcaDeBombaBH, setOrificioBH, setTipoDeCamisaBH, setFluidoMotrizBH, setEquipoSuperficialBH, setMotorYTipoDeMotorBCP, setProfunidadDelMotorBCP, setVelocidadBCP, setHpBCP, setArregloDeVarillasBCP, setTipoDeElastomeroBCP, setProfundidadDelAnclaAntitorqueBCP, setProfundidadDelMotorBE, setDiametroBE, setVoltsBE, setAmparajeBE, setArmaduraBE, setTipoDeCableBE, setLongitudDeCableBE, setRmpBE, setTipoDeUnidadBM, setVelocidadBM, setLongitudDeCareraBM, setTipoDeBombaSubsuperficialBM, setTamanoDeBombaSubsuperficialBM, setProfundidadDeLaBombaBM, setArregloDeVarillasBM, setCuantaConAnclaBM, setNivelDinamico, setNivelEstatico } from '../../../../redux/actions/pozo'
+import { setSistemasArtificialesImgURL, setTipoDeSistemo, setPresionDeCabeza, setPresionDeLineaODeSeparador, setNumeroDeDescargasOCiclosEV, setVolumenDesplazadoPorCircloEV, setPresionDeInyeccionBN, setPresionDeDescargaBN, setNumeroDeValvulasBN, setProfundidadDeLaVulvulaOperanteBN, setOrificioBN, setVolumenDeGasInyectadoBN, setProfundidadDeLaBombaBH, setTipoYMarcaDeBombaBH, setOrificioBH, setTipoDeCamisaBH, setFluidoMotrizBH, setEquipoSuperficialBH, setMotorYTipoDeMotorBCP, setProfunidadDelMotorBCP, setVelocidadBCP, setHpBCP, setArregloDeVarillasBCP, setTipoDeElastomeroBCP, setProfundidadDelAnclaAntitorqueBCP, setProfundidadDelMotorBE, setDiametroBE, setVoltsBE, setAmparajeBE, setArmaduraBE, setTipoDeCableBE, setLongitudDeCableBE, setRmpBE, setTipoDeUnidadBM, setVelocidadBM, setLongitudDeCareraBM, setTipoDeBombaSubsuperficialBM, setTamanoDeBombaSubsuperficialBM, setProfundidadDeLaBombaBM, setArregloDeVarillasBM, setCuantaConAnclaBM, setNivelDinamico, setNivelEstatico } from '../../../../redux/actions/pozo'
 
 @autobind class SistemasArtificialesDeProduccion extends Component {
   constructor(props) {
@@ -180,12 +180,37 @@ import { setTipoDeSistemo, setPresionDeCabeza, setPresionDeLineaODeSeparador, se
     setTipoDeSistemo(val.value)
   }
 
+
+  handleFileUpload(e) {
+    let { setSistemasArtificialesImgURL } = this.props
+    e.preventDefault()
+    let { files } = e.target
+    let localImgUrl = window.URL.createObjectURL(files[0])
+
+    setSistemasArtificialesImgURL(localImgUrl)
+  }
+
+  makeImgInput() {
+    let { formData } = this.props
+    formData = formData.toJS()
+    let { sistemasArtificialesImgURL } = formData
+
+    return (
+      <div style={{marginBot: '20px'}}>
+        <div className='header'>
+          Upload Sistem of Produccion Image (spanish)
+        </div>
+        <input type='file' accept="image/*" onChange={this.handleFileUpload}></input>
+        {sistemasArtificialesImgURL ? <img className='img-preview' src={sistemasArtificialesImgURL}></img> : null }
+      </div>
+    )
+  }
+
+
   render() {
     let { formData } = this.props
     formData = formData.toJS()
     let { tipoDeSistemo } = formData
-
-    console.log('renderrrrr')
 
     let options = [
       { label: 'Ninguna', value: 'none' },
@@ -209,10 +234,15 @@ import { setTipoDeSistemo, setPresionDeCabeza, setPresionDeLineaODeSeparador, se
 
     return (
       <div className="form sistemas-artificiales-de-produccion">
-        <div className='select-sistema' >
-          <InputRowSelectUnitless header='Tipo de sistema' value={tipoDeSistemo} options={options} callback={this.handleSelectSistema} />
+        <div className='left'>
+          <div className='select-sistema' >
+            <InputRowSelectUnitless header='Tipo de sistema' value={tipoDeSistemo} options={options} callback={this.handleSelectSistema} />
+          </div>
+          { forms[tipoDeSistemo]}
+          </div>
+        <div className='right'>
+          { this.makeImgInput() }
         </div>
-        { forms[tipoDeSistemo]}
       </div>
     )
   }
@@ -265,7 +295,8 @@ const mapDispatchToProps = dispatch => ({
   setArregloDeVarillasBM: val => dispatch(setArregloDeVarillasBM(val)),
   setCuantaConAnclaBM: val => dispatch(setCuantaConAnclaBM(val)),
   setNivelDinamico: val => dispatch(setNivelDinamico(val)),
-  setNivelEstatico  : val => dispatch(setNivelEstatico (val)),
+  setNivelEstatico  : val => dispatch(setNivelEstatico(val)),
+  setSistemasArtificialesImgURL: val => dispatch(setSistemasArtificialesImgURL(val)),
 })
 
 export default connect(mapStateToProps, mapDispatchToProps)(SistemasArtificialesDeProduccion)

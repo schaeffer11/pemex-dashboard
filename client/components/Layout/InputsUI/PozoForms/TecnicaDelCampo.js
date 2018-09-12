@@ -2,8 +2,15 @@ import React, { Component } from 'react'
 import autobind from 'autobind-decorator'
 import { InputRow, InputRowUnitless, InputRowSelectUnitless } from '../../Common/InputRow'
 import { connect } from 'react-redux'
-import { setDescubrimientoField, setFechaDeExplotacionField, setNumeroDePozosOperandoField, setPInicialAnoField, setPActualFechaField, setDpPerAnoField, setTyacField, setPrField, setDensidadDelAceiteField, setPSatField, setRgaFluidoField, setSalinidadField, setPvtRepresentativoField, setLitologiaField, setEspesorNetoField, setPorosidadField, setSwField, setKPromedioField, setCaaField, setCgaField, setQoField, setQgField, setRgaField, setFwField, setNpField, setGpField, setWpField, setRraField, setRrgField, setRrpceField, setH2sField, setCo2Field, setN2Field } from '../../../../redux/actions/pozo'
+import { setTipoDeFluidoField, setDescubrimientoField, setFechaDeExplotacionField, setNumeroDePozosOperandoField, setPInicialAnoField, setPActualFechaField, setDpPerAnoField, setTyacField, setPrField, setDensidadDelAceiteField, setPSatField, setRgaFluidoField, setSalinidadField, setPvtRepresentativoField, setLitologiaField, setEspesorNetoField, setPorosidadField, setSwField, setKPromedioField, setCaaField, setCgaField, setQoField, setQgField, setRgaField, setFwField, setNpField, setGpField, setWpField, setRraField, setRrgField, setRrpceField, setH2sField, setCo2Field, setN2Field } from '../../../../redux/actions/pozo'
 
+let fluidoOptions = [
+    { label: 'Aceite Negro', value: 'Aceite Negro' },
+    { label: 'Acetic Ligero', value: 'Acetic Ligero' },
+    { label: 'Gas y Condensado', value: 'Gas y Condensado' },
+    { label: 'Gas Hemedo', value: 'Gas Hemedo' },
+    { label: 'Gas Seco', value: 'Gas Seco' },
+]
 @autobind class TecnicaDelCampo extends Component {
   constructor(props) {
     super(props)
@@ -89,12 +96,12 @@ import { setDescubrimientoField, setFechaDeExplotacionField, setNumeroDePozosOpe
   }
 
   makeFluidoForm() {
-    let { setDensidadDelAceiteField, setPSatField, setRgaFluidoField, setSalinidadField, setPvtRepresentativoField, forms, formData } = this.props
+    let { setTipoDeFluidoField, setDensidadDelAceiteField, setPSatField, setRgaFluidoField, setSalinidadField, setPvtRepresentativoField, forms, formData } = this.props
 
     forms = forms.toJS()
     formData = formData.toJS()
 
-    let { densidadDelAceiteField, pSatField, rgaFluidoField, salinidadField, pvtRepresentativoField } = formData
+    let { tipoDeFluidoField, densidadDelAceiteField, pSatField, rgaFluidoField, salinidadField, pvtRepresentativoField } = formData
     const errors = forms.pozoFormError
 
     return (
@@ -102,6 +109,7 @@ import { setDescubrimientoField, setFechaDeExplotacionField, setNumeroDePozosOpe
         <div className='header'>
           Fluido
         </div>
+        <InputRowSelectUnitless header='Tipo de Fluido' value={tipoDeFluidoField} onChange={setTipoDeFluidoField} options={fluidoOptions} />
         <InputRow header="Densidad del aceite" name='densidadDelAceite' value={densidadDelAceiteField} onChange={setDensidadDelAceiteField} unit='°API' errors={errors} />
         <InputRow header="P sat" name='pSat' value={pSatField} onChange={setPSatField} unit='Kg/cm2' errors={errors} />
         <InputRow header="RGA" name='rga' value={rgaFluidoField} onChange={setRgaFluidoField} unit='m3/m3' errors={errors} />
@@ -126,7 +134,7 @@ import { setDescubrimientoField, setFechaDeExplotacionField, setNumeroDePozosOpe
         </div>
         <InputRowUnitless header="Litología" name='litologia' value={litologiaField} onChange={setLitologiaField} />
         <InputRow header="Espesor neto" name='espesorNeto'value={espesorNetoField} onChange={setEspesorNetoField} unit='m' errors={errors} />
-        <InputRow header="Porosidad" name='porosidad' value={porosidadField} onChange={setPorosidadField} unit='m' errors={errors} />
+        <InputRow header="Porosidad" name='porosidad' value={porosidadField} onChange={setPorosidadField} unit='%' errors={errors} />
         <InputRow header="Sw" name='Sw' value={swField} onChange={setSwField} unit='%' errors={errors} />
         <InputRow header="K promedio" name='kPromedio' value={kPromedioField} onChange={setKPromedioField} unit='mD' errors={errors} />
         <InputRow header="CAA" name='caa' value={caaField} onChange={setCaaField} unit='m' errors={errors} />
@@ -149,7 +157,7 @@ import { setDescubrimientoField, setFechaDeExplotacionField, setNumeroDePozosOpe
           Produccion @ Formacion
         </div>
         <InputRow header="Qo" name='qo' value={qoField} onChange={setQoField} unit='bpd' errors={errors} />
-        <InputRow header="Qg" name='qg' value={qgField} onChange={setQgField} unit='bpd' errors={errors} />
+        <InputRow header="Qg" name='qg' value={qgField} onChange={setQgField} unit='MMpcd' errors={errors} />
         <InputRow header="RGA" name='rgaProd' value={rgaField} onChange={setRgaField} unit='m3/m3' errors={errors} />
         <InputRow header="Fw" name='fw' value={fwField} onChange={setFwField} unit='%' errors={errors} />
         <InputRow header="Np" name='np' value={npField} onChange={setNpField} unit='MMb' errors={errors} />
@@ -225,6 +233,7 @@ const mapDispatchToProps = dispatch => ({
   setH2sField: val => dispatch(setH2sField(val)),
   setCo2Field: val => dispatch(setCo2Field(val)),
   setN2Field: val => dispatch(setN2Field(val)),
+  setTipoDeFluidoField: val => dispatch(setTipoDeFluidoField(val)),
 })
 
 export default connect(mapStateToProps, mapDispatchToProps)(TecnicaDelCampo)

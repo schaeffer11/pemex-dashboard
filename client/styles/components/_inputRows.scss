@@ -54,3 +54,52 @@
   	font-size: 12px
   }
 }
+
+.input-row-company {
+  display: grid;
+  grid-template-columns: 37% 16% 6% 16% 24%;
+  grid-template-areas: "header input unit compHeader compInput";
+  width: 100%;
+  background: whitesmoke;
+  padding: 5px;
+  border: solid 1px white;
+
+  .header {
+    grid-area: header;
+    font-size: 14px;
+  }
+
+  .input {
+    grid-area: input;
+    font-size: 12px
+  }
+
+  .unit {
+    grid-area: unit;
+    font-size: 10px;
+    text-align: center;
+    line-height: 30px;
+  }
+
+  .company-header {
+    grid-area: compHeader;
+    font-size: 14px;
+    text-align: right;
+    padding-right: 10px;
+  }
+
+  .company-input {
+    grid-area: compInput;
+    font-size: 12px;
+  }
+
+  .error {
+    grid-row: 2;
+    grid-column-start: 1;
+    grid-column-end: 3;
+    text-align: center;
+    padding: 5px 0;
+    color: red;
+    font-size: .875rem;
+  }
+}

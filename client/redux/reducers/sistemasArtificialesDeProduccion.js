@@ -1,7 +1,7 @@
 import { Map, fromJS } from 'immutable'
 
 const initialState = Map({ 
-	tipoDeSistemo: '',
+	tipoDeSistemo: 'none',
     presionDeCabeza: '',
     presionDeLineaODeSeparador: '',
     numeroDeDescargasOCiclosEV: '',
@@ -43,6 +43,7 @@ const initialState = Map({
     CuantaConAnclaBM: '',
     nivelDinamico: '',
     nivelEstatico: '',
+    sistemasArtificialesImgURL: null,
 
 })
 
@@ -133,7 +134,8 @@ const sistemasArtificialesDeProduccion = (state = initialState, action) => {
         return state.set('nivelDinamico', fromJS(action.value))
     case 'set_nivelEstatico':
         return state.set('nivelEstatico', fromJS(action.value))
-
+    case 'set_sistemasArtificialesImgURL':
+        return state.set('sistemasArtificialesImgURL', fromJS(action.value))
     default:
       return state
   }

@@ -48,6 +48,7 @@ export const setPActualFechaField = value => ({ type: 'set_pActualFechaField', v
 export const setDpPerAnoField = value => ({ type: 'set_dpPerAnoField', value})
 export const setTyacField = value => ({ type: 'set_tyacField', value})
 export const setPrField = value => ({ type: 'set_prField', value})
+export const setTipoDeFluidoField = value => ({ type: 'set_tipoDeFluidoField', value})
 export const setDensidadDelAceiteField = value => ({ type: 'set_densidadDelAceiteField', value})
 export const setPSatField = value => ({ type: 'set_pSatField', value})
 export const setRgaFluidoField = value => ({ type: 'set_rgaFluidoField', value})
@@ -118,7 +119,7 @@ export const setArregloDeVarillasBM = value => ({type: 'set_arregloDeVarillasBM'
 export const setCuantaConAnclaBM = value => ({type: 'set_CuantaConAnclaBM', value})
 export const setNivelDinamico = value => ({type: 'set_nivelDinamico', value})
 export const setNivelEstatico = value => ({type: 'set_nivelEstatico', value})
-
+export const setSistemasArtificialesImgURL = value => ({ type: 'set_sistemasArtificialesImgURL', value})
 
 //EvaluacionPetrofisica
 export const setLayerData = value => ({ type: 'set_layerData', value})
@@ -157,7 +158,6 @@ export const setPresionDataPozo = value => ({ type: 'set_presionDataPozo', value
 //HistoricoDeProduccion
 export const setFecha = value => ({ type: 'set_fecha', value})
 export const setTiempo = value => ({ type: 'set_tiempo', value})
-export const setTipoDeYac = value => ({ type: 'set_tipoDeYac', value})
 export const setEstrangulado = value => ({ type: 'set_estrangulado', value})
 export const setPtp = value => ({ type: 'set_ptp', value})
 export const setTtp = value => ({ type: 'set_ttp', value})

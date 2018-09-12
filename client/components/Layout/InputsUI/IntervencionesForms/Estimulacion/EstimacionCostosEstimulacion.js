@@ -1,7 +1,7 @@
 import React, { Component } from 'react'
 import autobind from 'autobind-decorator'
-import { InputRow, InputRowUnitless, InputRowSelectUnitless, TextAreaUnitless } from '../../../Common/InputRow'
-import { setEstCostCompaniaDeServicio, setEstCostoDeRentaDeBarco, setEstCostDeSistemaReactivo, setEstCostDeSistemaNoReactivo, setEstCostDeDivergenes, setEstCostDeN2, setEstCostHCL } from '../../../../../redux/actions/intervencionesEstimulacion'
+import { InputRow, InputRowUnitless, InputRowSelectUnitless, InputRowCosts, TextAreaUnitless } from '../../../Common/InputRow'
+import { setEstCostoDeRentaDeBarco, setEstCostDeSistemaReactivo, setEstCostDeSistemaNoReactivo, setEstCostDeDivergenes, setEstCostDeN2, setEstCostHCL } from '../../../../../redux/actions/intervencionesEstimulacion'
 import { connect } from 'react-redux'
 
 @autobind class EstimacionCostosEstimulacion extends Component {
@@ -28,13 +28,12 @@ import { connect } from 'react-redux'
         <div className='header'>
           Costos
         </div>
-        <InputRowUnitless header="Compañía de servicio" name='' value={estCostCompaniaDeServicio} onChange={setEstCostCompaniaDeServicio}/>
-        <InputRow header="Costo de renta de barco" name='' unit="MNX" value={estCostoDeRentaDeBarco} onChange={setEstCostoDeRentaDeBarco}/>
-        <InputRow header="Costo de sistema reactivo" name='' unit="MNX" value={estCostDeSistemaReactivo} onChange={setEstCostDeSistemaReactivo}/>
-        <InputRow header="Costo de sistema no reactivo" name='' unit="MNX" value={estCostDeSistemaNoReactivo} onChange={setEstCostDeSistemaNoReactivo}/>
-        <InputRow header="Costo de divergentes" name='' unit="MNX" value={estCostDeDivergenes} onChange={setEstCostDeDivergenes}/>
-        <InputRow header="Costo de N2" name='' unit="MNX" value={estCostDeN2} onChange={setEstCostDeN2}/>
-        <InputRow header="Costo de HCl" name='' unit="MNX" value={estCostHCL} onChange={setEstCostHCL}/>
+        <InputRowCosts header="Costo de renta de barco" name='' unit="MNX" value={estCostoDeRentaDeBarco} onChange={setEstCostoDeRentaDeBarco}/>
+        <InputRowCosts header="Costo de sistema reactivo" name='' unit="MNX" value={estCostDeSistemaReactivo} onChange={setEstCostDeSistemaReactivo}/>
+        <InputRowCosts header="Costo de sistema no reactivo" name='' unit="MNX" value={estCostDeSistemaNoReactivo} onChange={setEstCostDeSistemaNoReactivo}/>
+        <InputRowCosts header="Costo de divergentes" name='' unit="MNX" value={estCostDeDivergenes} onChange={setEstCostDeDivergenes}/>
+        <InputRowCosts header="Costo de N2" name='' unit="MNX" value={estCostDeN2} onChange={setEstCostDeN2}/>
+        <InputRowCosts header="Costo de HCl" name='' unit="MNX" value={estCostHCL} onChange={setEstCostHCL}/>
       </div>
     )
   }
@@ -59,7 +58,6 @@ const mapStateToProps = state => ({
 })
 
 const mapDispatchToProps = dispatch => ({
-  setEstCostCompaniaDeServicio: val => dispatch(setEstCostCompaniaDeServicio(val)),
   setEstCostoDeRentaDeBarco: val => dispatch(setEstCostoDeRentaDeBarco(val)),
   setEstCostDeSistemaReactivo: val => dispatch(setEstCostDeSistemaReactivo(val)),
   setEstCostDeSistemaNoReactivo: val => dispatch(setEstCostDeSistemaNoReactivo(val)),

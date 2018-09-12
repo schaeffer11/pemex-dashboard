@@ -3,7 +3,6 @@ import { Map, fromJS } from 'immutable'
 const initialState = Map({
     fecha: '',
     tiempo: '',
-    tipoDeYac: '',
     estrangulado: '',
     ptp: '',
     ttp: '',
@@ -46,8 +45,6 @@ const historicoDeProduccion = (state = initialState, action) => {
         return state.set('fecha', fromJS(action.value))
     case 'set_tiempo':
         return state.set('tiempo', fromJS(action.value))
-    case 'set_tipoDeYac':
-        return state.set('tipoDeYac', fromJS(action.value))
     case 'set_estrangulado':
         return state.set('estrangulado', fromJS(action.value))
     case 'set_ptp':

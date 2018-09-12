@@ -9,6 +9,7 @@ const initialState = Map({
     dpPerAnoField: '',
     tyacField: '',
     prField: '',
+    tipoDeFluidoField: '',
     densidadDelAceiteField: '',
     pSatField: '',
     rgaFluidoField: '',
@@ -55,6 +56,8 @@ const fichaTecnicaDelCampo = (state = initialState, action) => {
         return state.set('tyacField', fromJS(action.value))
     case 'set_prField':
         return state.set('prField', fromJS(action.value))
+    case 'set_tipoDeFluidoField':
+        return state.set('tipoDeFluidoField', fromJS(action.value))
     case 'set_densidadDelAceiteField':
         return state.set('densidadDelAceiteField', fromJS(action.value))
     case 'set_pSatField':

@@ -14,6 +14,15 @@ const options = [
   { label: 'Compatibilidad por Emulsión', value: 'emulsion' }
 ]
 
+const companyOptions = [
+  { label: 'Halliburton', value: 'Halliburton' },
+  { label: 'Schlumberger', value: 'Schlumberger' },
+  { label: 'PFM', value: 'PFM' },
+  { label: 'Chemiservices', value: 'Chemiservices' },
+  { label: 'BJ', value: 'BJ' },
+  { label: 'Weatherford', value: 'Weatherford' },
+]
+
 @autobind class PruebasDeLaboratorioEstimulacion extends Component {
   constructor(props) {
     super(props)
@@ -79,12 +88,22 @@ const options = [
     }
   }
 
-  handleSelect(row, e) {
+  handleSelectTipo(row, e) {
     let { formData, setPruebasDeLaboratorioData } = this.props
     formData = formData.toJS()
     let { pruebasDeLaboratorioData } = formData
 
     pruebasDeLaboratorioData[row.index].type = e
+
+    setPruebasDeLaboratorioData(pruebasDeLaboratorioData)
+  }
+
+  handleSelectCompany(row, e) {
+    let { formData, setPruebasDeLaboratorioData } = this.props
+    formData = formData.toJS()
+    let { pruebasDeLaboratorioData } = formData
+
+    pruebasDeLaboratorioData[row.index].compania = e
 
     setPruebasDeLaboratorioData(pruebasDeLaboratorioData)
   }
@@ -96,63 +115,70 @@ const options = [
     formData = formData.toJS()
     let { pruebasDeLaboratorioData } = formData
 
-
-
-
-          let columns = [{
-            Header: '',
-            accessor: 'delete',
-            width: 35,
-            resizable: false,
-            Cell: row => {
+    let columns = [{
+      Header: '',
+      accessor: 'delete',
+      width: 35,
+      resizable: false,
+      Cell: row => {
               if (row.original.length > 1) {
                 return (<div style={{color: 'white', background: 'red', borderRadius: '4px', textAlign: 'center', cursor: 'pointer'}}>X</div>)
               }
             }
-          }, {
-            Header: 'Tipo de Analisis',
-            accessor: 'type',
-            width: 420,
-            resizable: false,
-            style: {overflow: 'visible'},
-            Cell: row => {
-               return (<div>
-                <Select 
-                className='input' 
-                simpleValue={true} 
-                options={options} 
-                value={options.find(i=>i.value === row.original.type)}
-                onChange={(e) => this.handleSelect(row, e.value)} 
-                name={name} 
-              />
-              </div>)
-            }
-          }, { 
-            Header: 'Fecha de Muestreo',
-            accessor: 'fechaMuestreo',
-            cell: 'renderEditable',
-            maxWidth: 180,
-            resizable: false
-          }, { 
-            Header: 'Fecha de prueba',
-            accessor: 'fechaPrueba',
-            cell: 'renderEditable',
-            maxWidth: 180,
-            resizable: false
-          }, { 
-            Header: 'Compania',
-            accessor: 'compania',
-            cell: 'renderEditable'
-          }, { 
-            Header: 'Personal de Pemex que superviso',
-            accessor: 'superviso',
-            cell: 'renderEditable'
-          // }, { 
-          //   Header: 'test to show type',
-          //   accessor: 'type',
-          },
-        ]
-/*                value={options.find(i=>i.value === testSelect)} */
+      }, {
+        Header: 'Tipo de Analisis',
+        accessor: 'type',
+        width: 420,
+        resizable: false,
+        style: {overflow: 'visible'},
+        Cell: row => {
+                 return (<div>
+                  <Select 
+                  className='input' 
+                  simpleValue={true} 
+                  options={options} 
+                  value={options.find(i=>i.value === row.original.type)}
+                  onChange={(e) => this.handleSelect(row, e.value)} 
+                  name={name} 
+                />
+                </div>)
+              }
+      }, { 
+        Header: 'Fecha de Muestreo',
+        accessor: 'fechaMuestreo',
+        cell: 'renderEditable',
+        maxWidth: 180,
+        resizable: false
+      }, { 
+        Header: 'Fecha de prueba',
+        accessor: 'fechaPrueba',
+        cell: 'renderEditable',
+        maxWidth: 180,
+        resizable: false
+      }, { 
+        Header: 'Compania',
+        accessor: 'compania',
+        width: 200,
+        resizable: false,
+        style: {overflow: 'visible'},
+        Cell: row => {
+                 return (<div>
+                  <Select 
+                  className='input' 
+                  simpleValue={true} 
+                  options={companyOptions} 
+                  value={companyOptions.find(i=>i.value === row.original.compania)}
+                  onChange={(e) => this.handleSelectCompany(row, e.value)} 
+                  name={name} 
+                />
+                </div>)
+              }
+      }, { 
+        Header: 'Personal de Pemex que superviso',
+        accessor: 'superviso',
+        cell: 'renderEditable'
+      },
+    ]
 
     columns.forEach(column => {
       column.cell === 'renderEditable' ? column.Cell = this.renderEditable : null
@@ -185,13 +211,7 @@ const options = [
       <div className="form pruebas-de-laboratorio-estimulacion">
           { this.makeGeneralesForm() }
           <button className='new-row-button' onClick={this.addNewRow}> + </button>
-
-           {pruebasDeLaboratorioData.length}
-          
-{/*These both need to be moved to estimulation extra form */}
-{/*          <TextAreaUnitless header="Observaciones" name='' className={'obervaciones'} value={obervacionesLab} onChange={setObervacionesLab}/>
-          <div style={{color: 'red'}}>TODO: agregar opcion para subir evidencia de prueba de laboratorio. (add upload evidence of lab test)</div>
-*/}
+          {pruebasDeLaboratorioData.length}
       </div>
     )
   }

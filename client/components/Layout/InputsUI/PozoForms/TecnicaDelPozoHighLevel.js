@@ -32,6 +32,14 @@ import { setSubdireccion, setBloque, setActivo, setCampo, setPozo, setFormacion 
     }
   }
 
+  handleSelectFormacion(val) {
+    let { formacion, setFormacion } = this.props
+
+    if (formacion !== val.value) {
+      setFormacion(val.value) 
+    }
+  }
+
   handleSelectBloque(val) {
     let { setBloque } = this.props
 
@@ -97,6 +105,16 @@ import { setSubdireccion, setBloque, setActivo, setCampo, setPozo, setFormacion 
       ]
     }
 
+    let formacionOptions = [
+      {label: 'JSO', value: 'JSO'},
+      {label: 'JSK', value: 'JSK'},
+      {label: 'JST', value: 'JST'},
+      {label: 'KI', value: 'KI'},
+      {label: 'KM', value: 'KM'},
+      {label: 'KS', value: 'KS'},
+      {label: 'Paleoceno', value: 'paleoceno'},
+      {label: 'Eoceno', value: 'eoceno'},
+    ]
 
     let bloqueOptions = subdireccion ? bloqueOptionsMap[subdireccion] : []
 
@@ -109,7 +127,7 @@ import { setSubdireccion, setBloque, setActivo, setCampo, setPozo, setFormacion 
           <InputRowUnitless header="Activo" name="activo" value={activo} onChange={setActivo} name='activo' errors={errors} />
           <InputRowUnitless header="Campo" value={campo} onChange={setCampo} name='campo' errors={errors} />
           <InputRowUnitless header="Pozo" value={pozo} onChange={setPozo} name='pozo' errors={errors} />
-          <InputRowUnitless header="Formación" value={formacion} onChange={setFormacion} name='formacion' errors={errors} />
+          <InputRowSelectUnitless header="Formación" value={formacion} options={formacionOptions} callback={this.handleSelectFormacion} name='formacion' errors={errors} />
 
           <div style={{color: 'red'}}>TODO: agregar logica para nueva propuesta y opcion para subir resultados (add logic for new proposal/upload results)</div>
           <div style={{color: 'red'}}>TODO: agregar opcion de pozo nuevo o seleccionar pozo excistente (add new well/select well?)</div>

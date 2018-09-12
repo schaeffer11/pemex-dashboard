@@ -1,20 +1,35 @@
 import { Map, fromJS } from 'immutable'
 
 const initialState = Map({ 
-    estCostCompaniaDeServicio: '',
-    estCostoDeRentaDeBarco: '',
-    estCostDeSistemaReactivo: '',
-    estCostDeSistemaNoReactivo: '',
-    estCostDeDivergenes: '',
-    estCostDeN2: '',
-    estCostHCL: '',
+    estCostoDeRentaDeBarco: {
+            cost: 100,
+            company: 'test'
+        },
+    estCostDeSistemaReactivo: {
+            cost: '',
+            company: ''
+        },
+    estCostDeSistemaNoReactivo: {
+            cost: '',
+            company: ''
+        },
+    estCostDeDivergenes: {
+            cost: '',
+            company: ''
+        },
+    estCostDeN2: {
+            cost: '',
+            company: ''
+        },
+    estCostHCL: {
+            cost: '',
+            company: ''
+        },
 })
 
 
 const estCostEstimulacion = (state = initialState, action) => {
   switch (action.type) {
-    case 'set_estCostCompaniaDeServicio':
-        return state.set('estCostCompaniaDeServicio', fromJS(action.value))
     case 'set_estCostoDeRentaDeBarco':
         return state.set('estCostoDeRentaDeBarco', fromJS(action.value))
     case 'set_estCostDeSistemaReactivo':

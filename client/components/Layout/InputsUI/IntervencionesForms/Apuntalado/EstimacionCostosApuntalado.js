@@ -1,8 +1,8 @@
 
 import React, { Component } from 'react'
 import autobind from 'autobind-decorator'
-import { InputRow, InputRowUnitless, InputRowSelectUnitless, TextAreaUnitless } from '../../../Common/InputRow'
-import { setEstCostCompaniaDeServicio, setEstCostoDeRentaDeBarco, setEstCostUnidadesDeAltaPresion, setEstCostDelGelDeFractura, setEstCostDeSistemoRactivo, setEstCostDeSistemoNoRactivo, setEstCostDeDivergentes, setEstCostDeN2, setEstCostDeHCL, setEstCostDeSistemasAcidosRetardados, setEstCostDeCostoEquipoDeFacturamientoDePozos, setEstCostGelLineal, setEstCostTrabajosDeBombeoDiversos, setEstCostLlenadoDePozoYPruebaDeAdmision, setEstCostMinifrac, setEstCostBacheNeutralizador, setEstCostProtectorDeArbol } from '../../../../../redux/actions/intervencionesApuntalado'
+import { InputRow, InputRowUnitless, InputRowCosts, InputRowSelectUnitless, TextAreaUnitless } from '../../../Common/InputRow'
+import { setEstCostoDeRentaDeBarco, setEstCostUnidadesDeAltaPresion, setEstCostDelGelDeFractura, setEstCostDeSistemoRactivo, setEstCostDeSistemoNoRactivo, setEstCostDeDivergentes, setEstCostDeN2, setEstCostDeHCL, setEstCostDeSistemasAcidosRetardados, setEstCostDeCostoEquipoDeFacturamientoDePozos, setEstCostGelLineal, setEstCostTrabajosDeBombeoDiversos, setEstCostLlenadoDePozoYPruebaDeAdmision, setEstCostMinifrac, setEstCostBacheNeutralizador, setEstCostProtectorDeArbol } from '../../../../../redux/actions/intervencionesApuntalado'
 import { connect } from 'react-redux'
 
 @autobind class EstimacionCostosApuntalado extends Component {
@@ -20,32 +20,31 @@ import { connect } from 'react-redux'
   }
 
   makeCostosForm() {
-    let { setEstCostCompaniaDeServicio, setEstCostoDeRentaDeBarco, setEstCostUnidadesDeAltaPresion, setEstCostDelGelDeFractura, setEstCostDeSistemoRactivo, setEstCostDeSistemoNoRactivo, setEstCostDeDivergentes, setEstCostDeN2, setEstCostDeHCL, setEstCostDeSistemasAcidosRetardados, setEstCostDeCostoEquipoDeFacturamientoDePozos, setEstCostGelLineal, setEstCostTrabajosDeBombeoDiversos, setEstCostLlenadoDePozoYPruebaDeAdmision, setEstCostMinifrac, setEstCostBacheNeutralizador, setEstCostProtectorDeArbol, formData } = this.props
+    let { setEstCostoDeRentaDeBarco, setEstCostUnidadesDeAltaPresion, setEstCostDelGelDeFractura, setEstCostDeSistemoRactivo, setEstCostDeSistemoNoRactivo, setEstCostDeDivergentes, setEstCostDeN2, setEstCostDeHCL, setEstCostDeSistemasAcidosRetardados, setEstCostDeCostoEquipoDeFacturamientoDePozos, setEstCostGelLineal, setEstCostTrabajosDeBombeoDiversos, setEstCostLlenadoDePozoYPruebaDeAdmision, setEstCostMinifrac, setEstCostBacheNeutralizador, setEstCostProtectorDeArbol, formData } = this.props
     formData = formData.toJS()
-    let { estCostCompaniaDeServicio, estCostoDeRentaDeBarco, estCostUnidadesDeAltaPresion, estCostDelGelDeFractura, estCostDeSistemoRactivo, estCostDeSistemoNoRactivo, estCostDeDivergentes, estCostDeN2, estCostDeHCL, estCostDeSistemasAcidosRetardados, estCostDeCostoEquipoDeFacturamientoDePozos, estCostGelLineal, estCostTrabajosDeBombeoDiversos, estCostLlenadoDePozoYPruebaDeAdmision, estCostMinifrac, estCostBacheNeutralizador, estCostProtectorDeArbol } = formData
+    let { estCostoDeRentaDeBarco, estCostUnidadesDeAltaPresion, estCostDelGelDeFractura, estCostDeSistemoRactivo, estCostDeSistemoNoRactivo, estCostDeDivergentes, estCostDeN2, estCostDeHCL, estCostDeSistemasAcidosRetardados, estCostDeCostoEquipoDeFacturamientoDePozos, estCostGelLineal, estCostTrabajosDeBombeoDiversos, estCostLlenadoDePozoYPruebaDeAdmision, estCostMinifrac, estCostBacheNeutralizador, estCostProtectorDeArbol } = formData
    
     return (
       <div className='costos-form' >
         <div className='header'>
           Costos
         </div>
-        <InputRowUnitless header="Compania de Servicio" name='' value={estCostCompaniaDeServicio} onChange={estCostCompaniaDeServicio}/>
-        <InputRow header="Costo de renta de barco" name='' unit="MNX" value={estCostoDeRentaDeBarco} onChange={setEstCostoDeRentaDeBarco}/>
-        <InputRow header="Costo Unidades de alta presion" name='' unit="MNX" value={estCostUnidadesDeAltaPresion} onChange={setEstCostUnidadesDeAltaPresion}/>
-        <InputRow header="Costo del gel de fractura" name='' unit="MNX" value={estCostDelGelDeFractura} onChange={setEstCostDelGelDeFractura}/>
-        <InputRow header="Costo de sistema reactivo" name='' unit="MNX" value={estCostDeSistemoRactivo} onChange={setEstCostDeSistemoRactivo}/>
-        <InputRow header="Costo de sistema no reactivo" name='' unit="MNX" value={estCostDeSistemoNoRactivo} onChange={setEstCostDeSistemoNoRactivo} />
-        <InputRow header="Costo de divergentes" name='' unit="MNX" value={estCostDeDivergentes} onChange={setEstCostDeDivergentes}/>
-        <InputRow header="Costo de N2" name='' unit="MNX" value={estCostDeN2} onChange={setEstCostDeN2}/>
-        <InputRow header="Costo de HCL" name='' unit="MNX" value={estCostDeHCL} onChange={setEstCostDeHCL}/>
-        <InputRow header="Costo de sistemas acidos retardados" name='' unit="MNX" value={estCostDeSistemasAcidosRetardados} onChange={setEstCostDeSistemasAcidosRetardados}/>
-        <InputRow header="Costo equipo de fracturamiento de pozos" name='' unit="MNX" value={estCostDeCostoEquipoDeFacturamientoDePozos} onChange={setEstCostDeCostoEquipoDeFacturamientoDePozos}/>
-        <InputRow header="Costo gel lineal" name='' unit="MNX" value={estCostGelLineal} onChange={setEstCostGelLineal}/>
-        <InputRow header="Costo de trabajos de bombeo diversos" name='' unit="MNX" value={estCostTrabajosDeBombeoDiversos} onChange={setEstCostTrabajosDeBombeoDiversos}/>
-        <InputRow header="Costo de llenado de pozo y prueba de admision" name='' unit="MNX" value={estCostLlenadoDePozoYPruebaDeAdmision} onChange={setEstCostLlenadoDePozoYPruebaDeAdmision}/>
-        <InputRow header="Costo del Minifrac" name='' unit="MNX" value={estCostMinifrac} onChange={setEstCostMinifrac}/>
-        <InputRow header="Costo de Bache neutralizador" name='' unit="MNX" value={estCostBacheNeutralizador} onChange={setEstCostBacheNeutralizador}/>
-        <InputRow header="Protector de arbol" name='' unit="MNX" value={estCostProtectorDeArbol} onChange={setEstCostProtectorDeArbol}/>
+        <InputRowCosts header="Costo de renta de barco" name='' unit="MNX" value={estCostoDeRentaDeBarco} onChange={setEstCostoDeRentaDeBarco}/>
+        <InputRowCosts header="Costo Unidades de alta presion" name='' unit="MNX" value={estCostUnidadesDeAltaPresion} onChange={setEstCostUnidadesDeAltaPresion}/>
+        <InputRowCosts header="Costo del gel de fractura" name='' unit="MNX" value={estCostDelGelDeFractura} onChange={setEstCostDelGelDeFractura}/>
+        <InputRowCosts header="Costo de sistema reactivo" name='' unit="MNX" value={estCostDeSistemoRactivo} onChange={setEstCostDeSistemoRactivo}/>
+        <InputRowCosts header="Costo de sistema no reactivo" name='' unit="MNX" value={estCostDeSistemoNoRactivo} onChange={setEstCostDeSistemoNoRactivo} />
+        <InputRowCosts header="Costo de divergentes" name='' unit="MNX" value={estCostDeDivergentes} onChange={setEstCostDeDivergentes}/>
+        <InputRowCosts header="Costo de N2" name='' unit="MNX" value={estCostDeN2} onChange={setEstCostDeN2}/>
+        <InputRowCosts header="Costo de HCL" name='' unit="MNX" value={estCostDeHCL} onChange={setEstCostDeHCL}/>
+        <InputRowCosts header="Costo de sistemas acidos retardados" name='' unit="MNX" value={estCostDeSistemasAcidosRetardados} onChange={setEstCostDeSistemasAcidosRetardados}/>
+        <InputRowCosts header="Costo equipo de fracturamiento de pozos" name='' unit="MNX" value={estCostDeCostoEquipoDeFacturamientoDePozos} onChange={setEstCostDeCostoEquipoDeFacturamientoDePozos}/>
+        <InputRowCosts header="Costo gel lineal" name='' unit="MNX" value={estCostGelLineal} onChange={setEstCostGelLineal}/>
+        <InputRowCosts header="Costo de trabajos de bombeo diversos" name='' unit="MNX" value={estCostTrabajosDeBombeoDiversos} onChange={setEstCostTrabajosDeBombeoDiversos}/>
+        <InputRowCosts header="Costo de llenado de pozo y prueba de admision" name='' unit="MNX" value={estCostLlenadoDePozoYPruebaDeAdmision} onChange={setEstCostLlenadoDePozoYPruebaDeAdmision}/>
+        <InputRowCosts header="Costo del Minifrac" name='' unit="MNX" value={estCostMinifrac} onChange={setEstCostMinifrac}/>
+        <InputRowCosts header="Costo de Bache neutralizador" name='' unit="MNX" value={estCostBacheNeutralizador} onChange={setEstCostBacheNeutralizador}/>
+        <InputRowCosts header="Protector de arbol" name='' unit="MNX" value={estCostProtectorDeArbol} onChange={setEstCostProtectorDeArbol}/>
       </div>
     )
   }
@@ -67,7 +66,6 @@ const mapStateToProps = state => ({
 })
 
 const mapDispatchToProps = dispatch => ({
-  setEstCostCompaniaDeServicio: val => dispatch(setEstCostCompaniaDeServicio(val)),
   setEstCostoDeRentaDeBarco: val => dispatch(setEstCostoDeRentaDeBarco(val)),
   setEstCostUnidadesDeAltaPresion: val => dispatch(setEstCostUnidadesDeAltaPresion(val)),
   setEstCostDelGelDeFractura: val => dispatch(setEstCostDelGelDeFractura(val)),

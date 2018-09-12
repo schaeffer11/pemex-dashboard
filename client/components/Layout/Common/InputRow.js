@@ -14,8 +14,7 @@ const generateErrorElements = ( name = '', errors = [] ) => {
 export const InputRow = ({ header, name, unit, value, onChange, index, errors = [] }) => {
 
   let handleChange = (e) => {
-    console.log(e.target.value)
-    onChange(e.target.value, e)
+    onChange(e.target.value)
   }
 
   const errorElements = generateErrorElements(name, errors)
@@ -37,8 +36,7 @@ export const InputRow = ({ header, name, unit, value, onChange, index, errors = 
 export const InputRowUnitless = ({ header, name, unit, value, onChange, index={index}, errors = [] }) => {
 
   let handleChange = (e) => {
-    console.log(e.target.value)
-    onChange(e.target.value, e)
+    onChange(e.target.value)
   }
 
   const errorElements = generateErrorElements(name, errors)
@@ -76,8 +74,7 @@ export const InputRowSelectUnitless = ({ header, name, value, options, callback,
 export const TextAreaUnitless = ({ header, name, unit, className, subheader, value, onChange, index, errors =[] }) => {
   
   let handleChange = (e) => {
-    console.log(e.target.value)
-    onChange(e.target.value,e)
+    onChange(e.target.value)
   }
 
   return (
@@ -92,4 +89,37 @@ export const TextAreaUnitless = ({ header, name, unit, className, subheader, val
     </div>
     )
 }
+
+export const InputRowCosts = ({ header, name, unit, value, onChange, index, errors = [] }) => {
+
+  let handleCostChange = (e) => {
+    onChange({ cost: e.target.value, company: value.company })
+  }
+
+    let handleCompChange = (e) => {
+    onChange({ cost: value.cost, company: e.target.value })
+  }
+
+  const errorElements = generateErrorElements(name, errors)
+
+  return (
+    <div className='input-row input-row-company'>
+      <div className='label'>
+        {header}
+      </div>
+      <input className='input' value={value.cost} onChange={handleCostChange} name={name} index={index} required>
+      </input>
+      <div className='unit'>
+        {unit}
+      </div>
+      <div className='company-header label'>
+        Company
+      </div>
+      <input className='company-input' value={value.company} onChange={handleCompChange} name={name} index={index} required>
+      </input>
+    </div>
+    )
+}
+
+
 

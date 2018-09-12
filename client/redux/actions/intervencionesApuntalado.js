@@ -83,7 +83,6 @@ export const setEstIncGastoCompromisoQg = value => ({ type: 'set_estIncGastoComp
 export const setObervacionesEstIncApuntalado = value => ({ type: 'set_obervacionesEstIncApuntalado', value})
 
 
-export const setEstCostCompaniaDeServicio = value => ({ type: 'set_estCostCompaniaDeServicio', value})
 export const setEstCostoDeRentaDeBarco = value => ({ type: 'set_estCostoDeRentaDeBarco', value})
 export const setEstCostUnidadesDeAltaPresion = value => ({ type: 'set_estCostUnidadesDeAltaPresion', value})
 export const setEstCostDelGelDeFractura = value => ({ type: 'set_estCostDelGelDeFractura', value})

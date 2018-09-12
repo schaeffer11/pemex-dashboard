@@ -4,7 +4,7 @@ import { connect } from 'react-redux'
 import ReactTable from 'react-table'
 
 import { InputRow, InputRowUnitless, InputRowSelectUnitless } from '../../Common/InputRow'
-import { setHistorialIntervencionesData, setIntervaloProductor, setEspesorBruto, setEspesorNeto, setCaliza, setDolomia, setArcilla, setPorosidad, setPermeabilidad, setSw, setCaa, setCga, setTipoDePozo, setPwsFecha, setPwfFecha, setDeltaPPerMes, setTyac, setPvt, setAparejoDeProduccion, setProfEmpacador, setProfSensorPYT, setTipoDeSap, setModuloYoungArena, setModuloYoungLutitas, setRelacPoissonArena, setRelacPoissonLutatas, setGradienteDeFractura, setDensidadDeDisparos, setDiametroDeDisparos, formData } from '../../../../redux/actions/pozo'
+import { setTipoDeSistemo, setHistorialIntervencionesData, setIntervaloProductor, setEspesorBruto, setEspesorNeto, setCaliza, setDolomia, setArcilla, setPorosidad, setPermeabilidad, setSw, setCaa, setCga, setTipoDePozo, setPwsFecha, setPwfFecha, setDeltaPPerMes, setTyac, setPvt, setAparejoDeProduccion, setProfEmpacador, setProfSensorPYT, setTipoDeSap, setModuloYoungArena, setModuloYoungLutitas, setRelacPoissonArena, setRelacPoissonLutatas, setGradienteDeFractura, setDensidadDeDisparos, setDiametroDeDisparos, formData } from '../../../../redux/actions/pozo'
 
 let columns = [
   {
@@ -54,7 +54,7 @@ let columns = [
       return ['intervalosProductores', 'espesorBruto', 'espesorNeto', 'caliza', 'dolomia', 'arcilla', 'porosidad', 
        'permeabilidad', 'sw', 'caa', 'cga', 
        'tipoDePozo', 'pwsFecha', 'pwfFecha', 'deltaPPerMes', 'setTyac', 'setPvt', 'aparejoDeProduccion',
-       'profEmpacador', 'profSensorPYT','tipoDeSap',
+       'profEmpacador', 'profSensorPYT',
        'moduloYoungArena', 'moduloYoungLutitas', 'relacPoissonArena', 'relacPoissonLutatas', 'gradienteDeFractura',
        'densidadDeDisparos', 'diametroDeDisparos'].includes(error.field)
     })
@@ -95,14 +95,24 @@ let columns = [
   }
 
   makePozoForm() {
-    let { setTipoDePozo, setPwsFecha, setPwfFecha, setDeltaPPerMes, setTyac, setPvt, setAparejoDeProduccion, setProfEmpacador, setProfSensorPYT, setTipoDeSap, formData } = this.props 
+    let { tipoDeSistemo, setTipoDePozo, setPwsFecha, setPwfFecha, setDeltaPPerMes, setTyac, setPvt, setAparejoDeProduccion, setProfEmpacador, setProfSensorPYT, setTipoDeSistemo, formData } = this.props 
     formData = formData.toJS()
-    let { tipoDePozo, pwsFecha, pwfFecha, deltaPPerMes, tyac, pvt, aparejoDeProduccion, profEmpacador, profSensorPYT, tipoDeSap } = formData
+    let { tipoDePozo, pwsFecha, pwfFecha, deltaPPerMes, tyac, pvt, aparejoDeProduccion, profEmpacador, profSensorPYT } = formData
 
     let wellOptions = [
       { label: 'Productor', value: 'Productor' },
       { label: 'Inyector', value: 'Inyector' },
       { label: 'Cerrado', value: 'Cerrado' }
+    ]
+
+    let options = [
+      { label: 'Ninguna', value: 'none' },
+      { label: 'Embolo viajero', value: 'emboloViajero' },
+      { label: 'Bombeo neumatico', value: 'bombeoNeumatico' },
+      { label: 'Bombeo hidráulico', value: 'bombeoHidraulico' },
+      { label: 'Bombeo cavidades progresivas', value: 'bombeoCavidadesProgresivas' },
+      { label: 'Bombeo electrocentrífugo', value: 'bombeoElectrocentrifugo' },
+      { label: 'Bombeo mecánico', value: 'bombeoMecanico' },
     ]
 
     return (
@@ -119,7 +129,7 @@ let columns = [
           <InputRow header="Aparejo de producción" value={aparejoDeProduccion} onChange={setAparejoDeProduccion} name='aparejoDeProduccion' unit='pg' />
           <InputRow header="Prof. empacador" name='profEmpacador' value={profEmpacador} onChange={setProfEmpacador} unit='md' />
           <InputRow header="Prof. sensor P y T" name='profSensorPYT' value={profSensorPYT} onChange={setProfSensorPYT} unit='md' />
-          <InputRowUnitless header="Tipo de SAP" name='TipoDeSap' value={tipoDeSap} onChange={setTipoDeSap} />
+          {/*<InputRowUnitless header="Tipo de SAP" name='TipoDeSap' value={tipoDeSistemo !== '' ? options.find(i => i.value === tipoDeSistemo).label: null} onChange={setTipoDeSistemo} />*/}
       </div>
     )
   }
@@ -243,6 +253,7 @@ let columns = [
 const mapStateToProps = state => ({
   forms: state.get('forms'),
   formData: state.get('fichaTecnicaDelPozo'),
+  tipoDeSistemo: state.getIn(['sistemasArtificialesDeProduccion', 'tipoDeSistemo'])
 })
 
 const mapDispatchToProps = dispatch => ({
@@ -266,7 +277,7 @@ const mapDispatchToProps = dispatch => ({
   setAparejoDeProduccion: val => dispatch(setAparejoDeProduccion(val)),
   setProfEmpacador: val => dispatch(setProfEmpacador(val)),
   setProfSensorPYT: val => dispatch(setProfSensorPYT(val)),
-  setTipoDeSap: val => dispatch(setTipoDeSap(val)),
+  setTipoDeSistemo: val => dispatch(setTipoDeSistemo(val)),
   setModuloYoungArena: val => dispatch(setModuloYoungArena(val)),
   setModuloYoungLutitas: val => dispatch(setModuloYoungLutitas(val)),
   setRelacPoissonArena: val => dispatch(setRelacPoissonArena(val)),
