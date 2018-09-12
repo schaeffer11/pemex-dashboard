@@ -108,8 +108,7 @@ const resultadoOptions = [
   }
 
   makeCaracterizacionForm(index) {
-    let { formData, pruebasDeLaboratorio } = this.props
-    formData = formData.toJS()
+    let { pruebasDeLaboratorio } = this.props
     pruebasDeLaboratorio = pruebasDeLaboratorio.toJS()
     let { pruebasDeLaboratorioData } = pruebasDeLaboratorio
 
@@ -139,7 +138,7 @@ const resultadoOptions = [
   }
 
   makeSolubilidadForm(index) {
-    let { pruebasDeLaboratorio, formData } = this.props
+    let { pruebasDeLaboratorio } = this.props
     pruebasDeLaboratorio = pruebasDeLaboratorio.toJS()
     let { pruebasDeLaboratorioData } = pruebasDeLaboratorio 
     
@@ -157,7 +156,7 @@ const resultadoOptions = [
   }
 
   makeGrabadoNucleosForm(index) {
-    let { pruebasDeLaboratorio, formData } = this.props
+    let { pruebasDeLaboratorio } = this.props
     pruebasDeLaboratorio = pruebasDeLaboratorio.toJS()
     let { pruebasDeLaboratorioData } = pruebasDeLaboratorio
     
@@ -174,7 +173,7 @@ const resultadoOptions = [
   }
 
   makeGelLinealForm(index) {
-    let { pruebasDeLaboratorio, formData } = this.props
+    let { pruebasDeLaboratorio } = this.props
     pruebasDeLaboratorio = pruebasDeLaboratorio.toJS()
     let { pruebasDeLaboratorioData } = pruebasDeLaboratorio
     
@@ -193,7 +192,7 @@ const resultadoOptions = [
   }
 
   renderEditable(cellInfo) {
-    let { formData, pruebasDeLaboratorio, setPruebasDeLaboratorioData } = this.props
+    let { pruebasDeLaboratorio, setPruebasDeLaboratorioData } = this.props
     pruebasDeLaboratorio = pruebasDeLaboratorio.toJS()
     let { pruebasDeLaboratorioData } = pruebasDeLaboratorio
 
@@ -212,7 +211,7 @@ const resultadoOptions = [
   }
 
   addNewRow(event) {
-    let { formData, pruebasDeLaboratorio, setPruebasDeLaboratorioData } = this.props
+    let { pruebasDeLaboratorio, setPruebasDeLaboratorioData } = this.props
     pruebasDeLaboratorio = pruebasDeLaboratorio.toJS()
     let { pruebasDeLaboratorioData } = pruebasDeLaboratorio
 
@@ -228,7 +227,7 @@ const resultadoOptions = [
   }
 
   deleteRow(state, rowInfo, column, instance) {
-    let { formData, pruebasDeLaboratorio } = this.props
+    let { pruebasDeLaboratorio } = this.props
     pruebasDeLaboratorio = pruebasDeLaboratorio.toJS()
     let { pruebasDeLaboratorioData } = pruebasDeLaboratorio
 
@@ -254,8 +253,7 @@ const resultadoOptions = [
   }
 
   makeSistemaTable(index) {
-    let { formData, pruebasDeLaboratorio } = this.props
-    formData = formData.toJS()
+    let { pruebasDeLaboratorio } = this.props
     pruebasDeLaboratorio = pruebasDeLaboratorio.toJS()
     let { pruebasDeLaboratorioData } = pruebasDeLaboratorio
 
@@ -384,11 +382,8 @@ const resultadoOptions = [
   }
 
   render() {
-    let { setObervacionesPruebasLabAcido, formData, pruebasDeLaboratorio } = this.props
-    formData = formData.toJS()
+    let { setObervacionesPruebasLabAcido, pruebasDeLaboratorio } = this.props
     pruebasDeLaboratorio = pruebasDeLaboratorio.toJS()
-
-    let { obervacionesPruebasLabAcido} = formData
     let { pruebasDeLaboratorioData } = pruebasDeLaboratorio
 
     return pruebasDeLaboratorioData.map((form, i) =>      
@@ -415,7 +410,6 @@ const resultadoOptions = [
 
 
 const mapStateToProps = state => ({
-  formData: state.get('pruebasDeLaboratorioAcido'),
   pruebasDeLaboratorio: state.get('pruebasDeLaboratorio'),
 })
 

@@ -72,7 +72,7 @@ import AnalisisDelAgua from './AnalisisDelAgua'
   }
 
   handleSubmit(){
-    this.props.submitPozoForm(this.props)
+    this.props.submitPozoForm(this.props.everything)
   }
 
   downloadMasterTemplate() {
@@ -122,6 +122,7 @@ const mapDispatchToProps = dispatch => ({
 })
 
 const mapStateToProps = state => ({
+  everything: state,
   formsState: state.get('forms'),
   fichaTecnicaDelPozoHighLevel: state.get('fichaTecnicaDelPozoHighLevel'),
   fichaTecnicaDelPozo: state.get('fichaTecnicaDelPozo'),

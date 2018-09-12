@@ -3,6 +3,7 @@ import autobind from 'autobind-decorator'
 import { connect } from 'react-redux'
 import { setImgURL, setLayerData, setMudLossData } from '../../../../redux/actions/pozo'
 import ReactTable from 'react-table'
+import { freemem } from 'os';
 
 let layerColumns = [
   {
@@ -307,6 +308,43 @@ let mudLossColumns = [
     setImgURL(localImgUrl)
   }
 
+  handleMyClick(e) {
+    e.preventDefault()
+    console.log('what?', this.props.formData.toJS())
+    let data = this.props.formData.toJS()
+    const { imgURL } = data
+
+    function bufferToBase64(buf) {
+      console.log('buffer to 64')
+      var binstr = Array.prototype.map.call(buf, function (ch) {
+          return String.fromCharCode(ch);
+      }).join('');
+      return btoa(binstr);
+    }
+
+  var xhr = new XMLHttpRequest()
+  xhr.open('GET', imgURL, true)
+  xhr.responseType = 'arraybuffer'
+
+  xhr.onload = function(e) {
+    if (this.status == 200) {
+      var uInt8Array = new Uint8Array(this.response);
+      var byte3 = uInt8Array[4]; 
+      console.log('uint8', uInt8Array)
+      const base64 = bufferToBase64(uInt8Array)
+      console.log('fuck this up', uInt8Array)
+      let formData = new FormData()
+        formData.append('file', base64)
+        formData.append('somename', 'aldini')
+        fetch('/api/testing', {
+          method: 'POST',
+          body: formData,
+        })
+    }
+  }
+  xhr.send();
+  }
+
   makeImgInput() {
     let { formData } = this.props
     formData = formData.toJS()
@@ -331,6 +369,7 @@ let mudLossColumns = [
         {this.makeLayerTable()}
         {this.makeMudLossTable()}
         {this.makeImgInput()}
+        <button onClick={this.handleMyClick}>Do something</button>
       </div>
     )
   }

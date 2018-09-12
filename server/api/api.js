@@ -4,17 +4,25 @@ import express from 'express'
 import db from '../lib/db'
 import appConfig from '../../app-config.js'
 import path from 'path'
-
+import fs from 'fs'
+import multer from 'multer'
+import { addObject, signedURL, deleteObject } from '../aws';
 var well = require('./pozo')
 var intervencion = require('./intervenciones')
 
 const db_con = db.get(appConfig.users.database)
 const app = express()
 
+const upload = multer({
+  limits: { fieldSize: 25 * 1024 * 1024 },
+})
+
 const handleError = (err) => {
   console.error(err)
   return { status: 500, error: true }
 }
+
+app.use(upload.array())
 
 app.get('/ping', (req, res) => {
 	console.log('pong')
@@ -28,6 +36,46 @@ app.get('/getTemplate', (req, res) => {
   res.sendFile(localPath)
 })
 
+app.get('/what', (req, res) => {
+  const buf = fs.readFileSync(path.join(__dirname, '../../', 'screenshot_test.png'))
+  console.log('buf', buf)
+  res.send('done')
+})
+
+app.get('/geturl?', async (req, res) => {
+  const url = await signedURL(req.query.img).catch(reason => console.log(reason))
+  res.send(url)
+})
+
+app.get('/deleteobj', async (req, res) => {
+  const test = await deleteObject(req.query.img)
+  console.log('data', test)
+  res.send('done')
+})
+
+app.post('/inputTest', async (req, res) => {
+  console.log('what are we here?', req.body)
+  const allKeys = Object.keys(req.body)
+  const { pozo } = JSON.parse(req.body.fichaTecnicaDelPozo)
+  for(let key of allKeys) {
+    const innerObj = JSON.parse(req.body[key])
+    if (innerObj.img) {
+      console.log('ok i have something here')
+      const buf = Buffer.from(innerObj.img, 'base64')
+      const Key = `${pozo}.${key}`
+      const t = await addObject(buf, Key).catch(reason => console.log('something went wrong', reason))
+      console.log('uploaded', t)
+    }
+  }
+})
+
+app.post('/testing', (req, res) => {
+  // console.log('this is about to get fucked', req.body)
+  const buf = Buffer.from(req.body.file, 'base64')
+  addObject(buf)
+
+  res.json({ yeah: 'boy' })
+})
 
 app.post('/well', well.create);
 
