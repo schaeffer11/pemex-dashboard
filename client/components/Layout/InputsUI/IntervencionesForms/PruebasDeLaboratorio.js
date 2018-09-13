@@ -8,7 +8,7 @@ import Select from 'react-select'
 import { InputRow, InputRowUnitless, InputRowSelectUnitless, TextAreaUnitless } from '../../Common/InputRow'
 import { setPruebasDeLaboratorioData } from '../../../../redux/actions/intervencionesEstimulacion'
 
-const options = [
+export const options = [
   { label: 'Caracterización de Agua', value: 'caracterizacinAgua' },
   { label: 'Caracterización Físico-Química de Solubilidad', value: 'caracterizacinSolubilidad' },
   { label: 'Compatibilidad por Emulsión', value: 'emulsion' }
@@ -138,7 +138,7 @@ const companyOptions = [
                   simpleValue={true} 
                   options={options} 
                   value={options.find(i=>i.value === row.original.type)}
-                  onChange={(e) => this.handleSelect(row, e.value)} 
+                  onChange={(e) => this.handleSelectTipo(row, e.value)} 
                   name={name} 
                 />
                 </div>)

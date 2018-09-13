@@ -1,7 +1,7 @@
 import React, { Component } from 'react'
 import autobind from 'autobind-decorator'
 import { InputRow, InputRowUnitless, InputRowSelectUnitless, TextAreaUnitless } from '../../../Common/InputRow'
-import { typeOptions } from '../PruebasDeLaboratorio'
+import { options as typeOptions } from '../PruebasDeLaboratorio'
 import { setPruebasDeLaboratorioData } from '../../../../../redux/actions/intervencionesEstimulacion'
 import { setLabEvidenceImgURL } from '../../../../../redux/actions/intervencionesEstimulacion'
 import { connect } from 'react-redux'
