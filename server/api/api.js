@@ -63,8 +63,9 @@ app.get('/deleteobj', async (req, res) => {
 app.post('/inputTest', async (req, res) => {
   // console.log('what are we here?', req.body)
   const allKeys = Object.keys(req.body)
-  const { pozo } = JSON.parse(req.body.fichaTecnicaDelPozoHighLevel)
-  console.log('pzo', pozo)
+  // const { pozo } = JSON.parse(req.body.fichaTecnicaDelPozoHighLevel)
+  // console.log('pzo', pozo)
+  const finalObj = {}
   for(let k of allKeys) {
     const innerObj = JSON.parse(req.body[k])
     const innerKeys = Object.keys(innerObj)
@@ -73,6 +74,7 @@ app.post('/inputTest', async (req, res) => {
       console.log('found image', k, innerObj.imgName)
       const buf = Buffer.from(innerObj.img, 'base64')
       const t = await addObject(buf, innerObj.imgName).catch(reason => console.log(reason))
+      innerObj.img = t
       console.log('uploaded img', t, k)
     }
 
@@ -83,12 +85,18 @@ app.post('/inputTest', async (req, res) => {
           if (j.img) {
             const buf = Buffer.from(j.img, 'base64')
             const t = await addObject(buf, j.imgName).catch(reason => console.log(reason))
+            j.img = t
             console.log('uploaded img', k, t)
           }
         }
       }
     }
+    finalObj[k] = innerObj
   }
+
+  console.log('finalobj', finalObj.historicoDePresion.presionDataCampo)
+
+  // write to db
   res.json({ done: true })
 })
 

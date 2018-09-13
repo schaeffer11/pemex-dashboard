@@ -59,12 +59,14 @@ export function submitForm(fields) {
         for(let aKeys of innerKeys) {
           const property = innerObj[aKeys]
           if (Array.isArray(property)) {
+            let index = 0
             for (let j of property) {
               if (j.hasOwnProperty('imgURL')) {
                 if (j.imgURL) {
                   const img = await getBase64FromURL(j.imgURL)
                   j.img = img
-                  j.imgName = [pozo, k, j.type, utc].join('.')
+                  j.imgName = [pozo, k, j.type, index, utc].join('.')
+                  index += 1
                 }
               }
             }
