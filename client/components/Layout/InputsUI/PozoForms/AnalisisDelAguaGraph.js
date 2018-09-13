@@ -45,7 +45,7 @@ const config = {
         series: [{
           animation: false,
           name: 'something',
-          data: [2500, 500, 180, 1]
+          data: [1, 1, 1, 1]
         }]
       }
 
@@ -89,7 +89,7 @@ const config = {
         series: [{
           animation: false,
           name: 'something',
-          data: [2100, 8, 8, 1]
+          data: [1,1,1,1]
         }]
       }
 
@@ -98,22 +98,8 @@ const config = {
   constructor(props) {
     super(props)
     this.state = { 
-      chartConfig: {
-        title: {
-          text: ''
-        },
-        credits: {
-          enabled: false
-        }
-      },
-      chartConfig2: {
-        title: {
-          text: ''
-        },
-        credits: {
-          enabled: false
-        }
-      }
+      chartConfig: config,
+      chartConfig2: config2
     }
   }
 
@@ -143,7 +129,6 @@ const config = {
     
 
     if (oldFormData.sodio !== sodio || oldFormData.calcio !== calcio || oldFormData.magnesio !== magnesio || oldFormData.fierro !== fierro || oldFormData.cloruros !== cloruros || oldFormData.bicarbonatos !== bicarbonatos || oldFormData.sulfatos !== sulfatos || oldFormData.carbonatos !== carbonatos) {
-      console.log(sodio, calcio, magnesio, fierro, cloruros, bicarbonatos, sulfatos, carbonatos)
 
       let newConfig = config
       let newConfig2 = config2
@@ -174,8 +159,6 @@ const config = {
   render() {
     let { chartConfig, chartConfig2 } = this.state
 
-    console.log(chartConfig2)
-    console.log(chartConfig)
     return (
       <div className="graph">
         <div className='test' style={{position: 'relative', width: '50%', display: 'inline-block'}}>

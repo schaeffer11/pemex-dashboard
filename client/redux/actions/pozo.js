@@ -6,7 +6,6 @@ export const setCampo = value => ({ type: 'set_campo', value})
 export const setPozo = value => ({ type: 'set_pozo', value})
 export const setFormacion = value => ({ type: 'set_formacion', value})
 
-
 //FichaTecnicaDelPozo
 export const setIntervaloProductor = value => ({ type: 'set_intervaloProductor', value})
 export const setEspesorBruto = value => ({ type: 'set_espesorBruto', value})

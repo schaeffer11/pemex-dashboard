@@ -345,12 +345,18 @@
 
 	.analisis-del-agua {
 		display: grid;
+		grid-template-rows: 675px auto;
 		grid-template-columns: 50% 50%;
 		grid-column-gap: 10px;
-		grid-template-areas: 'valores .';
+		grid-template-areas: 	'valores .'
+								'valores graph';
 
 		.valores-form {
 			grid-area: valores;
+		}
+
+		.graph {
+			grid-area: graph;
 		}
 	}
 

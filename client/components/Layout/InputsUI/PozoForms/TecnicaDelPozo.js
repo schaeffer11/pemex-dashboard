@@ -121,7 +121,7 @@ let columns = [
         <div className='header'>
           Los Datos de Pozo
         </div>
-          <InputRowSelectUnitless header="Tipo de pozo" value={tipoDePozo} onChange={setTipoDePozo} name='' options={wellOptions} />
+          <InputRowSelectUnitless header="Tipo de pozo" value={tipoDePozo} callback={(e) => setTipoDePozo(e.value)} name='' options={wellOptions} />
           <InputRow header="Pws (fecha)" name='pws' value={pwsFecha} onChange={setPwsFecha} unit='Kg/cm2' />
           <InputRow header="Pwf (fecha)" name='pwf' value={pwfFecha} onChange={setPwfFecha} unit='Kg/cm2' />
           <InputRow header="Δp/mes" name='deltaPperMes' value={deltaPPerMes} onChange={setDeltaPPerMes} unit='Kg/cm2/mes' />
@@ -220,8 +220,8 @@ let columns = [
 
     return (
       <div className="form tecnica-del-pozo">
-        { this.makeFormacionForm() }
         { this.makePozoForm() }
+        { this.makeFormacionForm() }
         { this.makeHistoricalInterventionsInput() }
       </div>
     )

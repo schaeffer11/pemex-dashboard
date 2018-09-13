@@ -109,7 +109,7 @@ let fluidoOptions = [
         <div className='header'>
           Fluido
         </div>
-        <InputRowSelectUnitless header='Tipo de Fluido' value={tipoDeFluidoField} onChange={setTipoDeFluidoField} options={fluidoOptions} />
+        <InputRowSelectUnitless header='Tipo de Fluido' value={tipoDeFluidoField} callback={(e) => setTipoDeFluidoField(e.value)} options={fluidoOptions} />
         <InputRow header="Densidad del aceite" name='densidadDelAceite' value={densidadDelAceiteField} onChange={setDensidadDelAceiteField} unit='°API' errors={errors} />
         <InputRow header="P sat" name='pSat' value={pSatField} onChange={setPSatField} unit='Kg/cm2' errors={errors} />
         <InputRow header="RGA" name='rga' value={rgaFluidoField} onChange={setRgaFluidoField} unit='m3/m3' errors={errors} />
