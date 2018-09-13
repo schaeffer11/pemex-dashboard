@@ -11,7 +11,7 @@ import { setPruebasDeLaboratorioData } from '../../../../redux/actions/intervenc
 export const options = [
   { label: 'Caracterización de Agua', value: 'caracterizacinAgua' },
   { label: 'Caracterización Físico-Química de Solubilidad', value: 'caracterizacinSolubilidad' },
-  { label: 'Compatibilidad por Emulsión', value: 'emulsion' }
+  { label: 'Compatibilidad por Emulsión', value: 'emulsion' },
 ]
 
 const companyOptions = [
@@ -61,9 +61,10 @@ const companyOptions = [
     formData = formData.toJS()
     let { pruebasDeLaboratorioData } = formData
 
-    pruebasDeLaboratorioData[0].length = 2
+    let copy = pruebasDeLaboratorioData
+    copy[0].length = 2
 
-    setPruebasDeLaboratorioData([...pruebasDeLaboratorioData, {index: pruebasDeLaboratorioData.length, type: '', fechaMuestreo: '', fechaPrueba: '', compania: '', superviso: '', length: pruebasDeLaboratorioData.length + 1}])
+    setPruebasDeLaboratorioData([...copy, {index: pruebasDeLaboratorioData.length, type: '', fechaMuestreo: '', fechaPrueba: '', compania: '', superviso: '', length: pruebasDeLaboratorioData.length + 1}])
   }
 
 
@@ -75,14 +76,15 @@ const companyOptions = [
     return {
       onClick: e => {
         if (column.id === 'delete' && pruebasDeLaboratorioData.length > 1) {
-          pruebasDeLaboratorioData.splice(rowInfo.original.index, 1)
+          let copy = pruebasDeLaboratorioData
+          copy.splice(rowInfo.original.index, 1)
 
-          pruebasDeLaboratorioData.forEach((i, index) => {
+          copy.forEach((i, index) => {
             i.index = index
             i.length = pruebasDeLaboratorioData.length
           }) 
 
-          setPruebasDeLaboratorioData(pruebasDeLaboratorioData)
+          setPruebasDeLaboratorioData(copy)
         }
       }
     }
@@ -137,7 +139,7 @@ const companyOptions = [
                   className='input' 
                   simpleValue={true} 
                   options={options} 
-                  value={options.find(i=>i.value === row.original.type)}
+                  value={options.find(i=>i.value === row.original.type) || null}
                   onChange={(e) => this.handleSelectTipo(row, e.value)} 
                   name={name} 
                 />
@@ -167,7 +169,7 @@ const companyOptions = [
                   className='input' 
                   simpleValue={true} 
                   options={companyOptions} 
-                  value={companyOptions.find(i=>i.value === row.original.compania)}
+                  value={companyOptions.find(i=>i.value === row.original.compania) || null}
                   onChange={(e) => this.handleSelectCompany(row, e.value)} 
                   name={name} 
                 />

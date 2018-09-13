@@ -77,16 +77,18 @@ const resultadoOptions = [
   }
 
   updateValue(value, event){
+    console.log('im updating a value', value, event)
     if(event === undefined)
       return
-
+    event.preventDefault()
     let { setPruebasDeLaboratorioData, pruebasDeLaboratorio } = this.props
     pruebasDeLaboratorio = pruebasDeLaboratorio.toJS()
 
     let index = event.target.getAttribute('index')
     let pruebas = {...pruebasDeLaboratorio}
     pruebas.pruebasDeLaboratorioData[index][event.target.name] = value
-
+    console.log('what is last thing', pruebas.pruebasDeLaboratorioData[index][event.target.name] = value)
+    console.log('and the final', pruebas.pruebasDeLaboratorioData)
     setPruebasDeLaboratorioData(pruebas.pruebasDeLaboratorioData)
   }
 
@@ -125,33 +127,56 @@ const resultadoOptions = [
     setPruebasDeLaboratorioData(pruebasDeLaboratorioData)
   }
 
+  // deleteRow(state, rowInfo, column, instance) {
+  //   let { data } = this.state
+  //   let copy = JSON.parse(JSON.stringify(data))
+  //   // let { setLayerData, formData } = this.props
+  //   // formData = formData.toJS()
+  //   // let { layerData } = formData
+
+  //   return {
+  //     onClick: e => {
+  //       if (column.id === 'delete' && copy.length > 1) {
+  //       // if (column.id === 'delete' && layerData.length > 1) {
+  //         copy.splice(rowInfo.original.index, 1)
+  //         // layerData.splice(rowInfo.original.index, 1)
+
+  //         // layerData.forEach((i, index) => {
+  //         //   i.index = index
+  //         //   i.length = layerData.length
+  //         // }) 
+  //         copy.forEach((i, index) => {
+  //           i.index = index
+  //           i.length = copy.length
+  //         }) 
+
+  //         // setLayerData(layerData)
+  //         this.setState({
+  //           data: copy
+  //         })
+  //       }
+  //     }
+  //   }
+  // }
+
   deleteRow(state, rowInfo, column, instance) {
-    let { data } = this.state
-    let copy = JSON.parse(JSON.stringify(data))
-    // let { setLayerData, formData } = this.props
-    // formData = formData.toJS()
-    // let { layerData } = formData
+    let { pruebasDeLaboratorio, setPruebasDeLaboratorioData } = this.props
+    pruebasDeLaboratorio = pruebasDeLaboratorio.toJS()
+    let { pruebasDeLaboratorioData } = pruebasDeLaboratorio
+
+    let data = pruebasDeLaboratorioData[0].sistemasTable
 
     return {
       onClick: e => {
-        if (column.id === 'delete' && copy.length > 1) {
-        // if (column.id === 'delete' && layerData.length > 1) {
-          copy.splice(rowInfo.original.index, 1)
-          // layerData.splice(rowInfo.original.index, 1)
+        if (column.id === 'delete' && data.length > 1) {
+          data.splice(rowInfo.original.index, 1)
 
-          // layerData.forEach((i, index) => {
-          //   i.index = index
-          //   i.length = layerData.length
-          // }) 
-          copy.forEach((i, index) => {
+          data.forEach((i, index) => {
             i.index = index
-            i.length = copy.length
-          }) 
-
-          // setLayerData(layerData)
-          this.setState({
-            data: copy
+            i.length = data.length
           })
+
+          setPruebasDeLaboratorioData(data)
         }
       }
     }
@@ -296,8 +321,10 @@ const resultadoOptions = [
     pruebasDeLaboratorio = pruebasDeLaboratorio.toJS()
     let { pruebasDeLaboratorioData } = pruebasDeLaboratorio
 
-    return pruebasDeLaboratorioData.map((form, i) =>
-      <div className="form pruebas-de-laboratorio-estimulacion-extra" key={Math.random()}>
+    return pruebasDeLaboratorioData.map((form, i) =>{
+      console.log('my form is this', form, typeOptions, typeOptions.find(o => o.value === form.type))
+      return (
+      <div className="form pruebas-de-laboratorio-estimulacion-extra" key={`pruebasDeEstimulacionExtra_${i}`}>
         <div className="collapsable-section is-open">
           <div className="collapsable-title">
             <span className="left">{typeOptions.find(o => o.value === form.type).label}</span>
@@ -310,7 +337,7 @@ const resultadoOptions = [
             { this.makeImageInput(i) }
           </div>
         </div>
-      </div>
+      </div>)}
     )
   }
 }
