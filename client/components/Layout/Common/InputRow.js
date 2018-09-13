@@ -14,7 +14,7 @@ const generateErrorElements = ( name = '', errors = [] ) => {
 export const InputRow = ({ header, name, unit, value, onChange, index, errors = [] }) => {
 
   let handleChange = (e) => {
-    onChange(e.target.value)
+    onChange(e.target.value, e)
   }
 
   const errorElements = generateErrorElements(name, errors)
@@ -36,7 +36,7 @@ export const InputRow = ({ header, name, unit, value, onChange, index, errors = 
 export const InputRowUnitless = ({ header, name, unit, value, onChange, index={index}, errors = [] }) => {
 
   let handleChange = (e) => {
-    onChange(e.target.value)
+    onChange(e.target.value, e)
   }
 
   const errorElements = generateErrorElements(name, errors)
@@ -74,7 +74,7 @@ export const InputRowSelectUnitless = ({ header, name, value, options, callback,
 export const TextAreaUnitless = ({ header, name, unit, className, subheader, value, onChange, index, errors =[] }) => {
   
   let handleChange = (e) => {
-    onChange(e.target.value)
+    onChange(e.target.value, e)
   }
 
   return (

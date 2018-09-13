@@ -386,7 +386,7 @@ const resultadoOptions = [
     let { pruebasDeLaboratorioData } = pruebasDeLaboratorio
 
     return pruebasDeLaboratorioData.map((form, i) =>      
-      <div className="form pruebas-de-laboratorio-apuntalado-extra" key={Math.random()}>
+      <div className="form pruebas-de-laboratorio-apuntalado-extra" key={`pruebasDeAcidoExtra_${i}`}>
          <div className="collapsable-section is-open">
             <div className="collapsable-title">
               <span className="left">{typeOptions.find(o => o.value === form.type).label}</span> 

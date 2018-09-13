@@ -384,7 +384,7 @@ const resultadoOptions = [
     let { pruebasDeLaboratorioData } = pruebasDeLaboratorio
 
     return pruebasDeLaboratorioData.map((form, i) => 
-      <div key={Math.random()} className="form pruebas-de-laboratorio-apuntalado-extra">
+      <div key={`pruebasDeApuntaladoExtra_${i}`} className="form pruebas-de-laboratorio-apuntalado-extra">
         <div className="collapsable-section is-open">
             <div className="collapsable-title">
               <span className="left">{typeOptions.find(o => o.value === form.type).label}</span>
@@ -403,7 +403,7 @@ const resultadoOptions = [
               </div>
               <div className='bot'>
                 { this.makeSistemaTable(i) }
-                <TextAreaUnitless header="Observaciones" name='' className={'obervaciones'}/>
+                <TextAreaUnitless header="Observaciones" name='' className={'obervaciones'} onChange={this.updateValue} index={i}/>
                 { this.makeImageInput(i) }
               </div>
             </div>
