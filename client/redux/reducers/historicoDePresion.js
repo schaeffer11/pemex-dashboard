@@ -2,14 +2,14 @@ import { Map, fromJS } from 'immutable'
 
 const initialState = Map({ 
     presionDataCampo: [{
-        fecha: 0,
+        fecha: '',
         Qo: '',
         Np: '',
         Pws: '',
         Pr: '',
     }],
     presionDataPozo: [{
-        fecha: 0,
+        fecha: '',
         Qo: '',
         Np: '',
         Pws: '',

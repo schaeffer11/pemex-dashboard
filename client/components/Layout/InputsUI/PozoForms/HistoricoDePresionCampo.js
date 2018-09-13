@@ -98,7 +98,7 @@ let columns = [
 
     presionDataCampo[0].length = 2
 
-    setPresionDataCampo([...presionDataCampo, {index: presionDataCampo.length, type: '', fechaMuestreo: '', fechaPrueba: '', compania: '', superviso: '', length: presionDataCampo.length + 1, 'edited': false}])
+    setPresionDataCampo([...presionDataCampo, {index: presionDataCampo.length, fecha: '', Qo: '', Np: '', Pws: '', Pr: '', length: presionDataCampo.length + 1, 'edited': false}])
   }
 
 
