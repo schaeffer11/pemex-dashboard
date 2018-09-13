@@ -3,7 +3,7 @@ import { connect } from 'react-redux'
 import autobind from 'autobind-decorator'
 import axios from 'axios'
 
-import {submitForm} from '../../../../../redux/actions/estimulacionFormActions'
+import {submitForm} from '../../../../../redux/actions/pozoFormActions'
 
 import PropuestaDeEstimulacion from './PropuestaDeEstimulacion'
 import PruebasDeLaboratorio from '../PruebasDeLaboratorio'
@@ -54,7 +54,7 @@ import EstimacionCostosEstimulacion from './EstimacionCostosEstimulacion'
   }
 
   handleSubmit(){
-    this.props.submitEstimulacionForm(this.props)
+    this.props.submitEstimulacionForm()
   }
 
   render() {

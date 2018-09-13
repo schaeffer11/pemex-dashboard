@@ -3,7 +3,7 @@ import { connect } from 'react-redux'
 import autobind from 'autobind-decorator'
 import axios from 'axios'
 
-import {submitForm} from '../../../../../redux/actions/acidoFormActions'
+import {submitForm} from '../../../../../redux/actions/pozoFormActions'
 
 import EstimacionCostosAcido from './EstimacionCostosAcido'
 import EstimacionIncProduccionAcido from './EstimacionIncProduccionAcido'
@@ -54,7 +54,7 @@ import ResultadosDeLaSimulacionAcido from './ResultadosDeLaSimulacionAcido'
   }
 
   handleSubmit(){
-    this.props.submitAcidoForm(this.props)
+    this.props.submitAcidoForm()
   }
 
   render() {
