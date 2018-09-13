@@ -1,4 +1,5 @@
 import { combineReducers } from 'redux-immutable'
+import { Map } from 'immutable'
 import app from './reducers/app'
 import user from './reducers/user'
 import fichaTecnicaDelPozoHighLevel from './reducers/fichaTecnicaDelPozoHighLevel'
@@ -29,7 +30,7 @@ import historicoDePresion from './reducers/historicoDePresion'
 import historicoDeProduccion from './reducers/historicoDeProduccion'
 import forms from './reducers/forms'
 
-export default combineReducers({
+const appReducer = combineReducers({
   app,
   user,
   forms,
@@ -39,21 +40,33 @@ export default combineReducers({
   sistemasArtificialesDeProduccion,
   mecanicoYAparejoDeProduccion,
   analisisDelAgua,
-	objetivoYAlcancesIntervencion,
-	propuestaEstimulacion,
-	propuestaAcido,
-	propuestaApuntalado,
-	pruebasDeLaboratorio,
-	resultadosSimulacionEstimulacion,
-	resultadosSimulacionAcido,
-	resultadosSimulacionApuntalado,
-	estIncProduccionEstimulacion,
-	estIncProduccionAcido,
-	estIncProduccionApuntalado,
-	estCostEstimulacion,
-	estCostAcido,
-	estCostApuntalado,
-	evaluacionPetrofisica,
-	historicoDePresion,
-	historicoDeProduccion
+  objetivoYAlcancesIntervencion,
+  propuestaEstimulacion,
+  propuestaAcido,
+  propuestaApuntalado,
+  pruebasDeLaboratorio,
+  resultadosSimulacionEstimulacion,
+  resultadosSimulacionAcido,
+  resultadosSimulacionApuntalado,
+  estIncProduccionEstimulacion,
+  estIncProduccionAcido,
+  estIncProduccionApuntalado,
+  estCostEstimulacion,
+  estCostAcido,
+  estCostApuntalado,
+  evaluacionPetrofisica,
+  historicoDePresion,
+  historicoDeProduccion
 })
+
+const rootReducer = (state, action) => {
+  if (action.type === 'RESET_APP') {
+    const user = state.get('user')
+    const app = state.get('app')
+    state = Map({ user, app })
+  }
+  return appReducer(state, action)
+}
+
+
+export default rootReducer

@@ -1,5 +1,6 @@
 import React from 'react'
 import Select from 'react-select'
+import DatePicker from 'react-date-picker'
 
 const generateErrorElements = ( name = '', errors = [] ) => {
   let rowError = errors.find(error => error.field == name)
@@ -119,6 +120,22 @@ export const InputRowCosts = ({ header, name, unit, value, onChange, index, erro
       </input>
     </div>
     )
+}
+
+export const InputDate = ({ onChange, value, header }) => {
+  return (
+     <div className='input-row input-row-unitless'>
+      <div className='label'>
+        {header}
+      </div>
+      <DatePicker
+        onChange={onChange}
+        value={value}
+        locale="es-MX"
+      />
+    </div>
+    
+  )
 }
 
 

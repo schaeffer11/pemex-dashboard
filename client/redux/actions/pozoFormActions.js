@@ -29,7 +29,7 @@ function getBase64FromURL(imgURL) {
   })
 }
 
-export function submitForm(fields) {
+export function submitForm() {
   return async (dispatch, getState) => {
     const ignore = {
       app: true,
@@ -37,8 +37,8 @@ export function submitForm(fields) {
       router: true,
     }
     const errors = []
+    const convertedFields = getState().toJS()
     const formData = new FormData()
-    const convertedFields = fields.toJS()
     const allKeys = Object.keys(convertedFields)
     const { pozo } = convertedFields.fichaTecnicaDelPozoHighLevel
     const utc = Date.now()
@@ -82,7 +82,10 @@ export function submitForm(fields) {
       body: formData,
     })
       .then(r => r.json())
-      .then(r => console.log('server response', r))
+      .then(r => {
+        console.log('server response', r)
+        // dispatch({ type: 'RESET_APP' })
+      })
   }
 }
 

@@ -1,6 +1,6 @@
 import React, { Component } from 'react'
 import autobind from 'autobind-decorator'
-import { InputRow, InputRowUnitless, InputRowSelectUnitless } from '../../Common/InputRow'
+import { InputRow, InputRowUnitless, InputRowSelectUnitless, InputDate } from '../../Common/InputRow'
 import { connect } from 'react-redux'
 import { setTipoDeFluidoField, setDescubrimientoField, setFechaDeExplotacionField, setNumeroDePozosOperandoField, setPInicialAnoField, setPActualFechaField, setDpPerAnoField, setTyacField, setPrField, setDensidadDelAceiteField, setPSatField, setRgaFluidoField, setSalinidadField, setPvtRepresentativoField, setLitologiaField, setEspesorNetoField, setPorosidadField, setSwField, setKPromedioField, setCaaField, setCgaField, setQoField, setQgField, setRgaField, setFwField, setNpField, setGpField, setWpField, setRraField, setRrgField, setRrpceField, setH2sField, setCo2Field, setN2Field } from '../../../../redux/actions/pozo'
 
@@ -50,6 +50,10 @@ let fluidoOptions = [
     }
   }
 
+  testDate(date) {
+    console.log('here i have a date', date)
+  }
+
   makeGeneralesForm() {
     let { setDescubrimientoField, setFechaDeExplotacionField, setNumeroDePozosOperandoField, forms, formData } = this.props
 
@@ -58,14 +62,15 @@ let fluidoOptions = [
 
     let { descubrimientoField, fechaDeExplotacionField, numeroDePozosOperandoField } = formData
     const errors = forms.pozoFormError
-
+    console.log("la fecha", fechaDeExplotacionField)
     return (
       <div className='generales-form'>
         <div className='header'>
           Generales
         </div>
         <InputRowUnitless header="Descubrimiento" name='descubrimiento' value={descubrimientoField} onChange={setDescubrimientoField} errors={errors}/>
-        <InputRowUnitless header="Fecha de explotación" name='fechaDeExplotacion' value={fechaDeExplotacionField} onChange={setFechaDeExplotacionField} errors={errors}/>
+        {/* <InputRowUnitless header="Fecha de explotación" name='fechaDeExplotacion' value={fechaDeExplotacionField} onChange={setFechaDeExplotacionField} errors={errors}/> */}
+        <InputDate header="Fecha de explotación" name='fechaDeExplotacion' value={fechaDeExplotacionField} onChange={setFechaDeExplotacionField} errors={errors}/>
         <InputRowUnitless header="No. de pozo operando" type='number' name='noDePozoOperando' value={numeroDePozosOperandoField} onChange={setNumeroDePozosOperandoField} errors={errors}/>
       </div>
     )

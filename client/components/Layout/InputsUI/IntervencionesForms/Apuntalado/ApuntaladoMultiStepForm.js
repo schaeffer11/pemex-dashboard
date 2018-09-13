@@ -3,7 +3,7 @@ import { connect } from 'react-redux'
 import autobind from 'autobind-decorator'
 import axios from 'axios'
 
-import {submitForm} from '../../../../../redux/actions/apuntaladoFormActions'
+import {submitForm} from '../../../../../redux/actions/pozoFormActions'
 
 import PropuestaDeApuntalado from './PropuestaDeApuntalado'
 import PruebasDeLaboratorio from '../PruebasDeLaboratorio'
@@ -46,7 +46,7 @@ import EstimacionCostosApuntalado from './EstimacionCostosApuntalado'
   }
 
   handleSubmit(){
-    this.props.submitApuntaladoForm(this.props)
+    this.props.submitApuntaladoForm()
   }
 
   handlePrevSubtab(){
