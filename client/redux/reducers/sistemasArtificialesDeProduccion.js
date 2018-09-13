@@ -43,7 +43,7 @@ const initialState = Map({
     CuantaConAnclaBM: '',
     nivelDinamico: '',
     nivelEstatico: '',
-    sistemasArtificialesImgURL: null,
+    imgURL: null,
 
 })
 
@@ -135,7 +135,7 @@ const sistemasArtificialesDeProduccion = (state = initialState, action) => {
     case 'set_nivelEstatico':
         return state.set('nivelEstatico', fromJS(action.value))
     case 'set_sistemasArtificialesImgURL':
-        return state.set('sistemasArtificialesImgURL', fromJS(action.value))
+        return state.set('imgURL', fromJS(action.value))
     default:
       return state
   }

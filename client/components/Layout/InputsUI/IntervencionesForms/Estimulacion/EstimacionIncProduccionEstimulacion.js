@@ -89,14 +89,14 @@ import { connect } from 'react-redux'
   makeImageInput() {
     let { formData, setEstIncProdEstimulationImgURL } = this.props
     formData = formData.toJS()
-    let { estIncProdEstimulationImgURL } = formData
+    let { imgURL } = formData
     return (
       <div style={{marginBot: '20px'}}>
         <div className='header'>
           Upload Est Inc Prod Estimulation (spanish)
         </div>
         <input type='file' accept="image/*" onChange={(e) => this.handleFileUpload(e, setEstIncProdEstimulationImgURL)}></input>
-        {estIncProdEstimulationImgURL ? <img className='img-preview' src={estIncProdEstimulationImgURL}></img> : null }
+        {imgURL ? <img className='img-preview' src={imgURL}></img> : null }
       </div>
     )
   }

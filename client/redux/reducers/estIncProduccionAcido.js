@@ -18,7 +18,7 @@ const initialState = Map({
     estIncGastoCompromisoQo: '',
     estIncGastoCompromisoQg: '',
     obervacionesEstIncAcido: '',
-    estIncProdAcidoImgURL: null
+    imgURL: null
 })
 
 
@@ -59,7 +59,7 @@ const estIncProduccionAcido = (state = initialState, action) => {
     case 'set_obervacionesEstIncAcido':
         return state.set('obervacionesEstIncAcido', fromJS(action.value))
     case 'set_estIncProdAcidoImgURL':
-        return state.set('estIncProdAcidoImgURL', fromJS(action.value))
+        return state.set('imgURL', fromJS(action.value))
    
     default:
       return state

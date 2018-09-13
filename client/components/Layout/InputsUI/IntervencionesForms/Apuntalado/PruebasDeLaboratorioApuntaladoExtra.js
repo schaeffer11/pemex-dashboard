@@ -108,7 +108,7 @@ const resultadoOptions = [
 
     let index = event.target.getAttribute('index')
     let pruebas = {...pruebasDeLaboratorio}
-    pruebas.pruebasDeLaboratorioData[index][event.target.name] = event.target.value
+    pruebas.pruebasDeLaboratorioData[index][event.target.name] = value
 
     setPruebasDeLaboratorioData(pruebas.pruebasDeLaboratorioData)
   }

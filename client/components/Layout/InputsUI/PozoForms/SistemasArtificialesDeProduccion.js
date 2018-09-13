@@ -193,7 +193,7 @@ import { setSistemasArtificialesImgURL, setTipoDeSistemo, setPresionDeCabeza, se
   makeImgInput() {
     let { formData } = this.props
     formData = formData.toJS()
-    let { sistemasArtificialesImgURL } = formData
+    let { imgURL } = formData
 
     return (
       <div style={{marginBot: '20px'}}>
@@ -201,7 +201,7 @@ import { setSistemasArtificialesImgURL, setTipoDeSistemo, setPresionDeCabeza, se
           Upload Sistem of Produccion Image (spanish)
         </div>
         <input type='file' accept="image/*" onChange={this.handleFileUpload}></input>
-        {sistemasArtificialesImgURL ? <img className='img-preview' src={sistemasArtificialesImgURL}></img> : null }
+        {imgURL ? <img className='img-preview' src={imgURL}></img> : null }
       </div>
     )
   }
