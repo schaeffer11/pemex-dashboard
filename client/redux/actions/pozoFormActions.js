@@ -3,7 +3,6 @@ import {validatePozo} from '../../../common/utils/validation/pozoValidator'
 import Immutable from 'immutable'
 
 function bufferToBase64(buf) {
-  console.log('buffer to 64')
   var binstr = Array.prototype.map.call(buf, function (ch) {
       return String.fromCharCode(ch);
   }).join('');
@@ -20,7 +19,6 @@ function getBase64FromURL(imgURL) {
       if (this.status == 200) {
         var uInt8Array = new Uint8Array(this.response);
         var byte3 = uInt8Array[4]; 
-        console.log('uint8', uInt8Array)
         const base64 = bufferToBase64(uInt8Array)
         resolve(base64)
       } else {
@@ -33,7 +31,6 @@ function getBase64FromURL(imgURL) {
 
 export function submitForm(fields) {
   return async (dispatch, getState) => {
-    console.log('heheheheh', fields)
     const ignore = {
       app: true,
       user: true,
@@ -43,14 +40,37 @@ export function submitForm(fields) {
     const formData = new FormData()
     const convertedFields = fields.toJS()
     const allKeys = Object.keys(convertedFields)
-
-    for(let k of allKeys) {
+    const { pozo } = convertedFields.fichaTecnicaDelPozoHighLevel
+    const utc = Date.now()
+    for (let k of allKeys) {
       if(!ignore[k]) {
         const innerObj = convertedFields[k]
+        const innerKeys = Object.keys(innerObj)
+        // look for immediate images
         if (innerObj.hasOwnProperty('imgURL')) {
-          console.log('i need to do something here', k)
-          const img = await getBase64FromURL(innerObj.imgURL)
-          innerObj.img = img
+          if (innerObj.imgURL) {
+            const img = await getBase64FromURL(innerObj.imgURL)
+            innerObj.img = img
+            innerObj.imgName = [pozo, k, utc].join('.')
+          }
+        }
+
+        // Look for images inside arrays and get base64
+        for(let aKeys of innerKeys) {
+          const property = innerObj[aKeys]
+          if (Array.isArray(property)) {
+            let index = 0
+            for (let j of property) {
+              if (j.hasOwnProperty('imgURL')) {
+                if (j.imgURL) {
+                  const img = await getBase64FromURL(j.imgURL)
+                  j.img = img
+                  j.imgName = [pozo, k, j.type, index, utc].join('.')
+                  index += 1
+                }
+              }
+            }
+          }
         }
         formData.append(k, JSON.stringify(innerObj))
       }
@@ -61,6 +81,8 @@ export function submitForm(fields) {
       method: 'POST',
       body: formData,
     })
+      .then(r => r.json())
+      .then(r => console.log('server response', r))
   }
 }
 

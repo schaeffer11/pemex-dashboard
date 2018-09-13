@@ -18,7 +18,7 @@ const initialState = Map({
     estIncGastoCompromisoQo: '',
     estIncGastoCompromisoQg: '',
     obervacionesEstIncApuntalado: '',
-    estIncProdApuntaladoImgURL: null
+    imgURL: null
 })
 
 
@@ -59,7 +59,7 @@ const estIncProduccionApuntalado = (state = initialState, action) => {
     case 'set_obervacionesEstIncApuntalado':
         return state.set('obervacionesEstIncApuntalado', fromJS(action.value))
     case 'set_estIncProdApuntaladoImgURL':
-        return state.set('estIncProdApuntaladoImgURL', fromJS(action.value))
+        return state.set('imgURL', fromJS(action.value))
    
     default:
       return state

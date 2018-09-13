@@ -19,7 +19,7 @@ const initialState = Map({
     volumenCimaDeIntervalo: '',
     volumenBaseDeIntervalo: '',
     volumenDeEspacioAnular: '',
-    imgBoreDiagramURL: null,
+    imgURL: null,
     imgAparejoDeProduccionURL: null
 
 })
@@ -64,7 +64,7 @@ const mecanicoYAparejoDeProduccion = (state = initialState, action) => {
     case 'set_volumenDeEspacioAnular':
         return state.set('volumenDeEspacioAnular', fromJS(action.value))
     case 'set_imgBoreDiagramURL':
-        return state.set('imgBoreDiagramURL', fromJS(action.value))
+        return state.set('imgURL', fromJS(action.value))
     case 'set_imgAparejoDeProduccionURL':
         return state.set('imgAparejoDeProduccionURL', fromJS(action.value))
     default:

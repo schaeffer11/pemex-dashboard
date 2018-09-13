@@ -101,8 +101,7 @@ const resultadoOptions = [
 
     let index = event.target.getAttribute('index')
     let pruebas = {...pruebasDeLaboratorio}
-    pruebas.pruebasDeLaboratorioData[index][event.target.name] = event.target.value
-
+    pruebas.pruebasDeLaboratorioData[index][event.target.name] = value
     setPruebasDeLaboratorioData(pruebas.pruebasDeLaboratorioData)
   }
 
@@ -383,15 +382,15 @@ const resultadoOptions = [
     pruebasDeLaboratorio = pruebasDeLaboratorio.toJS()
     let { pruebasDeLaboratorioData } = pruebasDeLaboratorio
 
-    let imageURL = pruebasDeLaboratorioData[index].imageURL
+    let imgURL = pruebasDeLaboratorioData[index].imgURL
 
     return (
       <div style={{marginBot: '20px'}}>
         <div className='header'>
           Upload Lab Evidence (spanish)
         </div>
-        <input type='file' name='imageURL' accept="image/*" onChange={(e) => this.handleFileUpload(e, this.updateValue)} index={index}></input>
-        {imageURL ? <img className='img-preview' src={imageURL}></img> : null }
+        <input type='file' name='imgURL' accept="image/*" onChange={(e) => this.handleFileUpload(e, this.updateValue)} index={index}></input>
+        {imgURL ? <img className='img-preview' src={imgURL}></img> : null }
       </div>
     )
   }

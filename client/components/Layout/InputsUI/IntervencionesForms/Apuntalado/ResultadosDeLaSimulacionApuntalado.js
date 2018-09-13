@@ -53,14 +53,14 @@ import { connect } from 'react-redux'
   makeEvidenceSimulationInput() {
     let { formData, setEvidenceSimulationApuntaladoImgURL } = this.props
     formData = formData.toJS()
-    let { evidenceSimulationApuntaladoImgURL } = formData
+    let { imgURL } = formData
     return (
       <div style={{marginBot: '20px'}}>
         <div className='header'>
           Upload Evidence of Simulation (sim results) (spanish)
         </div>
         <input type='file' accept="image/*"  onChange={(e) => this.handleFileUpload(e, setEvidenceSimulationApuntaladoImgURL)} multiple></input>
-        {evidenceSimulationApuntaladoImgURL ? <img className='img-preview' src={evidenceSimulationApuntaladoImgURL}></img> : null }
+        {imgURL ? <img className='img-preview' src={imgURL}></img> : null }
       </div>
     )
   }

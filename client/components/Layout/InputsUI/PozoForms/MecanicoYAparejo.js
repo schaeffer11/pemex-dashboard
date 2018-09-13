@@ -138,14 +138,14 @@ let tratamientoPorOptions = [
   makeBoreDiagramInput() {
     let { formData, setImgBoreDiagramURL} = this.props
     formData = formData.toJS()
-    let { imgBoreDiagramURL } = formData
+    let { imgURL } = formData
     return (
       <div style={{marginBot: '20px'}}>
         <div className='header'>
           Upload Well Bore Diagram (spanish)
         </div>
         <input type='file' accept="image/*" onChange={(e) => this.handleFileUpload(e, setImgBoreDiagramURL)}></input>
-        {imgBoreDiagramURL ? <img className='img-preview' src={imgBoreDiagramURL}></img> : null }
+        {imgURL ? <img className='img-preview' src={imgURL}></img> : null }
       </div>
     )
   }
