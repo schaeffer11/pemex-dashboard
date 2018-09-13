@@ -99,7 +99,7 @@ app.post('/inputTest', async (req, res) => {
     finalObj[k] = innerObj
   }
 
-  console.log('finalobj', finalObj.historicoDePresion.presionDataCampo)
+  console.log('finalobj', finalObj)
 
   // write to db
   res.json({ done: true })

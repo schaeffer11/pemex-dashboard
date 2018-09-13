@@ -2,8 +2,8 @@ import { Map, fromJS } from 'immutable'
 
 const initialState = Map({ 
     estCostoDeRentaDeBarco: {
-            cost: 100,
-            company: 'test'
+            cost: '',
+            company: ''
         },
     estCostDeSistemaReactivo: {
             cost: '',
