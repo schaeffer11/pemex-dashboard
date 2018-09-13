@@ -6,7 +6,7 @@ import appConfig from '../../app-config.js'
 import path from 'path'
 import fs from 'fs'
 import multer from 'multer'
-import { addObject, signedURL, deleteObject } from '../aws';
+import { addObject, signedURL, deleteObject, getBuckets } from '../aws';
 var well = require('./pozo')
 var intervencion = require('./intervenciones')
 
@@ -27,6 +27,11 @@ app.use(upload.array())
 app.get('/ping', (req, res) => {
 	console.log('pong')
   res.json({ response: 'pong' })
+})
+
+app.get('/woop', async (req, res) => {
+  getBuckets()
+  res.send('done')
 })
 
 

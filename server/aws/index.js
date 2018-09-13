@@ -8,7 +8,7 @@ const s3 = new AWS.S3()
 export const signedURL = Key => new Promise((resolve, reject) => {
   const params = {
     Key,
-    Bucket: 'qdca-generated-content',
+    Bucket: 'pemex-prod-01',
   }
   s3.getSignedUrl('getObject', params, (err, url) => {
     if (err) {
@@ -21,7 +21,7 @@ export const signedURL = Key => new Promise((resolve, reject) => {
 export const deleteObject = Key => new Promise((resolve, reject) => {
   const params = {
     Key,
-    Bucket: 'qdca-generated-content',
+    Bucket: 'pemex-prod-01',
   }
   s3.deleteObject(params, (err, data) => {
     if (err) {
@@ -31,9 +31,18 @@ export const deleteObject = Key => new Promise((resolve, reject) => {
   })
 })
 
+export const getBuckets = () => {
+  s3.listBuckets({}, (err, data) => {
+    if (err) {
+      console.log('something is wrong', err)
+    }
+    console.log('should be buckets', data)
+  })
+}
+
 export const addObject = (buf, Key) => new Promise((resolve, reject) => {
   const params = {
-    Bucket: 'qdca-generated-content',
+    Bucket: 'pemex-prod-01',
     Key,
     Body: buf,
     // ContentEncoding: 'base64',

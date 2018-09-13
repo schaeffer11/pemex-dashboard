@@ -314,7 +314,7 @@ const resultadoOptions = [
       <div className="form pruebas-de-laboratorio-estimulacion-extra" key={`pruebasDeEstimulacionExtra_${i}`}>
         <div className="collapsable-section is-open">
           <div className="collapsable-title">
-            <span className="left">{typeOptions.find(o => o.value === form.type) ? typeOptions.find(o => o.value === form.type).label : 'missing lab type'}</span>
+            <span className="left">{typeOptions.find(o => o.value === form.type) ? typeOptions.find(o => o.value === form.type).label : 'Falta tipo de análisis'}</span>
               {form.fechaMuestreo &&
                 <span className="right">Fecha: {form.fechaMuestreo}</span>}
           </div>
