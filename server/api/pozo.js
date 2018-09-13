@@ -158,6 +158,77 @@ const INSERT_WELL_PRODUCCION_QUERY = `INSERT INTO WellHistoricalProduccion (
 //         ?`
 const INSERT_WELL_IMAGE_QUERY = `SELECT(1) FROM WellImages`
 
+
+const INSERT_INTERVENTION_BASE_QUERY = `INSERT INTO Intervenciones (
+      INTERVENCIONES_ID, WELL_FORMACION_ID, OBJETIVO, ALCANCES, TIPO_DE_INTERVENCIONES)
+      VALUES (?, ?, ?, ?, ?)`
+
+// , EST_COSTO_COMPANIA_DE_SERVICIOS, EST_COSTO_DE_RENTA_DE_BARCO, EST_COSTO_DE_SISTEMA_REACTIVO,
+//         EST_COSTO_DE_SISTEMA_NO_REACTIVO, EST_COSTO_DE_DIVERGENTES, EST_COSTO_DE_N2, EST_COSTO_DE_HCL
+const INSERT_INTERVENTION_ESIMULACION_QUERY = `INSERT INTO IntervencionesEstimulacions (
+        INTERVENTION_ID, WELL_FORMACION_ID,
+        INTERVALO, LONGITUD_DE_INTERVALO_A_TRATAR, VOLUME_APAREJO, CAPACIDAD_TOTAL_DEL_POZO, VOLUMEN_PRECOLCHON_N2,
+        VOLUMEN_SISTEMA_NO_REACTIVO, VOLUMEN_SISTEM_REACTIVO, VOLUMEN_SISTEMA_DIVERGENTE, VOLUMEN_DISPLAZAMIENTO_LIQUIDO, VOLUMEN_DESPLAZAMIENTO_N2,
+        VOLUMEN_TOTAL_DE_LIQUIDO, VOLUMEN_DEL_SISTEMA_ACIDO_LIMPIEZA, VOLUMEN_DEL_SISTEMA_NO_ACIDO_LIMPIEZA, TIPO_DE_COLOCACION,
+        TIEMPO_DE_CONTACTO, NUMERO_DE_ETAPAS, VOLUMEN_DEL_SISTEMA_ACIDO, VOLUMEN_DEL_SISTEMA_NO_ACIDO, VOLUMEN_DE_DIVERGENTE, VOLUMEN_DE_N2,
+        CALIDAD_DE_ESPUMA, VOLUMEN_DE_PRECOLCHON_N2, VOLUMEN_DE_DESPLAZAMIENTO, PENETRACION_RADIAL, LONGITUD_DE_AGUJERO_DE_GUSANO,
+        EST_INC_ESTRANGULADOR, EST_INC_Ptp, EST_INC_Ttp, EST_INC_Pbaj, EST_INC_Tbaj,
+        EST_INC_Ptr, EST_INC_Qi, EST_INC_Qo, EST_INC_Qq, EST_INC_Qw,
+        EST_INC_RGA, EST_INC_SALINIDAD, EST_INC_IP, EST_INC_DELTA_P, EST_INC_GASTO_COMPROMISO_Qo,
+        EST_INC_GASTO_COMPROMISO_Qg, EST_INC_OBSERVACIONES) VALUES
+        (?, ?, ?, ?, ?, ?, ?, ?, ?, ?,
+         ?, ?, ?, ?, ?, ?, ?, ?, ?, ?,
+         ?, ?, ?, ?, ?, ?, ?, ?, ?, ?,
+         ?, ?, ?, ?, ?, ?, ?, ?, ?, ?,
+         ?, ?, ?, ?)`
+
+
+// EST_COSTO_COMPANIA_DE_SERVICIO, EST_COSTO_DE_RENTA_DE_BARCO, EST_COSTO_UNIDADES_DE_ALTA_PRESION,
+//         EST_COSTO_DEL_GEL_DE_FRACTURA, EST_COSTO_DE_SISTEMA_REACTIVO, EST_COSTO_DE_SISTEMA_NO_REACTIVO, EST_COSTO_DE_DIVERGENTES, EST_COSTO_DE_N2,
+//         EST_COSTO_DE_HCL, EST_COSTO_DE_SISTEMAS_ACIDOS_RETARDADOS, EST_COSTO_EQUIPO_DE_FRACTURAMIENTO_DE_POZOS, EST_COSTO_GEL_LINEAL, EST_COSTO_DE_TRABAJOS_DE_BOMBEO_DIVERSOS,
+//         EST_COSTO_DE_LLENADO_DE_POZO_Y_PRUEBA_DE_ADMISION, EST_COSTO_DEL_MINIFRAC, EST_COSTO_DE_BACHE_NEUTRALIZADOR, EST_COSTO_DE_ARBOL, EST_COSTO_DEL_APUNTALANTE
+
+const INSERT_INTERVENTION_ACIDO_QUERY = `INSERT INTO IntervencionesAcido (
+        INTERVENTION_ID, WELL_FORMACION_ID,
+        INTERVALO, LONGITUD_DE_INTERVALO_A_TRATAR, VOLUME_APAREJO,
+        CAPACIDAD_TOTAL_DEL_POZO, VOLUMEN_PRECOLCHON_N2, VOLUMEN_SISTEMA_NO_REACTIVO, VOLUMEN_SISTEM_REACTIVO, VOLUMEN_SISTEMA_DIVERGENTE,
+        VOLUMEN_DISPLAZAMIENTO_LIQUIDO, VOLUMEN_DESPLAZAMIENTO_GEL_LINEAL, MODULO_YOUNG_ARENA,
+        MODULO_YOUNG_LUTITAS, RELAC_POISSON_ARENA, RELAC_POISSON_LUTITAS, GRADIENTE_DE_FRACTURA, DENSIDAD_DE_DISPAROS,
+        DIAMETRO_DE_DISPAROS, LONGITUD_TOTAL, LONGITUD_EFECTIVA_GRABADA,
+        ALTURA_GRABADA, ANCHO_PROMEDIO, CONCENTRACION_DEL_ACIDO, CONDUCTIVIDAD, FCD, PRESION_NETA,
+        EFICIENCIA_DE_FLUIDO_DE_FRACTURA, EST_INC_ESTRANGULADOR, EST_INC_Ptp, EST_INC_Ttp, EST_INC_Pbaj,
+        EST_INC_Tbaj, EST_INC_Ptr, EST_INC_Qi, EST_INC_Qo, EST_INC_Qq,
+        EST_INC_Qw, EST_INC_RGA, EST_INC_SALINIDAD, EST_INC_IP, EST_INC_DELTA_P,
+        EST_INC_GASTO_COMPROMISO_Qo, EST_INC_GASTO_COMPROMISO_Qg, EST_INC_OBSERVACIONES) VALUES
+        (?, ?, ?, ?, ?, ?, ?, ?, ?, ?,
+         ?, ?, ?, ?, ?, ?, ?, ?, ?, ?,
+         ?, ?, ?, ?, ?, ?, ?, ?, ?, ?,
+         ?, ?, ?, ?, ?, ?, ?, ?, ?, ?,
+         ?, ?, ?, ?, ?)`
+
+// , EST_COSTO_COMPANIA_DE_SERVICIO, EST_COSTO_DE_RENTA_DE_BARCO, EST_COSTO_UNIDADES_DE_ALTA_PRESION,
+        // EST_COSTO_DEL_GEL_DE_FRACTURA, EST_COSTO_DE_SISTEMA_REACTIVO, EST_COSTO_DE_SISTEMA_NO_REACTIVO, EST_COSTO_DE_DIVERGENTES, EST_COSTO_DE_N2,
+        // EST_COSTO_DE_HCL, EST_COSTO_DE_SISTEMAS_ACIDOS_RETARDADOS, EST_COSTO_EQUIPO_DE_FRACTURAMIENTO_DE_POZOS, EST_COSTO_GEL_LINEAL, EST_COSTO_DE_TRABAJOS_DE_BOMBEO_DIVERSOS,
+        // EST_COSTO_DE_LLENADO_DE_POZO_Y_PRUEBA_DE_ADMISION, EST_COSTO_DEL_MINIFRAC, EST_COSTO_DE_BACHE_NEUTRALIZADOR, EST_COSTO_DE_PROTECTOR_DE_ARBOL
+const INSERT_INTERVENTION_APUNTALADO_QUERY = `INSERT INTO IntervencionesApuntalado (
+        INTERVENTION_ID, WELL_FORMACION_ID, 
+        INTERVALO, LONGITUD_DE_INTERVALO_A_TRATAR, VOLUME_APAREJO,
+        CAPACIDAD_TOTAL_DEL_POZO, VOLUMEN_PRECOLCHON_N2, VOLUMEN_DE_APUNTALANTE, VOLUMEN_DE_GEL_DE_FRACTURA, VOLUMEN_DESPLAZAMIENTO,
+        VOLUMEN_TOTAL_DE_LIQUIDO, MODULO_YOUNG_ARENA,
+        MODULO_YOUNG_LUTITAS, RELAC_POISSON_ARENA, RELAC_POISSON_LUTITAS, GRADIENTE_DE_FRACTURA, DENSIDAD_DE_DISPAROS,
+        DIAMETRO_DE_DISPAROS, LONGITUD_APUNTALADA, ALTURA_TOTAL_DE_FRACTURA, ANCHO_PROMEDIO,
+        CONCENTRACION_AREAL, CONDUCTIVIDAD, FCD, PRESION_NETA, EFICIENCIA_DE_FLUIDO_DE_FRACTURA,
+        EST_INC_ESTRANGULADOR, EST_INC_Ptp, EST_INC_Ttp, EST_INC_Pbaj,
+        EST_INC_Tbaj, EST_INC_Ptr, EST_INC_Qi, EST_INC_Qo, EST_INC_Qq,
+        EST_INC_Qw, EST_INC_RGA, EST_INC_SALINIDAD, EST_INC_IP, EST_INC_DELTA_P,
+        EST_INC_GASTO_COMPROMISO_Qo, EST_INC_GASTO_COMPROMISO_Qg, EST_INC_OBSERVACIONES) VALUES
+        (?, ?, ?, ?, ?, ?, ?, ?, ?, ?,
+         ?, ?, ?, ?, ?, ?, ?, ?, ?, ?,
+         ?, ?, ?, ?, ?, ?, ?, ?, ?, ?,
+         ?, ?, ?, ?, ?, ?, ?, ?, ?, ?,
+         ?, ?, ?)`
+
+
 exports.create = async(req, res) => {
  // console.log('what are we here?', req.body)
   const allKeys = Object.keys(req.body)
@@ -192,7 +263,6 @@ exports.create = async(req, res) => {
     finalObj[k] = innerObj
   }
 
-  console.log('finalobj', finalObj)
 
   let { subdireccion, activo, campo, pozo, formacion } = finalObj.fichaTecnicaDelPozoHighLevel
 
@@ -240,11 +310,111 @@ exports.create = async(req, res) => {
   // let wellBoreFile = finalObj.mecanicoYAparejoDeProduccion.imgURL
   // let sistemasArtificialesFile = finalObj.sistemasArtificialesDeProduccon.imgURL
 
+
+  let { objetivo, alcances, tipoDeIntervenciones } = finalObj.objetivoYAlcancesIntervencion
+
+  let { pruebasDeLaboratorioData } = finalObj.pruebasDeLaboratorio
+
+
+  if (tipoDeIntervenciones === 'estimulacion') {
+
+      console.log("HERERER E", finalObj.propuestaEstimulacion)
+      //Propuesta Estimulaction
+      var { intervalo, longitudDeIntervalo, volAparejo,
+        capacidadTotalDelPozo, volumenPrecolchonN2, volumenSistemaNoReativo, volumenSistemaReactivo, volumenSistemaDivergente,
+        volumenDesplazamientoLiquido, volumenDesplazamientoN2, volumenTotalDeLiquido } = finalObj.propuestaEstimulacion
+
+      //Simulacion Resultados Estimulacion
+      var { volumenDelSistemaAcidoLimpieza, volumenDelSistemaNoAcidoLimpieza, tipoDeColocacion, tiempoDeContacto, numeroDeEtapas,
+        volumenDelSistemAcido, volumenDelSistemNoAcido, volumenDeDivergente, volumenDeN2, calidadDeEspuma,
+        volumenDePrecolchonN2, volumenDeDesplazamiento, penetracionRadial, longitudDeAgujeroDeGusano } = finalObj.resultadosSimulacionEstimulacion
+
+      //EstIncProd
+      var { estIncEstrangulador, estIncPtp, estIncTtp, estIncPbaj, estIncTbaj,
+        estIncPtr, estIncQl, estIncQo, estIncQg, estIncQw,
+        estIncRGA, estIncSalinidad, estIncIP, estIncDeltaP, estIncGastoCompromisoQo,
+        estIncGastoCompromisoQg, obervacionesEstIncEstim } = finalObj.estIncProduccionEstimulacion
+
+      //Est Cost
+      var { estCostCompaniaDeServicio, estCostoDeRentaDeBarco, estCostDeSistemaReactivo, estCostDeSistemaNoReactivo, estCostDeDivergenes,
+        estCostDeN2, estCostHCL } = finalObj.estCostEstimulacion
+
+  }
+  else if (tipoDeIntervenciones === 'acido') {
+      //Propuesta De Fracturamiento Acido
+      var { intervalo,
+        longitudDeIntervalo, volAparejo, capacidadTotalDelPozo, volumenPrecolchonN2, volumenSistemaNoReativo,
+        volumenSistemaReactivo, volumenSistemaDivergente, volumenDesplazamientoLiquido, volumenDesplazamientoGelLineal } = finalObj.propuestaAcido
+
+      //Resultados De La Simulacion
+      var { longitudTotal, longitudEfectivaGrabada, alturaGrabada, anchoPromedio, concentracionDelAcido,
+        conductividad, fcd, presionNeta, eficienciaDeFluidoDeFractura } = finalObj.resultadosSimulacionAcido
+
+      //Estimacion Del Incremento De Produccion
+      var { estIncEstrangulador, estIncPtp, estIncTtp, estIncPbaj, estIncTbaj,
+        estIncPtr, estIncQl, estIncQo, estIncQg, estIncQw,
+        estIncRGA, estIncSalinidad, estIncIP, estIncDeltaP, estIncGastoCompromisoQo,
+        estIncGastoCompromisoQg, obervacionesEstIncAcido } = finalObj.estIncProduccionAcido
+
+       //Estimacion De Costos
+      var { estCostCompaniaDeServicio, estCostoDeRentaDeBarco, estCostUnidadesDeAltaPresion, estCostDelGelDeFractura, estCostDeSistemoRactivo,
+        estCostDeSistemoNoRactivo, estCostDeDivergentes, estCostDeN2, estCostDeHCL, estCostDeSistemasAcidosRetardados,
+        estCostDeCostoEquipoDeFacturamientoDePozos, estCostGelLineal, estCostTrabajosDeBombeoDiversos, estCostLlenadoDePozoYPruebaDeAdmision, estCostMinifrac,
+        estCostBacheNeutralizador, estCostProtectorDeArbol, estCostApuntalante  } = finalObj.estCostAcido
+ 
+  }
+  else if (tipoDeIntervenciones === 'apuntalado') {
+      //Propuesta De Fracturamiento Apuntalado
+      var { intervalo,
+        longitudDeIntervalo, volAparejo, capacidadTotalDelPozo, volumenPrecolchonN2, volumenDeApuntalante,
+        volumenDeGelDeFractura, volumenDesplazamiento, volumenTotalDeLiquido } = finalObj.propuestaApuntalado
+
+      //Resultados de simulacion Apuntalado
+      var { longitudApuntalada, alturaTotalDeFractura, anchoPromedio, concentractionAreal, conductividad,
+        fcd, presionNeta, eficienciaDeFluidoDeFractura  } = finalObj.resultadosSimulacionApuntalado
+
+
+      //Est Inc Produccion
+      var { estIncEstrangulador, estIncPtp, estIncTtp, estIncPbaj, estIncTbaj,
+        estIncPtr, estIncQl, estIncQo, estIncQg, estIncQw,
+        estIncRGA, estIncSalinidad, estIncIP, estIncDeltaP, estIncGastoCompromisoQo,
+        estIncGastoCompromisoQg, obervacionesEstIncApuntalado } = finalObj.estIncProduccionApuntalado
+
+
+      //Est Cost Apuntalado
+      var { estCostCompaniaDeServicio, estCostoDeRentaDeBarco, estCostUnidadesDeAltaPresion, estCostDelGelDeFractura, estCostDeSistemoRactivo,
+        estCostDeSistemaNoRactivo, estCostDeDivergentes, estCostDeN2, estCostDeHCL, estCostDeSistemasAcidosRetardados,
+        estCostDeCostoEquipoDeFacturamientoDePozos, estCostGelLineal, estCostTrabajosDeBombeoDiversos, estCostLlenadoDePozoYPruebaDeAdmision, estCostMinifrac,
+        estCostBacheNeutralizador, estCostProtectorDeArbol } = finalObj.estCostApuntalado
+
+  }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
   // write to db
 
 
   let fieldFormacionID = Math.floor(Math.random() * 1000000000)
   let wellFormacionID = Math.floor(Math.random() * 1000000000)
+  let interventionID = Math.floor(Math.random() * 1000000000)
   let inputInterventionID
   let intervalID
   let zoneID
@@ -261,8 +431,8 @@ exports.create = async(req, res) => {
     qoField, qgField, rgaField, fwField, npField,
     gpField, wpField, rraField, rrgField, rrpceField,
     h2sField, co2Field, n2Field], (err, results) => {
-      console.log('field', err)
-      console.log('field', results)
+      // console.log('field', err)
+      // console.log('field', results)
 
       connection.query(INSERT_WELL_QUERY, [
       wellFormacionID, subdireccion, activo, campo, pozo,
@@ -271,8 +441,8 @@ exports.create = async(req, res) => {
       caa, cga, tipoDePozo, pwsFecha, pwfFecha,
       deltaPPerMes, tyac, pvt, aparejoDeProduccion, profEmpacador,
       profSensorPYT, tipoDeSistemo ], (err, results) => {
-        console.log('well', err)
-        console.log('well', results)
+        // console.log('well', err)
+        // console.log('well', results)
 
         let values = []
 
@@ -282,8 +452,8 @@ exports.create = async(req, res) => {
         })
 
         connection.query(INSERT_HIST_INTERVENCIONES_QUERY, [values], (err, results) => {
-          console.log('user input intervention', err)
-          console.log('user input intervention', results)
+          // console.log('user input intervention', err)
+          // console.log('user input intervention', results)
 
           values = []
 
@@ -294,8 +464,8 @@ exports.create = async(req, res) => {
           })
 
           connection.query(INSERT_LAYER_QUERY, [values], (err, results) => {
-            console.log('layers', err)
-            console.log('layers', results)
+            // console.log('layers', err)
+            // console.log('layers', results)
 
             values = []
 
@@ -305,8 +475,8 @@ exports.create = async(req, res) => {
             })
 
             connection.query(INSERT_MUD_LOSS_QUERY, [values], (err, results) => {
-              console.log('mud loss', err)
-              console.log('mud loss', results)
+              // console.log('mud loss', err)
+              // console.log('mud loss', results)
 
 
               connection.query(INSERT_MECANICO_QUERY, [
@@ -315,8 +485,8 @@ exports.create = async(req, res) => {
                 diametroDeOrificio, penetracion, tratamientoPor, volumenAparejoDeProduccion,
                 volumenCimaDeIntervalo, volumenBaseDeIntervalo, volumenDeEspacioAnular
               ], (err, results) => {
-                console.log('mecanico', err)
-                console.log('mecanico', results)
+                // console.log('mecanico', err)
+                // console.log('mecanico', results)
 
                 connection.query(INSERT_ANALISIS_AGUA_QUERY, [
                     wellFormacionID, pH, temperaturaDeConductividad, resistividad, salinidadConConductimetro, solidosDisueltosTotales,
@@ -325,8 +495,8 @@ exports.create = async(req, res) => {
                     cloruros, bicarbonatos, sulfatos, carbonatos, densidadAt15,
                     densidadAt20 
                 ], (err, results) => {
-                  console.log('agua', err)
-                  console.log('agua', results)
+                  // console.log('agua', err)
+                  // console.log('agua', results)
 
                   let query = 'SELECT(1) FROM WellProductionSystemsEmboloViajero'
 
@@ -387,8 +557,8 @@ exports.create = async(req, res) => {
 
 
                   connection.query(query, values, (err, results) => {
-                    console.log('sistemas', err)
-                    console.log('sistemas', results)
+                    // console.log('sistemas', err)
+                    // console.log('sistemas', results)
 
                     values = []
 
@@ -397,8 +567,8 @@ exports.create = async(req, res) => {
                     })
 
                     connection.query(INSERT_FIELD_PRESSURE_QUERY, [values], (err, results) => {
-                      console.log('field pressure', err)
-                      console.log('field pressure', results)
+                      // console.log('field pressure', err)
+                      // console.log('field pressure', results)
 
                       values = []
 
@@ -409,14 +579,14 @@ exports.create = async(req, res) => {
                       })
 
                       connection.query(INSERT_WELL_PRESSURE_QUERY, [values], (err, results) => {
-                        console.log('well pressure', err)
-                        console.log('well pressure', results)
+                        // console.log('well pressure', err)
+                        // console.log('well pressure', results)
 
                         connection.query(INSERT_WELL_AFOROS_QUERY, [
                         wellFormacionID, fecha, estrangulado, ptp, ttp, pbaj, tbaj, psep, tsep,
                         ql, qo, qg, qw, rga, salinidad, ph], (err, results) => {
-                          console.log('well aforos', err)
-                          console.log('well aforos', results)
+                          // console.log('well aforos', err)
+                          // console.log('well aforos', results)
 
                           values = []
                           produccionData.forEach(i => {
@@ -424,8 +594,8 @@ exports.create = async(req, res) => {
                           })
 
                           connection.query(INSERT_WELL_PRODUCCION_QUERY, [values], (err, results) => {
-                            console.log('well prod', err)
-                            console.log('well prod', results)
+                            // console.log('well prod', err)
+                            // console.log('well prod', results)
 
                             // values = [
                             //   [wellFormacionID, 'Well Log', wellLogFile],
@@ -434,24 +604,86 @@ exports.create = async(req, res) => {
                             // ]
 
                             connection.query(INSERT_WELL_IMAGE_QUERY, [values], (err, results) => {
-                              console.log('well img', err)
-                              console.log('well img', results)
+                              // console.log('well img', err)
+                              // console.log('well img', results)
+
+
+                              console.log('objectives', finalObj.objetivoYAlcancesIntervencion)
+
+                              connection.query(INSERT_INTERVENTION_BASE_QUERY, [
+                                interventionID, wellFormacionID, objetivo, alcances, tipoDeIntervenciones 
+                              ], (err, results) => {
+                                console.log('intervention base', err)
+                                console.log('intervention base', results)
+
+                                console.log(tipoDeIntervenciones)
+
+                                query = tipoDeIntervenciones === 'estimulacion' ? INSERT_INTERVENTION_ESIMULACION_QUERY : tipoDeIntervenciones === 'acido' ? INSERT_INTERVENTION_ACIDO_QUERY : INSERT_INTERVENTION_APUNTALADO_QUERY
+
+
+                                values = tipoDeIntervenciones === 'estimulacion' ? [
+                                    interventionID, wellFormacionID, intervalo, longitudDeIntervalo, volAparejo,
+                                    capacidadTotalDelPozo, volumenPrecolchonN2, volumenSistemaNoReativo, volumenSistemaReactivo, volumenSistemaDivergente,
+                                    volumenDesplazamientoLiquido, volumenDesplazamientoN2, volumenTotalDeLiquido,
+                                    volumenDelSistemaAcidoLimpieza, volumenDelSistemaNoAcidoLimpieza, tipoDeColocacion, tiempoDeContacto, numeroDeEtapas,
+                                    volumenDelSistemAcido, volumenDelSistemNoAcido, volumenDeDivergente, volumenDeN2, calidadDeEspuma,
+                                    volumenDePrecolchonN2, volumenDeDesplazamiento, penetracionRadial, longitudDeAgujeroDeGusano,
+                                    estIncEstrangulador, estIncPtp, estIncTtp, estIncPbaj, estIncTbaj,
+                                    estIncPtr, estIncQl, estIncQo, estIncQg, estIncQw,
+                                    estIncRGA, estIncSalinidad, estIncIP, estIncDeltaP, estIncGastoCompromisoQo,
+                                    estIncGastoCompromisoQg, obervacionesEstIncEstim
+                                  ]
+
+                                  : tipoDeIntervenciones === 'acido' ? [
+                                      interventionID, wellFormacionID, intervalo,
+                                      longitudDeIntervalo, volAparejo, capacidadTotalDelPozo, volumenPrecolchonN2, volumenSistemaNoReativo,
+                                      volumenSistemaReactivo, volumenSistemaDivergente, volumenDesplazamientoLiquido, volumenDesplazamientoGelLineal,
+                                      moduloYoungArena, moduloYoungLutitas, relacPoissonArena,
+                                      relacPoissonLutatas, gradienteDeFractura, densidadDeDisparos, diametroDeDisparos, 
+                                      longitudTotal, longitudEfectivaGrabada, alturaGrabada, anchoPromedio, concentracionDelAcido,
+                                      conductividad, fcd, presionNeta, eficienciaDeFluidoDeFractura, estIncEstrangulador, estIncPtp, estIncTtp, estIncPbaj, estIncTbaj,
+                                      estIncPtr, estIncQl, estIncQo, estIncQg, estIncQw,
+                                      estIncRGA, estIncSalinidad, estIncIP, estIncDeltaP, estIncGastoCompromisoQo,
+                                      estIncGastoCompromisoQg, obervacionesEstIncAcido
+                                    ] : [
+                                      interventionID, wellFormacionID, intervalo,
+                                      longitudDeIntervalo, volAparejo, capacidadTotalDelPozo, volumenPrecolchonN2, volumenDeApuntalante,
+                                      volumenDeGelDeFractura, volumenDesplazamiento, volumenTotalDeLiquido,
+                                      moduloYoungArena, moduloYoungLutitas, relacPoissonArena,
+                                      relacPoissonLutatas, gradienteDeFractura, densidadDeDisparos, diametroDeDisparos,
+                                      longitudApuntalada, alturaTotalDeFractura, anchoPromedio, concentractionAreal, conductividad,
+                                      fcd, presionNeta, eficienciaDeFluidoDeFractura,
+                                      estIncEstrangulador, estIncPtp, estIncTtp, estIncPbaj, estIncTbaj,
+                                      estIncPtr, estIncQl, estIncQo, estIncQg, estIncQw,
+                                      estIncRGA, estIncSalinidad, estIncIP, estIncDeltaP, estIncGastoCompromisoQo,
+                                      estIncGastoCompromisoQg, obervacionesEstIncApuntalado
+                                    ]
+
+
+                                connection.query(query, values, (err, results) => {
+                                  console.log('intervention', err)
+                                  console.log('intervention', results)
 
 
 
-                                 connection.commit(function(err) {
-                                  if (err) {
-                                    return connection.rollback(function() {
-                                      throw err;
-                                    });
-                                  }
-                                  console.log('success!');
-                                  var log = 'Post ' + results + ' added';
-                                  console.log(log)
-                                  res.json({message: 'success'});
+                                         connection.commit(function(err) {
+                                          if (err) {
+                                            return connection.rollback(function() {
+                                              throw err;
+                                            });
+                                          }
+                                          console.log('success!');
+                                          var log = 'Post ' + results + ' added';
+                                          console.log(log)
+                                          res.json({message: 'success'});
+
+                                        })
+
+
+
 
                                 })
-
+                              })
                             })
                           })
                         })

@@ -62,7 +62,7 @@ let fluidoOptions = [
 
     let { descubrimientoField, fechaDeExplotacionField, numeroDePozosOperandoField } = formData
     const errors = forms.pozoFormError
-    console.log("la fecha", fechaDeExplotacionField)
+
     return (
       <div className='generales-form'>
         <div className='header'>
