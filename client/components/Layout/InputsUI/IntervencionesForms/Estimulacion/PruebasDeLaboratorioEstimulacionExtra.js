@@ -1,6 +1,7 @@
 import React, { Component } from 'react'
 import autobind from 'autobind-decorator'
 import { InputRow, InputRowUnitless, InputRowSelectUnitless, TextAreaUnitless } from '../../../Common/InputRow'
+import { typeOptions } from '../PruebasDeLaboratorio'
 import { setPruebasDeLaboratorioData } from '../../../../../redux/actions/intervencionesEstimulacion'
 import { setLabEvidenceImgURL } from '../../../../../redux/actions/intervencionesEstimulacion'
 import { connect } from 'react-redux'
@@ -238,7 +239,7 @@ const resultadoOptions = [
 
 
     return (
-      <div style={{marginBot: '20px'}}> 
+      <div className="lab-results" style={{marginBot: '20px'}}> 
         <div className='header'>
           Lab Test Results (spanish)
         </div>
@@ -297,9 +298,18 @@ const resultadoOptions = [
 
     return pruebasDeLaboratorioData.map((form, i) =>
       <div className="form pruebas-de-laboratorio-estimulacion-extra" key={Math.random()}>
-          { this.makeSistemaTable(i) }
-          <TextAreaUnitless header="Observaciones" name='obervaciones' className={'obervaciones'} value={form.obervaciones} onChange={this.updateValue} index={i}/> 
-          { this.makeImageInput(i) }
+        <div className="collapsable-section is-open">
+          <div className="collapsable-title">
+            <span className="left">{typeOptions.find(o => o.value === form.type).label}</span>
+              {form.fechaMuestreo &&
+                <span className="right">Fecha: {form.fechaMuestreo}</span>}
+          </div>
+          <div className="collapsable-content">   
+            { this.makeSistemaTable(i) }
+            <TextAreaUnitless header="Observaciones" name='obervaciones' className={'obervaciones'} value={form.obervaciones} onChange={this.updateValue} index={i}/> 
+            { this.makeImageInput(i) }
+          </div>
+        </div>
       </div>
     )
   }

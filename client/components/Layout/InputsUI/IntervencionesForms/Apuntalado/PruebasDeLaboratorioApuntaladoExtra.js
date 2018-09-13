@@ -1,6 +1,7 @@
 import React, { Component } from 'react'
 import autobind from 'autobind-decorator'
 import { InputRow, InputRowUnitless, InputRowSelectUnitless, TextAreaUnitless } from '../../../Common/InputRow'
+import { typeOptions } from '../PruebasDeLaboratorio'
 import { setPruebasDeLaboratorioData } from '../../../../../redux/actions/intervencionesEstimulacion'
 import { connect } from 'react-redux'
 import ReactTable from 'react-table'
@@ -367,7 +368,7 @@ const resultadoOptions = [
     let imageURL = pruebasDeLaboratorioData[index].imageURL
 
     return (
-      <div style={{marginBot: '20px'}}>
+      <div className="lab-results" style={{marginBot: '20px'}}>
         <div className='header'>
           Upload Lab Evidence (spanish)
         </div>
@@ -384,20 +385,29 @@ const resultadoOptions = [
 
     return pruebasDeLaboratorioData.map((form, i) => 
       <div key={Math.random()} className="form pruebas-de-laboratorio-apuntalado-extra">
-        <div className='top'>
-            <div className='left'>
-              { this.makeCaracterizacionForm(i) }
+        <div className="collapsable-section is-open">
+            <div className="collapsable-title">
+              <span className="left">{typeOptions.find(o => o.value === form.type).label}</span>
+              {form.fechaMuestreo &&
+                <span className="right">Fecha: {form.fechaMuestreo}</span>}
             </div>
-            <div className='right'>
-              { this.makeGelLinealForm(i) }
-              { this.makeApuntalanteForm(i) }
+            <div className="collapsable-content">
+              <div className='top'>
+                <div className='left'>
+                  { this.makeCaracterizacionForm(i) }
+                </div>
+                <div className='right'>
+                  { this.makeGelLinealForm(i) }
+                  { this.makeApuntalanteForm(i) }
+                </div>
+              </div>
+              <div className='bot'>
+                { this.makeSistemaTable(i) }
+                <TextAreaUnitless header="Observaciones" name='' className={'obervaciones'}/>
+                { this.makeImageInput(i) }
+              </div>
             </div>
-        </div>
-        <div className='bot'>
-          { this.makeSistemaTable(i) }
-          <TextAreaUnitless header="Observaciones" name='' className={'obervaciones'}/>
-          { this.makeImageInput(i) }
-        </div>
+          </div>
       </div>
     )
   }

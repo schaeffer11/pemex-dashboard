@@ -2,6 +2,7 @@ import React, { Component } from 'react'
 import autobind from 'autobind-decorator'
 import { InputRow, InputRowUnitless, InputRowSelectUnitless, TextAreaUnitless } from '../../../Common/InputRow'
 import { setPruebasDeLaboratorioData } from '../../../../../redux/actions/intervencionesEstimulacion'
+import { typeOptions } from '../PruebasDeLaboratorio'
 import ReactTable from 'react-table'
 import { connect } from 'react-redux'
 import Select from 'react-select'
@@ -27,7 +28,7 @@ const resultadoOptions = [
 @autobind class PruebasDeLaboratorioAcidoExtra extends Component {
   constructor(props) {
     super(props)
-
+    
     let { setPruebasDeLaboratorioData, pruebasDeLaboratorio } = props
     pruebasDeLaboratorio = pruebasDeLaboratorio.toJS()
     let { pruebasDeLaboratorioData } = pruebasDeLaboratorio
@@ -84,11 +85,9 @@ const resultadoOptions = [
   }
 
   componentDidMount() {
-   console.log('here')
   }
 
   componentDidUpdate(prevProps) {
-   console.log('here')
   }
 
   
@@ -332,7 +331,7 @@ const resultadoOptions = [
     })
 
     return (
-      <div style={{marginBot: '20px'}}>
+      <div className="lab-results" style={{marginBot: '20px'}}>
         <div className='header'>
           Lab Test Results (spanish)
         </div>
@@ -388,21 +387,30 @@ const resultadoOptions = [
 
     return pruebasDeLaboratorioData.map((form, i) =>      
       <div className="form pruebas-de-laboratorio-apuntalado-extra" key={Math.random()}>
-        <div className='top'>
-          <div className='left'>
-          { this.makeCaracterizacionForm(i) }
-          </div>
-          <div className='right'>
-          { this.makeSolubilidadForm(i) }
-          { this.makeGrabadoNucleosForm(i) }
-          { this.makeGelLinealForm(i) }
-          </div>
-        </div>
-        <div className='bot'>
-          { this.makeSistemaTable(i) }
-          <TextAreaUnitless header="Observaciones" name='obervaciones' className={'obervaciones'} value={form.obervaciones} onChange={this.updateValue} index={i}/> 
-          { this.makeImageInput(i) }
-        </div>
+         <div className="collapsable-section is-open">
+            <div className="collapsable-title">
+              <span className="left">{typeOptions.find(o => o.value === form.type).label}</span> 
+              {form.fechaMuestreo &&
+                <span className="right">Fecha: {form.fechaMuestreo}</span>}
+            </div>
+            <div className="collapsable-content">
+              <div className='top'>
+                <div className='left'>
+                 { this.makeCaracterizacionForm(i) }
+                </div>
+                <div className='right'>
+                  { this.makeSolubilidadForm(i) }
+                  { this.makeGrabadoNucleosForm(i) }
+                  { this.makeGelLinealForm(i) }
+                </div>
+              </div>
+              <div className='bot'>
+                { this.makeSistemaTable(i) }
+                <TextAreaUnitless header="Observaciones" name='obervaciones' className={'obervaciones'} value={form.obervaciones} onChange={this.updateValue} index={i}/> 
+                { this.makeImageInput(i) }
+              </div>
+           </div>
+         </div>
       </div>
     )
   }
@@ -418,4 +426,5 @@ const mapDispatchToProps = dispatch => ({
 })
 
 export default connect(mapStateToProps, mapDispatchToProps)(PruebasDeLaboratorioAcidoExtra)
+
 

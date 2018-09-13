@@ -1,0 +1,35 @@
+.collapsable-section {
+  &.is-open {
+    .collapsable-content{
+      margin: 10px;
+      display: block;
+    }
+  } 
+
+  border: 1px solid;
+  margin-bottom: 20px;
+
+  .collapsable-title {
+    border-bottom: 1px solid;
+    padding: 10px;
+    font-weight: 600;
+    font-size: 1.4em;
+    background: #028080;
+    color: #fff;
+    display: flow-root;
+
+    .left {
+      float: left;
+    }
+
+    .right {
+      float:right;
+    }
+ 
+  }
+  
+  .collapsable-content {
+    transition: max-height 0.3s ease-out;
+    overflow: hidden;
+  }
+}
