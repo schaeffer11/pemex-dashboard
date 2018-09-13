@@ -2,19 +2,6 @@ export const setObjetivo = value => ({ type: 'set_objetivo', value})
 export const setAlcances = value => ({ type: 'set_alcances', value})
 export const setTipoDeIntervenciones = value => ({ type: 'set_tipoDeIntervenciones', value})
 
-
-export const setEtapa = value => ({ type: 'set_etapa', value})
-export const setSistema = value => ({ type: 'set_sistema', value})
-export const setVolLiquid = value => ({ type: 'set_volLiquid', value})
-export const setGastoN2 = value => ({ type: 'set_gastoN2', value})
-export const setGastoLiquido = value => ({ type: 'set_gastoLiquido', value})
-export const setGastoEnFondo = value => ({ type: 'set_gastoEnFondo', value})
-export const setCalidad = value => ({ type: 'set_calidad', value})
-export const setVolN2 = value => ({ type: 'set_volN2', value})
-export const setVolLiquidoAcum = value => ({ type: 'set_volLiquidoAcum', value})
-export const setVolN2Acum = value => ({ type: 'set_volN2Acum', value})
-export const setRelN2Liq = value => ({ type: 'set_relN2Liq', value})
-export const setTiempo = value => ({ type: 'set_tiempo', value})
 export const setIntervalo = value => ({ type: 'set_intervalo', value})
 export const setLongitudDeIntervalo = value => ({ type: 'set_longitudDeIntervalo', value})
 export const setVolAparejo = value => ({ type: 'set_volAparejo', value})
@@ -26,7 +13,7 @@ export const setVolumenSistemaDivergente = value => ({ type: 'set_volumenSistema
 export const setVolumenDesplazamientoLiquido = value => ({ type: 'set_volumenDesplazamientoLiquido', value})
 export const setVolumenDesplazamientoN2 = value => ({ type: 'set_volumenDesplazamientoN2', value})
 export const setVolumenTotalDeLiquido = value => ({ type: 'set_volumenTotalDeLiquido', value})
-
+export const setCedulaData = value => ({ type: 'set_cedulaData', value})
 
 export const setPruebasDeLaboratorioData = value => ({ type: 'set_pruebasDeLaboratorioData', value})
 
