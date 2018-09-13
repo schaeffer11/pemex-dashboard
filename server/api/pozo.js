@@ -229,6 +229,10 @@ const INSERT_INTERVENTION_APUNTALADO_QUERY = `INSERT INTO IntervencionesApuntala
          ?, ?, ?)`
 
 
+const INSERT_LAB_TEST_QUERY = `INSERT INTO IntervencionesLabTests (
+        LAB_ID, INTERVENTION_ID, WELL_FORMACION_ID, TIPO_DE_ANALISIS, FECHA_DE_MUESTREO, FECHA_DE_PRUEBA, COMPANIA, PERSONAL_DE_PEMEX_QUE_SUPERVISO, OBSERVACIONES)
+        VALUES ?`
+
 exports.create = async(req, res) => {
  // console.log('what are we here?', req.body)
   const allKeys = Object.keys(req.body)
@@ -664,7 +668,17 @@ exports.create = async(req, res) => {
                                   console.log('intervention', err)
                                   console.log('intervention', results)
 
+                                  values = []
+                                  console.log(pruebasDeLaboratorioData)
 
+                                  pruebasDeLaboratorioData.forEach(i => {
+                                    let labID = Math.floor(Math.random() * 1000000000)
+                                    values.push([labID, interventionID, wellFormacionID, i.type, i.fechaMuestreo, i.fechaPrueba, i.compania, i.superviso, i.obervaciones])
+                                  })
+                                  
+                                  connection.query(INSERT_LAB_TEST_QUERY, [values], (err, results) => {
+                                    console.log('lab tests', err)
+                                    console.log('lab tests', results)
 
                                          connection.commit(function(err) {
                                           if (err) {
@@ -679,9 +693,7 @@ exports.create = async(req, res) => {
 
                                         })
 
-
-
-
+                                  })
                                 })
                               })
                             })
