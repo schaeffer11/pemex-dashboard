@@ -77,7 +77,7 @@ const resultadoOptions = [
   }
 
   updateValue(value, event){
-    console.log('im updating a value', value, event)
+
     if(event === undefined)
       return
     event.preventDefault()
@@ -87,8 +87,7 @@ const resultadoOptions = [
     let index = event.target.getAttribute('index')
     let pruebas = {...pruebasDeLaboratorio}
     pruebas.pruebasDeLaboratorioData[index][event.target.name] = value
-    console.log('what is last thing', pruebas.pruebasDeLaboratorioData[index][event.target.name] = value)
-    console.log('and the final', pruebas.pruebasDeLaboratorioData)
+
     setPruebasDeLaboratorioData(pruebas.pruebasDeLaboratorioData)
   }
 
@@ -111,60 +110,29 @@ const resultadoOptions = [
     );
   }
 
-  addNewRow(event) {
+  addNewRow(event, i) {
     let { pruebasDeLaboratorio, setPruebasDeLaboratorioData } = this.props
     pruebasDeLaboratorio = pruebasDeLaboratorio.toJS()
     let { pruebasDeLaboratorioData } = pruebasDeLaboratorio
 
-    let index = event.target.getAttribute('index')
-    let data = pruebasDeLaboratorioData[index].sistemasTable
-    let copy = JSON.parse(JSON.stringify(data))
+    let copy = pruebasDeLaboratorioData[i].sistemasTable
 
     copy[0].length = 2
 
     let val =  ([...copy, {index: copy.length, sistem: '', tiempoRompimiento: '', interfase: '', solidosFiltrar: '', resultado: '' , length: copy.length + 1}])
-    pruebasDeLaboratorioData[index].sistemasTable = val
+    pruebasDeLaboratorioData[i].sistemasTable = val
     setPruebasDeLaboratorioData(pruebasDeLaboratorioData)
   }
 
-  // deleteRow(state, rowInfo, column, instance) {
-  //   let { data } = this.state
-  //   let copy = JSON.parse(JSON.stringify(data))
-  //   // let { setLayerData, formData } = this.props
-  //   // formData = formData.toJS()
-  //   // let { layerData } = formData
-
-  //   return {
-  //     onClick: e => {
-  //       if (column.id === 'delete' && copy.length > 1) {
-  //       // if (column.id === 'delete' && layerData.length > 1) {
-  //         copy.splice(rowInfo.original.index, 1)
-  //         // layerData.splice(rowInfo.original.index, 1)
-
-  //         // layerData.forEach((i, index) => {
-  //         //   i.index = index
-  //         //   i.length = layerData.length
-  //         // }) 
-  //         copy.forEach((i, index) => {
-  //           i.index = index
-  //           i.length = copy.length
-  //         }) 
-
-  //         // setLayerData(layerData)
-  //         this.setState({
-  //           data: copy
-  //         })
-  //       }
-  //     }
-  //   }
-  // }
-
   deleteRow(state, rowInfo, column, instance) {
+
     let { pruebasDeLaboratorio, setPruebasDeLaboratorioData } = this.props
     pruebasDeLaboratorio = pruebasDeLaboratorio.toJS()
     let { pruebasDeLaboratorioData } = pruebasDeLaboratorio
 
-    let data = pruebasDeLaboratorioData[0].sistemasTable
+    let copy = pruebasDeLaboratorioData
+    let i = column.tableIndex
+    let data = copy[i].sistemasTable
 
     return {
       onClick: e => {
@@ -176,10 +144,21 @@ const resultadoOptions = [
             i.length = data.length
           })
 
-          setPruebasDeLaboratorioData(data)
+          setPruebasDeLaboratorioData(copy)
         }
       }
     }
+  }
+
+  handleSelect(row, e, i, key) {
+    let { setPruebasDeLaboratorioData, pruebasDeLaboratorio } = this.props
+    pruebasDeLaboratorio = pruebasDeLaboratorio.toJS()
+    let { pruebasDeLaboratorioData } = pruebasDeLaboratorio
+
+    let copy = pruebasDeLaboratorioData
+
+    copy[i].sistemasTable[row.index][key] = e
+    setPruebasDeLaboratorioData(copy)
   }
 
   makeSistemaTable(index) {
@@ -191,6 +170,9 @@ const resultadoOptions = [
 
     if(data == undefined)
       return null
+
+    data[0].index = 0
+
 
     let columns = [
       {
@@ -221,7 +203,9 @@ const resultadoOptions = [
             className='input' 
             simpleValue={true} 
             options={interfaseOptions} 
-            name={name} 
+            name={name}
+            value={interfaseOptions.find(i=> i.value === row.original.interfase) || null}
+            onChange={(e) => this.handleSelect(row, e.value, index, 'interfase')} 
           />
           </div>)
         }
@@ -236,6 +220,8 @@ const resultadoOptions = [
             simpleValue={true} 
             options={solidosFiltrarOptions} 
             name={name} 
+            value={solidosFiltrarOptions.find(i=> i.value === row.original.solidosFiltrar) || null}
+            onChange={(e) => this.handleSelect(row, e.value, index, 'solidosFiltrar')} 
           />
           </div>)
         }
@@ -250,9 +236,11 @@ const resultadoOptions = [
             simpleValue={true} 
             options={resultadoOptions}  
             name={name} 
+            value={resultadoOptions.find(i=> i.value === row.original.resultado) || null}
+            onChange={(e) => this.handleSelect(row, e.value, index, 'resultado')} 
           />
           </div>)
-        }
+         }
       }
     ]
 
@@ -282,7 +270,7 @@ const resultadoOptions = [
           />
 
         </div>
-        <button className='new-row-button' index={index} onClick={this.addNewRow}> + </button>
+        <button className='new-row-button' index={index} onClick={(e) => this.addNewRow(e, index)}> + </button>
       </div>
     )
   }
@@ -322,7 +310,6 @@ const resultadoOptions = [
     let { pruebasDeLaboratorioData } = pruebasDeLaboratorio
 
     return pruebasDeLaboratorioData.map((form, i) =>{
-      console.log('my form is this', form, typeOptions, typeOptions.find(o => o.value === form.type))
       return (
       <div className="form pruebas-de-laboratorio-estimulacion-extra" key={`pruebasDeEstimulacionExtra_${i}`}>
         <div className="collapsable-section is-open">
