@@ -157,11 +157,12 @@ let tratamientoPorOptions = [
 
     return (
       <div style={{marginBot: '20px'}}>
-        <div className='header'>
+{/*        <div className='header'>
           Upload Aparejo De Produccion (spanish) (this is excel file? upload image or parse???)
         </div>
         <input type='file' accept="image/*" onChange={(e) => this.handleFileUpload(e, setImgAparejoDeProduccionURL)}></input>
-        {imgAparejoDeProduccionURL ? <img className='img-preview' src={imgAparejoDeProduccionURL}></img> : null }
+        {imgAparejoDeProduccionURL ? <img className='img-preview' src={imgAparejoDeProduccionURL}></img> : null }*/}
+        <div style={{color: 'red'}}> TODO: figure out Aparejo De Produccion (can we treat it as reg table?)</div>
       </div>
     )
   }

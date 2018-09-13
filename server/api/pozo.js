@@ -153,10 +153,10 @@ const INSERT_WELL_PRODUCCION_QUERY = `INSERT INTO WellHistoricalProduccion (
         VALUES 
         ?`
 
-const INSERT_WELL_IMAGE_QUERY = `INSERT INTO WellImages (
-        WELL_FORMACION_ID, IMAGE_NAME, IMG_URL) VALUES
-        ?`
-
+// const INSERT_WELL_IMAGE_QUERY = `INSERT INTO WellImages (
+//         WELL_FORMACION_ID, IMAGE_NAME, IMG_URL) VALUES
+//         ?`
+const INSERT_WELL_IMAGE_QUERY = `SELECT(1) FROM WellImages`
 
 exports.create = async(req, res) => {
  // console.log('what are we here?', req.body)
@@ -236,9 +236,9 @@ exports.create = async(req, res) => {
 
   let { salinidad, qw, estrangulado, tsep, rga, ptp, psep, ttp, qg, tbaj, ph, pbaj, ql, tiempo, fecha, qo, produccionData } = finalObj.historicoDeProduccion
 
-  let wellLogFile = finalObj.evaluacionPetrofisica.imgURL
-  let wellBoreFile = finalObj.mecanicoYAparejoDeProduccion.imgURL
-  let sistemasArtificialesFile = finalObj.sistemasArtificialesDeProduccon.imgURL
+  // let wellLogFile = finalObj.evaluacionPetrofisica.imgURL
+  // let wellBoreFile = finalObj.mecanicoYAparejoDeProduccion.imgURL
+  // let sistemasArtificialesFile = finalObj.sistemasArtificialesDeProduccon.imgURL
 
   // write to db
 
@@ -427,11 +427,11 @@ exports.create = async(req, res) => {
                             console.log('well prod', err)
                             console.log('well prod', results)
 
-                            values = [
-                              [wellFormacionID, 'Well Log', wellLogFile],
-                              [wellFormacionID, 'Well Bore Diagram'. wellBoreFile],
-                              [wellFormacionID, 'Sistemas Artificiales', sistemasArtificialesFile]
-                            ]
+                            // values = [
+                            //   [wellFormacionID, 'Well Log', wellLogFile],
+                            //   [wellFormacionID, 'Well Bore Diagram'. wellBoreFile],
+                            //   [wellFormacionID, 'Sistemas Artificiales', sistemasArtificialesFile]
+                            // ]
 
                             connection.query(INSERT_WELL_IMAGE_QUERY, [values], (err, results) => {
                               console.log('well img', err)

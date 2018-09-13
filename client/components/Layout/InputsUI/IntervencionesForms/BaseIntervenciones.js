@@ -56,7 +56,7 @@ import EstimulacionMultiStepForm from './Estimulacion/EstimulacionMultiStepForm'
               <TextAreaUnitless header="Objetivo - Describir el objetivo de la intervención indicando la causa principal, tipo de tratamiento a aplicar y técnica de colocación de los sistemas." name='objetivo' className={'objetivo'} value={objetivo} onChange={setObjetivo} />
               <TextAreaUnitless header="Alcances - Describir los alcances que se pretenden obtener con la intervención programada a ejecutar." name='alcances' className={'alcances'} value={alcances} onChange={setAlcances}/>
               <InputRowSelectUnitless header='Tipo de intervenciones' name='intervencion' value={tipoDeIntervenciones} options={tipoDeIntervencionesOptions} callback={this.handleSelectIntervencionesType} />
-              <button className="submit">Enviar</button>
+              <button className="submit">Siguiente</button>
             </div>
           </form>
           </div>
