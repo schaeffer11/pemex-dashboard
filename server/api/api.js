@@ -48,25 +48,48 @@ app.get('/geturl?', async (req, res) => {
 })
 
 app.get('/deleteobj', async (req, res) => {
-  const test = await deleteObject(req.query.img)
-  console.log('data', test)
+  const imgsToDelete = [
+    'dareal.pruebasDeLaboratorio.caracterizacinSolubilidad.1536860807755',
+    'dareal.pruebasDeLaboratorio.caracterizacinAgua.1536860807755',
+    'dareal.evaluacionPetrofisica.1536860807755'
+  ]
+
+  const done = await Promise.all(imgsToDelete.map(elem => deleteObject(elem)))
+  // const test = await deleteObject(req.query.img)
+  console.log('data', done)
   res.send('done')
 })
 
 app.post('/inputTest', async (req, res) => {
-  console.log('what are we here?', req.body)
+  // console.log('what are we here?', req.body)
   const allKeys = Object.keys(req.body)
-  const { pozo } = JSON.parse(req.body.fichaTecnicaDelPozo)
-  for(let key of allKeys) {
-    const innerObj = JSON.parse(req.body[key])
+  const { pozo } = JSON.parse(req.body.fichaTecnicaDelPozoHighLevel)
+  console.log('pzo', pozo)
+  for(let k of allKeys) {
+    const innerObj = JSON.parse(req.body[k])
+    const innerKeys = Object.keys(innerObj)
+    // look for immediate images
     if (innerObj.img) {
-      console.log('ok i have something here')
+      console.log('found image', k, innerObj.imgName)
       const buf = Buffer.from(innerObj.img, 'base64')
-      const Key = `${pozo}.${key}`
-      const t = await addObject(buf, Key).catch(reason => console.log('something went wrong', reason))
-      console.log('uploaded', t)
+      const t = await addObject(buf, innerObj.imgName).catch(reason => console.log(reason))
+      console.log('uploaded img', t, k)
+    }
+
+    for (let iKey of innerKeys) {
+      const property = innerObj[iKey]
+      if (Array.isArray(property)) {
+        for (let j of property) {
+          if (j.img) {
+            const buf = Buffer.from(j.img, 'base64')
+            const t = await addObject(buf, j.imgName).catch(reason => console.log(reason))
+            console.log('uploaded img', k, t)
+          }
+        }
+      }
     }
   }
+  res.json({ done: true })
 })
 
 app.post('/testing', (req, res) => {

@@ -40,6 +40,7 @@ export function submitForm(fields) {
     const formData = new FormData()
     const convertedFields = fields.toJS()
     const allKeys = Object.keys(convertedFields)
+    const { pozo } = convertedFields.fichaTecnicaDelPozoHighLevel
     const utc = Date.now()
     for (let k of allKeys) {
       if(!ignore[k]) {
@@ -47,9 +48,11 @@ export function submitForm(fields) {
         const innerKeys = Object.keys(innerObj)
         // look for immediate images
         if (innerObj.hasOwnProperty('imgURL')) {
-          const img = await getBase64FromURL(innerObj.imgURL)
-          innerObj.img = img
-          innerObj.imgName = [k, utc].join('.')
+          if (innerObj.imgURL) {
+            const img = await getBase64FromURL(innerObj.imgURL)
+            innerObj.img = img
+            innerObj.imgName = [pozo, k, utc].join('.')
+          }
         }
 
         // Look for images inside arrays and get base64
@@ -58,14 +61,15 @@ export function submitForm(fields) {
           if (Array.isArray(property)) {
             for (let j of property) {
               if (j.hasOwnProperty('imgURL')) {
-                const img = await getBase64FromURL(j.imgURL)
-                j.img = img
-                j.imgName = [k, j.type, utc].join('.')
+                if (j.imgURL) {
+                  const img = await getBase64FromURL(j.imgURL)
+                  j.img = img
+                  j.imgName = [pozo, k, j.type, utc].join('.')
+                }
               }
             }
           }
         }
-
         formData.append(k, JSON.stringify(innerObj))
       }
     }
@@ -75,6 +79,8 @@ export function submitForm(fields) {
       method: 'POST',
       body: formData,
     })
+      .then(r => r.json())
+      .then(r => console.log('server response', r))
   }
 }
 
