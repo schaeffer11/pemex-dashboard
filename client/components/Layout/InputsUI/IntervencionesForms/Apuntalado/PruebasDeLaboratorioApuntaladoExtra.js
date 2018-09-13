@@ -365,15 +365,15 @@ const resultadoOptions = [
     pruebasDeLaboratorio = pruebasDeLaboratorio.toJS()
     let { pruebasDeLaboratorioData } = pruebasDeLaboratorio
 
-    let imageURL = pruebasDeLaboratorioData[index].imageURL
+    let imgURL = pruebasDeLaboratorioData[index].imgURL
 
     return (
       <div className="lab-results" style={{marginBot: '20px'}}>
         <div className='header'>
           Upload Lab Evidence (spanish)
         </div>
-        <input type='file' name='imageURL' accept="image/*" onChange={(e) => this.handleFileUpload(e, this.updateValue)} index={index}></input>
-        {imageURL ? <img className='img-preview' src={imageURL}></img> : null }
+        <input type='file' name='imgURL' accept="image/*" onChange={(e) => this.handleFileUpload(e, this.updateValue)} index={index}></input>
+        {imgURL ? <img className='img-preview' src={imgURL}></img> : null }
       </div>
     )
   }
