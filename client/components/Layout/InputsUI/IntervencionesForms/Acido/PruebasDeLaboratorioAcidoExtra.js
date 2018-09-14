@@ -163,7 +163,7 @@ const resultadoOptions = [
         <div className='header'>
           Prueba de Grabado de Nucleos
         </div>
-        <InputRowUnitless header="Sistema ácido" name='sistemAcido' value={pruebasDeLaboratorioData[index].sistemAcido} onChange={this.updateValue} index={index}/>
+        <InputRowUnitless header="Sistema ácido" name='sistemAcidoGrabado' value={pruebasDeLaboratorioData[index].sistemAcidoGrabado} onChange={this.updateValue} index={index}/>
         <InputRowUnitless header="Nucleo de formación" name='nucleoDeFormacion' value={pruebasDeLaboratorioData[index].nucleoDeFormacion} onChange={this.updateValue} index={index}/>
         <InputRow header="Grabado" name='grabado' unit="gr" value={pruebasDeLaboratorioData[index].grabado} onChange={this.updateValue} index={index}/>
       </div>
