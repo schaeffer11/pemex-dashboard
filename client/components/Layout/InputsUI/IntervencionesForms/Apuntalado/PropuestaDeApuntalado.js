@@ -55,15 +55,15 @@ let columns = [
     cell: 'renderEditable',
   }, { 
     Header: 'Vol. N2 (m3 std)',
-    accessor: 'gastoLiqudo',
-    cell: 'renderEditable',
-  }, { 
-    Header: 'Vol. Liq. Acum. (m3)',
     accessor: 'volN2',
     cell: 'renderEditable',
   }, { 
-    Header: 'Vol. N2 Acum. (m3 std)',
+    Header: 'Vol. Liq. Acum. (m3)',
     accessor: 'volLiquidoAcum',
+    cell: 'renderEditable',
+  }, { 
+    Header: 'Vol. N2 Acum. (m3 std)',
+    accessor: 'volN2Acum',
     cell: 'renderEditable',
   }, { 
     Header: 'Rel. N2/Liq (m3 std/m3)',

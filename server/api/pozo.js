@@ -7,74 +7,6 @@ import multer from 'multer'
 import { addObject, signedURL, deleteObject, getBuckets } from '../aws/index';
 
 
-const INSERT_WELL_QUERYold = `INSERT INTO Wells (
-        WELL_ID, FORMACION_ID, SUBDIRECCION, BLOQUE, ACTIVO,
-        CAMPO, POZO, FORMACION, INTERVALO_PRODUCTOR, ESPESOR_BRUTO,
-        ESPESOR_NETO, CALIZA, DOLOMIA, ARCILLA, POROSIDAD,
-        PERMEABILIDAD, SW, CAA, CGA, TIPO_DE_POZO,
-        PWS_FECHA, PWF_FECHA, DELTA_P_PER_MES, TYAC, PVT,
-        APAREJO_DE_PRODUCCION, PROF_EMPACADOR, PROF_SENSOR_PYT, TIPO_DE_SAP, MODULO_YOUNG_ARENA,
-        MODULO_YOUNG_LUTITAS, RELAC_POISSON_ARENA, RELAC_POISSON_LUTITAS, GRADIENTE_DE_FRACTURA, DENSIDAD_DE_DISPAROS,
-        DIAMETRO_DE_DISPAROS, PRODUCTION_SYSTEM_TYPE, TIPO_DE_TERMINACION, H_INTERVALO_PRODUCTOR, EMPACADOR,
-        PRESION_DIF_EMPACADOR, SENSOR_PYT, TIP_DE_LINER, DIAMETRO_DE_LINER, TIPO_DE_PISTOLAS,
-        DENSIDAD_DE_DISPAROS_MECANICO_DUPL, FASE, DIAMETRO_DE_ORIFICIO, PENETRACION, TIPO_DE_SAP_MECANICO_DUPL,
-        TRATAMIENTO_POR, VOLUMEN_APAREJO_DE_PRODUCCION, VOLUMEN_INTERVALO_CIMA, VOLUMEN_INTERVALO_BASE, VOLUMEN_DE_ESPACIO_ANULA,
-        pH, TEMPERATURA_DE_CONDUCTIVIDAD, RESISTIVIDAD, SALINIDAD_CON_CONDUCTIMETRO, SOLIDOS_DISUELTOS_TOTALES,
-        DUREZA_TOTAL_COMO_CaCO3, DUREZA_DE_CALCIO_COMO_CaCO3, DUREZA_DE_MAGNESIO_COMO_CaCO3, ALCALINIDAD_TOTAL_COMO_CaCO3, ALCALINIDAD_A_LA_FENOLFTALEINA_COMO_CaCO3,
-        SALINIDAD_COMO_NaCL, SODIO, CALCIO, MAGNESIO, FIERRO,
-        CLORUROS, BICARBONATOS, SULFATOS, CARBONATOS, DENSIDAD_15,
-         DENSIDAD_20) VALUES
-        (null, 1, ?, ?, ?, ?, ?, ?, ?, ?,
-         ?, ?, ?, ?, ?, ?, ?, ?, ?, ?,
-         ?, ?, ?, ?, ?, ?, ?, ?, ?, ?,
-         ?, ?, ?, ?, ?, ?, ?, ?, ?, ?,
-         ?, ?, ?, ?, ?, ?, ?, ?, ?, ?,
-         ?, ?, ?, ?, ?, ?, ?, ?, ?, ?,
-         ?, ?, ?, ?, ?, ?, ?, ?, ?, ?,
-         ?, ?, ?, ?, ?, ?)`
-
-const INSERT_EMBOLO_VIAJERO_QUERY = `INSERT INTO ProductionSystemsEmboloViajero (
-                SYSTEM_ID, WELL_ID, FORMACION_ID, PRESION_DE_CABEZA, PRESION_DE_LINEA_O_DE_SEPARADOR,
-                NUMERO_DE_DESCARGAS_O_CIRCLOS, VOLUMEN_DESPLAZADO_POR_CIRCLO) VALUES
-                (1, 1, 1, ?, ?, ?, ?)`
-
-const INSERT_BOMBEO_NEUMATICO_QUERY = `INSERT INTO ProductionSystemsBombeoNeumatico (
-                SYSTEM_ID, WELL_ID, FORMACION_ID, PRESION_DE_CABEZA, PRESION_DE_LINEA_O_DE_SEPARADOR,
-                PRESION_DE_INYECCION, PRESION_DE_DESCARGA, NUMERO_DE_VALVULAS, PREFUNDIDAD_DE_LA_VALVULA_OPERANTE,
-                ORIFICIO, VOLUMEN_DE_GAS_INYECTADO) VALUES
-                (1, 1, 1, ?, ?, ?, ?, ?, ?, ?, ?)`
-
-const INSERT_BOMBEO_HIDRAULICO_QUERY = `INSERT INTO ProductionSystemsBombeoHidraulico (
-                SYSTEM_ID, WELL_ID, FORMACION_ID, PRESION_DE_CABEZA, PRESION_DE_LINEA_O_DE_SEPARADOR,
-                PROFUNDIDAD_DE_LA_BOMBA, TIPO_Y_MARCA_DE_BOMBA, ORIFICIO, TIPO_DE_CAMISA, FLUIDO_MOTRIZ) VALUES
-                (1, 1, 1, ?, ?, ?, ?, ?, ?, ?)`
-
-const INSERT_BOMBEO_CAVIDADES_QUERY = `INSERT INTO ProductionSystemsBombeoCavidadesProgresivas (
-                SYSTEM_ID, WELL_ID, FORMACION_ID, PRESION_DE_CABEZA, PRESION_DE_LINEA_O_DE_SEPARADOR,
-                MOTOR_Y_TIPO_DE_MOTOR, PROFUNDIDAD_DEL_MOTOR, VELOCIDAD, HP, ARREGLO_DE_VARILLAS,
-                TIPO_DE_ELASTOMERO, PROFUNDIDAD_DEL_ANCLA_ANTITORQUE) VALUES
-                (1, 1, 1, ?, ?, ?, ?, ?, ?, ?, ?, ?)`
-
-const INSERT_BOMBEO_ELECTROCENTRIFUGO_QUERY = `INSERT INTO ProductionSystemsBombeoElectrocentrifugo (
-                SYSTEM_ID, WELL_ID, FORMACION_ID, PRESION_DE_CABEZA, PRESION_DE_LINEA_O_DE_SEPARADOR,
-                PROFUNDIDAD_DEL_MOTOR, DIAMETRO, VOLTS, AMPERAJE, ARMADURA,
-                TIPO_DE_CABLE, LONGITUD_DE_CABLE, RPM) VALUES
-                (1, 1, 1, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`
-
-const INSERT_BOMBEO_MECANICO_QUERY = `INSERT INTO ProductionSystemsBombeoMecanico (
-                SYSTEM_ID, WELL_ID, FORMACION_ID, PRESION_DE_CABEZA, PRESION_DE_LINEA_O_DE_SEPARADOR,
-                TIPO_DE_UNIDAD, VELOCIDAD, LONGITUD_DE_CARERA, TIPO_DE_BOMBA_SUBSUPERFICIAL, TAMANO_DE_BOMBA_SUBSUPERFICIAL,
-                PROFUNDIDAD_DE_LA_BOMBA, ARREGLO_DE_VARILLAS, CUANTA_CON_ANCIA_MECHANICO_O_EMPACADOR, NIVEL_DINAMICO, NIVEL_ESTATICO) VALUES
-                (1, 1, 1, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`
-
-
-
-
-
-
-
-
-
 
 
 const INSERT_FIELDS_QUERY = `INSERT INTO Fields (
@@ -134,6 +66,42 @@ const INSERT_ANALISIS_AGUA_QUERY = `INSERT INTO WellAnalisisDelAgua (
         (?, ?, ?, ?, ?, ?, ?, ?, ?, ?,
          ?, ?, ?, ?, ?, ?, ?, ?, ?, ?,
          ?, ?)`
+
+
+const INSERT_EMBOLO_VIAJERO_QUERY = `INSERT INTO ProductionSystemsEmboloViajero (
+                SYSTEM_ID, WELL_ID, FORMACION_ID, PRESION_DE_CABEZA, PRESION_DE_LINEA_O_DE_SEPARADOR,
+                NUMERO_DE_DESCARGAS_O_CIRCLOS, VOLUMEN_DESPLAZADO_POR_CIRCLO) VALUES
+                (1, 1, 1, ?, ?, ?, ?)`
+
+const INSERT_BOMBEO_NEUMATICO_QUERY = `INSERT INTO ProductionSystemsBombeoNeumatico (
+                SYSTEM_ID, WELL_ID, FORMACION_ID, PRESION_DE_CABEZA, PRESION_DE_LINEA_O_DE_SEPARADOR,
+                PRESION_DE_INYECCION, PRESION_DE_DESCARGA, NUMERO_DE_VALVULAS, PREFUNDIDAD_DE_LA_VALVULA_OPERANTE,
+                ORIFICIO, VOLUMEN_DE_GAS_INYECTADO) VALUES
+                (1, 1, 1, ?, ?, ?, ?, ?, ?, ?, ?)`
+
+const INSERT_BOMBEO_HIDRAULICO_QUERY = `INSERT INTO ProductionSystemsBombeoHidraulico (
+                SYSTEM_ID, WELL_ID, FORMACION_ID, PRESION_DE_CABEZA, PRESION_DE_LINEA_O_DE_SEPARADOR,
+                PROFUNDIDAD_DE_LA_BOMBA, TIPO_Y_MARCA_DE_BOMBA, ORIFICIO, TIPO_DE_CAMISA, FLUIDO_MOTRIZ) VALUES
+                (1, 1, 1, ?, ?, ?, ?, ?, ?, ?)`
+
+const INSERT_BOMBEO_CAVIDADES_QUERY = `INSERT INTO ProductionSystemsBombeoCavidadesProgresivas (
+                SYSTEM_ID, WELL_ID, FORMACION_ID, PRESION_DE_CABEZA, PRESION_DE_LINEA_O_DE_SEPARADOR,
+                MOTOR_Y_TIPO_DE_MOTOR, PROFUNDIDAD_DEL_MOTOR, VELOCIDAD, HP, ARREGLO_DE_VARILLAS,
+                TIPO_DE_ELASTOMERO, PROFUNDIDAD_DEL_ANCLA_ANTITORQUE) VALUES
+                (1, 1, 1, ?, ?, ?, ?, ?, ?, ?, ?, ?)`
+
+const INSERT_BOMBEO_ELECTROCENTRIFUGO_QUERY = `INSERT INTO ProductionSystemsBombeoElectrocentrifugo (
+                SYSTEM_ID, WELL_ID, FORMACION_ID, PRESION_DE_CABEZA, PRESION_DE_LINEA_O_DE_SEPARADOR,
+                PROFUNDIDAD_DEL_MOTOR, DIAMETRO, VOLTS, AMPERAJE, ARMADURA,
+                TIPO_DE_CABLE, LONGITUD_DE_CABLE, RPM) VALUES
+                (1, 1, 1, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`
+
+const INSERT_BOMBEO_MECANICO_QUERY = `INSERT INTO ProductionSystemsBombeoMecanico (
+                SYSTEM_ID, WELL_ID, FORMACION_ID, PRESION_DE_CABEZA, PRESION_DE_LINEA_O_DE_SEPARADOR,
+                TIPO_DE_UNIDAD, VELOCIDAD, LONGITUD_DE_CARERA, TIPO_DE_BOMBA_SUBSUPERFICIAL, TAMANO_DE_BOMBA_SUBSUPERFICIAL,
+                PROFUNDIDAD_DE_LA_BOMBA, ARREGLO_DE_VARILLAS, CUANTA_CON_ANCIA_MECHANICO_O_EMPACADOR, NIVEL_DINAMICO, NIVEL_ESTATICO) VALUES
+                (1, 1, 1, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`
+
 
 const INSERT_FIELD_PRESSURE_QUERY = `INSERT INTO FieldHistoricalPressure (
         FIELD_FORMACION_ID, FECHA, QO, NP, PWS, PR) VALUES
@@ -343,6 +311,7 @@ export const create = async(req, res) => {
       var { estCostCompaniaDeServicio, estCostoDeRentaDeBarco, estCostDeSistemaReactivo, estCostDeSistemaNoReactivo, estCostDeDivergenes,
         estCostDeN2, estCostHCL } = finalObj.estCostEstimulacion
 
+      var { cedulaData } = finalObj.propuestaEstimulacion
   }
   else if (tipoDeIntervenciones === 'acido') {
       //Propuesta De Fracturamiento Acido
@@ -366,6 +335,7 @@ export const create = async(req, res) => {
         estCostDeCostoEquipoDeFacturamientoDePozos, estCostGelLineal, estCostTrabajosDeBombeoDiversos, estCostLlenadoDePozoYPruebaDeAdmision, estCostMinifrac,
         estCostBacheNeutralizador, estCostProtectorDeArbol, estCostApuntalante  } = finalObj.estCostAcido
  
+      var { cedulaData } = finalObj.propuestaAcido
   }
   else if (tipoDeIntervenciones === 'apuntalado') {
       //Propuesta De Fracturamiento Apuntalado
@@ -391,31 +361,12 @@ export const create = async(req, res) => {
         estCostDeCostoEquipoDeFacturamientoDePozos, estCostGelLineal, estCostTrabajosDeBombeoDiversos, estCostLlenadoDePozoYPruebaDeAdmision, estCostMinifrac,
         estCostBacheNeutralizador, estCostProtectorDeArbol } = finalObj.estCostApuntalado
 
+      var { cedulaData } = finalObj.propuestaApuntalado
   }
 
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
   // write to db
-
-
   let fieldFormacionID = Math.floor(Math.random() * 1000000000)
   let wellFormacionID = Math.floor(Math.random() * 1000000000)
   let interventionID = Math.floor(Math.random() * 1000000000)
@@ -435,8 +386,8 @@ export const create = async(req, res) => {
     qoField, qgField, rgaField, fwField, npField,
     gpField, wpField, rraField, rrgField, rrpceField,
     h2sField, co2Field, n2Field], (err, results) => {
-      // console.log('field', err)
-      // console.log('field', results)
+      console.log('field', err)
+      console.log('field', results)
 
       connection.query(INSERT_WELL_QUERY, [
       wellFormacionID, subdireccion, activo, campo, pozo,
@@ -445,8 +396,8 @@ export const create = async(req, res) => {
       caa, cga, tipoDePozo, pwsFecha, pwfFecha,
       deltaPPerMes, tyac, pvt, aparejoDeProduccion, profEmpacador,
       profSensorPYT, tipoDeSistemo ], (err, results) => {
-        // console.log('well', err)
-        // console.log('well', results)
+        console.log('well', err)
+        console.log('well', results)
 
         let values = []
 
@@ -456,8 +407,8 @@ export const create = async(req, res) => {
         })
 
         connection.query(INSERT_HIST_INTERVENCIONES_QUERY, [values], (err, results) => {
-          // console.log('user input intervention', err)
-          // console.log('user input intervention', results)
+          console.log('user input intervention', err)
+          console.log('user input intervention', results)
 
           values = []
 
@@ -468,8 +419,8 @@ export const create = async(req, res) => {
           })
 
           connection.query(INSERT_LAYER_QUERY, [values], (err, results) => {
-            // console.log('layers', err)
-            // console.log('layers', results)
+            console.log('layers', err)
+            console.log('layers', results)
 
             values = []
 
@@ -479,8 +430,8 @@ export const create = async(req, res) => {
             })
 
             connection.query(INSERT_MUD_LOSS_QUERY, [values], (err, results) => {
-              // console.log('mud loss', err)
-              // console.log('mud loss', results)
+              console.log('mud loss', err)
+              console.log('mud loss', results)
 
 
               connection.query(INSERT_MECANICO_QUERY, [
@@ -489,8 +440,8 @@ export const create = async(req, res) => {
                 diametroDeOrificio, penetracion, tratamientoPor, volumenAparejoDeProduccion,
                 volumenCimaDeIntervalo, volumenBaseDeIntervalo, volumenDeEspacioAnular
               ], (err, results) => {
-                // console.log('mecanico', err)
-                // console.log('mecanico', results)
+                console.log('mecanico', err)
+                console.log('mecanico', results)
 
                 connection.query(INSERT_ANALISIS_AGUA_QUERY, [
                     wellFormacionID, pH, temperaturaDeConductividad, resistividad, salinidadConConductimetro, solidosDisueltosTotales,
@@ -499,8 +450,8 @@ export const create = async(req, res) => {
                     cloruros, bicarbonatos, sulfatos, carbonatos, densidadAt15,
                     densidadAt20 
                 ], (err, results) => {
-                  // console.log('agua', err)
-                  // console.log('agua', results)
+                  console.log('agua', err)
+                  console.log('agua', results)
 
                   let query = 'SELECT(1) FROM WellProductionSystemsEmboloViajero'
 
@@ -561,8 +512,8 @@ export const create = async(req, res) => {
 
 
                   connection.query(query, values, (err, results) => {
-                    // console.log('sistemas', err)
-                    // console.log('sistemas', results)
+                    console.log('sistemas', err)
+                    console.log('sistemas', results)
 
                     values = []
 
@@ -571,8 +522,8 @@ export const create = async(req, res) => {
                     })
 
                     connection.query(INSERT_FIELD_PRESSURE_QUERY, [values], (err, results) => {
-                      // console.log('field pressure', err)
-                      // console.log('field pressure', results)
+                      console.log('field pressure', err)
+                      console.log('field pressure', results)
 
                       values = []
 
@@ -583,14 +534,14 @@ export const create = async(req, res) => {
                       })
 
                       connection.query(INSERT_WELL_PRESSURE_QUERY, [values], (err, results) => {
-                        // console.log('well pressure', err)
-                        // console.log('well pressure', results)
+                        console.log('well pressure', err)
+                        console.log('well pressure', results)
 
                         connection.query(INSERT_WELL_AFOROS_QUERY, [
                         wellFormacionID, fecha, estrangulado, ptp, ttp, pbaj, tbaj, psep, tsep,
                         ql, qo, qg, qw, rga, salinidad, ph], (err, results) => {
-                          // console.log('well aforos', err)
-                          // console.log('well aforos', results)
+                          console.log('well aforos', err)
+                          console.log('well aforos', results)
 
                           values = []
                           produccionData.forEach(i => {
@@ -598,8 +549,8 @@ export const create = async(req, res) => {
                           })
 
                           connection.query(INSERT_WELL_PRODUCCION_QUERY, [values], (err, results) => {
-                            // console.log('well prod', err)
-                            // console.log('well prod', results)
+                            console.log('well prod', err)
+                            console.log('well prod', results)
 
                             // values = [
                             //   [wellFormacionID, 'Well Log', wellLogFile],
@@ -608,11 +559,8 @@ export const create = async(req, res) => {
                             // ]
 
                             connection.query(INSERT_WELL_IMAGE_QUERY, [values], (err, results) => {
-                              // console.log('well img', err)
-                              // console.log('well img', results)
-
-
-                              console.log('objectives', finalObj.objetivoYAlcancesIntervencion)
+                              console.log('well img', err)
+                              console.log('well img', results)
 
                               connection.query(INSERT_INTERVENTION_BASE_QUERY, [
                                 interventionID, wellFormacionID, objetivo, alcances, tipoDeIntervenciones 
@@ -623,7 +571,6 @@ export const create = async(req, res) => {
                                 console.log(tipoDeIntervenciones)
 
                                 query = tipoDeIntervenciones === 'estimulacion' ? INSERT_INTERVENTION_ESIMULACION_QUERY : tipoDeIntervenciones === 'acido' ? INSERT_INTERVENTION_ACIDO_QUERY : INSERT_INTERVENTION_APUNTALADO_QUERY
-
 
                                 values = tipoDeIntervenciones === 'estimulacion' ? [
                                     interventionID, wellFormacionID, intervalo, longitudDeIntervalo, volAparejo,
@@ -671,28 +618,108 @@ export const create = async(req, res) => {
                                   values = []
                                   console.log(pruebasDeLaboratorioData)
 
+                                  const labResultValues = []
+                                  const labExtraValues = []
                                   pruebasDeLaboratorioData.forEach(i => {
-                                    let labID = Math.floor(Math.random() * 1000000000)
+                                    const labID = Math.floor(Math.random() * 1000000000)
                                     values.push([labID, interventionID, wellFormacionID, i.type, i.fechaMuestreo, i.fechaPrueba, i.compania, i.superviso, i.obervaciones])
+                                    i.sistemasTable.forEach(i => {
+                                      let resultID = Math.floor(Math.random() * 1000000000)
+                                      labResultValues.push([resultID, labID, interventionID, wellFormacionID, i.sistem, i.tiempoRompimiento, i.interfase, i.solidosFiltrar, i.resultado])
+                                    })
+
+                                    let newRow = [labID, interventionID, wellFormacionID, i.contenidoDeAceite, i.contenidoDeAgua, i.contenidoDeEmulsion, i.contenidoDeSolidos, i.tipoDeSolidos, i.densidadDelAceite, i.densidadDelAgua, i.densidadDeLaEmulsion, i.contenidoDeAsfaltenos, i.contenidoDeParafinas, i.contenidoDeResinas, i.indiceDeEstabilidadDelColoidal, i.indiceDeEstabilidadDelAgua, i.pH, i.salinidad, i.viscosidadDelAceite]
+                                    if (tipoDeIntervenciones === 'acido') {
+                                      newRow = newRow.concat([i.sistemAcido, i.pesoMuestraInicial, i.pesoMuestraFinal, i.solubilidad, i.sistemAcidoGrabado, i.nucleoDeFormacion, i.grabado, i.tipoDeGelLineal, i.viscosidadDelGelLineal, i.tiempoDeReticulacion, i.pHGelLineal, i.tiempoDeRompedorDelGel])
+                                      labExtraValues.push(newRow)
+                                    }
+                                    else if (tipoDeIntervenciones === 'apuntalado') {
+                                      newRow = newRow.concat([i.tipoDeGelLineal, i.viscosidadDelGelLineal, i.tiempoDeReticulacion, i.pHGelLineal, i.tiempoDeRompedorDelGel, i.tamanoDelApuntalante, i.gravedadEspecifica, i.esfericidad, i.redondeo, i.turbidez, i.psi, i.pruebaDeSolubilidadConAcida])
+                                      labExtraValues.push(newRow)
+                                    }
                                   })
                                   
                                   connection.query(INSERT_LAB_TEST_QUERY, [values], (err, results) => {
                                     console.log('lab tests', err)
                                     console.log('lab tests', results)
 
-                                         connection.commit(function(err) {
-                                          if (err) {
-                                            return connection.rollback(function() {
-                                              throw err;
-                                            });
+
+                                    query = tipoDeIntervenciones === 'estimulacion' ? INSERT_CEDULA_ESTIMULACION_QUERY : tipoDeIntervenciones === 'acido' ? INSERT_CEDULA_ACIDO_QUERY : INSERT_CEDULA_APUNTALADO_QUERY
+
+                                    values = []
+
+                                    if (tipoDeIntervenciones === 'estimulacion') {
+                                      cedulaData.forEach(i => {
+                                        let cedulaID = Math.floor(Math.random() * 1000000000)
+                                        values.push([cedulaID, interventionID, wellFormacionID, i.etapa, i.sistema, i.volLiquid, i.gastoN2, i.gastoLiqudo, i.gastoEnFondo, i.calidad, i.volN2, i.volLiquidoAcum, i.volN2Acum, i.relN2Liq, i.tiempo])
+                                      })
+                                    } 
+                                    else {
+                                      cedulaData.forEach(i => {
+                                        let cedulaID = Math.floor(Math.random() * 1000000000)
+                                        values.push([cedulaID, interventionID, wellFormacionID, i.etapa, i.sistema, i.tipoDeApuntalante, i.concentraciDeApuntalante, i.volLiquid, i.gastoN2, i.gastoLiqudo, i.gastoEnFondo, i.calidad, i.volN2, i.volLiquidoAcum, i.volN2Acum, i.relN2Liq, i.tiempo])
+                                      })
+                                    }
+
+                                    connection.query(query, [values], (err, results) => {
+                                      console.log('cedula', err)
+                                      console.log('cedula', results)
+
+                                      connection.query(INSERT_LAB_RESULTS_QUERY, [labResultValues], (err, results) => {
+                                        console.log('lab results', err)
+                                        console.log('lab results', results)
+
+                                        query =  tipoDeIntervenciones === 'estimulacion' ? `select(1) FROM Users LIMIT 1` : tipoDeIntervenciones === 'acido' ? INSERT_LAB_ACIDO_QUERY : INSERT_LAB_APUNTALADO_QUERY
+                                        
+                                        connection.query(query, [labExtraValues], (err, results) => {
+                                          console.log('lab extras', err)
+                                          console.log('lab extras', results)
+
+
+                                          values = []
+                                          if (tipoDeIntervenciones === 'estimulacion') {
+                                            Object.keys(finalObj.estCostEstimulacion).forEach(key => {
+                                              let obj = finalObj.estCostEstimulacion[key]
+                                              let costID = Math.floor(Math.random() * 1000000000)
+                                              values.push([costID, interventionID, key, obj.company, obj.cost])
+                                            })
                                           }
-                                          console.log('success!');
-                                          var log = 'Post ' + results + ' added';
-                                          console.log(log)
-                                          res.json({message: 'success'});
+                                          else if (tipoDeIntervenciones === 'acido') {
+                                            Object.keys(finalObj.estCostAcido).forEach(key => {
+                                              let obj = finalObj.estCostAcido[key]
+                                              let costID = Math.floor(Math.random() * 1000000000)
+                                              values.push([costID, interventionID, key, obj.company, obj.cost])
+                                            })
+                                          }
+                                          else if (tipoDeIntervenciones === 'apuntalado') {
+                                            Object.keys(finalObj.estCostApuntalado).forEach(key => {
+                                              let obj = finalObj.estCostApuntalado[key]
+                                              let costID = Math.floor(Math.random() * 1000000000)
+                                              values.push([costID, interventionID, key, obj.company, obj.cost])
+                                            })
+                                          }
 
+                                          connection.query(INSERT_COSTS_QUERY, [values], (err, results) => {
+                                            console.log('costs', err)
+                                            console.log('costs', results)
+
+
+                                            connection.commit(function(err) {
+                                                if (err) {
+                                                  return connection.rollback(function() {
+                                                    throw err;
+                                                  });
+                                                }
+                                                console.log('success!');
+                                                var log = 'Post ' + results + ' added';
+                                                console.log(log)
+                                                res.json({message: 'success'});
+
+                                            })
+                                          })
                                         })
-
+                                      })
+                                    })
                                   })
                                 })
                               })
@@ -711,175 +738,3 @@ export const create = async(req, res) => {
     })
   })
 }
-
-
-
-
-// exports.create = function(req, res, next){
-
-//     //Ficha Tecnica Del Pozo
-//     let { subdireccion, bloque, activo, campo, pozo, formacion, intervaloProductor, espesorBruto, espesorNeto, caliza,
-//           dolomia, arcilla, porosidad, permeabilidad, sw, caa, cga, tipoDePozo, pwsFecha, pwfFecha,
-//           deltaPPerMes, tyac, pvt, aparejoDeProduccion, profEmpacador, profSensorPYT, tipoDeSap, moduloYoungArena, moduloYoungLutitas, relacPoissonArena,
-//           relacPoissonLutatas, gradienteDeFractura, densidadDeDisparos, diametroDeDisparos } = req.body
-          
-//     //Ficha Tecnia Del Campo
-//     let { descubrimientoField, fechaDeExplotacionField, numeroDePozosOperandoField, pInicialAnoField, pActualFechaField,
-//       dpPerAnoField, tyacField, prField, densidadDelAceiteField, pSatField,
-//       rgaFluidoField, salinidadField, pvtRepresentativoField, litologiaField, espesorNetoField,
-//       porosidadField, swField, kPromedioField, caaField, cgaField,
-//       qoField, qgField, rgaField, fwField, npField,
-//       gpField, wpField, rraField, rrgField, rrpceField,
-//       h2sField, co2Field, n2Field } = req.body
-
-//     //Informacion De Sistemas Artificiales De Produccion
-//     let { tipoDeSistemo, presionDeCabeza, presionDeLineaODeSeparador, numeroDeDescargasOCiclosEV, volumenDesplazadoPorCircloEV,
-//       presionDeInyeccionBN, presionDeDescargaBN, numeroDeValvulasBN, profundidadDeLaVulvulaOperanteBN, orificioBN,
-//       volumenDeGasInyectadoBN, profundidadDeLaBombaBH, tipoYMarcaDeBombaBH, orificioBH, tipoDeCamisaBH,
-//       fluidoMotrizBH, equipoSuperficialBH, motorYTipoDeMotorBCP, profunidadDelMotorBCP, velocidadBCP,
-//       hpBCP, arregloDeVarillasBCP, tipoDeElastomeroBCP, profundidadDelAnclaAntitorqueBCP, profundidadDelMotorBE,
-//       diametroBE, voltsBE, amparajeBE, armaduraBE, tipoDeCableBE,
-//       longitudDeCableBE, rmpBE, tipoDeUnidadBM, velocidadBM, longitudDeCareraBM,
-//       tipoDeBombaSubsuperficialBM, tamanoDeBombaSubsuperficialBM, profundidadDeLaBombaBM, arregloDeVarillasBM, CuantaConAnclaBM,
-//       nivelDinamico, nivelEstatico } = req.body
-
-//     //Mecanico Y Aparejo De Produccion
-//     let {tipoDeTerminacion, hIntervaloProductor, empacador, presionDifEmpacador, sensorPyt,
-//       tipoDeLiner, diametroDeLiner, tipoDePistolas, densidadDeDisparosMechanico, fase,
-//       diametroDeOrificio, penetracion, tipoDeSAP, tratamientoPor, volumenAparejoDeProduccion,
-//       volumenCimaDeIntervalo, volumenBaseDeIntervalo, volumenDeEspacioAnular } = req.body
-
-//     //Analisis Del Agu
-//     let {pH, temperaturaDeConductividad, resistividad, salinidadConConductimetro, solidosDisueltosTotales,
-//       durezaTotalComoCaCO3, durezaDeCalcioComoCaCO3, durezaDeMagnesioComoCaCO3, alcalinidadTotalComoCaCO3, alcalinidadALaFenolftaleinaComoCaCO3,
-//       salinidadComoNaCl, sodio, calcio, magnesio, fierro,
-//       cloruros, bicarbonatos, sulfatos, carbonatos, densidadAt15,
-//       densidadAt20 } = req.body
-
-    
-//     connection.beginTransaction(function(err) {
-//       if (err) { throw err; }
-
-//         connection.query(INSERT_WELL_QUERY, [
-//           subdireccion, bloque, activo, campo, pozo,
-//           formacion, intervaloProductor, espesorBruto, espesorNeto, caliza,
-//           dolomia, arcilla, porosidad, permeabilidad, sw,
-//           caa, cga, tipoDePozo, pwsFecha, pwfFecha,
-//           deltaPPerMes, tyac, pvt, aparejoDeProduccion, profEmpacador,
-//           profSensorPYT, tipoDeSap, moduloYoungArena, moduloYoungLutitas, relacPoissonArena,
-//           relacPoissonLutatas, gradienteDeFractura, densidadDeDisparos, diametroDeDisparos, tipoDeSistemo,
-//           tipoDeTerminacion, hIntervaloProductor, empacador, presionDifEmpacador, sensorPyt,
-//           tipoDeLiner, diametroDeLiner, tipoDePistolas, densidadDeDisparos, fase,
-//           diametroDeOrificio, penetracion, tipoDeSAP, tratamientoPor, volumenAparejoDeProduccion,
-//           volumenCimaDeIntervalo, volumenBaseDeIntervalo, volumenDeEspacioAnular,
-//           pH, temperaturaDeConductividad, resistividad, salinidadConConductimetro, solidosDisueltosTotales,
-//           durezaTotalComoCaCO3, durezaDeCalcioComoCaCO3, durezaDeMagnesioComoCaCO3, alcalinidadTotalComoCaCO3, alcalinidadALaFenolftaleinaComoCaCO3,
-//           salinidadComoNaCl, sodio, calcio, magnesio, fierro,
-//           cloruros, bicarbonatos, sulfatos, carbonatos, densidadAt15,
-//           densidadAt20], function (error, results, fields) {
-
-//           const wellId = results.insertId;
-
-//           if (error) {
-//             return connection.rollback(function() {
-//               console.log('rollback');
-//               throw error;
-//             });
-//           }
-
-//           connection.query(INSERT_FIELDS_QUERY, [
-//             subdireccion, bloque, activo, campo, formacion,
-//             descubrimientoField, fechaDeExplotacionField, numeroDePozosOperandoField, pInicialAnoField, pActualFechaField,
-//             dpPerAnoField, tyacField, prField, densidadDelAceiteField, pSatField,
-//             rgaFluidoField, salinidadField, pvtRepresentativoField, litologiaField, espesorNetoField,
-//             porosidadField, swField, kPromedioField, caaField, cgaField,
-//             qoField, qgField, rgaField, fwField, npField,
-//             gpField, wpField, rraField, rrgField, rrpceField,
-//             h2sField, co2Field, n2Field], (err, results) => {
-
-//             let query;
-//             let vals;
-
-//             console.log(tipoDeSistemo)
-
-//             switch(tipoDeSistemo) {
-//               case 'emboloViajero':
-//                 query = `INSERT INTO ProductionSystemsEmboloViajero (
-//                   SYSTEM_ID, WELL_ID, FORMACION_ID, PRESION_DE_CABEZA, PRESION_DE_LINEA_O_DE_SEPARADOR,
-//                   NUMERO_DE_DESCARGAS_O_CIRCLOS, VOLUMEN_DESPLAZADO_POR_CIRCLO) VALUES
-//                   (1, ?, 1, ?, ?, ?, ?)`
-//                 vals = [wellId, presionDeCabeza, presionDeLineaODeSeparador, numeroDeDescargasOCiclosEV, volumenDesplazadoPorCircloEV]
-//                 break
-//               case 'bombeoNeumatico':
-//                 query = `INSERT INTO ProductionSystemsBombeoNeumatico (
-//                   SYSTEM_ID, WELL_ID, FORMACION_ID, PRESION_DE_CABEZA, PRESION_DE_LINEA_O_DE_SEPARADOR,
-//                   PRESION_DE_INYECCION, PRESION_DE_DESCARGA, NUMERO_DE_VALVULAS, PREFUNDIDAD_DE_LA_VALVULA_OPERANTE,
-//                   ORIFICIO, VOLUMEN_DE_GAS_INYECTADO) VALUES
-//                   (1, ?, 1, ?, ?, ?, ?, ?, ?, ?, ?)`
-//                 vals = [wellId, presionDeCabeza, presionDeLineaODeSeparador, presionDeInyeccionBN, presionDeDescargaBN, numeroDeValvulasBN,
-//                   profundidadDeLaVulvulaOperanteBN, orificioBN, volumenDeGasInyectadoBN]
-//                 break
-//               case 'bombeoHidraulico':
-//                 query = `INSERT INTO ProductionSystemsBombeoHidraulico (
-//                   SYSTEM_ID, WELL_ID, FORMACION_ID, PRESION_DE_CABEZA, PRESION_DE_LINEA_O_DE_SEPARADOR,
-//                   PROFUNDIDAD_DE_LA_BOMBA, TIPO_Y_MARCA_DE_BOMBA, ORIFICIO, TIPO_DE_CAMISA, FLUIDO_MOTRIZ) VALUES
-//                   (1, ?, 1, ?, ?, ?, ?, ?, ?, ?)`
-//                 vals = [wellId, presionDeCabeza, presionDeLineaODeSeparador, profundidadDeLaBombaBH, tipoYMarcaDeBombaBH, orificioBH,
-//                   tipoDeCamisaBH, fluidoMotrizBH, equipoSuperficialBH]
-//                 break
-//               case 'bombeoCavidadesProgresivas':
-//                 query = `INSERT INTO ProductionSystemsBombeoCavidadesProgresivas (
-//                   SYSTEM_ID, WELL_ID, FORMACION_ID, PRESION_DE_CABEZA, PRESION_DE_LINEA_O_DE_SEPARADOR,
-//                   MOTOR_Y_TIPO_DE_MOTOR, PROFUNDIDAD_DEL_MOTOR, VELOCIDAD, HP, ARREGLO_DE_VARILLAS,
-//                   TIPO_DE_ELASTOMERO, PROFUNDIDAD_DEL_ANCLA_ANTITORQUE) VALUES
-//                   (1, ?, 1, ?, ?, ?, ?, ?, ?, ?, ?, ?)`
-//                 vals = [wellId, presionDeCabeza, presionDeLineaODeSeparador, motorYTipoDeMotorBCP, profunidadDelMotorBCP, velocidadBCP,
-//                   hpBCP, arregloDeVarillasBCP, tipoDeElastomeroBCP, profundidadDelAnclaAntitorqueBCP]
-//                 break
-//               case 'bombeoElectrocentrifugo':
-//                 query = `INSERT INTO ProductionSystemsBombeoElectrocentrifugo (
-//                   SYSTEM_ID, WELL_ID, FORMACION_ID, PRESION_DE_CABEZA, PRESION_DE_LINEA_O_DE_SEPARADOR,
-//                   PROFUNDIDAD_DEL_MOTOR, DIAMETRO, VOLTS, AMPERAJE, ARMADURA,
-//                   TIPO_DE_CABLE, LONGITUD_DE_CABLE, RPM) VALUES
-//                   (1, ?, 1, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`
-//                 vals = [wellId, presionDeCabeza, presionDeLineaODeSeparador, profundidadDelMotorBE, diametroBE, voltsBE,
-//                   amparajeBE, armaduraBE, tipoDeCableBE, longitudDeCableBE, rmpBE]
-//                 break
-//               case 'bombeoMecanico':
-//                 query = `INSERT INTO ProductionSystemsBombeoMecanico (
-//                   SYSTEM_ID, WELL_ID, FORMACION_ID, PRESION_DE_CABEZA, PRESION_DE_LINEA_O_DE_SEPARADOR,
-//                   TIPO_DE_UNIDAD, VELOCIDAD, LONGITUD_DE_CARERA, TIPO_DE_BOMBA_SUBSUPERFICIAL, TAMANO_DE_BOMBA_SUBSUPERFICIAL,
-//                   PROFUNDIDAD_DE_LA_BOMBA, ARREGLO_DE_VARILLAS, CUANTA_CON_ANCIA_MECHANICO_O_EMPACADOR, NIVEL_DINAMICO, NIVEL_ESTATICO) VALUES
-//                   (1, ?, 1, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`
-//                   vals = [wellId, presionDeCabeza, presionDeLineaODeSeparador, tipoDeUnidadBM, velocidadBM, longitudDeCareraBM,
-//                     tipoDeBombaSubsuperficialBM, tamanoDeBombaSubsuperficialBM, profundidadDeLaBombaBM, arregloDeVarillasBM, CuantaConAnclaBM,
-//                     nivelDinamico, nivelEstatico]
-//               break;
-//             }
-
-//             if(query){ 
-//               return connection.query(query, vals, (err, results) => {
-
-//                 connection.commit(function(err) {
-//                   if (err) {
-//                     return connection.rollback(function() {
-//                       throw err;
-//                     });
-//                   }
-//                   console.log('success!');
-//                   var log = 'Post ' + results.insertId + ' added';
-//                   console.log(log)
-//                    res.json({message: 'success'});
-
-//                 })
-//               })
-//             }else {
-//                var err = new Error('failed');
-//                err.status = 500;
-//                next(err);
-//             }
-
-//          })
-//       })
-//     })
-// }
