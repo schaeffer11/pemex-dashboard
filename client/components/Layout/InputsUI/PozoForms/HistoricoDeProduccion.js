@@ -2,7 +2,8 @@ import React, { Component } from 'react'
 import autobind from 'autobind-decorator'
 import { connect } from 'react-redux'
 import { InputRow, InputRowUnitless, InputRowSelectUnitless } from '../../Common/InputRow'
-import { setFecha, setTiempo, setEstrangulado, setPtp, setTtp, setPbaj, setTbaj, setPsep, setTsep, setQl, setQo, setQg, setQw, setRga, setSalinidad, setPh, setProduccionData } from '../../../../redux/actions/pozo'
+import {withValidate} from '../../Common/Validate'
+import { setFecha, setTiempo, setEstrangulado, setPtp, setTtp, setPbaj, setTbaj, setPsep, setTsep, setQl, setQo, setQg, setQw, setRga, setSalinidad, setPh, setProduccionData, setChecked } from '../../../../redux/actions/pozo'
 import ReactTable from 'react-table'
 
 let columns = [
@@ -76,12 +77,15 @@ let columns = [
 @autobind class HistoricoDeProduccion extends Component {
   constructor(props) {
     super(props)
-    this.state = { 
-      containsErrors: false
+    this.state = {
+      containsErrors: false,
+      errors: [],
+      checked: []
     }
   }
 
   componentDidMount(){
+    this.validate()
     this.containsErrors()
     this.props.containsErrors(this, this.state.containsErrors)
   }
@@ -92,19 +96,32 @@ let columns = [
   }
 
   containsErrors(){
-    const {forms} = this.props
-    const errors = forms.get('pozoFormError')
-
-    var foundErrors = errors.find(error => {
-      return [].includes(error.field)
-    })
-
-    foundErrors = foundErrors === undefined ? false : true
+    let foundErrors = false
+    for (const key of Object.keys(this.state.errors)) {
+      if(this.state.errors[key].checked)
+        foundErrors = true
+    }
 
     if(foundErrors !== this.state.containsErrors){
       this.setState({
-        containsErrors: foundErrors === undefined
+        containsErrors: foundErrors
       })
+    }
+  }
+
+  validate(event){
+    let {setChecked, formData} = this.props
+    formData = formData.toJS()
+
+    let field = event ? event.target.name : null
+    let {errors, checked} = this.props.validate(field, formData)
+
+    this.setState({
+      errors: errors,
+    })
+
+    if(event && event.target.name){
+      setChecked(checked)
     }
   }
 
@@ -118,22 +135,22 @@ let columns = [
         <div className='header'>
           Aforo
         </div>
-        <InputRow header="Fecha" name='' unit='dd/mmm/aa' value={fecha} onChange={setFecha} />
-        <InputRow header="Tiempo" name='' unit='hrs' value={tiempo} onChange={setTiempo} />
-        <InputRow header="Estrangulador" name='' unit='pg' value={estrangulado} onChange={setEstrangulado} />
-        <InputRow header="PTP" name='' unit='Kg/cm2' value={ptp} onChange={setPtp} />
-        <InputRow header="TTP" name='' unit='°C' value={ttp} onChange={setTtp} />
-        <InputRow header="PBAJ" name='' unit='Kg/cm2' value={pbaj} onChange={setPbaj} />
-        <InputRow header="TBAJ" name='' unit='°C' value={tbaj} onChange={setTbaj} />
-        <InputRow header="Psep" name='' unit='Kg/cm2' value={psep} onChange={setPsep} />
-        <InputRow header="Tsep" name='' unit='°C' value={tsep} onChange={setTsep} />
-        <InputRow header="Ql" name='' unit='bpd' value={ql} onChange={setQl} />
-        <InputRow header="Qo" name='' unit='bpd' value={qo} onChange={setQo} />
-        <InputRow header="Qg" name='' unit='MMpcd' value={qg} onChange={setQg} />
-        <InputRow header="Qw" name='' unit='bpd' value={qw} onChange={setQw} />  
-        <InputRow header="RGA" name='' unit='m3/m3' value={rga} onChange={setRga} />
-        <InputRow header="Salinidad" name='' unit='ppm' value={salinidad} onChange={setSalinidad} />
-        <InputRow header="pH" name='' unit='Adim.' value={ph} onChange={setPh} />
+        <InputRow header="Fecha" name='fecha' unit='dd/mmm/aa' value={fecha} onChange={setFecha} onBlur={this.validate} errors={this.state.errors} />
+        <InputRow header="Tiempo" name='tiempo' unit='hrs' value={tiempo} onChange={setTiempo} onBlur={this.validate} errors={this.state.errors} />
+        <InputRow header="Estrangulador" name='estrangulado' unit='pg' value={estrangulado} onChange={setEstrangulado} onBlur={this.validate} errors={this.state.errors} />
+        <InputRow header="PTP" name='ptp' unit='Kg/cm2' value={ptp} onChange={setPtp} onBlur={this.validate} errors={this.state.errors} />
+        <InputRow header="TTP" name='ttp' unit='°C' value={ttp} onChange={setTtp} onBlur={this.validate} errors={this.state.errors} />
+        <InputRow header="PBAJ" name='pbaj' unit='Kg/cm2' value={pbaj} onChange={setPbaj} onBlur={this.validate} errors={this.state.errors} />
+        <InputRow header="TBAJ" name='tbaj' unit='°C' value={tbaj} onChange={setTbaj} onBlur={this.validate} errors={this.state.errors} />
+        <InputRow header="Psep" name='psep' unit='Kg/cm2' value={psep} onChange={setPsep} onBlur={this.validate} errors={this.state.errors} />
+        <InputRow header="Tsep" name='tsep' unit='°C' value={tsep} onChange={setTsep} onBlur={this.validate} errors={this.state.errors} />
+        <InputRow header="Ql" name='ql' unit='bpd' value={ql} onChange={setQl} onBlur={this.validate} errors={this.state.errors} />
+        <InputRow header="Qo" name='qo' unit='bpd' value={qo} onChange={setQo} onBlur={this.validate} errors={this.state.errors} />
+        <InputRow header="Qg" name='qg' unit='MMpcd' value={qg} onChange={setQg} onBlur={this.validate} errors={this.state.errors} />
+        <InputRow header="Qw" name='qw' unit='bpd' value={qw} onChange={setQw} onBlur={this.validate} errors={this.state.errors} />  
+        <InputRow header="RGA" name='rga' unit='m3/m3' value={rga} onChange={setRga} onBlur={this.validate} errors={this.state.errors} />
+        <InputRow header="Salinidad" name='salinidad' unit='ppm' value={salinidad} onChange={setSalinidad} onBlur={this.validate} errors={this.state.errors} />
+        <InputRow header="pH" name='ph' unit='Adim.' value={ph} onChange={setPh} onBlur={this.validate} errors={this.state.errors} />
       </div>
     )
   }
@@ -226,6 +243,78 @@ let columns = [
   }
 }
 
+const validate = values => {
+    const errors = {}
+
+    if(!values.fecha ){
+       errors.fecha = {message: "Este campo no puede estar vacio"}
+    }
+
+    if(!values.tiempo ){
+       errors.tiempo = {message: "Este campo no puede estar vacio"}
+    }
+
+    if(!values.estrangulado ){
+       errors.estrangulado = {message: "Este campo no puede estar vacio"}
+    }
+
+    if(!values.ptp ){
+       errors.ptp = {message: "Este campo no puede estar vacio"}
+    }
+
+    if(!values.ttp ){
+       errors.ttp = {message: "Este campo no puede estar vacio"}
+    }
+
+    if(!values.pbaj ){
+       errors.pbaj = {message: "Este campo no puede estar vacio"}
+    }
+
+    if(!values.tbaj ){
+       errors.tbaj = {message: "Este campo no puede estar vacio"}
+    }
+
+    if(!values.psep ){
+       errors.psep = {message: "Este campo no puede estar vacio"}
+    }
+
+    if(!values.tsep ){
+       errors.tsep = {message: "Este campo no puede estar vacio"}
+    }
+
+    if(!values.ql ){
+       errors.ql = {message: "Este campo no puede estar vacio"}
+    }
+
+    if(!values.qo ){
+       errors.qo = {message: "Este campo no puede estar vacio"}
+    }
+
+    if(!values.qg ){
+       errors.qg = {message: "Este campo no puede estar vacio"}
+    }
+
+    if(!values.qw ){
+       errors.qw = {message: "Este campo no puede estar vacio"}
+    }
+
+    if(!values.rga ){
+       errors.rga = {message: "Este campo no puede estar vacio"}
+    }
+
+    if(!values.salinidad ){
+       errors.salinidad = {message: "Este campo no puede estar vacio"}
+    }
+
+
+    if(!values.ph ){
+       errors.ph = {message: "Este campo no puede estar vacio"}
+    }
+
+
+    return errors
+}
+
 const mapStateToProps = state => ({
   forms: state.get('forms'),
   formData: state.get('historicoDeProduccion'),
@@ -249,6 +338,10 @@ const mapDispatchToProps = dispatch => ({
     setSalinidad: val => dispatch(setSalinidad(val)),
     setPh: val => dispatch(setPh(val)),
     setProduccionData: val => dispatch(setProduccionData(val)),
+    setChecked: val => dispatch(setChecked(val))    
 })
 
-export default connect(mapStateToProps, mapDispatchToProps)(HistoricoDeProduccion)
+export default withValidate(
+  validate,
+  connect(mapStateToProps, mapDispatchToProps)(HistoricoDeProduccion)
+)

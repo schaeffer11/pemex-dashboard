@@ -1,20 +1,24 @@
 import React, { Component } from 'react'
 import autobind from 'autobind-decorator'
 import Select from 'react-select'
+import {withValidate} from '../../Common/Validate'
 import { InputRow, InputRowUnitless, InputRowSelectUnitless } from '../../Common/InputRow'
 import { connect } from 'react-redux'
-import { setSistemasArtificialesImgURL, setTipoDeSistemo, setPresionDeCabeza, setPresionDeLineaODeSeparador, setNumeroDeDescargasOCiclosEV, setVolumenDesplazadoPorCircloEV, setPresionDeInyeccionBN, setPresionDeDescargaBN, setNumeroDeValvulasBN, setProfundidadDeLaVulvulaOperanteBN, setOrificioBN, setVolumenDeGasInyectadoBN, setProfundidadDeLaBombaBH, setTipoYMarcaDeBombaBH, setOrificioBH, setTipoDeCamisaBH, setFluidoMotrizBH, setEquipoSuperficialBH, setMotorYTipoDeMotorBCP, setProfunidadDelMotorBCP, setVelocidadBCP, setHpBCP, setArregloDeVarillasBCP, setTipoDeElastomeroBCP, setProfundidadDelAnclaAntitorqueBCP, setProfundidadDelMotorBE, setDiametroBE, setVoltsBE, setAmparajeBE, setArmaduraBE, setTipoDeCableBE, setLongitudDeCableBE, setRmpBE, setTipoDeUnidadBM, setVelocidadBM, setLongitudDeCareraBM, setTipoDeBombaSubsuperficialBM, setTamanoDeBombaSubsuperficialBM, setProfundidadDeLaBombaBM, setArregloDeVarillasBM, setCuantaConAnclaBM, setNivelDinamico, setNivelEstatico } from '../../../../redux/actions/pozo'
+import { setSistemasArtificialesImgURL, setTipoDeSistemo, setPresionDeCabeza, setPresionDeLineaODeSeparador, setNumeroDeDescargasOCiclosEV, setVolumenDesplazadoPorCircloEV, setPresionDeInyeccionBN, setPresionDeDescargaBN, setNumeroDeValvulasBN, setProfundidadDeLaVulvulaOperanteBN, setOrificioBN, setVolumenDeGasInyectadoBN, setProfundidadDeLaBombaBH, setTipoYMarcaDeBombaBH, setOrificioBH, setTipoDeCamisaBH, setFluidoMotrizBH, setEquipoSuperficialBH, setMotorYTipoDeMotorBCP, setProfunidadDelMotorBCP, setVelocidadBCP, setHpBCP, setArregloDeVarillasBCP, setTipoDeElastomeroBCP, setProfundidadDelAnclaAntitorqueBCP, setProfundidadDelMotorBE, setDiametroBE, setVoltsBE, setAmparajeBE, setArmaduraBE, setTipoDeCableBE, setLongitudDeCableBE, setRmpBE, setTipoDeUnidadBM, setVelocidadBM, setLongitudDeCareraBM, setTipoDeBombaSubsuperficialBM, setTamanoDeBombaSubsuperficialBM, setProfundidadDeLaBombaBM, setArregloDeVarillasBM, setCuantaConAnclaBM, setNivelDinamico, setNivelEstatico, setChecked } from '../../../../redux/actions/pozo'
 
 @autobind class SistemasArtificialesDeProduccion extends Component {
   constructor(props) {
     super(props)
     this.state = {
-     containsErrors: false
+      containsErrors: false,
+      errors: [],
+      checked: []
     }
 
   }
 
   componentDidMount(){
+    this.validate()
     this.containsErrors()
     this.props.containsErrors(this, this.state.containsErrors)
   }
@@ -25,20 +29,35 @@ import { setSistemasArtificialesImgURL, setTipoDeSistemo, setPresionDeCabeza, se
   }
 
   containsErrors(){
-    const {forms} = this.props
-    const errors = forms.get('pozoFormError')
+    let foundErrors = false
+    for (const key of Object.keys(this.state.errors)) {
+      if(this.state.errors[key].checked)
+        foundErrors = true
+    }
 
-    var foundErrors = errors.find(error => {
-      return [].includes(error.field)
-    })
-
-    foundErrors = foundErrors === undefined ? false : true
-
-    if(foundErrors !== this.state.containsErrors){     
+    if(foundErrors !== this.state.containsErrors){
       this.setState({
-        containsErrors: foundErrors === undefined
+        containsErrors: foundErrors
       })
     }
+
+  }
+
+  validate(event){
+    let {setChecked, formData} = this.props
+    formData = formData.toJS()
+
+    let field = event ? event.target.name : null
+    let {errors, checked} = this.props.validate(field, formData)
+
+    this.setState({
+      errors: errors,
+    })
+
+    if(event && event.target.name){
+      setChecked(checked)
+    }
+
   }
 
   makeEmboloViajeroForm() {
@@ -236,7 +255,7 @@ import { setSistemasArtificialesImgURL, setTipoDeSistemo, setPresionDeCabeza, se
       <div className="form sistemas-artificiales-de-produccion">
         <div className='left'>
           <div className='select-sistema' >
-            <InputRowSelectUnitless header='Tipo de sistema' value={tipoDeSistemo} options={options} callback={this.handleSelectSistema} />
+            <InputRowSelectUnitless header='Tipo de sistema' name='tipoDeSistemo' value={tipoDeSistemo} options={options} callback={this.handleSelectSistema} onBlur={this.validate} errors={this.state.errors} />
           </div>
           { forms[tipoDeSistemo]}
           </div>
@@ -246,6 +265,16 @@ import { setSistemasArtificialesImgURL, setTipoDeSistemo, setPresionDeCabeza, se
       </div>
     )
   }
+}
+
+const validate = values => {
+    const errors = {}
+
+    if(!values.tipoDeSistemo ){
+       errors.tipoDeSistemo = {message: "Este campo no puede estar vacio"}
+    }
+
+    return errors
 }
 
 const mapStateToProps = state => ({
@@ -297,6 +326,10 @@ const mapDispatchToProps = dispatch => ({
   setNivelDinamico: val => dispatch(setNivelDinamico(val)),
   setNivelEstatico  : val => dispatch(setNivelEstatico(val)),
   setSistemasArtificialesImgURL: val => dispatch(setSistemasArtificialesImgURL(val)),
+  setChecked: val => dispatch(setChecked(val))
 })
 
-export default connect(mapStateToProps, mapDispatchToProps)(SistemasArtificialesDeProduccion)
+export default withValidate(
+  validate,
+  connect(mapStateToProps, mapDispatchToProps)(SistemasArtificialesDeProduccion)
+)

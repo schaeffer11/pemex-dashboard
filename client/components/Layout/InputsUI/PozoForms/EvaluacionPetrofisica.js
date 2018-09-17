@@ -1,7 +1,8 @@
 import React, { Component } from 'react'
 import autobind from 'autobind-decorator'
 import { connect } from 'react-redux'
-import { setImgURL, setLayerData, setMudLossData } from '../../../../redux/actions/pozo'
+import {withValidate} from '../../Common/Validate'
+import { setImgURL, setLayerData, setMudLossData, setChecked } from '../../../../redux/actions/pozo'
 import ReactTable from 'react-table'
 import { freemem } from 'os';
 
@@ -97,12 +98,16 @@ let mudLossColumns = [
 @autobind class EvaluacionPetrofisica extends Component {
   constructor(props) {
     super(props)
-    this.state = { 
+    this.state = {
       containsErrors: false,
+      errors: [],
+      checked: []
     }
+
   }
 
   componentDidMount(){
+    this.validate()
     this.containsErrors()
     this.props.containsErrors(this, this.state.containsErrors)
   }
@@ -113,22 +118,36 @@ let mudLossColumns = [
   }
 
   containsErrors(){
-    const {forms} = this.props
-    const errors = forms.get('pozoFormError')
-
-    var foundErrors = errors.find(error => {
-      return [].includes(error.field)
-    })
-
-    foundErrors = foundErrors === undefined ? false : true
+    let foundErrors = false
+    for (const key of Object.keys(this.state.errors)) {
+      if(this.state.errors[key].checked)
+        foundErrors = true
+    }
 
     if(foundErrors !== this.state.containsErrors){
       this.setState({
-        containsErrors: foundErrors === undefined
+        containsErrors: foundErrors
       })
     }
+
   }
 
+  validate(event){
+    let {setChecked, formData} = this.props
+    formData = formData.toJS()
+
+    let field = event ? event.target.name : null
+    let {errors, checked} = this.props.validate(field, formData)
+
+    this.setState({
+      errors: errors,
+    })
+
+    if(event && event.target.name){
+      setChecked(checked)
+    }
+
+  }
 
 //Duplicating these 3 functions for the sake of time, rather than making nice
   renderEditable(cellInfo) {
@@ -337,6 +356,10 @@ let mudLossColumns = [
   }
 }
 
+const validate = values => {
+    const errors = {}
+    return errors
+}
 
 const mapStateToProps = state => ({
   forms: state.get('forms'),
@@ -347,6 +370,12 @@ const mapDispatchToProps = dispatch => ({
   setImgURL: val => dispatch(setImgURL(val)),
   setLayerData: val => dispatch(setLayerData(val)),
   setMudLossData: val => dispatch(setMudLossData(val)),
+  setChecked: val => dispatch(setChecked(val))
 })
 
-export default connect(mapStateToProps, mapDispatchToProps)(EvaluacionPetrofisica)
+
+
+export default withValidate(
+  validate,
+  connect(mapStateToProps, mapDispatchToProps)(EvaluacionPetrofisica)
+)

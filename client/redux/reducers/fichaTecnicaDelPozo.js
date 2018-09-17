@@ -22,9 +22,10 @@ const initialState = Map({
 	profEmpacador: '',
 	profSensorPYT: '',
 	tipoDeSap: '',
-    historialIntervencionesData: [{
+        historialIntervencionesData: [{
         fecha: '',
-        intervenciones: ''
+        intervenciones: '',
+        checked: []
     }]
 })
 
@@ -74,6 +75,8 @@ const fichaTecnicaDelPozo = (state = initialState, action) => {
     	return state.set('tipoDeSap', fromJS(action.value))
     case 'set_historialIntervencionesData':
         return state.set('historialIntervencionesData', fromJS(action.value))
+    case 'set_checked' :
+        return state.set('checked', fromJS(action.value))
     default:
       return state
   }

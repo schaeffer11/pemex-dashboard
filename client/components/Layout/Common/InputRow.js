@@ -3,16 +3,16 @@ import Select from 'react-select'
 import DatePicker from 'react-date-picker'
 
 const generateErrorElements = ( name = '', errors = [] ) => {
-  let rowError = errors.find(error => error.field == name)
+  let rowError = errors[name]
 
-  if(rowError){
+  if(rowError && rowError.checked){
     return ( <div className="error">{rowError.message}</div> )
   }
 
   return ''
 }
 
-export const InputRow = ({ header, name, unit, value, onChange, index, errors = [] }) => {
+export const InputRow = ({ header, name, unit, value, onChange, onBlur, index, errors = [] }) => {
 
   let handleChange = (e) => {
     onChange(e.target.value, e)
@@ -25,16 +25,17 @@ export const InputRow = ({ header, name, unit, value, onChange, index, errors = 
       <div className='label'>
         {header}
       </div>
-      <input className='input' value={value} onChange={handleChange} name={name} index={index} required>
+      <input className='input' value={value} onChange={handleChange} onBlur={onBlur} name={name} index={index} required>
       </input>
       <div className='unit'>
         {unit}
       </div>
+      { errorElements }
     </div>
     )
 }
 
-export const InputRowUnitless = ({ header, name, unit, value, onChange, index={index}, errors = [] }) => {
+export const InputRowUnitless = ({ header, name, unit, value, onChange, onBlur, index={index}, errors = [] }) => {
 
   let handleChange = (e) => {
     onChange(e.target.value, e)
@@ -47,7 +48,7 @@ export const InputRowUnitless = ({ header, name, unit, value, onChange, index={i
       <div className='label'>
         {header}
       </div>
-      <input className='input' type='text' value={value} onChange={handleChange} name={name} index={index}/>
+      <input className='input' type='text' value={value} onChange={handleChange} onBlur={onBlur} name={name} index={index}/>
       { errorElements }
     </div>
     )

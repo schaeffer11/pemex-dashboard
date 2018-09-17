@@ -21,7 +21,7 @@ const initialState = Map({
     volumenDeEspacioAnular: '',
     imgURL: null,
     imgAparejoDeProduccionURL: null
-
+    checked: []
 })
 
 
@@ -67,6 +67,8 @@ const mecanicoYAparejoDeProduccion = (state = initialState, action) => {
         return state.set('imgURL', fromJS(action.value))
     case 'set_imgAparejoDeProduccionURL':
         return state.set('imgAparejoDeProduccionURL', fromJS(action.value))
+    case 'set_checked' :
+        return state.set('checked', fromJS(action.value))
     default:
       return state
   }
