@@ -4,7 +4,7 @@ const connection = db.getConnection(appConfig.users.database)
 import path from 'path'
 import fs from 'fs'
 import multer from 'multer'
-import { addObject, signedURL, deleteObject, getBuckets } from '../aws';
+import { addObject, signedURL, deleteObject, getBuckets } from '../aws/index';
 
 
 const INSERT_WELL_QUERYold = `INSERT INTO Wells (
@@ -233,7 +233,7 @@ const INSERT_LAB_TEST_QUERY = `INSERT INTO IntervencionesLabTests (
         LAB_ID, INTERVENTION_ID, WELL_FORMACION_ID, TIPO_DE_ANALISIS, FECHA_DE_MUESTREO, FECHA_DE_PRUEBA, COMPANIA, PERSONAL_DE_PEMEX_QUE_SUPERVISO, OBSERVACIONES)
         VALUES ?`
 
-exports.create = async(req, res) => {
+export const create = async(req, res) => {
  // console.log('what are we here?', req.body)
   const allKeys = Object.keys(req.body)
   // const { pozo } = JSON.parse(req.body.fichaTecnicaDelPozoHighLevel)

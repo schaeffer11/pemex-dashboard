@@ -4,9 +4,11 @@ import appConfig from '../../app-config.js'
 import path from 'path'
 import fs from 'fs'
 import multer from 'multer'
-import { addObject, signedURL, deleteObject, getBuckets } from '../aws';
-var well = require('./pozo')
-var intervencion = require('./intervenciones')
+import { addObject, signedURL, deleteObject, getBuckets } from '../aws/index';
+// var well = require('./pozo')
+import { create as createWell } from './pozo'
+// import intervencion from './intervenciones'
+// var intervencion = require('./intervenciones')
 
 const db_con = db.get(appConfig.users.database)
 const app = express()
@@ -70,9 +72,9 @@ app.post('/testing', (req, res) => {
   res.json({ yeah: 'boy' })
 })
 
-app.post('/well', well.create);
+app.post('/well', createWell);
 
-app.post('/intervencion', intervencion.create);
+// app.post('/intervencion', intervencion.create);
 
 
 

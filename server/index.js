@@ -12,8 +12,7 @@ import proxy from 'http-proxy-middleware'
 import cors from 'cors'
 
 // CONFIG & ENVIRONMENT
-const { NODE_ENV } = process.env
-const env = NODE_ENV || 'dev'
+const env = process.env.NODE_ENV || 'dev'
 const isProduction = env === 'production'
 const PORT = process.env.PORT || config.ports.http
 
