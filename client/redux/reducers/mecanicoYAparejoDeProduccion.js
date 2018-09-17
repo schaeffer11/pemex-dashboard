@@ -20,7 +20,7 @@ const initialState = Map({
     volumenBaseDeIntervalo: '',
     volumenDeEspacioAnular: '',
     imgURL: null,
-    imgAparejoDeProduccionURL: null
+    imgAparejoDeProduccionURL: null,
     checked: []
 })
 

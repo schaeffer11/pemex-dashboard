@@ -35,7 +35,7 @@ export function withValidate(validationFunction, WrappedComponent) {
       const errors = validationFunction(values)
  
 
-      let checked  = this.formData.get('checked') ? this.formData.get('checked').toJS() : []
+      let checked  = this.formData.get('checked') ? this.formData.get('checked') : []
       if(checked.indexOf(field) === -1)
         checked = [...checked, field]
 
