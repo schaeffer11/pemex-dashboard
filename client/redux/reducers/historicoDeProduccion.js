@@ -17,6 +17,7 @@ const initialState = Map({
     rga: '',
     salinidad: '',
     ph: '',
+    checked: [],
     produccionData: [{
         fecha: '',
         dias: '',
@@ -73,6 +74,8 @@ const historicoDeProduccion = (state = initialState, action) => {
         return state.set('salinidad', fromJS(action.value))
     case 'set_ph':
         return state.set('ph', fromJS(action.value))
+    case 'set_checked' :
+        return state.set('checked', fromJS(action.value))
     default:
       return state
   }

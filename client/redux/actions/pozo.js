@@ -5,7 +5,7 @@ export const setActivo = value => ({ type: 'set_activo', value})
 export const setCampo = value => ({ type: 'set_campo', value})
 export const setPozo = value => ({ type: 'set_pozo', value})
 export const setFormacion = value => ({ type: 'set_formacion', value})
-
+export const setChecked = value => ({ type: 'set_checked', value}) 
 
 //FichaTecnicaDelPozo
 export const setIntervaloProductor = value => ({ type: 'set_intervaloProductor', value})

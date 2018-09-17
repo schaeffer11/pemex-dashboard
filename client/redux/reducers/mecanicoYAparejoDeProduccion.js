@@ -20,8 +20,8 @@ const initialState = Map({
     volumenBaseDeIntervalo: '',
     volumenDeEspacioAnular: '',
     imgBoreDiagramURL: null,
-    imgAparejoDeProduccionURL: null
-
+    imgAparejoDeProduccionURL: null,
+    checked: []
 })
 
 
@@ -67,6 +67,8 @@ const mecanicoYAparejoDeProduccion = (state = initialState, action) => {
         return state.set('imgBoreDiagramURL', fromJS(action.value))
     case 'set_imgAparejoDeProduccionURL':
         return state.set('imgAparejoDeProduccionURL', fromJS(action.value))
+    case 'set_checked' :
+        return state.set('checked', fromJS(action.value))
     default:
       return state
   }

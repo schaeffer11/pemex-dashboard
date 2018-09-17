@@ -1,7 +1,7 @@
 import { Map, fromJS } from 'immutable'
 
 const initialState = Map({ 
-	pH: '',
+    pH: '',
     temperaturaDeConductividad: '',
     resistividad: '',
     salinidadConConductimetro: '',
@@ -22,6 +22,7 @@ const initialState = Map({
     carbonatos: '',
     densidadAt15: '',
     densidadAt20: '',
+    checked: []
 })
 
 
@@ -69,6 +70,8 @@ const analisisDelAgua = (state = initialState, action) => {
         return state.set('densidadAt15', fromJS(action.value))
     case 'set_densidadAt20':
         return state.set('densidadAt20', fromJS(action.value))
+    case 'set_checked' :
+        return state.set('checked', fromJS(action.value))
    
     default:
       return state

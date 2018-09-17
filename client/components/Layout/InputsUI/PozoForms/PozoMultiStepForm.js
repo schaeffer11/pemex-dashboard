@@ -24,17 +24,18 @@ import AnalisisDelAgua from './AnalisisDelAgua'
       currentStep: 0
     }
 
+    // TODO: Refactor the tabs to be children instead
     this.forms = [
-      {'title' : 'Información General de la Asignación' , 'content':<TecnicaDelPozoHighLevel containsErrors={this.containsErrors}/>},
-      {'title' : 'Ficha Técnica del Campo', 'content': <TecnicaDelCampo containsErrors={this.containsErrors}/>},
-      {'title' : 'Ficha Técnica del Pozo' , 'content':<TecnicaDelPozo containsErrors={this.containsErrors}/>},
-      {'title' : 'Evaluación Petrofísica', 'content': <EvaluacionPetrofisica containsErrors={this.containsErrors} /> },
-      {'title' : 'Edo. Mecánico y Aparejo de Producción', 'content': <MecanicoYAparejo containsErrors={this.containsErrors} /> },
-      {'title' : 'Análisis del Agua', 'content': <AnalisisDelAgua containsErrors={this.containsErrors} /> }, 
-      {'title' : 'Información de Sistemas Artificiales de Producción', 'content': <SistemasArtificialesDeProduccion containsErrors={this.containsErrors} /> },
-      {'title' : 'Histórico de Presión - Campo', 'content': <HistoricoDePresionCampo containsErrors={this.containsErrors} />},
-      {'title' : 'Histórico de Presión - Pozo', 'content': <HistoricoDePresionPozo containsErrors={this.containsErrors} />},
-      {'title' : 'Histórico de Producción', 'content': <HistoricoDeProduccion containsErrors={this.containsErrors} /> },
+      {'title' : 'Información General de la Asignación' , 'type': 'TecnicaDelPozoHighLevel', 'content':<TecnicaDelPozoHighLevel containsErrors={this.containsErrors}/>},
+      {'title' : 'Ficha Técnica del Campo', 'type': 'TecnicaDelCampo', 'content': <TecnicaDelCampo containsErrors={this.containsErrors}/>},
+      {'title' : 'Ficha Técnica del Pozo' , 'type':'TecnicaDelPozo',  'content':<TecnicaDelPozo containsErrors={this.containsErrors}/>},
+      {'title' : 'Evaluación Petrofísica', 'type':'EvaluacionPetrofisica', 'content': <EvaluacionPetrofisica containsErrors={this.containsErrors} /> },
+      {'title' : 'Edo. Mecánico y Aparejo de Producción', 'type':'MecanicoYAparejo',  'content': <MecanicoYAparejo containsErrors={this.containsErrors} /> },
+      {'title' : 'Análisis del Agua', 'type':'AnalisisDelAgua', 'content': <AnalisisDelAgua containsErrors={this.containsErrors} /> }, 
+      {'title' : 'Información de Sistemas Artificiales de Producción', 'type':'SistemasArtificialesDeProduccion', 'content': <SistemasArtificialesDeProduccion containsErrors={this.containsErrors} /> },
+      {'title' : 'Histórico de Presión - Campo', 'type':'HistoricoDePresionCampo', 'content': <HistoricoDePresionCampo containsErrors={this.containsErrors} />},
+      {'title' : 'Histórico de Presión - Pozo', 'type':'HistoricoDePresionPozo', 'content': <HistoricoDePresionPozo containsErrors={this.containsErrors} />},
+      {'title' : 'Histórico de Producción', 'type':'HistoricoDeProduccion', 'content': <HistoricoDeProduccion containsErrors={this.containsErrors} /> },
 
 
     ];
@@ -50,7 +51,7 @@ import AnalisisDelAgua from './AnalisisDelAgua'
   containsErrors(el, errors){
     if(el === undefined) return false
 
-    var found = this.forms.findIndex((form) => form.content.type.WrappedComponent.name == el._reactInternalFiber.type.name)
+    var found = this.forms.findIndex((form) => form.type == el._reactInternalFiber.type.name)
     if(found !== -1)
       this.forms[found]['error'] = errors
   }

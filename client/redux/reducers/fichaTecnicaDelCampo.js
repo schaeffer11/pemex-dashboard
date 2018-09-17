@@ -34,7 +34,8 @@ const initialState = Map({
     rrpceField: '',
     h2sField: '',
     co2Field: '',
-    n2Field: ''
+    n2Field: '',
+    checked: []
 })
 
 
@@ -108,6 +109,8 @@ const fichaTecnicaDelCampo = (state = initialState, action) => {
         return state.set('co2Field', fromJS(action.value))
     case 'set_n2Field':
         return state.set('n2Field', fromJS(action.value))
+    case 'set_checked' :
+        return state.set('checked', fromJS(action.value))
     default:
       return state
   }

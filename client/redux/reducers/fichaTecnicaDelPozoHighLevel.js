@@ -7,6 +7,7 @@ const initialState = Map({
 	campo: '',
 	pozo: '',
 	formacion: '',
+        checked: []
 })
 
 
@@ -24,7 +25,8 @@ const fichaTechnicaDelPozo = (state = initialState, action) => {
     	return state.set('pozo', fromJS(action.value))
     case 'set_formacion':
     	return state.set('formacion', fromJS(action.value))
-   
+    case 'set_checked' :
+        return state.set('checked', fromJS(action.value))  
     default:
       return state
   }

@@ -3,8 +3,9 @@ import autobind from 'autobind-decorator'
 import { connect } from 'react-redux'
 import ReactTable from 'react-table'
 
+import {withValidate} from '../../Common/Validate'
 import { InputRow, InputRowUnitless, InputRowSelectUnitless } from '../../Common/InputRow'
-import { setTipoDeSistemo, setHistorialIntervencionesData, setIntervaloProductor, setEspesorBruto, setEspesorNeto, setCaliza, setDolomia, setArcilla, setPorosidad, setPermeabilidad, setSw, setCaa, setCga, setTipoDePozo, setPwsFecha, setPwfFecha, setDeltaPPerMes, setTyac, setPvt, setAparejoDeProduccion, setProfEmpacador, setProfSensorPYT, setTipoDeSap, formData } from '../../../../redux/actions/pozo'
+import { setTipoDeSistemo, setHistorialIntervencionesData, setIntervaloProductor, setEspesorBruto, setEspesorNeto, setCaliza, setDolomia, setArcilla, setPorosidad, setPermeabilidad, setSw, setCaa, setCga, setTipoDePozo, setPwsFecha, setPwfFecha, setDeltaPPerMes, setTyac, setPvt, setAparejoDeProduccion, setProfEmpacador, setProfSensorPYT, setTipoDeSap, formData, setChecked } from '../../../../redux/actions/pozo'
 
 let columns = [
   {
@@ -32,12 +33,15 @@ let columns = [
 @autobind class TechnicaDelPozo extends Component {
   constructor(props) {
     super(props)
-    this.state = { 
-      containsErrors: false
+    this.state = {
+      containsErrors: false,
+      errors: [],
+      checked: []
     }
   }
 
   componentDidMount(){
+    this.validate()
     this.containsErrors()
     this.props.containsErrors(this, this.state.containsErrors)
   }
@@ -48,25 +52,35 @@ let columns = [
   }
 
   containsErrors(){
-    const {forms} = this.props
-    const errors = forms.get('pozoFormError')
-
-    var foundErrors = errors.find(error => {
-      return ['intervalosProductores', 'espesorBruto', 'espesorNeto', 'caliza', 'dolomia', 'arcilla', 'porosidad', 
-       'permeabilidad', 'sw', 'caa', 'cga', 
-       'tipoDePozo', 'pwsFecha', 'pwfFecha', 'deltaPPerMes', 'setTyac', 'setPvt', 'aparejoDeProduccion',
-       'profEmpacador', 'profSensorPYT',
-       'moduloYoungArena', 'moduloYoungLutitas', 'relacPoissonArena', 'relacPoissonLutatas', 'gradienteDeFractura',
-       'densidadDeDisparos', 'diametroDeDisparos'].includes(error.field)
-    })
-
-    foundErrors = foundErrors === undefined ? false : true
+    let foundErrors = false
+    for (const key of Object.keys(this.state.errors)) {
+      if(this.state.errors[key].checked)
+        foundErrors = true
+    }
 
     if(foundErrors !== this.state.containsErrors){
       this.setState({
         containsErrors: foundErrors
       })
-     }
+    }
+
+  }
+
+  validate(event){
+    let {setChecked, formData} = this.props
+    formData = formData.toJS()
+
+    let field = event ? event.target.name : null
+    let {errors, checked} = this.props.validate(field, formData)
+
+    this.setState({
+      errors: errors,
+    })
+
+    if(event && event.target.name){
+      setChecked(checked)
+    }
+
   }
 
   makeFormacionForm() {
@@ -80,17 +94,17 @@ let columns = [
         <div className='header'>
           Los Datos de Formación
         </div>
-        <InputRow header="Intervalos(s) productor(es)" type='number' name='intervalosProductores' value={intervaloProductor}  onChange={setIntervaloProductor} unit='md/mv' errors={errors} />
-        <InputRow header="Espesor bruto" name='espesorBruto' value={espesorBruto} onChange={setEspesorBruto} unit='m' errors={errors} />
-        <InputRow header="Espesor neto" name='espesorNeto' value={espesorNeto} onChange={setEspesorNeto} unit='m' errors={errors} />
-        <InputRow header="Caliza" name='caliza' value={caliza} onChange={setCaliza} unit='%' errors={errors} />
-        <InputRow header="Dolomia" name='dolomia' value={dolomia} onChange={setDolomia} unit='%' errors={errors} />
-        <InputRow header="Arcilla" name='arcilla' value={arcilla} onChange={setArcilla} unit='%' errors={errors} />
-        <InputRow header="Porosidad" name='porosidad' value={porosidad} onChange={setPorosidad} unit='%' errors={errors} />
-        <InputRow header="Permeabilidad" name='permeabilidad' value={permeabilidad} onChange={setPermeabilidad} unit='mD' errors={errors} />
-        <InputRow header="Sw" name='sw' value={sw} onChange={setSw} unit='%' errors={errors} />
-        <InputRow header="CAA" name='caa' value={caa} onChange={setCaa} unit='mvbnm' errors={errors} />
-        <InputRow header="CGA" name='cga' value={cga} onChange={setCga} unit='mvbnm' errors={errors} />
+        <InputRow header="Intervalos(s) productor(es)" type='number' name='intervalosProductores' value={intervaloProductor}  onChange={setIntervaloProductor} unit='md/mv' onBlur={this.validate} errors={this.state.errors} />
+        <InputRow header="Espesor bruto" name='espesorBruto' value={espesorBruto} onChange={setEspesorBruto} unit='m' onBlur={this.validate} errors={this.state.errors} />
+        <InputRow header="Espesor neto" name='espesorNeto' value={espesorNeto} onChange={setEspesorNeto} unit='m' onBlur={this.validate} errors={this.state.errors} />
+        <InputRow header="Caliza" name='caliza' value={caliza} onChange={setCaliza} unit='%' onBlur={this.validate} errors={this.state.errors} />
+        <InputRow header="Dolomia" name='dolomia' value={dolomia} onChange={setDolomia} unit='%' onBlur={this.validate} errors={this.state.errors} />
+        <InputRow header="Arcilla" name='arcilla' value={arcilla} onChange={setArcilla} unit='%' onBlur={this.validate} errors={this.state.errors} />
+        <InputRow header="Porosidad" name='porosidad' value={porosidad} onChange={setPorosidad} unit='%' onBlur={this.validate} errors={this.state.errors} />
+        <InputRow header="Permeabilidad" name='permeabilidad' value={permeabilidad} onChange={setPermeabilidad} unit='mD' onBlur={this.validate} errors={this.state.errors} />
+        <InputRow header="Sw" name='sw' value={sw} onChange={setSw} unit='%' onBlur={this.validate} errors={this.state.errors} />
+        <InputRow header="CAA" name='caa' value={caa} onChange={setCaa} unit='mvbnm' onBlur={this.validate} errors={this.state.errors} />
+        <InputRow header="CGA" name='cga' value={cga} onChange={setCga} unit='mvbnm' onBlur={this.validate} errors={this.state.errors} />
       </div>
     )
   }
@@ -121,16 +135,16 @@ let columns = [
         <div className='header'>
           Los Datos de Pozo
         </div>
-          <InputRowSelectUnitless header="Tipo de pozo" value={tipoDePozo} onChange={setTipoDePozo} name='' options={wellOptions} />
-          <InputRow header="Pws (fecha)" name='pws' value={pwsFecha} onChange={setPwsFecha} unit='Kg/cm2' />
-          <InputRow header="Pwf (fecha)" name='pwf' value={pwfFecha} onChange={setPwfFecha} unit='Kg/cm2' />
-          <InputRow header="Δp/mes" name='deltaPperMes' value={deltaPPerMes} onChange={setDeltaPPerMes} unit='Kg/cm2/mes' />
-          <InputRow header="Tyac" name='tyac' value={tyac} onChange={setTyac} unit='°C' />
-          <InputRow header="PVT" name='pvt' value={pvt} onChange={setPvt} unit='Pozo' />
-          <InputRow header="Aparejo de producción" value={aparejoDeProduccion} onChange={setAparejoDeProduccion} name='aparejoDeProduccion' unit='pg' />
-          <InputRow header="Prof. empacador" name='profEmpacador' value={profEmpacador} onChange={setProfEmpacador} unit='md' />
-          <InputRow header="Prof. sensor P y T" name='profSensorPYT' value={profSensorPYT} onChange={setProfSensorPYT} unit='md' />
-          {/*<InputRowUnitless header="Tipo de SAP" name='TipoDeSap' value={tipoDeSistemo !== '' ? options.find(i => i.value === tipoDeSistemo).label: null} onChange={setTipoDeSistemo} />*/}
+          <InputRowSelectUnitless header="Tipo de pozo" value={tipoDePozo} onChange={setTipoDePozo} name='tipoDePozo' options={wellOptions} onBlur={this.validate} errors={this.state.errors} />
+          <InputRow header="Pws (fecha)" name='pws' value={pwsFecha} onChange={setPwsFecha} unit='Kg/cm2' onBlur={this.validate} errors={this.state.errors} />
+          <InputRow header="Pwf (fecha)" name='pwf' value={pwfFecha} onChange={setPwfFecha} unit='Kg/cm2' onBlur={this.validate} errors={this.state.errors} />
+          <InputRow header="Δp/mes" name='deltaPperMes' value={deltaPPerMes} onChange={setDeltaPPerMes} unit='Kg/cm2/mes' onBlur={this.validate} errors={this.state.errors} />
+          <InputRow header="Tyac" name='tyac' value={tyac} onChange={setTyac} unit='°C' onBlur={this.validate} errors={this.state.errors} />
+          <InputRow header="PVT" name='pvt' value={pvt} onChange={setPvt} unit='Pozo' onBlur={this.validate} errors={this.state.errors} />
+          <InputRow header="Aparejo de producción" value={aparejoDeProduccion} onChange={setAparejoDeProduccion} name='aparejoDeProduccion' unit='pg' onBlur={this.validate} errors={this.state.errors} />
+          <InputRow header="Prof. empacador" name='profEmpacador' value={profEmpacador} onChange={setProfEmpacador} unit='md' onBlur={this.validate} errors={this.state.errors} />
+          <InputRow header="Prof. sensor P y T" name='profSensorPYT' value={profSensorPYT} onChange={setProfSensorPYT} unit='md' onBlur={this.validate} errors={this.state.errors} />
+          {/*<InputRowUnitless header="Tipo de SAP" name='TipoDeSap' value={tipoDeSistemo !== '' ? options.find(i => i.value === tipoDeSistemo).label: null} onChange={setTipoDeSistemo} onBlur={this.validate} errors={this.state.errors} />*/}
       </div>
     )
   }
@@ -228,6 +242,95 @@ let columns = [
   }
 }
 
+const validate = values => {
+    const errors = {}
+
+    if(!values.intervalosProductores ){
+       errors.intervalosProductores = {message: "Este campo no puede estar vacio"}
+    }
+
+    if(!values.espesorBruto ){
+       errors.espesorBruto = {message: "Este campo no puede estar vacio"}
+    }
+
+    if(!values.espesorNeto ){
+       errors.espesorNeto = {message: "Este campo no puede estar vacio"}
+    }
+
+    if(!values.caliza ){
+       errors.caliza = {message: "Este campo no puede estar vacio"}
+    }
+
+    if(!values.dolomia ){
+       errors.dolomia = {message: "Este campo no puede estar vacio"}
+    }
+
+    if(!values.arcilla ){
+       errors.arcilla = {message: "Este campo no puede estar vacio"}
+    }
+
+    if(!values.porosidad ){
+       errors.porosidad = {message: "Este campo no puede estar vacio"}
+    }
+
+    if(!values.permeabilidad ){
+       errors.permeabilidad = {message: "Este campo no puede estar vacio"}
+    }
+
+    if(!values.sw ){
+       errors.sw = {message: "Este campo no puede estar vacio"}
+    }
+
+    if(!values.caa ){
+       errors.caa = {message: "Este campo no puede estar vacio"}
+    }
+
+    if(!values.cga ){
+       errors.cga = {message: "Este campo no puede estar vacio"}
+    }
+
+    if(!values.tipoDePozo ){
+       errors.tipoDePozo = {message: "Este campo no puede estar vacio"}
+    }
+
+    if(!values.pws ){
+       errors.pws = {message: "Este campo no puede estar vacio"}
+    }
+
+    if(!values.pwf ){
+       errors.pwf = {message: "Este campo no puede estar vacio"}
+    }
+
+    if(!values.deltaPperMes ){
+       errors.deltaPperMes = {message: "Este campo no puede estar vacio"}
+    }
+
+    if(!values.tyac ){
+       errors.tyac = {message: "Este campo no puede estar vacio"}
+    }
+
+    if(!values.pvt ){
+       errors.pvt = {message: "Este campo no puede estar vacio"}
+    }
+
+    if(!values.aparejoDeProduccion ){
+       errors.aparejoDeProduccion = {message: "Este campo no puede estar vacio"}
+    }
+
+    if(!values.profEmpacador ){
+       errors.profEmpacador = {message: "Este campo no puede estar vacio"}
+    }
+
+    if(!values.profSensorPYT ){
+       errors.profSensorPYT = {message: "Este campo no puede estar vacio"}
+    }
+
+    if(!values.TipoDeSap ){
+       errors.TipoDeSap = {message: "Este campo no puede estar vacio"}
+    }
+
+    return errors
+}
 
 const mapStateToProps = state => ({
   forms: state.get('forms'),
@@ -258,7 +361,10 @@ const mapDispatchToProps = dispatch => ({
   setProfSensorPYT: val => dispatch(setProfSensorPYT(val)),
   setTipoDeSistemo: val => dispatch(setTipoDeSistemo(val)),
   setHistorialIntervencionesData: val => dispatch(setHistorialIntervencionesData(val)),
+  setChecked: val => dispatch(setChecked(val))
 })
 
-export default connect(mapStateToProps, mapDispatchToProps)(TechnicaDelPozo)
-
+export default withValidate(
+  validate,
+  connect(mapStateToProps, mapDispatchToProps)(TechnicaDelPozo)
+)
