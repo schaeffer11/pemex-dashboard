@@ -14,7 +14,8 @@ import EstimulacionMultiStepForm from './Estimulacion/EstimulacionMultiStepForm'
   constructor(props) {
     super(props)
     this.state = { 
-      form: null
+      form: null,
+      errors: []
     }
   }
 
@@ -27,9 +28,34 @@ import EstimulacionMultiStepForm from './Estimulacion/EstimulacionMultiStepForm'
   handleSubmit(event){
     event.preventDefault();
     let {formData} = this.props
+    const errors = this.validate(formData.toJS())
+
+    if(Object.keys(errors).length){ // There were errors in the form
+      this.setState({
+        errors: errors
+      })
+      return false;
+    }
+
     this.setState({
-      form: 'test'
+      form: 'test',
+      errors: errors
     })
+
+  }
+
+  validate(formData){
+    let errors = {};
+    if(!formData.tipoDeIntervenciones){
+      errors.tipoDeIntervenciones = {message: "Este campo no puede estar vacio", checked: true}
+    }
+    if(!formData.objetivo){
+      errors.objetivo = {message: "Este campo no puede estar vacio", checked: true}
+    }
+    if(!formData.alcances){
+      errors.alcances = {message: "Este campo no puede estar vacio", checked: true}
+    }
+    return errors;
   }
 
   render() {
@@ -53,9 +79,9 @@ import EstimulacionMultiStepForm from './Estimulacion/EstimulacionMultiStepForm'
           <div className="content">
           <form className="form base-intervenciones" onSubmit={this.handleSubmit}>
             <div className='main-form'>
-              <TextAreaUnitless header="Objetivo - Describir el objetivo de la intervención indicando la causa principal, tipo de tratamiento a aplicar y técnica de colocación de los sistemas." name='objetivo' className={'objetivo'} value={objetivo} onChange={setObjetivo} />
-              <TextAreaUnitless header="Alcances - Describir los alcances que se pretenden obtener con la intervención programada a ejecutar." name='alcances' className={'alcances'} value={alcances} onChange={setAlcances}/>
-              <InputRowSelectUnitless header='Tipo de intervenciones' name='intervencion' value={tipoDeIntervenciones} options={tipoDeIntervencionesOptions} callback={this.handleSelectIntervencionesType} />
+              <TextAreaUnitless header="Objetivo - Describir el objetivo de la intervención indicando la causa principal, tipo de tratamiento a aplicar y técnica de colocación de los sistemas." name='objetivo' className={'objetivo'} value={objetivo} onChange={setObjetivo} errors={this.state.errors} />
+              <TextAreaUnitless header="Alcances - Describir los alcances que se pretenden obtener con la intervención programada a ejecutar." name='alcances' className={'alcances'} value={alcances} onChange={setAlcances} errors={this.state.errors}/>
+              <InputRowSelectUnitless header='Tipo de intervenciones' name='tipoDeIntervenciones' value={tipoDeIntervenciones} options={tipoDeIntervencionesOptions} callback={this.handleSelectIntervencionesType} errors={this.state.errors} />
               <button className="submit">Siguiente</button>
             </div>
           </form>
