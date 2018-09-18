@@ -95,3 +95,5 @@ export const setEstCostMinifrac = value => ({ type: 'set_estCostMinifrac', value
 export const setEstCostBacheNeutralizador = value => ({ type: 'set_estCostBacheNeutralizador', value})
 export const setEstCostProtectorDeArbol = value => ({ type: 'set_estCostProtectorDeArbol', value})
 export const setEstCostApuntalante = value => ({ type: 'set_estCostApuntalante', value})
+
+export const setChecked = value => ({ type: 'set_checked', value})
