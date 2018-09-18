@@ -8,7 +8,6 @@ import { addObject, signedURL, deleteObject, getBuckets } from '../aws/index';
 
 
 
-
 const INSERT_FIELDS_QUERY = `INSERT INTO Fields (
       FIELD_FORMACION_ID, SUBDIRECCION, ACTIVO, CAMPO, FORMACION, DESCUBRIMIENTO, FECHA_DE_EXPLOTACION,
       NUMERO_DE_POZOS_OPERANDO, P_INICIAL_ANO, P_ACTUAL_FECHA, DP_PER_ANO, TYAC, PR, TIPO_DE_FLUIDO, DENSIDAD_DEL_ACEITE, P_SAT,
@@ -121,18 +120,16 @@ const INSERT_WELL_PRODUCCION_QUERY = `INSERT INTO WellHistoricalProduccion (
         VALUES 
         ?`
 
-// const INSERT_WELL_IMAGE_QUERY = `INSERT INTO WellImages (
-//         WELL_FORMACION_ID, IMAGE_NAME, IMG_URL) VALUES
-//         ?`
-const INSERT_WELL_IMAGE_QUERY = `SELECT(1) FROM WellImages`
+const INSERT_WELL_IMAGE_QUERY = `INSERT INTO WellImages (
+        WELL_FORMACION_ID, IMAGE_NAME, IMG_URL) VALUES
+        ?`
+// const INSERT_WELL_IMAGE_QUERY = `SELECT(1) FROM WellImages`
 
 
 const INSERT_INTERVENTION_BASE_QUERY = `INSERT INTO Intervenciones (
       INTERVENCIONES_ID, WELL_FORMACION_ID, OBJETIVO, ALCANCES, TIPO_DE_INTERVENCIONES)
       VALUES (?, ?, ?, ?, ?)`
 
-// , EST_COSTO_COMPANIA_DE_SERVICIOS, EST_COSTO_DE_RENTA_DE_BARCO, EST_COSTO_DE_SISTEMA_REACTIVO,
-//         EST_COSTO_DE_SISTEMA_NO_REACTIVO, EST_COSTO_DE_DIVERGENTES, EST_COSTO_DE_N2, EST_COSTO_DE_HCL
 const INSERT_INTERVENTION_ESIMULACION_QUERY = `INSERT INTO IntervencionesEstimulacions (
         INTERVENTION_ID, WELL_FORMACION_ID,
         INTERVALO, LONGITUD_DE_INTERVALO_A_TRATAR, VOLUME_APAREJO, CAPACIDAD_TOTAL_DEL_POZO, VOLUMEN_PRECOLCHON_N2,
@@ -149,12 +146,6 @@ const INSERT_INTERVENTION_ESIMULACION_QUERY = `INSERT INTO IntervencionesEstimul
          ?, ?, ?, ?, ?, ?, ?, ?, ?, ?,
          ?, ?, ?, ?, ?, ?, ?, ?, ?, ?,
          ?, ?, ?, ?)`
-
-
-// EST_COSTO_COMPANIA_DE_SERVICIO, EST_COSTO_DE_RENTA_DE_BARCO, EST_COSTO_UNIDADES_DE_ALTA_PRESION,
-//         EST_COSTO_DEL_GEL_DE_FRACTURA, EST_COSTO_DE_SISTEMA_REACTIVO, EST_COSTO_DE_SISTEMA_NO_REACTIVO, EST_COSTO_DE_DIVERGENTES, EST_COSTO_DE_N2,
-//         EST_COSTO_DE_HCL, EST_COSTO_DE_SISTEMAS_ACIDOS_RETARDADOS, EST_COSTO_EQUIPO_DE_FRACTURAMIENTO_DE_POZOS, EST_COSTO_GEL_LINEAL, EST_COSTO_DE_TRABAJOS_DE_BOMBEO_DIVERSOS,
-//         EST_COSTO_DE_LLENADO_DE_POZO_Y_PRUEBA_DE_ADMISION, EST_COSTO_DEL_MINIFRAC, EST_COSTO_DE_BACHE_NEUTRALIZADOR, EST_COSTO_DE_ARBOL, EST_COSTO_DEL_APUNTALANTE
 
 const INSERT_INTERVENTION_ACIDO_QUERY = `INSERT INTO IntervencionesAcido (
         INTERVENTION_ID, WELL_FORMACION_ID,
@@ -174,10 +165,6 @@ const INSERT_INTERVENTION_ACIDO_QUERY = `INSERT INTO IntervencionesAcido (
          ?, ?, ?, ?, ?, ?, ?, ?, ?, ?,
          ?, ?, ?, ?, ?)`
 
-// , EST_COSTO_COMPANIA_DE_SERVICIO, EST_COSTO_DE_RENTA_DE_BARCO, EST_COSTO_UNIDADES_DE_ALTA_PRESION,
-        // EST_COSTO_DEL_GEL_DE_FRACTURA, EST_COSTO_DE_SISTEMA_REACTIVO, EST_COSTO_DE_SISTEMA_NO_REACTIVO, EST_COSTO_DE_DIVERGENTES, EST_COSTO_DE_N2,
-        // EST_COSTO_DE_HCL, EST_COSTO_DE_SISTEMAS_ACIDOS_RETARDADOS, EST_COSTO_EQUIPO_DE_FRACTURAMIENTO_DE_POZOS, EST_COSTO_GEL_LINEAL, EST_COSTO_DE_TRABAJOS_DE_BOMBEO_DIVERSOS,
-        // EST_COSTO_DE_LLENADO_DE_POZO_Y_PRUEBA_DE_ADMISION, EST_COSTO_DEL_MINIFRAC, EST_COSTO_DE_BACHE_NEUTRALIZADOR, EST_COSTO_DE_PROTECTOR_DE_ARBOL
 const INSERT_INTERVENTION_APUNTALADO_QUERY = `INSERT INTO IntervencionesApuntalado (
         INTERVENTION_ID, WELL_FORMACION_ID, 
         INTERVALO, LONGITUD_DE_INTERVALO_A_TRATAR, VOLUME_APAREJO,
@@ -196,10 +183,56 @@ const INSERT_INTERVENTION_APUNTALADO_QUERY = `INSERT INTO IntervencionesApuntala
          ?, ?, ?, ?, ?, ?, ?, ?, ?, ?,
          ?, ?, ?)`
 
-
 const INSERT_LAB_TEST_QUERY = `INSERT INTO IntervencionesLabTests (
         LAB_ID, INTERVENTION_ID, WELL_FORMACION_ID, TIPO_DE_ANALISIS, FECHA_DE_MUESTREO, FECHA_DE_PRUEBA, COMPANIA, PERSONAL_DE_PEMEX_QUE_SUPERVISO, OBSERVACIONES)
         VALUES ?`
+
+const INSERT_CEDULA_ESTIMULACION_QUERY = `INSERT INTO IntervencionesCedulaEstimulacion (
+        CEDULA_ID, INTERVENTION_ID, WELL_FORMACION_ID, ETAPA, SISTEMA,
+        VOL_LIQUID, GASTO_N2, GASTO_LIQUIDO, GASTO_EN_FONDO, CALIDAD, VOL_N2, VOL_LIQUIDO_ACUM, 
+        VOL_N2_ACUM, REL_N2_LIQ, TIEMPO) VALUES ?`
+
+const INSERT_CEDULA_ACIDO_QUERY = `INSERT INTO IntervencionesCedulaAcido (
+        CEDULA_ID, INTERVENTION_ID, WELL_FORMACION_ID, ETAPA, SISTEMA, TIPO_DE_APUNTALANTE, CONCENTRACION_DE_APUNTALANTE, 
+        VOL_LIQUID, GASTO_N2, GASTO_LIQUIDO, GASTO_EN_FONDO, CALIDAD, VOL_N2, VOL_LIQUIDO_ACUM, 
+        VOL_N2_ACUM, REL_N2_LIQ, TIEMPO) VALUES ?`
+
+const INSERT_CEDULA_APUNTALADO_QUERY = `INSERT INTO IntervencionesCedulaApuntalado (
+        CEDULA_ID, INTERVENTION_ID, WELL_FORMACION_ID, ETAPA, SISTEMA, TIPO_DE_APUNTALANTE, CONCENTRACION_DE_APUNTALANTE, 
+        VOL_LIQUID, GASTO_N2, GASTO_LIQUIDO, GASTO_EN_FONDO, CALIDAD, VOL_N2, VOL_LIQUIDO_ACUM, 
+        VOL_N2_ACUM, REL_N2_LIQ, TIEMPO) VALUES ?`        
+
+const INSERT_LAB_RESULTS_QUERY = `INSERT INTO IntervencionesLabResults (
+        RESULT_ID, LAB_ID, INTERVENTION_ID, WELL_FORMACION_ID, SISTEMA, 
+        TIEMPO_DE_ROMPIMIENTO, INTERFASE, SOLIDOS_DESPUES_DE_FILTRAR, RESULTADO) VALUES ?`
+
+const INSERT_LAB_ACIDO_QUERY = `INSERT INTO IntervencionesLabTestsAcido (
+        LAB_ID, INTERVENTION_ID, WELL_FORMACION_ID, CONTENIDO_DE_ACEITE, CONTENIDO_DE_AGUA, 
+        CONTENIDO_DE_EMULSION, CONTENIDO_DE_SOLIDOS, TIPO_DE_SOLIDOS, DENSIDAD_DEL_ACEITE, 
+        DENSIDAD_DEL_AGUA, DENSIDAD_DE_LA_EMULSION, CONTENIDO_DE_ASFALTENOS, CONTENIDO_DE_PARAFINAS, 
+        CONTENIDO_DE_RESINAS, INDICE_DE_ESTABILIDAD_COLOIDAL, INDICE_DE_ESTABILIDAD_DEL_AGUA, PH, 
+        SALINIDAD, VISCOSIDAD_DEL_ACEITE, SISTEMA_ACIDO_SOLUBILIDAD, PESO_MUESTRA_INICIAL, 
+        PESO_MUESTRA_FINAL, SOLUBILIDAD, SISTEMA_ACIDO_GRABADO_DE_NUCLEOS, NUCLEO_DE_FORMACION, 
+        GRABADO, TIPO_DE_GEL_LINEAL, VISCOSIDAD_DEL_GEL_LINEAL, TIEMPO_DE_RETICULACION, 
+        PH_GEL_LINEAL, TIEMPO_DE_ROMPEDOR_DEL_GEL) VALUES ?`
+
+const INSERT_LAB_APUNTALADO_QUERY = `INSERT INTO IntervencionesLabTestsApuntalado (
+        LAB_ID, INTERVENTION_ID, WELL_FORMACION_ID, CONTENIDO_DE_ACEITE, CONTENIDO_DE_AGUA, 
+        CONTENIDO_DE_EMULSION, CONTENIDO_DE_SOLIDOS, TIPO_DE_SOLIDOS, DENSIDAD_DEL_ACEITE, 
+        DENSIDAD_DEL_AGUA, DENSIDAD_DE_LA_EMULSION, CONTENIDO_DE_ASFALTENOS, CONTENIDO_DE_PARAFINAS, 
+        CONTENIDO_DE_RESINAS, INDICE_DE_ESTABILIDAD_COLOIDAL, INDICE_DE_ESTABILIDAD_DEL_AGUA, PH, 
+        SALINIDAD, VISCOSIDAD_DEL_ACEITE, TIPO_DE_GEL_LINEAL, VISCOSIDAD_DEL_GEL_LINEAL, 
+        TIEMPO_DE_RETICULACION, PH_GEL_LINEAL, TIEMPO_DE_ROMPEDOR_DEL_GEL, TAMANO_DEL_APUNTALANTE, 
+        GRAVEDAD_ESPECIFICA, ESFERICIDAD, REDONDEO, TURBIDEZ, RESISTENCIA, 
+        PRUEBA_DE_SOLUBILIDAD_CON_ACIDO) VALUES ?`
+        
+const INSERT_COSTS_QUERY = `INSERT INTO IntervencionesEstimatedCosts (
+        COST_ID, INTERVENTION_ID, ITEM, COMPANY, COST) VALUES ?`
+
+
+const INSERT_INTERVENTION_IMAGE_QUERY = `INSERT INTO IntervencionesImages (
+        INTERVENTION_ID, IMAGE_NAME, IMG_URL) VALUES
+        ?`
 
 export const create = async(req, res) => {
  // console.log('what are we here?', req.body)
@@ -278,9 +311,14 @@ export const create = async(req, res) => {
 
   let { salinidad, qw, estrangulado, tsep, rga, ptp, psep, ttp, qg, tbaj, ph, pbaj, ql, tiempo, fecha, qo, produccionData } = finalObj.historicoDeProduccion
 
-  // let wellLogFile = finalObj.evaluacionPetrofisica.imgURL
-  // let wellBoreFile = finalObj.mecanicoYAparejoDeProduccion.imgURL
-  // let sistemasArtificialesFile = finalObj.sistemasArtificialesDeProduccon.imgURL
+  let wellLogFile = finalObj.evaluacionPetrofisica.imgURL
+  let wellBoreFile = finalObj.mecanicoYAparejoDeProduccion.imgURL
+  let sistemasArtificialesFile = finalObj.sistemasArtificialesDeProduccion.imgURL
+
+  let labResultsFile
+  let simResultsFile
+  let incProdFile
+
 
 
   let { objetivo, alcances, tipoDeIntervenciones } = finalObj.objetivoYAlcancesIntervencion
@@ -312,6 +350,10 @@ export const create = async(req, res) => {
         estCostDeN2, estCostHCL } = finalObj.estCostEstimulacion
 
       var { cedulaData } = finalObj.propuestaEstimulacion
+
+      labResultsFile = finalObj.resultadosSimulacionEstimulacion.imgURL
+      incProdFile = finalObj.estIncProduccionEstimulacion.imgURL
+      simResultsFile = finalObj.resultadosSimulacionEstimulacion.imgURL
   }
   else if (tipoDeIntervenciones === 'acido') {
       //Propuesta De Fracturamiento Acido
@@ -336,7 +378,12 @@ export const create = async(req, res) => {
         estCostBacheNeutralizador, estCostProtectorDeArbol, estCostApuntalante  } = finalObj.estCostAcido
  
       var { cedulaData } = finalObj.propuestaAcido
+
+      labResultsFile = finalObj.resultadosSimulacionAcido.imgURL
+      incProdFile = finalObj.estIncProduccionAcido.imgURL
+      simResultsFile = finalObj.resultadosSimulacionAcido.imgURL
   }
+
   else if (tipoDeIntervenciones === 'apuntalado') {
       //Propuesta De Fracturamiento Apuntalado
       var { intervalo,
@@ -362,6 +409,10 @@ export const create = async(req, res) => {
         estCostBacheNeutralizador, estCostProtectorDeArbol } = finalObj.estCostApuntalado
 
       var { cedulaData } = finalObj.propuestaApuntalado
+
+      labResultsFile = finalObj.resultadosSimulacionApuntalado.imgURL
+      incProdFile = finalObj.estIncProduccionApuntalado.imgURL
+      simResultsFile = finalObj.resultadosSimulacionApuntalado.imgURL
   }
 
 
@@ -552,11 +603,11 @@ export const create = async(req, res) => {
                             console.log('well prod', err)
                             console.log('well prod', results)
 
-                            // values = [
-                            //   [wellFormacionID, 'Well Log', wellLogFile],
-                            //   [wellFormacionID, 'Well Bore Diagram'. wellBoreFile],
-                            //   [wellFormacionID, 'Sistemas Artificiales', sistemasArtificialesFile]
-                            // ]
+                            values = [
+                              [wellFormacionID, 'Well Log', wellLogFile],
+                              [wellFormacionID, 'Well Bore Diagram', wellBoreFile],
+                              [wellFormacionID, 'Sistemas Artificiales', sistemasArtificialesFile]
+                            ]
 
                             connection.query(INSERT_WELL_IMAGE_QUERY, [values], (err, results) => {
                               console.log('well img', err)
@@ -703,19 +754,33 @@ export const create = async(req, res) => {
                                             console.log('costs', err)
                                             console.log('costs', results)
 
+                                            values = [
+                                              [interventionID, 'Lab Results', labResultsFile],
+                                              [interventionID, 'Est Inc Prod', incProdFile],
+                                              [interventionID, 'Simulation Results', simResultsFile]
+                                            ]
 
-                                            connection.commit(function(err) {
-                                                if (err) {
-                                                  return connection.rollback(function() {
-                                                    throw err;
-                                                  });
-                                                }
-                                                console.log('success!');
-                                                var log = 'Post ' + results + ' added';
-                                                console.log(log)
-                                                res.json({message: 'success'});
+                                            connection.query(INSERT_INTERVENTION_IMAGE_QUERY, [values], (err, results) => {
+                                              console.log('intervention img', err)
+                                              console.log('intervention img', results)
+
+
+
+                                                connection.commit(function(err) {
+                                                    if (err) {
+                                                      return connection.rollback(function() {
+                                                        throw err;
+                                                      });
+                                                    }
+                                                    console.log('success!');
+                                                    var log = 'Post ' + results + ' added';
+                                                    console.log(log)
+                                                    res.json({message: 'success'});
+
+                                                })
 
                                             })
+
                                           })
                                         })
                                       })
