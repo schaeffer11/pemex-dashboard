@@ -54,10 +54,19 @@ export const InputRowUnitless = ({ header, name, unit, value, onChange, onBlur, 
     )
 }
 
-export const InputRowSelectUnitless = ({ header, name, value, options, callback, index, errors=[] }) => {
+export const InputRowSelectUnitless = ({ header, name, value, options, callback, onBlur, index, errors=[] }) => {
 
   if (!options) {
     options = []
+  }
+
+  //Suplement the event object with the properties that are not provided by the Select component
+  let handleBlur = (e) => {
+    if(onBlur && onBlur instanceof Function){
+      e.target.name = name
+      e.target.value = options.find(i=>i.value === value)
+      onBlur(e)
+    }
   }
   
   const errorElements = generateErrorElements(name, errors)
@@ -67,7 +76,7 @@ export const InputRowSelectUnitless = ({ header, name, value, options, callback,
       <div className='label'>
         {header}
       </div>
-      <Select className='input' simpleValue={true} options={options} value={options.find(i=>i.value === value)} onChange={callback} name={name} index={index} />
+      <Select className='input' simpleValue={true} options={options} value={options.find(i=>i.value === value)} onChange={callback} onBlur={handleBlur} name={name} index={index} />
       { errorElements }
     </div>
     )
