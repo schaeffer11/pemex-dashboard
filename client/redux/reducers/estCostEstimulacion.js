@@ -25,6 +25,7 @@ const initialState = Map({
             cost: '',
             company: ''
         },
+    checked:[]
 })
 
 
@@ -43,11 +44,9 @@ const estCostEstimulacion = (state = initialState, action) => {
     case 'set_estCostHCL':
         return state.set('estCostHCL', fromJS(action.value))
     case 'set_etapa':
-
-
-
-
-   
+        return state.set('etapa', fromJS(action.value))
+    case 'set_checked' :
+        return state.set('checked', fromJS(action.value))
     default:
       return state
   }

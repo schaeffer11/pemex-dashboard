@@ -25,7 +25,8 @@ const initialState = Map({
         volN2Acum: '',
         relN2Liq: '',
         tiempo: '',
-    }]
+    }],
+    checked: []
 })
 
 
@@ -55,7 +56,8 @@ const propuestaEstimulacion = (state = initialState, action) => {
         return state.set('volumenTotalDeLiquido', fromJS(action.value))
     case 'set_cedulaData':
         return state.set('cedulaData', fromJS(action.value))
-
+    case 'set_checked':
+        return state.set('checked', fromJS(action.value))
 
    
     default:
