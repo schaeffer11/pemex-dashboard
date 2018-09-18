@@ -12,7 +12,7 @@ const generateErrorElements = ( name = '', errors = [] ) => {
   return ''
 }
 
-export const InputRow = ({ header, name, unit, value, onChange, onBlur, index, errors = [] }) => {
+export const InputRow = ({ header, type='number', name, unit, value, onChange, onBlur, index, errors = [] }) => {
 
   let handleChange = (e) => {
     onChange(e.target.value, e)
@@ -25,7 +25,7 @@ export const InputRow = ({ header, name, unit, value, onChange, onBlur, index, e
       <div className='label'>
         {header}
       </div>
-      <input className='input' value={value} onChange={handleChange} onBlur={onBlur} name={name} index={index} required>
+      <input className='input' type={type} value={value} onChange={handleChange} onBlur={onBlur} name={name} index={index} required>
       </input>
       <div className='unit'>
         {unit}
@@ -35,7 +35,7 @@ export const InputRow = ({ header, name, unit, value, onChange, onBlur, index, e
     )
 }
 
-export const InputRowUnitless = ({ header, name, unit, value, onChange, onBlur, index={index}, errors = [] }) => {
+export const InputRowUnitless = ({ header, type='text', name, unit, value, onChange, onBlur, index={index}, errors = [] }) => {
 
   let handleChange = (e) => {
     onChange(e.target.value, e)
@@ -48,7 +48,7 @@ export const InputRowUnitless = ({ header, name, unit, value, onChange, onBlur, 
       <div className='label'>
         {header}
       </div>
-      <input className='input' type='text' value={value} onChange={handleChange} onBlur={onBlur} name={name} index={index}/>
+      <input className='input' type={type} value={value} onChange={handleChange} onBlur={onBlur} name={name} index={index}/>
       { errorElements }
     </div>
     )
@@ -118,7 +118,7 @@ export const InputRowCosts = ({ header, name, unit, value, onChange, index, erro
       <div className='label'>
         {header}
       </div>
-      <input className='input' value={value.cost} onChange={handleCostChange} name={name} index={index} required>
+      <input className='input' type="number" value={value.cost} onChange={handleCostChange} name={name} index={index} required>
       </input>
       <div className='unit'>
         {unit}
