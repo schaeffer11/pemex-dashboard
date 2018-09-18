@@ -88,6 +88,8 @@ export const TextAreaUnitless = ({ header, name, unit, className, subheader, val
     onChange(e.target.value, e)
   }
 
+  const errorElements = generateErrorElements(name, errors)
+
   return (
     <div className={`input-row input-row-unitless ${className}`}>
       <div className='label'>
@@ -97,6 +99,7 @@ export const TextAreaUnitless = ({ header, name, unit, className, subheader, val
       </div>
       <textarea type='text' style={{height: '130px'}} value={value} onChange={handleChange} name={name} index={index}>
       </textarea>
+      { errorElements }
     </div>
     )
 }
