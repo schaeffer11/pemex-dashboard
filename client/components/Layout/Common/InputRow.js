@@ -12,7 +12,7 @@ const generateErrorElements = ( name = '', errors = [] ) => {
   return ''
 }
 
-export const InputRow = ({ header, name, unit, value, onChange, onBlur, index, errors = [] }) => {
+export const InputRow = ({ header, type='number', name, unit, value, onChange, onBlur, index, errors = [] }) => {
 
   let handleChange = (e) => {
     onChange(e.target.value, e)
@@ -25,7 +25,7 @@ export const InputRow = ({ header, name, unit, value, onChange, onBlur, index, e
       <div className='label'>
         {header}
       </div>
-      <input className='input' value={value} onChange={handleChange} onBlur={onBlur} name={name} index={index} required>
+      <input className='input' type={type} value={value} onChange={handleChange} onBlur={onBlur} name={name} index={index} required>
       </input>
       <div className='unit'>
         {unit}
@@ -35,7 +35,7 @@ export const InputRow = ({ header, name, unit, value, onChange, onBlur, index, e
     )
 }
 
-export const InputRowUnitless = ({ header, name, unit, value, onChange, onBlur, index={index}, errors = [] }) => {
+export const InputRowUnitless = ({ header, type='text', name, unit, value, onChange, onBlur, index={index}, errors = [] }) => {
 
   let handleChange = (e) => {
     onChange(e.target.value, e)
@@ -48,16 +48,25 @@ export const InputRowUnitless = ({ header, name, unit, value, onChange, onBlur, 
       <div className='label'>
         {header}
       </div>
-      <input className='input' type='text' value={value} onChange={handleChange} onBlur={onBlur} name={name} index={index}/>
+      <input className='input' type={type} value={value} onChange={handleChange} onBlur={onBlur} name={name} index={index}/>
       { errorElements }
     </div>
     )
 }
 
-export const InputRowSelectUnitless = ({ header, name, value, options, callback, index, errors=[] }) => {
+export const InputRowSelectUnitless = ({ header, name, value, options, callback, onBlur, index, errors=[] }) => {
 
   if (!options) {
     options = []
+  }
+
+  //Suplement the event object with the properties that are not provided by the Select component
+  let handleBlur = (e) => {
+    if(onBlur && onBlur instanceof Function){
+      e.target.name = name
+      e.target.value = options.find(i=>i.value === value)
+      onBlur(e)
+    }
   }
   
   const errorElements = generateErrorElements(name, errors)
@@ -67,7 +76,7 @@ export const InputRowSelectUnitless = ({ header, name, value, options, callback,
       <div className='label'>
         {header}
       </div>
-      <Select className='input' simpleValue={true} options={options} value={options.find(i=>i.value === value)} onChange={callback} name={name} index={index} />
+      <Select className='input' simpleValue={true} options={options} value={options.find(i=>i.value === value)} onChange={callback} onBlur={handleBlur} name={name} index={index} />
       { errorElements }
     </div>
     )
@@ -79,6 +88,8 @@ export const TextAreaUnitless = ({ header, name, unit, className, subheader, val
     onChange(e.target.value, e)
   }
 
+  const errorElements = generateErrorElements(name, errors)
+
   return (
     <div className={`input-row input-row-unitless ${className}`}>
       <div className='label'>
@@ -88,6 +99,7 @@ export const TextAreaUnitless = ({ header, name, unit, className, subheader, val
       </div>
       <textarea type='text' style={{height: '130px'}} value={value} onChange={handleChange} name={name} index={index}>
       </textarea>
+      { errorElements }
     </div>
     )
 }
@@ -109,7 +121,7 @@ export const InputRowCosts = ({ header, name, unit, value, onChange, index, erro
       <div className='label'>
         {header}
       </div>
-      <input className='input' value={value.cost} onChange={handleCostChange} name={name} index={index} required>
+      <input className='input' type="number" value={value.cost} onChange={handleCostChange} name={name} index={index} required>
       </input>
       <div className='unit'>
         {unit}
