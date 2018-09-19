@@ -20,7 +20,8 @@ import { setSubdireccion, setActivo, setCampo, setPozo, setFormacion, setChecked
         formacion: null
       },
       errors: [],
-      checked: []
+      checked: [],
+      fieldWellOptions: []
     }
   }
 
@@ -28,6 +29,15 @@ import { setSubdireccion, setActivo, setCampo, setPozo, setFormacion, setChecked
     this.validate()
     this.containsErrors()
     this.props.containsErrors(this, this.state.containsErrors)
+    
+    fetch('/api/getFieldWellMapping')
+      .then(r => r.json())
+      .then(r => {
+
+        this.setState({
+          fieldWellOptions: r
+        })
+    })
   }
 
   componentDidUpdate(){
@@ -57,6 +67,17 @@ import { setSubdireccion, setActivo, setCampo, setPozo, setFormacion, setChecked
     let { setActivo } = this.props
 
     setActivo(val.value)
+  }
+
+  handleSelectField(val) {
+    let { campo, setCampo, setPozo } = this.props
+
+    if (campo !== val.value) {
+      setCampo(val.value)
+      setPozo(null)
+    }
+  
+
   }
 
   containsErrors(){
@@ -110,6 +131,7 @@ import { setSubdireccion, setActivo, setCampo, setPozo, setFormacion, setChecked
 */
 
   render() {
+    let { fieldWellOptions } = this.state
     let { setActivo, setCampo, setPozo, setFormacion, formData, forms } = this.props
 
     formData = formData.toJS()
@@ -164,14 +186,30 @@ import { setSubdireccion, setActivo, setCampo, setPozo, setFormacion, setChecked
 
     let activoOptions = subdireccion ? activoOptionsMap[subdireccion] : []
 
+    let fieldOptions = []
+    let wellOptions = []
+
+    if (fieldWellOptions.length > 0) {
+      fieldWellOptions.forEach(item => {
+        if (!fieldOptions.map(i => i.value).includes(item.FIELD_FORMACION_ID)) {
+          fieldOptions.push({label: item.FIELD_NAME, value: item.FIELD_FORMACION_ID})
+        }
+      })
+    }
+
+    if (campo && fieldWellOptions.length > 0) {
+      wellOptions = fieldWellOptions.filter(i => i.FIELD_FORMACION_ID === parseInt(campo)).map(i => ({ label: i.WELL_NAME, value: i.WELL_FORMACION_ID}))
+    }
+
+
     return (
       <form className="form tecnica-del-pozo-high-level">
         <div className='main-form'>
 
           <InputRowSelectUnitless header='Subdirección' name="subdireccion" value={subdireccion} options={subdireccionOptions} onBlur={this.validate} callback={this.handleSelectSubdireccion} errors={this.state.errors} />
           <InputRowSelectUnitless header='Activo' name="activo" value={activo} options={activoOptions} onBlur={this.validate} callback={this.handleSelectActivo} errors={this.state.errors} />
-          <InputRowUnitless header="Campo" value={campo} onChange={setCampo} onBlur={this.validate} name='campo' errors={this.state.errors} />
-          <InputRowUnitless header="Pozo" value={pozo} onChange={setPozo} onBlur={this.validate} name='pozo' errors={this.state.errors} />
+          <InputRowSelectUnitless header="Campo" name="campo" value={campo} options={fieldOptions} callback={this.handleSelectField} onBlur={this.validate} name='campo' errors={this.state.errors} />
+          <InputRowSelectUnitless header="Pozo" name="pozo" value={pozo} options={wellOptions} callback={(e) => setPozo(e.value)} onBlur={this.validate} name='pozo' errors={this.state.errors} />
           <InputRowSelectUnitless header="Formación" value={formacion} options={formacionOptions} onBlur={this.validate} callback={this.handleSelectFormacion} name='formacion' errors={this.state.errors} />
 
           <div style={{color: 'red'}}>TODO: agregar logica para nueva propuesta y opcion para subir resultados (add logic for new proposal/upload results)</div>

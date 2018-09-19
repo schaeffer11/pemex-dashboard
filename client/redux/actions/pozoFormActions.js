@@ -16,6 +16,7 @@ function getBase64FromURL(imgURL) {
     xhr.responseType = 'arraybuffer'
   
     xhr.onload = function(e) {
+
       if (this.status == 200) {
         var uInt8Array = new Uint8Array(this.response);
         var byte3 = uInt8Array[4]; 
@@ -29,63 +30,99 @@ function getBase64FromURL(imgURL) {
   })
 }
 
-export function submitForm() {
+export function submitForm(action) {
   return async (dispatch, getState) => {
     const ignore = {
       app: true,
-      user: true,
       router: true,
     }
     const errors = []
     const convertedFields = getState().toJS()
     const formData = new FormData()
     const allKeys = Object.keys(convertedFields)
+    
+    const tipoDeIntervencion = convertedFields.objetivoYAlcancesIntervencion.tipoDeIntervenciones
+
+
+    let filteredKeys
+
+    if (tipoDeIntervencion === 'estimulacion') {
+      filteredKeys = allKeys.filter(i => !((i.includes('Acido')) || i.includes('Apuntalado')))
+    }
+    else if (tipoDeIntervencion === 'acido') {
+      filteredKeys = allKeys.filter(i => !((i.includes('Estimulacion')) || i.includes('Apuntalado')))
+    }
+    else if (tipoDeIntervencion === 'apuntalado') {
+      //filteredKeys = allKeys.filter(i => i !== 'resultadosSimulacionEstimulacion' || i !== 'estIncProduccionEstimulacion' || i !== 'resultadosSimulacionAcido' || i!== 'estIncProduccionAcido')
+      filteredKeys = allKeys.filter(i => !((i.includes('Estimulacion')) || i.includes('Acido')))
+    }
+
+
+
+
     const { pozo } = convertedFields.fichaTecnicaDelPozoHighLevel
     const utc = Date.now()
-    for (let k of allKeys) {
+    for (let k of filteredKeys) {
       if(!ignore[k]) {
         const innerObj = convertedFields[k]
         const innerKeys = Object.keys(innerObj)
         // look for immediate images
-        if (innerObj.hasOwnProperty('imgURL')) {
-          if (innerObj.imgURL) {
-            const img = await getBase64FromURL(innerObj.imgURL)
-            innerObj.img = img
-            innerObj.imgName = [pozo, k, utc].join('.')
-          }
-        }
+        // if (innerObj.hasOwnProperty('imgURL')) {
+        //   if (innerObj.imgURL) {
+        //     const img = await getBase64FromURL(innerObj.imgURL)
+        //     innerObj.img = img
+        //     // innerObj.imgName = [pozo, k, utc].join('.')
+        //   }
+        // }
 
         // Look for images inside arrays and get base64
-        for(let aKeys of innerKeys) {
-          const property = innerObj[aKeys]
-          if (Array.isArray(property)) {
-            let index = 0
-            for (let j of property) {
-              if (j.hasOwnProperty('imgURL')) {
-                if (j.imgURL) {
-                  const img = await getBase64FromURL(j.imgURL)
-                  j.img = img
-                  j.imgName = [pozo, k, j.type, index, utc].join('.')
-                  index += 1
-                }
-              }
-            }
-          }
-        }
+        // for(let aKeys of innerKeys) {
+        //   const property = innerObj[aKeys]
+        //   if (Array.isArray(property)) {
+        //     let index = 0
+        //     for (let j of property) {
+        //       if (j.hasOwnProperty('imgURL')) {
+        //         if (j.imgURL) {
+        //           const img = await getBase64FromURL(j.imgURL)
+        //           j.img = img
+        //           j.imgName = [pozo, k, j.type, index, utc].join('.')
+        //           index += 1
+        //         }
+        //       }
+        //     }
+        //   }
+        // }
         formData.append(k, JSON.stringify(innerObj))
       }
     }
 
-    console.log('done')
-    fetch('/api/well', {
-      method: 'POST',
-      body: formData,
-    })
-      .then(r => r.json())
-      .then(r => {
-        console.log('server response', r)
-        // dispatch({ type: 'RESET_APP' })
+    console.log(action)
+    if (action === 'save') {
+      fetch('/api/wellSave', {
+        method: 'POST',
+        body: formData,
       })
+        .then(r => r.json())
+        .then(r => {
+          console.log('server response', r)
+          // dispatch({ type: 'RESET_APP' })
+        })
+    }
+    else if (action === 'submit') {
+      fetch('/api/well', {
+        method: 'POST',
+        body: formData,
+      })
+        .then(r => r.json())
+        .then(r => {
+          console.log('server response', r)
+          // dispatch({ type: 'RESET_APP' })
+        })
+    }
+
+
+
+
   }
 }
 

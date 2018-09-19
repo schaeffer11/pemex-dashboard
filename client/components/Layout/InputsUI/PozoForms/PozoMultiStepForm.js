@@ -72,8 +72,9 @@ import AnalisisDelAgua from './AnalisisDelAgua'
     }
   }
 
-  handleSubmit(){
-    this.props.submitPozoForm(this.props.everything)
+  handleSubmit(action){
+    console.log('hanlding sub', action)
+    this.props.submitPozoForm(action)
   }
 
   downloadMasterTemplate() {
@@ -109,7 +110,8 @@ import AnalisisDelAgua from './AnalisisDelAgua'
             {this.forms[this.state.currentStep].content}
           </div>
           <button className="submit" onClick={this.downloadMasterTemplate}>{'Descarga el Formato General'}</button>
-          <button className="submit" disabled={pozoFormSubmitting} onClick={this.handleSubmit}>{pozoFormSubmitting ? 'Enviando...' : 'Enviar'}</button>
+          <button className="submit" disabled={pozoFormSubmitting} onClick={(e) => this.handleSubmit('save')}>{pozoFormSubmitting ? 'Saving...' : 'Save'}</button>
+          <button className="submit" disabled={pozoFormSubmitting} onClick={(e) => this.handleSubmit('submit')}>{pozoFormSubmitting ? 'Enviando...' : 'Enviar'}</button>
           { errors.length > 0 &&
               <div className="error">Se han encontrado errores en la forma.</div>
           }

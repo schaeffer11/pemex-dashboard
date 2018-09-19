@@ -5,12 +5,9 @@ import path from 'path'
 import fs from 'fs'
 import multer from 'multer'
 import { addObject, signedURL, deleteObject, getBuckets } from '../aws/index';
-// var well = require('./pozo')
 import { create as createWell } from './pozo'
-// import intervencion from './intervenciones'
-// var intervencion = require('./intervenciones')
 
-const db_con = db.get(appConfig.users.database)
+const connection = db.getConnection(appConfig.users.database)
 const app = express()
 
 const upload = multer({
@@ -72,7 +69,30 @@ app.post('/testing', (req, res) => {
   res.json({ yeah: 'boy' })
 })
 
-app.post('/well', createWell);
+
+app.get('/getFieldWellMapping', (req, res) => {
+    connection.query(`SELECT * FROM FieldWellMapping`, (err, results) => {
+      res.json(results)
+    })
+})
+
+
+
+
+
+
+app.post('/well', async (req, res) => {
+  const test = await createWell(req.body, 'submit')
+  res.json({ well: 'submitted' })
+})
+
+
+app.post('/wellSave', async (req, res) => {
+  const test = await createWell(req.body, 'save')
+  res.json({ well: 'submitted' })
+})
+
+
 
 // app.post('/intervencion', intervencion.create);
 
