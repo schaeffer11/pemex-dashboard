@@ -28,7 +28,11 @@ const INSERT_FIELDS_QUERY = {
       (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, 
        ?, ?, ?, ?, ?, ?, ?, ?, ?, ?,
        ?, ?, ?, ?, ?, ?, ?, ?, ?, ?,
-       ?, ?, ?, ?, ?, ?, ?, ?, ?)`
+       ?, ?, ?, ?, ?, ?, ?, ?, ?)`,
+    loadSave: `SELECT * FROM _FieldsDataSave WHERE TRANSACTION_ID = ?`,
+
+    loadMostRecent: `SELECT * FROM FieldsData WHERE MOST RECENTDATE`,
+    loadTransaction: `SELECT * FROM FieldsData WHERE TRANSACTION_ID = ?`
 }
 
 const INSERT_WELL_QUERY = {
@@ -488,6 +492,23 @@ const INSERT_TRANSACTION = {
         TRANSACTION_ID, USER_ID, FIELD_FORMACION_ID, WELL_FORMACION_ID) VALUES
         (?, ?, ?, ?)`
 }
+
+
+export const loadFields = async (body, cb) => {
+
+  console.log('body', body)
+
+  let action = 'loadSave'
+  console.log('in load field')
+
+  connection.query(INSERT_FIELDS_QUERY[action], [transID], (err, results) => {
+    console.log('loadSave', err)
+    console.log('loadSave', results)
+    cb(results)
+   })
+
+}
+
 
 
 export const create = async (body, action) => {

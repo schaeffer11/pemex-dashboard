@@ -5,7 +5,7 @@ import path from 'path'
 import fs from 'fs'
 import multer from 'multer'
 import { addObject, signedURL, deleteObject, getBuckets } from '../aws/index';
-import { create as createWell } from './pozo'
+import { create as createWell, loadFields } from './pozo'
 
 const connection = db.getConnection(appConfig.users.database)
 const app = express()
@@ -76,9 +76,14 @@ app.get('/getFieldWellMapping', (req, res) => {
     })
 })
 
+app.post('/getSaveID', (req, res) => {
+    connection.query(`SELECT * FROM SavedInputs WHERE USER_ID = ? AND WELL_FORMACION_ID = ?`, 
+      [userID, wellID], (err, results) => {
 
-
-
+        console.log(results)
+        res.json(results)
+    })
+})
 
 
 app.post('/well', async (req, res) => {
@@ -93,6 +98,12 @@ app.post('/wellSave', async (req, res) => {
 })
 
 
+app.post('/loadFields', async (req, res) => {
+  loadFields(req.body, (data) => {
+    res.json(data)
+  })
+
+})
 
 // app.post('/intervencion', intervencion.create);
 
