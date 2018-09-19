@@ -136,7 +136,7 @@ let tratamientoPorOptions = [
           Capacidad
         </div>
         VOLUMEN
-        <InputRowSelectUnitless header="Tratamiento por" name='tratamientoPor' value={tratamientoPor} callback={setTratamientoPor} options={tratamientoPorOptions} onBlur={this.validate} errors={this.state.errors} />
+        <InputRowSelectUnitless header="Tratamiento por" name='tratamientoPor' value={tratamientoPor} callback={(e) => setTratamientoPor(e.value)} options={tratamientoPorOptions} onBlur={this.validate} errors={this.state.errors} />
         <InputRow header="Volumen aparejo de producción" name='volumenAparejoDeProduccion' value={volumenAparejoDeProduccion} onChange={setVolumenAparejoDeProduccion} unit='m3' onBlur={this.validate} errors={this.state.errors} />
         <InputRow header="Volumen @ cima de intervalo" name='volumenCimaDeIntervalo' value={volumenCimaDeIntervalo} onChange={setVolumenCimaDeIntervalo} unit='m3' onBlur={this.validate} errors={this.state.errors} />
         <InputRow header="Volumen @ base de intervalo" name='volumenBaseDeIntervalo' value={volumenBaseDeIntervalo} onChange={setVolumenBaseDeIntervalo} unit='m3' onBlur={this.validate} errors={this.state.errors} />
