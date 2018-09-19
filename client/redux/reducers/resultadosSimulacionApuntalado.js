@@ -9,7 +9,8 @@ const initialState = Map({
     fcd: '',
     presionNeta: '',
     eficienciaDeFluidoDeFractura: '',
-    imgURL: null
+    imgURL: null,
+    checked: []
 })
 
 
@@ -33,6 +34,8 @@ const resultadosSimulacionApuntalado = (state = initialState, action) => {
         return state.set('eficienciaDeFluidoDeFractura', fromJS(action.value))
     case 'set_evidenceSimulationApuntaladoImgURL':
         return state.set('imgURL', fromJS(action.value))
+    case 'set_checked' :
+        return state.set('checked', fromJS(action.value))
     default:
       return state
   }

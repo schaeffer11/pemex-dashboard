@@ -18,7 +18,8 @@ const initialState = Map({
     estIncGastoCompromisoQo: '',
     estIncGastoCompromisoQg: '',
     obervacionesEstIncApuntalado: '',
-    imgURL: null
+    imgURL: null,
+    checked: []
 })
 
 
@@ -60,7 +61,8 @@ const estIncProduccionApuntalado = (state = initialState, action) => {
         return state.set('obervacionesEstIncApuntalado', fromJS(action.value))
     case 'set_estIncProdApuntaladoImgURL':
         return state.set('imgURL', fromJS(action.value))
-   
+    case 'set_checked' :
+        return state.set('checked', fromJS(action.value))   
     default:
       return state
   }

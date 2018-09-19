@@ -65,6 +65,7 @@ const initialState = Map({
         cost: '',
         company: ''
     },
+    checked:[]
 })
 
 
@@ -102,7 +103,8 @@ const estCostApuntalado = (state = initialState, action) => {
         return state.set('estCostBacheNeutralizador', fromJS(action.value))
     case 'set_estCostProtectorDeArbol':
         return state.set('estCostProtectorDeArbol', fromJS(action.value))
-
+    case 'set_checked' :
+        return state.set('checked', fromJS(action.value))
 
     default:
       return state
