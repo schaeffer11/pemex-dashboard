@@ -83,31 +83,30 @@ import AnalisisDelAgua from './AnalisisDelAgua'
   
   handleLoad() {
     let { user, fichaTecnicaDelPozoHighLevel } = this.props
+    user = user.toJS()
+    fichaTecnicaDelPozoHighLevel = fichaTecnicaDelPozoHighLevel.toJS()
 
 
     fetch('/api/getSaveID', {
       method: 'POST',
-      body: {
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify({
         wellID: fichaTecnicaDelPozoHighLevel.pozo,
         userID: user.id
-      }
+      })
     })
     .then(res => res.json())
-    .then(res => {
+    .then(data => {
 
+      let transactionID = data[0].TRANSACTION_ID
 
-
-      fetch('/api/loadFields', {
-        method: 'POST'
-      })
-      .then(res => res.json())
-      .then(res => {
-        console.log(res)
-      })
-
-
-
-
+      fetch(`/api/getFields?transactionID=${transactionID}`)
+        .then(res => res.json())
+        .then(res => {
+          console.log(res)
+        })
 
     })
 

@@ -30,8 +30,6 @@ const INSERT_FIELDS_QUERY = {
        ?, ?, ?, ?, ?, ?, ?, ?, ?, ?,
        ?, ?, ?, ?, ?, ?, ?, ?, ?)`,
     loadSave: `SELECT * FROM _FieldsDataSave WHERE TRANSACTION_ID = ?`,
-
-    loadMostRecent: `SELECT * FROM FieldsData WHERE MOST RECENTDATE`,
     loadTransaction: `SELECT * FROM FieldsData WHERE TRANSACTION_ID = ?`
 }
 
@@ -55,7 +53,9 @@ const INSERT_WELL_QUERY = {
         APAREJO_DE_PRODUCCION, PROF_EMPACADOR, PROF_SENSOR_PYT, TIPO_DE_SISTEMA, TRANSACTION_ID) VALUES
         (?, ?, ?, ?, ?, ?, ?, ?, ?, ?,
          ?, ?, ?, ?, ?, ?, ?, ?, ?, ?,
-         ?, ?, ?, ?, ?, ?)`
+         ?, ?, ?, ?, ?, ?)`,
+    loadSave: `SELECT * FROM _WellsDataSave WHERE TRANSACTION_ID = ?`,
+    loadTransaction: `SELECT * FROM WellsData WHERE TRANSACTION_ID = ?`    
 }
 
 const INSERT_HIST_INTERVENCIONES_QUERY = {
@@ -64,7 +64,9 @@ const INSERT_HIST_INTERVENCIONES_QUERY = {
         ?`,
     submit: `INSERT INTO WellUserInputInterventions (
         WELL_FORMACION_ID, INPUT_INTERVENTION_ID, DATE, DESCRIPTION, TRANSACTION_ID) VALUES
-        ?`
+        ?`,
+    loadSave: `SELECT * FROM _WellUserInputInterventionsSave WHERE TRANSACTION_ID = ?`,
+    loadTransaction: `SELECT * FROM WellUserInputInterventions WHERE TRANSACTION_ID = ?`    
 }
 
 const INSERT_LAYER_QUERY = {
@@ -75,7 +77,9 @@ const INSERT_LAYER_QUERY = {
     submit: `INSERT INTO WellLayers (
         INTERVAL_ID, WELL_FORMACION_ID, INTERVALO, CIMA_MD, BASE_MD, CIMA_MV, BASE_MV,
         V_ARC, POROSITY, SW, DENS, RESIS, PERMEABILIDAD, TRANSACTION_ID) VALUES
-        ?`
+        ?`,
+    loadSave: `SELECT * FROM _WellLayersSave WHERE TRANSACTION_ID = ?`,
+    loadTransaction: `SELECT * FROM WellLayers WHERE TRANSACTION_ID = ?`    
 }
 
 const INSERT_MUD_LOSS_QUERY = {
@@ -84,7 +88,9 @@ const INSERT_MUD_LOSS_QUERY = {
         ?`,
     submit: `INSERT INTO WellZones (
         ZONE_ID, WELL_FORMACION_ID, CIMA_MD, BASE_MD, LODO_PERDIDO, DENSIDAD, TRANSACTION_ID) VALUES
-        ?`
+        ?`,
+    loadSave: `SELECT * FROM _WellZonesSave WHERE TRANSACTION_ID = ?`,
+    loadTransaction: `SELECT * FROM WellZones WHERE TRANSACTION_ID = ?`    
 }
 
 const INSERT_MECANICO_QUERY = {
@@ -103,7 +109,9 @@ const INSERT_MECANICO_QUERY = {
         TRATAMIENTO_POR, VOLUMEN_APAREJO_DE_PRODUCCION, VOLUMEN_INTERVALO_CIMA, 
         VOLUMEN_INTERVALO_BASE, VOLUMEN_DE_ESPACIO_ANULA, TRANSACTION_ID) VALUES 
         (?, ?, ?, ?, ?, ?, ?, ?, ?, ?,
-         ?, ?, ?, ?, ?, ?, ?, ?, ?)`
+         ?, ?, ?, ?, ?, ?, ?, ?, ?)`,     
+    loadSave: `SELECT * FROM _WellMecanicoSave WHERE TRANSACTION_ID = ?`,
+    loadTransaction: `SELECT * FROM WellMecanico WHERE TRANSACTION_ID = ?`    
 }
 
 const INSERT_ANALISIS_AGUA_QUERY = {
@@ -127,6 +135,8 @@ const INSERT_ANALISIS_AGUA_QUERY = {
         (?, ?, ?, ?, ?, ?, ?, ?, ?, ?,
          ?, ?, ?, ?, ?, ?, ?, ?, ?, ?,
          ?, ?, ?)`
+,     loadSave: `SELECT * FROM _WellAnalisisDelAguaSave WHERE TRANSACTION_ID = ?`,
+    loadTransaction: `SELECT * FROM WellAnalisisDelAgua WHERE TRANSACTION_ID = ?`    
 }
 
 const INSERT_EMBOLO_VIAJERO_QUERY = {
@@ -137,7 +147,9 @@ const INSERT_EMBOLO_VIAJERO_QUERY = {
     submit: `INSERT INTO ProductionSystemsEmboloViajero (
                 SYSTEM_ID, WELL_ID, FORMACION_ID, PRESION_DE_CABEZA, PRESION_DE_LINEA_O_DE_SEPARADOR,
                 NUMERO_DE_DESCARGAS_O_CIRCLOS, VOLUMEN_DESPLAZADO_POR_CIRCLO, TRANSACTION_ID) VALUES
-                (1, 1, 1, ?, ?, ?, ?, ?)`
+                (1, 1, 1, ?, ,?, ?,?)`,
+    loadSave: `SELECT * FROM _ProductionSystemsEmboloViajeroSave WHERE TRANSACTION_ID = ?`,
+    loadTransaction: `SELECT * FROM table ProductionSystemsEmboloViajero TRANSACTION_ID = ?`    
 }
 
 const INSERT_BOMBEO_NEUMATICO_QUERY = {
@@ -150,7 +162,9 @@ const INSERT_BOMBEO_NEUMATICO_QUERY = {
                 SYSTEM_ID, WELL_ID, FORMACION_ID, PRESION_DE_CABEZA, PRESION_DE_LINEA_O_DE_SEPARADOR,
                 PRESION_DE_INYECCION, PRESION_DE_DESCARGA, NUMERO_DE_VALVULAS, PREFUNDIDAD_DE_LA_VALVULA_OPERANTE,
                 ORIFICIO, VOLUMEN_DE_GAS_INYECTADO, TRANSACTION_ID) VALUES
-                (1, 1, 1, ?, ?, ?, ?, ?, ?, ?, ?, ?)`
+                (1, 1, 1, ?, ?, ?, ?, ?, ,?, ?,?)`,
+    loadSave: `SELECT * FROM _ProductionSystemsBombeoNeumaticoSave WHERE TRANSACTION_ID = ?`,
+    loadTransaction: `SELECT * FROM ProductionSystemsBombeoNeumatico WHERE TRANSACTION_ID = ?`    
 }
 
 const INSERT_BOMBEO_HIDRAULICO_QUERY = {
@@ -161,7 +175,9 @@ const INSERT_BOMBEO_HIDRAULICO_QUERY = {
     submit: `INSERT INTO ProductionSystemsBombeoHidraulico (
                 SYSTEM_ID, WELL_ID, FORMACION_ID, PRESION_DE_CABEZA, PRESION_DE_LINEA_O_DE_SEPARADOR,
                 PROFUNDIDAD_DE_LA_BOMBA, TIPO_Y_MARCA_DE_BOMBA, ORIFICIO, TIPO_DE_CAMISA, FLUIDO_MOTRIZ, TRANSACTION_ID) VALUES
-                (1, 1, 1, ?, ?, ?, ?, ?, ?, ?, ?)`
+                (1, 1, 1, ?, ?, ?, ?, ,?, ?,?)`,
+    loadSave: `SELECT * FROM _ProductionSystemsBombeoHidraulicoSave WHERE TRANSACTION_ID = ?`,
+    loadTransaction: `SELECT * FROM ProductionSystemsBombeoHidraulico WHERE TRANSACTION_ID = ?`    
 }
 
 const INSERT_BOMBEO_CAVIDADES_QUERY = {
@@ -174,7 +190,9 @@ const INSERT_BOMBEO_CAVIDADES_QUERY = {
                 SYSTEM_ID, WELL_ID, FORMACION_ID, PRESION_DE_CABEZA, PRESION_DE_LINEA_O_DE_SEPARADOR,
                 MOTOR_Y_TIPO_DE_MOTOR, PROFUNDIDAD_DEL_MOTOR, VELOCIDAD, HP, ARREGLO_DE_VARILLAS,
                 TIPO_DE_ELASTOMERO, PROFUNDIDAD_DEL_ANCLA_ANTITORQUE, TRANSACTION_ID) VALUES
-                (1, 1, 1, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`
+                (1, 1, 1, ?, ?, ?, ?, ?, ?, ,?, ?,?)`,
+    loadSave: `SELECT * FROM _ProductionSystemsBombeoCavidadesProgresivasSave WHERE TRANSACTION_ID = ?`,
+    loadTransaction: `SELECT * FROM ProductionSystemsBombeoCavidadesProgresivas WHERE TRANSACTION_ID = ?`    
 }
 
 const INSERT_BOMBEO_ELECTROCENTRIFUGO_QUERY = {
@@ -187,7 +205,9 @@ const INSERT_BOMBEO_ELECTROCENTRIFUGO_QUERY = {
                 SYSTEM_ID, WELL_ID, FORMACION_ID, PRESION_DE_CABEZA, PRESION_DE_LINEA_O_DE_SEPARADOR,
                 PROFUNDIDAD_DEL_MOTOR, DIAMETRO, VOLTS, AMPERAJE, ARMADURA,
                 TIPO_DE_CABLE, LONGITUD_DE_CABLE, RPM, TRANSACTION_ID) VALUES
-                (1, 1, 1, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`
+                (1, 1, 1, ?, ?, ?, ?, ?, ?, ?, ,?, ?,?)`,
+    loadSave: `SELECT * FROM _ProductionSystemsBombeoElectrocentrifugoSave WHERE TRANSACTION_ID = ?`,
+    loadTransaction: `SELECT * FROM ProductionSystemsBombeoElectrocentrifugo WHERE TRANSACTION_ID = ?`    
 }
 
 const INSERT_BOMBEO_MECANICO_QUERY = {
@@ -200,7 +220,10 @@ const INSERT_BOMBEO_MECANICO_QUERY = {
                 SYSTEM_ID, WELL_ID, FORMACION_ID, PRESION_DE_CABEZA, PRESION_DE_LINEA_O_DE_SEPARADOR,
                 TIPO_DE_UNIDAD, VELOCIDAD, LONGITUD_DE_CARERA, TIPO_DE_BOMBA_SUBSUPERFICIAL, TAMANO_DE_BOMBA_SUBSUPERFICIAL,
                 PROFUNDIDAD_DE_LA_BOMBA, ARREGLO_DE_VARILLAS, CUANTA_CON_ANCIA_MECHANICO_O_EMPACADOR, NIVEL_DINAMICO, NIVEL_ESTATICO, TRANSACTION_ID) VALUES
-                (1, 1, 1, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`
+                (1, 1, ,1, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`,
+    loadSave: `SELECT * FROM _ProductionSystemsBombeoMecanicoSave WHERE TRANSACTION_ID = ?`,
+    loadTransaction: `SELECT * FROM ProductionSystemsBombeoMecanico WHERE TRANSACTION_ID = ?`
+
 
 }
 
@@ -210,7 +233,9 @@ const INSERT_FIELD_PRESSURE_QUERY = {
         ?`,
     submit: `INSERT INTO FieldHistoricalPressure (
         FIELD_FORMACION_ID, FECHA, QO, NP, PWS, PR, TRANSACTION_ID) VALUES
-        ?`
+        ?`,
+    loadSave: `SELECT * FROM _FieldHistoricalPressureSave WHERE TRANSACTION_ID = ?`,
+    loadTransaction: `SELECT * FROM FieldHistoricalPressure WHERE TRANSACTION_ID = ?`    
 }
 
 const INSERT_WELL_PRESSURE_QUERY = {
@@ -219,7 +244,9 @@ const INSERT_WELL_PRESSURE_QUERY = {
         ?`,
     submit: `INSERT INTO WellHistoricalPressure (
         WELL_FORMACION_ID, FECHA, QO, NP, PWS, PR, TRANSACTION_ID) VALUES
-        ?`
+        ?`,
+    loadSave: `SELECT * FROM _WellHistoricalPressureSave WHERE TRANSACTION_ID = ?`,
+    loadTransaction: `SELECT * FROM WellHistoricalPressure WHERE TRANSACTION_ID = ?`    
 }
 
 const INSERT_WELL_AFOROS_QUERY = {
@@ -232,7 +259,9 @@ const INSERT_WELL_AFOROS_QUERY = {
         WELL_FORMACION_ID, FECHA, ESTRANGULADOR, PTP, TTP, PBAJ, TBAJ, PSEP, TSEP, QL, 
         QO, QG, QW, RGA, SALINIDAD, PH, TRANSACTION_ID) VALUES 
         (?, ?, ?, ?, ?, ?, ?, ?, ?, ?,
-         ?, ?, ?, ?, ?, ?, ?)`
+         ?, ?, ?, ?, ?, ?, ?)`,     
+    loadSave: `SELECT * FROM _WellAforosSave WHERE TRANSACTION_ID = ?`,
+    loadTransaction: `SELECT * FROM WellAforos WHERE TRANSACTION_ID = ?`    
 }
 
 const INSERT_WELL_PRODUCCION_QUERY = {
@@ -243,7 +272,9 @@ const INSERT_WELL_PRODUCCION_QUERY = {
     submit: `INSERT INTO WellHistoricalProduccion (
         WELL_FORMACION_ID, Fecha, Dias, QO, QW, QG_CAL, QGL, NP, WP, GP, GI, RGA, FW_FRACTION, POZOS_PROD_ACTIVOS, TRANSACTION_ID)
         VALUES 
-        ?`
+        ?`,
+    loadSave: `SELECT * FROM _WellHistoricalProduccionSave WHERE TRANSACTION_ID = ?`,
+    loadTransaction: `SELECT * FROM WellHistoricalProduccion WHERE TRANSACTION_ID = ?`    
 }
 
 const INSERT_WELL_IMAGE_QUERY = {
@@ -251,10 +282,10 @@ const INSERT_WELL_IMAGE_QUERY = {
         WELL_FORMACION_ID, IMAGE_NAME, IMG_URL, TRANSACTION_ID) VALUES
         ?`,
     submit: `INSERT INTO WellImages (
-        WELL_FORMACION_ID, IMAGE_NAME, IMG_URL, TRANSACTION_ID) VALUES
-        ?`
-
-
+        WELL_FORMACION_ID, IMAGE_NAME, IMG_URL, TRANSACTION_ID) VALUES,
+        ?, ?, ?, ?`,
+    loadSave: `SELECT * FROM _WellImagesSave WHERE TRANSACTION_ID = ?`,
+    loadTransaction: `SELECT * FROM WellImages WHERE TRANSACTION_ID = ?`
 }
 
 const INSERT_INTERVENTION_BASE_QUERY = {
@@ -263,7 +294,9 @@ const INSERT_INTERVENTION_BASE_QUERY = {
       VALUES (?, ?, ?, ?, ?, ?)`,
     submit: `INSERT INTO Intervenciones (
       INTERVENCIONES_ID, WELL_FORMACION_ID, OBJETIVO, ALCANCES, TIPO_DE_INTERVENCIONES, TRANSACTION_ID)
-      VALUES (?, ?, ?, ?, ?, ?)`
+      VALUES (?, ?, ?, ?, ?, ?,)`,
+    loadSave: `SELECT * FROM table WHERE TRANSACTION_ID = ?`,
+    loadTransaction: `SELECT * FROM table WHERE TRANSACTION_ID = ?`    
 }
 
 const INSERT_INTERVENTION_ESIMULACION_QUERY = {
@@ -298,7 +331,9 @@ const INSERT_INTERVENTION_ESIMULACION_QUERY = {
          ?, ?, ?, ?, ?, ?, ?, ?, ?, ?,
          ?, ?, ?, ?, ?, ?, ?, ?, ?, ?,
          ?, ?, ?, ?, ?, ?, ?, ?, ?, ?,
-         ?, ?, ?, ?, ?)`
+         ?, ?, ?, ?, ?)`,     
+    loadSave: `SELECT * FROM table WHERE TRANSACTION_ID = ?`,
+    loadTransaction: `SELECT * FROM table WHERE TRANSACTION_ID = ?`    
 }
 
 const INSERT_INTERVENTION_ACIDO_QUERY = {
@@ -335,7 +370,9 @@ const INSERT_INTERVENTION_ACIDO_QUERY = {
          ?, ?, ?, ?, ?, ?, ?, ?, ?, ?,
          ?, ?, ?, ?, ?, ?, ?, ?, ?, ?,
          ?, ?, ?, ?, ?, ?, ?, ?, ?, ?,
-         ?, ?, ?, ?, ?, ?)`
+         ?, ?, ?, ?, ?, ?)`,     
+    loadSave: `SELECT * FROM table WHERE TRANSACTION_ID = ?`,
+    loadTransaction: `SELECT * FROM table WHERE TRANSACTION_ID = ?`    
 }
 
 const INSERT_INTERVENTION_APUNTALADO_QUERY = {
@@ -372,7 +409,9 @@ const INSERT_INTERVENTION_APUNTALADO_QUERY = {
          ?, ?, ?, ?, ?, ?, ?, ?, ?, ?,
          ?, ?, ?, ?, ?, ?, ?, ?, ?, ?,
          ?, ?, ?, ?, ?, ?, ?, ?, ?, ?,
-         ?, ?, ?, ?)`
+         ?, ?, ?, ?)`,     
+    loadSave: `SELECT * FROM table WHERE TRANSACTION_ID = ?`,
+    loadTransaction: `SELECT * FROM table WHERE TRANSACTION_ID = ?`    
 }
 
 const INSERT_LAB_TEST_QUERY = {
@@ -381,7 +420,9 @@ const INSERT_LAB_TEST_QUERY = {
         VALUES ?`,
     submit: `INSERT INTO IntervencionesLabTests (
         LAB_ID, INTERVENTION_ID, WELL_FORMACION_ID, TIPO_DE_ANALISIS, FECHA_DE_MUESTREO, FECHA_DE_PRUEBA, COMPANIA, PERSONAL_DE_PEMEX_QUE_SUPERVISO, OBSERVACIONES, TRANSACTION_ID)
-        VALUES ?`
+        VALUES ?`,
+    loadSave: `SELECT * FROM table WHERE TRANSACTION_ID = ?`,
+    loadTransaction: `SELECT * FROM table WHERE TRANSACTION_ID = ?`    
 }
 
 const INSERT_CEDULA_ESTIMULACION_QUERY = {
@@ -392,7 +433,9 @@ const INSERT_CEDULA_ESTIMULACION_QUERY = {
     submit: `INSERT INTO IntervencionesCedulaEstimulacion (
         CEDULA_ID, INTERVENTION_ID, WELL_FORMACION_ID, ETAPA, SISTEMA,
         VOL_LIQUID, GASTO_N2, GASTO_LIQUIDO, GASTO_EN_FONDO, CALIDAD, VOL_N2, VOL_LIQUIDO_ACUM, 
-        VOL_N2_ACUM, REL_N2_LIQ, TIEMPO, TRANSACTION_ID) VALUES ?`
+        VOL_N2_ACUM, REL_N2_LIQ, TIEMPO, TRANSACTION_ID) VALUES ?`,
+    loadSave: `SELECT * FROM table WHERE TRANSACTION_ID = ?`,
+    loadTransaction: `SELECT * FROM table WHERE TRANSACTION_ID = ?`    
 }
 
 const INSERT_CEDULA_ACIDO_QUERY = {
@@ -403,7 +446,9 @@ const INSERT_CEDULA_ACIDO_QUERY = {
     submit: `INSERT INTO IntervencionesCedulaAcido (
         CEDULA_ID, INTERVENTION_ID, WELL_FORMACION_ID, ETAPA, SISTEMA, TIPO_DE_APUNTALANTE, CONCENTRACION_DE_APUNTALANTE, 
         VOL_LIQUID, GASTO_N2, GASTO_LIQUIDO, GASTO_EN_FONDO, CALIDAD, VOL_N2, VOL_LIQUIDO_ACUM, 
-        VOL_N2_ACUM, REL_N2_LIQ, TIEMPO, TRANSACTION_ID) VALUES ?`
+        VOL_N2_ACUM, REL_N2_LIQ, TIEMPO, TRANSACTION_ID) VALUES ?`,
+    loadSave: `SELECT * FROM table WHERE TRANSACTION_ID = ?`,
+    loadTransaction: `SELECT * FROM table WHERE TRANSACTION_ID = ?`    
 }
 
 const INSERT_CEDULA_APUNTALADO_QUERY = {
@@ -414,7 +459,9 @@ const INSERT_CEDULA_APUNTALADO_QUERY = {
     submit: `INSERT INTO IntervencionesCedulaApuntalado (
         CEDULA_ID, INTERVENTION_ID, WELL_FORMACION_ID, ETAPA, SISTEMA, TIPO_DE_APUNTALANTE, CONCENTRACION_DE_APUNTALANTE, 
         VOL_LIQUID, GASTO_N2, GASTO_LIQUIDO, GASTO_EN_FONDO, CALIDAD, VOL_N2, VOL_LIQUIDO_ACUM, 
-        VOL_N2_ACUM, REL_N2_LIQ, TIEMPO, TRANSACTION_ID) VALUES ?`        
+        VOL_N2_ACUM, REL_N2_LIQ, TIEMPO, TRANSACTION_ID) VALUES ?`        ,
+    loadSave: `SELECT * FROM table WHERE TRANSACTION_ID = ?`,
+    loadTransaction: `SELECT * FROM table WHERE TRANSACTION_ID = ?`    
 }
 
 const INSERT_LAB_RESULTS_QUERY = {
@@ -423,7 +470,9 @@ const INSERT_LAB_RESULTS_QUERY = {
         TIEMPO_DE_ROMPIMIENTO, INTERFASE, SOLIDOS_DESPUES_DE_FILTRAR, RESULTADO, TRANSACTION_ID) VALUES ?`,
     submit: `INSERT INTO IntervencionesLabResults (
         RESULT_ID, LAB_ID, INTERVENTION_ID, WELL_FORMACION_ID, SISTEMA, 
-        TIEMPO_DE_ROMPIMIENTO, INTERFASE, SOLIDOS_DESPUES_DE_FILTRAR, RESULTADO, TRANSACTION_ID) VALUES ?`
+        TIEMPO_DE_ROMPIMIENTO, INTERFASE, SOLIDOS_DESPUES_DE_FILTRAR, RESULTADO, TRANSACTION_ID) VALUES ?`,
+    loadSave: `SELECT * FROM table WHERE TRANSACTION_ID = ?`,
+    loadTransaction: `SELECT * FROM table WHERE TRANSACTION_ID = ?`    
 }
 
 const INSERT_LAB_ACIDO_QUERY = {
@@ -444,7 +493,9 @@ const INSERT_LAB_ACIDO_QUERY = {
         SALINIDAD, VISCOSIDAD_DEL_ACEITE, SISTEMA_ACIDO_SOLUBILIDAD, PESO_MUESTRA_INICIAL, 
         PESO_MUESTRA_FINAL, SOLUBILIDAD, SISTEMA_ACIDO_GRABADO_DE_NUCLEOS, NUCLEO_DE_FORMACION, 
         GRABADO, TIPO_DE_GEL_LINEAL, VISCOSIDAD_DEL_GEL_LINEAL, TIEMPO_DE_RETICULACION, 
-        PH_GEL_LINEAL, TIEMPO_DE_ROMPEDOR_DEL_GEL, TRANSACTION_ID) VALUES ?`
+        PH_GEL_LINEAL, TIEMPO_DE_ROMPEDOR_DEL_GEL, TRANSACTION_ID) VALUES ?`,
+    loadSave: `SELECT * FROM table WHERE TRANSACTION_ID = ?`,
+    loadTransaction: `SELECT * FROM table WHERE TRANSACTION_ID = ?`    
 }
 
 const INSERT_LAB_APUNTALADO_QUERY = {
@@ -465,14 +516,18 @@ const INSERT_LAB_APUNTALADO_QUERY = {
         SALINIDAD, VISCOSIDAD_DEL_ACEITE, TIPO_DE_GEL_LINEAL, VISCOSIDAD_DEL_GEL_LINEAL, 
         TIEMPO_DE_RETICULACION, PH_GEL_LINEAL, TIEMPO_DE_ROMPEDOR_DEL_GEL, TAMANO_DEL_APUNTALANTE, 
         GRAVEDAD_ESPECIFICA, ESFERICIDAD, REDONDEO, TURBIDEZ, RESISTENCIA, 
-        PRUEBA_DE_SOLUBILIDAD_CON_ACIDO, TRANSACTION_ID) VALUES ?`
+        PRUEBA_DE_SOLUBILIDAD_CON_ACIDO, TRANSACTION_ID) VALUES ?`,
+    loadSave: `SELECT * FROM table WHERE TRANSACTION_ID = ?`,
+    loadTransaction: `SELECT * FROM table WHERE TRANSACTION_ID = ?`    
 }
 
 const INSERT_COSTS_QUERY = {
     save: `INSERT INTO _IntervencionesEstimatedCostsSave (
         COST_ID, INTERVENTION_ID, ITEM, COMPANY, COST, TRANSACTION_ID) VALUES ?`,
     submit: `INSERT INTO IntervencionesEstimatedCosts (
-        COST_ID, INTERVENTION_ID, ITEM, COMPANY, COST, TRANSACTION_ID) VALUES ?`
+        COST_ID, INTERVENTION_ID, ITEM, COMPANY, COST, TRANSACTION_ID) VALUES ?`,
+    loadSave: `SELECT * FROM table WHERE TRANSACTION_ID = ?`,
+    loadTransaction: `SELECT * FROM table WHERE TRANSACTION_ID = ?`    
 }
 
 const INSERT_INTERVENTION_IMAGE_QUERY = {
@@ -481,7 +536,9 @@ const INSERT_INTERVENTION_IMAGE_QUERY = {
         ?`,
     submit: `INSERT INTO IntervencionesImages (
         INTERVENTION_ID, IMAGE_NAME, IMG_URL, TRANSACTION_ID) VALUES
-        ?`
+        ?`,
+    loadSave: `SELECT * FROM table WHERE TRANSACTION_ID = ?`,
+    loadTransaction: `SELECT * FROM table WHERE TRANSACTION_ID = ?`    
 }
 
 const INSERT_TRANSACTION = {
@@ -490,25 +547,119 @@ const INSERT_TRANSACTION = {
         (?, ?, ?)`,
     submit: `INSERT INTO Transactions (
         TRANSACTION_ID, USER_ID, FIELD_FORMACION_ID, WELL_FORMACION_ID) VALUES
-        (?, ?, ?, ?)`
+        (?, ?, ?, ?)`,
+    loadSave: `SELECT * FROM table WHERE TRANSACTION_ID = ?`,
+    loadTransaction: `SELECT * FROM table WHERE TRANSACTION_ID = ?`    
 }
 
 
-export const loadFields = async (body, cb) => {
-
-  console.log('body', body)
-
+export const getFields = async (transID, cb) => {
   let action = 'loadSave'
-  console.log('in load field')
 
   connection.query(INSERT_FIELDS_QUERY[action], [transID], (err, results) => {
-    console.log('loadSave', err)
-    console.log('loadSave', results)
     cb(results)
    })
-
 }
 
+export const getWell = async (transID, cb) => {
+  let action = 'loadSave'
+
+  connection.query(INSERT_WELL_QUERY[action], [transID], (err, results) => {
+    cb(results)
+   })
+}
+
+export const getHistIntervenciones = async (transID, cb) => {
+  let action = 'loadSave'
+
+  connection.query(INSERT_HIST_INTERVENCIONES_QUERY[action], [transID], (err, results) => {
+    cb(results)
+   })
+}
+
+
+export const getLayer = async (transID, cb) => {
+  let action = 'loadSave'
+
+  connection.query(INSERT_LAYER_QUERY[action], [transID], (err, results) => {
+    cb(results)
+   })
+}
+
+export const getMudLoss = async (transID, cb) => {
+  let action = 'loadSave'
+
+  connection.query(INSERT_MUD_LOSS_QUERY[action], [transID], (err, results) => {
+    cb(results)
+   })
+}
+
+export const getMecanico = async (transID, cb) => {
+  let action = 'loadSave'
+
+  connection.query(INSERT_MECANICO_QUERY[action], [transID], (err, results) => {
+    cb(results)
+   })
+}
+
+export const getAnalisisAgua = async (transID, cb) => {
+  let action = 'loadSave'
+
+  connection.query(INSERT_ANALISIS_AGUA_QUERY[action], [transID], (err, results) => {
+    cb(results)
+   })
+}
+
+export const getSistema = async (transID, cb) => {
+  let action = 'loadSave'
+
+  // let query = switch(tipoDeSistema) {
+
+  // }
+  connection.query(INSERT_FIELDS_QUERY[action], [transID], (err, results) => {
+    cb(results)
+   })
+}
+
+export const getFieldPressure = async (transID, cb) => {
+  let action = 'loadSave'
+
+  connection.query(INSERT_FIELD_PRESSURE_QUERY[action], [transID], (err, results) => {
+    cb(results)
+   })
+}
+
+export const getWellPressure = async (transID, cb) => {
+  let action = 'loadSave'
+
+  connection.query(INSERT_WELL_PRESSURE_QUERY[action], [transID], (err, results) => {
+    cb(results)
+   })
+}
+
+export const getWellAForos = async (transID, cb) => {
+  let action = 'loadSave'
+
+  connection.query(INSERT_WELL_AFOROS_QUERY[action], [transID], (err, results) => {
+    cb(results)
+   })
+}
+
+export const getWellProduccion = async (transID, cb) => {
+  let action = 'loadSave'
+
+  connection.query(INSERT_WELL_PRODUCCION_QUERY[action], [transID], (err, results) => {
+    cb(results)
+   })
+}
+
+export const getWellImages = async (transID, cb) => {
+  let action = 'loadSave'
+
+  connection.query(INSERT_WELL_IMAGE_QUERY[action], [transID], (err, results) => {
+    cb(results)
+   })
+}
 
 
 export const create = async (body, action) => {
