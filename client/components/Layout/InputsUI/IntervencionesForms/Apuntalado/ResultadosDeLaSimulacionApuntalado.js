@@ -1,23 +1,62 @@
 import React, { Component } from 'react'
 import autobind from 'autobind-decorator'
+import {withValidate} from '../../../Common/Validate'
 import { InputRow, InputRowUnitless, InputRowSelectUnitless, TextAreaUnitless } from '../../../Common/InputRow'
-import { setEvidenceSimulationApuntaladoImgURL, setLongitudApuntalada, setAlturaTotalDeFractura, setAnchoPromedio, setConcentractionAreal, setConductividad, setFcd, setPresionNeta, setEficienciaDeFluidoDeFractura } from '../../../../../redux/actions/intervencionesApuntalado'
+import { setEvidenceSimulationApuntaladoImgURL, setLongitudApuntalada, setAlturaTotalDeFractura, setAnchoPromedio, setConcentractionAreal, setConductividad, setFcd, setPresionNeta, setEficienciaDeFluidoDeFractura, setChecked } from '../../../../../redux/actions/intervencionesApuntalado'
 import { connect } from 'react-redux'
 
 @autobind class ResultadosDeLaSimulacionApuntalado extends Component {
   constructor(props) {
     super(props)
     this.state = { 
+      containsErrors: false,
+      errors: [],
+      checked: []
     }
   }
 
   componentDidMount() {
+    this.validate()
+    this.containsErrors()
   }
 
   componentDidUpdate(prevProps) {
-
+    this.containsErrors()
   }
 
+  containsErrors(){
+    let foundErrors = false
+    for (const key of Object.keys(this.state.errors)) {
+      if(this.state.errors[key].checked)
+        foundErrors = true
+    }
+
+    if(foundErrors !== this.state.containsErrors){
+      this.setState({
+        containsErrors: foundErrors
+      })
+    }
+  }
+
+  validate(event){
+    let {setChecked, formData} = this.props
+    formData = formData.toJS()
+
+    let field = event ? event.target.name : null
+    let {errors, checked} = this.props.validate(field, formData)
+
+    this.setState({
+      errors: errors,
+    })
+
+    if(event && event.target.name){
+      setChecked( checked)
+
+      this.setState({
+        checked: checked
+      })
+    }
+  }
 
   makeResultForm() {
     let { setLongitudApuntalada, setAlturaTotalDeFractura, setAnchoPromedio, setConcentractionAreal, setConductividad, setFcd, setPresionNeta, setEficienciaDeFluidoDeFractura, formData } = this.props
@@ -28,14 +67,14 @@ import { connect } from 'react-redux'
       <div className='result-form' >
         <div className='header'>
         </div>
-        <InputRow header="Longitud apuntalada" name='' unit="m" value={longitudApuntalada} onChange={setLongitudApuntalada} />
-        <InputRow header="Altura total de fractura" name='' unit="m" value={alturaTotalDeFractura} onChange={setAlturaTotalDeFractura} />
-        <InputRow header="Ancho promedio" name='' unit="pg." value={anchoPromedio} onChange={setAnchoPromedio} />
-        <InputRow header="Concentración Areal" name='' unit="lb/pg2" value={concentractionAreal} onChange={setConcentractionAreal} />
-        <InputRow header="Conductividad" name='' unit="mD*ft" value={conductividad} onChange={setConductividad} />
-        <InputRow header="FCD" name='' unit="adim." value={fcd} onChange={setFcd} />
-        <InputRow header="Presión neta" name='' unit="psi" value={presionNeta} onChange={setPresionNeta} />
-        <InputRow header="Eficiencia de fluido  de fractura" name='' unit="%" value={eficienciaDeFluidoDeFractura} onChange={setEficienciaDeFluidoDeFractura} />
+        <InputRow header="Longitud apuntalada" name='longitudApuntalada' unit="m" value={longitudApuntalada} onChange={setLongitudApuntalada}  errors={this.state.errors} onBlur={this.validate}/>
+        <InputRow header="Altura total de fractura" name='alturaTotalDeFractura' unit="m" value={alturaTotalDeFractura} onChange={setAlturaTotalDeFractura}  errors={this.state.errors} onBlur={this.validate}/>
+        <InputRow header="Ancho promedio" name='anchoPromedio' unit="pg." value={anchoPromedio} onChange={setAnchoPromedio}  errors={this.state.errors} onBlur={this.validate}/>
+        <InputRow header="Concentración Areal" name='concentractionAreal' unit="lb/pg2" value={concentractionAreal} onChange={setConcentractionAreal}  errors={this.state.errors} onBlur={this.validate}/>
+        <InputRow header="Conductividad" name='conductividad' unit="mD*ft" value={conductividad} onChange={setConductividad}  errors={this.state.errors} onBlur={this.validate}/>
+        <InputRow header="FCD" name='fcd' unit="adim." value={fcd} onChange={setFcd}  errors={this.state.errors} onBlur={this.validate}/>
+        <InputRow header="Presión neta" name='presionNeta' unit="psi" value={presionNeta} onChange={setPresionNeta}  errors={this.state.errors} onBlur={this.validate}/>
+        <InputRow header="Eficiencia de fluido  de fractura" name='eficienciaDeFluidoDeFractura' unit="%" value={eficienciaDeFluidoDeFractura} onChange={setEficienciaDeFluidoDeFractura}  errors={this.state.errors} onBlur={this.validate}/>
       </div>
     )
   }
@@ -65,7 +104,7 @@ import { connect } from 'react-redux'
     )
   }
 
-
+  
 
   render() {
 
@@ -82,6 +121,43 @@ import { connect } from 'react-redux'
   }
 }
 
+const validate = values => {
+    const errors = {}
+
+    if(!values.longitudApuntalada){
+      errors.longitudApuntalada = {message: "Este campo no puede estar vacio"}
+    }
+
+    if(!values.alturaTotalDeFractura){
+      errors.alturaTotalDeFractura = {message: "Este campo no puede estar vacio"}
+    }
+
+    if(!values.anchoPromedio){
+      errors.anchoPromedio = {message: "Este campo no puede estar vacio"}
+    }
+
+    if(!values.concentractionAreal){
+      errors.concentractionAreal = {message: "Este campo no puede estar vacio"}
+    }
+
+    if(!values.conductividad){
+      errors.conductividad = {message: "Este campo no puede estar vacio"}
+    }
+
+    if(!values.fcd){
+      errors.fcd = {message: "Este campo no puede estar vacio"}
+    }
+
+    if(!values.presionNeta){
+      errors.presionNeta = {message: "Este campo no puede estar vacio"}
+    }
+
+    if(!values.eficienciaDeFluidoDeFractura){
+      errors.eficienciaDeFluidoDeFractura = {message: "Este campo no puede estar vacio"}
+    }
+
+    return errors
+}
 
 const mapStateToProps = state => ({
   formData: state.get('resultadosSimulacionApuntalado'),
@@ -97,6 +173,10 @@ const mapDispatchToProps = dispatch => ({
   setPresionNeta: val => dispatch(setPresionNeta(val)),
   setEficienciaDeFluidoDeFractura: val => dispatch(setEficienciaDeFluidoDeFractura(val)),
   setEvidenceSimulationApuntaladoImgURL: val => dispatch(setEvidenceSimulationApuntaladoImgURL(val)),
+  setChecked: val => dispatch(setChecked(val))
 })
 
-export default connect(mapStateToProps, mapDispatchToProps)(ResultadosDeLaSimulacionApuntalado)
+export default withValidate(
+  validate,
+  connect(mapStateToProps, mapDispatchToProps)(ResultadosDeLaSimulacionApuntalado)
+)
