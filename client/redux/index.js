@@ -29,6 +29,7 @@ import evaluacionPetrofisica from './reducers/evaluacionPetrofisica'
 import historicoDePresion from './reducers/historicoDePresion'
 import historicoDeProduccion from './reducers/historicoDeProduccion'
 import forms from './reducers/forms'
+import global from './reducers/global'
 
 const appReducer = combineReducers({
   app,
@@ -56,7 +57,8 @@ const appReducer = combineReducers({
   estCostApuntalado,
   evaluacionPetrofisica,
   historicoDePresion,
-  historicoDeProduccion
+  historicoDeProduccion,
+  global
 })
 
 const rootReducer = (state, action) => {

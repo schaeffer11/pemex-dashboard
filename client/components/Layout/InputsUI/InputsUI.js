@@ -3,11 +3,13 @@ import autobind from 'autobind-decorator'
 import axios from 'axios';
 import { connect } from 'react-redux'
 
+import GeneralData from './Components/GeneralData'
 import Tabs from './Components/Tabs'
 import Subtabs from './Components/Subtabs'
 import { pagesPozo, pagesIntervenciones } from '../../../lib/maps'
 import BaseIntervenciones from './IntervencionesForms/BaseIntervenciones'
 import PozoMultiStepForm from './PozoForms/PozoMultiStepForm'
+import { setShowForms } from '../../../redux/actions/global'
 
 @autobind class InputsUI extends Component {
   constructor(props) {
@@ -44,10 +46,15 @@ import PozoMultiStepForm from './PozoForms/PozoMultiStepForm'
   }
 
 
+
   render() {
     let { selectedTab, selectedSubtab, error } = this.state
-    let { objetivoYAlcancesIntervencion } = this.props
+    let { objetivoYAlcancesIntervencion, global } = this.props
+
     objetivoYAlcancesIntervencion = objetivoYAlcancesIntervencion.toJS()
+    global = global.toJS()
+
+    let { showForms } = global
     let { tipoDeIntervenciones } = objetivoYAlcancesIntervencion
 
     let form = null
@@ -59,19 +66,29 @@ import PozoMultiStepForm from './PozoForms/PozoMultiStepForm'
       form = <BaseIntervenciones />
     }
 
-    return (
-      <div className="input-forms">
-        <Tabs handleSelectTab={this.handleSelectTab} selectedTab={selectedTab} />
-        <div className="tab-content">
-          { form }
+    if (!showForms) {
+      return ( 
+        <div className="input-forms">
+          <GeneralData />
         </div>
-      </div>
-    )
+      )  
+    } 
+    else {
+      return (
+        <div className="input-forms">
+          <Tabs handleSelectTab={this.handleSelectTab} selectedTab={selectedTab} />
+          <div className="tab-content">
+            { form }
+          </div>
+        </div>
+      )
+    }      
   }
 }
 
 const mapStateToProps = state => ({
   objetivoYAlcancesIntervencion: state.get('objetivoYAlcancesIntervencion'),
+  global: state.get('global')
  
 })
 
