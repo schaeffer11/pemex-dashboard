@@ -3,8 +3,8 @@ import autobind from 'autobind-decorator'
 import { connect } from 'react-redux'
 import axios from 'axios';
 
-import {submitForm} from '../../../../redux/actions/pozoFormActions'
-import TecnicaDelPozoHighLevel from './TecnicaDelPozoHighLevel'
+import { submitForm } from '../../../../redux/actions/pozoFormActions'
+import { setShowForms } from '../../../../redux/actions/global'
 import TecnicaDelPozo from './TecnicaDelPozo'
 import TecnicaDelCampo from './TecnicaDelCampo'
 import SistemasArtificialesDeProduccion from './SistemasArtificialesDeProduccion'
@@ -26,7 +26,6 @@ import AnalisisDelAgua from './AnalisisDelAgua'
 
     // TODO: Refactor the tabs to be children instead
     this.forms = [
-      {'title' : 'Información General de la Asignación' , 'type': 'TecnicaDelPozoHighLevel', 'content':<TecnicaDelPozoHighLevel containsErrors={this.containsErrors}/>},
       {'title' : 'Ficha Técnica del Campo', 'type': 'TecnicaDelCampo', 'content': <TecnicaDelCampo containsErrors={this.containsErrors}/>},
       {'title' : 'Ficha Técnica del Pozo' , 'type':'TecnicaDelPozo',  'content':<TecnicaDelPozo containsErrors={this.containsErrors}/>},
       {'title' : 'Evaluación Petrofísica', 'type':'EvaluacionPetrofisica', 'content': <EvaluacionPetrofisica containsErrors={this.containsErrors} /> },
@@ -115,47 +114,50 @@ import AnalisisDelAgua from './AnalisisDelAgua'
 
 
   render() {
-     let className = 'subtab'
-     let title = this.forms[this.state.currentStep].title
-     let pozoFormSubmitting = this.props.formsState.get('pozoFormSubmitting')
-     const submitting = pozoFormSubmitting ? 'submitting' : ''
-     const errors = this.props.formsState.get('pozoFormError')
+    let { setShowForms } = this.props
+    let className = 'subtab'
+    let title = this.forms[this.state.currentStep].title
+    let pozoFormSubmitting = this.props.formsState.get('pozoFormSubmitting')
+    const submitting = pozoFormSubmitting ? 'submitting' : ''
+    const errors = this.props.formsState.get('pozoFormError')
 
-     const errorClass = errors.length ? 'error' : ''
+    const errorClass = errors.length ? 'error' : ''
 
-     return (
-         <div className={`multistep-form ${submitting} ${errorClass}`}>
-          <div className="subtabs">
-              {this.forms.map( (tab, index) => {
-                 const active = this.state.currentStep === index ? 'active' : ''; 
-                 const tabError = tab.error ? 'error' : ''
-                 return <div className={`${className} ${active} ${tabError}`} onClick={() => this.handleClick(index)} key={index}><span></span> {tab.title} </div>
-                 }
-              )}
+    return (
+       <div className={`multistep-form ${submitting} ${errorClass}`}>
+        <div className="subtabs">
+            {this.forms.map( (tab, index) => {
+               const active = this.state.currentStep === index ? 'active' : ''; 
+               const tabError = tab.error ? 'error' : ''
+               return <div className={`${className} ${active} ${tabError}`} onClick={() => this.handleClick(index)} key={index}><span></span> {tab.title} </div>
+               }
+            )}
+        </div>
+        <div className="content">
+          <div className="tab-title">
+            { title }
+            <button className="cta next" onClick={this.handleNextSubtab}>Siguiente</button>
+            <button className="cta prev" onClick={this.handlePrevSubtab}>Anterior</button> 
           </div>
-          <div className="content">
-            <div className="tab-title">
-              { title }
-              <button className="cta next" onClick={this.handleNextSubtab}>Siguiente</button>
-              <button className="cta prev" onClick={this.handlePrevSubtab}>Anterior</button> 
-            </div>
 
-            {this.forms[this.state.currentStep].content}
-          </div>
-          <button className="submit" onClick={this.downloadMasterTemplate}>{'Descarga el Formato General'}</button>
-          <button className="submit" disabled={pozoFormSubmitting} onClick={(e) => this.handleSubmit('save')}>{pozoFormSubmitting ? 'Saving...' : 'Save'}</button>
-          <button className="submit" onClick={this.handleLoad} >Load</button>
-          <button className="submit" disabled={pozoFormSubmitting} onClick={(e) => this.handleSubmit('submit')}>{pozoFormSubmitting ? 'Enviando...' : 'Enviar'}</button>
-          { errors.length > 0 &&
-              <div className="error">Se han encontrado errores en la forma.</div>
-          }
-         </div>
+          {this.forms[this.state.currentStep].content}
+        </div>
+        <button className="submit" onClick={this.downloadMasterTemplate}>{'Descarga el Formato General'}</button>
+        <button className="submit" disabled={pozoFormSubmitting} onClick={(e) => this.handleSubmit('save')}>{pozoFormSubmitting ? 'Saving...' : 'Save'}</button>
+        <button className="submit" onClick={this.handleLoad} >Load</button>
+        <button className="submit" disabled={pozoFormSubmitting} onClick={(e) => this.handleSubmit('submit')}>{pozoFormSubmitting ? 'Enviando...' : 'Enviar'}</button>
+        <button className="submit" onClick={(e) => setShowForms(false)}>Back to beginning</button>
+        { errors.length > 0 &&
+            <div className="error">Se han encontrado errores en la forma.</div>
+        }
+       </div>
      );
   }
 }
 
 const mapDispatchToProps = dispatch => ({
-  submitPozoForm: values => {dispatch(submitForm(values))}
+  submitPozoForm: values => {dispatch(submitForm(values))},
+  setShowForms : values => { dispatch(setShowForms(values))}
 })
 
 const mapStateToProps = state => ({

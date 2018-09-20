@@ -1,7 +1,6 @@
 import React from 'react'
 
 //Well Forms
-import TecnicaDelPozoHighLevel from '../components/Layout/InputsUI/PozoForms/TecnicaDelPozoHighLevel'
 import TecnicaDelPozo from '../components/Layout/InputsUI/PozoForms/TecnicaDelPozo'
 import TecnicaDelCampo from '../components/Layout/InputsUI/PozoForms/TecnicaDelCampo'
 import SistemasArtificialesDeProduccion from '../components/Layout/InputsUI/PozoForms/SistemasArtificialesDeProduccion'
@@ -35,11 +34,6 @@ import EstimacionCostosApuntalado from '../components/Layout/InputsUI/Intervenci
 
 
 export const pagesPozo = {
-      tecnicaDelPozoHighLevel: {
-        key: 'tecnicaDelPozoHighLevel',
-        form: <TecnicaDelPozoHighLevel />,
-        title: 'Overview'
-      },
       tecnicaDelPozo: {
         key: 'tecnicaDelPozo',
         form: <TecnicaDelPozo />,
