@@ -7,8 +7,13 @@ import multer from 'multer'
 import { addObject, signedURL, deleteObject, getBuckets } from '../aws/index';
 import { create as createWell, getFields, getWell, 
             getHistIntervenciones, getLayer, getMudLoss, getMecanico, 
-            getAnalisisAgua, getSistema, getFieldPressure, getWellPressure, 
-            getWellAForos, getWellProduccion, getWellImages } from './pozo'
+            getAnalisisAgua, getEmboloViajero, getBombeoNeumatico, getBombeoHidraulico, 
+            getBombeoCavidades, getBombeoElectrocentrifugo, getBombeoMecanico, 
+            getFieldPressure, getWellPressure, 
+            getWellAForos, getWellProduccion, getWellImages, getInterventionBase, 
+            getInterventionEsimulacion, getInterventionAcido, getInterventionApuntalado, 
+            getLabTest, getCedulaEstimulacion, getCedulaAcido, getCedulaApuntalado, 
+            getLabResults, getLabAcido, getLabApuntalado, getCosts, getInterventionImage } from './pozo'
 
 const connection = db.getConnection(appConfig.users.database)
 const app = express()
@@ -82,8 +87,6 @@ app.get('/getFieldWellMapping', (req, res) => {
 
 app.get('/getSaveID', (req, res) => {
     let { userID, wellID } = req.query
-
-    console.log('here', userID, wellID)
     
     connection.query(`SELECT * FROM SavedInputs WHERE USER_ID = ? AND WELL_FORMACION_ID = ?`, 
       [userID, wellID], (err, results) => {
@@ -164,13 +167,54 @@ app.get('/getAnalisisAgua', async (req, res) => {
   })
 })
 
-app.get('/getSistema', async (req, res) => {
+app.get('/getEmboloViajero', async (req, res) => {
   let { transactionID } = req.query
 
-  getSistema(transactionID, (data) => {
+  getEmboloViajero(transactionID, (data) => {
     res.json(data)
   })
 })
+
+app.get('/getBombeoNeumatico', async (req, res) => {
+  let { transactionID } = req.query
+
+  getBombeoNeumatico(transactionID, (data) => {
+    res.json(data)
+  })
+})
+
+app.get('/getBombeoHidraulico', async (req, res) => {
+  let { transactionID } = req.query
+
+  getBombeoHidraulico(transactionID, (data) => {
+    res.json(data)
+  })
+})
+
+app.get('/getBombeoCavidades', async (req, res) => {
+  let { transactionID } = req.query
+
+  getBombeoCavidades(transactionID, (data) => {
+    res.json(data)
+  })
+})
+
+app.get('/getBombeoElectrocentrifugo', async (req, res) => {
+  let { transactionID } = req.query
+
+  getBombeoElectrocentrifugo(transactionID, (data) => {
+    res.json(data)
+  })
+})
+
+app.get('/getBombeoMecanico', async (req, res) => {
+  let { transactionID } = req.query
+
+  getBombeoMecanico(transactionID, (data) => {
+    res.json(data)
+  })
+})
+
 
 app.get('/getFieldPressure', async (req, res) => {
   let { transactionID } = req.query
@@ -212,10 +256,109 @@ app.get('/getWellImages', async (req, res) => {
   })
 })
 
+app.get('/getInterventionBase', async (req, res) => {
+  let { transactionID } = req.query
 
+  getInterventionBase(transactionID, (data) => {
+    res.json(data)
+  })
+})
 
-// app.post('/intervencion', intervencion.create);
+app.get('/getInterventionEstimulacion', async (req, res) => {
+  let { transactionID } = req.query
 
+  getInterventionEsimulacion(transactionID, (data) => {
+    res.json(data)
+  })
+})
+
+app.get('/getInterventionAcido', async (req, res) => {
+  let { transactionID } = req.query
+
+  getInterventionAcido(transactionID, (data) => {
+    res.json(data)
+  })
+})
+
+app.get('/getInterventionApuntalado', async (req, res) => {
+  let { transactionID } = req.query
+
+  getInterventionApuntalado(transactionID, (data) => {
+    res.json(data)
+  })
+})
+
+app.get('/getLabTest', async (req, res) => {
+  let { transactionID } = req.query
+
+  getLabTest(transactionID, (data) => {
+    res.json(data)
+  })
+})
+
+app.get('/getCedulaEstimulacion', async (req, res) => {
+  let { transactionID } = req.query
+
+  getCedulaEstimulacion(transactionID, (data) => {
+    res.json(data)
+  })
+})
+
+app.get('/getCedulaAcido', async (req, res) => {
+  let { transactionID } = req.query
+
+  getCedulaAcido(transactionID, (data) => {
+    res.json(data)
+  })
+})
+
+app.get('/getCedulaApuntalado', async (req, res) => {
+  let { transactionID } = req.query
+
+  getCedulaApuntalado(transactionID, (data) => {
+    res.json(data)
+  })
+})
+
+app.get('/getLabResults', async (req, res) => {
+  let { transactionID } = req.query
+
+  getLabResults(transactionID, (data) => {
+    res.json(data)
+  })
+})
+
+app.get('/getLabAcido', async (req, res) => {
+  let { transactionID } = req.query
+
+  getLabAcido(transactionID, (data) => {
+    res.json(data)
+  })
+})
+
+app.get('/getLabApuntalado', async (req, res) => {
+  let { transactionID } = req.query
+
+  getLabApuntalado(transactionID, (data) => {
+    res.json(data)
+  })
+})
+
+app.get('/getCosts', async (req, res) => {
+  let { transactionID } = req.query
+
+  getCosts(transactionID, (data) => {
+    res.json(data)
+  })
+})
+
+app.get('/getInterventionImage', async (req, res) => {
+  let { transactionID } = req.query
+
+  getInterventionImage(transactionID, (data) => {
+    res.json(data)
+  })
+})
 
 
 app.get('*', (req, res) => {
