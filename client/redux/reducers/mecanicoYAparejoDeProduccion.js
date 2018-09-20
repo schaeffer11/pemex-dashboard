@@ -19,7 +19,6 @@ const initialState = Map({
     volumenCimaDeIntervalo: '',
     volumenBaseDeIntervalo: '',
     volumenDeEspacioAnular: '',
-    imgURL: null,
     imgAparejoDeProduccionURL: null,
     checked: []
 })

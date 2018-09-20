@@ -180,7 +180,7 @@ let columns = [
 
     produccionData[0].length = 2
 
-    setProduccionData([...produccionData, {index: produccionData.length, type: '', fechaMuestreo: '', fechaPrueba: '', compania: '', superviso: '', length: produccionData.length + 1, 'edited': false}])
+    setProduccionData([...produccionData, {index: produccionData.length, fecha: '', dias: '', qo: '', qo: '', qw: '', qg: '', qgl: '', np: '', wp: '', gp: '', gi: '', rga: '', fw: '', pozosProdActivos: '', length: produccionData.length + 1, 'edited': false}])
   }
 
 

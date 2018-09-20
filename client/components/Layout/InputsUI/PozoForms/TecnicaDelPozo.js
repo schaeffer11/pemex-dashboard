@@ -174,7 +174,7 @@ let columns = [
 
     historialIntervencionesData[0].length = 2
 
-    setHistorialIntervencionesData([...historialIntervencionesData, {index: historialIntervencionesData.length, type: '', fechaMuestreo: '', fechaPrueba: '', compania: '', superviso: '', length: historialIntervencionesData.length + 1, 'edited': false}])
+    setHistorialIntervencionesData([...historialIntervencionesData, {index: historialIntervencionesData.length, fecha: '', intervenciones: '', length: historialIntervencionesData.length + 1, 'edited': false}])
   }
 
 

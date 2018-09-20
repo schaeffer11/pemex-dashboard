@@ -65,9 +65,12 @@ const rootReducer = (state, action) => {
   const user = state.get('user')
   const app = state.get('app')
   const global = state.get('global')
+  const router = state.get('router')
+  const forms = state.get('forms')
+
   if (action.type === 'LOAD_SAVE') {
     const { saved } = action
-    const newState = { ...saved, user, app, global }
+    const newState = { ...saved, user, app, global, router, forms }
     return state = Map(newState)
   }
 

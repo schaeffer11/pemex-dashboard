@@ -35,6 +35,7 @@ const initialState = Map({
     rmpBE: '',
     tipoDeUnidadBM: '',
     velocidadBM: '',
+    velocidadBCP: '',
     longitudDeCareraBM: '',
     tipoDeBombaSubsuperficialBM: '',
     tamanoDeBombaSubsuperficialBM: '',

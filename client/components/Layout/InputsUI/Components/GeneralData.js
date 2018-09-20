@@ -3,6 +3,8 @@ import autobind from 'autobind-decorator'
 import Select from 'react-select'
 import { connect } from 'react-redux'
 import { compose } from 'redux'
+import objectPath from 'object-path'
+
 import { setObjetivo, setAlcances, setTipoDeIntervenciones } from '../../../../redux/actions/intervencionesEstimulacion'
 import { setSubdireccion, setActivo, setCampo, setPozo, setFormacion, setChecked } from '../../../../redux/actions/pozo'
 import { setShowForms } from '../../../../redux/actions/global'
@@ -59,63 +61,19 @@ import { InputRow, InputRowUnitless, InputRowSelectUnitless, TextAreaUnitless } 
     }
   }
 
-  // containsErrors(){
-  //   let foundErrors = false
-  //   for (const key of Object.keys(this.state.errors)) {
-  //     if(this.state.errors[key].checked)
-  //       foundErrors = true
-  //   }
-
-  //   if(foundErrors !== this.state.containsErrors){
-  //     this.setState({
-  //       containsErrors: foundErrors
-  //     })
-  //   } 
-
-  // }
-
-  // validate(event){
-  //   let {setChecked, formData} = this.props
-  //   formData = formData.toJS()
-
-  //   let field = event ? event.target.name : null
-  //   let {errors, checked} = this.props.validate(field, formData)
-
-  //   this.setState({
-  //     errors: errors,
-  //   })
-
-  //   if(event && event.target.name){
-  //     setChecked(checked)
-  //   }
-
-  // }
-/*
-  setCheck(field){
-    let {setChecked, formData} = this.props
-    formData = formData.toJS()
-    const checked = [ ...formData.checked, field ]
-
-    checked.forEach(field => {
-      if(errors[field])
-        errors[field].checked = true
-    })
-
-    this.setState({
-      checked: checked
-    })
-
-    setChecked(checked)
-  }
-*/
-
-  checkComplete() {
+  checkIncomplete() {
     let { interventionFormData, formData } = this.props
     interventionFormData = interventionFormData.toJS()
     formData = formData.toJS()
 
     let { objetivo, alcances, tipoDeIntervenciones } = interventionFormData
     let { subdireccion, activo, campo, pozo, formacion } = formData
+
+    if (!!(objetivo) && !!(alcances) && !!(tipoDeIntervenciones) && !!(subdireccion) && !!(activo) && !!(campo)  && !!(pozo) && !!(formacion)) {
+      return false
+    }
+
+    return true
   }
 
   makeGeneralInterventionForm() {
@@ -145,6 +103,10 @@ import { InputRow, InputRowUnitless, InputRowSelectUnitless, TextAreaUnitless } 
   makeGeneralForm() {
     let { fieldWellOptions } = this.state
     let { setActivo, setCampo, setPozo, setFormacion, formData, forms } = this.props
+
+    console.log(formData)
+
+
 
     formData = formData.toJS()
     forms = forms.toJS()
@@ -230,6 +192,62 @@ import { InputRow, InputRowUnitless, InputRowSelectUnitless, TextAreaUnitless } 
     )
   }
 
+  
+  async handleLoad() {
+
+    // These ids are just for testing
+    const wellID = 449251665
+    const userID = 30
+    let transactionID = await fetch(`/api/getSaveID?wellID=${wellID}&userID=${userID}`)
+      .then(res => res.json())
+      .then(r => r.transactionID)
+    console.log('ok i have a transaction', transactionID)
+    transactionID = 557683300
+    Promise.all([
+      fetch(`api/getFields?transactionID=${transactionID}`).then(r => r.json()),
+      fetch(`api/getMudLoss?transactionID=${transactionID}`).then(r => r.json()),
+      fetch(`api/getLayer?transactionID=${transactionID}`).then(r => r.json()),
+      fetch(`api/getWell?transactionID=${transactionID}`).then(r => r.json()),
+      fetch(`api/getHistIntervenciones?transactionID=${transactionID}`).then(r => r.json()),
+      fetch(`api/getMecanico?transactionID=${transactionID}`).then(r => r.json()),
+      fetch(`api/getAnalisisAgua?transactionID=${transactionID}`).then(r => r.json()),
+      fetch(`api/getEmboloViajero?transactionID=${transactionID}`).then(r => r.json()),
+      fetch(`api/getBombeoNeumatico?transactionID=${transactionID}`).then(r => r.json()),
+      fetch(`api/getBombeoHidraulico?transactionID=${transactionID}`).then(r => r.json()),
+      fetch(`api/getBombeoCavidades?transactionID=${transactionID}`).then(r => r.json()),
+      fetch(`api/getBombeoElectrocentrifugo?transactionID=${transactionID}`).then(r => r.json()),
+      fetch(`api/getBombeoMecanico?transactionID=${transactionID}`).then(r => r.json()),
+      fetch(`api/getFieldPressure?transactionID=${transactionID}`).then(r => r.json()),
+      fetch(`api/getWellPressure?transactionID=${transactionID}`).then(r => r.json()),
+      fetch(`api/getWellAforos?transactionID=${transactionID}`).then(r => r.json()),
+      fetch(`api/getWellProduccion?transactionID=${transactionID}`).then(r => r.json()),
+    ])
+      .catch(error => console.log('some error i found', error))
+      .then((results) => {
+        const newState = {}
+        console.log(results)
+        results.forEach(r => {
+          /*
+           * Results is an array from all the fetches done above, we loop through each response and get the keys associated
+           * These keys (rKeys) represent the name of the register (e.g. evaluacionPetrofisica, fichaTecnicaDelCampo etc)
+           * We then get all the keys inside the rKeys and individually set them to our new state using object-path
+           * object-path allows you to set the following: evaluacionPetrofisica.mudloss and evaluacionPetrofisica.layerData
+           * This will not replace the entire evaluacion petrofisica rather it will just add the new key. Use this!
+           * Otherwise, if you do evaluacionPetrofisica[mudloss] and evaluacionPetrofisica[layerData] evaluacionPetrofisica will be replaced
+           */
+          const rKeys = Object.keys(r)
+          rKeys.forEach(registerName => {
+            Object.keys(r[registerName]).forEach(key => {
+              objectPath.set(newState, `${registerName}.${key}`, r[registerName][key])
+            })
+          })
+        })
+
+        this.props.loadFromSave(newState)
+      })
+  }
+
+
   render() {
     let { setShowForms } = this.props
 
@@ -237,7 +255,8 @@ import { InputRow, InputRowUnitless, InputRowSelectUnitless, TextAreaUnitless } 
       <div className='form general-data'>
       { this.makeGeneralForm() }
       { this.makeGeneralInterventionForm() }
-      <button className='submit' disabled={this.checkComplete} onClick={(e) => setShowForms(true)} >CLICK ME</button>
+      <button className="submit submit-load" onClick={this.handleLoad} >Load</button>
+      <button className='submit submit-continue' disabled={this.checkIncomplete()} onClick={(e) => setShowForms(true)} >Continue</button>
       </div>
     )
   }
@@ -265,6 +284,12 @@ const mapStateToProps = state => ({
   forms: state.get('forms')  
 })
 
+const testLoadFromSave = (saved) => {
+  return (dispatch, getState) => {
+    dispatch({ type: 'LOAD_SAVE', saved })
+  }
+}
+
 const mapDispatchToProps = dispatch => ({
   setSubdireccion: val => dispatch(setSubdireccion(val)), 
   setActivo: val => dispatch(setActivo(val)), 
@@ -275,6 +300,7 @@ const mapDispatchToProps = dispatch => ({
   setAlcances : val => dispatch(setAlcances(val)),
   setTipoDeIntervenciones : val => dispatch(setTipoDeIntervenciones(val)),
   setShowForms : val => dispatch(setShowForms(val)),
+  loadFromSave: values => {dispatch(testLoadFromSave(values))},
 })
 
 // export default withValidate(

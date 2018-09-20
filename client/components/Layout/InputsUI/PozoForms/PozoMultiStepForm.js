@@ -1,7 +1,6 @@
 import React, { Component } from 'react'
 import autobind from 'autobind-decorator'
 import { connect } from 'react-redux'
-import objectPath from 'object-path'
 import axios from 'axios';
 
 import { submitForm } from '../../../../redux/actions/pozoFormActions'
@@ -81,49 +80,6 @@ import AnalisisDelAgua from './AnalisisDelAgua'
     window.location = `/api/getTemplate`
   }
   
-  async handleLoad() {
-    // let { user, fichaTecnicaDelPozoHighLevel } = this.props
-    // user = user.toJS()
-    // fichaTecnicaDelPozoHighLevel = fichaTecnicaDelPozoHighLevel.toJS()
-    // wellID = fichaTecnicaDelPozoHighLevel.pozo,
-
-    // These ids are just for testing
-    const wellID = 449251665
-    const userID = 30
-    const transactionID = await fetch(`/api/getSaveID?wellID=${wellID}&userID=${userID}`)
-      .then(res => res.json())
-      .then(r => r.transactionID)
-    console.log('ok i have a transaction', transactionID)
-
-    Promise.all([
-      fetch(`/api/getFields?transactionID=${transactionID}`).then(r => r.json()),
-      fetch(`api/getMudLoss?transactionID=${transactionID}`).then(r => r.json()),
-      fetch(`api/getLayer?transactionID=${transactionID}`).then(r => r.json()),
-    ])
-      .catch(error => console.log('some error i found', error))
-      .then((results) => {
-        const newState = {}
-        console.log(results)
-        results.forEach(r => {
-          /**
-           * Results is an array from all the fetches done above, we loop through each response and get the keys associated
-           * These keys (rKeys) represent the name of the register (e.g. evaluacionPetrofisica, fichaTecnicaDelCampo etc)
-           * We then get all the keys inside the rKeys and individually set them to our new state using object-path
-           * object-path allows you to set the following: evaluacionPetrofisica.mudloss and evaluacionPetrofisica.layerData
-           * This will not replace the entire evaluacion petrofisica rather it will just add the new key. Use this!
-           * Otherwise, if you do evaluacionPetrofisica[mudloss] and evaluacionPetrofisica[layerData] evaluacionPetrofisica will be replaced
-           */
-          const rKeys = Object.keys(r)
-          rKeys.forEach(registerName => {
-            Object.keys(r[registerName]).forEach(key => {
-              objectPath.set(newState, `${registerName}.${key}`, r[registerName][key])
-            })
-          })
-        })
-        this.props.loadFromSave(newState)
-      })
-}
-
 
 
   render() {
@@ -157,7 +113,6 @@ import AnalisisDelAgua from './AnalisisDelAgua'
         </div>
         <button className="submit" onClick={this.downloadMasterTemplate}>{'Descarga el Formato General'}</button>
         <button className="submit" disabled={pozoFormSubmitting} onClick={(e) => this.handleSubmit('save')}>{pozoFormSubmitting ? 'Saving...' : 'Save'}</button>
-        <button className="submit" onClick={this.handleLoad} >Load</button>
         <button className="submit" disabled={pozoFormSubmitting} onClick={(e) => this.handleSubmit('submit')}>{pozoFormSubmitting ? 'Enviando...' : 'Enviar'}</button>
         <button className="submit" onClick={(e) => setShowForms(false)}>Back to beginning</button>
         { errors.length > 0 &&
@@ -168,15 +123,8 @@ import AnalisisDelAgua from './AnalisisDelAgua'
   }
 }
 
-const testLoadFromSave = (saved) => {
-  return (dispatch, getState) => {
-    dispatch({ type: 'LOAD_SAVE', saved })
-  }
-}
-
 const mapDispatchToProps = dispatch => ({
   submitPozoForm: values => {dispatch(submitForm(values))},
-  loadFromSave: values => {dispatch(testLoadFromSave(values))}
   setShowForms : values => { dispatch(setShowForms(values))}
 })
 

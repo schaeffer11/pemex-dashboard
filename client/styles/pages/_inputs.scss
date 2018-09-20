@@ -224,12 +224,31 @@
     .general-data {
     	display: grid;
     	grid-column-gap: 10px;
-    	grid-template-columns: 50% 50%;
+    	grid-template-columns: calc(50% - 200px) 200px 200px calc(50% - 200px);
+    	grid-template-areas: 	'general general intervention intervention'
+    							'. load continue .';
+    	
+    	.general-form {
+    		grid-area: general;
+    	}
 
-    	.submit {
+    	.intervention-form {
+    		grid-area: intervention;
+    	}
+
+    	.submit-load {
+    		grid-area: load;
     		width: 200px;
+    		display: inline-block;
     		position: relative;
-    		left: calc(50% - 100px);
+    		margin-top: 24px;
+    	}
+
+    	.submit-continue {
+    		grid-area: continue;
+    	    width: 200px;
+    	    display: inline-block;
+    		position: relative;
     		margin-top: 24px;
     	}
     }

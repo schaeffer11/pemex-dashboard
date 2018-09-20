@@ -627,9 +627,7 @@ export const getBombeoNeumatico = async (transID, cb) => {
 export const getBombeoHidraulico = async (transID, cb) => {
     let action = 'loadSave'
 
-    console.log('testesteststest')
     connection.query(INSERT_BOMBEO_HIDRAULICO_QUERY[action], [transID], (err, results) => {
-        console.log(results)
         cb(results)
     })
 }
@@ -650,7 +648,7 @@ export const getBombeoElectrocentrifugo = async (transID, cb) => {
 export const getBombeoMecanico = async (transID, cb) => {
     let action = 'loadSave'
 
-    connection.query(INSERT_MECANICO_QUERY[action], [transID], (err, results) => {
+    connection.query(INSERT_BOMBEO_MECANICO_QUERY[action], [transID], (err, results) => {
         cb(results)
     })
 }
@@ -882,7 +880,7 @@ export const create = async (body, action) => {
   let { layerData, mudLossData } = finalObj.evaluacionPetrofisica
 
   let { tipoDeTerminacion, hIntervaloProductor, empacador, presionDifEmpacador, sensorPyt,
-    tipoDeLiner, diametroDeLiner, tipoDePistolas, densidadDeDisparosMechanico, fase,
+    tipoDeLiner, diametroDeLiner, tipoDePistolas, densidadDeDisparosMecanico, fase,
     diametroDeOrificio, penetracion, tratamientoPor, volumenAparejoDeProduccion,
     volumenCimaDeIntervalo, volumenBaseDeIntervalo, volumenDeEspacioAnular } = finalObj.mecanicoYAparejoDeProduccion
 
@@ -1129,10 +1127,10 @@ export const create = async (body, action) => {
                     case 'bombeoHidraulico':
                       query = action === 'save' ? `INSERT INTO _WellProductionSystemsBombeoHidraulicoSave (
                         WELL_FORMACION_ID, PRESION_DE_CABEZA, PRESION_DE_LINEA_O_DE_SEPARADOR,
-                        PROFUNDIDAD_DE_LA_BOMBA, TIPO_Y_MARCA_DE_BOMBA, ORIFICIO, TIPO_DE_CAMISA, FLUIDO_MOTRIZ, TRANSACTION_ID) VALUES
+                        PROFUNDIDAD_DE_LA_BOMBA, TIPO_Y_MARCA_DE_BOMBA, ORIFICIO, TIPO_DE_CAMISA, FLUIDO_MOTRIZ, EQUIPO_SUPERFICIAL, TRANSACTION_ID) VALUES
                         (?, ?, ?, ?, ?, ?, ?, ?, ?)` : `INSERT INTO WellProductionSystemsBombeoHidraulico (
                         WELL_FORMACION_ID, PRESION_DE_CABEZA, PRESION_DE_LINEA_O_DE_SEPARADOR,
-                        PROFUNDIDAD_DE_LA_BOMBA, TIPO_Y_MARCA_DE_BOMBA, ORIFICIO, TIPO_DE_CAMISA, FLUIDO_MOTRIZ, TRANSACTION_ID) VALUES
+                        PROFUNDIDAD_DE_LA_BOMBA, TIPO_Y_MARCA_DE_BOMBA, ORIFICIO, TIPO_DE_CAMISA, FLUIDO_MOTRIZ, EQUIPO_SUPERFICIAL, TRANSACTION_ID) VALUES
                         (?, ?, ?, ?, ?, ?, ?, ?, ?)`
                       values = [wellFormacionID, presionDeCabeza, presionDeLineaODeSeparador, profundidadDeLaBombaBH, tipoYMarcaDeBombaBH, orificioBH,
                         tipoDeCamisaBH, fluidoMotrizBH, equipoSuperficialBH, transactionID]
@@ -1287,7 +1285,10 @@ export const create = async (body, action) => {
 
                                   const labResultValues = []
                                   const labExtraValues = []
-                                  pruebasDeLaboratorioData.forEach(i => {
+
+                                  console.log(pruebasDeLaboratorioData)
+                                  if (pruebasDeLaboratorioData && pruebasDeLaboratorioData[0].sistemasTable && pruebasDeLaboratorioData[0].sistemasTable.length > 0) {
+                                    pruebasDeLaboratorioData.forEach(i => {
                                     const labID = Math.floor(Math.random() * 1000000000)
                                     values.push([labID, interventionID, wellFormacionID, i.type, i.fechaMuestreo, i.fechaPrueba, i.compania, i.superviso, i.obervaciones, transactionID])
                                     i.sistemasTable.forEach(i => {
@@ -1308,6 +1309,12 @@ export const create = async (body, action) => {
                                     }
                                   })
                                   
+                                  }
+                                  else {
+                                    INSERT_LAB_TEST_QUERY.save = `SELECT(1) FROM Users LIMIT 1`
+                                    INSERT_LAB_RESULTS_QUERY.save = `SELECT(1) FROM Users LIMIT 1`
+                                  }
+
                                   connection.query((action === 'save' ? INSERT_LAB_TEST_QUERY.save : INSERT_LAB_TEST_QUERY.submit), [values], (err, results) => {
                                     console.log('lab tests', err)
                                     console.log('lab tests', results)
@@ -1318,16 +1325,31 @@ export const create = async (body, action) => {
                                     values = []
 
                                     if (tipoDeIntervenciones === 'estimulacion') {
-                                      cedulaData.forEach(i => {
-                                        let cedulaID = Math.floor(Math.random() * 1000000000)
-                                        values.push([cedulaID, interventionID, wellFormacionID, i.etapa, i.sistema, i.volLiquid, i.gastoN2, i.gastoLiqudo, i.gastoEnFondo, i.calidad, i.volN2, i.volLiquidoAcum, i.volN2Acum, i.relN2Liq, i.tiempo, transactionID])
-                                      })
+                                      if (cedulaData) {
+                                        cedulaData.forEach(i => {
+                                          let cedulaID = Math.floor(Math.random() * 1000000000)
+                                          values.push([cedulaID, interventionID, wellFormacionID, i.etapa, i.sistema, i.volLiquid, i.gastoN2, i.gastoLiqudo, i.gastoEnFondo, i.calidad, i.volN2, i.volLiquidoAcum, i.volN2Acum, i.relN2Liq, i.tiempo, transactionID])
+                                        })  
+                                      }
+                                      else {
+                                        if (action === 'save') {
+                                          query = 'SELECT(1) FROM Users LIMIT 1'
+                                        }
+                                      } 
                                     } 
                                     else {
-                                      cedulaData.forEach(i => {
-                                        let cedulaID = Math.floor(Math.random() * 1000000000)
-                                        values.push([cedulaID, interventionID, wellFormacionID, i.etapa, i.sistema, i.tipoDeApuntalante, i.concentraciDeApuntalante, i.volLiquid, i.gastoN2, i.gastoLiqudo, i.gastoEnFondo, i.calidad, i.volN2, i.volLiquidoAcum, i.volN2Acum, i.relN2Liq, i.tiempo, transactionID])
-                                      })
+                                      if (cedulaData) {
+                                        cedulaData.forEach(i => {
+                                          let cedulaID = Math.floor(Math.random() * 1000000000)
+                                          values.push([cedulaID, interventionID, wellFormacionID, i.etapa, i.sistema, i.tipoDeApuntalante, i.concentraciDeApuntalante, i.volLiquid, i.gastoN2, i.gastoLiqudo, i.gastoEnFondo, i.calidad, i.volN2, i.volLiquidoAcum, i.volN2Acum, i.relN2Liq, i.tiempo, transactionID])
+                                        })   
+                                      }
+                                      else {
+                                        if (action === 'save') {
+                                          query = 'SELECT(1) FROM Users LIMIT 1'
+                                        }
+                                      }
+
                                     }
 
                                     connection.query(query, [values], (err, results) => {

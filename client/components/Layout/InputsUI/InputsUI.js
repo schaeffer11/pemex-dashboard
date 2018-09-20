@@ -16,13 +16,13 @@ import { setShowForms } from '../../../redux/actions/global'
     super(props)
     this.state = { 
       selectedTab: 'Pozo',
-      selectedSubtab: 'tecnicaDelPozoHighLevel',
+      selectedSubtab: 'tecnicaDelPozo',
     }
   }
 
 
   handleSelectTab(val) {
-    let selectedSub = val === 'Pozo' ? Object.keys(pagesPozo)[0] : 'objectivoYAlcances'
+    let selectedSub = val === 'Pozo' ? Object.keys(pagesPozo)[0] : Object.keys(pagesIntervenciones)[0]
 
     this.setState({
       selectedTab: val,
@@ -49,13 +49,12 @@ import { setShowForms } from '../../../redux/actions/global'
 
   render() {
     let { selectedTab, selectedSubtab, error } = this.state
-    let { objetivoYAlcancesIntervencion, global } = this.props
+    let { global } = this.props
 
-    objetivoYAlcancesIntervencion = objetivoYAlcancesIntervencion.toJS()
     global = global.toJS()
 
     let { showForms } = global
-    let { tipoDeIntervenciones } = objetivoYAlcancesIntervencion
+
 
     let form = null
 
