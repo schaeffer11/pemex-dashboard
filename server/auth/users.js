@@ -53,6 +53,8 @@ export const validate = (userData, cb) => {
     if (user.password === pwd) {
       console.log('password match... OK')
 
+      console.log(user)
+
       cb(null, user)
     } else {
       cb({ message: 'invalid login' })
@@ -74,6 +76,7 @@ export const getUser = (username, cb) => {
 
       try {
         var user = results
+        console.log('res', results)
         cb(null, user)
       } catch (err) {
         cb(err, null)

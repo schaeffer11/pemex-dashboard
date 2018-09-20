@@ -115,7 +115,7 @@ app.use('/auth', (req, res) => {
     }
 
     let user = {
-      id: userData.username,
+      id: userData.id,
       name: userData.username,
     }
 

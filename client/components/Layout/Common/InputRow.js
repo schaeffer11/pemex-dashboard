@@ -76,13 +76,13 @@ export const InputRowSelectUnitless = ({ header, name, value, options, callback,
       <div className='label'>
         {header}
       </div>
-      <Select className='input' simpleValue={true} options={options} value={options.find(i=>i.value === value)} onChange={callback} onBlur={handleBlur} name={name} index={index} />
+      <Select className='input' simpleValue={true} options={options} value={options.find(i=>i.value === value) || null} onChange={callback} onBlur={handleBlur} name={name} index={index} />
       { errorElements }
     </div>
     )
 }
 
-export const TextAreaUnitless = ({ header, name, unit, className, subheader, value, onChange, index, errors =[] }) => {
+export const TextAreaUnitless = ({ header, name, unit, className, subheader, value, onChange, index, onBlur, errors =[] }) => {
   
   let handleChange = (e) => {
     onChange(e.target.value, e)
@@ -97,14 +97,14 @@ export const TextAreaUnitless = ({ header, name, unit, className, subheader, val
         {subheader ? <br></br>: null}
         {subheader ? subheader : null}
       </div>
-      <textarea type='text' style={{height: '130px'}} value={value} onChange={handleChange} name={name} index={index}>
+      <textarea type='text' style={{height: '130px'}} value={value} onChange={handleChange} onBlur={onBlur} name={name} index={index}>
       </textarea>
       { errorElements }
     </div>
     )
 }
 
-export const InputRowCosts = ({ header, name, unit, value, onChange, index, errors = [] }) => {
+export const InputRowCosts = ({ header, name, unit, value, onChange, index, onBlur, errors = [] }) => {
 
   let handleCostChange = (e) => {
     onChange({ cost: e.target.value, company: value.company })
@@ -114,6 +114,8 @@ export const InputRowCosts = ({ header, name, unit, value, onChange, index, erro
     onChange({ cost: value.cost, company: e.target.value })
   }
 
+  const costName = `${name}`
+  const companyName = `${name}`
   const errorElements = generateErrorElements(name, errors)
 
   return (
@@ -121,7 +123,7 @@ export const InputRowCosts = ({ header, name, unit, value, onChange, index, erro
       <div className='label'>
         {header}
       </div>
-      <input className='input' type="number" value={value.cost} onChange={handleCostChange} name={name} index={index} required>
+      <input className='input' type="number" value={value.cost} onChange={handleCostChange} name={costName} onBlur={onBlur}  index={index} required>
       </input>
       <div className='unit'>
         {unit}
@@ -129,8 +131,9 @@ export const InputRowCosts = ({ header, name, unit, value, onChange, index, erro
       <div className='company-header label'>
         Company
       </div>
-      <input className='company-input' value={value.company} onChange={handleCompChange} name={name} index={index} required>
+      <input className='company-input' value={value.company} onChange={handleCompChange} name={companyName} onBlur={onBlur} index={index} required>
       </input>
+      {errorElements}
     </div>
     )
 }

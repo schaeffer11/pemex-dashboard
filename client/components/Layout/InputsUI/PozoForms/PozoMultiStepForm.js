@@ -72,14 +72,48 @@ import AnalisisDelAgua from './AnalisisDelAgua'
     }
   }
 
-  handleSubmit(){
-    this.props.submitPozoForm(this.props.everything)
+  handleSubmit(action){
+    console.log('hanlding sub', action)
+    this.props.submitPozoForm(action)
   }
 
   downloadMasterTemplate() {
     window.location = `/api/getTemplate`
   }
   
+  handleLoad() {
+    let { user, fichaTecnicaDelPozoHighLevel } = this.props
+    user = user.toJS()
+    fichaTecnicaDelPozoHighLevel = fichaTecnicaDelPozoHighLevel.toJS()
+
+
+    fetch('/api/getSaveID', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify({
+        wellID: fichaTecnicaDelPozoHighLevel.pozo,
+        userID: user.id
+      })
+    })
+    .then(res => res.json())
+    .then(data => {
+
+      let transactionID = data[0].TRANSACTION_ID
+
+      fetch(`/api/getFields?transactionID=${transactionID}`)
+        .then(res => res.json())
+        .then(res => {
+          console.log(res)
+        })
+
+    })
+
+}
+
+
+
   render() {
      let className = 'subtab'
      let title = this.forms[this.state.currentStep].title
@@ -109,7 +143,9 @@ import AnalisisDelAgua from './AnalisisDelAgua'
             {this.forms[this.state.currentStep].content}
           </div>
           <button className="submit" onClick={this.downloadMasterTemplate}>{'Descarga el Formato General'}</button>
-          <button className="submit" disabled={pozoFormSubmitting} onClick={this.handleSubmit}>{pozoFormSubmitting ? 'Enviando...' : 'Enviar'}</button>
+          <button className="submit" disabled={pozoFormSubmitting} onClick={(e) => this.handleSubmit('save')}>{pozoFormSubmitting ? 'Saving...' : 'Save'}</button>
+          <button className="submit" onClick={this.handleLoad} >Load</button>
+          <button className="submit" disabled={pozoFormSubmitting} onClick={(e) => this.handleSubmit('submit')}>{pozoFormSubmitting ? 'Enviando...' : 'Enviar'}</button>
           { errors.length > 0 &&
               <div className="error">Se han encontrado errores en la forma.</div>
           }
@@ -131,7 +167,8 @@ const mapStateToProps = state => ({
   objetivoYAlcancesIntervencion: state.get('objetivoYAlcancesIntervencion'),
   sistemasArtificialesDeProduccion: state.get('sistemasArtificialesDeProduccion'),
   mecanicoYAparejoDeProduccion: state.get('mecanicoYAparejoDeProduccion'),
-  analisisDelAgua: state.get('analisisDelAgua')
+  analisisDelAgua: state.get('analisisDelAgua'),
+  user: state.get('user')
 
 })
 

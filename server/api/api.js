@@ -5,12 +5,12 @@ import path from 'path'
 import fs from 'fs'
 import multer from 'multer'
 import { addObject, signedURL, deleteObject, getBuckets } from '../aws/index';
-// var well = require('./pozo')
-import { create as createWell } from './pozo'
-// import intervencion from './intervenciones'
-// var intervencion = require('./intervenciones')
+import { create as createWell, getFields, getWell, 
+            getHistIntervenciones, getLayer, getMudLoss, getMecanico, 
+            getAnalisisAgua, getSistema, getFieldPressure, getWellPressure, 
+            getWellAForos, getWellProduccion, getWellImages } from './pozo'
 
-const db_con = db.get(appConfig.users.database)
+const connection = db.getConnection(appConfig.users.database)
 const app = express()
 
 const upload = multer({
@@ -72,7 +72,147 @@ app.post('/testing', (req, res) => {
   res.json({ yeah: 'boy' })
 })
 
-app.post('/well', createWell);
+
+app.get('/getFieldWellMapping', (req, res) => {
+    connection.query(`SELECT * FROM FieldWellMapping`, (err, results) => {
+      res.json(results)
+    })
+})
+
+
+app.get('/getSaveID', (req, res) => {
+    let { userID, wellID } = req.query
+
+    console.log('here', userID, wellID)
+    
+    connection.query(`SELECT * FROM SavedInputs WHERE USER_ID = ? AND WELL_FORMACION_ID = ?`, 
+      [userID, wellID], (err, results) => {
+
+        console.log('resultsss', userID, wellID, results)
+        res.json(results)
+    })
+})
+
+
+app.post('/well', async (req, res) => {
+  const test = await createWell(req.body, 'submit')
+  res.json({ well: 'submitted' })
+})
+
+
+app.post('/wellSave', async (req, res) => {
+  const test = await createWell(req.body, 'save')
+  res.json({ well: 'submitted' })
+})
+
+app.get('/getFields', async (req, res) => {
+  let { transactionID } = req.query
+
+  getFields(transactionID, (data) => {
+    res.json(data)
+  })
+})
+
+app.get('/getWell', async (req, res) => {
+  let { transactionID } = req.query
+
+  getWell(transactionID, (data) => {
+    res.json(data)
+  })
+})
+
+
+app.get('/getHistIntervenciones', async (req, res) => {
+  let { transactionID } = req.query
+
+  getHistIntervenciones(transactionID, (data) => {
+    res.json(data)
+  })
+})
+
+
+app.get('/getLayer', async (req, res) => {
+  let { transactionID } = req.query
+
+  getLayer(transactionID, (data) => {
+    res.json(data)
+  })
+})
+
+
+app.get('/getMudLoss', async (req, res) => {
+  let { transactionID } = req.query
+
+  getMudLoss(transactionID, (data) => {
+    res.json(data)
+  })
+})
+
+app.get('/getMecanico', async (req, res) => {
+  let { transactionID } = req.query
+
+  getMecanico(transactionID, (data) => {
+    res.json(data)
+  })
+})
+
+app.get('/getAnalisisAgua', async (req, res) => {
+  let { transactionID } = req.query
+
+  getAnalisisAgua(transactionID, (data) => {
+    res.json(data)
+  })
+})
+
+app.get('/getSistema', async (req, res) => {
+  let { transactionID } = req.query
+
+  getSistema(transactionID, (data) => {
+    res.json(data)
+  })
+})
+
+app.get('/getFieldPressure', async (req, res) => {
+  let { transactionID } = req.query
+
+  getFieldPressure(transactionID, (data) => {
+    res.json(data)
+  })
+})
+
+app.get('/getWellPressure', async (req, res) => {
+  let { transactionID } = req.query
+
+  getWellPressure(transactionID, (data) => {
+    res.json(data)
+  })
+})
+
+app.get('/getWellAForos', async (req, res) => {
+  let { transactionID } = req.query
+
+  getWellAForos(transactionID, (data) => {
+    res.json(data)
+  })
+})
+
+app.get('/getWellProduccion', async (req, res) => {
+  let { transactionID } = req.query
+
+  getWellProduccion(transactionID, (data) => {
+    res.json(data)
+  })
+})
+
+app.get('/getWellImages', async (req, res) => {
+  let { transactionID } = req.query
+
+  getWellImages(transactionID, (data) => {
+    res.json(data)
+  })
+})
+
+
 
 // app.post('/intervencion', intervencion.create);
 

@@ -93,3 +93,5 @@ export const setEstCostLlenadoDePozoYPruebaDeAdmision = value => ({ type: 'set_e
 export const setEstCostMinifrac = value => ({ type: 'set_estCostMinifrac', value})
 export const setEstCostBacheNeutralizador = value => ({ type: 'set_estCostBacheNeutralizador', value})
 export const setEstCostProtectorDeArbol = value => ({ type: 'set_estCostProtectorDeArbol', value})
+
+export const setChecked = value => ({ type: 'set_checked', value})

@@ -52,7 +52,6 @@ import PozoMultiStepForm from './PozoForms/PozoMultiStepForm'
 
     let form = null
 
-
     if (selectedTab === 'Pozo' && pagesPozo[selectedSubtab]) {
       form = <PozoMultiStepForm />
     }

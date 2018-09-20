@@ -27,13 +27,11 @@ import classNames from 'classnames'
   attemptLogin(e) {
     e.preventDefault()
 
-    console.log('hihih')
     let userid = this.refs.userid.value
     let userpwd = this.refs.userpwd.value
 
     this.setState({ isVerifying: true, error: false })
     this.forceUpdate()
-    console.log('calling auth')
 
     API
       .auth({ userid, userpwd })

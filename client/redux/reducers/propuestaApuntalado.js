@@ -32,7 +32,8 @@ const initialState = Map({
         volN2Acum: '',
         relN2Liq: '',
         tiempo: '',
-    }]
+    }],
+    checked: []
 })
 
 const propuestaApuntalado = (state = initialState, action) => {
@@ -72,6 +73,8 @@ const propuestaApuntalado = (state = initialState, action) => {
         return state.set('diametroDeDisparos', fromJS(action.value))
     case 'set_cedulaData':
         return state.set('cedulaData', fromJS(action.value))
+    case 'set_checked' :
+        return state.set('checked', fromJS(action.value))
     default:
       return state
   }
