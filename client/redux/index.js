@@ -60,14 +60,17 @@ const appReducer = combineReducers({
 })
 
 const rootReducer = (state, action) => {
+  const user = state.get('user')
+  const app = state.get('app')
+  const global = state.get('global')
   if (action.type === 'LOAD_SAVE') {
-    state = Map(action.saved)
+    const { saved } = action
+    const newState = { ...saved, user, app, global }
+    return state = Map(newState)
   }
-  
+
   if (action.type === 'RESET_APP') {
-    const user = state.get('user')
-    const app = state.get('app')
-    state = Map({ user, app })
+    return state = Map({ user, app })
   }
   return appReducer(state, action)
 }

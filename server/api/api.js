@@ -3,6 +3,7 @@ import db from '../lib/db'
 import appConfig from '../../app-config.js'
 import path from 'path'
 import fs from 'fs'
+import objectPath from 'object-path'
 import multer from 'multer'
 import { addObject, signedURL, deleteObject, getBuckets } from '../aws/index';
 import { create as createWell, getFields, getWell, 
@@ -92,7 +93,7 @@ app.get('/getSaveID', (req, res) => {
       [userID, wellID], (err, results) => {
 
         console.log('resultsss', userID, wellID, results)
-        res.json(results)
+        res.json({ transactionID: results[0].TRANSACTION_ID })
     })
 })
 
@@ -110,9 +111,27 @@ app.post('/wellSave', async (req, res) => {
 
 app.get('/getFields', async (req, res) => {
   let { transactionID } = req.query
-
+  const map = {
+    DESCUBRIMIENTO: { parent: 'fichaTecnicaDelCampo', child: 'descubrimientoField' },
+    FECHA_DE_EXPLOTACION: { parent: 'fichaTecnicaDelCampo', child: 'fechaDeExplotacionField' },
+    NUMERO_DE_POZOS_OPERANDO: { parent: 'fichaTecnicaDelCampo', child: 'numeroDePozosOperandoField' },
+    DP_PER_ANO: { parent: 'fichaTecnicaDelCampo', child: 'dpPerAnoField' },
+    TYAC: { parent: 'fichaTecnicaDelCampo', child: 'tyacField' },
+    PR: { parent: 'fichaTecnicaDelCampo', child: 'prField' },
+    TIPO_DE_FLUIDO: { parent: 'fichaTecnicaDelCampo', child: 'tipoDeFluidoField' },
+    DENSIDAD_DEL_ACEITE: { parent: 'fichaTecnicaDelCampo', child: 'densidadDelAceiteField' },
+    P_SAT: { parent: 'fichaTecnicaDelCampo', child: 'descubrimientoField' },
+    RGA_FLUIDO: { parent: 'fichaTecnicaDelCampo', child: 'rgaFluidoField' },
+  }
   getFields(transactionID, (data) => {
-    res.json(data)
+    const finalObj = {}
+    Object.keys(data[0]).forEach(key => {
+      if (map[key]) {
+        const { parent, child } = map[key]
+        objectPath.set(finalObj, `${parent}.${child}`, data[0][key])
+      }
+    })
+    res.json(finalObj)
   })
 })
 
@@ -137,8 +156,27 @@ app.get('/getHistIntervenciones', async (req, res) => {
 app.get('/getLayer', async (req, res) => {
   let { transactionID } = req.query
 
+  const map = {
+    INTERVALO: { child: 'interval' },
+    BASE_MV: { child: 'baseMD' },
+  }
+
+  const mainParent = 'evaluacionPetrofisica'
+  const innerParent = 'layerData'
+
   getLayer(transactionID, (data) => {
-    res.json(data)
+    const finalObj = {}
+    data.forEach(d => {
+      const innerObj = {}
+      Object.keys(d).forEach(k => {
+        if (map[k]) {
+          const { child } = map[k]
+          objectPath.set(innerObj, child, d[k])
+        }
+      })
+      objectPath.push(finalObj, `${mainParent}.${innerParent}`, innerObj)
+    })
+    res.json(finalObj)
   })
 })
 
@@ -146,8 +184,30 @@ app.get('/getLayer', async (req, res) => {
 app.get('/getMudLoss', async (req, res) => {
   let { transactionID } = req.query
 
+  const map = {
+    CIMA_MD: { child: 'cimaMD' },
+    LODO_PERDIDO: { child: 'lodoPerdido' },
+    DENSIDAD: { child: 'densidad' },
+    length: { child: 'length' },
+  }
+
+  const mainParent = 'evaluacionPetrofisica'
+  const innerParent = 'mudLossData'
+
   getMudLoss(transactionID, (data) => {
-    res.json(data)
+    const finalObj = {}
+    data.forEach(d => {
+      const innerObj = {}
+      Object.keys(d).forEach(k => {
+        if (map[k]) {
+          const { child } = map[k]
+          objectPath.set(innerObj, child, d[k])
+        }
+      })
+      objectPath.push(finalObj, `${mainParent}.${innerParent}`, innerObj)
+    })
+
+    res.json(finalObj)
   })
 })
 
