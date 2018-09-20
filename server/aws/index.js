@@ -1,14 +1,8 @@
 import AWS from 'aws-sdk'
-<<<<<<< HEAD
 // import config from '../../aws.config.json'
 import config from '../../aws.config.json'
 
 // let config = {}
-=======
-import config from '../../aws.config.json'
-
-
->>>>>>> 8a7a462d5b1442313b43a10f2c2badd72cbb7c0a
 AWS.config.s3 = config
 
 const s3 = new AWS.S3()
