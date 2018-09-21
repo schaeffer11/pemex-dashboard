@@ -30,7 +30,7 @@ export const setProfEmpacador = value => ({ type: 'set_profEmpacador', value})
 export const setProfSensorPYT = value => ({ type: 'set_profSensorPYT', value})
 export const setTipoDeSap = value => ({ type: 'set_tipoDeSap', value})
 export const setHistorialIntervencionesData = value => ({ type: 'set_historialIntervencionesData', value})
-
+export const setFichaTecnicaDelPozo = value => ({ type: 'set_fichaTecnicaDelPozo', value})
 
 //FichaTecnicaDelCampo
 export const setDescubrimientoField = value => ({ type: 'set_descubrimientoField', value})
@@ -67,6 +67,7 @@ export const setRrpceField = value => ({ type: 'set_rrpceField', value})
 export const setH2sField = value => ({ type: 'set_h2sField', value})
 export const setCo2Field = value => ({ type: 'set_co2Field', value})
 export const setN2Field = value => ({ type: 'set_n2Field', value})
+export const setFichaTecnicaDelCampo = value => ({ type: 'set_fichaTecnicaDelCampo', value})
 
 
 //InformacionDeSistemasArtificialsDeProduccion
@@ -113,12 +114,13 @@ export const setCuantaConAnclaBM = value => ({type: 'set_CuantaConAnclaBM', valu
 export const setNivelDinamico = value => ({type: 'set_nivelDinamico', value})
 export const setNivelEstatico = value => ({type: 'set_nivelEstatico', value})
 export const setSistemasArtificialesImgURL = value => ({ type: 'set_sistemasArtificialesImgURL', value})
+export const setSistemasArtificialesDeProduccion = value => ({ type: 'set_sistemasArtificialesDeProduccion', value})
 
 //EvaluacionPetrofisica
 export const setLayerData = value => ({ type: 'set_layerData', value})
 export const setMudLossData = value => ({ type: 'set_mudLossData', value})
 export const setImgURL = value => ({ type: 'set_imgURL', value})
-
+export const setEvaluacionPetrofisica = value => ({ type: 'set_evaluacionPetrofisica', value})
 
 //EdoMecanicoYAparejoDeProduccion
 export const setTipoDeTerminacion = value => ({ type: 'set_tipoDeTerminacion', value})
@@ -141,7 +143,7 @@ export const setVolumenBaseDeIntervalo = value => ({ type: 'set_volumenBaseDeInt
 export const setVolumenDeEspacioAnular = value => ({ type: 'set_volumenDeEspacioAnular', value})
 export const setImgBoreDiagramURL = value => ({ type: 'set_imgBoreDiagramURL', value})
 export const setImgAparejoDeProduccionURL = value => ({ type: 'set_imgAparejoDeProduccionURL', value})
-
+export const setMecanicoYAparejoDeProduccion = value => ({ type: 'set_mecanicoYAparejoDeProduccion', value})
 
 //HistoricoDePresion
 export const setPresionDataCampo = value => ({ type: 'set_presionDataCampo', value})
@@ -166,7 +168,7 @@ export const setRga = value => ({ type: 'set_rga', value})
 export const setSalinidad = value => ({ type: 'set_salinidad', value})
 export const setPh = value => ({ type: 'set_ph', value})
 export const setProduccionData = value => ({ type: 'set_produccionData', value})
-
+export const setHistoricoProduccion = value => ({ type: 'set_historicoProduccion', value})
 //AnalisisDelAgua
 export const setPH = value => ({ type: 'set_pH', value})
 export const setTemperaturaDeConductividad = value => ({ type: 'set_temperaturaDeConductividad', value})
@@ -189,3 +191,4 @@ export const setSulfatos = value => ({ type: 'set_sulfatos', value})
 export const setCarbonatos = value => ({ type: 'set_carbonatos', value})
 export const setDensidadAt15 = value => ({ type: 'set_densidadAt15', value})
 export const setDensidadAt20 = value => ({ type: 'set_densidadAt20', value})
+export const setAnalisisDelAgua = value => ({ type: 'set_analisisDelAgua', value})

@@ -87,6 +87,20 @@ let tratamientoPorOptions = [
     }
   }
 
+  handleSelectTipoDeTerminacion(val) {
+    let { setTipoDeTerminacion, setTipoDePistolas, setDensidadDeDisparosMecanico, 
+      setFase, setDiametroDeOrificio, setPenetracion } = this.props
+
+    if (val.value === 'Agujero Descubierto (AD)') {
+      setTipoDePistolas(null) 
+      setDensidadDeDisparosMecanico(null)
+      setFase(null) 
+      setDiametroDeOrificio(null) 
+      setPenetracion(null)  
+    }
+
+    setTipoDeTerminacion(val.value)
+  }
 
   makeTerminacionForm() {
     let { setTipoDeTerminacion, setHIntervaloProductor, setEmpacador, setPresionDifEmpacador, setSensorPyt, setTipoDeLiner, setDiametroDeLiner, setTipoDePistolas, setDensidadDeDisparosMecanico, setFase, setDiametroDeOrificio, setPenetracion, setTipoDeSAP, formData } = this.props
@@ -99,7 +113,7 @@ let tratamientoPorOptions = [
           Terminación
         </div>
         TIPO
-        <InputRowSelectUnitless header="Tipo de terminación" value={tipoDeTerminacion} callback={(e) => setTipoDeTerminacion(e.value)} options={tipoDeTerminacionOptions} name='tipoDeTerminacion' onBlur={this.validate} errors={this.state.errors} />
+        <InputRowSelectUnitless header="Tipo de terminación" value={tipoDeTerminacion} callback={this.handleSelectTipoDeTerminacion} options={tipoDeTerminacionOptions} name='tipoDeTerminacion' onBlur={this.validate} errors={this.state.errors} />
         <InputRow header="h (intervalo productor)" value={hIntervaloProductor} onChange={setHIntervaloProductor} name='hIntervaloProductor' unit='m' onBlur={this.validate} errors={this.state.errors} />
         <InputRow header="Empacador" name='empacador' value={empacador} onChange={setEmpacador} unit='m' onBlur={this.validate} errors={this.state.errors} />
         <InputRow header="Presión dif. empacador" name='presionDifEmpacador' value={presionDifEmpacador} onChange={setPresionDifEmpacador} unit='psi' onBlur={this.validate} errors={this.state.errors} />
@@ -175,11 +189,6 @@ let tratamientoPorOptions = [
 
     return (
       <div style={{marginBot: '20px'}}>
-{/*        <div className='header'>
-          Upload Aparejo De Produccion (spanish) (this is excel file? upload image or parse???)
-        </div>
-        <input type='file' accept="image/*" onChange={(e) => this.handleFileUpload(e, setImgAparejoDeProduccionURL)}></input>
-        {imgAparejoDeProduccionURL ? <img className='img-preview' src={imgAparejoDeProduccionURL}></img> : null }*/}
         <div style={{color: 'red'}}> TODO: figure out Aparejo De Produccion (can we treat it as reg table?)</div>
       </div>
     )

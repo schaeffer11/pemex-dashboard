@@ -11,7 +11,7 @@ import { create as createWell, getFields, getWell,
             getAnalisisAgua, getEmboloViajero, getBombeoNeumatico, getBombeoHidraulico, 
             getBombeoCavidades, getBombeoElectrocentrifugo, getBombeoMecanico, 
             getFieldPressure, getWellPressure, 
-            getWellAForos, getWellProduccion, getWellImages, getInterventionBase, 
+            getWellAforos, getWellProduccion, getWellImages, getInterventionBase, 
             getInterventionEsimulacion, getInterventionAcido, getInterventionApuntalado, 
             getLabTest, getCedulaEstimulacion, getCedulaAcido, getCedulaApuntalado, 
             getLabResults, getLabAcido, getLabApuntalado, getCosts, getInterventionImage } from './pozo'
@@ -86,16 +86,60 @@ app.get('/getFieldWellMapping', (req, res) => {
 })
 
 
-app.get('/getSaveID', (req, res) => {
+app.get('/getSave', (req, res) => {
     let { userID, wellID } = req.query
     
-    connection.query(`SELECT * FROM SavedInputs WHERE USER_ID = ? AND WELL_FORMACION_ID = ?`, 
+    connection.query(`SELECT * FROM SavedInputs WHERE USER_ID = ? AND WELL_FORMACION_ID = ? ORDER BY INSERT_TIME DESC LIMIT 1`, 
       [userID, wellID], (err, results) => {
 
         console.log('resultsss', userID, wellID, results)
-        res.json({ transactionID: results[0].TRANSACTION_ID })
+        let transactionID = null
+        let tipoDeIntervenciones = null
+
+        if (results.length > 0) {
+          transactionID = results[0].TRANSACTION_ID
+          tipoDeIntervenciones = results[0].TIPO_DE_INTERVENCIONES
+        }
+
+        res.json({ transactionID: transactionID, tipoDeIntervenciones: tipoDeIntervenciones })
     })
 })
+
+app.get('/getTransactionField', (req, res) => {
+    let { fieldID } = req.query
+    
+    connection.query(`select * from Transactions WHERE FIELD_FORMACION_ID = ? ORDER BY INSERT_TIME DESC LIMIT 1;`, 
+      [fieldID], (err, results) => {
+        console.log('fuckdfuckfuc', results)
+
+        let transactionID = null
+
+        if (results.length > 0) {
+          transactionID = results[0].TRANSACTION_ID
+        }
+
+        res.json({ transactionID: transactionID })
+    })
+})
+
+app.get('/getTransactionWell', (req, res) => {
+    let { wellID } = req.query
+    
+    connection.query(`select * from Transactions WHERE WELL_FORMACION_ID = ? ORDER BY INSERT_TIME DESC LIMIT 1;`, 
+      [wellID], (err, results) => {
+
+        let transactionID = null
+
+        if (results.length > 0) {
+          transactionID = results[0].TRANSACTION_ID
+        }
+
+        res.json({ transactionID: transactionID })
+    })
+})
+
+
+
 
 
 app.post('/well', async (req, res) => {
@@ -110,7 +154,10 @@ app.post('/wellSave', async (req, res) => {
 })
 
 app.get('/getFields', async (req, res) => {
-  let { transactionID } = req.query
+  let { transactionID, saved } = req.query
+
+  let action = saved ? 'loadSave' : 'loadTransaction'
+
   const map = {
     FIELD_FORMACION_ID: { parent: 'fichaTecnicaDelPozoHighLevel', child: 'campo'},
     DESCUBRIMIENTO: { parent: 'fichaTecnicaDelCampo', child: 'descubrimientoField' },
@@ -126,7 +173,7 @@ app.get('/getFields', async (req, res) => {
     P_SAT: { parent: 'fichaTecnicaDelCampo', child: 'pSatField' },
     RGA_FLUIDO: { parent: 'fichaTecnicaDelCampo', child: 'rgaFluidoField' },
     SALINIDAD: { parent: 'fichaTecnicaDelCampo', child: 'salinidadField'},
-    PVT_REPRESENTATIVO: { parent: 'fichaTecnicaDelCampo', child: ''},
+    PVT_REPRESENTATIVO: { parent: 'fichaTecnicaDelCampo', child: 'pvtRepresentativoField'},
     LITOLOGIA: { parent: 'fichaTecnicaDelCampo', child: 'litologiaField'},
     ESPESOR_NETO: { parent: 'fichaTecnicaDelCampo', child: 'espesorNetoField'},
     POROSIDAD: { parent: 'fichaTecnicaDelCampo', child: 'porosidadField'},
@@ -148,20 +195,29 @@ app.get('/getFields', async (req, res) => {
     CO2: { parent: 'fichaTecnicaDelCampo', child: 'co2Field'},
     N2: { parent: 'fichaTecnicaDelCampo', child: 'n2Field'},
   }
-  getFields(transactionID, (data) => {
+  getFields(transactionID, action, (data) => {
     const finalObj = {}
-    Object.keys(data[0]).forEach(key => {
-      if (map[key]) {
-        const { parent, child } = map[key]
-        objectPath.set(finalObj, `${parent}.${child}`, data[0][key])
-      }
-    })
-    res.json(finalObj)
+    
+    if (data.length > 0) {
+      Object.keys(data[0]).forEach(key => {
+        if (map[key]) {
+          const { parent, child } = map[key]
+          objectPath.set(finalObj, `${parent}.${child}`, data[0][key])
+        }
+      })
+      res.json(finalObj)
+    }
+    else {
+      res.json({ err: 'No value found in database' })
+    }
   })
 })
 
 app.get('/getWell', async (req, res) => {
-  let { transactionID } = req.query
+  let { transactionID, saved } = req.query
+
+  let action = saved ? 'loadSave' : 'loadTransaction'
+
 
   const map = {
     WELL_FORMACION_ID: { parent: 'fichaTecnicaDelPozoHighLevel', child: 'pozo'},
@@ -191,22 +247,30 @@ app.get('/getWell', async (req, res) => {
     TIPO_DE_SISTEMA: { parent: 'sistemasArtificialesDeProduccion', child: 'tipoDeSistemo' }
   }
 
-  getWell(transactionID, (data) => {
+  getWell(transactionID, action, (data) => {
     const finalObj = {}
-    console.log(data)
-    Object.keys(data[0]).forEach(key => {
-      if (map[key]) {
-        const { parent, child } = map[key]
-        objectPath.set(finalObj, `${parent}.${child}`, data[0][key])
-      }
-    })
-    res.json(finalObj)
+    
+    if (data.length > 0) {console.log(data)
+      Object.keys(data[0]).forEach(key => {
+        if (map[key]) {
+          const { parent, child } = map[key]
+          objectPath.set(finalObj, `${parent}.${child}`, data[0][key])
+        }
+      })
+      res.json(finalObj)
+    }
+    else {
+      res.json({ err: 'No value found in database' })
+    }
   })
 })
 
 
 app.get('/getHistIntervenciones', async (req, res) => {
-  let { transactionID } = req.query
+  let { transactionID, saved } = req.query
+
+  let action = saved ? 'loadSave' : 'loadTransaction'
+
 
   const map = {
     DATE: { child: 'fecha' },
@@ -216,35 +280,54 @@ app.get('/getHistIntervenciones', async (req, res) => {
   const mainParent = 'fichaTecnicaDelPozo'
   const innerParent = 'historialIntervencionesData'
 
-  getHistIntervenciones(transactionID, (data) => {
+  getHistIntervenciones(transactionID, action, (data) => {
     const finalObj = {}
-    data.forEach((d, index) => {
-      const innerObj = {}
-      Object.keys(d).forEach(k => {
-        if (map[k]) {
-          const { child } = map[k]
-          objectPath.set(innerObj, child, d[k])
-        }
 
+    if (data.length > 0) {
+      data.forEach((d, index) => {
+        const innerObj = {}
+        Object.keys(d).forEach(k => {
+          if (map[k]) {
+            const { child } = map[k]
+            objectPath.set(innerObj, child, d[k])
+          }
+
+        })
+        objectPath.set(innerObj, 'length', data.length)
+        objectPath.set(innerObj, 'index', index)
+        objectPath.push(finalObj, `${mainParent}.${innerParent}`, innerObj)
       })
-      objectPath.set(innerObj, 'length', data.length)
-      objectPath.set(innerObj, 'index', index)
-      objectPath.push(finalObj, `${mainParent}.${innerParent}`, innerObj)
-    })
-    res.json(finalObj)
+      res.json(finalObj)
+    }
+    else if (action === 'loadTransaction'){
+      res.json({ err: 'No value found in database'  })
+    }
+    else {
+      res.json({
+        mainParent: {
+          innerParent: [
+          {}
+          ]
+        }
+      })
+    }
   })
 })
 
 
+
 app.get('/getLayer', async (req, res) => {
-  let { transactionID } = req.query
+  let { transactionID, saved } = req.query
+
+  let action = saved ? 'loadSave' : 'loadTransaction'
+
 
   const map = {
     INTERVALO: { child: 'interval' },
     CIMA_MD: { child: 'cimaMD'},
     BASE_MD: { child: 'baseMD'},
     CIMA_MV: { child: 'cimaMV'},
-    BASE_MV: { child: 'baseMD' },
+    BASE_MV: { child: 'baseMV' },
     V_ARC: { child: 'vArc'},
     POROSITY: { child: 'porosity'},
     SW: { child: 'sw'},
@@ -256,30 +339,49 @@ app.get('/getLayer', async (req, res) => {
   const mainParent = 'evaluacionPetrofisica'
   const innerParent = 'layerData'
 
-  getLayer(transactionID, (data) => {
+  getLayer(transactionID, action, (data) => {
     const finalObj = {}
-    data.forEach((d, index) => {
-      const innerObj = {}
-      Object.keys(d).forEach(k => {
-        if (map[k]) {
-          const { child } = map[k]
-          objectPath.set(innerObj, child, d[k])
+    if (data.length > 0) {
+      data.forEach((d, index) => {
+        const innerObj = {}
+        Object.keys(d).forEach(k => {
+          if (map[k]) {
+            const { child } = map[k]
+            objectPath.set(innerObj, child, d[k])
+          }
+        })
+        objectPath.set(innerObj, 'length', data.length)
+        objectPath.set(innerObj, 'index', index)
+        objectPath.push(finalObj, `${mainParent}.${innerParent}`, innerObj)
+      })
+      res.json(finalObj)
+    }
+    else if (action === 'loadTransaction'){
+      res.json({ err: 'No value found in database'  })
+    }
+    else {
+      res.json({
+        mainParent: {
+          innerParent: [
+          {}
+          ]
         }
       })
-      objectPath.set(innerObj, 'length', data.length)
-      objectPath.set(innerObj, 'index', index)
-      objectPath.push(finalObj, `${mainParent}.${innerParent}`, innerObj)
-    })
-    res.json(finalObj)
+    }
   })
 })
 
 
+
 app.get('/getMudLoss', async (req, res) => {
-  let { transactionID } = req.query
+  let { transactionID, saved } = req.query
+
+  let action = saved ? 'loadSave' : 'loadTransaction'
+
 
   const map = {
     CIMA_MD: { child: 'cimaMD' },
+    BASE_MD: { child: 'baseMD' },
     LODO_PERDIDO: { child: 'lodoPerdido' },
     DENSIDAD: { child: 'densidad' },
     length: { child: 'length' },
@@ -288,27 +390,45 @@ app.get('/getMudLoss', async (req, res) => {
   const mainParent = 'evaluacionPetrofisica'
   const innerParent = 'mudLossData'
 
-  getMudLoss(transactionID, (data) => {
+  getMudLoss(transactionID, action, (data) => {
     const finalObj = {}
-    data.forEach((d, index) => {
-      const innerObj = {}
-      Object.keys(d).forEach(k => {
-        if (map[k]) {
-          const { child } = map[k]
-          objectPath.set(innerObj, child, d[k])
+    if (data.length > 0) {
+      data.forEach((d, index) => {
+        const innerObj = {}
+        Object.keys(d).forEach(k => {
+          if (map[k]) {
+            const { child } = map[k]
+            objectPath.set(innerObj, child, d[k])
+          }
+        })
+        objectPath.set(innerObj, 'length', data.length)
+        objectPath.set(innerObj, 'index', index)
+        objectPath.push(finalObj, `${mainParent}.${innerParent}`, innerObj)
+      })
+
+      res.json(finalObj)
+    }
+    else if (action === 'loadTransaction'){
+      res.json({ err: 'No value found in database'  })
+    }
+    else {
+      res.json({
+        mainParent: {
+          innerParent: [
+          {}
+          ]
         }
       })
-      objectPath.set(innerObj, 'length', data.length)
-      objectPath.set(innerObj, 'index', index)
-      objectPath.push(finalObj, `${mainParent}.${innerParent}`, innerObj)
-    })
-
-    res.json(finalObj)
+    }
   })
 })
 
+
 app.get('/getMecanico', async (req, res) => {
-  let { transactionID } = req.query
+  let { transactionID, saved } = req.query
+
+  let action = saved ? 'loadSave' : 'loadTransaction'
+
 
   const map = {
     TIPO_DE_TERMINACION: { parent: 'mecanicoYAparejoDeProduccion', child: 'tipoDeTerminacion'},
@@ -330,20 +450,28 @@ app.get('/getMecanico', async (req, res) => {
     VOLUMEN_DE_ESPACIO_ANULA: { parent: 'mecanicoYAparejoDeProduccion', child: 'volumenDeEspacioAnular'},
   }
 
-  getMecanico(transactionID, (data) => {
-    const finalObj = {}
-    Object.keys(data[0]).forEach(key => {
-      if (map[key]) {
-        const { parent, child } = map[key]
-        objectPath.set(finalObj, `${parent}.${child}`, data[0][key])
-      }
-    })
-    res.json(finalObj)
+  getMecanico(transactionID, action, (data) => {
+    
+    if (data.length > 0) {const finalObj = {}
+      Object.keys(data[0]).forEach(key => {
+        if (map[key]) {
+          const { parent, child } = map[key]
+          objectPath.set(finalObj, `${parent}.${child}`, data[0][key])
+        }
+      })
+      res.json(finalObj)
+    }
+    else {
+      res.json({ err: 'No value found in database' })
+    }
   })
 })
 
 app.get('/getAnalisisAgua', async (req, res) => {
-  let { transactionID } = req.query
+  let { transactionID, saved } = req.query
+
+  let action = saved ? 'loadSave' : 'loadTransaction'
+
  
   const map = {
     pH: { parent: 'analisisDelAgua', child: 'pH' },
@@ -369,21 +497,27 @@ app.get('/getAnalisisAgua', async (req, res) => {
     DENSIDAD_20: { parent: 'analisisDelAgua', child: 'densidadAt20' },
   }
 
-  getAnalisisAgua(transactionID, (data) => {
-    const finalObj = {}
-    Object.keys(data[0]).forEach(key => {
-      if (map[key]) {
-        const { parent, child } = map[key]
-        objectPath.set(finalObj, `${parent}.${child}`, data[0][key])
-      }
-    })
-    res.json(finalObj)
+  getAnalisisAgua(transactionID, action, (data) => {
+    
+    if (data.length > 0) {const finalObj = {}
+      Object.keys(data[0]).forEach(key => {
+        if (map[key]) {
+          const { parent, child } = map[key]
+          objectPath.set(finalObj, `${parent}.${child}`, data[0][key])
+        }
+      })
+      res.json(finalObj)
+    }
+    else {
+      res.json({ err: 'No value found in database' })
+    }
   })
 })
 
 app.get('/getEmboloViajero', async (req, res) => {
-  let { transactionID } = req.query
+  let { transactionID, saved } = req.query
 
+  let action = saved ? 'loadSave' : 'loadTransaction'
  
   const map = {
     PRESION_DE_CABEZA: { parent: 'sistemasArtificialesDeProduccion', child: 'presionDeCabeza' },
@@ -392,7 +526,7 @@ app.get('/getEmboloViajero', async (req, res) => {
     VOLUMEN_DESPLAZADO_POR_CIRCLO: { parent: 'sistemasArtificialesDeProduccion', child: 'volumenDesplazadoPorCircloEV' },
   }
 
-  getEmboloViajero(transactionID, (data) => {
+  getEmboloViajero(transactionID, action, (data) => {
     const finalObj = {}
     if (data[0]) {
       Object.keys(data[0]).forEach(key => {
@@ -400,20 +534,27 @@ app.get('/getEmboloViajero', async (req, res) => {
           const { parent, child } = map[key]
           objectPath.set(finalObj, `${parent}.${child}`, data[0][key])
         }
-      })   
+      })
+      res.json(finalObj)   
     }
-    else {
+    else if (action === 'loadSave') {
       Object.keys(map).forEach(key => {
         const { parent, child } = map[key]
         objectPath.set(finalObj, `${parent}.${child}`, '')
       })
+      res.json(finalObj)
     }
-    res.json(finalObj)
+    else {
+      res.json({ err: 'No value found in database'  })
+    }
   })
 })
 
 app.get('/getBombeoNeumatico', async (req, res) => {
-  let { transactionID } = req.query
+  let { transactionID, saved } = req.query
+
+  let action = saved ? 'loadSave' : 'loadTransaction'
+
  
   const map = {
     PRESION_DE_CABEZA: { parent: 'sistemasArtificialesDeProduccion', child: 'presionDeCabeza' },
@@ -426,7 +567,7 @@ app.get('/getBombeoNeumatico', async (req, res) => {
     VOLUMEN_DE_GAS_INYECTADO: { parent: 'sistemasArtificialesDeProduccion', child: 'volumenDeGasInyectadoBN'},
   }
 
-  getBombeoNeumatico(transactionID, (data) => {
+  getBombeoNeumatico(transactionID, action, (data) => {
     const finalObj = {}
     if (data[0]) {
       Object.keys(data[0]).forEach(key => {
@@ -434,21 +575,28 @@ app.get('/getBombeoNeumatico', async (req, res) => {
           const { parent, child } = map[key]
           objectPath.set(finalObj, `${parent}.${child}`, data[0][key])
         }
-      })   
+      })
+      res.json(finalObj)   
     }
-    else {
+    else if (action === 'loadSave') {
       Object.keys(map).forEach(key => {
         const { parent, child } = map[key]
         objectPath.set(finalObj, `${parent}.${child}`, '')
       })
+      res.json(finalObj)
     }
-    res.json(finalObj)
+    else {
+      res.json({ err: 'No value found in database'  })
+    }
   })
 })
 
 
 app.get('/getBombeoHidraulico', async (req, res) => {
-  let { transactionID } = req.query
+  let { transactionID, saved } = req.query
+
+  let action = saved ? 'loadSave' : 'loadTransaction'
+
 
   const map = {
     PRESION_DE_CABEZA: { parent: 'sistemasArtificialesDeProduccion', child: 'presionDeCabeza' },
@@ -461,7 +609,7 @@ app.get('/getBombeoHidraulico', async (req, res) => {
     EQUIPO_SUPERFICIAL: { parent: 'sistemasArtificialesDeProduccion', child: 'equipoSuperficialBH'},
   }
 
-  getBombeoHidraulico(transactionID, (data) => {
+  getBombeoHidraulico(transactionID, action, (data) => {
     const finalObj = {}
     if (data[0]) {
       Object.keys(data[0]).forEach(key => {
@@ -469,20 +617,27 @@ app.get('/getBombeoHidraulico', async (req, res) => {
           const { parent, child } = map[key]
           objectPath.set(finalObj, `${parent}.${child}`, data[0][key])
         }
-      })   
+      })
+      res.json(finalObj)   
     }
-    else {
+    else if (action === 'loadSave') {
       Object.keys(map).forEach(key => {
         const { parent, child } = map[key]
         objectPath.set(finalObj, `${parent}.${child}`, '')
       })
+      res.json(finalObj)
     }
-    res.json(finalObj)
+    else {
+      res.json({ err: 'No value found in database'  })
+    }
   })
 })
 
 app.get('/getBombeoCavidades', async (req, res) => {
-  let { transactionID } = req.query
+  let { transactionID, saved } = req.query
+
+  let action = saved ? 'loadSave' : 'loadTransaction'
+
 
   const map = {
     PRESION_DE_CABEZA: { parent: 'sistemasArtificialesDeProduccion', child: 'presionDeCabeza' },
@@ -498,7 +653,7 @@ app.get('/getBombeoCavidades', async (req, res) => {
 
 
 
-  getBombeoCavidades(transactionID, (data) => {
+  getBombeoCavidades(transactionID, action, (data) => {
     const finalObj = {}
     if (data[0]) {
       Object.keys(data[0]).forEach(key => {
@@ -506,20 +661,27 @@ app.get('/getBombeoCavidades', async (req, res) => {
           const { parent, child } = map[key]
           objectPath.set(finalObj, `${parent}.${child}`, data[0][key])
         }
-      })   
+      })
+      res.json(finalObj)   
     }
-    else {
+    else if (action === 'loadSave') {
       Object.keys(map).forEach(key => {
         const { parent, child } = map[key]
         objectPath.set(finalObj, `${parent}.${child}`, '')
       })
+      res.json(finalObj)
     }
-    res.json(finalObj)
+    else {
+      res.json({ err: 'No value found in database'  })
+    }
   })
 })
 
 app.get('/getBombeoElectrocentrifugo', async (req, res) => {
-  let { transactionID } = req.query
+  let { transactionID, saved } = req.query
+
+  let action = saved ? 'loadSave' : 'loadTransaction'
+
 
   const map = {
     PRESION_DE_CABEZA: { parent: 'sistemasArtificialesDeProduccion', child: 'presionDeCabeza' }, 
@@ -534,7 +696,7 @@ app.get('/getBombeoElectrocentrifugo', async (req, res) => {
     RPM: { parent: 'sistemasArtificialesDeProduccion', child: 'rpmBE' },
   }
 
-  getBombeoElectrocentrifugo(transactionID, (data) => {
+  getBombeoElectrocentrifugo(transactionID, action, (data) => {
     const finalObj = {}
     if (data[0]) {
       Object.keys(data[0]).forEach(key => {
@@ -542,20 +704,27 @@ app.get('/getBombeoElectrocentrifugo', async (req, res) => {
           const { parent, child } = map[key]
           objectPath.set(finalObj, `${parent}.${child}`, data[0][key])
         }
-      })   
+      })
+      res.json(finalObj)   
     }
-    else {
+    else if (action === 'loadSave') {
       Object.keys(map).forEach(key => {
         const { parent, child } = map[key]
         objectPath.set(finalObj, `${parent}.${child}`, '')
       })
+      res.json(finalObj)
     }
-    res.json(finalObj)
+    else {
+      res.json({ err: 'No value found in database'  })
+    }
   })
 })
 
 app.get('/getBombeoMecanico', async (req, res) => {
-  let { transactionID } = req.query
+  let { transactionID, saved } = req.query
+
+  let action = saved ? 'loadSave' : 'loadTransaction'
+
 
   const map = {
     PRESION_DE_CABEZA: { parent: 'sistemasArtificialesDeProduccion', child: 'presionDeCabeza' }, 
@@ -572,7 +741,7 @@ app.get('/getBombeoMecanico', async (req, res) => {
     NIVEL_ESTATICO: { parent: 'sistemasArtificialesDeProduccion', child: 'nivelEstatico' },
   }
 
-  getBombeoMecanico(transactionID, (data) => {
+  getBombeoMecanico(transactionID, action, (data) => {
     const finalObj = {}
 
     if (data[0]) {
@@ -581,22 +750,29 @@ app.get('/getBombeoMecanico', async (req, res) => {
           const { parent, child } = map[key]
           objectPath.set(finalObj, `${parent}.${child}`, data[0][key])
         }
-      })   
+      })
+      res.json(finalObj)   
     }
-    else {
+    else if (action === 'loadSave') {
       Object.keys(map).forEach(key => {
         const { parent, child } = map[key]
         objectPath.set(finalObj, `${parent}.${child}`, '')
       })
+      res.json(finalObj)
     }
-    res.json(finalObj)
+    else {
+      res.json({ err: 'No value found in database'  })
+    }
   })
 })
 
 
 
 app.get('/getFieldPressure', async (req, res) => {
-  let { transactionID } = req.query
+  let { transactionID, saved } = req.query
+
+  let action = saved ? 'loadSave' : 'loadTransaction'
+
 
   const map = {
     FECHA: { child: 'fecha' },
@@ -609,28 +785,46 @@ app.get('/getFieldPressure', async (req, res) => {
   const mainParent = 'historicoDePresion'
   const innerParent = 'presionDataCampo'
 
-  getFieldPressure(transactionID, (data) => {
+  getFieldPressure(transactionID, action, (data) => {
     const finalObj = {}
-    data.forEach((d, index) => {
-      const innerObj = {}
-      Object.keys(d).forEach(k => {
-        if (map[k]) {
-          const { child } = map[k]
-          objectPath.set(innerObj, child, d[k])
+    if (data.length > 0) {
+      data.forEach((d, index) => {
+        const innerObj = {}
+        Object.keys(d).forEach(k => {
+          if (map[k]) {
+            const { child } = map[k]
+            objectPath.set(innerObj, child, d[k])
+          }
+        })
+        objectPath.set(innerObj, 'length', data.length)
+        objectPath.set(innerObj, 'index', index)
+        objectPath.push(finalObj, `${mainParent}.${innerParent}`, innerObj)
+      })
+
+      res.json(finalObj)
+    }
+    else if (action === 'loadTransaction'){
+      res.json({ err: 'No value found in database'  })
+    }
+    else {
+      res.json({
+        mainParent: {
+          innerParent: [
+          {}
+          ]
         }
       })
-      objectPath.set(innerObj, 'length', data.length)
-      objectPath.set(innerObj, 'index', index)
-      objectPath.push(finalObj, `${mainParent}.${innerParent}`, innerObj)
-    })
-
-    res.json(finalObj)
+    }
   })
 })
 
 
+
 app.get('/getWellPressure', async (req, res) => {
-  let { transactionID } = req.query
+  let { transactionID, saved } = req.query
+
+  let action = saved ? 'loadSave' : 'loadTransaction'
+
 
   const map = {
     FECHA: { child: 'fecha' },
@@ -643,28 +837,46 @@ app.get('/getWellPressure', async (req, res) => {
   const mainParent = 'historicoDePresion'
   const innerParent = 'presionDataPozo'
 
-  getWellPressure(transactionID, (data) => {
+  getWellPressure(transactionID, action, (data) => {
     const finalObj = {}
-    data.forEach((d, index) => {
-      const innerObj = {}
-      Object.keys(d).forEach(k => {
-        if (map[k]) {
-          const { child } = map[k]
-          objectPath.set(innerObj, child, d[k])
+    if (data.length > 0) {
+      data.forEach((d, index) => {
+        const innerObj = {}
+        Object.keys(d).forEach(k => {
+          if (map[k]) {
+            const { child } = map[k]
+            objectPath.set(innerObj, child, d[k])
+          }
+        })
+        objectPath.set(innerObj, 'length', data.length)
+        objectPath.set(innerObj, 'index', index)
+        objectPath.push(finalObj, `${mainParent}.${innerParent}`, innerObj)
+      })
+
+      res.json(finalObj)
+    }
+    else if (action === 'loadTransaction'){
+      res.json({ err: 'No value found in database'  })
+    }
+    else {
+      res.json({
+        mainParent: {
+          innerParent: [
+          {}
+          ]
         }
       })
-      objectPath.set(innerObj, 'length', data.length)
-      objectPath.set(innerObj, 'index', index)
-      objectPath.push(finalObj, `${mainParent}.${innerParent}`, innerObj)
-    })
-
-    res.json(finalObj)
+    }
   })
 })
 
 
+
 app.get('/getWellAforos', async (req, res) => {
-  let { transactionID } = req.query
+  let { transactionID, saved } = req.query
+
+  let action = saved ? 'loadSave' : 'loadTransaction'
+
  
   const map = {
     FECHA: { parent: 'historicoDeProduccion', child: 'fecha' }, 
@@ -684,7 +896,7 @@ app.get('/getWellAforos', async (req, res) => {
     PH: { parent: 'historicoDeProduccion', child: 'ph'},
   }
 
-  getWellAForos(transactionID, (data) => {
+  getWellAforos(transactionID, action, (data) => {
     const finalObj = {}
 
     if (data[0]) {
@@ -694,19 +906,20 @@ app.get('/getWellAforos', async (req, res) => {
           objectPath.set(finalObj, `${parent}.${child}`, data[0][key])
         }
       })   
+      res.json(finalObj)
     }
     else {
-      Object.keys(map).forEach(key => {
-        const { parent, child } = map[key]
-        objectPath.set(finalObj, `${parent}.${child}`, '')
-      })
+      res.json({ err: 'No value found in database'  })
     }
-    res.json(finalObj)
   })
 })
 
+
 app.get('/getWellProduccion', async (req, res) => {
-  let { transactionID } = req.query
+  let { transactionID, saved } = req.query
+
+  let action = saved ? 'loadSave' : 'loadTransaction'
+
   
   const map = {
     Fecha: { child: 'fecha' },
@@ -727,35 +940,46 @@ app.get('/getWellProduccion', async (req, res) => {
   const mainParent = 'historicoDeProduccion'
   const innerParent = 'produccionData'
 
-  getWellProduccion(transactionID, (data) => {
+  getWellProduccion(transactionID, action, (data) => {
     const finalObj = {}
-    data.forEach((d, index) => {
-      const innerObj = {}
-      Object.keys(d).forEach(k => {
-        if (map[k]) {
-          const { child } = map[k]
-          objectPath.set(innerObj, child, d[k])
-        }
+    if (data.length > 0) {
+      data.forEach((d, index) => {
+        const innerObj = {}
+        Object.keys(d).forEach(k => {
+          if (map[k]) {
+            const { child } = map[k]
+            objectPath.set(innerObj, child, d[k])
+          }
+        })
+        objectPath.set(innerObj, 'length', data.length)
+        objectPath.set(innerObj, 'index', index)
+        objectPath.push(finalObj, `${mainParent}.${innerParent}`, innerObj)
       })
-      objectPath.set(innerObj, 'length', data.length)
-      objectPath.set(innerObj, 'index', index)
-      objectPath.push(finalObj, `${mainParent}.${innerParent}`, innerObj)
-    })
 
-    res.json(finalObj)
+      res.json(finalObj)
+    }
+    else {
+      res.json({ err: 'No value found in database'  })
+    }
   })
 })
 
 app.get('/getWellImages', async (req, res) => {
-  let { transactionID } = req.query
+  let { transactionID, saved } = req.query
 
-  getWellImages(transactionID, (data) => {
+  let action = saved ? 'loadSave' : 'loadTransaction'
+
+
+  getWellImages(transactionID, action, (data) => {
     res.json(data)
   })
 })
 
 app.get('/getInterventionBase', async (req, res) => {
-  let { transactionID } = req.query
+  let { transactionID, saved } = req.query
+
+  let action = saved ? 'loadSave' : 'loadTransaction'
+
 
   const map = {
     OBJETIVO: { parent: 'objetivoYAlcancesIntervencion', child: 'objetivo' }, 
@@ -763,7 +987,7 @@ app.get('/getInterventionBase', async (req, res) => {
     TIPO_DE_INTERVENCIONES: { parent: 'objetivoYAlcancesIntervencion', child: 'tipoDeIntervenciones' }, 
   }
 
-  getInterventionBase(transactionID, (data) => {
+  getInterventionBase(transactionID, action, (data) => {
     const finalObj = {}
 
     if (data[0]) {
@@ -785,7 +1009,10 @@ app.get('/getInterventionBase', async (req, res) => {
 })
 
 app.get('/getInterventionEstimulacion', async (req, res) => {
-  let { transactionID } = req.query
+  let { transactionID, saved } = req.query
+
+  let action = saved ? 'loadSave' : 'loadTransaction'
+
 
   const map = {
     INTERVALO: { parent: 'propuestaEstimulacion', child: 'intervalo' }, 
@@ -832,7 +1059,7 @@ app.get('/getInterventionEstimulacion', async (req, res) => {
     EST_INC_OBSERVACIONES: { parent: 'estIncProduccionEstimulacion', child: 'obervacionesEstIncEstim' },
   }
 
-  getInterventionEsimulacion(transactionID, (data) => {
+  getInterventionEsimulacion(transactionID, action, (data) => {
     const finalObj = {}
 
     if (data[0]) {
@@ -854,7 +1081,10 @@ app.get('/getInterventionEstimulacion', async (req, res) => {
 })
 
 app.get('/getInterventionAcido', async (req, res) => {
-  let { transactionID } = req.query
+  let { transactionID, saved } = req.query
+
+  let action = saved ? 'loadSave' : 'loadTransaction'
+
 
   const map = {
     INTERVALO: { parent: 'propuestaAcido', child: 'intervalo' }, 
@@ -899,11 +1129,11 @@ app.get('/getInterventionAcido', async (req, res) => {
     EST_INC_DELTA_P: { parent: 'estIncProduccionAcido', child: 'estIncDeltaP' }, 
     EST_INC_GASTO_COMPROMISO_Qo: { parent: 'estIncProduccionAcido', child: 'estIncGastoCompromisoQo' },
     EST_INC_GASTO_COMPROMISO_Qg: { parent: 'estIncProduccionAcido', child: 'estIncGastoCompromisoQg' }, 
-    EST_INC_OBSERVACIONES: { parent: 'estIncProduccionAcido', child: 'obervacionesEstIncEstim' },
+    EST_INC_OBSERVACIONES: { parent: 'estIncProduccionAcido', child: 'obervacionesEstIncAcido' },
   }
 
 
-  getInterventionAcido(transactionID, (data) => {
+  getInterventionAcido(transactionID, action, (data) => {
     const finalObj = {}
 
     if (data[0]) {
@@ -926,7 +1156,10 @@ app.get('/getInterventionAcido', async (req, res) => {
 
 
 app.get('/getInterventionApuntalado', async (req, res) => {
-  let { transactionID } = req.query
+  let { transactionID, saved } = req.query
+
+  let action = saved ? 'loadSave' : 'loadTransaction'
+
 
   const map = {
     INTERVALO: { parent: 'propuestaApuntalado', child: 'intervalo' }, 
@@ -935,7 +1168,7 @@ app.get('/getInterventionApuntalado', async (req, res) => {
     CAPACIDAD_TOTAL_DEL_POZO: { parent: 'propuestaApuntalado', child: 'capacidadTotalDelPozo' }, 
     VOLUMEN_PRECOLCHON_N2: { parent: 'propuestaApuntalado', child: 'volumenPrecolchonN2' }, 
     VOLUMEN_DE_APUNTALANTE: { parent: 'propuestaApuntalado', child: 'volumenDeApuntalante' }, 
-    VOLUMEN_DE_GEL_DE_FRACTURA: { parent: 'propuestaApuntalado', child: 'volumenDeGelDeFracture' }, 
+    VOLUMEN_DE_GEL_DE_FRACTURA: { parent: 'propuestaApuntalado', child: 'volumenDeGelDeFractura' }, 
     VOLUMEN_DESPLAZAMIENTO: { parent: 'propuestaApuntalado', child: 'volumenDesplazamiento' },
     VOLUMEN_TOTAL_DE_LIQUIDO: { parent: 'propuestaApuntalado', child: 'volumenTotalDeLiquido' }, 
     MODULO_YOUNG_ARENA: { parent: 'propuestaApuntalado', child: 'moduloYoungArena' },
@@ -945,7 +1178,7 @@ app.get('/getInterventionApuntalado', async (req, res) => {
     GRADIENTE_DE_FRACTURA: { parent: 'propuestaApuntalado', child: 'gradienteDeFractura' }, 
     DENSIDAD_DE_DISPAROS: { parent: 'propuestaApuntalado', child: 'densidadDeDisparos' },
     DIAMETRO_DE_DISPAROS: { parent: 'propuestaApuntalado', child: 'diametroDeDisparos' }, 
-    LONGITUD_APUNTALADA: { parent: 'resultadosSimulacionApuntalado', child: 'longitudApuntalado' }, 
+    LONGITUD_APUNTALADA: { parent: 'resultadosSimulacionApuntalado', child: 'longitudApuntalada' }, 
     ALTURA_TOTAL_DE_FRACTURA: { parent: 'resultadosSimulacionApuntalado', child: 'alturaTotalDeFractura' },
     ANCHO_PROMEDIO: { parent: 'resultadosSimulacionApuntalado', child: 'anchoPromedio' }, 
     CONCENTRACION_AREAL: { parent: 'resultadosSimulacionApuntalado', child: 'concentractionAreal' },
@@ -969,10 +1202,10 @@ app.get('/getInterventionApuntalado', async (req, res) => {
     EST_INC_DELTA_P: { parent: 'estIncProduccionApuntalado', child: 'estIncDeltaP' }, 
     EST_INC_GASTO_COMPROMISO_Qo: { parent: 'estIncProduccionApuntalado', child: 'estIncGastoCompromisoQo' },
     EST_INC_GASTO_COMPROMISO_Qg: { parent: 'estIncProduccionApuntalado', child: 'estIncGastoCompromisoQg' }, 
-    EST_INC_OBSERVACIONES: { parent: 'estIncProduccionApuntalado', child: 'obervacionesEstIncEstim' },
+    EST_INC_OBSERVACIONES: { parent: 'estIncProduccionApuntalado', child: 'obervacionesEstIncApuntalado' },
   } 
 
-  getInterventionApuntalado(transactionID, (data) => {
+  getInterventionApuntalado(transactionID, action, (data) => {
     const finalObj = {}
 
     if (data[0]) {
@@ -993,7 +1226,10 @@ app.get('/getInterventionApuntalado', async (req, res) => {
   })
 })
 app.get('/getLabTest', async (req, res) => {
-  let { transactionID } = req.query
+  let { transactionID, saved } = req.query
+
+  let action = saved ? 'loadSave' : 'loadTransaction'
+
 
   const map = {
     TIPO_DE_ANALISIS: { child: 'type' }, 
@@ -1007,7 +1243,7 @@ app.get('/getLabTest', async (req, res) => {
   const mainParent = 'pruebasDeLaboratorio'
   const innerParent = 'pruebasDeLaboratorioData'
 
-  getLabTest(transactionID, (data) => {
+  getLabTest(transactionID, action, (data) => {
     const finalObj = {}
     data.forEach((d, index) => {
       const innerObj = {}
@@ -1027,7 +1263,10 @@ app.get('/getLabTest', async (req, res) => {
 })
 
 app.get('/getCedulaEstimulacion', async (req, res) => {
-  let { transactionID } = req.query
+  let { transactionID, saved } = req.query
+
+  let action = saved ? 'loadSave' : 'loadTransaction'
+
 
   const map = {
     ETAPA: { child: 'etapa' }, 
@@ -1038,7 +1277,8 @@ app.get('/getCedulaEstimulacion', async (req, res) => {
     GASTO_N2: { child: 'gastoN2' }, 
     GASTO_LIQUIDO: { child: 'gastoLiqudo' }, 
     GASTO_EN_FONDO: { child: 'gastoEnFondo' }, 
-    CALIDAD: { child: '' }, VOL_N2: { child: 'calidad' }, 
+    CALIDAD: { child: 'calidad' }, 
+    VOL_N2: { child: 'volN2' },
     VOL_LIQUIDO_ACUM: { child: 'volLiquidoAcum' }, 
     VOL_N2_ACUM: { child: 'volN2Acum' }, 
     REL_N2_LIQ: { child: 'relN2Liq' }, 
@@ -1048,20 +1288,31 @@ app.get('/getCedulaEstimulacion', async (req, res) => {
   const mainParent = 'propuestaEstimulacion'
   const innerParent = 'cedulaData'
 
-  getCedulaEstimulacion(transactionID, (data) => {
-    const finalObj = {}
-    data.forEach((d, index) => {
-      const innerObj = {}
-      Object.keys(d).forEach(k => {
-        if (map[k]) {
-          const { child } = map[k]
-          objectPath.set(innerObj, child, d[k])
-        }
+  getCedulaEstimulacion(transactionID, action, (data) => {
+    let finalObj = {}
+    if (data.length > 0) {
+      data.forEach((d, index) => {
+        const innerObj = {}
+        Object.keys(d).forEach(k => {
+          if (map[k]) {
+            const { child } = map[k]
+            objectPath.set(innerObj, child, d[k])
+          }
+        })
+        objectPath.set(innerObj, 'length', data.length)
+        objectPath.set(innerObj, 'index', index)
+        objectPath.push(finalObj, `${mainParent}.${innerParent}`, innerObj)
       })
-      objectPath.set(innerObj, 'length', data.length)
-      objectPath.set(innerObj, 'index', index)
-      objectPath.push(finalObj, `${mainParent}.${innerParent}`, innerObj)
-    })
+    }
+    else {
+      finalObj = {
+        'propuestaEstimulacion': {
+          "cedulaData": [
+            {}
+          ]
+        }
+      }
+    }
 
     res.json(finalObj)
   })
@@ -1069,7 +1320,10 @@ app.get('/getCedulaEstimulacion', async (req, res) => {
 
 
 app.get('/getCedulaAcido', async (req, res) => {
-  let { transactionID } = req.query
+  let { transactionID, saved } = req.query
+
+  let action = saved ? 'loadSave' : 'loadTransaction'
+
 
 
   const map = {
@@ -1081,7 +1335,8 @@ app.get('/getCedulaAcido', async (req, res) => {
     GASTO_N2: { child: 'gastoN2' }, 
     GASTO_LIQUIDO: { child: 'gastoLiqudo' }, 
     GASTO_EN_FONDO: { child: 'gastoEnFondo' }, 
-    CALIDAD: { child: '' }, VOL_N2: { child: 'calidad' }, 
+    CALIDAD: { child: 'calidad' }, 
+    VOL_N2: { child: 'volN2' },
     VOL_LIQUIDO_ACUM: { child: 'volLiquidoAcum' }, 
     VOL_N2_ACUM: { child: 'volN2Acum' }, 
     REL_N2_LIQ: { child: 'relN2Liq' }, 
@@ -1091,20 +1346,31 @@ app.get('/getCedulaAcido', async (req, res) => {
   const mainParent = 'propuestaAcido'
   const innerParent = 'cedulaData'
 
-  getCedulaAcido(transactionID, (data) => {
-    const finalObj = {}
-    data.forEach((d, index) => {
-      const innerObj = {}
-      Object.keys(d).forEach(k => {
-        if (map[k]) {
-          const { child } = map[k]
-          objectPath.set(innerObj, child, d[k])
-        }
+  getCedulaAcido(transactionID, action, (data) => {
+    let finalObj = {}
+    if (data.length > 0) {
+      data.forEach((d, index) => {
+        const innerObj = {}
+        Object.keys(d).forEach(k => {
+          if (map[k]) {
+            const { child } = map[k]
+            objectPath.set(innerObj, child, d[k])
+          }
+        })
+        objectPath.set(innerObj, 'length', data.length)
+        objectPath.set(innerObj, 'index', index)
+        objectPath.push(finalObj, `${mainParent}.${innerParent}`, innerObj)
       })
-      objectPath.set(innerObj, 'length', data.length)
-      objectPath.set(innerObj, 'index', index)
-      objectPath.push(finalObj, `${mainParent}.${innerParent}`, innerObj)
-    })
+    }
+    else {
+      finalObj = {
+        'propuestaAcido': {
+          "cedulaData": [
+            {}
+          ]
+        }
+      }
+    }
 
     res.json(finalObj)
   })
@@ -1112,7 +1378,10 @@ app.get('/getCedulaAcido', async (req, res) => {
 
 
 app.get('/getCedulaApuntalado', async (req, res) => {
-  let { transactionID } = req.query
+  let { transactionID, saved } = req.query
+
+  let action = saved ? 'loadSave' : 'loadTransaction'
+
 
 
   const map = {
@@ -1124,7 +1393,8 @@ app.get('/getCedulaApuntalado', async (req, res) => {
     GASTO_N2: { child: 'gastoN2' }, 
     GASTO_LIQUIDO: { child: 'gastoLiqudo' }, 
     GASTO_EN_FONDO: { child: 'gastoEnFondo' }, 
-    CALIDAD: { child: '' }, VOL_N2: { child: 'calidad' }, 
+    CALIDAD: { child: 'calidad' }, 
+    VOL_N2: { child: 'volN2' }, 
     VOL_LIQUIDO_ACUM: { child: 'volLiquidoAcum' }, 
     VOL_N2_ACUM: { child: 'volN2Acum' }, 
     REL_N2_LIQ: { child: 'relN2Liq' }, 
@@ -1134,20 +1404,31 @@ app.get('/getCedulaApuntalado', async (req, res) => {
   const mainParent = 'propuestaApuntalado'
   const innerParent = 'cedulaData'
 
-  getCedulaApuntalado(transactionID, (data) => {
-    const finalObj = {}
-    data.forEach((d, index) => {
-      const innerObj = {}
-      Object.keys(d).forEach(k => {
-        if (map[k]) {
-          const { child } = map[k]
-          objectPath.set(innerObj, child, d[k])
-        }
+  getCedulaApuntalado(transactionID, action, (data) => {
+    let finalObj = {}
+    if (data.length > 0) {
+      data.forEach((d, index) => {
+        const innerObj = {}
+        Object.keys(d).forEach(k => {
+          if (map[k]) {
+            const { child } = map[k]
+            objectPath.set(innerObj, child, d[k])
+          }
+        })
+        objectPath.set(innerObj, 'length', data.length)
+        objectPath.set(innerObj, 'index', index)
+        objectPath.push(finalObj, `${mainParent}.${innerParent}`, innerObj)
       })
-      objectPath.set(innerObj, 'length', data.length)
-      objectPath.set(innerObj, 'index', index)
-      objectPath.push(finalObj, `${mainParent}.${innerParent}`, innerObj)
-    })
+    }
+    else {
+      finalObj = {
+        'propuestaApuntalado': {
+          "cedulaData": [
+            {}
+          ]
+        }
+      }
+    }
 
     res.json(finalObj)
   })
@@ -1155,21 +1436,28 @@ app.get('/getCedulaApuntalado', async (req, res) => {
 
 
 app.get('/getLabResults', async (req, res) => {
-  let { transactionID } = req.query
+  let { transactionID, saved } = req.query
+
+  let action = saved ? 'loadSave' : 'loadTransaction'
+
 
   const map = {
-    SISTEMA: { child: '' }, 
-    TIEMPO_DE_ROMPIMIENTO: { child: '' }, 
-    INTERFASE: { child: '' }, 
-    SOLIDOS_DESPUES_DE_FILTRAR: { child: '' }, 
-    RESULTADO: { child: '' },
+    SISTEMA: { child: 'sistem' }, 
+    TIEMPO_DE_ROMPIMIENTO: { child: 'tiempoRompimiento' }, 
+    INTERFASE: { child: 'interfase' }, 
+    SOLIDOS_DESPUES_DE_FILTRAR: { child: 'solidosFiltrar' }, 
+    RESULTADO: { child: 'resultado' },
   }
 
-  const mainParent = 'pruebasDeLaboratorioData'
-  const innerParent = 's'
+  const mainParent = 'pruebasDeLaboratorio'
+  const innerParent = 'pruebasDeLaboratorioData'
 
-  getLabResults(transactionID, (data) => {
+  getLabResults(transactionID, action, (data) => {
     const finalObj = {}
+    console.log(data)
+
+    data = [data[0], data[0]]
+
     data.forEach((d, index) => {
       const innerObj = {}
       Object.keys(d).forEach(k => {
@@ -1189,7 +1477,10 @@ app.get('/getLabResults', async (req, res) => {
 
 
 app.get('/getLabAcido', async (req, res) => {
-  let { transactionID } = req.query
+  let { transactionID, saved } = req.query
+
+  let action = saved ? 'loadSave' : 'loadTransaction'
+
 
   const map = {
     CONTENIDO_DE_ACEITE: { child: 'contenidoDeAceite' }, 
@@ -1225,7 +1516,7 @@ app.get('/getLabAcido', async (req, res) => {
   const mainParent = 'pruebasDeLaboratorio'
   const innerParent = 'pruebasDeLaboratorioData'
 
-  getLabAcido(transactionID, (data) => {
+  getLabAcido(transactionID, action, (data) => {
     const finalObj = {}
     data.forEach((d, index) => {
       const innerObj = {}
@@ -1246,7 +1537,10 @@ app.get('/getLabAcido', async (req, res) => {
 
 
 app.get('/getLabApuntalado', async (req, res) => {
-  let { transactionID } = req.query
+  let { transactionID, saved } = req.query
+
+  let action = saved ? 'loadSave' : 'loadTransaction'
+
 
   const map = {
     CONTENIDO_DE_ACEITE: { child: 'contenidoDeAceite' }, 
@@ -1282,7 +1576,7 @@ app.get('/getLabApuntalado', async (req, res) => {
   const mainParent = 'pruebasDeLaboratorio'
   const innerParent = 'pruebasDeLaboratorioData'
 
-  getLabApuntalado(transactionID, (data) => {
+  getLabApuntalado(transactionID, action, (data) => {
     const finalObj = {}
     data.forEach((d, index) => {
       const innerObj = {}
@@ -1303,17 +1597,23 @@ app.get('/getLabApuntalado', async (req, res) => {
 
 
 app.get('/getCosts', async (req, res) => {
-  let { transactionID } = req.query
+  let { transactionID, saved } = req.query
 
-  getCosts(transactionID, (data) => {
+  let action = saved ? 'loadSave' : 'loadTransaction'
+
+
+  getCosts(transactionID, action, (data) => {
     res.json(data)
   })
 })
 
 app.get('/getInterventionImage', async (req, res) => {
-  let { transactionID } = req.query
+  let { transactionID, saved } = req.query
 
-  getInterventionImage(transactionID, (data) => {
+  let action = saved ? 'loadSave' : 'loadTransaction'
+
+
+  getInterventionImage(transactionID, action, (data) => {
     res.json(data)
   })
 })

@@ -149,7 +149,7 @@ const INSERT_EMBOLO_VIAJERO_QUERY = {
                 NUMERO_DE_DESCARGAS_O_CIRCLOS, VOLUMEN_DESPLAZADO_POR_CIRCLO, TRANSACTION_ID) VALUES
                 (1, 1, 1, ?, ,?, ?,?)`,
     loadSave: `SELECT * FROM _WellProductionSystemsEmboloViajeroSave WHERE TRANSACTION_ID = ?`,
-    loadTransaction: `SELECT * FROM Welltable ProductionSystemsEmboloViajero TRANSACTION_ID = ?`    
+    loadTransaction: `SELECT * FROM WellProductionSystemsEmboloViajero WHERE TRANSACTION_ID = ?`    
 }
 
 const INSERT_BOMBEO_NEUMATICO_QUERY = {
@@ -282,8 +282,8 @@ const INSERT_WELL_IMAGE_QUERY = {
         WELL_FORMACION_ID, IMAGE_NAME, IMG_URL, TRANSACTION_ID) VALUES
         ?`,
     submit: `INSERT INTO WellImages (
-        WELL_FORMACION_ID, IMAGE_NAME, IMG_URL, TRANSACTION_ID) VALUES,
-        ?, ?, ?, ?`,
+        WELL_FORMACION_ID, IMAGE_NAME, IMG_URL, TRANSACTION_ID) VALUES
+        ?`,
     loadSave: `SELECT * FROM _WellImagesSave WHERE TRANSACTION_ID = ?`,
     loadTransaction: `SELECT * FROM WellImages WHERE TRANSACTION_ID = ?`
 }
@@ -294,7 +294,7 @@ const INSERT_INTERVENTION_BASE_QUERY = {
       VALUES (?, ?, ?, ?, ?, ?)`,
     submit: `INSERT INTO Intervenciones (
       INTERVENCIONES_ID, WELL_FORMACION_ID, OBJETIVO, ALCANCES, TIPO_DE_INTERVENCIONES, TRANSACTION_ID)
-      VALUES (?, ?, ?, ?, ?, ?,)`,
+      VALUES (?, ?, ?, ?, ?, ?)`,
     loadSave: `SELECT * FROM _IntervencionesSave WHERE TRANSACTION_ID = ?`,
     loadTransaction: `SELECT * FROM Intervenciones WHERE TRANSACTION_ID = ?`    
 }
@@ -543,244 +543,188 @@ const INSERT_INTERVENTION_IMAGE_QUERY = {
 
 const INSERT_TRANSACTION = {
     save: `INSERT INTO SavedInputs (
-        TRANSACTION_ID, USER_ID, WELL_FORMACION_ID) VALUES
-        (?, ?, ?)`,
+        TRANSACTION_ID, USER_ID, WELL_FORMACION_ID, TIPO_DE_INTERVENCIONES) VALUES
+        (?, ?, ?, ?)`,
     submit: `INSERT INTO Transactions (
         TRANSACTION_ID, USER_ID, FIELD_FORMACION_ID, WELL_FORMACION_ID) VALUES
         (?, ?, ?, ?)`, 
 }
 
 
-export const getFields = async (transID, cb) => {
-  let action = 'loadSave'
-
+export const getFields = async (transID, action, cb) => {
   connection.query(INSERT_FIELDS_QUERY[action], [transID], (err, results) => {
     cb(results)
    })
 }
 
-export const getWell = async (transID, cb) => {
-  let action = 'loadSave'
-
+export const getWell = async (transID, action, cb) => {
   connection.query(INSERT_WELL_QUERY[action], [transID], (err, results) => {
     cb(results)
    })
 }
 
-export const getHistIntervenciones = async (transID, cb) => {
-  let action = 'loadSave'
-
+export const getHistIntervenciones = async (transID, action, cb) => {
   connection.query(INSERT_HIST_INTERVENCIONES_QUERY[action], [transID], (err, results) => {
     cb(results)
    })
 }
 
 
-export const getLayer = async (transID, cb) => {
-  let action = 'loadSave'
-
+export const getLayer = async (transID, action, cb) => {
   connection.query(INSERT_LAYER_QUERY[action], [transID], (err, results) => {
     cb(results)
    })
 }
 
-export const getMudLoss = async (transID, cb) => {
-  let action = 'loadSave'
-
+export const getMudLoss = async (transID, action, cb) => {
   connection.query(INSERT_MUD_LOSS_QUERY[action], [transID], (err, results) => {
     cb(results)
    })
 }
 
-export const getMecanico = async (transID, cb) => {
-  let action = 'loadSave'
-
+export const getMecanico = async (transID, action, cb) => {
   connection.query(INSERT_MECANICO_QUERY[action], [transID], (err, results) => {
     cb(results)
    })
 }
 
-export const getAnalisisAgua = async (transID, cb) => {
-  let action = 'loadSave'
-
+export const getAnalisisAgua = async (transID, action, cb) => {
   connection.query(INSERT_ANALISIS_AGUA_QUERY[action], [transID], (err, results) => {
     cb(results)
    })
 }
 
 
-export const getEmboloViajero = async (transID, cb) => {
-    let action = 'loadSave'
-
+export const getEmboloViajero = async (transID, action, cb) => {
     connection.query(INSERT_EMBOLO_VIAJERO_QUERY[action], [transID], (err, results) => {
+        console.log(err)
+        console.log(results)
         cb(results)
     })
 }
 
-export const getBombeoNeumatico = async (transID, cb) => {
-    let action = 'loadSave'
-
+export const getBombeoNeumatico = async (transID, action, cb) => {
     connection.query(INSERT_BOMBEO_NEUMATICO_QUERY[action], [transID], (err, results) => {
         cb(results)
     })
 }
-export const getBombeoHidraulico = async (transID, cb) => {
-    let action = 'loadSave'
-
+export const getBombeoHidraulico = async (transID, action, cb) => {
     connection.query(INSERT_BOMBEO_HIDRAULICO_QUERY[action], [transID], (err, results) => {
         cb(results)
     })
 }
-export const getBombeoCavidades = async (transID, cb) => {
-    let action = 'loadSave'
-
+export const getBombeoCavidades = async (transID, action, cb) => {
     connection.query(INSERT_BOMBEO_CAVIDADES_QUERY[action], [transID], (err, results) => {
         cb(results)
     })
 }
-export const getBombeoElectrocentrifugo = async (transID, cb) => {
-    let action = 'loadSave'
-
+export const getBombeoElectrocentrifugo = async (transID, action, cb) => {
     connection.query(INSERT_BOMBEO_ELECTROCENTRIFUGO_QUERY[action], [transID], (err, results) => {
         cb(results)
     })
 }
-export const getBombeoMecanico = async (transID, cb) => {
-    let action = 'loadSave'
-
+export const getBombeoMecanico = async (transID, action, cb) => {
     connection.query(INSERT_BOMBEO_MECANICO_QUERY[action], [transID], (err, results) => {
         cb(results)
     })
 }
 
 
-export const getFieldPressure = async (transID, cb) => {
-  let action = 'loadSave'
-
+export const getFieldPressure = async (transID, action, cb) => {
   connection.query(INSERT_FIELD_PRESSURE_QUERY[action], [transID], (err, results) => {
     cb(results)
    })
 }
 
-export const getWellPressure = async (transID, cb) => {
-  let action = 'loadSave'
-
+export const getWellPressure = async (transID, action, cb) => {
   connection.query(INSERT_WELL_PRESSURE_QUERY[action], [transID], (err, results) => {
     cb(results)
    })
 }
 
-export const getWellAForos = async (transID, cb) => {
-  let action = 'loadSave'
-
+export const getWellAforos = async (transID, action, cb) => {
+    console.log('queirying well afroso', action)
+    console.log(INSERT_WELL_AFOROS_QUERY[action])
   connection.query(INSERT_WELL_AFOROS_QUERY[action], [transID], (err, results) => {
+    console.log('i didi it', err)
+    console.log(results)
     cb(results)
    })
 }
 
-export const getWellProduccion = async (transID, cb) => {
-  let action = 'loadSave'
-
+export const getWellProduccion = async (transID, action, cb) => {
   connection.query(INSERT_WELL_PRODUCCION_QUERY[action], [transID], (err, results) => {
     cb(results)
    })
 }
 
-export const getWellImages = async (transID, cb) => {
-  let action = 'loadSave'
-
+export const getWellImages = async (transID, action, cb) => {
   connection.query(INSERT_WELL_IMAGE_QUERY[action], [transID], (err, results) => {
     cb(results)
    })
 }
 
-export const getInterventionBase = async (transID, cb) => {
-    let action = 'loadSave'
-
+export const getInterventionBase = async (transID, action, cb) => {
     connection.query(INSERT_INTERVENTION_BASE_QUERY[action], [transID], (err, results) => {
         cb(results)
     })
 }
-export const getInterventionEsimulacion = async (transID, cb) => {
-    let action = 'loadSave'
-
+export const getInterventionEsimulacion = async (transID, action, cb) => {
     connection.query(INSERT_INTERVENTION_ESIMULACION_QUERY[action], [transID], (err, results) => {
         cb(results)
     })
 }
-export const getInterventionAcido = async (transID, cb) => {
-    let action = 'loadSave'
-
+export const getInterventionAcido = async (transID, action, cb) => {
     connection.query(INSERT_INTERVENTION_ACIDO_QUERY[action], [transID], (err, results) => {
         cb(results)
     })
 }
-export const getInterventionApuntalado = async (transID, cb) => {
-    let action = 'loadSave'
-
+export const getInterventionApuntalado = async (transID, action, cb) => {
     connection.query(INSERT_INTERVENTION_APUNTALADO_QUERY[action], [transID], (err, results) => {
         cb(results)
     })
 }
-export const getLabTest = async (transID, cb) => {
-    let action = 'loadSave'
-
+export const getLabTest = async (transID, action, cb) => {
     connection.query(INSERT_LAB_TEST_QUERY[action], [transID], (err, results) => {
         cb(results)
     })
 }
-export const getCedulaEstimulacion = async (transID, cb) => {
-    let action = 'loadSave'
-
+export const getCedulaEstimulacion = async (transID, action, cb) => {
     connection.query(INSERT_CEDULA_ESTIMULACION_QUERY[action], [transID], (err, results) => {
         cb(results)
     })
 }
-export const getCedulaAcido = async (transID, cb) => {
-    let action = 'loadSave'
-
+export const getCedulaAcido = async (transID, action, cb) => {
     connection.query(INSERT_CEDULA_ACIDO_QUERY[action], [transID], (err, results) => {
         cb(results)
     })
 }
-export const getCedulaApuntalado = async (transID, cb) => {
-    let action = 'loadSave'
-
+export const getCedulaApuntalado = async (transID, action, cb) => {
     connection.query(INSERT_CEDULA_APUNTALADO_QUERY[action], [transID], (err, results) => {
         cb(results)
     })
 }
-export const getLabResults = async (transID, cb) => {
-    let action = 'loadSave'
-
+export const getLabResults = async (transID, action, cb) => {
     connection.query(INSERT_LAB_RESULTS_QUERY[action], [transID], (err, results) => {
         cb(results)
     })
 }
-export const getLabAcido = async (transID, cb) => {
-    let action = 'loadSave'
-
+export const getLabAcido = async (transID, action, cb) => {
     connection.query(INSERT_LAB_ACIDO_QUERY[action], [transID], (err, results) => {
         cb(results)
     })
 }
-export const getLabApuntalado = async (transID, cb) => {
-    let action = 'loadSave'
-
+export const getLabApuntalado = async (transID, action, cb) => {
     connection.query(INSERT_LAB_APUNTALADO_QUERY[action], [transID], (err, results) => {
         cb(results)
     })
 }
-export const getCosts = async (transID, cb) => {
-    let action = 'loadSave'
-
+export const getCosts = async (transID, action, cb) => {
     connection.query(INSERT_COSTS_QUERY[action], [transID], (err, results) => {
         cb(results)
     })
 }
-export const getInterventionImage = async (transID, cb) => {
-    let action = 'loadSave'
-
+export const getInterventionImage = async (transID, action, cb) => {
     connection.query(INSERT_INTERVENTION_IMAGE_QUERY[action], [transID], (err, results) => {
         cb(results)
     })
@@ -874,8 +818,7 @@ export const create = async (body, action) => {
 
   let { intervaloProductor, espesorBruto, espesorNeto, caliza,
     dolomia, arcilla, porosidad, permeabilidad, sw, caa, cga, tipoDePozo, pwsFecha, pwfFecha,
-    deltaPPerMes, tyac, pvt, aparejoDeProduccion, profEmpacador, profSensorPYT, tipoDeSap, moduloYoungArena, moduloYoungLutitas, relacPoissonArena,
-    relacPoissonLutatas, gradienteDeFractura, densidadDeDisparos, diametroDeDisparos, historialIntervencionesData } = finalObj.fichaTecnicaDelPozo
+    deltaPPerMes, tyac, pvt, aparejoDeProduccion, profEmpacador, profSensorPYT, tipoDeSap, historialIntervencionesData } = finalObj.fichaTecnicaDelPozo
   
   let { layerData, mudLossData } = finalObj.evaluacionPetrofisica
 
@@ -950,7 +893,8 @@ export const create = async (body, action) => {
       //Propuesta De Fracturamiento Acido
       var { intervalo,
         longitudDeIntervalo, volAparejo, capacidadTotalDelPozo, volumenPrecolchonN2, volumenSistemaNoReativo,
-        volumenSistemaReactivo, volumenSistemaDivergente, volumenDesplazamientoLiquido, volumenDesplazamientoGelLineal } = finalObj.propuestaAcido
+        volumenSistemaReactivo, volumenSistemaDivergente, volumenDesplazamientoLiquido, volumenDesplazamientoGelLineal, moduloYoungArena, moduloYoungLutitas, relacPoissonArena,
+    relacPoissonLutatas, gradienteDeFractura, densidadDeDisparos, diametroDeDisparos } = finalObj.propuestaAcido
 
       //Resultados De La Simulacion
       var { longitudTotal, longitudEfectivaGrabada, alturaGrabada, anchoPromedio, concentracionDelAcido,
@@ -979,7 +923,8 @@ export const create = async (body, action) => {
       //Propuesta De Fracturamiento Apuntalado
       var { intervalo,
         longitudDeIntervalo, volAparejo, capacidadTotalDelPozo, volumenPrecolchonN2, volumenDeApuntalante,
-        volumenDeGelDeFractura, volumenDesplazamiento, volumenTotalDeLiquido } = finalObj.propuestaApuntalado
+        volumenDeGelDeFractura, volumenDesplazamiento, volumenTotalDeLiquido, moduloYoungArena, moduloYoungLutitas, relacPoissonArena,
+    relacPoissonLutatas, gradienteDeFractura, densidadDeDisparos, diametroDeDisparos } = finalObj.propuestaApuntalado
 
       //Resultados de simulacion Apuntalado
       var { longitudApuntalada, alturaTotalDeFractura, anchoPromedio, concentractionAreal, conductividad,
@@ -1320,7 +1265,6 @@ export const create = async (body, action) => {
                                     console.log('lab tests', err)
                                     console.log('lab tests', results)
 
-
                                     query = tipoDeIntervenciones === 'estimulacion' ? (action === 'save' ? INSERT_CEDULA_ESTIMULACION_QUERY.save : INSERT_CEDULA_ESTIMULACION_QUERY.submit) : tipoDeIntervenciones === 'acido' ? (action === 'save' ? INSERT_CEDULA_ACIDO_QUERY.save : INSERT_CEDULA_ACIDO_QUERY.submit) : (action === 'save' ? INSERT_CEDULA_APUNTALADO_QUERY.save : INSERT_CEDULA_APUNTALADO_QUERY.submit)
 
                                     values = []
@@ -1412,7 +1356,7 @@ export const create = async (body, action) => {
                                               console.log('intervention img', err)
                                               console.log('intervention img', results)
 
-                                              values = action === 'save' ? [transactionID, userID, wellFormacionID] : [[transactionID, userID, fieldFormacionID, wellFormacionID]]
+                                              values = action === 'save' ? [transactionID, userID, wellFormacionID, tipoDeIntervenciones] : [transactionID, userID, fieldFormacionID, wellFormacionID]
                                               connection.query((action === 'save' ? INSERT_TRANSACTION.save : INSERT_TRANSACTION.submit), values, (err, results) => {
                                                 console.log('transaction', err)
                                                 console.log('transaction', results)

@@ -111,6 +111,8 @@ const fichaTecnicaDelCampo = (state = initialState, action) => {
         return state.set('n2Field', fromJS(action.value))
     case 'set_checked' :
         return state.set('checked', fromJS(action.value))
+    case 'set_fichaTecnicaDelCampo':
+        return state = fromJS(action.value)
     default:
       return state
   }

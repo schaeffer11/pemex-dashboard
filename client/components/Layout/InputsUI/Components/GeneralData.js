@@ -198,44 +198,63 @@ import { InputRow, InputRowUnitless, InputRowSelectUnitless, TextAreaUnitless } 
 
   
   async handleLoad() {
+    let { user, formData } = this.props
+    user = user.toJS()
+    formData = formData.toJS()
 
-    // These ids are just for testing
-    const wellID = 449251665
-    const userID = 30
-    let transactionID = await fetch(`/api/getSaveID?wellID=${wellID}&userID=${userID}`)
+
+    const wellID = formData.pozo
+    const userID = user.id
+
+    console.log(wellID, userID)
+
+    let data = await fetch(`/api/getSave?userID=${userID}`)
       .then(res => res.json())
-      .then(r => r.transactionID)
-    console.log('ok i have a transaction', transactionID)
-    transactionID = 105177824
+
+    let { transactionID, tipoDeIntervenciones } = data
+
+    console.log(transactionID)
+
+    let labQuery
+
+    if (tipoDeIntervenciones === 'estimulacion') {
+      labQuery = `api/getCedulaEstimulacion?transactionID=${transactionID}&saved=1`
+    }
+    else if (tipoDeIntervenciones === 'acido') {
+      labQuery = `api/getLabAcido?transactionID=${transactionID}&saved=1`
+    }
+    else if (tipoDeIntervenciones === 'apuntalado') {
+      labQuery = `api/getLabApuntalado?transactionID=${transactionID}&saved=1`
+    }
+
     Promise.all([
-      fetch(`api/getFields?transactionID=${transactionID}`).then(r => r.json()),
-      fetch(`api/getMudLoss?transactionID=${transactionID}`).then(r => r.json()),
-      fetch(`api/getLayer?transactionID=${transactionID}`).then(r => r.json()),
-      fetch(`api/getWell?transactionID=${transactionID}`).then(r => r.json()),
-      fetch(`api/getHistIntervenciones?transactionID=${transactionID}`).then(r => r.json()),
-      fetch(`api/getMecanico?transactionID=${transactionID}`).then(r => r.json()),
-      fetch(`api/getAnalisisAgua?transactionID=${transactionID}`).then(r => r.json()),
-      fetch(`api/getEmboloViajero?transactionID=${transactionID}`).then(r => r.json()),
-      fetch(`api/getBombeoNeumatico?transactionID=${transactionID}`).then(r => r.json()),
-      fetch(`api/getBombeoHidraulico?transactionID=${transactionID}`).then(r => r.json()),
-      fetch(`api/getBombeoCavidades?transactionID=${transactionID}`).then(r => r.json()),
-      fetch(`api/getBombeoElectrocentrifugo?transactionID=${transactionID}`).then(r => r.json()),
-      fetch(`api/getBombeoMecanico?transactionID=${transactionID}`).then(r => r.json()),
-      fetch(`api/getFieldPressure?transactionID=${transactionID}`).then(r => r.json()),
-      fetch(`api/getWellPressure?transactionID=${transactionID}`).then(r => r.json()),
-      fetch(`api/getWellAforos?transactionID=${transactionID}`).then(r => r.json()),
-      fetch(`api/getWellProduccion?transactionID=${transactionID}`).then(r => r.json()),
-      fetch(`api/getInterventionBase?transactionID=${transactionID}`).then(r => r.json()),
-      fetch(`api/getInterventionEstimulacion?transactionID=${transactionID}`).then(r => r.json()),
-      fetch(`api/getInterventionAcido?transactionID=${transactionID}`).then(r => r.json()),
-      fetch(`api/getInterventionApuntalado?transactionID=${transactionID}`).then(r => r.json()),
-      fetch(`api/getLabTest?transactionID=${transactionID}`).then(r => r.json()),
-      fetch(`api/getCedulaEstimulacion?transactionID=${transactionID}`).then(r => r.json()),
-      fetch(`api/getCedulaAcido?transactionID=${transactionID}`).then(r => r.json()),
-      fetch(`api/getCedulaApuntalado?transactionID=${transactionID}`).then(r => r.json()),       
+      fetch(`api/getFields?transactionID=${transactionID}&saved=1`).then(r => r.json()),
+      fetch(`api/getMudLoss?transactionID=${transactionID}&saved=1`).then(r => r.json()),
+      fetch(`api/getLayer?transactionID=${transactionID}&saved=1`).then(r => r.json()),
+      fetch(`api/getWell?transactionID=${transactionID}&saved=1`).then(r => r.json()),
+      fetch(`api/getHistIntervenciones?transactionID=${transactionID}&saved=1`).then(r => r.json()),
+      fetch(`api/getMecanico?transactionID=${transactionID}&saved=1`).then(r => r.json()),
+      fetch(`api/getAnalisisAgua?transactionID=${transactionID}&saved=1`).then(r => r.json()),
+      fetch(`api/getEmboloViajero?transactionID=${transactionID}&saved=1`).then(r => r.json()),
+      fetch(`api/getBombeoNeumatico?transactionID=${transactionID}&saved=1`).then(r => r.json()),
+      fetch(`api/getBombeoHidraulico?transactionID=${transactionID}&saved=1`).then(r => r.json()),
+      fetch(`api/getBombeoCavidades?transactionID=${transactionID}&saved=1`).then(r => r.json()),
+      fetch(`api/getBombeoElectrocentrifugo?transactionID=${transactionID}&saved=1`).then(r => r.json()),
+      fetch(`api/getBombeoMecanico?transactionID=${transactionID}&saved=1`).then(r => r.json()),
+      fetch(`api/getFieldPressure?transactionID=${transactionID}&saved=1`).then(r => r.json()),
+      fetch(`api/getWellPressure?transactionID=${transactionID}&saved=1`).then(r => r.json()),
+      fetch(`api/getWellAforos?transactionID=${transactionID}&saved=1`).then(r => r.json()),
+      fetch(`api/getWellProduccion?transactionID=${transactionID}&saved=1`).then(r => r.json()),
+      fetch(`api/getInterventionBase?transactionID=${transactionID}&saved=1`).then(r => r.json()),
+      fetch(`api/getInterventionEstimulacion?transactionID=${transactionID}&saved=1`).then(r => r.json()),
+      fetch(`api/getInterventionAcido?transactionID=${transactionID}&saved=1`).then(r => r.json()),
+      fetch(`api/getInterventionApuntalado?transactionID=${transactionID}&saved=1`).then(r => r.json()),
+      fetch(`api/getLabTest?transactionID=${transactionID}&saved=1`).then(r => r.json()),
+      fetch(`api/getCedulaEstimulacion?transactionID=${transactionID}&saved=1`).then(r => r.json()),   
+      fetch(`api/getCedulaAcido?transactionID=${transactionID}&saved=1`).then(r => r.json()),   
+      fetch(`api/getCedulaApuntalado?transactionID=${transactionID}&saved=1`).then(r => r.json()),      
       // fetch(`api/getLabResults?transactionID=${transactionID}`).then(r => r.json()),
-      fetch(`api/getLabAcido?transactionID=${transactionID}`).then(r => r.json()),
-      fetch(`api/getLabApuntalado?transactionID=${transactionID}`).then(r => r.json()),
+      fetch(labQuery).then(r => r.json()),
       // fetch(`api/getCosts?transactionID=${transactionID}`).then(r => r.json()),
     ])
       .catch(error => console.log('some error i found', error))
@@ -243,14 +262,6 @@ import { InputRow, InputRowUnitless, InputRowSelectUnitless, TextAreaUnitless } 
         const newState = {}
         console.log(results)
         results.forEach(r => {
-          /*
-           * Results is an array from all the fetches done above, we loop through each response and get the keys associated
-           * These keys (rKeys) represent the name of the register (e.g. evaluacionPetrofisica, fichaTecnicaDelCampo etc)
-           * We then get all the keys inside the rKeys and individually set them to our new state using object-path
-           * object-path allows you to set the following: evaluacionPetrofisica.mudloss and evaluacionPetrofisica.layerData
-           * This will not replace the entire evaluacion petrofisica rather it will just add the new key. Use this!
-           * Otherwise, if you do evaluacionPetrofisica[mudloss] and evaluacionPetrofisica[layerData] evaluacionPetrofisica will be replaced
-           */
           const rKeys = Object.keys(r)
           rKeys.forEach(registerName => {
             Object.keys(r[registerName]).forEach(key => {
@@ -263,16 +274,20 @@ import { InputRow, InputRowUnitless, InputRowSelectUnitless, TextAreaUnitless } 
       })
   }
 
+  downloadMasterTemplate() {
+    window.location = `/api/getTemplate`
+  }
 
   render() {
     let { setShowForms } = this.props
 
     return (
       <div className='form general-data'>
-      { this.makeGeneralForm() }
-      { this.makeGeneralInterventionForm() }
-      <button className="submit submit-load" onClick={this.handleLoad} >Load</button>
-      <button className='submit submit-continue' disabled={this.checkIncomplete()} onClick={(e) => setShowForms(true)} >Continue</button>
+        { this.makeGeneralForm() }
+        { this.makeGeneralInterventionForm() }
+        <button className="submit submit-load" onClick={this.handleLoad} >Load</button>
+        <button className='submit submit-continue' disabled={this.checkIncomplete()} onClick={(e) => setShowForms(true)} >Continue</button>
+        <button className="submit download-template" onClick={this.downloadMasterTemplate}>{'Descarga el Formato General'}</button>
       </div>
     )
   }
@@ -296,6 +311,7 @@ const validate = values => {
 
 const mapStateToProps = state => ({
   formData: state.get('fichaTecnicaDelPozoHighLevel'),
+  user: state.get('user'),
   interventionFormData: state.get('objetivoYAlcancesIntervencion'),
   forms: state.get('forms')  
 })

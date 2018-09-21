@@ -1,8 +1,8 @@
 .input-forms {
 	height: 100%;
-	margin: 15px 0;
 	min-width: 1000px;
 	padding: .7em;
+
 
 /*
 	grid-template-rows: 100px 75px 40px 500px;
@@ -40,13 +40,24 @@
 		}
 	}
 
-	.submit-button {
-		width: 135px;
-		left: calc(50% - 50px);
+	.save-button {
+		width: 120px;
+		left: calc(50% - 120px);
 		position: relative;
-		margin-top: 40px;
+		margin-right: 5px;
+		margin-top: 10px;
 		padding-bot: 40px;
-		color: $primary-green;
+		color: white;
+  	}
+  	
+	.submit-button {
+		width: 120px;
+		left: calc(50% - 120px);
+		position: relative;
+		margin-left: 5px;
+		margin-top: 10px;
+		padding-bot: 40px;
+		color: white;
 	}
 
 	.subtabs {
@@ -226,7 +237,8 @@
     	grid-column-gap: 10px;
     	grid-template-columns: calc(50% - 200px) 200px 200px calc(50% - 200px);
     	grid-template-areas: 	'general general intervention intervention'
-    							'. load continue .';
+    							'. load continue .'
+    							'. download download .';
     	
     	.general-form {
     		grid-area: general;
@@ -236,11 +248,12 @@
     		grid-area: intervention;
     	}
 
+    	.download-template {
+    		grid-area: download;
+    		margin-top: 24px;
+    	}
     	.submit-load {
     		grid-area: load;
-    		width: 200px;
-    		display: inline-block;
-    		position: relative;
     		margin-top: 24px;
     	}
 

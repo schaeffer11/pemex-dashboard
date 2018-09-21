@@ -3,14 +3,13 @@ import { connect } from 'react-redux'
 import autobind from 'autobind-decorator'
 import axios from 'axios'
 
-import {submitForm} from '../../../../../redux/actions/pozoFormActions'
-
 import EstimacionCostosAcido from './EstimacionCostosAcido'
 import EstimacionIncProduccionAcido from './EstimacionIncProduccionAcido'
 import PropuestaDeAcido from './PropuestaDeAcido'
 import PruebasDeLaboratorio from '../PruebasDeLaboratorio'
 import PruebasDeLaboratorioAcidoExtra from './PruebasDeLaboratorioAcidoExtra'
 import ResultadosDeLaSimulacionAcido from './ResultadosDeLaSimulacionAcido'
+import { setShowForms } from '../../../../../redux/actions/global'
 
 @autobind class AcidoMultiStepForm extends Component {
 
@@ -53,11 +52,8 @@ import ResultadosDeLaSimulacionAcido from './ResultadosDeLaSimulacionAcido'
     }
   }
 
-  handleSubmit(){
-    this.props.submitAcidoForm()
-  }
-
   render() {
+        let { setShowForms } = this.props
      let className = 'subtab'
      let title = this.forms[this.state.currentStep].title
      let acidoFormSubmitting = this.props.forms.get('acidoFormSubmitting')
@@ -74,6 +70,7 @@ import ResultadosDeLaSimulacionAcido from './ResultadosDeLaSimulacionAcido'
           </div>
           <div className="content">
             <div className="tab-title">
+              <i class="far fa-caret-square-left" style={{position: 'relative', fontSize: '50px', left: '-20px', top: '7px', color: '#70AC46'}} onClick={(e) => setShowForms(false)}></i>
               { title }
               <button className="cta next" onClick={this.handleNextSubtab}>Siguiente</button>
               <button className="cta prev" onClick={this.handlePrevSubtab}>Anterior</button> 
@@ -81,8 +78,6 @@ import ResultadosDeLaSimulacionAcido from './ResultadosDeLaSimulacionAcido'
 
             {this.forms[this.state.currentStep].content}
           </div>
-
-          <button className="submit" disabled={acidoFormSubmitting} onClick={this.handleSubmit}>{acidoFormSubmitting ? 'Enviando...' : 'Enviar'}</button>
          </div>
      );
   }
@@ -90,7 +85,7 @@ import ResultadosDeLaSimulacionAcido from './ResultadosDeLaSimulacionAcido'
 
 
 const mapDispatchToProps = dispatch => ({
-  submitAcidoForm: values => {dispatch(submitForm(values))}
+    setShowForms : values => { dispatch(setShowForms(values))},
 })
 
 const mapStateToProps = state => ({

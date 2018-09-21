@@ -5,6 +5,12 @@ button {
     padding: 6px 30px;
     font-size: .8em;
     min-width: 100px;
+    cursor: pointer;
+  }
+  &.load {
+    border: 1px solid $active-green;
+    color: $active-green;
+    margin-left: 20px;
   }
   &.prev {
     border: 1px solid $active-green;

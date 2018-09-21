@@ -10,6 +10,7 @@ import { pagesPozo, pagesIntervenciones } from '../../../lib/maps'
 import BaseIntervenciones from './IntervencionesForms/BaseIntervenciones'
 import PozoMultiStepForm from './PozoForms/PozoMultiStepForm'
 import { setShowForms } from '../../../redux/actions/global'
+import { submitForm } from '../../../redux/actions/pozoFormActions'
 
 @autobind class InputsUI extends Component {
   constructor(props) {
@@ -45,11 +46,18 @@ import { setShowForms } from '../../../redux/actions/global'
 
   }
 
+  handleSubmit(action){
+    console.log('hanlding sub', action)
+    this.props.submitPozoForm(action)
+  }
+
 
 
   render() {
     let { selectedTab, selectedSubtab, error } = this.state
     let { global } = this.props
+    let pozoFormSubmitting = this.props.formsState.get('pozoFormSubmitting')
+    const errors = this.props.formsState.get('pozoFormError')
 
     global = global.toJS()
 
@@ -79,6 +87,9 @@ import { setShowForms } from '../../../redux/actions/global'
           <div className="tab-content">
             { form }
           </div>
+          <button className="submit save-button" disabled={pozoFormSubmitting} onClick={(e) => this.handleSubmit('save')}>{pozoFormSubmitting ? 'Saving...' : 'Save'}</button>
+          <button className="submit submit-button" disabled={pozoFormSubmitting} onClick={(e) => this.handleSubmit('submit')}>{pozoFormSubmitting ? 'Enviando...' : 'Enviar'}</button>
+          <div style={{height: '10px'}}></div>
         </div>
       )
     }      
@@ -87,11 +98,13 @@ import { setShowForms } from '../../../redux/actions/global'
 
 const mapStateToProps = state => ({
   objetivoYAlcancesIntervencion: state.get('objetivoYAlcancesIntervencion'),
-  global: state.get('global')
+  global: state.get('global'),
+  formsState: state.get('forms'),
  
 })
 
 const mapDispatchToProps = dispatch => ({
+  submitPozoForm: values => {dispatch(submitForm(values))},
 })
 
 export default connect(mapStateToProps, mapDispatchToProps)(InputsUI)

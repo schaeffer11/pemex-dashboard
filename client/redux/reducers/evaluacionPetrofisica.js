@@ -35,6 +35,8 @@ const evaluacionPetrofisica = (state = initialState, action) => {
         return state.set('mudLossData', fromJS(action.value))   
     case 'set_imgURL':
         return state.set('imgURL', fromJS(action.value))
+    case 'set_evaluacionPetrofisica':
+        return state = fromJS(action.value)
     default:
       return state
   }
