@@ -89,10 +89,9 @@ app.get('/getFieldWellMapping', (req, res) => {
 app.get('/getSave', (req, res) => {
     let { userID, wellID } = req.query
     
-    connection.query(`SELECT * FROM SavedInputs WHERE USER_ID = ? AND WELL_FORMACION_ID = ? ORDER BY INSERT_TIME DESC LIMIT 1`, 
+    connection.query(`SELECT * FROM SavedInputs WHERE USER_ID = ? ORDER BY INSERT_TIME DESC LIMIT 1`, 
       [userID, wellID], (err, results) => {
 
-        console.log('resultsss', userID, wellID, results)
         let transactionID = null
         let tipoDeIntervenciones = null
 
@@ -110,7 +109,6 @@ app.get('/getTransactionField', (req, res) => {
     
     connection.query(`select * from Transactions WHERE FIELD_FORMACION_ID = ? ORDER BY INSERT_TIME DESC LIMIT 1;`, 
       [fieldID], (err, results) => {
-        console.log('fuckdfuckfuc', results)
 
         let transactionID = null
 
