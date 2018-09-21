@@ -108,7 +108,7 @@ const resultadoOptions = [
 
     let index = event.target.getAttribute('index')
     let pruebas = {...pruebasDeLaboratorio}
-    pruebas.pruebasDeLaboratorioData[index][event.target.name] = event.target.value
+    pruebas.pruebasDeLaboratorioData[index][event.target.name] = value
 
     setPruebasDeLaboratorioData(pruebas.pruebasDeLaboratorioData)
   }
@@ -205,48 +205,57 @@ const resultadoOptions = [
     );
   }
 
-  addNewRow(event) {
+  addNewRow(event, i) {
     let { pruebasDeLaboratorio, setPruebasDeLaboratorioData } = this.props
     pruebasDeLaboratorio = pruebasDeLaboratorio.toJS()
     let { pruebasDeLaboratorioData } = pruebasDeLaboratorio
- 
-    let index = event.target.getAttribute('index')   
-    let data = pruebasDeLaboratorioData[index].sistemasTable
-    let copy = JSON.parse(JSON.stringify(data))
+
+    console.log(i, pruebasDeLaboratorioData)
+    let copy = pruebasDeLaboratorioData[i].sistemasTable
 
     copy[0].length = 2
-    
+
     let val =  ([...copy, {index: copy.length, sistem: '', tiempoRompimiento: '', interfase: '', solidosFiltrar: '', resultado: '' , length: copy.length + 1}])
-    pruebasDeLaboratorioData[index].sistemasTable = val
+    pruebasDeLaboratorioData[i].sistemasTable = val
     setPruebasDeLaboratorioData(pruebasDeLaboratorioData)
   }
 
   deleteRow(state, rowInfo, column, instance) {
-    let { pruebasDeLaboratorio } = this.props
+
+    let { pruebasDeLaboratorio, setPruebasDeLaboratorioData } = this.props
     pruebasDeLaboratorio = pruebasDeLaboratorio.toJS()
     let { pruebasDeLaboratorioData } = pruebasDeLaboratorio
 
-    let data = pruebasDeLaboratorioData[0].sistemasTable 
-    let copy = JSON.parse(JSON.stringify(data))
+    let copy = pruebasDeLaboratorioData
+    let i = column.tableIndex
+    let data = copy[i].sistemasTable
 
     return {
       onClick: e => {
-        if (column.id === 'delete' && copy.length > 1) {
-          copy.splice(rowInfo.original.index, 1)
+        if (column.id === 'delete' && data.length > 1) {
+          data.splice(rowInfo.original.index, 1)
 
-          copy.forEach((i, index) => {
+          data.forEach((i, index) => {
             i.index = index
-            i.length = copy.length
-          }) 
-
-          this.setState({
-            data: copy
+            i.length = data.length
           })
+
+          setPruebasDeLaboratorioData(copy)
         }
       }
     }
   }
 
+  handleSelect(row, e, i, key) {
+    let { setPruebasDeLaboratorioData, pruebasDeLaboratorio } = this.props
+    pruebasDeLaboratorio = pruebasDeLaboratorio.toJS()
+    let { pruebasDeLaboratorioData } = pruebasDeLaboratorio
+
+    let copy = pruebasDeLaboratorioData
+
+    copy[i].sistemasTable[row.index][key] = e
+    setPruebasDeLaboratorioData(copy)
+  }
 
 
   makeSistemaTable(index) {
@@ -289,6 +298,8 @@ const resultadoOptions = [
             simpleValue={true} 
             options={interfaseOptions} 
             name={name} 
+            value={interfaseOptions.find(i=> i.value === row.original.interfase) || null}
+            onChange={(e) => this.handleSelect(row, e.value, index, 'interfase')} 
           />
           </div>)
         }
@@ -303,6 +314,8 @@ const resultadoOptions = [
             simpleValue={true} 
             options={solidosFiltrarOptions} 
             name={name} 
+            value={solidosFiltrarOptions.find(i=> i.value === row.original.solidosFiltrar) || null}
+            onChange={(e) => this.handleSelect(row, e.value, index, 'solidosFiltrar')} 
           />
           </div>)
         }
@@ -317,6 +330,8 @@ const resultadoOptions = [
             simpleValue={true} 
             options={resultadoOptions}  
             name={name} 
+            value={resultadoOptions.find(i=> i.value === row.original.resultado) || null}
+            onChange={(e) => this.handleSelect(row, e.value, index, 'resultado')} 
           />
           </div>)
         }
@@ -347,7 +362,7 @@ const resultadoOptions = [
             getTdProps={this.deleteRow}
           />
         </div>
-        <button className='new-row-button' index={index} onClick={this.addNewRow}> + </button>
+        <button className='new-row-button' index={index} onClick={(e) => this.addNewRow(e, index)}> + </button>
       </div>
     )
   }
@@ -365,15 +380,15 @@ const resultadoOptions = [
     pruebasDeLaboratorio = pruebasDeLaboratorio.toJS()
     let { pruebasDeLaboratorioData } = pruebasDeLaboratorio
 
-    let imageURL = pruebasDeLaboratorioData[index].imageURL
+    let imgURL = pruebasDeLaboratorioData[index].imgURL
 
     return (
       <div className="lab-results" style={{marginBot: '20px'}}>
         <div className='header'>
           Upload Lab Evidence (spanish)
         </div>
-        <input type='file' name='imageURL' accept="image/*" onChange={(e) => this.handleFileUpload(e, this.updateValue)} index={index}></input>
-        {imageURL ? <img className='img-preview' src={imageURL}></img> : null }
+        <input type='file' name='imgURL' accept="image/*" onChange={(e) => this.handleFileUpload(e, this.updateValue)} index={index}></input>
+        {imgURL ? <img className='img-preview' src={imgURL}></img> : null }
       </div>
     )
   }
@@ -384,10 +399,10 @@ const resultadoOptions = [
     let { pruebasDeLaboratorioData } = pruebasDeLaboratorio
 
     return pruebasDeLaboratorioData.map((form, i) => 
-      <div key={Math.random()} className="form pruebas-de-laboratorio-apuntalado-extra">
+      <div key={`pruebasDeApuntaladoExtra_${i}`} className="form pruebas-de-laboratorio-apuntalado-extra">
         <div className="collapsable-section is-open">
             <div className="collapsable-title">
-              <span className="left">{typeOptions.find(o => o.value === form.type).label}</span>
+              <span className="left">{typeOptions.find(o => o.value === form.type) ? typeOptions.find(o => o.value === form.type).label : 'Falta tipo de análisis'}</span>
               {form.fechaMuestreo &&
                 <span className="right">Fecha: {form.fechaMuestreo}</span>}
             </div>
@@ -403,7 +418,7 @@ const resultadoOptions = [
               </div>
               <div className='bot'>
                 { this.makeSistemaTable(i) }
-                <TextAreaUnitless header="Observaciones" name='' className={'obervaciones'}/>
+                <TextAreaUnitless header="Observaciones" name='' className={'obervaciones'} onChange={this.updateValue} index={i}/>
                 { this.makeImageInput(i) }
               </div>
             </div>

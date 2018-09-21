@@ -3,6 +3,7 @@ import autobind from 'autobind-decorator'
 import { InputRow, InputRowUnitless, InputRowSelectUnitless } from '../../Common/InputRow'
 import {withValidate} from '../../Common/Validate'
 import { connect } from 'react-redux'
+import AnalisisDelAguaGraph from './AnalisisDelAguaGraph'
 import { setPH, setTemperaturaDeConductividad, setResistividad, setSalinidadConConductimetro, setSolidosDisueltosTotales, setDurezaTotalComoCaCO3, setDurezaDeCalcioComoCaCO3, setDurezaDeMagnesioComoCaCO3, setAlcalinidadTotalComoCaCO3, setAlcalinidadALaFenolftaleinaComoCaCO3, setSalinidadComoNaCl, setSodio, setCalcio, setMagnesio, setFierro, setCloruros, setBicarbonatos, setSulfatos, setCarbonatos, setDensidadAt15, setDensidadAt20, setChecked } from '../../../../redux/actions/pozo'
 
 @autobind class AnalisisDelAgua extends Component {
@@ -125,6 +126,7 @@ import { setPH, setTemperaturaDeConductividad, setResistividad, setSalinidadConC
     return (
       <div className="form analisis-del-agua">
         { this.makeValoresForm() }
+        <AnalisisDelAguaGraph />
       </div>
     )
   }

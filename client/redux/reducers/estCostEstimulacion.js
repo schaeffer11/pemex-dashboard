@@ -2,8 +2,8 @@ import { Map, fromJS } from 'immutable'
 
 const initialState = Map({ 
     estCostoDeRentaDeBarco: {
-            cost: 100,
-            company: 'test'
+            cost: '',
+            company: ''
         },
     estCostDeSistemaReactivo: {
             cost: '',
@@ -25,6 +25,7 @@ const initialState = Map({
             cost: '',
             company: ''
         },
+    checked:[]
 })
 
 
@@ -43,11 +44,9 @@ const estCostEstimulacion = (state = initialState, action) => {
     case 'set_estCostHCL':
         return state.set('estCostHCL', fromJS(action.value))
     case 'set_etapa':
-
-
-
-
-   
+        return state.set('etapa', fromJS(action.value))
+    case 'set_checked' :
+        return state.set('checked', fromJS(action.value))
     default:
       return state
   }

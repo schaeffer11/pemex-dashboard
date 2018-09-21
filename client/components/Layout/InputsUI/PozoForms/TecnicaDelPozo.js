@@ -135,7 +135,7 @@ let columns = [
         <div className='header'>
           Los Datos de Pozo
         </div>
-          <InputRowSelectUnitless header="Tipo de pozo" value={tipoDePozo} onChange={setTipoDePozo} name='tipoDePozo' options={wellOptions} onBlur={this.validate} errors={this.state.errors} />
+          <InputRowSelectUnitless header="Tipo de pozo" value={tipoDePozo} callback={(e) => setTipoDePozo(e.value)}  name='tipoDePozo' options={wellOptions} onBlur={this.validate} errors={this.state.errors} />
           <InputRow header="Pws (fecha)" name='pws' value={pwsFecha} onChange={setPwsFecha} unit='Kg/cm2' onBlur={this.validate} errors={this.state.errors} />
           <InputRow header="Pwf (fecha)" name='pwf' value={pwfFecha} onChange={setPwfFecha} unit='Kg/cm2' onBlur={this.validate} errors={this.state.errors} />
           <InputRow header="Δp/mes" name='deltaPperMes' value={deltaPPerMes} onChange={setDeltaPPerMes} unit='Kg/cm2/mes' onBlur={this.validate} errors={this.state.errors} />
@@ -174,7 +174,7 @@ let columns = [
 
     historialIntervencionesData[0].length = 2
 
-    setHistorialIntervencionesData([...historialIntervencionesData, {index: historialIntervencionesData.length, type: '', fechaMuestreo: '', fechaPrueba: '', compania: '', superviso: '', length: historialIntervencionesData.length + 1, 'edited': false}])
+    setHistorialIntervencionesData([...historialIntervencionesData, {index: historialIntervencionesData.length, fecha: '', intervenciones: '', length: historialIntervencionesData.length + 1, 'edited': false}])
   }
 
 
@@ -234,8 +234,8 @@ let columns = [
 
     return (
       <div className="form tecnica-del-pozo">
-        { this.makeFormacionForm() }
         { this.makePozoForm() }
+        { this.makeFormacionForm() }
         { this.makeHistoricalInterventionsInput() }
       </div>
     )

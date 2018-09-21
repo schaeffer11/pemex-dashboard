@@ -98,7 +98,7 @@ let columns = [
 
     presionDataPozo[0].length = 2
 
-    setPresionDataPozo([...presionDataPozo, {index: presionDataPozo.length, type: '', fechaMuestreo: '', fechaPrueba: '', compania: '', superviso: '', length: presionDataPozo.length + 1, 'edited': false}])
+    setPresionDataPozo([...presionDataPozo, {index: presionDataPozo.length, fecha: '', Qo: '', Np: '', Pws: '', Pr: '', length: presionDataPozo.length + 1, 'edited': false}])
   }
 
 

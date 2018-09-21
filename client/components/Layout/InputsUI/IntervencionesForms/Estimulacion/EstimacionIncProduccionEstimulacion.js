@@ -1,21 +1,78 @@
 import React, { Component } from 'react'
 import autobind from 'autobind-decorator'
+import {withValidate} from '../../../Common/Validate'
 import { InputRow, InputRowUnitless, InputRowSelectUnitless, TextAreaUnitless } from '../../../Common/InputRow'
-import { setEstIncProdEstimulationImgURL, setEstIncEstrangulador, setEstIncPtp, setEstIncTtp, setEstIncPbaj, setEstIncTbaj, setEstIncPtr, setEstIncQl, setEstIncQo, setEstIncQg, setEstIncQw, setEstIncRGA, setEstIncSalinidad, setEstIncIP, setEstIncDeltaP, setEstIncGastoCompromisoQo, setEstIncGastoCompromisoQg, setObervacionesEstIncEstim } from '../../../../../redux/actions/intervencionesEstimulacion'
+import { setEstIncProdEstimulationImgURL, setEstIncEstrangulador, setEstIncPtp, setEstIncTtp, setEstIncPbaj, setEstIncTbaj, setEstIncPtr, setEstIncQl, setEstIncQo, setEstIncQg, setEstIncQw, setEstIncRGA, setEstIncSalinidad, setEstIncIP, setEstIncDeltaP, setEstIncGastoCompromisoQo, setEstIncGastoCompromisoQg, setObervacionesEstIncEstim, setChecked } from '../../../../../redux/actions/intervencionesEstimulacion'
 import { connect } from 'react-redux'
 
 @autobind class EstimacionIncProduccionEstimulacion extends Component {
   constructor(props) {
     super(props)
     this.state = { 
+      containsErrors: false,
+      errors: [],
+      checked: []
     }
   }
 
   componentDidMount() {
+    this.validate()
+    this.containsErrors()
   }
 
   componentDidUpdate(prevProps) {
+    this.containsErrors()
+  }
 
+  containsErrors(){
+    let foundErrors = false
+    for (const key of Object.keys(this.state.errors)) {
+      if(this.state.errors[key].checked)
+        foundErrors = true
+    }
+
+    if(foundErrors !== this.state.containsErrors){
+      this.setState({
+        containsErrors: foundErrors
+      })
+    }
+  }
+
+  validate(event){
+    let {setChecked, formData} = this.props
+    formData = formData.toJS()
+
+    let field = event ? event.target.name : null
+    let {errors, checked} = this.props.validate(field, formData)
+
+    this.setState({
+      errors: errors,
+    })
+
+    if(event && event.target.name){
+      setChecked(checked)
+
+      this.setState({
+        checked: checked
+      })
+    }
+  }
+
+  setCheck(field){
+    let {setChecked, formData} = this.props
+    formData = formData.toJS()
+    const checked = [ ...formData.checked, field ]
+
+    checked.forEach(field => {
+      if(errors[field])
+        errors[field].checked = true
+    })
+
+    this.setState({
+      checked: checked
+    })
+
+    setChecked(checked)
   }
 
   makeModeladoForm() {
@@ -28,20 +85,20 @@ import { connect } from 'react-redux'
         <div className='header'>
           Modelado
         </div>
-        <InputRow header="Estrangulador" name='' unit="pg" value={estIncEstrangulador} onChange={setEstIncEstrangulador}/>
-        <InputRow header="PTP" name='' unit="Kg/cm2" value={estIncPtp} onChange={setEstIncPtp}/>
-        <InputRow header="TTP" name='' unit="C" value={estIncTtp} onChange={setEstIncTtp}/>
-        <InputRow header="PBAJ" name='' unit="Kg/cm2" value={estIncPbaj} onChange={setEstIncPbaj}/>
-        <InputRow header="TBAJ" name='' unit="C" value={estIncTbaj} onChange={setEstIncTbaj}/>
-        <InputRow header="PTR" name='' unit="Kg/cm2" value={estIncPtr} onChange={setEstIncPtr}/>
-        <InputRow header="Ql" name='' unit="bpd" value={estIncQl} onChange={setEstIncQl}/>
-        <InputRow header="Qo" name='' unit="bpd" value={estIncQo} onChange={setEstIncQo}/>
-        <InputRow header="Qg" name='' unit="MMpcd" value={estIncQg} onChange={setEstIncQg}/> 
-        <InputRow header="Qw" name='' unit="bpd" value={estIncQw} onChange={setEstIncQw}/>
-        <InputRow header="RGA" name='' unit="m3/m3" value={estIncRGA} onChange={setEstIncRGA}/>
-        <InputRow header="Salinidad" name='' unit="ppm" value={estIncSalinidad} onChange={setEstIncSalinidad}/>
-        <InputRow header="IP estimado" name='' unit="bpd/psi" value={estIncIP} onChange={setEstIncIP}/>
-        <InputRow header="ΔP" name='' unit="Kg/cm2" value={estIncDeltaP} onChange={setEstIncDeltaP}/>
+        <InputRow header="Estrangulador" name='estIncEstrangulador' unit="pg" value={estIncEstrangulador} onChange={setEstIncEstrangulador} errors={this.state.errors} onBlur={this.validate}/>
+        <InputRow header="PTP" name='estIncPtp' unit="Kg/cm2" value={estIncPtp} onChange={setEstIncPtp} errors={this.state.errors} onBlur={this.validate}/>
+        <InputRow header="TTP" name='estIncTtp' unit="C" value={estIncTtp} onChange={setEstIncTtp} errors={this.state.errors} onBlur={this.validate}/>
+        <InputRow header="PBAJ" name='estIncPbaj' unit="Kg/cm2" value={estIncPbaj} onChange={setEstIncPbaj} errors={this.state.errors} onBlur={this.validate}/>
+        <InputRow header="TBAJ" name='estIncTbaj' unit="C" value={estIncTbaj} onChange={setEstIncTbaj} errors={this.state.errors} onBlur={this.validate}/>
+        <InputRow header="PTR" name='estIncPtr' unit="Kg/cm2" value={estIncPtr} onChange={setEstIncPtr} errors={this.state.errors} onBlur={this.validate}/>
+        <InputRow header="Ql" name='estIncQl' unit="bpd" value={estIncQl} onChange={setEstIncQl} errors={this.state.errors} onBlur={this.validate}/>
+        <InputRow header="Qo" name='estIncQo' unit="bpd" value={estIncQo} onChange={setEstIncQo} errors={this.state.errors} onBlur={this.validate}/>
+        <InputRow header="Qg" name='estIncQg' unit="MMpcd" value={estIncQg} onChange={setEstIncQg} errors={this.state.errors} onBlur={this.validate}/> 
+        <InputRow header="Qw" name='estIncQw' unit="bpd" value={estIncQw} onChange={setEstIncQw} errors={this.state.errors} onBlur={this.validate}/>
+        <InputRow header="RGA" name='estIncRGA' unit="m3/m3" value={estIncRGA} onChange={setEstIncRGA} errors={this.state.errors} onBlur={this.validate}/>
+        <InputRow header="Salinidad" name='estIncSalinidad' unit="ppm" value={estIncSalinidad} onChange={setEstIncSalinidad} errors={this.state.errors} onBlur={this.validate}/>
+        <InputRow header="IP estimado" name='estIncIP' unit="bpd/psi" value={estIncIP} onChange={setEstIncIP} errors={this.state.errors} onBlur={this.validate}/>
+        <InputRow header="ΔP" name='estIncDeltaP' unit="Kg/cm2" value={estIncDeltaP} onChange={setEstIncDeltaP} errors={this.state.errors} onBlur={this.validate}/>
 
       </div>
     )
@@ -57,8 +114,8 @@ import { connect } from 'react-redux'
         <div className='header'>
           Gasto Compromiso
         </div>
-        <InputRow header="QO" name='' unit="bpd" value={estIncGastoCompromisoQo} onChange={setEstIncGastoCompromisoQo}/>
-        <InputRow header="QG" name='' unit="MMpcd" value={estIncGastoCompromisoQg} onChange={setEstIncGastoCompromisoQg}/>
+        <InputRow header="QO" name='estIncGastoCompromisoQo' unit="bpd" value={estIncGastoCompromisoQo} onChange={setEstIncGastoCompromisoQo} errors={this.state.errors} onBlur={this.validate}/>
+        <InputRow header="QG" name='estIncGastoCompromisoQg' unit="MMpcd" value={estIncGastoCompromisoQg} onChange={setEstIncGastoCompromisoQg} errors={this.state.errors} onBlur={this.validate}/>
       </div>
     )
   }
@@ -73,7 +130,7 @@ import { connect } from 'react-redux'
         <div className='header'>
           Observaciones
         </div>
-        <TextAreaUnitless header="Observaciones" name='' className={'obervaciones'} value={obervacionesEstIncEstim} onChange={setObervacionesEstIncEstim}/>
+        <TextAreaUnitless header="Observaciones" name='obervacionesEstIncEstim' className={'obervaciones'} value={obervacionesEstIncEstim} onChange={setObervacionesEstIncEstim} errors={this.state.errors} onBlur={this.validate}/>
       </div>
     )
   }
@@ -89,14 +146,14 @@ import { connect } from 'react-redux'
   makeImageInput() {
     let { formData, setEstIncProdEstimulationImgURL } = this.props
     formData = formData.toJS()
-    let { estIncProdEstimulationImgURL } = formData
+    let { imgURL } = formData
     return (
       <div style={{marginBot: '20px'}}>
         <div className='header'>
           Upload Est Inc Prod Estimulation (spanish)
         </div>
         <input type='file' accept="image/*" onChange={(e) => this.handleFileUpload(e, setEstIncProdEstimulationImgURL)}></input>
-        {estIncProdEstimulationImgURL ? <img className='img-preview' src={estIncProdEstimulationImgURL}></img> : null }
+        {imgURL ? <img className='img-preview' src={imgURL}></img> : null }
       </div>
     )
   }
@@ -116,6 +173,80 @@ import { connect } from 'react-redux'
       </div>
     )
   }
+}
+
+const validate = values => {
+    const errors = {}
+
+    if(!values.estIncEstrangulador ){
+       errors.estIncEstrangulador = {message: "Este campo no puede estar vacio"}
+    }
+
+    if(!values.estIncPtp ){
+       errors.estIncPtp = {message: "Este campo no puede estar vacio"}
+    }
+
+    if(!values.estIncTtp ){
+       errors.estIncTtp = {message: "Este campo no puede estar vacio"}
+    }
+
+    if(!values.estIncPbaj ){
+       errors.estIncPbaj = {message: "Este campo no puede estar vacio"}
+    }
+
+    if(!values.estIncTbaj ){
+       errors.estIncTbaj = {message: "Este campo no puede estar vacio"}
+    }
+
+    if(!values.estIncPtr ){
+       errors.estIncPtr = {message: "Este campo no puede estar vacio"}
+    }
+
+    if(!values.estIncQl ){
+       errors.estIncQl = {message: "Este campo no puede estar vacio"}
+    }
+
+    if(!values.estIncQo ){
+       errors.estIncQo = {message: "Este campo no puede estar vacio"}
+    }
+
+    if(!values.estIncQg ){
+       errors.estIncQg = {message: "Este campo no puede estar vacio"}
+    }
+
+    if(!values.estIncQw ){
+       errors.estIncQw = {message: "Este campo no puede estar vacio"}
+    }
+
+    if(!values.estIncRGA ){
+       errors.estIncRGA = {message: "Este campo no puede estar vacio"}
+    }
+
+    if(!values.estIncSalinidad ){
+       errors.estIncSalinidad = {message: "Este campo no puede estar vacio"}
+    }
+
+    if(!values.estIncIP ){
+       errors.estIncIP = {message: "Este campo no puede estar vacio"}
+    }
+
+    if(!values.estIncDeltaP ){
+       errors.estIncDeltaP = {message: "Este campo no puede estar vacio"}
+    }
+
+    if(!values.estIncGastoCompromisoQo ){
+       errors.estIncGastoCompromisoQo = {message: "Este campo no puede estar vacio"}
+    }
+
+    if(!values.estIncGastoCompromisoQg ){
+       errors.estIncGastoCompromisoQg = {message: "Este campo no puede estar vacio"}
+    }
+
+    if(!values.obervacionesEstIncEstim ){
+       errors.obervacionesEstIncEstim = {message: "Este campo no puede estar vacio"}
+    }
+
+    return errors
 }
 
 
@@ -142,6 +273,10 @@ const mapDispatchToProps = dispatch => ({
   setEstIncGastoCompromisoQg: val => dispatch(setEstIncGastoCompromisoQg(val)),
   setObervacionesEstIncEstim: val => dispatch(setObervacionesEstIncEstim(val)),
   setEstIncProdEstimulationImgURL: val => dispatch(setEstIncProdEstimulationImgURL(val)),
+  setChecked: val => dispatch(setChecked(val))
 })
 
-export default connect(mapStateToProps, mapDispatchToProps)(EstimacionIncProduccionEstimulacion)
+export default withValidate(
+  validate,
+  connect(mapStateToProps, mapDispatchToProps)(EstimacionIncProduccionEstimulacion)
+)

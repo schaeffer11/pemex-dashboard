@@ -101,8 +101,7 @@ const resultadoOptions = [
 
     let index = event.target.getAttribute('index')
     let pruebas = {...pruebasDeLaboratorio}
-    pruebas.pruebasDeLaboratorioData[index][event.target.name] = event.target.value
-
+    pruebas.pruebasDeLaboratorioData[index][event.target.name] = value
     setPruebasDeLaboratorioData(pruebas.pruebasDeLaboratorioData)
   }
 
@@ -164,7 +163,7 @@ const resultadoOptions = [
         <div className='header'>
           Prueba de Grabado de Nucleos
         </div>
-        <InputRowUnitless header="Sistema ácido" name='sistemAcido' value={pruebasDeLaboratorioData[index].sistemAcido} onChange={this.updateValue} index={index}/>
+        <InputRowUnitless header="Sistema ácido" name='sistemAcidoGrabado' value={pruebasDeLaboratorioData[index].sistemAcidoGrabado} onChange={this.updateValue} index={index}/>
         <InputRowUnitless header="Nucleo de formación" name='nucleoDeFormacion' value={pruebasDeLaboratorioData[index].nucleoDeFormacion} onChange={this.updateValue} index={index}/>
         <InputRow header="Grabado" name='grabado' unit="gr" value={pruebasDeLaboratorioData[index].grabado} onChange={this.updateValue} index={index}/>
       </div>
@@ -209,47 +208,57 @@ const resultadoOptions = [
     );
   }
 
-  addNewRow(event) {
+  addNewRow(event, i) {
     let { pruebasDeLaboratorio, setPruebasDeLaboratorioData } = this.props
     pruebasDeLaboratorio = pruebasDeLaboratorio.toJS()
     let { pruebasDeLaboratorioData } = pruebasDeLaboratorio
 
-    let index = event.target.getAttribute('index')
-    let data = pruebasDeLaboratorioData[index].sistemasTable
-    let copy = JSON.parse(JSON.stringify(data))
+    let copy = pruebasDeLaboratorioData[i].sistemasTable
 
     copy[0].length = 2
 
     let val =  ([...copy, {index: copy.length, sistem: '', tiempoRompimiento: '', interfase: '', solidosFiltrar: '', resultado: '' , length: copy.length + 1}])
-    pruebasDeLaboratorioData[index].sistemasTable = val
+    pruebasDeLaboratorioData[i].sistemasTable = val
     setPruebasDeLaboratorioData(pruebasDeLaboratorioData)
   }
 
   deleteRow(state, rowInfo, column, instance) {
-    let { pruebasDeLaboratorio } = this.props
+
+    let { pruebasDeLaboratorio, setPruebasDeLaboratorioData } = this.props
     pruebasDeLaboratorio = pruebasDeLaboratorio.toJS()
     let { pruebasDeLaboratorioData } = pruebasDeLaboratorio
 
-    let data = pruebasDeLaboratorioData[0].sistemasTable
-    let copy = JSON.parse(JSON.stringify(data))
+    let copy = pruebasDeLaboratorioData
+    let i = column.tableIndex
+    let data = copy[i].sistemasTable
 
     return {
       onClick: e => {
-        if (column.id === 'delete' && copy.length > 1) {
-          copy.splice(rowInfo.original.index, 1)
+        if (column.id === 'delete' && data.length > 1) {
+          data.splice(rowInfo.original.index, 1)
 
-          copy.forEach((i, index) => {
+          data.forEach((i, index) => {
             i.index = index
-            i.length = copy.length
+            i.length = data.length
           })
 
-          this.setState({
-            data: copy
-          })
+          setPruebasDeLaboratorioData(copy)
         }
       }
     }
   }
+
+  handleSelect(row, e, i, key) {
+    let { setPruebasDeLaboratorioData, pruebasDeLaboratorio } = this.props
+    pruebasDeLaboratorio = pruebasDeLaboratorio.toJS()
+    let { pruebasDeLaboratorioData } = pruebasDeLaboratorio
+
+    let copy = pruebasDeLaboratorioData
+
+    copy[i].sistemasTable[row.index][key] = e
+    setPruebasDeLaboratorioData(copy)
+  }
+
 
   makeSistemaTable(index) {
     let { pruebasDeLaboratorio } = this.props
@@ -291,6 +300,8 @@ const resultadoOptions = [
             simpleValue={true}
             options={interfaseOptions}
             name={name}
+            value={interfaseOptions.find(i=> i.value === row.original.interfase) || null}
+            onChange={(e) => this.handleSelect(row, e.value, index, 'interfase')} 
           />
           </div>)
         }
@@ -305,6 +316,8 @@ const resultadoOptions = [
             simpleValue={true}
             options={solidosFiltrarOptions}
             name={name}
+            value={solidosFiltrarOptions.find(i=> i.value === row.original.solidosFiltrar) || null}
+            onChange={(e) => this.handleSelect(row, e.value, index, 'solidosFiltrar')}
           />
           </div>)
         }
@@ -319,6 +332,8 @@ const resultadoOptions = [
             simpleValue={true}
             options={resultadoOptions}
             name={name}
+            value={resultadoOptions.find(i=> i.value === row.original.resultado) || null}
+            onChange={(e) => this.handleSelect(row, e.value, index, 'resultado')} 
           />
           </div>)
         }
@@ -349,7 +364,7 @@ const resultadoOptions = [
             getTdProps={this.deleteRow}
           />
         </div>
-        <button className='new-row-button' index={index} onClick={this.addNewRow}> + </button>
+        <button className='new-row-button' index={index} onClick={(e) => this.addNewRow(e, index)}> + </button>
       </div>
     )
   }
@@ -367,15 +382,15 @@ const resultadoOptions = [
     pruebasDeLaboratorio = pruebasDeLaboratorio.toJS()
     let { pruebasDeLaboratorioData } = pruebasDeLaboratorio
 
-    let imageURL = pruebasDeLaboratorioData[index].imageURL
+    let imgURL = pruebasDeLaboratorioData[index].imgURL
 
     return (
       <div style={{marginBot: '20px'}}>
         <div className='header'>
           Upload Lab Evidence (spanish)
         </div>
-        <input type='file' name='imageURL' accept="image/*" onChange={(e) => this.handleFileUpload(e, this.updateValue)} index={index}></input>
-        {imageURL ? <img className='img-preview' src={imageURL}></img> : null }
+        <input type='file' name='imgURL' accept="image/*" onChange={(e) => this.handleFileUpload(e, this.updateValue)} index={index}></input>
+        {imgURL ? <img className='img-preview' src={imgURL}></img> : null }
       </div>
     )
   }
@@ -386,10 +401,10 @@ const resultadoOptions = [
     let { pruebasDeLaboratorioData } = pruebasDeLaboratorio
 
     return pruebasDeLaboratorioData.map((form, i) =>      
-      <div className="form pruebas-de-laboratorio-apuntalado-extra" key={Math.random()}>
+      <div className="form pruebas-de-laboratorio-apuntalado-extra" key={`pruebasDeAcidoExtra_${i}`}>
          <div className="collapsable-section is-open">
             <div className="collapsable-title">
-              <span className="left">{typeOptions.find(o => o.value === form.type).label}</span> 
+              <span className="left">{typeOptions.find(o => o.value === form.type) ? typeOptions.find(o => o.value === form.type).label : 'Falta tipo de análisis'}</span> 
               {form.fechaMuestreo &&
                 <span className="right">Fecha: {form.fechaMuestreo}</span>}
             </div>

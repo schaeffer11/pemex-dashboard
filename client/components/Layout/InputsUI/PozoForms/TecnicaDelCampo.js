@@ -1,6 +1,6 @@
 import React, { Component } from 'react'
 import autobind from 'autobind-decorator'
-import { InputRow, InputRowUnitless, InputRowSelectUnitless } from '../../Common/InputRow'
+import { InputRow, InputRowUnitless, InputRowSelectUnitless, InputDate } from '../../Common/InputRow'
 import {withValidate} from '../../Common/Validate'
 import { connect } from 'react-redux'
 import { setTipoDeFluidoField, setDescubrimientoField, setFechaDeExplotacionField, setNumeroDePozosOperandoField, setPInicialAnoField, setPActualFechaField, setDpPerAnoField, setTyacField, setPrField, setDensidadDelAceiteField, setPSatField, setRgaFluidoField, setSalinidadField, setPvtRepresentativoField, setLitologiaField, setEspesorNetoField, setPorosidadField, setSwField, setKPromedioField, setCaaField, setCgaField, setQoField, setQgField, setRgaField, setFwField, setNpField, setGpField, setWpField, setRraField, setRrgField, setRrpceField, setH2sField, setCo2Field, setN2Field, setChecked } from '../../../../redux/actions/pozo'
@@ -65,6 +65,10 @@ let fluidoOptions = [
 
   }
 
+  testDate(date) {
+    console.log('here i have a date', date)
+  }
+
   makeGeneralesForm() {
     let { setDescubrimientoField, setFechaDeExplotacionField, setNumeroDePozosOperandoField, forms, formData } = this.props
 
@@ -124,7 +128,7 @@ let fluidoOptions = [
         <div className='header'>
           Fluido
         </div>
-        <InputRowSelectUnitless header='Tipo de Fluido' name='tipoDeFluidoField' value={tipoDeFluidoField} onChange={setTipoDeFluidoField} options={fluidoOptions} />
+        <InputRowSelectUnitless header='Tipo de Fluido' name='tipoDeFluidoField' value={tipoDeFluidoField} callback={(e) => setTipoDeFluidoField(e.value)} options={fluidoOptions} onBlur={this.validate} errors={this.state.errors}/>
         <InputRow header="Densidad del aceite" name='densidadDelAceite' value={densidadDelAceiteField} onChange={setDensidadDelAceiteField} unit='°API' onBlur={this.validate} errors={this.state.errors} />
         <InputRow header="P sat" name='pSat' value={pSatField} onChange={setPSatField} unit='Kg/cm2' onBlur={this.validate} errors={this.state.errors} />
         <InputRow header="RGA" name='rga' value={rgaFluidoField} onChange={setRgaFluidoField} unit='m3/m3' onBlur={this.validate} errors={this.state.errors} />
@@ -147,7 +151,7 @@ let fluidoOptions = [
         <div className='header'>
           Formacion
         </div>
-        <InputRowUnitless header="Litología" name='litologia' value={litologiaField} onChange={setLitologiaField} />
+        <InputRowUnitless header="Litología" name='litologia' value={litologiaField} onChange={setLitologiaField} onBlur={this.validate} errors={this.state.errors} />
         <InputRow header="Espesor neto" name='espesorNeto'value={espesorNetoField} onChange={setEspesorNetoField} unit='m' onBlur={this.validate} errors={this.state.errors} />
         <InputRow header="Porosidad" name='porosidad' value={porosidadField} onChange={setPorosidadField} unit='%' onBlur={this.validate} errors={this.state.errors} />
         <InputRow header="Sw" name='Sw' value={swField} onChange={setSwField} unit='%' onBlur={this.validate} errors={this.state.errors} />
@@ -230,6 +234,18 @@ const validate = values => {
 
     if(!values.pActualFecha ){
        errors.pActualFecha = {message: "Este campo no puede estar vacio"}
+    }
+
+    if(!values.dpPerAno ){
+       errors.dpPerAno = {message: "Este campo no puede estar vacio"}
+    }
+
+    if(!values.tyac ){
+      errors.tyac = {message: "Este campo no puede estar vacio"}
+    }
+
+    if(!values.pr ){
+      errors.pr = {message: "Este campo no puede estar vacio"}
     }
 
     if(!values.dpPerAnoField ){

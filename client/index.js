@@ -18,6 +18,7 @@ import API from './lib/api-store';
 
 const localStorageKey = 'welcomeToTheMachine'
 const persistedState = loadState(localStorageKey, Map())
+// const persistedState = Map()
 
 const history = createBrowserHistory()
 const composeEnhancer = window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__ || compose
