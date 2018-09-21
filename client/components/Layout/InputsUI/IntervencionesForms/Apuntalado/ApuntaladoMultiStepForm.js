@@ -3,14 +3,13 @@ import { connect } from 'react-redux'
 import autobind from 'autobind-decorator'
 import axios from 'axios'
 
-import {submitForm} from '../../../../../redux/actions/pozoFormActions'
-
 import PropuestaDeApuntalado from './PropuestaDeApuntalado'
 import PruebasDeLaboratorio from '../PruebasDeLaboratorio'
 import PruebasDeLaboratorioApuntaladoExtra from './PruebasDeLaboratorioApuntaladoExtra'
 import ResultadosDeLaSimulacionApuntalado from './ResultadosDeLaSimulacionApuntalado'
 import EstimacionIncProduccionApuntalado from './EstimacionIncProduccionApuntalado'
 import EstimacionCostosApuntalado from './EstimacionCostosApuntalado'
+import { setShowForms } from '../../../../../redux/actions/global'
 
 @autobind class ApuntaladoMultiStepForm extends Component {
 
@@ -45,10 +44,6 @@ import EstimacionCostosApuntalado from './EstimacionCostosApuntalado'
     }
   }
 
-  handleSubmit(){
-    this.props.submitApuntaladoForm()
-  }
-
   handlePrevSubtab(){
     if( this.state.currentStep - 1 >= 0){
       this.setState({
@@ -58,6 +53,7 @@ import EstimacionCostosApuntalado from './EstimacionCostosApuntalado'
   }
 
   render() {
+        let { setShowForms } = this.props
      let className = 'subtab'
      let title = this.forms[this.state.currentStep].title
      let apuntaladoFormSubmitting = this.props.forms.get('apuntaladoFormSubmitting')
@@ -74,6 +70,7 @@ import EstimacionCostosApuntalado from './EstimacionCostosApuntalado'
           </div>
           <div className="content">
             <div className="tab-title">
+              <i class="far fa-caret-square-left" style={{position: 'relative', fontSize: '50px', left: '-20px', top: '7px', color: '#70AC46'}} onClick={(e) => setShowForms(false)}></i>
               { title }
               <button className="cta next" onClick={this.handleNextSubtab}>Siguiente</button>
               <button className="cta prev" onClick={this.handlePrevSubtab}>Anterior</button> 
@@ -81,8 +78,6 @@ import EstimacionCostosApuntalado from './EstimacionCostosApuntalado'
 
             {this.forms[this.state.currentStep].content}
           </div>
-
-          <button className="submit" disabled={apuntaladoFormSubmitting} onClick={this.handleSubmit}>{apuntaladoFormSubmitting ? 'Enviando...' : 'Enviar'}</button>
          </div>
      );
   }
@@ -90,7 +85,7 @@ import EstimacionCostosApuntalado from './EstimacionCostosApuntalado'
 
 
 const mapDispatchToProps = dispatch => ({
-  submitApuntaladoForm: values => {dispatch(submitForm(values))}
+    setShowForms : values => { dispatch(setShowForms(values))},
 })
 
 const mapStateToProps = state => ({

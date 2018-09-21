@@ -35,6 +35,7 @@ const initialState = Map({
     rmpBE: '',
     tipoDeUnidadBM: '',
     velocidadBM: '',
+    velocidadBCP: '',
     longitudDeCareraBM: '',
     tipoDeBombaSubsuperficialBM: '',
     tamanoDeBombaSubsuperficialBM: '',
@@ -136,9 +137,12 @@ const sistemasArtificialesDeProduccion = (state = initialState, action) => {
         return state.set('nivelEstatico', fromJS(action.value))
     case 'set_sistemasArtificialesImgURL':
         return state.set('imgURL', fromJS(action.value))
+    case 'set_sistemasArtificialesDeProduccion':
+        return state = fromJS(action.value)
     default:
       return state
   }
 }
+
 
 export default sistemasArtificialesDeProduccion

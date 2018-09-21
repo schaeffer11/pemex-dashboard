@@ -76,6 +76,8 @@ const historicoDeProduccion = (state = initialState, action) => {
         return state.set('ph', fromJS(action.value))
     case 'set_checked' :
         return state.set('checked', fromJS(action.value))
+    case 'set_historicoProduccion':
+        return state = fromJS(action.value)
     default:
       return state
   }

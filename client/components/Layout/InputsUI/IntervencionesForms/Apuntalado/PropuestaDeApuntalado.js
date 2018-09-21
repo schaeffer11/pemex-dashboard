@@ -247,6 +247,10 @@ let columns = [
       column.cell === 'renderEditable' ? column.Cell = this.renderEditable : null
     })
 
+    let length = 1
+    if (cedulaData) {
+      length = cedulaData.length
+    }
     return (
       <div className='generales-form' >
         <div className='header'>
@@ -259,7 +263,7 @@ let columns = [
             columns={columns}
             showPagination={false}
             showPageSizeOptions={false}
-            pageSize={cedulaData.length}
+            pageSize={length}
             sortable={false}
             getTdProps={this.deleteRow}
           />

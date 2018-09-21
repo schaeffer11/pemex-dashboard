@@ -3,14 +3,13 @@ import { connect } from 'react-redux'
 import autobind from 'autobind-decorator'
 import axios from 'axios'
 
-import {submitForm} from '../../../../../redux/actions/pozoFormActions'
-
 import PropuestaDeEstimulacion from './PropuestaDeEstimulacion'
 import PruebasDeLaboratorio from '../PruebasDeLaboratorio'
 import PruebasDeLaboratorioEstimulacionExtra from './PruebasDeLaboratorioEstimulacionExtra'
 import ResultadosDeLaSimulacionEstimulacion from './ResultadosDeLaSimulacionEstimulacion'
 import EstimacionIncProduccionEstimulacion from './EstimacionIncProduccionEstimulacion'
 import EstimacionCostosEstimulacion from './EstimacionCostosEstimulacion'
+import { setShowForms } from '../../../../../redux/actions/global'
 
 @autobind class EstimulacionMultiStepForm extends Component {
 
@@ -53,11 +52,8 @@ import EstimacionCostosEstimulacion from './EstimacionCostosEstimulacion'
     }
   }
 
-  handleSubmit(){
-    this.props.submitEstimulacionForm()
-  }
-
   render() {
+        let { setShowForms } = this.props
      let className = 'subtab'
      let title = this.forms[this.state.currentStep].title
      let estimulacionFormSubmitting = this.props.forms.get('estimulacionFormSubmitting')
@@ -74,6 +70,7 @@ import EstimacionCostosEstimulacion from './EstimacionCostosEstimulacion'
           </div>
           <div className="content">
             <div className="tab-title">
+              <i class="far fa-caret-square-left" style={{position: 'relative', fontSize: '50px', left: '-20px', top: '7px', color: '#70AC46'}} onClick={(e) => setShowForms(false)}></i>
               { title }
               <button className="cta next" onClick={this.handleNextSubtab}>Siguiente</button>
               <button className="cta prev" onClick={this.handlePrevSubtab}>Anterior</button> 
@@ -81,14 +78,13 @@ import EstimacionCostosEstimulacion from './EstimacionCostosEstimulacion'
 
             {this.forms[this.state.currentStep].content}
           </div>
-          <button className="submit" disabled={estimulacionFormSubmitting} onClick={this.handleSubmit}>{estimulacionFormSubmitting ? 'Enviando...' : 'Enviar'}</button>
          </div>
      );
   }
 }
 
 const mapDispatchToProps = dispatch => ({
-  submitEstimulacionForm: values => {dispatch(submitForm(values))}
+    setShowForms : values => { dispatch(setShowForms(values))},
 })
 
 const mapStateToProps = state => ({

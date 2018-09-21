@@ -72,10 +72,14 @@ const analisisDelAgua = (state = initialState, action) => {
         return state.set('densidadAt20', fromJS(action.value))
     case 'set_checked' :
         return state.set('checked', fromJS(action.value))
-   
+    case 'set_analisisDelAgua':
+        return state = fromJS(action.value)
     default:
       return state
   }
 }
+
+
+
 
 export default analisisDelAgua

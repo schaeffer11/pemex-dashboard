@@ -8,18 +8,16 @@ const initialState = Map({
     sensorPyt: '',
     tipoDeLiner: '',
     diametroDeLiner: '',
-    tipoDePistolas: '',
-    densidadDeDisparosMecanico: '',
-    fase: '',
-    diametroDeOrificio: '',
-    penetracion: '',
-    tipoDeSAP: '',
+    tipoDePistolas: null,
+    densidadDeDisparosMecanico: null,
+    fase: null,
+    diametroDeOrificio: null,
+    penetracion: null,
     tratamientoPor: '',
     volumenAparejoDeProduccion: '',
     volumenCimaDeIntervalo: '',
     volumenBaseDeIntervalo: '',
     volumenDeEspacioAnular: '',
-    imgURL: null,
     imgAparejoDeProduccionURL: null,
     checked: []
 })
@@ -67,6 +65,8 @@ const mecanicoYAparejoDeProduccion = (state = initialState, action) => {
         return state.set('imgURL', fromJS(action.value))
     case 'set_imgAparejoDeProduccionURL':
         return state.set('imgAparejoDeProduccionURL', fromJS(action.value))
+    case 'set_mecanicoYAparejoDeProduccion':
+        return state = fromJS(action.value)
     case 'set_checked' :
         return state.set('checked', fromJS(action.value))
     default:

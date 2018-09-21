@@ -3,8 +3,7 @@ import autobind from 'autobind-decorator'
 import { connect } from 'react-redux'
 import axios from 'axios';
 
-import {submitForm} from '../../../../redux/actions/pozoFormActions'
-import TecnicaDelPozoHighLevel from './TecnicaDelPozoHighLevel'
+import { setShowForms } from '../../../../redux/actions/global'
 import TecnicaDelPozo from './TecnicaDelPozo'
 import TecnicaDelCampo from './TecnicaDelCampo'
 import SistemasArtificialesDeProduccion from './SistemasArtificialesDeProduccion'
@@ -15,6 +14,8 @@ import HistoricoDePresionPozo from './HistoricoDePresionPozo'
 import HistoricoDeProduccion from './HistoricoDeProduccion'
 import AnalisisDelAgua from './AnalisisDelAgua'
 
+import { setFichaTecnicaDelCampo, setFichaTecnicaDelPozo, setEvaluacionPetrofisica, setMecanicoYAparejoDeProduccion, 
+  setAnalisisDelAgua, setSistemasArtificialesDeProduccion, setPresionDataCampo, setPresionDataPozo, setHistoricoProduccion } from '../../../../redux/actions/pozo'
 
 @autobind class PozoMultiStepForm extends Component {
 
@@ -26,20 +27,276 @@ import AnalisisDelAgua from './AnalisisDelAgua'
 
     // TODO: Refactor the tabs to be children instead
     this.forms = [
-      {'title' : 'Información General de la Asignación' , 'type': 'TecnicaDelPozoHighLevel', 'content':<TecnicaDelPozoHighLevel containsErrors={this.containsErrors}/>},
-      {'title' : 'Ficha Técnica del Campo', 'type': 'TecnicaDelCampo', 'content': <TecnicaDelCampo containsErrors={this.containsErrors}/>},
-      {'title' : 'Ficha Técnica del Pozo' , 'type':'TecnicaDelPozo',  'content':<TecnicaDelPozo containsErrors={this.containsErrors}/>},
-      {'title' : 'Evaluación Petrofísica', 'type':'EvaluacionPetrofisica', 'content': <EvaluacionPetrofisica containsErrors={this.containsErrors} /> },
-      {'title' : 'Edo. Mecánico y Aparejo de Producción', 'type':'MecanicoYAparejo',  'content': <MecanicoYAparejo containsErrors={this.containsErrors} /> },
-      {'title' : 'Análisis del Agua', 'type':'AnalisisDelAgua', 'content': <AnalisisDelAgua containsErrors={this.containsErrors} /> }, 
-      {'title' : 'Información de Sistemas Artificiales de Producción', 'type':'SistemasArtificialesDeProduccion', 'content': <SistemasArtificialesDeProduccion containsErrors={this.containsErrors} /> },
-      {'title' : 'Histórico de Presión - Campo', 'type':'HistoricoDePresionCampo', 'content': <HistoricoDePresionCampo containsErrors={this.containsErrors} />},
-      {'title' : 'Histórico de Presión - Pozo', 'type':'HistoricoDePresionPozo', 'content': <HistoricoDePresionPozo containsErrors={this.containsErrors} />},
-      {'title' : 'Histórico de Producción', 'type':'HistoricoDeProduccion', 'content': <HistoricoDeProduccion containsErrors={this.containsErrors} /> },
+      {'title' : 'Ficha Técnica del Campo', 'type': 'TecnicaDelCampo', 'content': <TecnicaDelCampo containsErrors={this.containsErrors} /> },
+      {'title' : 'Ficha Técnica del Pozo' , 'type':'TecnicaDelPozo',  'content':<TecnicaDelPozo containsErrors={this.containsErrors} /> },
+      {'title' : 'Evaluación Petrofísica', 'type':'EvaluacionPetrofisica', 'content': <EvaluacionPetrofisica containsErrors={this.containsErrors}  /> },
+      {'title' : 'Edo. Mecánico y Aparejo de Producción', 'type':'MecanicoYAparejo',  'content': <MecanicoYAparejo containsErrors={this.containsErrors}  /> },
+      {'title' : 'Análisis del Agua', 'type':'AnalisisDelAgua', 'content': <AnalisisDelAgua containsErrors={this.containsErrors}  /> }, 
+      {'title' : 'Información de Sistemas Artificiales de Producción', 'type':'SistemasArtificialesDeProduccion', 'content': <SistemasArtificialesDeProduccion containsErrors={this.containsErrors}  /> },
+      {'title' : 'Histórico de Presión - Campo', 'type':'HistoricoDePresionCampo', 'content': <HistoricoDePresionCampo containsErrors={this.containsErrors}  /> },
+      {'title' : 'Histórico de Presión - Pozo', 'type':'HistoricoDePresionPozo', 'content': <HistoricoDePresionPozo containsErrors={this.containsErrors}  /> },
+      {'title' : 'Histórico de Producción', 'type':'HistoricoDeProduccion', 'content': <HistoricoDeProduccion containsErrors={this.containsErrors}  /> },
 
 
     ];
 
+  }
+
+
+  async loadTecnicaDelCampo() {
+    let { fichaTecnicaDelPozoHighLevel, setFichaTecnicaDelCampo } = this.props
+    fichaTecnicaDelPozoHighLevel = fichaTecnicaDelPozoHighLevel.toJS()
+    let { campo } = fichaTecnicaDelPozoHighLevel
+
+    let transactionID = await fetch(`/api/getTransactionField?fieldID=${campo}`)
+      .then(res => res.json())
+      .then(res => res.transactionID)
+
+    if (transactionID) {
+      let data = await fetch(`api/getFields?transactionID=${transactionID}`).then(r => r.json())
+
+      if (!data.err) {
+        setFichaTecnicaDelCampo(data.fichaTecnicaDelCampo)
+      }
+    }
+    else {
+      console.log('no data found')
+    }
+  }
+
+  async loadTecnicaDelPozo() {
+    let { fichaTecnicaDelPozoHighLevel, setFichaTecnicaDelPozo } = this.props
+    fichaTecnicaDelPozoHighLevel = fichaTecnicaDelPozoHighLevel.toJS()
+    let { pozo } = fichaTecnicaDelPozoHighLevel
+
+    let transactionID = await fetch(`/api/getTransactionWell?wellID=${pozo}`)
+      .then(res => res.json())
+      .then(res => res.transactionID)
+
+    console.log(transactionID)
+
+    if (transactionID) {
+      let data = await fetch(`api/getWell?transactionID=${transactionID}`).then(r => r.json())
+      let interventionData = await fetch(`api/getHistIntervenciones?transactionID=${transactionID}`).then(r => r.json())
+
+      if (!data.err && !interventionData.err) {
+        let newObj = data.fichaTecnicaDelPozo
+        newObj.historialIntervencionesData = interventionData.fichaTecnicaDelPozo.historialIntervencionesData
+
+        setFichaTecnicaDelPozo(newObj)
+
+      }
+    }
+    else { 
+      console.log('no data found')
+    }
+  }
+
+  async loadEvaluacionPetrofisica() {
+    let { fichaTecnicaDelPozoHighLevel, setEvaluacionPetrofisica } = this.props
+    fichaTecnicaDelPozoHighLevel = fichaTecnicaDelPozoHighLevel.toJS()
+    let { pozo } = fichaTecnicaDelPozoHighLevel
+
+    let transactionID = await fetch(`/api/getTransactionWell?wellID=${pozo}`)
+      .then(res => res.json())
+      .then(res => res.transactionID)
+
+    console.log(transactionID)
+
+    if (transactionID) {
+      let data = await fetch(`api/getMudLoss?transactionID=${transactionID}`).then(r => r.json())
+      let layerData = await fetch(`api/getLayer?transactionID=${transactionID}`).then(r => r.json())
+
+      if (!data.err && !layerData.err) {
+
+        let newObj = data.evaluacionPetrofisica
+        newObj.layerData = layerData.evaluacionPetrofisica.layerData
+
+        setEvaluacionPetrofisica(newObj)
+
+      }
+    }
+    else { 
+      console.log('no data found')
+    }
+  }
+
+
+  async loadMecanicoYAparejo() {
+    let { fichaTecnicaDelPozoHighLevel, setMecanicoYAparejoDeProduccion } = this.props
+    fichaTecnicaDelPozoHighLevel = fichaTecnicaDelPozoHighLevel.toJS()
+    let { pozo } = fichaTecnicaDelPozoHighLevel
+
+    let transactionID = await fetch(`/api/getTransactionWell?wellID=${pozo}`)
+    .then(res => res.json())
+    .then(res => res.transactionID)
+
+    if (transactionID) {
+      let data = await fetch(`api/getMecanico?transactionID=${transactionID}`).then(r => r.json())
+
+      if (!data.err) {
+        setMecanicoYAparejoDeProduccion(data.mecanicoYAparejoDeProduccion)
+      }
+    }
+    else {
+      console.log('no data found')
+    }
+  }
+
+  async loadAnalisisDelAgua() {
+    let { fichaTecnicaDelPozoHighLevel, setAnalisisDelAgua } = this.props
+    fichaTecnicaDelPozoHighLevel = fichaTecnicaDelPozoHighLevel.toJS()
+    let { pozo } = fichaTecnicaDelPozoHighLevel
+
+    let transactionID = await fetch(`/api/getTransactionWell?wellID=${pozo}`)
+    .then(res => res.json())
+    .then(res => res.transactionID)
+
+    if (transactionID) {
+      let data = await fetch(`api/getAnalisisAgua?transactionID=${transactionID}`).then(r => r.json())
+
+      if (!data.err) {
+        setAnalisisDelAgua(data.analisisDelAgua)
+      }
+    }
+    else {
+      console.log('no data found')
+    }
+  }
+
+  async loadSistemasArtificialesDeProduccion() {
+    let { fichaTecnicaDelPozoHighLevel, setSistemasArtificialesDeProduccion } = this.props
+    fichaTecnicaDelPozoHighLevel = fichaTecnicaDelPozoHighLevel.toJS()
+    let { pozo } = fichaTecnicaDelPozoHighLevel
+
+    let transactionID = await fetch(`/api/getTransactionWell?wellID=${pozo}`)
+    .then(res => res.json())
+    .then(res => res.transactionID)
+
+    if (transactionID) {
+      let type = await fetch(`api/getWell?transactionID=${transactionID}`).then(r => r.json())
+
+      if (!type.err) {
+        type = type.sistemasArtificialesDeProduccion.tipoDeSistemo
+
+        let data
+
+        if (type === 'emboloViajero') {
+          data = await fetch(`api/getEmboloViajero?transactionID=${transactionID}`).then(r => r.json())
+        }
+        else if (type === 'bombeoNeumatico') {
+          data = await  fetch(`api/getBombeoNeumatico?transactionID=${transactionID}`).then(r => r.json())
+        }
+        else if (type === 'bombeoHidraulico') {
+          data = await fetch(`api/getBombeoHidraulico?transactionID=${transactionID}`).then(r => r.json())
+        }
+        else if (type === 'bombeoCavidadesProgresivas') {
+          data = await fetch(`api/getBombeoCavidades?transactionID=${transactionID}`).then(r => r.json())
+        }
+        else if (type === 'bombeoElectrocentrifugo') {
+          data = await fetch(`api/getBombeoElectrocentrifugo?transactionID=${transactionID}`).then(r => r.json())
+        }
+        else if (type === 'bombeoMecanico') {
+          data = await  fetch(`api/getBombeoMecanico?transactionID=${transactionID}`).then(r => r.json())
+        }
+
+        if (!data.err) {
+        
+          let newObj = data.sistemasArtificialesDeProduccion
+          newObj.tipoDeSistemo = type
+
+          setSistemasArtificialesDeProduccion(newObj)
+        }
+        else {
+          console.log('no data found')
+        }
+      }
+    }
+    else {
+      console.log('no data found')
+    }
+  }
+
+
+  async loadHistoricoDePresionCampo() {
+    let { fichaTecnicaDelPozoHighLevel, setPresionDataCampo } = this.props
+    fichaTecnicaDelPozoHighLevel = fichaTecnicaDelPozoHighLevel.toJS()
+    let { pozo } = fichaTecnicaDelPozoHighLevel
+
+    let transactionID = await fetch(`/api/getTransactionWell?wellID=${pozo}`)
+      .then(res => res.json())
+      .then(res => res.transactionID)
+
+    console.log(transactionID)
+
+    if (transactionID) {
+      let data = await fetch(`api/getFieldPressure?transactionID=${transactionID}`).then(r => r.json())
+
+      if (!data.err) {
+
+        let newObj = data.historicoDePresion.presionDataCampo
+
+        setPresionDataCampo(newObj)
+
+      }
+    }
+    else { 
+      console.log('no data found')
+    }
+  }
+
+
+  async loadHistoricoDePresionPozo() {
+    let { fichaTecnicaDelPozoHighLevel, setPresionDataPozo } = this.props
+    fichaTecnicaDelPozoHighLevel = fichaTecnicaDelPozoHighLevel.toJS()
+    let { pozo } = fichaTecnicaDelPozoHighLevel
+
+    let transactionID = await fetch(`/api/getTransactionWell?wellID=${pozo}`)
+      .then(res => res.json())
+      .then(res => res.transactionID)
+
+    if (transactionID) {
+      let data = await fetch(`api/getWellPressure?transactionID=${transactionID}`).then(r => r.json())
+
+      if (!data.err) {
+
+        let newObj = data.historicoDePresion.presionDataPozo
+
+        setPresionDataPozo(newObj)
+
+      }
+    }
+    else { 
+      console.log('no data found')
+    }
+  }
+
+
+  async loadHistoricoDeProduccion() {
+    let { fichaTecnicaDelPozoHighLevel, setHistoricoProduccion } = this.props
+    fichaTecnicaDelPozoHighLevel = fichaTecnicaDelPozoHighLevel.toJS()
+    let { pozo } = fichaTecnicaDelPozoHighLevel
+
+    let transactionID = await fetch(`/api/getTransactionWell?wellID=${pozo}`)
+      .then(res => res.json())
+      .then(res => res.transactionID)
+
+    if (transactionID) {
+      let aforosData = await fetch(`api/getWellAforos?transactionID=${transactionID}`).then(r => r.json())
+      let produccionData = await fetch(`api/getWellProduccion?transactionID=${transactionID}`).then(r => r.json())
+
+      if (!produccionData.err && !aforosData.err) {
+
+        let newObj = aforosData.historicoDeProduccion
+        newObj.produccionData = produccionData.historicoDeProduccion.produccionData
+
+        console.log(newObj)
+        setHistoricoProduccion(newObj)
+      }
+    }
+    else { 
+      console.log('no data found')
+    }
   }
 
   handleClick(i){
@@ -72,90 +329,63 @@ import AnalisisDelAgua from './AnalisisDelAgua'
     }
   }
 
-  handleSubmit(action){
-    console.log('hanlding sub', action)
-    this.props.submitPozoForm(action)
-  }
-
-  downloadMasterTemplate() {
-    window.location = `/api/getTemplate`
-  }
-  
-  handleLoad() {
-    let { user, fichaTecnicaDelPozoHighLevel } = this.props
-    user = user.toJS()
-    fichaTecnicaDelPozoHighLevel = fichaTecnicaDelPozoHighLevel.toJS()
-
-
-    fetch('/api/getSaveID', {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json'
-      },
-      body: JSON.stringify({
-        wellID: fichaTecnicaDelPozoHighLevel.pozo,
-        userID: user.id
-      })
-    })
-    .then(res => res.json())
-    .then(data => {
-
-      let transactionID = data[0].TRANSACTION_ID
-
-      fetch(`/api/getFields?transactionID=${transactionID}`)
-        .then(res => res.json())
-        .then(res => {
-          console.log(res)
-        })
-
-    })
-
-}
-
-
 
   render() {
-     let className = 'subtab'
-     let title = this.forms[this.state.currentStep].title
-     let pozoFormSubmitting = this.props.formsState.get('pozoFormSubmitting')
-     const submitting = pozoFormSubmitting ? 'submitting' : ''
-     const errors = this.props.formsState.get('pozoFormError')
+    let { setShowForms } = this.props
+    let className = 'subtab'
+    let title = this.forms[this.state.currentStep].title
+    
+    let pozoFormSubmitting = this.props.formsState.get('pozoFormSubmitting')
+    const submitting = pozoFormSubmitting ? 'submitting' : ''
+    const errors = this.props.formsState.get('pozoFormError')
 
-     const errorClass = errors.length ? 'error' : ''
+    const errorClass = errors.length ? 'error' : ''
 
-     return (
-         <div className={`multistep-form ${submitting} ${errorClass}`}>
-          <div className="subtabs">
-              {this.forms.map( (tab, index) => {
-                 const active = this.state.currentStep === index ? 'active' : ''; 
-                 const tabError = tab.error ? 'error' : ''
-                 return <div className={`${className} ${active} ${tabError}`} onClick={() => this.handleClick(index)} key={index}><span></span> {tab.title} </div>
-                 }
-              )}
+
+    let loadFunctions = [this.loadTecnicaDelCampo, this.loadTecnicaDelPozo, this.loadEvaluacionPetrofisica, this.loadMecanicoYAparejo, this.loadAnalisisDelAgua, this.loadSistemasArtificialesDeProduccion, this.loadHistoricoDePresionCampo, this.loadHistoricoDePresionPozo, this.loadHistoricoDeProduccion]
+    let loadFunction =loadFunctions[this.state.currentStep]
+
+    return (
+       <div className={`multistep-form ${submitting} ${errorClass}`}>
+        <div className="subtabs">
+            {this.forms.map( (tab, index) => {
+               const active = this.state.currentStep === index ? 'active' : ''; 
+               const tabError = tab.error ? 'error' : ''
+               return <div className={`${className} ${active} ${tabError}`} onClick={() => this.handleClick(index)} key={index}><span></span> {tab.title} </div>
+               }
+            )}
+        </div>
+        <div className="content">
+          <div className="tab-title">
+            <i class="far fa-caret-square-left" style={{position: 'relative', fontSize: '50px', left: '-20px', top: '7px', color: '#70AC46'}} onClick={(e) => setShowForms(false)}></i>
+            { title }
+            <button className="cta next" onClick={this.handleNextSubtab}>Siguiente</button>
+            <button className="cta prev" onClick={this.handlePrevSubtab}>Anterior</button> 
+            <button className="cta load" onClick={loadFunction}>Load</button> 
           </div>
-          <div className="content">
-            <div className="tab-title">
-              { title }
-              <button className="cta next" onClick={this.handleNextSubtab}>Siguiente</button>
-              <button className="cta prev" onClick={this.handlePrevSubtab}>Anterior</button> 
-            </div>
 
-            {this.forms[this.state.currentStep].content}
-          </div>
-          <button className="submit" onClick={this.downloadMasterTemplate}>{'Descarga el Formato General'}</button>
-          <button className="submit" disabled={pozoFormSubmitting} onClick={(e) => this.handleSubmit('save')}>{pozoFormSubmitting ? 'Saving...' : 'Save'}</button>
-          <button className="submit" onClick={this.handleLoad} >Load</button>
-          <button className="submit" disabled={pozoFormSubmitting} onClick={(e) => this.handleSubmit('submit')}>{pozoFormSubmitting ? 'Enviando...' : 'Enviar'}</button>
-          { errors.length > 0 &&
-              <div className="error">Se han encontrado errores en la forma.</div>
-          }
-         </div>
+          {this.forms[this.state.currentStep].content}
+        </div>
+      
+        { errors.length > 0 &&
+            <div className="error">Se han encontrado errores en la forma.</div>
+        }
+       </div>
      );
   }
 }
 
 const mapDispatchToProps = dispatch => ({
-  submitPozoForm: values => {dispatch(submitForm(values))}
+  setShowForms : values => { dispatch(setShowForms(values))},
+  setFichaTecnicaDelCampo : values => { dispatch(setFichaTecnicaDelCampo(values))},
+  setFichaTecnicaDelPozo : values => { dispatch(setFichaTecnicaDelPozo(values))},
+  setEvaluacionPetrofisica : values => { dispatch(setEvaluacionPetrofisica(values))},
+  setMecanicoYAparejoDeProduccion : values => { dispatch(setMecanicoYAparejoDeProduccion(values))},
+  setAnalisisDelAgua : values => { dispatch(setAnalisisDelAgua(values))},
+  setSistemasArtificialesDeProduccion : values => {dispatch(setSistemasArtificialesDeProduccion(values))},
+  setPresionDataPozo : values => {dispatch(setPresionDataPozo(values))},
+  setPresionDataCampo : values => {dispatch(setPresionDataCampo(values))},
+  setHistoricoProduccion : values => {dispatch(setHistoricoProduccion(values))},
 })
 
 const mapStateToProps = state => ({
