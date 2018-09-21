@@ -63,9 +63,11 @@ import { InputRow, InputRowUnitless, InputRowSelectUnitless, TextAreaUnitless } 
 
   checkIncomplete() {
     let { interventionFormData, formData } = this.props
+
     interventionFormData = interventionFormData.toJS()
     formData = formData.toJS()
-
+    
+    
     let { objetivo, alcances, tipoDeIntervenciones } = interventionFormData
     let { subdireccion, activo, campo, pozo, formacion } = formData
 
@@ -78,7 +80,10 @@ import { InputRow, InputRowUnitless, InputRowSelectUnitless, TextAreaUnitless } 
 
   makeGeneralInterventionForm() {
     let { setObjetivo, setAlcances, setTipoDeIntervenciones, interventionFormData } = this.props
+
     interventionFormData = interventionFormData.toJS()
+
+    
     let { objetivo, alcances, tipoDeIntervenciones } = interventionFormData
 
     let tipoDeIntervencionesOptions = [
@@ -104,11 +109,10 @@ import { InputRow, InputRowUnitless, InputRowSelectUnitless, TextAreaUnitless } 
     let { fieldWellOptions } = this.state
     let { setActivo, setCampo, setPozo, setFormacion, formData, forms } = this.props
 
-    console.log(formData)
-
-
 
     formData = formData.toJS()
+    
+
     forms = forms.toJS()
 
     let { subdireccion, activo, campo, pozo, formacion } = formData
@@ -202,7 +206,7 @@ import { InputRow, InputRowUnitless, InputRowSelectUnitless, TextAreaUnitless } 
       .then(res => res.json())
       .then(r => r.transactionID)
     console.log('ok i have a transaction', transactionID)
-    transactionID = 557683300
+    transactionID = 105177824
     Promise.all([
       fetch(`api/getFields?transactionID=${transactionID}`).then(r => r.json()),
       fetch(`api/getMudLoss?transactionID=${transactionID}`).then(r => r.json()),
@@ -221,6 +225,18 @@ import { InputRow, InputRowUnitless, InputRowSelectUnitless, TextAreaUnitless } 
       fetch(`api/getWellPressure?transactionID=${transactionID}`).then(r => r.json()),
       fetch(`api/getWellAforos?transactionID=${transactionID}`).then(r => r.json()),
       fetch(`api/getWellProduccion?transactionID=${transactionID}`).then(r => r.json()),
+      fetch(`api/getInterventionBase?transactionID=${transactionID}`).then(r => r.json()),
+      fetch(`api/getInterventionEstimulacion?transactionID=${transactionID}`).then(r => r.json()),
+      fetch(`api/getInterventionAcido?transactionID=${transactionID}`).then(r => r.json()),
+      fetch(`api/getInterventionApuntalado?transactionID=${transactionID}`).then(r => r.json()),
+      fetch(`api/getLabTest?transactionID=${transactionID}`).then(r => r.json()),
+      fetch(`api/getCedulaEstimulacion?transactionID=${transactionID}`).then(r => r.json()),
+      fetch(`api/getCedulaAcido?transactionID=${transactionID}`).then(r => r.json()),
+      fetch(`api/getCedulaApuntalado?transactionID=${transactionID}`).then(r => r.json()),       
+      // fetch(`api/getLabResults?transactionID=${transactionID}`).then(r => r.json()),
+      fetch(`api/getLabAcido?transactionID=${transactionID}`).then(r => r.json()),
+      fetch(`api/getLabApuntalado?transactionID=${transactionID}`).then(r => r.json()),
+      // fetch(`api/getCosts?transactionID=${transactionID}`).then(r => r.json()),
     ])
       .catch(error => console.log('some error i found', error))
       .then((results) => {

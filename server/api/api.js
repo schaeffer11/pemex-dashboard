@@ -577,9 +577,7 @@ app.get('/getBombeoMecanico', async (req, res) => {
 
     if (data[0]) {
       Object.keys(data[0]).forEach(key => {
-        console.log(key)
         if (map[key]) {
-          console.log(map[key])
           const { parent, child } = map[key]
           objectPath.set(finalObj, `${parent}.${child}`, data[0][key])
         }
@@ -691,9 +689,7 @@ app.get('/getWellAforos', async (req, res) => {
 
     if (data[0]) {
       Object.keys(data[0]).forEach(key => {
-        console.log(key)
         if (map[key]) {
-          console.log(map[key])
           const { parent, child } = map[key]
           objectPath.set(finalObj, `${parent}.${child}`, data[0][key])
         }
@@ -761,90 +757,550 @@ app.get('/getWellImages', async (req, res) => {
 app.get('/getInterventionBase', async (req, res) => {
   let { transactionID } = req.query
 
+  const map = {
+    OBJETIVO: { parent: 'objetivoYAlcancesIntervencion', child: 'objetivo' }, 
+    ALCANCES: { parent: 'objetivoYAlcancesIntervencion', child: 'alcances' },
+    TIPO_DE_INTERVENCIONES: { parent: 'objetivoYAlcancesIntervencion', child: 'tipoDeIntervenciones' }, 
+  }
+
   getInterventionBase(transactionID, (data) => {
-    res.json(data)
+    const finalObj = {}
+
+    if (data[0]) {
+      Object.keys(data[0]).forEach(key => {
+        if (map[key]) {
+          const { parent, child } = map[key]
+          objectPath.set(finalObj, `${parent}.${child}`, data[0][key])
+        }
+      })   
+    }
+    else {
+      Object.keys(map).forEach(key => {
+        const { parent, child } = map[key]
+        objectPath.set(finalObj, `${parent}.${child}`, '')
+      })
+    }
+    res.json(finalObj)
   })
 })
 
 app.get('/getInterventionEstimulacion', async (req, res) => {
   let { transactionID } = req.query
 
+  const map = {
+    INTERVALO: { parent: 'propuestaEstimulacion', child: 'intervalo' }, 
+    LONGITUD_DE_INTERVALO_A_TRATAR: { parent: 'propuestaEstimulacion', child: 'longitudDeIntervalo' }, 
+    VOLUME_APAREJO: { parent: 'propuestaEstimulacion', child: 'volAparejo' }, 
+    CAPACIDAD_TOTAL_DEL_POZO: { parent: 'propuestaEstimulacion', child: 'capacidadTotalDelPozo' }, 
+    VOLUMEN_PRECOLCHON_N2: { parent: 'propuestaEstimulacion', child: 'volumenPrecolchonN2' },
+    VOLUMEN_SISTEMA_NO_REACTIVO: { parent: 'propuestaEstimulacion', child: 'volumenSistemaNoReativo' }, 
+    VOLUMEN_SISTEM_REACTIVO: { parent: 'propuestaEstimulacion', child: 'volumenSistemaReactivo' }, 
+    VOLUMEN_SISTEMA_DIVERGENTE: { parent: 'propuestaEstimulacion', child: 'volumenSistemaDivergente' }, 
+    VOLUMEN_DISPLAZAMIENTO_LIQUIDO: { parent: 'propuestaEstimulacion', child: 'volumenDesplazamientoLiquido' }, 
+    VOLUMEN_DESPLAZAMIENTO_N2: { parent: 'propuestaEstimulacion', child: 'volumenDesplazamientoN2' },
+    VOLUMEN_TOTAL_DE_LIQUIDO: { parent: 'propuestaEstimulacion', child: 'volumenTotalDeLiquido' }, 
+    VOLUMEN_DEL_SISTEMA_ACIDO_LIMPIEZA: { parent: 'resultadosSimulacionEstimulacion', child: 'volumenDelSistemaAcidoLimpieza' },
+    VOLUMEN_DEL_SISTEMA_NO_ACIDO_LIMPIEZA: { parent: 'resultadosSimulacionEstimulacion', child: 'volumenDelSistemaNoAcidoLimpieza' }, 
+    TIPO_DE_COLOCACION: { parent: 'resultadosSimulacionEstimulacion', child: 'tipoDeColocacion' },
+    TIEMPO_DE_CONTACTO: { parent: 'resultadosSimulacionEstimulacion', child: 'tiempoDeContacto' }, 
+    NUMERO_DE_ETAPAS: { parent: 'resultadosSimulacionEstimulacion', child: 'numeroDeEtapas' }, 
+    VOLUMEN_DEL_SISTEMA_ACIDO: { parent: 'resultadosSimulacionEstimulacion', child: 'volumenDelSistemAcido' }, 
+    VOLUMEN_DEL_SISTEMA_NO_ACIDO: { parent: 'resultadosSimulacionEstimulacion', child: 'volumenDelSistemNoAcido' }, 
+    VOLUMEN_DE_DIVERGENTE: { parent: 'resultadosSimulacionEstimulacion', child: 'volumenDeDivergente' }, 
+    VOLUMEN_DE_N2: { parent: 'resultadosSimulacionEstimulacion', child: 'volumenDeN2' },
+    CALIDAD_DE_ESPUMA: { parent: 'resultadosSimulacionEstimulacion', child: 'calidadDeEspuma' }, 
+    VOLUMEN_DE_PRECOLCHON_N2: { parent: 'resultadosSimulacionEstimulacion', child: 'volumenDePrecolchonN2' }, 
+    VOLUMEN_DE_DESPLAZAMIENTO: { parent: 'resultadosSimulacionEstimulacion', child: 'volumenDeDesplazamiento' }, 
+    PENETRACION_RADIAL: { parent: 'resultadosSimulacionEstimulacion', child: 'penetracionRadial' }, 
+    LONGITUD_DE_AGUJERO_DE_GUSANO: { parent: 'resultadosSimulacionEstimulacion', child: 'longitudDeAgujeroDeGusano' },
+    EST_INC_ESTRANGULADOR: { parent: 'estIncProduccionEstimulacion', child: 'estIncEstrangulador' },
+    EST_INC_Ptp: { parent: 'estIncProduccionEstimulacion', child: 'estIncPtp' }, 
+    EST_INC_Ttp: { parent: 'estIncProduccionEstimulacion', child: 'estIncTtp' }, 
+    EST_INC_Pbaj: { parent: 'estIncProduccionEstimulacion', child: 'estIncPbaj' }, 
+    EST_INC_Tbaj: { parent: 'estIncProduccionEstimulacion', child: 'estIncTbaj' },
+    EST_INC_Ptr: { parent: 'estIncProduccionEstimulacion', child: 'estIncPtr' }, 
+    EST_INC_Qi: { parent: 'estIncProduccionEstimulacion', child: 'estIncQl' }, 
+    EST_INC_Qo: { parent: 'estIncProduccionEstimulacion', child: 'estIncQo' }, 
+    EST_INC_Qq: { parent: 'estIncProduccionEstimulacion', child: 'estIncQg' }, 
+    EST_INC_Qw: { parent: 'estIncProduccionEstimulacion', child: 'estIncQw' },
+    EST_INC_RGA: { parent: 'estIncProduccionEstimulacion', child: 'estIncRGA' }, 
+    EST_INC_SALINIDAD: { parent: 'estIncProduccionEstimulacion', child: 'estIncSalinidad' }, 
+    EST_INC_IP: { parent: 'estIncProduccionEstimulacion', child: 'estIncIP' }, 
+    EST_INC_DELTA_P: { parent: 'estIncProduccionEstimulacion', child: 'estIncDeltaP' }, 
+    EST_INC_GASTO_COMPROMISO_Qo: { parent: 'estIncProduccionEstimulacion', child: 'estIncGastoCompromisoQo' },
+    EST_INC_GASTO_COMPROMISO_Qg: { parent: 'estIncProduccionEstimulacion', child: 'estIncGastoCompromisoQg' }, 
+    EST_INC_OBSERVACIONES: { parent: 'estIncProduccionEstimulacion', child: 'obervacionesEstIncEstim' },
+  }
+
   getInterventionEsimulacion(transactionID, (data) => {
-    res.json(data)
+    const finalObj = {}
+
+    if (data[0]) {
+      Object.keys(data[0]).forEach(key => {
+        if (map[key]) {
+          const { parent, child } = map[key]
+          objectPath.set(finalObj, `${parent}.${child}`, data[0][key])
+        }
+      })   
+    }
+    else {
+      Object.keys(map).forEach(key => {
+        const { parent, child } = map[key]
+        objectPath.set(finalObj, `${parent}.${child}`, '')
+      })
+    }
+    res.json(finalObj)
   })
 })
 
 app.get('/getInterventionAcido', async (req, res) => {
   let { transactionID } = req.query
 
+  const map = {
+    INTERVALO: { parent: 'propuestaAcido', child: 'intervalo' }, 
+    LONGITUD_DE_INTERVALO_A_TRATAR: { parent: 'propuestaAcido', child: 'longitudDeIntervalo' }, 
+    VOLUME_APAREJO: { parent: 'propuestaAcido', child: 'volAparejo' },
+    CAPACIDAD_TOTAL_DEL_POZO: { parent: 'propuestaAcido', child: 'capacidadTotalDelPozo' }, 
+    VOLUMEN_PRECOLCHON_N2: { parent: 'propuestaAcido', child: 'volumenPrecolchonN2' }, 
+    VOLUMEN_SISTEMA_NO_REACTIVO: { parent: 'propuestaAcido', child: 'volumenSistemaNoReativo' }, 
+    VOLUMEN_SISTEM_REACTIVO: { parent: 'propuestaAcido', child: 'volumenSistemaReactivo' }, 
+    VOLUMEN_SISTEMA_DIVERGENTE: { parent: 'propuestaAcido', child: 'volumenSistemaDivergente' },
+    VOLUMEN_DISPLAZAMIENTO_LIQUIDO: { parent: 'propuestaAcido', child: 'volumenDesplazamientoLiquido' }, 
+    VOLUMEN_DESPLAZAMIENTO_GEL_LINEAL: { parent: 'propuestaAcido', child: 'volumenDesplazamientoGelLineal' }, 
+    MODULO_YOUNG_ARENA: { parent: 'propuestaAcido', child: 'moduloYoungArena' },
+    MODULO_YOUNG_LUTITAS: { parent: 'propuestaAcido', child: 'moduloYoungLutitas' }, 
+    RELAC_POISSON_ARENA: { parent: 'propuestaAcido', child: 'relacPoissonArena' }, 
+    RELAC_POISSON_LUTITAS: { parent: 'propuestaAcido', child: 'relacPoissonLutitas' }, 
+    GRADIENTE_DE_FRACTURA: { parent: 'propuestaAcido', child: 'gradienteDeFractura' }, 
+    DENSIDAD_DE_DISPAROS: { parent: 'propuestaAcido', child: 'densidadDeDisparos' },
+    DIAMETRO_DE_DISPAROS: { parent: 'propuestaAcido', child: 'diametroDeDisparos' }, 
+    LONGITUD_TOTAL: { parent: 'resultadosSimulacionAcido', child: 'longitudTotal' }, 
+    LONGITUD_EFECTIVA_GRABADA: { parent: 'resultadosSimulacionAcido', child: 'longitudEfectivaGrabada' },
+    ALTURA_GRABADA: { parent: 'resultadosSimulacionAcido', child: 'alturaGrabada' }, 
+    ANCHO_PROMEDIO: { parent: 'resultadosSimulacionAcido', child: 'anchoPromedio' }, 
+    CONCENTRACION_DEL_ACIDO: { parent: 'resultadosSimulacionAcido', child: 'concentracionDelAcido' }, 
+    CONDUCTIVIDAD: { parent: 'resultadosSimulacionAcido', child: 'conductividad' }, 
+    FCD: { parent: 'resultadosSimulacionAcido', child: 'fcd' },
+    PRESION_NETA: { parent: 'resultadosSimulacionAcido', child: 'presionNeta' },
+    EFICIENCIA_DE_FLUIDO_DE_FRACTURA: { parent: 'resultadosSimulacionAcido', child: 'eficienciaDeFluidoDeFractura' }, 
+    EST_INC_ESTRANGULADOR: { parent: 'estIncProduccionAcido', child: 'estIncEstrangulador' },
+    EST_INC_Ptp: { parent: 'estIncProduccionAcido', child: 'estIncPtp' }, 
+    EST_INC_Ttp: { parent: 'estIncProduccionAcido', child: 'estIncTtp' }, 
+    EST_INC_Pbaj: { parent: 'estIncProduccionAcido', child: 'estIncPbaj' }, 
+    EST_INC_Tbaj: { parent: 'estIncProduccionAcido', child: 'estIncTbaj' },
+    EST_INC_Ptr: { parent: 'estIncProduccionAcido', child: 'estIncPtr' }, 
+    EST_INC_Qi: { parent: 'estIncProduccionAcido', child: 'estIncQl' }, 
+    EST_INC_Qo: { parent: 'estIncProduccionAcido', child: 'estIncQo' }, 
+    EST_INC_Qq: { parent: 'estIncProduccionAcido', child: 'estIncQg' }, 
+    EST_INC_Qw: { parent: 'estIncProduccionAcido', child: 'estIncQw' },
+    EST_INC_RGA: { parent: 'estIncProduccionAcido', child: 'estIncRGA' }, 
+    EST_INC_SALINIDAD: { parent: 'estIncProduccionAcido', child: 'estIncSalinidad' }, 
+    EST_INC_IP: { parent: 'estIncProduccionAcido', child: 'estIncIP' }, 
+    EST_INC_DELTA_P: { parent: 'estIncProduccionAcido', child: 'estIncDeltaP' }, 
+    EST_INC_GASTO_COMPROMISO_Qo: { parent: 'estIncProduccionAcido', child: 'estIncGastoCompromisoQo' },
+    EST_INC_GASTO_COMPROMISO_Qg: { parent: 'estIncProduccionAcido', child: 'estIncGastoCompromisoQg' }, 
+    EST_INC_OBSERVACIONES: { parent: 'estIncProduccionAcido', child: 'obervacionesEstIncEstim' },
+  }
+
+
   getInterventionAcido(transactionID, (data) => {
-    res.json(data)
+    const finalObj = {}
+
+    if (data[0]) {
+      Object.keys(data[0]).forEach(key => {
+        if (map[key]) {
+          const { parent, child } = map[key]
+          objectPath.set(finalObj, `${parent}.${child}`, data[0][key])
+        }
+      })   
+    }
+    else {
+      Object.keys(map).forEach(key => {
+        const { parent, child } = map[key]
+        objectPath.set(finalObj, `${parent}.${child}`, '')
+      })
+    }
+    res.json(finalObj)
   })
 })
+
 
 app.get('/getInterventionApuntalado', async (req, res) => {
   let { transactionID } = req.query
 
+  const map = {
+    INTERVALO: { parent: 'propuestaApuntalado', child: 'intervalo' }, 
+    LONGITUD_DE_INTERVALO_A_TRATAR: { parent: 'propuestaApuntalado', child: 'longitudDeIntervalo' }, 
+    VOLUME_APAREJO: { parent: 'propuestaApuntalado', child: 'volAparejo' },
+    CAPACIDAD_TOTAL_DEL_POZO: { parent: 'propuestaApuntalado', child: 'capacidadTotalDelPozo' }, 
+    VOLUMEN_PRECOLCHON_N2: { parent: 'propuestaApuntalado', child: 'volumenPrecolchonN2' }, 
+    VOLUMEN_DE_APUNTALANTE: { parent: 'propuestaApuntalado', child: 'volumenDeApuntalante' }, 
+    VOLUMEN_DE_GEL_DE_FRACTURA: { parent: 'propuestaApuntalado', child: 'volumenDeGelDeFracture' }, 
+    VOLUMEN_DESPLAZAMIENTO: { parent: 'propuestaApuntalado', child: 'volumenDesplazamiento' },
+    VOLUMEN_TOTAL_DE_LIQUIDO: { parent: 'propuestaApuntalado', child: 'volumenTotalDeLiquido' }, 
+    MODULO_YOUNG_ARENA: { parent: 'propuestaApuntalado', child: 'moduloYoungArena' },
+    MODULO_YOUNG_LUTITAS: { parent: 'propuestaApuntalado', child: 'moduloYoungLutitas' }, 
+    RELAC_POISSON_ARENA: { parent: 'propuestaApuntalado', child: 'relacPoissonArena' }, 
+    RELAC_POISSON_LUTITAS: { parent: 'propuestaApuntalado', child: 'relacPoissonLutitas' }, 
+    GRADIENTE_DE_FRACTURA: { parent: 'propuestaApuntalado', child: 'gradienteDeFractura' }, 
+    DENSIDAD_DE_DISPAROS: { parent: 'propuestaApuntalado', child: 'densidadDeDisparos' },
+    DIAMETRO_DE_DISPAROS: { parent: 'propuestaApuntalado', child: 'diametroDeDisparos' }, 
+    LONGITUD_APUNTALADA: { parent: 'resultadosSimulacionApuntalado', child: 'longitudApuntalado' }, 
+    ALTURA_TOTAL_DE_FRACTURA: { parent: 'resultadosSimulacionApuntalado', child: 'alturaTotalDeFractura' },
+    ANCHO_PROMEDIO: { parent: 'resultadosSimulacionApuntalado', child: 'anchoPromedio' }, 
+    CONCENTRACION_AREAL: { parent: 'resultadosSimulacionApuntalado', child: 'concentractionAreal' },
+    CONDUCTIVIDAD: { parent: 'resultadosSimulacionApuntalado', child: 'conductividad' }, 
+    FCD: { parent: 'resultadosSimulacionApuntalado', child: 'fcd' },
+    PRESION_NETA: { parent: 'resultadosSimulacionApuntalado', child: 'presionNeta' },
+    EFICIENCIA_DE_FLUIDO_DE_FRACTURA: { parent: 'resultadosSimulacionApuntalado', child: 'eficienciaDeFluidoDeFractura' }, 
+    EST_INC_ESTRANGULADOR: { parent: 'estIncProduccionApuntalado', child: 'estIncEstrangulador' },
+    EST_INC_Ptp: { parent: 'estIncProduccionApuntalado', child: 'estIncPtp' }, 
+    EST_INC_Ttp: { parent: 'estIncProduccionApuntalado', child: 'estIncTtp' }, 
+    EST_INC_Pbaj: { parent: 'estIncProduccionApuntalado', child: 'estIncPbaj' }, 
+    EST_INC_Tbaj: { parent: 'estIncProduccionApuntalado', child: 'estIncTbaj' },
+    EST_INC_Ptr: { parent: 'estIncProduccionApuntalado', child: 'estIncPtr' }, 
+    EST_INC_Qi: { parent: 'estIncProduccionApuntalado', child: 'estIncQl' }, 
+    EST_INC_Qo: { parent: 'estIncProduccionApuntalado', child: 'estIncQo' }, 
+    EST_INC_Qq: { parent: 'estIncProduccionApuntalado', child: 'estIncQg' }, 
+    EST_INC_Qw: { parent: 'estIncProduccionApuntalado', child: 'estIncQw' },
+    EST_INC_RGA: { parent: 'estIncProduccionApuntalado', child: 'estIncRGA' }, 
+    EST_INC_SALINIDAD: { parent: 'estIncProduccionApuntalado', child: 'estIncSalinidad' }, 
+    EST_INC_IP: { parent: 'estIncProduccionApuntalado', child: 'estIncIP' }, 
+    EST_INC_DELTA_P: { parent: 'estIncProduccionApuntalado', child: 'estIncDeltaP' }, 
+    EST_INC_GASTO_COMPROMISO_Qo: { parent: 'estIncProduccionApuntalado', child: 'estIncGastoCompromisoQo' },
+    EST_INC_GASTO_COMPROMISO_Qg: { parent: 'estIncProduccionApuntalado', child: 'estIncGastoCompromisoQg' }, 
+    EST_INC_OBSERVACIONES: { parent: 'estIncProduccionApuntalado', child: 'obervacionesEstIncEstim' },
+  } 
+
   getInterventionApuntalado(transactionID, (data) => {
-    res.json(data)
+    const finalObj = {}
+
+    if (data[0]) {
+      Object.keys(data[0]).forEach(key => {
+        if (map[key]) {
+          const { parent, child } = map[key]
+          objectPath.set(finalObj, `${parent}.${child}`, data[0][key])
+        }
+      })   
+    }
+    else {
+      Object.keys(map).forEach(key => {
+        const { parent, child } = map[key]
+        objectPath.set(finalObj, `${parent}.${child}`, '')
+      })
+    }
+    res.json(finalObj)
   })
 })
-
 app.get('/getLabTest', async (req, res) => {
   let { transactionID } = req.query
 
+  const map = {
+    TIPO_DE_ANALISIS: { child: 'type' }, 
+    FECHA_DE_MUESTREO: { child: 'fechnaMuesetreo' }, 
+    FECHA_DE_PRUEBA: { child: 'fechaPrueba' }, 
+    COMPANIA: { child: 'compania' }, 
+    PERSONAL_DE_PEMEX_QUE_SUPERVISO: { child: 'superviso' }, 
+    OBSERVACIONES: { child: 'obervaciones' },
+  }
+
+  const mainParent = 'pruebasDeLaboratorio'
+  const innerParent = 'pruebasDeLaboratorioData'
+
   getLabTest(transactionID, (data) => {
-    res.json(data)
+    const finalObj = {}
+    data.forEach((d, index) => {
+      const innerObj = {}
+      Object.keys(d).forEach(k => {
+        if (map[k]) {
+          const { child } = map[k]
+          objectPath.set(innerObj, child, d[k])
+        }
+      })
+      objectPath.set(innerObj, 'length', data.length)
+      objectPath.set(innerObj, 'index', index)
+      objectPath.push(finalObj, `${mainParent}.${innerParent}`, innerObj)
+    })
+
+    res.json(finalObj)
   })
 })
 
 app.get('/getCedulaEstimulacion', async (req, res) => {
   let { transactionID } = req.query
 
+  const map = {
+    ETAPA: { child: 'etapa' }, 
+    SISTEMA: { child: 'sistema' }, 
+    TIPO_DE_APUNTALANTE: { child: 'tipoDeApuntalante' }, 
+    CONCENTRACION_DE_APUNTALANTE: { child: 'concentraciDeApuntalante' }, 
+    VOL_LIQUID: { child: 'volLiquid' }, 
+    GASTO_N2: { child: 'gastoN2' }, 
+    GASTO_LIQUIDO: { child: 'gastoLiqudo' }, 
+    GASTO_EN_FONDO: { child: 'gastoEnFondo' }, 
+    CALIDAD: { child: '' }, VOL_N2: { child: 'calidad' }, 
+    VOL_LIQUIDO_ACUM: { child: 'volLiquidoAcum' }, 
+    VOL_N2_ACUM: { child: 'volN2Acum' }, 
+    REL_N2_LIQ: { child: 'relN2Liq' }, 
+    TIEMPO: { child: 'tiempo' },
+  }
+
+  const mainParent = 'propuestaEstimulacion'
+  const innerParent = 'cedulaData'
+
   getCedulaEstimulacion(transactionID, (data) => {
-    res.json(data)
+    const finalObj = {}
+    data.forEach((d, index) => {
+      const innerObj = {}
+      Object.keys(d).forEach(k => {
+        if (map[k]) {
+          const { child } = map[k]
+          objectPath.set(innerObj, child, d[k])
+        }
+      })
+      objectPath.set(innerObj, 'length', data.length)
+      objectPath.set(innerObj, 'index', index)
+      objectPath.push(finalObj, `${mainParent}.${innerParent}`, innerObj)
+    })
+
+    res.json(finalObj)
   })
 })
+
 
 app.get('/getCedulaAcido', async (req, res) => {
   let { transactionID } = req.query
 
+
+  const map = {
+    ETAPA: { child: 'etapa' }, 
+    SISTEMA: { child: 'sistema' }, 
+    TIPO_DE_APUNTALANTE: { child: 'tipoDeApuntalante' }, 
+    CONCENTRACION_DE_APUNTALANTE: { child: 'concentraciDeApuntalante' }, 
+    VOL_LIQUID: { child: 'volLiquid' }, 
+    GASTO_N2: { child: 'gastoN2' }, 
+    GASTO_LIQUIDO: { child: 'gastoLiqudo' }, 
+    GASTO_EN_FONDO: { child: 'gastoEnFondo' }, 
+    CALIDAD: { child: '' }, VOL_N2: { child: 'calidad' }, 
+    VOL_LIQUIDO_ACUM: { child: 'volLiquidoAcum' }, 
+    VOL_N2_ACUM: { child: 'volN2Acum' }, 
+    REL_N2_LIQ: { child: 'relN2Liq' }, 
+    TIEMPO: { child: 'tiempo' },
+  }
+
+  const mainParent = 'propuestaAcido'
+  const innerParent = 'cedulaData'
+
   getCedulaAcido(transactionID, (data) => {
-    res.json(data)
+    const finalObj = {}
+    data.forEach((d, index) => {
+      const innerObj = {}
+      Object.keys(d).forEach(k => {
+        if (map[k]) {
+          const { child } = map[k]
+          objectPath.set(innerObj, child, d[k])
+        }
+      })
+      objectPath.set(innerObj, 'length', data.length)
+      objectPath.set(innerObj, 'index', index)
+      objectPath.push(finalObj, `${mainParent}.${innerParent}`, innerObj)
+    })
+
+    res.json(finalObj)
   })
 })
+
 
 app.get('/getCedulaApuntalado', async (req, res) => {
   let { transactionID } = req.query
 
+
+  const map = {
+    ETAPA: { child: 'etapa' }, 
+    SISTEMA: { child: 'sistema' }, 
+    TIPO_DE_APUNTALANTE: { child: 'tipoDeApuntalante' }, 
+    CONCENTRACION_DE_APUNTALANTE: { child: 'concentraciDeApuntalante' }, 
+    VOL_LIQUID: { child: 'volLiquid' }, 
+    GASTO_N2: { child: 'gastoN2' }, 
+    GASTO_LIQUIDO: { child: 'gastoLiqudo' }, 
+    GASTO_EN_FONDO: { child: 'gastoEnFondo' }, 
+    CALIDAD: { child: '' }, VOL_N2: { child: 'calidad' }, 
+    VOL_LIQUIDO_ACUM: { child: 'volLiquidoAcum' }, 
+    VOL_N2_ACUM: { child: 'volN2Acum' }, 
+    REL_N2_LIQ: { child: 'relN2Liq' }, 
+    TIEMPO: { child: 'tiempo' },
+  }
+
+  const mainParent = 'propuestaApuntalado'
+  const innerParent = 'cedulaData'
+
   getCedulaApuntalado(transactionID, (data) => {
-    res.json(data)
+    const finalObj = {}
+    data.forEach((d, index) => {
+      const innerObj = {}
+      Object.keys(d).forEach(k => {
+        if (map[k]) {
+          const { child } = map[k]
+          objectPath.set(innerObj, child, d[k])
+        }
+      })
+      objectPath.set(innerObj, 'length', data.length)
+      objectPath.set(innerObj, 'index', index)
+      objectPath.push(finalObj, `${mainParent}.${innerParent}`, innerObj)
+    })
+
+    res.json(finalObj)
   })
 })
+
 
 app.get('/getLabResults', async (req, res) => {
   let { transactionID } = req.query
 
+  const map = {
+    SISTEMA: { child: '' }, 
+    TIEMPO_DE_ROMPIMIENTO: { child: '' }, 
+    INTERFASE: { child: '' }, 
+    SOLIDOS_DESPUES_DE_FILTRAR: { child: '' }, 
+    RESULTADO: { child: '' },
+  }
+
+  const mainParent = 'pruebasDeLaboratorioData'
+  const innerParent = 's'
+
   getLabResults(transactionID, (data) => {
-    res.json(data)
+    const finalObj = {}
+    data.forEach((d, index) => {
+      const innerObj = {}
+      Object.keys(d).forEach(k => {
+        if (map[k]) {
+          const { child } = map[k]
+          objectPath.set(innerObj, child, d[k])
+        }
+      })
+      objectPath.set(innerObj, 'length', data.length)
+      objectPath.set(innerObj, 'index', index)
+      objectPath.push(finalObj, `${mainParent}.${innerParent}`, innerObj)
+    })
+
+    res.json(finalObj)
   })
 })
+
 
 app.get('/getLabAcido', async (req, res) => {
   let { transactionID } = req.query
 
+  const map = {
+    CONTENIDO_DE_ACEITE: { child: 'contenidoDeAceite' }, 
+    CONTENIDO_DE_AGUA: { child: 'contenidoDeAgua' }, 
+    CONTENIDO_DE_EMULSION: { child: 'contenidoDeEmulsion' },
+    CONTENIDO_DE_SOLIDOS: { child: 'contenidoDeSolidos' },
+    TIPO_DE_SOLIDOS: { child: 'tipoDeSolidos' },
+    DENSIDAD_DEL_ACEITE: { child: 'densidadDelAceite' },
+    DENSIDAD_DEL_AGUA: { child: 'densidadDelAgua' },
+    DENSIDAD_DE_LA_EMULSION: { child: 'densidadDeLaEmulsion' },
+    CONTENIDO_DE_ASFALTENOS: { child: 'contenidoDeAsfaltenos' },
+    CONTENIDO_DE_PARAFINAS: { child: 'contenidoDeParafinas' },
+    CONTENIDO_DE_RESINAS: { child: 'contenidoDeResinas' },
+    INDICE_DE_ESTABILIDAD_COLOIDAL: { child: 'indiceDeEstabilidadColoidal' },
+    INDICE_DE_ESTABILIDAD_DEL_AGUA: { child: 'indiceDeEstabilidadDelAgua' },
+    PH: { child: 'pH' },
+    SALINIDAD: { child: 'salinidad' },
+    VISCOSIDAD_DEL_ACEITE: { child: 'viscosidadDelAceite' },
+    SISTEMA_ACIDO_SOLUBILIDAD: { child: 'sistemaAcidoSolubilidad' },
+    PESO_MUESTRA_INICIAL: { child: 'pesoMuestraInicial' },
+    PESO_MUESTRA_FINAL: { child: 'pesoMuestraFinal' },
+    SOLUBILIDAD: { child: 'solubilidad' },
+    SISTEMA_ACIDO_GRABADO_DE_NUCLEOS: { child: 'sistemaAcidoGrabadoDeNucleos' },
+    NUCLEO_DE_FORMACION: { child: 'nucleoDeFormacion' },
+    GRABADO: { child: 'grabado' },
+    TIPO_DE_GEL_LINEAL: { child: 'tipoDeGelLineal' },
+    VISCOSIDAD_DEL_GEL_LINEAL: { child: 'viscosidadDelGelLineal' },
+    TIEMPO_DE_RETICULACION: { child: 'tiempoDeReticulacion' },
+    PH_GEL_LINEAL: { child: 'phGelLineal' },
+    TIEMPO_DE_ROMPEDOR_DEL_GEL: { child: 'tiempoDeRompedorDelGel' },
+  }
+
+  const mainParent = 'pruebasDeLaboratorio'
+  const innerParent = 'pruebasDeLaboratorioData'
+
   getLabAcido(transactionID, (data) => {
-    res.json(data)
+    const finalObj = {}
+    data.forEach((d, index) => {
+      const innerObj = {}
+      Object.keys(d).forEach(k => {
+        if (map[k]) {
+          const { child } = map[k]
+          objectPath.set(innerObj, child, d[k])
+        }
+      })
+      objectPath.set(innerObj, 'length', data.length)
+      objectPath.set(innerObj, 'index', index)
+      objectPath.push(finalObj, `${mainParent}.${innerParent}`, innerObj)
+    })
+
+    res.json(finalObj)
   })
 })
+
 
 app.get('/getLabApuntalado', async (req, res) => {
   let { transactionID } = req.query
 
+  const map = {
+    CONTENIDO_DE_ACEITE: { child: 'contenidoDeAceite' }, 
+    CONTENIDO_DE_AGUA: { child: 'contenidoDeAgua' }, 
+    CONTENIDO_DE_EMULSION: { child: 'contenidoDeEmulsion' }, 
+    CONTENIDO_DE_SOLIDOS: { child: 'contenidoDeSolidos' }, 
+    TIPO_DE_SOLIDOS: { child: 'tipoDeSolidos' },
+    DENSIDAD_DEL_ACEITE: { child: 'densidadDelAceite' }, 
+    DENSIDAD_DEL_AGUA: { child: 'densidadDelAgua' }, 
+    DENSIDAD_DE_LA_EMULSION: { child: 'densidadDeLaEmulsion' }, 
+    CONTENIDO_DE_ASFALTENOS: { child: 'contenidoDeAsfaltenos' }, 
+    CONTENIDO_DE_PARAFINAS: { child: 'contenidoDeParafinas' }, 
+    CONTENIDO_DE_RESINAS: { child: 'contenidoDeResinas' }, 
+    INDICE_DE_ESTABILIDAD_COLOIDAL: { child: 'indiceDeEstabilidadColoidal' }, 
+    INDICE_DE_ESTABILIDAD_DEL_AGUA: { child: 'indiceDeEstabilidadDelAgua' }, 
+    PH: { child: 'pH' }, 
+    SALINIDAD: { child: 'salinidad' }, 
+    VISCOSIDAD_DEL_ACEITE: { child: 'viscosidadDelAceite' }, 
+    TIPO_DE_GEL_LINEAL: { child: 'tipoDeGelLineal' }, 
+    VISCOSIDAD_DEL_GEL_LINEAL: { child: 'viscosidadDelGelLineal' }, 
+    TIEMPO_DE_RETICULACION: { child: 'tiempoDeReticulacion' }, 
+    PH_GEL_LINEAL: { child: 'phGelLineal' }, 
+    TIEMPO_DE_ROMPEDOR_DEL_GEL: { child: 'tiempoDeRompedorDelGel' }, 
+    TAMANO_DEL_APUNTALANTE: { child: 'tamanoDelApuntalante' }, 
+    GRAVEDAD_ESPECIFICA: { child: 'gravedadEspecifica' }, 
+    ESFERICIDAD: { child: 'esfericidad' }, 
+    REDONDEO: { child: 'redondeo' }, 
+    TURBIDEZ: { child: 'turbidez' }, 
+    RESISTENCIA: { child: 'resistencia' }, 
+    PRUEBA_DE_SOLUBILIDAD_CON_ACIDO: { child: 'pruebaDeSolubilidadConAcido' },
+  }
+
+  const mainParent = 'pruebasDeLaboratorio'
+  const innerParent = 'pruebasDeLaboratorioData'
+
   getLabApuntalado(transactionID, (data) => {
-    res.json(data)
+    const finalObj = {}
+    data.forEach((d, index) => {
+      const innerObj = {}
+      Object.keys(d).forEach(k => {
+        if (map[k]) {
+          const { child } = map[k]
+          objectPath.set(innerObj, child, d[k])
+        }
+      })
+      objectPath.set(innerObj, 'length', data.length)
+      objectPath.set(innerObj, 'index', index)
+      objectPath.push(finalObj, `${mainParent}.${innerParent}`, innerObj)
+    })
+
+    res.json(finalObj)
   })
 })
+
 
 app.get('/getCosts', async (req, res) => {
   let { transactionID } = req.query

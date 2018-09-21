@@ -1081,7 +1081,7 @@ export const create = async (body, action) => {
 
               connection.query((action === 'save' ? INSERT_MECANICO_QUERY.save : INSERT_MECANICO_QUERY.submit), [
                 wellFormacionID, tipoDeTerminacion, hIntervaloProductor, empacador, presionDifEmpacador, sensorPyt,
-                tipoDeLiner, diametroDeLiner, tipoDePistolas, densidadDeDisparosMechanico, fase,
+                tipoDeLiner, diametroDeLiner, tipoDePistolas, densidadDeDisparosMecanico, fase,
                 diametroDeOrificio, penetracion, tratamientoPor, volumenAparejoDeProduccion,
                 volumenCimaDeIntervalo, volumenBaseDeIntervalo, volumenDeEspacioAnular, transactionID
               ], (err, results) => {
@@ -1291,11 +1291,12 @@ export const create = async (body, action) => {
                                     pruebasDeLaboratorioData.forEach(i => {
                                     const labID = Math.floor(Math.random() * 1000000000)
                                     values.push([labID, interventionID, wellFormacionID, i.type, i.fechaMuestreo, i.fechaPrueba, i.compania, i.superviso, i.obervaciones, transactionID])
-                                    i.sistemasTable.forEach(i => {
-                                      let resultID = Math.floor(Math.random() * 1000000000)
-                                      labResultValues.push([resultID, labID, interventionID, wellFormacionID, i.sistem, i.tiempoRompimiento, i.interfase, i.solidosFiltrar, i.resultado, transactionID])
-                                    })
-
+                                    if (i.sistemasTable) {
+                                        i.sistemasTable.forEach(i => {
+                                          let resultID = Math.floor(Math.random() * 1000000000)
+                                          labResultValues.push([resultID, labID, interventionID, wellFormacionID, i.sistem, i.tiempoRompimiento, i.interfase, i.solidosFiltrar, i.resultado, transactionID])
+                                        })
+                                    }
                                     let newRow = [labID, interventionID, wellFormacionID, i.contenidoDeAceite, i.contenidoDeAgua, i.contenidoDeEmulsion, i.contenidoDeSolidos, i.tipoDeSolidos, i.densidadDelAceite, i.densidadDelAgua, i.densidadDeLaEmulsion, i.contenidoDeAsfaltenos, i.contenidoDeParafinas, i.contenidoDeResinas, i.indiceDeEstabilidadDelColoidal, i.indiceDeEstabilidadDelAgua, i.pH, i.salinidad, i.viscosidadDelAceite, transactionID]
                                     if (tipoDeIntervenciones === 'acido') {
                                       newRow = newRow.slice(0, -1)
@@ -1388,7 +1389,7 @@ export const create = async (body, action) => {
                                           }
                                           else if (tipoDeIntervenciones === 'apuntalado') {
                                             Object.keys(finalObj.estCostApuntalado).forEach(key => {
-                                              if (key !== checked) {
+                                              if (key !== 'checked') {
                                                 let obj = finalObj.estCostApuntalado[key]
                                                 let costID = Math.floor(Math.random() * 1000000000)
                                                 values.push([costID, interventionID, key, obj.company, obj.cost, transactionID])

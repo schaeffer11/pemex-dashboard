@@ -1,5 +1,5 @@
 import { combineReducers } from 'redux-immutable'
-import { Map } from 'immutable'
+import { Map, fromJS } from 'immutable'
 import app from './reducers/app'
 import user from './reducers/user'
 import fichaTecnicaDelPozoHighLevel from './reducers/fichaTecnicaDelPozoHighLevel'
@@ -71,7 +71,7 @@ const rootReducer = (state, action) => {
   if (action.type === 'LOAD_SAVE') {
     const { saved } = action
     const newState = { ...saved, user, app, global, router, forms }
-    return state = Map(newState)
+    return state = fromJS(newState)
   }
 
   if (action.type === 'RESET_APP') {
