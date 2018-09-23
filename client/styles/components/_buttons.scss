@@ -33,7 +33,12 @@ button {
     color: white;
     min-width: 100px;
   }
+  &:hover:enabled {
+    cursor: pointer;
+    opacity: .7;
+  }
   &[disabled]{
+    cursor: not-allowed;
     background: #C0C0C0;
   }
 }
