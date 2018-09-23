@@ -732,7 +732,7 @@ export const getInterventionImage = async (transID, action, cb) => {
 
 
 
-export const create = async (body, action) => {
+export const create = async (body, action, cb) => {
   let transactionID = Math.floor(Math.random() * 1000000000)
  // console.log('what are we here?', body)
   const allKeys = Object.keys(body)
