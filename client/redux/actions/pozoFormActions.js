@@ -1,6 +1,6 @@
 import axios from 'axios'
 import {validatePozo} from '../../../common/utils/validation/pozoValidator'
-import { setIsSaved } from '../../redux/actions/global'
+import { setIsSaved, setIsLoading } from '../../redux/actions/global'
 import Immutable from 'immutable'
 
 function bufferToBase64(buf) {
@@ -33,6 +33,8 @@ function getBase64FromURL(imgURL) {
 
 export function submitForm(action) {
   return async (dispatch, getState) => {
+    console.log('submitting something')
+    dispatch(setIsLoading({ isLoading: true, isSaved: false }))
     const ignore = {
       app: true,
       router: true,
@@ -107,7 +109,8 @@ export function submitForm(action) {
         .then(({ isSaved }) => {
           console.log('server response', isSaved)
           if (isSaved) {
-            dispatch(setIsSaved(true))
+            // dispatch(setIsSaved(true))
+            dispatch(setIsLoading({ isLoading: false, isSaved: true }))
           }
         })
     }

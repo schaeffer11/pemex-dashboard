@@ -77,7 +77,7 @@ const Notification = ({ isSaved, setSaved }) => {
     // const { isSaved } = this.props
     if (isSaved) {
       setSaved(false)
-      toast(<Toasty type={type} notification="Informacion se ha guardado exitosamente" />, { ...toastProps })
+      toast(<Toasty type={type} notification="Información se ha guardado exitosamente" />, { ...toastProps })
     }
     return <ToastContainer />
 }

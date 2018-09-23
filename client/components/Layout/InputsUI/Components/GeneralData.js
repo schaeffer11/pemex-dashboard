@@ -7,8 +7,10 @@ import objectPath from 'object-path'
 
 import { setObjetivo, setAlcances, setTipoDeIntervenciones } from '../../../../redux/actions/intervencionesEstimulacion'
 import { setSubdireccion, setActivo, setCampo, setPozo, setFormacion, setChecked } from '../../../../redux/actions/pozo'
-import { setShowForms } from '../../../../redux/actions/global'
+import { setShowForms, setIsLoading } from '../../../../redux/actions/global'
 import { InputRow, InputRowUnitless, InputRowSelectUnitless, TextAreaUnitless } from '../../Common/InputRow'
+import Notification from '../../Common/Notification'
+import Loading from '../../Common/Loading'
 // import {withValidate} from '../../Common/Validate'
 
 @autobind class GeneralData extends Component {
@@ -198,7 +200,8 @@ import { InputRow, InputRowUnitless, InputRowSelectUnitless, TextAreaUnitless } 
 
   
   async handleLoad() {
-    let { user, formData } = this.props
+    let { user, formData, setLoading } = this.props
+    setLoading({ isLoading: true })
     user = user.toJS()
     formData = formData.toJS()
 
@@ -269,7 +272,7 @@ import { InputRow, InputRowUnitless, InputRowSelectUnitless, TextAreaUnitless } 
             })
           })
         })
-
+        setLoading({ isLoading: false, isSaved: true })
         this.props.loadFromSave(newState)
       })
   }
@@ -288,6 +291,8 @@ import { InputRow, InputRowUnitless, InputRowSelectUnitless, TextAreaUnitless } 
         <button className="submit submit-load" onClick={this.handleLoad} >Load</button>
         <button className='submit submit-continue' disabled={this.checkIncomplete()} onClick={(e) => setShowForms(true)} >Continue</button>
         <button className="submit download-template" onClick={this.downloadMasterTemplate}>{'Descarga el Formato General'}</button>
+        <Notification />
+        <Loading />
       </div>
     )
   }
@@ -333,6 +338,7 @@ const mapDispatchToProps = dispatch => ({
   setTipoDeIntervenciones : val => dispatch(setTipoDeIntervenciones(val)),
   setShowForms : val => dispatch(setShowForms(val)),
   loadFromSave: values => {dispatch(testLoadFromSave(values))},
+  setLoading: obj => dispatch(setIsLoading(obj))
 })
 
 // export default withValidate(
