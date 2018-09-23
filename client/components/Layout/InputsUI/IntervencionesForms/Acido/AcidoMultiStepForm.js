@@ -3,7 +3,7 @@ import { connect } from 'react-redux'
 import autobind from 'autobind-decorator'
 import axios from 'axios'
 
-import EstimacionCostosAcido from './EstimacionCostosAcido'
+import EstimacionCostos from '../EstimacionCostos'
 import EstimacionIncProduccionAcido from './EstimacionIncProduccionAcido'
 import PropuestaDeAcido from './PropuestaDeAcido'
 import PruebasDeLaboratorio from '../PruebasDeLaboratorio'
@@ -25,7 +25,7 @@ import { setShowForms } from '../../../../../redux/actions/global'
       {'title' : 'Pruebas de Laboratorio de Fracturamiento Acido', 'content': <PruebasDeLaboratorioAcidoExtra/> },
       {'title' : 'Resultados de la Simulacion de Fracturamiento Acido', 'content': <ResultadosDeLaSimulacionAcido/> },
       {'title' : 'Estimacion del Incremento de Produccion', 'content': <EstimacionIncProduccionAcido/> },
-      {'title' : 'Estimacion de Costos de Fracturamiento Acido', 'content': <EstimacionCostosAcido/> }
+      {'title' : 'Estimacion de Costos de Fracturamiento Acido', 'content': <EstimacionCostos/> }
     ];
 
   }

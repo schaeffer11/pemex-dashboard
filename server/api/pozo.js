@@ -732,36 +732,6 @@ export const getInterventionImage = async (transID, action, cb) => {
 
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 export const create = async (body, action) => {
   let transactionID = Math.floor(Math.random() * 1000000000)
  // console.log('what are we here?', body)
@@ -861,6 +831,7 @@ export const create = async (body, action) => {
 
   let { pruebasDeLaboratorioData } = finalObj.pruebasDeLaboratorio
 
+  let { estimacionCostosData } = finalObj.estCost
 
   if (tipoDeIntervenciones === 'estimulacion') {
       //Propuesta Estimulaction
@@ -878,10 +849,6 @@ export const create = async (body, action) => {
         estIncPtr, estIncQl, estIncQo, estIncQg, estIncQw,
         estIncRGA, estIncSalinidad, estIncIP, estIncDeltaP, estIncGastoCompromisoQo,
         estIncGastoCompromisoQg, obervacionesEstIncEstim } = finalObj.estIncProduccionEstimulacion
-
-      //Est Cost
-      var { estCostCompaniaDeServicio, estCostoDeRentaDeBarco, estCostDeSistemaReactivo, estCostDeSistemaNoReactivo, estCostDeDivergenes,
-        estCostDeN2, estCostHCL } = finalObj.estCostEstimulacion
 
       var { cedulaData } = finalObj.propuestaEstimulacion
 
@@ -906,12 +873,6 @@ export const create = async (body, action) => {
         estIncRGA, estIncSalinidad, estIncIP, estIncDeltaP, estIncGastoCompromisoQo,
         estIncGastoCompromisoQg, obervacionesEstIncAcido } = finalObj.estIncProduccionAcido
 
-       //Estimacion De Costos
-      var { estCostCompaniaDeServicio, estCostoDeRentaDeBarco, estCostUnidadesDeAltaPresion, estCostDelGelDeFractura, estCostDeSistemoRactivo,
-        estCostDeSistemoNoRactivo, estCostDeDivergentes, estCostDeN2, estCostDeHCL, estCostDeSistemasAcidosRetardados,
-        estCostDeCostoEquipoDeFacturamientoDePozos, estCostGelLineal, estCostTrabajosDeBombeoDiversos, estCostLlenadoDePozoYPruebaDeAdmision, estCostMinifrac,
-        estCostBacheNeutralizador, estCostProtectorDeArbol, estCostApuntalante  } = finalObj.estCostAcido
- 
       var { cedulaData } = finalObj.propuestaAcido
 
       labResultsFile = finalObj.resultadosSimulacionAcido.imgName
@@ -936,13 +897,6 @@ export const create = async (body, action) => {
         estIncPtr, estIncQl, estIncQo, estIncQg, estIncQw,
         estIncRGA, estIncSalinidad, estIncIP, estIncDeltaP, estIncGastoCompromisoQo,
         estIncGastoCompromisoQg, obervacionesEstIncApuntalado } = finalObj.estIncProduccionApuntalado
-
-
-      //Est Cost Apuntalado
-      var { estCostCompaniaDeServicio, estCostoDeRentaDeBarco, estCostUnidadesDeAltaPresion, estCostDelGelDeFractura, estCostDeSistemoRactivo,
-        estCostDeSistemaNoRactivo, estCostDeDivergentes, estCostDeN2, estCostDeHCL, estCostDeSistemasAcidosRetardados,
-        estCostDeCostoEquipoDeFacturamientoDePozos, estCostGelLineal, estCostTrabajosDeBombeoDiversos, estCostLlenadoDePozoYPruebaDeAdmision, estCostMinifrac,
-        estCostBacheNeutralizador, estCostProtectorDeArbol } = finalObj.estCostApuntalado
 
       var { cedulaData } = finalObj.propuestaApuntalado
 
@@ -1311,36 +1265,11 @@ export const create = async (body, action) => {
                                           console.log('lab extras', err)
                                           console.log('lab extras', results)
 
-
                                           values = []
-                                          if (tipoDeIntervenciones === 'estimulacion') {
-                                            Object.keys(finalObj.estCostEstimulacion).forEach(key => {
-                                              if (key !== 'checked') {
-                                                let obj = finalObj.estCostEstimulacion[key]
-                                                let costID = Math.floor(Math.random() * 1000000000)
-                                                values.push([costID, interventionID, key, obj.company, obj.cost, transactionID])
-                                              }
-                                            })
-                                          }
-                                          else if (tipoDeIntervenciones === 'acido') {
-                                            Object.keys(finalObj.estCostAcido).forEach(key => {
-                                              if (key !== 'checked') {
-                                                let obj = finalObj.estCostAcido[key]
-                                                let costID = Math.floor(Math.random() * 1000000000)
-                                                values.push([costID, interventionID, key, obj.company, obj.cost, transactionID])
-                                              }
-                                            })
-                                          }
-                                          else if (tipoDeIntervenciones === 'apuntalado') {
-                                            Object.keys(finalObj.estCostApuntalado).forEach(key => {
-                                              if (key !== 'checked') {
-                                                let obj = finalObj.estCostApuntalado[key]
-                                                let costID = Math.floor(Math.random() * 1000000000)
-                                                values.push([costID, interventionID, key, obj.company, obj.cost, transactionID])
-                                              }
-                                        
-                                            })
-                                          }
+                                          estimacionCostosData.forEach(i => {
+                                            let costID = Math.floor(Math.random() * 1000000000)
+                                            values.push([costID, interventionID, i.item, i.compania, i.cost, transactionID])
+                                          })
 
                                           connection.query((action === 'save' ? INSERT_COSTS_QUERY.save : INSERT_COSTS_QUERY.submit), [values], (err, results) => {
                                             console.log('costs', err)

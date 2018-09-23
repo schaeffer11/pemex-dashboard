@@ -202,19 +202,13 @@ import { InputRow, InputRowUnitless, InputRowSelectUnitless, TextAreaUnitless } 
     user = user.toJS()
     formData = formData.toJS()
 
-
     const wellID = formData.pozo
     const userID = user.id
-
-    console.log(wellID, userID)
 
     let data = await fetch(`/api/getSave?userID=${userID}`)
       .then(res => res.json())
 
     let { transactionID, tipoDeIntervenciones } = data
-
-    console.log(transactionID)
-
     let labQuery
 
     if (tipoDeIntervenciones === 'estimulacion') {
@@ -255,7 +249,7 @@ import { InputRow, InputRowUnitless, InputRowSelectUnitless, TextAreaUnitless } 
       fetch(`api/getCedulaApuntalado?transactionID=${transactionID}&saved=1`).then(r => r.json()),      
       // fetch(`api/getLabResults?transactionID=${transactionID}`).then(r => r.json()),
       fetch(labQuery).then(r => r.json()),
-      // fetch(`api/getCosts?transactionID=${transactionID}`).then(r => r.json()),
+      fetch(`api/getCosts?transactionID=${transactionID}&saved=1`).then(r => r.json()),
     ])
       .catch(error => console.log('some error i found', error))
       .then((results) => {
@@ -285,16 +279,13 @@ import { InputRow, InputRowUnitless, InputRowSelectUnitless, TextAreaUnitless } 
       <div className='form general-data'>
         { this.makeGeneralForm() }
         { this.makeGeneralInterventionForm() }
-        <button className="submit submit-load" onClick={this.handleLoad} >Load</button>
-        <button className='submit submit-continue' disabled={this.checkIncomplete()} onClick={(e) => setShowForms(true)} >Continue</button>
+        <button className="submit submit-load" onClick={this.handleLoad} >Cargar datos previamente Guardados</button>
+        <button className='submit submit-continue' disabled={this.checkIncomplete()} onClick={(e) => setShowForms(true)} >Siguiente</button>
         <button className="submit download-template" onClick={this.downloadMasterTemplate}>{'Descarga el Formato General'}</button>
       </div>
     )
   }
 }
-
-
-
 
 const validate = values => {
     const errors = {}

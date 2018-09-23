@@ -22,9 +22,7 @@ import resultadosSimulacionApuntalado from './reducers/resultadosSimulacionApunt
 import estIncProduccionEstimulacion from './reducers/estIncProduccionEstimulacion'
 import estIncProduccionAcido from './reducers/estIncProduccionAcido'
 import estIncProduccionApuntalado from './reducers/estIncProduccionApuntalado'
-import estCostEstimulacion from './reducers/estCostEstimulacion'
-import estCostAcido from './reducers/estCostAcido'
-import estCostApuntalado from './reducers/estCostApuntalado'
+import estCost from './reducers/estCost'
 import evaluacionPetrofisica from './reducers/evaluacionPetrofisica'
 import historicoDePresion from './reducers/historicoDePresion'
 import historicoDeProduccion from './reducers/historicoDeProduccion'
@@ -52,9 +50,7 @@ const appReducer = combineReducers({
   estIncProduccionEstimulacion,
   estIncProduccionAcido,
   estIncProduccionApuntalado,
-  estCostEstimulacion,
-  estCostAcido,
-  estCostApuntalado,
+  estCost,
   evaluacionPetrofisica,
   historicoDePresion,
   historicoDeProduccion,

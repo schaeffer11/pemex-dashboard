@@ -12,6 +12,11 @@ let fluidoOptions = [
     { label: 'Gas Hemedo', value: 'Gas Hemedo' },
     { label: 'Gas Seco', value: 'Gas Seco' },
 ]
+ 
+let litologiaOptions = [
+    { label: 'Arenas', value: 'Arenas' },
+    { label: 'Carbonatos', value: 'Carbonatos'}
+]
 @autobind class TecnicaDelCampo extends Component {
   constructor(props) {
     super(props)
@@ -151,7 +156,7 @@ let fluidoOptions = [
         <div className='header'>
           Formacion
         </div>
-        <InputRowUnitless header="Litología" name='litologia' value={litologiaField} onChange={setLitologiaField} onBlur={this.validate} errors={this.state.errors} />
+        <InputRowSelectUnitless header='Litología' name='litologia' value={litologiaField} callback={(e) => setLitologiaField(e.value)} options={litologiaOptions} onBlur={this.validate} errors={this.state.errors}/>
         <InputRow header="Espesor neto" name='espesorNeto'value={espesorNetoField} onChange={setEspesorNetoField} unit='m' onBlur={this.validate} errors={this.state.errors} />
         <InputRow header="Porosidad" name='porosidad' value={porosidadField} onChange={setPorosidadField} unit='%' onBlur={this.validate} errors={this.state.errors} />
         <InputRow header="Sw" name='Sw' value={swField} onChange={setSwField} unit='%' onBlur={this.validate} errors={this.state.errors} />

@@ -8,7 +8,7 @@ import PruebasDeLaboratorio from '../PruebasDeLaboratorio'
 import PruebasDeLaboratorioApuntaladoExtra from './PruebasDeLaboratorioApuntaladoExtra'
 import ResultadosDeLaSimulacionApuntalado from './ResultadosDeLaSimulacionApuntalado'
 import EstimacionIncProduccionApuntalado from './EstimacionIncProduccionApuntalado'
-import EstimacionCostosApuntalado from './EstimacionCostosApuntalado'
+import EstimacionCostos from '../EstimacionCostos'
 import { setShowForms } from '../../../../../redux/actions/global'
 
 @autobind class ApuntaladoMultiStepForm extends Component {
@@ -25,7 +25,7 @@ import { setShowForms } from '../../../../../redux/actions/global'
       {'title' : 'Pruebas de Laboratorio de Fracturamiento Apuntalado', 'content': <PruebasDeLaboratorioApuntaladoExtra/> },
       {'title' : 'Resultados de la Simulacion de Fracturamiento Apuntalado', 'content': <ResultadosDeLaSimulacionApuntalado/> },
       {'title' : 'Estimacion del Incremento de Produccion', 'content': <EstimacionIncProduccionApuntalado/> },
-      {'title' : 'Estimacion de Costos de Fracturamiento Apuntalado', 'content': <EstimacionCostosApuntalado/> }
+      {'title' : 'Estimacion de Costos de Fracturamiento Apuntalado', 'content': <EstimacionCostos/> }
     ];
 
   }

@@ -270,7 +270,7 @@ const resultadoOptions = [
           />
 
         </div>
-        <button className='new-row-button' index={index} onClick={(e) => this.addNewRow(e, index)}> + </button>
+        <button className='new-row-button' index={index} onClick={(e) => this.addNewRow(e, index)}>Añadir un renglón</button>
       </div>
     )
   }

@@ -1322,8 +1322,6 @@ app.get('/getCedulaAcido', async (req, res) => {
 
   let action = saved ? 'loadSave' : 'loadTransaction'
 
-
-
   const map = {
     ETAPA: { child: 'etapa' }, 
     SISTEMA: { child: 'sistema' }, 
@@ -1594,14 +1592,96 @@ app.get('/getLabApuntalado', async (req, res) => {
 })
 
 
-app.get('/getCosts', async (req, res) => {
+app.get('/getCedulaAcido', async (req, res) => {
   let { transactionID, saved } = req.query
 
   let action = saved ? 'loadSave' : 'loadTransaction'
 
+  const map = {
+    ETAPA: { child: 'etapa' }, 
+    SISTEMA: { child: 'sistema' }, 
+    TIPO_DE_APUNTALANTE: { child: 'tipoDeApuntalante' }, 
+
+  }
+
+  const mainParent = 'propuestaAcido'
+  const innerParent = 'cedulaData'
+
+  getCedulaAcido(transactionID, action, (data) => {
+    let finalObj = {}
+    if (data.length > 0) {
+      data.forEach((d, index) => {
+        const innerObj = {}
+        Object.keys(d).forEach(k => {
+          if (map[k]) {
+            const { child } = map[k]
+            objectPath.set(innerObj, child, d[k])
+          }
+        })
+        objectPath.set(innerObj, 'length', data.length)
+        objectPath.set(innerObj, 'index', index)
+        objectPath.push(finalObj, `${mainParent}.${innerParent}`, innerObj)
+      })
+    }
+    else {
+      finalObj = {
+        'propuestaAcido': {
+          "cedulaData": [
+            {}
+          ]
+        }
+      }
+    }
+
+    res.json(finalObj)
+  })
+})
+
+
+
+
+app.get('/getCosts', async (req, res) => {
+  let { transactionID, saved } = req.query
+
+  let action = saved ? 'loadSave' : 'loadTransaction'
+  
+  const map = {
+    ITEM: { child: 'item' }, 
+    COMPANY: { child: 'compania' }, 
+    COST: { child: 'cost' }, 
+
+  }
+
+  const mainParent = 'estCost'
+  const innerParent = 'estimacionCostosData'
 
   getCosts(transactionID, action, (data) => {
-    res.json(data)
+    let finalObj = {}
+    if (data.length > 0) {
+      data.forEach((d, index) => {
+        const innerObj = {}
+        Object.keys(d).forEach(k => {
+          if (map[k]) {
+            const { child } = map[k]
+            objectPath.set(innerObj, child, d[k])
+          }
+        })
+        objectPath.set(innerObj, 'length', data.length)
+        objectPath.set(innerObj, 'index', index)
+        objectPath.push(finalObj, `${mainParent}.${innerParent}`, innerObj)
+      })
+    }
+    else {
+      finalObj = {
+        'estCost': {
+          "estimacionCostosData": [
+            {}
+          ]
+        }
+      }
+    }
+
+    res.json(finalObj)
   })
 })
 
