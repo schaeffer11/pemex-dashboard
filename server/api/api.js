@@ -141,7 +141,7 @@ app.get('/getTransactionWell', (req, res) => {
 
 
 app.post('/well', async (req, res) => {
-  const test = await createWell(req.body, 'submit', err => {
+  createWell(req.body, 'submit', err => {
     if (err) {
       console.log('we got an error saving', err)
       res.json({ isSubmitted: false })
@@ -150,7 +150,6 @@ app.post('/well', async (req, res) => {
       res.json({ isSubmitted: true })
     }
   })
-  // res.json({ well: 'submitted' })
 })
 
 

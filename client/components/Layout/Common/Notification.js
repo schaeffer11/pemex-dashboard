@@ -61,7 +61,7 @@ const Toasty = ({ type, notification }) => {
 //   }
 // }
 
-const Notification = ({ saved, loaded, setLoading }) => {
+const Notification = ({ saved, loaded, submitted, setLoading }) => {
   console.log('Notifying?', saved, loaded)
     const toastProps = {
       position: 'top-right',
@@ -74,21 +74,32 @@ const Notification = ({ saved, loaded, setLoading }) => {
       draggablePercent: 60,
     }
     const toastPropsCopy = { ...toastProps }
+    let notification = ''
     if (saved !== null) {
       toastPropsCopy.type = saved
+      notification = saved === 'success' ? '¡Exito! Su información se ha guardado' : '¡Error! Su información no se guardó'
       setLoading({ saved: null })
-      toast(<Toasty type={saved} notification="¡Exito! Su información se ha guardado" />, toastPropsCopy)
     } else if (loaded !== null) {
       toastPropsCopy.type = loaded
+      notification = loaded === 'success' ? '¡Descarga existosa!' : '¡Error! Su información no se descargó'
       setLoading({ loaded: null })
-      toast(<Toasty type={loaded} notification="¡Descarga existosa!" />, toastPropsCopy)
+    } else if (submitted !== null) {
+      toastPropsCopy.type = submitted
+      notification = loaded === 'success' ? '¡Exito! Su información se ha guardado' : '¡Error! Su información no se guardó'
+      setLoading({ submitted: null })
     }
+
+    if (saved || loaded || submitted) {
+      toast(<Toasty type={submitted} notification={notification} />, toastPropsCopy)
+    }
+    
     return <ToastContainer />
 }
 
 const mapStateToProps = state => ({
   saved: state.getIn(['global', 'saved']),
   loaded: state.getIn(['global', 'loaded']),
+  submitted: state.getIn(['global', 'submitted']),
 })
 
 const mapDispatchToProps = dispatch => ({

@@ -118,8 +118,9 @@ export function submitForm(action) {
         body: formData,
       })
         .then(r => r.json())
-        .then(r => {
-          console.log('server response', r)
+        .then(({ isSubmitted }) => {
+          const submitted = isSubmitted ? 'success' : 'error'
+          dispatch(setIsLoading({ isLoading: false, submitted }))
           // dispatch({ type: 'RESET_APP' })
         })
     }

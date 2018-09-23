@@ -4,6 +4,7 @@ const initialState = Map({
     showForms: false,
     saved: null,
     loaded: null,
+    submitted: null,
     loadText: null,
     isLoading: false,
 })

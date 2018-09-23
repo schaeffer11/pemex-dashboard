@@ -967,6 +967,7 @@ export const create = async (body, action, cb) => {
   connection.beginTransaction(function(err) {
     if (err) { throw err; }
 
+    const errors = []
     connection.query((action === 'save' ? INSERT_FIELDS_QUERY.save : INSERT_FIELDS_QUERY.submit), [
     fieldFormacionID, subdireccion, activo, formacion,
     descubrimientoField, fechaDeExplotacionField, numeroDePozosOperandoField, pInicialAnoField, pActualFechaField,
@@ -978,7 +979,12 @@ export const create = async (body, action, cb) => {
     h2sField, co2Field, n2Field, transactionID], (err, results) => {
       console.log('field', err)
       console.log('field', results)
-
+      if (err) {
+        return connection.rollback(function() {
+          console.log('rolling back!!! 1')
+          cb(err)
+        })
+      }
       connection.query((action === 'save' ? INSERT_WELL_QUERY.save : INSERT_WELL_QUERY.submit), [
       wellFormacionID, subdireccion, activo,
       formacion, intervaloProductor, espesorBruto, espesorNeto, caliza,
@@ -986,9 +992,14 @@ export const create = async (body, action, cb) => {
       caa, cga, tipoDePozo, pwsFecha, pwfFecha,
       deltaPPerMes, tyac, pvt, aparejoDeProduccion, profEmpacador,
       profSensorPYT, tipoDeSistemo, transactionID ], (err, results) => {
+        if (err) {
+            return connection.rollback(function() {
+              console.log('rolling back!!! 2')
+              cb(err)
+            })
+        }
         console.log('well', err)
         console.log('well', results)
-
         let values = []
 
         historialIntervencionesData.forEach(i => {
@@ -997,6 +1008,12 @@ export const create = async (body, action, cb) => {
         })
 
         connection.query((action === 'save' ? INSERT_HIST_INTERVENCIONES_QUERY.save : INSERT_HIST_INTERVENCIONES_QUERY.submit), [values], (err, results) => {
+          if (err) {
+            return connection.rollback(function() {
+              console.log('rolling back!!! 2')
+              cb(err)
+            })
+          }
           console.log('user input intervention', err)
           console.log('user input intervention', results)
 
@@ -1011,7 +1028,12 @@ export const create = async (body, action, cb) => {
           connection.query((action === 'save' ? INSERT_LAYER_QUERY.save : INSERT_LAYER_QUERY.submit), [values], (err, results) => {
             console.log('layers', err)
             console.log('layers', results)
-
+            if (err) {
+              return connection.rollback(function() {
+                console.log('rolling back!!! 2')
+                cb(err)
+              })
+            }
             values = []
 
             mudLossData.forEach(i => {
@@ -1022,7 +1044,12 @@ export const create = async (body, action, cb) => {
             connection.query((action === 'save' ? INSERT_MUD_LOSS_QUERY.save : INSERT_MUD_LOSS_QUERY.submit), [values], (err, results) => {
               console.log('mud loss', err)
               console.log('mud loss', results)
-
+              if (err) {
+                return connection.rollback(function() {
+                  console.log('rolling back!!! 2')
+                  cb(err)
+                })
+              }
 
               connection.query((action === 'save' ? INSERT_MECANICO_QUERY.save : INSERT_MECANICO_QUERY.submit), [
                 wellFormacionID, tipoDeTerminacion, hIntervaloProductor, empacador, presionDifEmpacador, sensorPyt,
@@ -1030,6 +1057,12 @@ export const create = async (body, action, cb) => {
                 diametroDeOrificio, penetracion, tratamientoPor, volumenAparejoDeProduccion,
                 volumenCimaDeIntervalo, volumenBaseDeIntervalo, volumenDeEspacioAnular, transactionID
               ], (err, results) => {
+                if (err) {
+                  return connection.rollback(function() {
+                    console.log('rolling back!!! 2')
+                    cb(err)
+                  })
+                }
                 console.log('mecanico', err)
                 console.log('mecanico', results)
 
@@ -1040,6 +1073,12 @@ export const create = async (body, action, cb) => {
                     cloruros, bicarbonatos, sulfatos, carbonatos, densidadAt15,
                     densidadAt20, transactionID 
                 ], (err, results) => {
+                  if (err) {
+                    return connection.rollback(function() {
+                      console.log('rolling back!!! 2')
+                      cb(err)
+                    })
+                  }
                   console.log('agua', err)
                   console.log('agua', results)
 
@@ -1126,6 +1165,12 @@ export const create = async (body, action, cb) => {
                   connection.query(query, values, (err, results) => {
                     console.log('sistemas', err)
                     console.log('sistemas', results)
+                    if (err) {
+                      return connection.rollback(function() {
+                        console.log('rolling back!!! 2')
+                        cb(err)
+                      })
+                    }
 
                     values = []
 
@@ -1136,6 +1181,12 @@ export const create = async (body, action, cb) => {
                     connection.query((action === 'save' ? INSERT_FIELD_PRESSURE_QUERY.save : INSERT_FIELD_PRESSURE_QUERY.submit), [values], (err, results) => {
                       console.log('field pressure', err)
                       console.log('field pressure', results)
+                      if (err) {
+                        return connection.rollback(function() {
+                          console.log('rolling back!!! 2')
+                          cb(err)
+                        })
+                      }
 
                       values = []
 
@@ -1148,12 +1199,24 @@ export const create = async (body, action, cb) => {
                       connection.query((action === 'save' ? INSERT_WELL_PRESSURE_QUERY.save : INSERT_WELL_PRESSURE_QUERY.submit), [values], (err, results) => {
                         console.log('well pressure', err)
                         console.log('well pressure', results)
+                        if (err) {
+                          return connection.rollback(function() {
+                            console.log('rolling back!!! 2')
+                            cb(err)
+                          })
+                        }
 
                         connection.query((action === 'save' ? INSERT_WELL_AFOROS_QUERY.save : INSERT_WELL_AFOROS_QUERY.submit), [
                         wellFormacionID, fecha, estrangulado, ptp, ttp, pbaj, tbaj, psep, tsep,
                         ql, qo, qg, qw, rga, salinidad, ph, transactionID], (err, results) => {
                           console.log('well aforos', err)
                           console.log('well aforos', results)
+                          if (err) {
+                            return connection.rollback(function() {
+                              console.log('rolling back!!! 2')
+                              cb(err)
+                            })
+                          }
 
                           values = []
                           produccionData.forEach(i => {
@@ -1163,6 +1226,12 @@ export const create = async (body, action, cb) => {
                           connection.query((action === 'save' ? INSERT_WELL_PRODUCCION_QUERY.save : INSERT_WELL_PRODUCCION_QUERY.submit), [values], (err, results) => {
                             console.log('well prod', err)
                             console.log('well prod', results)
+                            if (err) {
+                              return connection.rollback(function() {
+                                console.log('rolling back!!! 2')
+                                cb(err)
+                              })
+                            }
 
                             values = [
                               [wellFormacionID, 'Well Log', wellLogFile, transactionID],
@@ -1173,12 +1242,24 @@ export const create = async (body, action, cb) => {
                             connection.query((action === 'save' ? INSERT_WELL_IMAGE_QUERY.save : INSERT_WELL_IMAGE_QUERY.submit), [values], (err, results) => {
                               console.log('well img', err)
                               console.log('well img', results)
+                              if (err) {
+                                return connection.rollback(function() {
+                                  console.log('rolling back!!! 2')
+                                  cb(err)
+                                })
+                              }
 
                               connection.query((action === 'save' ? INSERT_INTERVENTION_BASE_QUERY.save : INSERT_INTERVENTION_BASE_QUERY.submit), [
                                 interventionID, wellFormacionID, objetivo, alcances, tipoDeIntervenciones, transactionID
                               ], (err, results) => {
                                 console.log('intervention base', err)
                                 console.log('intervention base', results)
+                                if (err) {
+                                  return connection.rollback(function() {
+                                    console.log('rolling back!!! 2')
+                                    cb(err)
+                                  })
+                                }
 
 
                                 query = tipoDeIntervenciones === 'estimulacion' ? (action === 'save' ? INSERT_INTERVENTION_ESIMULACION_QUERY.save : INSERT_INTERVENTION_ESIMULACION_QUERY.submit) : tipoDeIntervenciones === 'acido' ? (action === 'save' ? INSERT_INTERVENTION_ACIDO_QUERY.save : INSERT_INTERVENTION_ACIDO_QUERY.submit) : (action === 'save' ? INSERT_INTERVENTION_APUNTALADO_QUERY.save : INSERT_INTERVENTION_APUNTALADO_QUERY.submit)
@@ -1225,6 +1306,12 @@ export const create = async (body, action, cb) => {
                                 connection.query(query, values, (err, results) => {
                                   console.log('intervention', err)
                                   console.log('intervention', results)
+                                  if (err) {
+                                    return connection.rollback(function() {
+                                      console.log('rolling back!!! 2')
+                                      cb(err)
+                                    })
+                                  }
 
                                   values = []
 
@@ -1264,6 +1351,12 @@ export const create = async (body, action, cb) => {
                                   connection.query((action === 'save' ? INSERT_LAB_TEST_QUERY.save : INSERT_LAB_TEST_QUERY.submit), [values], (err, results) => {
                                     console.log('lab tests', err)
                                     console.log('lab tests', results)
+                                    if (err) {
+                                      return connection.rollback(function() {
+                                        console.log('rolling back!!! 2')
+                                        cb(err)
+                                      })
+                                    }
 
                                     query = tipoDeIntervenciones === 'estimulacion' ? (action === 'save' ? INSERT_CEDULA_ESTIMULACION_QUERY.save : INSERT_CEDULA_ESTIMULACION_QUERY.submit) : tipoDeIntervenciones === 'acido' ? (action === 'save' ? INSERT_CEDULA_ACIDO_QUERY.save : INSERT_CEDULA_ACIDO_QUERY.submit) : (action === 'save' ? INSERT_CEDULA_APUNTALADO_QUERY.save : INSERT_CEDULA_APUNTALADO_QUERY.submit)
 
@@ -1300,16 +1393,35 @@ export const create = async (body, action, cb) => {
                                     connection.query(query, [values], (err, results) => {
                                       console.log('cedula', err)
                                       console.log('cedula', results)
+                                      if (err) {
+                                        return connection.rollback(function() {
+                                          console.log('rolling back!!! 2')
+                                          cb(err)
+                                        })
+                                      }
 
                                       connection.query((action === 'save' ? INSERT_LAB_RESULTS_QUERY.save : INSERT_LAB_RESULTS_QUERY.submit), [labResultValues], (err, results) => {
                                         console.log('lab results', err)
                                         console.log('lab results', results)
+                                        if (err) {
+                                          return connection.rollback(function() {
+                                            console.log('rolling back!!! 2')
+                                            cb(err)
+                                          })
+                                        }
 
                                         query =  tipoDeIntervenciones === 'estimulacion' ? `select(1) FROM Users LIMIT 1` : tipoDeIntervenciones === 'acido' ? (action === 'save' ? INSERT_LAB_ACIDO_QUERY.save : INSERT_LAB_ACIDO_QUERY.submit) : (action === 'save' ? INSERT_LAB_APUNTALADO_QUERY.save : INSERT_LAB_APUNTALADO_QUERY.submit)
                                         
                                         connection.query(query, [labExtraValues], (err, results) => {
                                           console.log('lab extras', err)
                                           console.log('lab extras', results)
+                                          // TODO: Re-add this error handler when labs are ready
+                                          if (err) {
+                                            // return connection.rollback(function() {
+                                            //   console.log('rolling back!!! 2')
+                                            //   cb(err)
+                                            // })
+                                          }
 
 
                                           values = []
@@ -1345,6 +1457,12 @@ export const create = async (body, action, cb) => {
                                           connection.query((action === 'save' ? INSERT_COSTS_QUERY.save : INSERT_COSTS_QUERY.submit), [values], (err, results) => {
                                             console.log('costs', err)
                                             console.log('costs', results)
+                                            if (err) {
+                                              return connection.rollback(function() {
+                                                console.log('rolling back!!! 2')
+                                                cb(err)
+                                              })
+                                            }
 
                                             values = [
                                               [interventionID, 'Lab Results', labResultsFile, transactionID],
@@ -1355,16 +1473,29 @@ export const create = async (body, action, cb) => {
                                             connection.query((action === 'save' ? INSERT_INTERVENTION_IMAGE_QUERY.save : INSERT_INTERVENTION_IMAGE_QUERY.submit), [values], (err, results) => {
                                               console.log('intervention img', err)
                                               console.log('intervention img', results)
+                                              if (err) {
+                                                return connection.rollback(function() {
+                                                  console.log('rolling back!!! 2')
+                                                  cb(err)
+                                                })
+                                              }
 
                                               values = action === 'save' ? [transactionID, userID, wellFormacionID, tipoDeIntervenciones] : [transactionID, userID, fieldFormacionID, wellFormacionID]
                                               connection.query((action === 'save' ? INSERT_TRANSACTION.save : INSERT_TRANSACTION.submit), values, (err, results) => {
                                                 console.log('transaction', err)
                                                 console.log('transaction', results)
+                                                if (err) {
+                                                  return connection.rollback(function() {
+                                                    console.log('rolling back!!! 2')
+                                                    cb(err)
+                                                  })
+                                                }
 
                                                 connection.commit(function(err) {
                                                     if (err) {
                                                       cb(err)
                                                       return connection.rollback(function() {
+                                                        console.log('something went terrible')
                                                         throw err;
                                                       });
                                                     }
