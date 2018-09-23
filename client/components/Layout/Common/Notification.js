@@ -1,7 +1,7 @@
 import React, { Component } from 'react'
 import { connect } from 'react-redux'
 import { ToastContainer, toast } from 'react-toastify'
-import { setIsSaved } from '../../../redux/actions/global'
+import { setIsLoading } from '../../../redux/actions/global'
 import 'react-toastify/dist/ReactToastify.css'
 
 const Toasty = ({ type, notification }) => {
@@ -61,33 +61,38 @@ const Toasty = ({ type, notification }) => {
 //   }
 // }
 
-const Notification = ({ isSaved, setSaved }) => {
-  const type = 'success'
+const Notification = ({ saved, loaded, setLoading }) => {
+  console.log('Notifying?', saved, loaded)
     const toastProps = {
       position: 'top-right',
-      autoClose: false,
-      // hideProgressBar: false,
+      autoClose: 5000,
+      hideProgressBar: false,
       closeOnClick: true,
-      // pauseOnHover: true,
-      type,
+      pauseOnHover: true,
       newestOnTop: true,
       draggable: true,
       draggablePercent: 60,
     }
-    // const { isSaved } = this.props
-    if (isSaved) {
-      setSaved(false)
-      toast(<Toasty type={type} notification="Información se ha guardado exitosamente" />, { ...toastProps })
+    const toastPropsCopy = { ...toastProps }
+    if (saved !== null) {
+      toastPropsCopy.type = saved
+      setLoading({ saved: null })
+      toast(<Toasty type={saved} notification="¡Exito! Su información se ha guardado" />, toastPropsCopy)
+    } else if (loaded !== null) {
+      toastPropsCopy.type = loaded
+      setLoading({ loaded: null })
+      toast(<Toasty type={loaded} notification="¡Descarga existosa!" />, toastPropsCopy)
     }
     return <ToastContainer />
 }
 
 const mapStateToProps = state => ({
-  isSaved: state.getIn(['global', 'isSaved']),
+  saved: state.getIn(['global', 'saved']),
+  loaded: state.getIn(['global', 'loaded']),
 })
 
 const mapDispatchToProps = dispatch => ({
-  setSaved: val => dispatch(setIsSaved(val)),
+  setLoading: obj => dispatch(setIsLoading(obj)),
 })
 
 export default connect(mapStateToProps, mapDispatchToProps)(Notification)

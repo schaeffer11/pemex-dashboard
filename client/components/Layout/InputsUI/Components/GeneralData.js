@@ -201,7 +201,7 @@ import Loading from '../../Common/Loading'
   
   async handleLoad() {
     let { user, formData, setLoading } = this.props
-    setLoading({ isLoading: true })
+    setLoading({ isLoading: true, loadText: 'Descargando' })
     user = user.toJS()
     formData = formData.toJS()
 
@@ -260,7 +260,10 @@ import Loading from '../../Common/Loading'
       fetch(labQuery).then(r => r.json()),
       // fetch(`api/getCosts?transactionID=${transactionID}`).then(r => r.json()),
     ])
-      .catch(error => console.log('some error i found', error))
+      .catch(error => {
+        console.log('some error i found', error)
+        setLoading({ isLoading: false, loaded: 'error' })
+      })
       .then((results) => {
         const newState = {}
         console.log(results)
@@ -272,7 +275,7 @@ import Loading from '../../Common/Loading'
             })
           })
         })
-        setLoading({ isLoading: false, isSaved: true })
+        setLoading({ isLoading: false, loaded: 'success' })
         this.props.loadFromSave(newState)
       })
   }

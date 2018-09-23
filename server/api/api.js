@@ -141,8 +141,16 @@ app.get('/getTransactionWell', (req, res) => {
 
 
 app.post('/well', async (req, res) => {
-  const test = await createWell(req.body, 'submit')
-  res.json({ well: 'submitted' })
+  const test = await createWell(req.body, 'submit', err => {
+    if (err) {
+      console.log('we got an error saving', err)
+      res.json({ isSubmitted: false })
+    } else {
+      console.log('all good in the saving neighborhood')
+      res.json({ isSubmitted: true })
+    }
+  })
+  // res.json({ well: 'submitted' })
 })
 
 

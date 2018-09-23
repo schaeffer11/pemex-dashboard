@@ -3,14 +3,12 @@ import { connect } from 'react-redux'
 import { ScaleLoader } from 'react-spinners'
 
 
-const Loading = ({ isLoading }) => {
-  // const isLoading = true
-  console.log('looking for something?', isLoading)
+const Loading = ({ isLoading, loadText }) => {
   if (isLoading) {
     return (
       <div className="loader-overlay">
         <div className="loader-div">
-          <h1>Cargando</h1>
+          <h1>{loadText}</h1>
           <ScaleLoader
             className="loader"
             sizeUnit={"px"}
@@ -26,6 +24,7 @@ const Loading = ({ isLoading }) => {
 
 const mapStateToProps = state => ({
   isLoading: state.getIn(['global', 'isLoading']),
+  loadText: state.getIn(['global', 'loadText']),
 })
 
 export default connect(mapStateToProps)(Loading)

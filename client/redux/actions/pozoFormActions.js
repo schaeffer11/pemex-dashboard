@@ -34,7 +34,7 @@ function getBase64FromURL(imgURL) {
 export function submitForm(action) {
   return async (dispatch, getState) => {
     console.log('submitting something')
-    dispatch(setIsLoading({ isLoading: true, isSaved: false }))
+    dispatch(setIsLoading({ isLoading: true, loadText: 'Guardando' }))
     const ignore = {
       app: true,
       router: true,
@@ -107,11 +107,9 @@ export function submitForm(action) {
       })
         .then(r => r.json())
         .then(({ isSaved }) => {
-          console.log('server response', isSaved)
-          if (isSaved) {
-            // dispatch(setIsSaved(true))
-            dispatch(setIsLoading({ isLoading: false, isSaved: true }))
-          }
+          console.log('server response', saved)
+          const saved = isSaved ? 'success' : 'error'
+          dispatch(setIsLoading({ isLoading: false, saved }))
         })
     }
     else if (action === 'submit') {
