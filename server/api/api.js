@@ -147,8 +147,16 @@ app.post('/well', async (req, res) => {
 
 
 app.post('/wellSave', async (req, res) => {
-  const test = await createWell(req.body, 'save')
-  res.json({ well: 'submitted' })
+  // TODO: Find a way to clean up callbacks from createWell
+  createWell(req.body, 'save', err => {
+    if (err) {
+      console.log('we got an error saving', err)
+      res.json({ isSaved: false })
+    } else {
+      console.log('all good in the saving neighborhood')
+      res.json({ isSaved: true })
+    }
+  })
 })
 
 app.get('/getFields', async (req, res) => {

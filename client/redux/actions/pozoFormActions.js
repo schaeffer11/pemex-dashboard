@@ -1,5 +1,6 @@
 import axios from 'axios'
 import {validatePozo} from '../../../common/utils/validation/pozoValidator'
+import { setIsSaved } from '../../redux/actions/global'
 import Immutable from 'immutable'
 
 function bufferToBase64(buf) {
@@ -103,9 +104,11 @@ export function submitForm(action) {
         body: formData,
       })
         .then(r => r.json())
-        .then(r => {
-          console.log('server response', r)
-          // dispatch({ type: 'RESET_APP' })
+        .then(({ isSaved }) => {
+          console.log('server response', isSaved)
+          if (isSaved) {
+            dispatch(setIsSaved(true))
+          }
         })
     }
     else if (action === 'submit') {

@@ -762,7 +762,7 @@ export const getInterventionImage = async (transID, action, cb) => {
 
 
 
-export const create = async (body, action) => {
+export const create = async (body, action, cb) => {
   let transactionID = Math.floor(Math.random() * 1000000000)
  // console.log('what are we here?', body)
   const allKeys = Object.keys(body)
@@ -1363,6 +1363,7 @@ export const create = async (body, action) => {
 
                                                 connection.commit(function(err) {
                                                     if (err) {
+                                                      cb(err)
                                                       return connection.rollback(function() {
                                                         throw err;
                                                       });
@@ -1370,8 +1371,7 @@ export const create = async (body, action) => {
                                                     console.log('success!');
                                                     var log = 'Post ' + results + ' added';
                                                     console.log(log)
-                                                    // res.json({message: 'success'});
-
+                                                    cb(null)
                                                 })
                                               })
                                             })
