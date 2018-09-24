@@ -31,10 +31,11 @@
 								'footer';
 		.background-image {
 			grid-area: background;
-			background-image: url('/images/oilField.png');
+			background-image: url('/images/plataforma2.jpg');
 			background-size: cover;
 			min-height: 480px;
-                        position: relative;
+			background-repeat: no-repeat;
+			position: relative;
 
 			.buttons {
 				position: relative;
