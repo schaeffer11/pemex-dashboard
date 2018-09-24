@@ -283,7 +283,7 @@ import Loading from '../../Common/Loading'
       <div className='form general-data'>
         { this.makeGeneralForm() }
         { this.makeGeneralInterventionForm() }
-        <button className="submit submit-load" onClick={this.handleLoad} >Cargar datos previamente Guardados</button>
+        <button className="submit submit-load" onClick={this.handleLoad} >Cargar borrdador</button>
         <button className='submit submit-continue' disabled={this.checkIncomplete()} onClick={(e) => setShowForms(true)} >Siguiente</button>
         <button className="submit download-template" onClick={this.downloadMasterTemplate}>{'Descarga el Formato General'}</button>
         <Notification />

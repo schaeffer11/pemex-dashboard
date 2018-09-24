@@ -69,7 +69,6 @@ import { setFichaTecnicaDelCampo, setFichaTecnicaDelPozo, setEvaluacionPetrofisi
     }
     else {
       console.log('no data found')
-      // setLoading({ isLoading: false, loaded:'error' })
       setLoading({ 
         isLoading: false,
         showNotification: true,
@@ -80,9 +79,10 @@ import { setFichaTecnicaDelCampo, setFichaTecnicaDelPozo, setEvaluacionPetrofisi
   }
 
   async loadTecnicaDelPozo() {
-    let { fichaTecnicaDelPozoHighLevel, setFichaTecnicaDelPozo } = this.props
+    let { fichaTecnicaDelPozoHighLevel, setFichaTecnicaDelPozo, setLoading } = this.props
     fichaTecnicaDelPozoHighLevel = fichaTecnicaDelPozoHighLevel.toJS()
     let { pozo } = fichaTecnicaDelPozoHighLevel
+    setLoading({ isLoading: true, loadText: 'Descargando' })
 
 
     let transactionID = await fetch(`/api/getTransactionWell?wellID=${pozo}`)
@@ -100,18 +100,32 @@ import { setFichaTecnicaDelCampo, setFichaTecnicaDelPozo, setEvaluacionPetrofisi
         newObj.historialIntervencionesData = interventionData.fichaTecnicaDelPozo.historialIntervencionesData
 
         setFichaTecnicaDelPozo(newObj)
+        setLoading({ 
+          isLoading: false,
+          showNotification: true,
+          notificationType: 'success',
+          notificationText: `Se ha descargado informacion del pozo: ${pozo}`
+        })
 
       }
     }
     else { 
       console.log('no data found')
+      setLoading({ 
+        isLoading: false,
+        showNotification: true,
+        notificationType: 'warning',
+        notificationText: `No se ha encontrado informacion del pozo: ${pozo}`
+      })
     }
   }
 
   async loadEvaluacionPetrofisica() {
-    let { fichaTecnicaDelPozoHighLevel, setEvaluacionPetrofisica } = this.props
+    let { fichaTecnicaDelPozoHighLevel, setEvaluacionPetrofisica, setLoading } = this.props
     fichaTecnicaDelPozoHighLevel = fichaTecnicaDelPozoHighLevel.toJS()
     let { pozo } = fichaTecnicaDelPozoHighLevel
+    setLoading({ isLoading: true, loadText: 'Descargando' })
+
 
     let transactionID = await fetch(`/api/getTransactionWell?wellID=${pozo}`)
       .then(res => res.json())
@@ -129,19 +143,32 @@ import { setFichaTecnicaDelCampo, setFichaTecnicaDelPozo, setEvaluacionPetrofisi
         newObj.layerData = layerData.evaluacionPetrofisica.layerData
 
         setEvaluacionPetrofisica(newObj)
-
+        setLoading({ 
+          isLoading: false,
+          showNotification: true,
+          notificationType: 'success',
+          notificationText: `Se ha descargado informacion del pozo: ${pozo}`
+        })
       }
     }
     else { 
       console.log('no data found')
+      setLoading({ 
+        isLoading: false,
+        showNotification: true,
+        notificationType: 'warning',
+        notificationText: `No se ha encontrado informacion del pozo: ${pozo}`
+      })
     }
   }
 
 
   async loadMecanicoYAparejo() {
-    let { fichaTecnicaDelPozoHighLevel, setMecanicoYAparejoDeProduccion } = this.props
+    let { fichaTecnicaDelPozoHighLevel, setMecanicoYAparejoDeProduccion, setLoading } = this.props
     fichaTecnicaDelPozoHighLevel = fichaTecnicaDelPozoHighLevel.toJS()
     let { pozo } = fichaTecnicaDelPozoHighLevel
+    setLoading({ isLoading: true, loadText: 'Descargando' })
+
 
     let transactionID = await fetch(`/api/getTransactionWell?wellID=${pozo}`)
     .then(res => res.json())
@@ -152,17 +179,30 @@ import { setFichaTecnicaDelCampo, setFichaTecnicaDelPozo, setEvaluacionPetrofisi
 
       if (data && !data.err) {
         setMecanicoYAparejoDeProduccion(data.mecanicoYAparejoDeProduccion)
+        setLoading({ 
+          isLoading: false,
+          showNotification: true,
+          notificationType: 'success',
+          notificationText: `Se ha descargado informacion del pozo: ${pozo}`
+        })
       }
     }
     else {
       console.log('no data found')
+      setLoading({ 
+        isLoading: false,
+        showNotification: true,
+        notificationType: 'warning',
+        notificationText: `No se ha encontrado informacion del pozo: ${pozo}`
+      })
     }
   }
 
   async loadAnalisisDelAgua() {
-    let { fichaTecnicaDelPozoHighLevel, setAnalisisDelAgua } = this.props
+    let { fichaTecnicaDelPozoHighLevel, setAnalisisDelAgua, setLoading } = this.props
     fichaTecnicaDelPozoHighLevel = fichaTecnicaDelPozoHighLevel.toJS()
     let { pozo } = fichaTecnicaDelPozoHighLevel
+    setLoading({ isLoading: true, loadText: 'Descargando' })
 
     let transactionID = await fetch(`/api/getTransactionWell?wellID=${pozo}`)
     .then(res => res.json())
@@ -173,17 +213,31 @@ import { setFichaTecnicaDelCampo, setFichaTecnicaDelPozo, setEvaluacionPetrofisi
 
       if (data && !data.err) {
         setAnalisisDelAgua(data.analisisDelAgua)
+        setLoading({ 
+          isLoading: false,
+          showNotification: true,
+          notificationType: 'success',
+          notificationText: `Se ha descargado informacion del pozo: ${pozo}`
+        })
       }
     }
     else {
       console.log('no data found')
+      setLoading({ 
+        isLoading: false,
+        showNotification: true,
+        notificationType: 'warning',
+        notificationText: `No se ha encontrado informacion del pozo: ${pozo}`
+      })
     }
   }
 
   async loadSistemasArtificialesDeProduccion() {
-    let { fichaTecnicaDelPozoHighLevel, setSistemasArtificialesDeProduccion } = this.props
+    let { fichaTecnicaDelPozoHighLevel, setSistemasArtificialesDeProduccion, setLoading } = this.props
     fichaTecnicaDelPozoHighLevel = fichaTecnicaDelPozoHighLevel.toJS()
     let { pozo } = fichaTecnicaDelPozoHighLevel
+    setLoading({ isLoading: true, loadText: 'Descargando' })
+
 
     let transactionID = await fetch(`/api/getTransactionWell?wellID=${pozo}`)
     .then(res => res.json())
@@ -222,22 +276,41 @@ import { setFichaTecnicaDelCampo, setFichaTecnicaDelPozo, setEvaluacionPetrofisi
           newObj.tipoDeSistemo = type
 
           setSistemasArtificialesDeProduccion(newObj)
+          setLoading({ 
+            isLoading: false,
+            showNotification: true,
+            notificationType: 'success',
+            notificationText: `Se ha descargado informacion del pozo: ${pozo}`
+          })
         }
         else {
           console.log('no data found')
+          setLoading({ 
+            isLoading: false,
+            showNotification: true,
+            notificationType: 'warning',
+            notificationText: `No se ha encontrado informacion del pozo: ${pozo}`
+          })
         }
       }
     }
     else {
       console.log('no data found')
+      setLoading({ 
+        isLoading: false,
+        showNotification: true,
+        notificationType: 'warning',
+        notificationText: `No se ha encontrado informacion del pozo: ${pozo}`
+      })
     }
   }
 
 
   async loadHistoricoDePresionCampo() {
-    let { fichaTecnicaDelPozoHighLevel, setPresionDataCampo } = this.props
+    let { fichaTecnicaDelPozoHighLevel, setPresionDataCampo, setLoading } = this.props
     fichaTecnicaDelPozoHighLevel = fichaTecnicaDelPozoHighLevel.toJS()
     let { pozo } = fichaTecnicaDelPozoHighLevel
+    setLoading({ isLoading: true, loadText: 'Descargando' })
 
     let transactionID = await fetch(`/api/getTransactionWell?wellID=${pozo}`)
       .then(res => res.json())
@@ -253,19 +326,32 @@ import { setFichaTecnicaDelCampo, setFichaTecnicaDelPozo, setEvaluacionPetrofisi
         let newObj = data.historicoDePresion.presionDataCampo
 
         setPresionDataCampo(newObj)
+        setLoading({ 
+          isLoading: false,
+          showNotification: true,
+          notificationType: 'success',
+          notificationText: `Se ha descargado informacion del pozo: ${pozo}`
+        })
 
       }
     }
     else { 
       console.log('no data found')
+      setLoading({ 
+        isLoading: false,
+        showNotification: true,
+        notificationType: 'warning',
+        notificationText: `No se ha encontrado informacion del pozo: ${pozo}`
+      })
     }
   }
 
 
   async loadHistoricoDePresionPozo() {
-    let { fichaTecnicaDelPozoHighLevel, setPresionDataPozo } = this.props
+    let { fichaTecnicaDelPozoHighLevel, setPresionDataPozo, setLoading } = this.props
     fichaTecnicaDelPozoHighLevel = fichaTecnicaDelPozoHighLevel.toJS()
     let { pozo } = fichaTecnicaDelPozoHighLevel
+    setLoading({ isLoading: true, loadText: 'Descargando' })
 
     let transactionID = await fetch(`/api/getTransactionWell?wellID=${pozo}`)
       .then(res => res.json())
@@ -277,21 +363,33 @@ import { setFichaTecnicaDelCampo, setFichaTecnicaDelPozo, setEvaluacionPetrofisi
       if (data && !data.err) {
 
         let newObj = data.historicoDePresion.presionDataPozo
-
+        setLoading({ 
+          isLoading: false,
+          showNotification: true,
+          notificationType: 'success',
+          notificationText: `Se ha descargado informacion del pozo: ${pozo}`
+        })
         setPresionDataPozo(newObj)
 
       }
     }
     else { 
       console.log('no data found')
+      setLoading({ 
+        isLoading: false,
+        showNotification: true,
+        notificationType: 'warning',
+        notificationText: `No se ha encontrado informacion del pozo: ${pozo}`
+      })
     }
   }
 
 
   async loadHistoricoDeProduccion() {
-    let { fichaTecnicaDelPozoHighLevel, setHistoricoProduccion } = this.props
+    let { fichaTecnicaDelPozoHighLevel, setHistoricoProduccion, setLoading } = this.props
     fichaTecnicaDelPozoHighLevel = fichaTecnicaDelPozoHighLevel.toJS()
     let { pozo } = fichaTecnicaDelPozoHighLevel
+    setLoading({ isLoading: true, loadText: 'Descargando' })
 
     let transactionID = await fetch(`/api/getTransactionWell?wellID=${pozo}`)
       .then(res => res.json())
@@ -308,10 +406,22 @@ import { setFichaTecnicaDelCampo, setFichaTecnicaDelPozo, setEvaluacionPetrofisi
 
         console.log(newObj)
         setHistoricoProduccion(newObj)
+        setLoading({ 
+          isLoading: false,
+          showNotification: true,
+          notificationType: 'success',
+          notificationText: `Se ha descargado informacion del pozo: ${pozo}`
+        })
       }
     }
     else { 
       console.log('no data found')
+      setLoading({ 
+        isLoading: false,
+        showNotification: true,
+        notificationType: 'warning',
+        notificationText: `No se ha encontrado informacion del pozo: ${pozo}`
+      })
     }
   }
 
@@ -377,7 +487,7 @@ import { setFichaTecnicaDelCampo, setFichaTecnicaDelPozo, setEvaluacionPetrofisi
             { title }
             <button className="cta next" onClick={this.handleNextSubtab}>Siguiente</button>
             <button className="cta prev" onClick={this.handlePrevSubtab}>Anterior</button> 
-            <button className="cta load" onClick={loadFunction}>Load</button> 
+            <button className="cta load" onClick={loadFunction}>Cargar última intervención</button> 
           </div>
 
           {this.forms[this.state.currentStep].content}
