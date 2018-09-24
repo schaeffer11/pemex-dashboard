@@ -262,7 +262,13 @@ import Loading from '../../Common/Loading'
     ])
       .catch(error => {
         console.log('some error i found', error)
-        setLoading({ isLoading: false, loaded: 'error' })
+        // setLoading({ isLoading: false, loaded: 'error' })
+        setLoading({ 
+          isLoading: false,
+          showNotification: true,
+          notificationType: 'error',
+          notificationText: `No se ha descargado informacion del pozo: ${pozo}`
+        })
       })
       .then((results) => {
         const newState = {}
@@ -275,7 +281,12 @@ import Loading from '../../Common/Loading'
             })
           })
         })
-        setLoading({ isLoading: false, loaded: 'success' })
+        setLoading({ 
+          isLoading: false,
+          showNotification: true,
+          notificationType: 'success',
+          notificationText: `Se ha descargado informacion del pozo: ${wellID}`
+        })
         this.props.loadFromSave(newState)
       })
   }
