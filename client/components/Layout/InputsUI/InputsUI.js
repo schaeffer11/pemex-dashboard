@@ -93,7 +93,7 @@ import Loading from '../Common/Loading'
           <button className="submit submit-button" disabled={pozoFormSubmitting} onClick={(e) => this.handleSubmit('submit')}>{pozoFormSubmitting ? 'Enviando...' : 'Enviar'}</button>
           <div style={{height: '10px'}}></div>
           <Notification />
-{/*          <Loading />*/}
+          <Loading />
         </div>
       )
     }      
