@@ -1426,15 +1426,16 @@ export const create = async (body, action, cb) => {
                                                   
         
                                                     pruebasCompatibilidadData.forEach(i => {
-                                                      i.compatabilidadTable.forEach(j => {
-                                                        let id = Math.floor(Math.random() * 1000000000)
-                                                        values.push([id, i.labID, interventionID, wellFormacionID, j.diseno, j.sistema, j.aceiteDelPozo,
-                                                          j.tiempoDeRompimiento, j.separacionDeFases, j.solidos, j.condicion, transactionID])
-                                                      })
+                                                      if (i.compatabilidadTable) {
+                                                        i.compatabilidadTable.forEach(j => {
+                                                          let id = Math.floor(Math.random() * 1000000000)
+                                                          values.push([id, i.labID, interventionID, wellFormacionID, j.diseno, j.sistema, j.aceiteDelPozo,
+                                                            j.tiempoDeRompimiento, j.separacionDeFases, j.solidos, j.condicion, transactionID])
+                                                        })
+                                                      }
                                                     })
 
-
-                                                    connection.query(action === 'save' ? INSERT_LAB_TEST_PRUEBAS_DE_COMPATIBILIDAD.save : INSERT_LAB_TEST_PRUEBAS_DE_COMPATIBILIDAD.submit, [values], (err, results) => {
+                                                    connection.query(values.length === 0 ? DUMMY_QUERY : action === 'save' ? INSERT_LAB_TEST_PRUEBAS_DE_COMPATIBILIDAD.save : INSERT_LAB_TEST_PRUEBAS_DE_COMPATIBILIDAD.submit, [values], (err, results) => {
                                                       console.log('lab test compatibilidad', err)
                                                       console.log('lab test compatibilidad', results)
 
@@ -1494,14 +1495,16 @@ export const create = async (body, action, cb) => {
                                                         
               
                                                           pruebasGrabadoData.forEach(i => {
-                                                            i.grabadoTable.forEach(j => {
-                                                              let id = Math.floor(Math.random() * 1000000000)
-                                                              values.push([id, i.labID, interventionID, wellFormacionID, j.sistemaAcido, j.tiempoDeContacto,
-                                                              j.grabado, transactionID])
-                                                            })
+                                                            if (i.grabadoTable) {
+                                                              i.grabadoTable.forEach(j => {
+                                                                let id = Math.floor(Math.random() * 1000000000)
+                                                                values.push([id, i.labID, interventionID, wellFormacionID, j.sistemaAcido, j.tiempoDeContacto,
+                                                                j.grabado, transactionID])
+                                                              })
+                                                            }
                                                           })
 
-                                                          connection.query(action === 'save' ? INSERT_LAB_TEST_PRUEBAS_DE_GRABADO.save : INSERT_LAB_TEST_PRUEBAS_DE_GRABADO.submit, [values], (err, results) => {
+                                                          connection.query(values.length === 0 ? DUMMY_QUERY : action === 'save' ? INSERT_LAB_TEST_PRUEBAS_DE_GRABADO.save : INSERT_LAB_TEST_PRUEBAS_DE_GRABADO.submit, [values], (err, results) => {
                                                             console.log('lab test grabado', err)
                                                             console.log('lab test grabado', results)
 
