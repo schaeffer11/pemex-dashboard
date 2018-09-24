@@ -20,13 +20,11 @@ import EstimacionIncProduccionEstimulacion from '../components/Layout/InputsUI/I
 import EstimacionCostosEstimulacion from '../components/Layout/InputsUI/IntervencionesForms/Estimulacion/EstimacionCostosEstimulacion'
 
 import PropuestaDeAcido from '../components/Layout/InputsUI/IntervencionesForms/Acido/PropuestaDeAcido'
-import PruebasDeLaboratorioAcidoExtra from '../components/Layout/InputsUI/IntervencionesForms/Acido/PruebasDeLaboratorioAcidoExtra'
 import ResultadosDeLaSimulacionAcido from '../components/Layout/InputsUI/IntervencionesForms/Acido/ResultadosDeLaSimulacionAcido'
 import EstimacionIncProduccionAcido from '../components/Layout/InputsUI/IntervencionesForms/Acido/EstimacionIncProduccionAcido'
 import EstimacionCostosAcido from '../components/Layout/InputsUI/IntervencionesForms/Acido/EstimacionCostosAcido'
 
 import PropuestaDeApuntalado from '../components/Layout/InputsUI/IntervencionesForms/Apuntalado/PropuestaDeApuntalado'
-import PruebasDeLaboratorioApuntaladoExtra from '../components/Layout/InputsUI/IntervencionesForms/Apuntalado/PruebasDeLaboratorioApuntaladoExtra'
 import ResultadosDeLaSimulacionApuntalado from '../components/Layout/InputsUI/IntervencionesForms/Apuntalado/ResultadosDeLaSimulacionApuntalado'
 import EstimacionIncProduccionApuntalado from '../components/Layout/InputsUI/IntervencionesForms/Apuntalado/EstimacionIncProduccionApuntalado'
 import EstimacionCostosApuntalado from '../components/Layout/InputsUI/IntervencionesForms/Apuntalado/EstimacionCostosApuntalado'
@@ -120,11 +118,6 @@ export const pagesIntervenciones = {
               form: <PruebasDeLaboratorio />,
               title: 'Pruebas de Laboratorio'
             },
-            pruebasDeLaboratorioExtra: {
-              key: 'pruebasDeLaboratorioExtra',
-              form: <PruebasDeLaboratorioAcidoExtra />,
-              title: 'Pruebas de Laboratorio - Fracturamiento Acido'
-            },
             resultadosDeLaSimulacion: {
               key: 'resultadosDeLaSimulacion',
               form: <ResultadosDeLaSimulacionAcido />,
@@ -151,11 +144,6 @@ export const pagesIntervenciones = {
               key: 'pruebasDeLaboratorio',
               form: <PruebasDeLaboratorio/>,
               title: 'Pruebas de Laboratorio'
-            },
-            pruebasDeLaboratorioExtra: {
-              key: 'pruebasDeLaboratorioExtra',
-              form: <PruebasDeLaboratorioApuntaladoExtra />,
-              title: 'Pruebas de Laboratorio de Fracturamiento Apuntalado'
             },
             resultadosDeLaSimulacion: {
               key: 'resultadosDeLaSimulacion',

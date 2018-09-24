@@ -9,9 +9,12 @@ import { InputRow, InputRowUnitless, InputRowSelectUnitless, TextAreaUnitless } 
 import { setPruebasDeLaboratorioData } from '../../../../redux/actions/intervencionesEstimulacion'
 
 export const options = [
-  { label: 'Caracterización de Agua', value: 'caracterizacinAgua' },
-  { label: 'Caracterización Físico-Química de Solubilidad', value: 'caracterizacinSolubilidad' },
-  { label: 'Compatibilidad por Emulsión', value: 'emulsion' },
+  { label: 'Caracterización Fisico-química de fluidos', value: 'caracterizacionFisico' },
+  { label: 'Pruebas de Solubilidad', value: 'pruebasDeSolubilidad' },
+  { label: 'Pruebas de Compatiblidad por emulsión', value: 'pruebasDeCompatibilidad' },
+  { label: 'Pruebas para apuntalante', value: 'pruebasParaApuntalante' },
+  { label: 'Pruebas gel de fractura', value: 'pruebasGelDeFractura' },
+  { label: 'Pruebas de grabado', value: 'pruebasDeGrabado' },
 ]
 
 const companyOptions = [
