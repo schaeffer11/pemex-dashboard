@@ -1392,7 +1392,7 @@ export const create = async (body, action, cb) => {
                                                     i.phDelAgua, i.salinidadDelAgua, i.salinidadDelAceite, transactionID])
                                                 })
 
-                                                connection.query(action === 'save' ? INSERT_LAB_TEST_CARACTERIZACION_FISICO.save : INSERT_LAB_TEST_CARACTERIZACION_FISICO.submit, [values], (err, results) => {
+                                                connection.query(values.length === 0 ? DUMMY_QUERY : action === 'save' ? INSERT_LAB_TEST_CARACTERIZACION_FISICO.save : INSERT_LAB_TEST_CARACTERIZACION_FISICO.submit, [values], (err, results) => {
                                                   console.log('lab test caracterizacionFisico', err)
                                                   console.log('lab test caracterizacionFisico', results)
                                                   if (err) {
@@ -1411,7 +1411,7 @@ export const create = async (body, action, cb) => {
                                                       i.pesoDeLaMuestraFinal, i.solubilidad, transactionID])
                                                   })
 
-                                                  connection.query(action === 'save' ? INSERT_LAB_TEST_PRUEBAS_DE_SOLUBILIDAD.save : INSERT_LAB_TEST_PRUEBAS_DE_SOLUBILIDAD.submit, [values], (err, results) => {
+                                                  connection.query(values.length === 0 ? DUMMY_QUERY : action === 'save' ? INSERT_LAB_TEST_PRUEBAS_DE_SOLUBILIDAD.save : INSERT_LAB_TEST_PRUEBAS_DE_SOLUBILIDAD.submit, [values], (err, results) => {
                                                     console.log('lab test solubildad', err)
                                                     console.log('lab test solubildad', results)
                                                     if (err) {
@@ -1457,7 +1457,7 @@ export const create = async (body, action, cb) => {
                                                           i.malla, i.aglutinamiento, i.turbidez, i.solubilidad, transactionID])
                                                       })
 
-                                                      connection.query(action === 'save' ? INSERT_LAB_TEST_PRUEBAS_PARA_APUNTALANTE.save : INSERT_LAB_TEST_PRUEBAS_PARA_APUNTALANTE.submit, [values], (err, results) => {
+                                                      connection.query(values.length === 0 ? DUMMY_QUERY : action === 'save' ? INSERT_LAB_TEST_PRUEBAS_PARA_APUNTALANTE.save : INSERT_LAB_TEST_PRUEBAS_PARA_APUNTALANTE.submit, [values], (err, results) => {
                                                         console.log('lab test apuntalante', err)
                                                         console.log('lab test apuntalante', results)
 
@@ -1478,7 +1478,7 @@ export const create = async (body, action, cb) => {
                                                             i.tiempoDeRompimiento, i.dosificacionDeQuebradors, i.viscosidadDelGelDeFractura, transactionID])
                                                         })
 
-                                                        connection.query(action === 'save' ? INSERT_LAB_TEST_PRUEBAS_GEL_DE_FRACTURA.save : INSERT_LAB_TEST_PRUEBAS_GEL_DE_FRACTURA.submit, [values], (err, results) => {
+                                                        connection.query(values.length === 0 ? DUMMY_QUERY : action === 'save' ? INSERT_LAB_TEST_PRUEBAS_GEL_DE_FRACTURA.save : INSERT_LAB_TEST_PRUEBAS_GEL_DE_FRACTURA.submit, [values], (err, results) => {
                                                           console.log('lab test fractura', err)
                                                           console.log('lab test fractura', results)
 
