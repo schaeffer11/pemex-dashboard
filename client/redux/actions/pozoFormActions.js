@@ -107,9 +107,23 @@ export function submitForm(action) {
       })
         .then(r => r.json())
         .then(({ isSaved }) => {
-          console.log('server response', saved)
-          const saved = isSaved ? 'success' : 'error'
-          dispatch(setIsLoading({ isLoading: false, saved }))
+          let notificationType = ''
+          let notificationText = ''
+          if (isSaved) {
+            notificationType = 'success'
+            notificationText = 'Su información se ha guardado'
+          } else {
+            notificationType = 'error'
+            notificationText = 'Su información no se guardó'
+          }
+          // const notificationType = isSaved ? 'success' : 'error'
+          // dispatch(setIsLoading({ isLoading: false, saved }))
+          dispatch(setIsLoading({
+            notificationType,
+            notificationText,
+            isLoading: false,
+            showNotification: true,
+          }))
         })
     }
     else if (action === 'submit') {
@@ -119,9 +133,24 @@ export function submitForm(action) {
       })
         .then(r => r.json())
         .then(({ isSubmitted }) => {
-          const submitted = isSubmitted ? 'success' : 'error'
-          dispatch(setIsLoading({ isLoading: false, submitted }))
+          let notificationType = ''
+          let notificationText = ''
+          if (isSubmitted) {
+            notificationType = 'success'
+            notificationText = 'Su información se ha guardado'
+          } else {
+            notificationType = 'error'
+            notificationText = 'Su información no se guardó'
+          }
+          // const submitted = isSubmitted ? 'success' : 'error'
+          // dispatch(setIsLoading({ isLoading: false, submitted }))
           // dispatch({ type: 'RESET_APP' })
+          dispatch(setIsLoading({
+            notificationType,
+            notificationText,
+            isLoading: false,
+            showNotification: true,
+          }))
         })
     }
 

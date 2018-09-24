@@ -5,6 +5,9 @@ const initialState = Map({
     saved: null,
     loaded: null,
     submitted: null,
+    showNotification: false,
+    notificationText: null,
+    notificationType: null,
     loadText: null,
     isLoading: false,
 })
@@ -18,6 +21,10 @@ const global = (state = initialState, action) => {
       return state.set('saved', action.value)
     case 'set_isLoading':
       return state.mergeDeep(fromJS(action.obj))
+    case 'reset_notification':
+      return state.set('showNotification', false)
+                  .set('notificationText', null)
+                  .set('notificationType', null)
     default:
    		return state
   }

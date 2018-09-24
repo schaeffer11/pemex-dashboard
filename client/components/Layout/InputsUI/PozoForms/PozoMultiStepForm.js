@@ -3,6 +3,7 @@ import autobind from 'autobind-decorator'
 import { connect } from 'react-redux'
 import axios from 'axios';
 
+import { setIsLoading } from '../../../../redux/actions/global'
 import { setShowForms } from '../../../../redux/actions/global'
 import TecnicaDelPozo from './TecnicaDelPozo'
 import TecnicaDelCampo from './TecnicaDelCampo'
@@ -44,23 +45,37 @@ import { setFichaTecnicaDelCampo, setFichaTecnicaDelPozo, setEvaluacionPetrofisi
 
 
   async loadTecnicaDelCampo() {
-    let { fichaTecnicaDelPozoHighLevel, setFichaTecnicaDelCampo } = this.props
+    let { fichaTecnicaDelPozoHighLevel, setFichaTecnicaDelCampo, setLoading } = this.props
     fichaTecnicaDelPozoHighLevel = fichaTecnicaDelPozoHighLevel.toJS()
-    let { campo } = fichaTecnicaDelPozoHighLevel
+    let { campo, pozo } = fichaTecnicaDelPozoHighLevel
+    setLoading({ isLoading: true, loadText: 'Descargando' })
+
 
     let transactionID = await fetch(`/api/getTransactionField?fieldID=${campo}`)
       .then(res => res.json())
       .then(res => res.transactionID)
-
     if (transactionID) {
       let data = await fetch(`api/getFields?transactionID=${transactionID}`).then(r => r.json())
 
       if (!data.err) {
         setFichaTecnicaDelCampo(data.fichaTecnicaDelCampo)
+        setLoading({ 
+          isLoading: false,
+          showNotification: true,
+          notificationType: 'success',
+          notificationText: `Se ha descargado informacion del pozo: ${pozo}`
+        })
       }
     }
     else {
       console.log('no data found')
+      // setLoading({ isLoading: false, loaded:'error' })
+      setLoading({ 
+        isLoading: false,
+        showNotification: true,
+        notificationType: 'warning',
+        notificationText: `No se ha encontrado informacion del pozo: ${pozo}`
+      })
     }
   }
 
@@ -68,6 +83,7 @@ import { setFichaTecnicaDelCampo, setFichaTecnicaDelPozo, setEvaluacionPetrofisi
     let { fichaTecnicaDelPozoHighLevel, setFichaTecnicaDelPozo } = this.props
     fichaTecnicaDelPozoHighLevel = fichaTecnicaDelPozoHighLevel.toJS()
     let { pozo } = fichaTecnicaDelPozoHighLevel
+
 
     let transactionID = await fetch(`/api/getTransactionWell?wellID=${pozo}`)
       .then(res => res.json())
@@ -317,7 +333,7 @@ import { setFichaTecnicaDelCampo, setFichaTecnicaDelPozo, setEvaluacionPetrofisi
     if(this.forms.length > this.state.currentStep + 1){
       this.setState({
         currentStep: this.state.currentStep + 1
-      }) 
+      })
     }
   }
 
@@ -386,6 +402,7 @@ const mapDispatchToProps = dispatch => ({
   setPresionDataPozo : values => {dispatch(setPresionDataPozo(values))},
   setPresionDataCampo : values => {dispatch(setPresionDataCampo(values))},
   setHistoricoProduccion : values => {dispatch(setHistoricoProduccion(values))},
+  setLoading: obj => {dispatch(setIsLoading(obj))}
 })
 
 const mapStateToProps = state => ({
@@ -399,7 +416,6 @@ const mapStateToProps = state => ({
   mecanicoYAparejoDeProduccion: state.get('mecanicoYAparejoDeProduccion'),
   analisisDelAgua: state.get('analisisDelAgua'),
   user: state.get('user')
-
 })
 
 
