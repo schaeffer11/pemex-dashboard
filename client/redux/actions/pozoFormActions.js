@@ -95,8 +95,11 @@ export function submitForm(action) {
         formData.append(k, JSON.stringify(innerObj))
       }
     }
+   
+    if(action === 'submit'){
+      runValidation(allKeys, filteredKeys)
+    }
 
-    console.log(action)
     if (action === 'save') {
       fetch('/api/wellSave', {
         method: 'POST',
@@ -119,12 +122,15 @@ export function submitForm(action) {
           // dispatch({ type: 'RESET_APP' })
         })
     }
-
-
-
-
   }
 }
+
+export function runValidation(allKeys, filteredKeys){
+  //console.log(allKeys)
+  //console.log(filteredKeys)
+}
+
+
 
 // export function submitForm(fields) {
 //   return (dispatch, getState) => {

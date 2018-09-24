@@ -19,13 +19,20 @@ import { setShowForms } from '../../../../../redux/actions/global'
       currentStep: 0
     }
 
+    this.propuestaDeEstimulacion = React.createRef();
+    this.pruebasDeLaboratorio = React.createRef();
+    this.pruebasDeLaboratorioEstimulacionExtra = React.createRef();
+    this.resultadosDeLaSimulacionEstimulacion = React.createRef();
+    this.estimacionIncProduccionEstimulacion = React.createRef();
+    this.estimacionCostosEstimulacion = React.createRef();
+
     this.forms = [
-      {'title' : 'Propuesta de Tratamiento de Estimulacion', 'content': <PropuestaDeEstimulacion/> },  
-      {'title' : 'Pruebas de Laboratorio', 'content': <PruebasDeLaboratorio/> },
-      {'title' : 'Pruebas de Laboratorio de Estimulacion', 'content': <PruebasDeLaboratorioEstimulacionExtra/> },
-      {'title' : 'Resultados de la Simulacion de Estimulacion', 'content': <ResultadosDeLaSimulacionEstimulacion/> },
-      {'title' : 'Estimacion del Incremento de Produccion', 'content': <EstimacionIncProduccionEstimulacion/> },
-      {'title' : 'Estimacion de Costos de Estimulacion', 'content': <EstimacionCostosEstimulacion/> }
+      {'title' : 'Propuesta de Tratamiento de Estimulacion', 'content': <PropuestaDeEstimulacion ref={Ref => this.propuestaDeEstimulacion=Ref } /> },  
+      {'title' : 'Pruebas de Laboratorio', 'content': <PruebasDeLaboratorio ref={Ref =>  this.pruebasDeLaboratorio=Ref } /> },
+      {'title' : 'Pruebas de Laboratorio de Estimulacion', 'content': <PruebasDeLaboratorioEstimulacionExtra ref={Ref =>  this.pruebasDeLaboratorioEstimulacionExtra=Ref } /> },
+      {'title' : 'Resultados de la Simulacion de Estimulacion', 'content': <ResultadosDeLaSimulacionEstimulacion ref={Ref =>  this.resultadosDeLaSimulacionEstimulacion=Ref } /> },
+      {'title' : 'Estimacion del Incremento de Produccion', 'content': <EstimacionIncProduccionEstimulacion ref={Ref =>  this.estimacionIncProduccionEstimulacion=Ref } /> },
+      {'title' : 'Estimacion de Costos de Estimulacion', 'content': <EstimacionCostosEstimulacion ref={Ref =>  this.estimacionCostosEstimulacion=Ref } /> }
     ];
 
   }
@@ -50,6 +57,17 @@ import { setShowForms } from '../../../../../redux/actions/global'
         currentStep: this.state.currentStep - 1
       })
     }
+  }
+
+  validate(){
+    return (
+      this.propuestaDeEstimulacion.selector.props.forceValidation() &&
+      this.pruebasDeLaboratorio.selector.props.forceValidation() &&
+      this.pruebasDeLaboratorioEstimulacionExtra.selector.props.forceValidation() &&
+      this.resultadosDeLaSimulacionEstimulacion.selector.props.forceValidation() &&
+      this.estimacionIncProduccionEstimulacion.selector.props.forceValidation() &&
+      this.estimacionCostosEstimulacion.selector.props.forceValidation() 
+    )
   }
 
   render() {
@@ -97,5 +115,5 @@ const mapStateToProps = state => ({
   estCostEstimulacion: state.get('estCostEstimulacion')
 })
 
-export default connect(mapStateToProps, mapDispatchToProps)(EstimulacionMultiStepForm);
+export default connect(mapStateToProps, mapDispatchToProps, null, { withRef: true })(EstimulacionMultiStepForm);
 

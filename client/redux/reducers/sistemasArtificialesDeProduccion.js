@@ -45,7 +45,7 @@ const initialState = Map({
     nivelDinamico: '',
     nivelEstatico: '',
     imgURL: null,
-
+    checked: []
 })
 
 
@@ -139,6 +139,8 @@ const sistemasArtificialesDeProduccion = (state = initialState, action) => {
         return state.set('imgURL', fromJS(action.value))
     case 'set_sistemasArtificialesDeProduccion':
         return state = fromJS(action.value)
+    case 'set_checked' :
+        return state.set('checked', fromJS(action.value))
     default:
       return state
   }

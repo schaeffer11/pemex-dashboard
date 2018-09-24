@@ -263,10 +263,6 @@ const validate = values => {
        errors.penetracion = {message: "Este campo no puede estar vacio"}
     }
 
-    if(!values.tipoDeSAP ){
-       errors.tipoDeSAP = {message: "Este campo no puede estar vacio"}
-    }
-
     if(!values.tratamientoPor ){
        errors.tratamientoPor = {message: "Este campo no puede estar vacio"}
     }

@@ -15,6 +15,7 @@ let fluidoOptions = [
 @autobind class TecnicaDelCampo extends Component {
   constructor(props) {
     super(props)
+
     this.state = {
       containsErrors: false,
       errors: [],
@@ -25,12 +26,12 @@ let fluidoOptions = [
   componentDidMount(){
     this.validate()
     this.containsErrors()
-    this.props.containsErrors(this, this.state.containsErrors)
+    //this.props.containsErrors(this, this.state.containsErrors)
   }
 
   componentDidUpdate(){
-    this.containsErrors()
-    this.props.containsErrors(this, this.state.containsErrors)
+    //this.containsErrors()
+    //this.props.containsErrors(this, this.state.containsErrors)
   }
 
   containsErrors(){
@@ -42,7 +43,7 @@ let fluidoOptions = [
 
     if(foundErrors !== this.state.containsErrors){
       this.setState({
-        containsErrors: foundErrors
+        foundErrors: foundErrors
       })
     }
 
@@ -83,9 +84,9 @@ let fluidoOptions = [
         <div className='header'>
           Generales
         </div>
-        <InputRowUnitless header="Descubrimiento" name='descubrimiento' value={descubrimientoField} onChange={setDescubrimientoField} onBlur={this.validate} errors={this.state.errors}/>
-        <InputRowUnitless header="Fecha de explotación" name='fechaDeExplotacion' value={fechaDeExplotacionField} onChange={setFechaDeExplotacionField} onBlur={this.validate} errors={this.state.errors}/>
-        <InputRowUnitless header="No. de pozo operando" type='number' name='noDePozoOperando' value={numeroDePozosOperandoField} onChange={setNumeroDePozosOperandoField} onBlur={this.validate} errors={this.state.errors}/>
+        <InputRowUnitless header="Descubrimiento" name='descubrimientoField' value={descubrimientoField} onChange={setDescubrimientoField} onBlur={this.validate} errors={this.state.errors}/>
+        <InputDate header="Fecha de explotación" name='fechaDeExplotacionField' value={fechaDeExplotacionField} onChange={setFechaDeExplotacionField} onBlur={this.validate} errors={this.state.errors}/>
+        <InputRowUnitless header="No. de pozo operando" name='numeroDePozoOperandoField' value={numeroDePozosOperandoField} onChange={setNumeroDePozosOperandoField} onBlur={this.validate} errors={this.state.errors}/>
       </div>
     )
   }
@@ -104,11 +105,11 @@ let fluidoOptions = [
         <div className='header'>
           Explotacion
         </div>
-        <InputRow header="P. inicial (año)" name='pInicialAno' value={pInicialAnoField} onChange={setPInicialAnoField} unit='Kg/cm2' onBlur={this.validate} errors={this.state.errors} />
-        <InputRow header="P. actual (fecha)" name='pActualFecha' value={pActualFechaField} onChange={setPActualFechaField} unit='Kg/cm2' onBlur={this.validate} errors={this.state.errors} />
-        <InputRow header="DP/año" name='dpPerAno' value={dpPerAnoField} onChange={setDpPerAnoField} unit='Kg/cm2/año' onBlur={this.validate} errors={this.state.errors} />
-        <InputRow header="T yac" name='tyac' value={tyacField} onChange={setTyacField} unit='°C' onBlur={this.validate} errors={this.state.errors} />
-        <InputRow header="P.R." name='pr' value={prField} onChange={setPrField} unit='mvbnm' onBlur={this.validate} errors={this.state.errors} />
+        <InputRow header="P. inicial (año)" name='pInicialAnoField' value={pInicialAnoField} onChange={setPInicialAnoField} unit='Kg/cm2' onBlur={this.validate} errors={this.state.errors} />
+        <InputDate header="P. actual (fecha)" name='pActualFechaField' value={pActualFechaField} onChange={setPActualFechaField} unit='' onBlur={this.validate} errors={this.state.errors} />
+        <InputRow header="DP/año" name='dpPerAnoField' value={dpPerAnoField} onChange={setDpPerAnoField} unit='Kg/cm2/año' onBlur={this.validate} errors={this.state.errors} />
+        <InputRow header="T yac" name='tyacField' value={tyacField} onChange={setTyacField} unit='°C' onBlur={this.validate} errors={this.state.errors} />
+        <InputRow header="P.R." name='prField' value={prField} onChange={setPrField} unit='mvbnm' onBlur={this.validate} errors={this.state.errors} />
 
       </div>
     )
@@ -129,11 +130,11 @@ let fluidoOptions = [
           Fluido
         </div>
         <InputRowSelectUnitless header='Tipo de Fluido' name='tipoDeFluidoField' value={tipoDeFluidoField} callback={(e) => setTipoDeFluidoField(e.value)} options={fluidoOptions} onBlur={this.validate} errors={this.state.errors}/>
-        <InputRow header="Densidad del aceite" name='densidadDelAceite' value={densidadDelAceiteField} onChange={setDensidadDelAceiteField} unit='°API' onBlur={this.validate} errors={this.state.errors} />
-        <InputRow header="P sat" name='pSat' value={pSatField} onChange={setPSatField} unit='Kg/cm2' onBlur={this.validate} errors={this.state.errors} />
-        <InputRow header="RGA" name='rga' value={rgaFluidoField} onChange={setRgaFluidoField} unit='m3/m3' onBlur={this.validate} errors={this.state.errors} />
-        <InputRow header="Salinidad" name='salinidad' value={salinidadField} onChange={setSalinidadField} unit='ppm' onBlur={this.validate} errors={this.state.errors} />
-        <InputRowUnitless header="PVT representativo" name='pvtRepresentativo' value={pvtRepresentativoField} onChange={setPvtRepresentativoField} onBlur={this.validate} errors={this.state.errors} />
+        <InputRow header="Densidad del aceite" name='densidadDelAceiteField' value={densidadDelAceiteField} onChange={setDensidadDelAceiteField} unit='°API' onBlur={this.validate} errors={this.state.errors} />
+        <InputRow header="P sat" name='pSatField' value={pSatField} onChange={setPSatField} unit='Kg/cm2' onBlur={this.validate} errors={this.state.errors} />
+        <InputRow header="RGA" name='rgaFluidoField' value={rgaFluidoField} onChange={setRgaFluidoField} unit='m3/m3' onBlur={this.validate} errors={this.state.errors} />
+        <InputRow header="Salinidad" name='salinidadField' value={salinidadField} onChange={setSalinidadField} unit='ppm' onBlur={this.validate} errors={this.state.errors} />
+        <InputRowUnitless header="PVT representativo" name='pvtRepresentativoField' value={pvtRepresentativoField} onChange={setPvtRepresentativoField} onBlur={this.validate} errors={this.state.errors} />
       </div>
     )
   }
@@ -151,13 +152,13 @@ let fluidoOptions = [
         <div className='header'>
           Formacion
         </div>
-        <InputRowUnitless header="Litología" name='litologia' value={litologiaField} onChange={setLitologiaField} onBlur={this.validate} errors={this.state.errors} />
-        <InputRow header="Espesor neto" name='espesorNeto'value={espesorNetoField} onChange={setEspesorNetoField} unit='m' onBlur={this.validate} errors={this.state.errors} />
-        <InputRow header="Porosidad" name='porosidad' value={porosidadField} onChange={setPorosidadField} unit='%' onBlur={this.validate} errors={this.state.errors} />
-        <InputRow header="Sw" name='Sw' value={swField} onChange={setSwField} unit='%' onBlur={this.validate} errors={this.state.errors} />
-        <InputRow header="K promedio" name='kPromedio' value={kPromedioField} onChange={setKPromedioField} unit='mD' onBlur={this.validate} errors={this.state.errors} />
-        <InputRow header="CAA" name='caa' value={caaField} onChange={setCaaField} unit='m' onBlur={this.validate} errors={this.state.errors} />
-        <InputRow header="CGA" name='cga' value={cgaField} onChange={setCgaField} unit='m' onBlur={this.validate} errors={this.state.errors} />
+        <InputRowUnitless header="Litología" name='litologiaField' value={litologiaField} onChange={setLitologiaField} onBlur={this.validate} errors={this.state.errors} />
+        <InputRow header="Espesor neto" name='espesorNetoField' value={espesorNetoField} onChange={setEspesorNetoField} unit='m' onBlur={this.validate} errors={this.state.errors} />
+        <InputRow header="Porosidad" name='porosidadField' value={porosidadField} onChange={setPorosidadField} unit='%' onBlur={this.validate} errors={this.state.errors} />
+        <InputRow header="Sw" name='swField' value={swField} onChange={setSwField} unit='%' onBlur={this.validate} errors={this.state.errors} />
+        <InputRow header="K promedio" name='kPromedioField' value={kPromedioField} onChange={setKPromedioField} unit='mD' onBlur={this.validate} errors={this.state.errors} />
+        <InputRow header="CAA" name='caaField' value={caaField} onChange={setCaaField} unit='m' onBlur={this.validate} errors={this.state.errors} />
+        <InputRow header="CGA" name='cgaField' value={cgaField} onChange={setCgaField} unit='m' onBlur={this.validate} errors={this.state.errors} />
       </div>
     )
   }
@@ -175,19 +176,19 @@ let fluidoOptions = [
         <div className='header'>
           Produccion @ Formacion
         </div>
-        <InputRow header="Qo" name='qo' value={qoField} onChange={setQoField} unit='bpd' onBlur={this.validate} errors={this.state.errors} />
-        <InputRow header="Qg" name='qg' value={qgField} onChange={setQgField} unit='MMpcd' onBlur={this.validate} errors={this.state.errors} />
-        <InputRow header="RGA" name='rgaProd' value={rgaField} onChange={setRgaField} unit='m3/m3' onBlur={this.validate} errors={this.state.errors} />
-        <InputRow header="Fw" name='fw' value={fwField} onChange={setFwField} unit='%' onBlur={this.validate} errors={this.state.errors} />
-        <InputRow header="Np" name='np' value={npField} onChange={setNpField} unit='MMb' onBlur={this.validate} errors={this.state.errors} />
-        <InputRow header="Gp" name='gp' value={gpField} onChange={setGpField} unit='MMMpc' onBlur={this.validate} errors={this.state.errors} />
-        <InputRow header="Wp" name='wp' value={wpField} onChange={setWpField} unit='MMb' onBlur={this.validate} errors={this.state.errors} />
-        <InputRow header="RRA" name='rra' value={rraField} onChange={setRraField} unit='MMb' onBlur={this.validate} errors={this.state.errors} />
-        <InputRow header="RRG" name='rrg' value={rrgField} onChange={setRrgField} unit='MMMpc' onBlur={this.validate} errors={this.state.errors} />
-        <InputRow header="RRPCE" name='rrpce' value={rrpceField} onChange={setRrpceField} unit='MMb' onBlur={this.validate} errors={this.state.errors} />
-        <InputRow header="H2S" name='h2s' value={h2sField} onChange={setH2sField} unit='%' onBlur={this.validate} errors={this.state.errors} />
-        <InputRow header="CO2" name='co2' value={co2Field} onChange={setCo2Field} unit='%' onBlur={this.validate} errors={this.state.errors} />
-        <InputRow header="N2" name='n2' value={n2Field} onChange={setN2Field} unit='%' onBlur={this.validate} errors={this.state.errors} />
+        <InputRow header="Qo" name='qoField' value={qoField} onChange={setQoField} unit='bpd' onBlur={this.validate} errors={this.state.errors} />
+        <InputRow header="Qg" name='qgField' value={qgField} onChange={setQgField} unit='MMpcd' onBlur={this.validate} errors={this.state.errors} />
+        <InputRow header="RGA" name='rgaField' value={rgaField} onChange={setRgaField} unit='m3/m3' onBlur={this.validate} errors={this.state.errors} />
+        <InputRow header="Fw" name='fwField' value={fwField} onChange={setFwField} unit='%' onBlur={this.validate} errors={this.state.errors} />
+        <InputRow header="Np" name='npField' value={npField} onChange={setNpField} unit='MMb' onBlur={this.validate} errors={this.state.errors} />
+        <InputRow header="Gp" name='gpField' value={gpField} onChange={setGpField} unit='MMMpc' onBlur={this.validate} errors={this.state.errors} />
+        <InputRow header="Wp" name='wpField' value={wpField} onChange={setWpField} unit='MMb' onBlur={this.validate} errors={this.state.errors} />
+        <InputRow header="RRA" name='rraField' value={rraField} onChange={setRraField} unit='MMb' onBlur={this.validate} errors={this.state.errors} />
+        <InputRow header="RRG" name='rrgField' value={rrgField} onChange={setRrgField} unit='MMMpc' onBlur={this.validate} errors={this.state.errors} />
+        <InputRow header="RRPCE" name='rrpceField' value={rrpceField} onChange={setRrpceField} unit='MMb' onBlur={this.validate} errors={this.state.errors} />
+        <InputRow header="H2S" name='h2sField' value={h2sField} onChange={setH2sField} unit='%' onBlur={this.validate} errors={this.state.errors} />
+        <InputRow header="CO2" name='co2Field' value={co2Field} onChange={setCo2Field} unit='%' onBlur={this.validate} errors={this.state.errors} />
+        <InputRow header="N2" name='n2Field' value={n2Field} onChange={setN2Field} unit='%' onBlur={this.validate} errors={this.state.errors} />
       </div>
     )
   }
@@ -216,36 +217,36 @@ let fluidoOptions = [
 const validate = values => {
     const errors = {}
 
-    if(!values.descubrimiento ){
-       errors.descubrimiento = {message: "Este campo no puede estar vacio"}
+    if(!values.descubrimientoField ){
+       errors.descubrimientoField = {message: "Este campo no puede estar vacio"}
     }
 
-    if(!values.fechaDeExplotacion ){
-       errors.fechaDeExplotacion = {message: "Este campo no puede estar vacio"}
+    if(!values.fechaDeExplotacionField ){
+       errors.fechaDeExplotacionField = {message: "Este campo no puede estar vacio"}
+    }
+/*
+    if(!values.numeroDePozoOperandoField ){
+       errors.numeroDePozoOperandoField = {message: "Este campo no puede estar vacio"}
+    }
+*/
+    if(!values.pInicialAnoField ){
+       errors.pInicialAnoField = {message: "Este campo no puede estar vacio"}
     }
 
-    if(!values.noDePozoOperando ){
-       errors.noDePozoOperando = {message: "Este campo no puede estar vacio"}
+    if(!values.pActualFechaField ){
+       errors.pActualFechaField = {message: "Este campo no puede estar vacio"}
     }
 
-    if(!values.pInicialAno ){
-       errors.pInicialAno = {message: "Este campo no puede estar vacio"}
+    if(!values.dpPerAnoField ){
+       errors.dpPerAnoField = {message: "Este campo no puede estar vacio"}
     }
 
-    if(!values.pActualFecha ){
-       errors.pActualFecha = {message: "Este campo no puede estar vacio"}
+    if(!values.tyacField ){
+      errors.tyacField = {message: "Este campo no puede estar vacio"}
     }
 
-    if(!values.dpPerAno ){
-       errors.dpPerAno = {message: "Este campo no puede estar vacio"}
-    }
-
-    if(!values.tyac ){
-      errors.tyac = {message: "Este campo no puede estar vacio"}
-    }
-
-    if(!values.pr ){
-      errors.pr = {message: "Este campo no puede estar vacio"}
+    if(!values.prField ){
+      errors.prField = {message: "Este campo no puede estar vacio"}
     }
 
     if(!values.dpPerAnoField ){
@@ -264,104 +265,104 @@ const validate = values => {
        errors.tipoDeFluidoField = {message: "Este campo no puede estar vacio"}
     }
 
-    if(!values.densidadDelAceite ){
-       errors.densidadDelAceite = {message: "Este campo no puede estar vacio"}
+    if(!values.densidadDelAceiteField ){
+       errors.densidadDelAceiteField = {message: "Este campo no puede estar vacio"}
     }
 
-    if(!values.pSat ){
-       errors.pSat = {message: "Este campo no puede estar vacio"}
+    if(!values.pSatField ){
+       errors.pSatField = {message: "Este campo no puede estar vacio"}
     }
 
-    if(!values.rga ){
-       errors.rga = {message: "Este campo no puede estar vacio"}
+    if(!values.rgaField ){
+       errors.rgaField = {message: "Este campo no puede estar vacio"}
     }
 
-    if(!values.salinidad ){
-       errors.salinidad = {message: "Este campo no puede estar vacio"}
+    if(!values.salinidadField ){
+       errors.salinidadField = {message: "Este campo no puede estar vacio"}
     }
 
-    if(!values.pvtRepresentativo ){
-       errors.pvtRepresentativo = {message: "Este campo no puede estar vacio"}
+    if(!values.pvtRepresentativoField ){
+       errors.pvtRepresentativoField = {message: "Este campo no puede estar vacio"}
     }
 
-    if(!values.litologia ){
-       errors.litologia = {message: "Este campo no puede estar vacio"}
+    if(!values.litologiaField ){
+       errors.litologiaField = {message: "Este campo no puede estar vacio"}
     }
 
-    if(!values.espesorNeto ){
-       errors.espesorNeto = {message: "Este campo no puede estar vacio"}
+    if(!values.espesorNetoField ){
+       errors.espesorNetoField = {message: "Este campo no puede estar vacio"}
     }
 
-    if(!values.porosidad ){
-       errors.porosidad = {message: "Este campo no puede estar vacio"}
+    if(!values.porosidadField ){
+       errors.porosidadField = {message: "Este campo no puede estar vacio"}
     }
 
-    if(!values.Sw ){
-       errors.Sw = {message: "Este campo no puede estar vacio"}
+    if(!values.swField ){
+       errors.swField = {message: "Este campo no puede estar vacio"}
     }
 
-    if(!values.kPromedio ){
-       errors.kPromedio = {message: "Este campo no puede estar vacio"}
+    if(!values.kPromedioField ){
+       errors.kPromedioField = {message: "Este campo no puede estar vacio"}
     }
 
-    if(!values.caa ){
-       errors.caa = {message: "Este campo no puede estar vacio"}
+    if(!values.caaField ){
+       errors.caaField = {message: "Este campo no puede estar vacio"}
     }
 
-    if(!values.cga ){
-       errors.cga = {message: "Este campo no puede estar vacio"}
+    if(!values.cgaField ){
+       errors.cgaField = {message: "Este campo no puede estar vacio"}
     }
 
-    if(!values.qo ){
-       errors.qo = {message: "Este campo no puede estar vacio"}
+    if(!values.qoField ){
+       errors.qoField = {message: "Este campo no puede estar vacio"}
     }
 
-    if(!values.qg ){
-       errors.qg = {message: "Este campo no puede estar vacio"}
+    if(!values.qgField ){
+       errors.qgField = {message: "Este campo no puede estar vacio"}
     }
 
-    if(!values.rgaProd ){
-       errors.rgaProd = {message: "Este campo no puede estar vacio"}
+    if(!values.rgaFluidoField ){
+       errors.rgaFluidoField = {message: "Este campo no puede estar vacio"}
     }
 
-    if(!values.fw ){
-       errors.fw = {message: "Este campo no puede estar vacio"}
+    if(!values.fwField ){
+       errors.fwField = {message: "Este campo no puede estar vacio"}
     }
 
-    if(!values.np ){
-       errors.np = {message: "Este campo no puede estar vacio"}
+    if(!values.npField ){
+       errors.npField = {message: "Este campo no puede estar vacio"}
     }
 
-    if(!values.gp ){
-       errors.gp = {message: "Este campo no puede estar vacio"}
+    if(!values.gpField ){
+       errors.gpField = {message: "Este campo no puede estar vacio"}
     }
 
-    if(!values.wp ){
-       errors.wp = {message: "Este campo no puede estar vacio"}
+    if(!values.wpField ){
+       errors.wpField = {message: "Este campo no puede estar vacio"}
     }
 
-    if(!values.rra ){
-       errors.rra = {message: "Este campo no puede estar vacio"}
+    if(!values.rraField ){
+       errors.rraField = {message: "Este campo no puede estar vacio"}
     }
 
-    if(!values.rrg ){
-       errors.rrg = {message: "Este campo no puede estar vacio"}
+    if(!values.rrgField ){
+       errors.rrgField = {message: "Este campo no puede estar vacio"}
     }
 
-    if(!values.rrpce ){
-       errors.rrpce = {message: "Este campo no puede estar vacio"}
+    if(!values.rrpceField ){
+       errors.rrpceField = {message: "Este campo no puede estar vacio"}
     }
 
-    if(!values.h2s ){
-       errors.h2s = {message: "Este campo no puede estar vacio"}
+    if(!values.h2sField ){
+       errors.h2sField = {message: "Este campo no puede estar vacio"}
     }
 
-    if(!values.co2 ){
-       errors.co2 = {message: "Este campo no puede estar vacio"}
+    if(!values.co2Field ){
+       errors.co2Field = {message: "Este campo no puede estar vacio"}
     }
 
-    if(!values.n2 ){
-       errors.n2 = {message: "Este campo no puede estar vacio"}
+    if(!values.n2Field ){
+       errors.n2Field = {message: "Este campo no puede estar vacio"}
     }
     return errors
 }

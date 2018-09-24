@@ -1,6 +1,8 @@
 import React from 'react'
 import Select from 'react-select'
-import DatePicker from 'react-date-picker'
+import DatePicker from 'react-datepicker'
+import moment from 'moment'
+import datepicker from "react-datepicker/dist/react-datepicker.css";
 
 const generateErrorElements = ( name = '', errors = [] ) => {
   let rowError = errors[name]
@@ -138,17 +140,30 @@ export const InputRowCosts = ({ header, name, unit, value, onChange, index, onBl
     )
 }
 
-export const InputDate = ({ onChange, value, header }) => {
+export const InputDate = ({ name, onChange, value, header, onBlur, errors }) => {
+
+  const errorElements = generateErrorElements(name, errors)
+
+  let handleSelect = (date, event) => {
+    if(date)
+      onChange(date.format())
+  }
+
   return (
      <div className='input-row input-row-unitless'>
       <div className='label'>
         {header}
       </div>
       <DatePicker
-        onChange={onChange}
-        value={value}
-        locale="es-MX"
+        dateFormat="DD/MM/YYYY"
+        name={name} 
+        onChange={handleSelect}
+        onBlur={onBlur}
+        selected={moment(value)}
+        locale="es-mx"
+        key="es-mx"
       />
+      {errorElements}
     </div>
     
   )

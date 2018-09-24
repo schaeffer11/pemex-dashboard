@@ -25,21 +25,29 @@ import { setFichaTecnicaDelCampo, setFichaTecnicaDelPozo, setEvaluacionPetrofisi
       currentStep: 0
     }
 
+    this.fichaTecnicaDelCampo = React.createRef();
+    this.fichaTecnicaDelPozo = React.createRef();
+    this.evaluacionPetrofisica = React.createRef();
+    this.mecanicoYAparejo = React.createRef();
+    this.analisisDelAgua = React.createRef();
+    this.sistemasArtificialesDeProduccion = React.createRef();
+    this.historicoDePresionCampo = React.createRef();
+    this.historicoDePresionPozo = React.createRef();
+    this.historicoDeProduccion = React.createRef();
+    
+
     // TODO: Refactor the tabs to be children instead
     this.forms = [
-      {'title' : 'Ficha Técnica del Campo', 'type': 'TecnicaDelCampo', 'content': <TecnicaDelCampo containsErrors={this.containsErrors} /> },
-      {'title' : 'Ficha Técnica del Pozo' , 'type':'TecnicaDelPozo',  'content':<TecnicaDelPozo containsErrors={this.containsErrors} /> },
-      {'title' : 'Evaluación Petrofísica', 'type':'EvaluacionPetrofisica', 'content': <EvaluacionPetrofisica containsErrors={this.containsErrors}  /> },
-      {'title' : 'Edo. Mecánico y Aparejo de Producción', 'type':'MecanicoYAparejo',  'content': <MecanicoYAparejo containsErrors={this.containsErrors}  /> },
-      {'title' : 'Análisis del Agua', 'type':'AnalisisDelAgua', 'content': <AnalisisDelAgua containsErrors={this.containsErrors}  /> }, 
-      {'title' : 'Información de Sistemas Artificiales de Producción', 'type':'SistemasArtificialesDeProduccion', 'content': <SistemasArtificialesDeProduccion containsErrors={this.containsErrors}  /> },
-      {'title' : 'Histórico de Presión - Campo', 'type':'HistoricoDePresionCampo', 'content': <HistoricoDePresionCampo containsErrors={this.containsErrors}  /> },
-      {'title' : 'Histórico de Presión - Pozo', 'type':'HistoricoDePresionPozo', 'content': <HistoricoDePresionPozo containsErrors={this.containsErrors}  /> },
-      {'title' : 'Histórico de Producción', 'type':'HistoricoDeProduccion', 'content': <HistoricoDeProduccion containsErrors={this.containsErrors}  /> },
-
-
+      {'title' : 'Ficha Técnica del Campo', 'type': 'TecnicaDelCampo', 'content': <TecnicaDelCampo ref={Ref =>  this.fichaTecnicaDelCampo=Ref } containsErrors={this.containsErrors} /> },
+      {'title' : 'Ficha Técnica del Pozo' , 'type':'TecnicaDelPozo',  'content':<TecnicaDelPozo ref={Ref =>  this.fichaTecnicaDelPozo=Ref } containsErrors={this.containsErrors} /> },
+      {'title' : 'Evaluación Petrofísica', 'type':'EvaluacionPetrofisica', 'content': <EvaluacionPetrofisica ref={Ref => this.evaluacionPetrofisica=Ref} containsErrors={this.containsErrors}  /> },
+      {'title' : 'Edo. Mecánico y Aparejo de Producción', 'type':'MecanicoYAparejo',  'content': <MecanicoYAparejo ref={Ref => this.mecanicoYAparejo=Ref } containsErrors={this.containsErrors}  /> },
+      {'title' : 'Análisis del Agua', 'type':'AnalisisDelAgua', 'content': <AnalisisDelAgua ref={Ref => this.analisisDelAgua=Ref } containsErrors={this.containsErrors}  /> }, 
+      {'title' : 'Información de Sistemas Artificiales de Producción', 'type':'SistemasArtificialesDeProduccion', 'content': <SistemasArtificialesDeProduccion ref={Ref => this.sistemasArtificialesDeProduccion=Ref } containsErrors={this.containsErrors}  /> },
+      {'title' : 'Histórico de Presión - Campo', 'type':'HistoricoDePresionCampo', 'content': <HistoricoDePresionCampo ref={Ref => this.historicoDePresionCampo=Ref } containsErrors={this.containsErrors}  /> },
+      {'title' : 'Histórico de Presión - Pozo', 'type':'HistoricoDePresionPozo', 'content': <HistoricoDePresionPozo ref={Ref => this.historicoDePresionPozo=Ref } containsErrors={this.containsErrors}  /> },
+      {'title' : 'Histórico de Producción', 'type':'HistoricoDeProduccion', 'content': <HistoricoDeProduccion ref={Ref => this.historicoDeProduccion=Ref } containsErrors={this.containsErrors}  /> },
     ];
-
   }
 
 
@@ -329,6 +337,19 @@ import { setFichaTecnicaDelCampo, setFichaTecnicaDelPozo, setEvaluacionPetrofisi
     }
   }
 
+  validate() {
+    return (
+      this.fichaTecnicaDelCampo.selector.props.forceValidation() &&
+      this.fichaTecnicaDelPozo.selector.props.forceValidation() &&
+      this.evaluacionPetrofisica.selector.props.forceValidation() &&
+      this.mecanicoYAparejo.selector.props.forceValidation() &&
+      this.analisisDelAgua.selector.props.forceValidation() &&
+      this.sistemasArtificialesDeProduccion.selector.props.forceValidation() &&
+      this.historicoDePresionCampo.selector.props.forceValidation() &&
+      this.historicoDePresionPozo.selector.props.forceValidation() &&
+      this.historicoDeProduccion.selector.props.forceValidation() 
+    )
+  }
 
   render() {
     let { setShowForms } = this.props
@@ -365,6 +386,13 @@ import { setFichaTecnicaDelCampo, setFichaTecnicaDelPozo, setEvaluacionPetrofisi
           </div>
 
           {this.forms[this.state.currentStep].content}
+        </div>
+
+        <div style={{display: 'none'}}>
+          {this.forms.map((form, index) => {
+             if(index != this.state.currentStep)
+               return this.forms[index].content}
+          )}
         </div>
       
         { errors.length > 0 &&
@@ -403,4 +431,4 @@ const mapStateToProps = state => ({
 })
 
 
-export default connect(mapStateToProps, mapDispatchToProps)(PozoMultiStepForm)
+export default connect(mapStateToProps, mapDispatchToProps, null, {withRef: true})(PozoMultiStepForm)
