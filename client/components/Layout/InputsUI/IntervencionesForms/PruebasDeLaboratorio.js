@@ -216,7 +216,6 @@ const companyOptions = [
       <div className="form pruebas-de-laboratorio-estimulacion">
           { this.makeGeneralesForm() }
           <button className='new-row-button' onClick={this.addNewRow}>Añadir un renglón</button>
-          {pruebasDeLaboratorioData.length}
       </div>
     )
   }

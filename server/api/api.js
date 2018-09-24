@@ -14,7 +14,7 @@ import { create as createWell, getFields, getWell,
             getWellAforos, getWellProduccion, getWellImages, getInterventionBase, 
             getInterventionEsimulacion, getInterventionAcido, getInterventionApuntalado, 
             getLabTest, getCedulaEstimulacion, getCedulaAcido, getCedulaApuntalado, 
-            getLabResults, getLabAcido, getLabApuntalado, getCosts, getInterventionImage } from './pozo'
+            getCosts, getInterventionImage } from './pozo'
 
 const connection = db.getConnection(appConfig.users.database)
 const app = express()
@@ -1446,167 +1446,6 @@ app.get('/getCedulaApuntalado', async (req, res) => {
 })
 
 
-app.get('/getLabResults', async (req, res) => {
-  let { transactionID, saved } = req.query
-
-  let action = saved ? 'loadSave' : 'loadTransaction'
-
-
-  const map = {
-    SISTEMA: { child: 'sistem' }, 
-    TIEMPO_DE_ROMPIMIENTO: { child: 'tiempoRompimiento' }, 
-    INTERFASE: { child: 'interfase' }, 
-    SOLIDOS_DESPUES_DE_FILTRAR: { child: 'solidosFiltrar' }, 
-    RESULTADO: { child: 'resultado' },
-  }
-
-  const mainParent = 'pruebasDeLaboratorio'
-  const innerParent = 'pruebasDeLaboratorioData'
-
-  getLabResults(transactionID, action, (data) => {
-    const finalObj = {}
-    console.log(data)
-
-    data = [data[0], data[0]]
-
-    data.forEach((d, index) => {
-      const innerObj = {}
-      Object.keys(d).forEach(k => {
-        if (map[k]) {
-          const { child } = map[k]
-          objectPath.set(innerObj, child, d[k])
-        }
-      })
-      objectPath.set(innerObj, 'length', data.length)
-      objectPath.set(innerObj, 'index', index)
-      objectPath.push(finalObj, `${mainParent}.${innerParent}`, innerObj)
-    })
-
-    res.json(finalObj)
-  })
-})
-
-
-app.get('/getLabAcido', async (req, res) => {
-  let { transactionID, saved } = req.query
-
-  let action = saved ? 'loadSave' : 'loadTransaction'
-
-
-  const map = {
-    CONTENIDO_DE_ACEITE: { child: 'contenidoDeAceite' }, 
-    CONTENIDO_DE_AGUA: { child: 'contenidoDeAgua' }, 
-    CONTENIDO_DE_EMULSION: { child: 'contenidoDeEmulsion' },
-    CONTENIDO_DE_SOLIDOS: { child: 'contenidoDeSolidos' },
-    TIPO_DE_SOLIDOS: { child: 'tipoDeSolidos' },
-    DENSIDAD_DEL_ACEITE: { child: 'densidadDelAceite' },
-    DENSIDAD_DEL_AGUA: { child: 'densidadDelAgua' },
-    DENSIDAD_DE_LA_EMULSION: { child: 'densidadDeLaEmulsion' },
-    CONTENIDO_DE_ASFALTENOS: { child: 'contenidoDeAsfaltenos' },
-    CONTENIDO_DE_PARAFINAS: { child: 'contenidoDeParafinas' },
-    CONTENIDO_DE_RESINAS: { child: 'contenidoDeResinas' },
-    INDICE_DE_ESTABILIDAD_COLOIDAL: { child: 'indiceDeEstabilidadColoidal' },
-    INDICE_DE_ESTABILIDAD_DEL_AGUA: { child: 'indiceDeEstabilidadDelAgua' },
-    PH: { child: 'pH' },
-    SALINIDAD: { child: 'salinidad' },
-    VISCOSIDAD_DEL_ACEITE: { child: 'viscosidadDelAceite' },
-    SISTEMA_ACIDO_SOLUBILIDAD: { child: 'sistemaAcidoSolubilidad' },
-    PESO_MUESTRA_INICIAL: { child: 'pesoMuestraInicial' },
-    PESO_MUESTRA_FINAL: { child: 'pesoMuestraFinal' },
-    SOLUBILIDAD: { child: 'solubilidad' },
-    SISTEMA_ACIDO_GRABADO_DE_NUCLEOS: { child: 'sistemaAcidoGrabadoDeNucleos' },
-    NUCLEO_DE_FORMACION: { child: 'nucleoDeFormacion' },
-    GRABADO: { child: 'grabado' },
-    TIPO_DE_GEL_LINEAL: { child: 'tipoDeGelLineal' },
-    VISCOSIDAD_DEL_GEL_LINEAL: { child: 'viscosidadDelGelLineal' },
-    TIEMPO_DE_RETICULACION: { child: 'tiempoDeReticulacion' },
-    PH_GEL_LINEAL: { child: 'phGelLineal' },
-    TIEMPO_DE_ROMPEDOR_DEL_GEL: { child: 'tiempoDeRompedorDelGel' },
-  }
-
-  const mainParent = 'pruebasDeLaboratorio'
-  const innerParent = 'pruebasDeLaboratorioData'
-
-  getLabAcido(transactionID, action, (data) => {
-    const finalObj = {}
-    data.forEach((d, index) => {
-      const innerObj = {}
-      Object.keys(d).forEach(k => {
-        if (map[k]) {
-          const { child } = map[k]
-          objectPath.set(innerObj, child, d[k])
-        }
-      })
-      objectPath.set(innerObj, 'length', data.length)
-      objectPath.set(innerObj, 'index', index)
-      objectPath.push(finalObj, `${mainParent}.${innerParent}`, innerObj)
-    })
-
-    res.json(finalObj)
-  })
-})
-
-
-app.get('/getLabApuntalado', async (req, res) => {
-  let { transactionID, saved } = req.query
-
-  let action = saved ? 'loadSave' : 'loadTransaction'
-
-
-  const map = {
-    CONTENIDO_DE_ACEITE: { child: 'contenidoDeAceite' }, 
-    CONTENIDO_DE_AGUA: { child: 'contenidoDeAgua' }, 
-    CONTENIDO_DE_EMULSION: { child: 'contenidoDeEmulsion' }, 
-    CONTENIDO_DE_SOLIDOS: { child: 'contenidoDeSolidos' }, 
-    TIPO_DE_SOLIDOS: { child: 'tipoDeSolidos' },
-    DENSIDAD_DEL_ACEITE: { child: 'densidadDelAceite' }, 
-    DENSIDAD_DEL_AGUA: { child: 'densidadDelAgua' }, 
-    DENSIDAD_DE_LA_EMULSION: { child: 'densidadDeLaEmulsion' }, 
-    CONTENIDO_DE_ASFALTENOS: { child: 'contenidoDeAsfaltenos' }, 
-    CONTENIDO_DE_PARAFINAS: { child: 'contenidoDeParafinas' }, 
-    CONTENIDO_DE_RESINAS: { child: 'contenidoDeResinas' }, 
-    INDICE_DE_ESTABILIDAD_COLOIDAL: { child: 'indiceDeEstabilidadColoidal' }, 
-    INDICE_DE_ESTABILIDAD_DEL_AGUA: { child: 'indiceDeEstabilidadDelAgua' }, 
-    PH: { child: 'pH' }, 
-    SALINIDAD: { child: 'salinidad' }, 
-    VISCOSIDAD_DEL_ACEITE: { child: 'viscosidadDelAceite' }, 
-    TIPO_DE_GEL_LINEAL: { child: 'tipoDeGelLineal' }, 
-    VISCOSIDAD_DEL_GEL_LINEAL: { child: 'viscosidadDelGelLineal' }, 
-    TIEMPO_DE_RETICULACION: { child: 'tiempoDeReticulacion' }, 
-    PH_GEL_LINEAL: { child: 'phGelLineal' }, 
-    TIEMPO_DE_ROMPEDOR_DEL_GEL: { child: 'tiempoDeRompedorDelGel' }, 
-    TAMANO_DEL_APUNTALANTE: { child: 'tamanoDelApuntalante' }, 
-    GRAVEDAD_ESPECIFICA: { child: 'gravedadEspecifica' }, 
-    ESFERICIDAD: { child: 'esfericidad' }, 
-    REDONDEO: { child: 'redondeo' }, 
-    TURBIDEZ: { child: 'turbidez' }, 
-    RESISTENCIA: { child: 'resistencia' }, 
-    PRUEBA_DE_SOLUBILIDAD_CON_ACIDO: { child: 'pruebaDeSolubilidadConAcido' },
-  }
-
-  const mainParent = 'pruebasDeLaboratorio'
-  const innerParent = 'pruebasDeLaboratorioData'
-
-  getLabApuntalado(transactionID, action, (data) => {
-    const finalObj = {}
-    data.forEach((d, index) => {
-      const innerObj = {}
-      Object.keys(d).forEach(k => {
-        if (map[k]) {
-          const { child } = map[k]
-          objectPath.set(innerObj, child, d[k])
-        }
-      })
-      objectPath.set(innerObj, 'length', data.length)
-      objectPath.set(innerObj, 'index', index)
-      objectPath.push(finalObj, `${mainParent}.${innerParent}`, innerObj)
-    })
-
-    res.json(finalObj)
-  })
-})
-
-
 app.get('/getCedulaAcido', async (req, res) => {
   let { transactionID, saved } = req.query
 
@@ -1651,8 +1490,6 @@ app.get('/getCedulaAcido', async (req, res) => {
     res.json(finalObj)
   })
 })
-
-
 
 
 app.get('/getCosts', async (req, res) => {

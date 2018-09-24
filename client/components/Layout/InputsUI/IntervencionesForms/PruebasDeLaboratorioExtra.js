@@ -107,9 +107,9 @@ const grabadoOptions = [
 
     return (
       <div className='fisico-form' >
-        <div className='header'>{/*
+{/*        <div className='header'>
           Test
-*/}        </div>
+        </div>*/}
           <InputRow header="Determinación del porcentaje de aceite" name='percentAceite' value={pruebasDeLaboratorioData[index].percentAceite} onChange={this.updateValue} index={index} unit='%' />
           <InputRow header="Determinación del porcentaje de agua" name='percentAgua' value={pruebasDeLaboratorioData[index].percentAgua} onChange={this.updateValue} index={index} unit='%' />
           <InputRow header="Determinación del porcentaje de emulsión" name='percentEmulsion' value={pruebasDeLaboratorioData[index].percentEmulsion} onChange={this.updateValue} index={index} unit='%' />
@@ -216,6 +216,12 @@ const grabadoOptions = [
     pruebasDeLaboratorio = pruebasDeLaboratorio.toJS()
     let { pruebasDeLaboratorioData } = pruebasDeLaboratorio
 
+    let val = ''
+
+    if (pruebasDeLaboratorioData && pruebasDeLaboratorioData[cellInfo.column.tableIndex] && pruebasDeLaboratorioData[cellInfo.column.tableIndex]["compatabilidadTable"] && pruebasDeLaboratorioData[cellInfo.column.tableIndex]["compatabilidadTable"][cellInfo.index] && pruebasDeLaboratorioData[cellInfo.column.tableIndex]["compatabilidadTable"][cellInfo.index][cellInfo.column.id]) {
+      val = pruebasDeLaboratorioData[cellInfo.column.tableIndex]["compatabilidadTable"][cellInfo.index][cellInfo.column.id]
+    }
+
     return (
       <div
         style={{ backgroundColor: "#fafafa" }}
@@ -225,7 +231,7 @@ const grabadoOptions = [
           let copy = JSON.parse(JSON.stringify(pruebasDeLaboratorioData))
           copy[cellInfo.column.tableIndex]["compatabilidadTable"][cellInfo.index][cellInfo.column.id] = e.target.innerHTML;
           setPruebasDeLaboratorioData(copy)
-        }}>{pruebasDeLaboratorioData[cellInfo.column.tableIndex]["compatabilidadTable"][cellInfo.index][cellInfo.column.id]}
+        }}>{val}
         </div>
     );
   }
@@ -233,7 +239,12 @@ const grabadoOptions = [
     let { pruebasDeLaboratorio, setPruebasDeLaboratorioData } = this.props
     pruebasDeLaboratorio = pruebasDeLaboratorio.toJS()
     let { pruebasDeLaboratorioData } = pruebasDeLaboratorio
+    
+    let val = ''
 
+    if (pruebasDeLaboratorioData && pruebasDeLaboratorioData[cellInfo.column.tableIndex] && pruebasDeLaboratorioData[cellInfo.column.tableIndex]["grabadoTable"] && pruebasDeLaboratorioData[cellInfo.column.tableIndex]["grabadoTable"][cellInfo.index] && pruebasDeLaboratorioData[cellInfo.column.tableIndex]["grabadoTable"][cellInfo.index][cellInfo.column.id]) {
+      val = pruebasDeLaboratorioData[cellInfo.column.tableIndex]["grabadoTable"][cellInfo.index][cellInfo.column.id]
+    }
 
     return (
       <div
@@ -244,7 +255,7 @@ const grabadoOptions = [
           let copy = JSON.parse(JSON.stringify(pruebasDeLaboratorioData))
           copy[cellInfo.column.tableIndex]["grabadoTable"][cellInfo.index][cellInfo.column.id] = e.target.innerHTML;
           setPruebasDeLaboratorioData(copy)
-        }}>{pruebasDeLaboratorioData[cellInfo.column.tableIndex]["grabadoTable"][cellInfo.index][cellInfo.column.id]}
+        }}>{val}
         </div>
     );
   }

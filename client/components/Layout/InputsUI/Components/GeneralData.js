@@ -212,17 +212,6 @@ import Loading from '../../Common/Loading'
       .then(res => res.json())
 
     let { transactionID, tipoDeIntervenciones } = data
-    let labQuery
-
-    if (tipoDeIntervenciones === 'estimulacion') {
-      labQuery = `api/getCedulaEstimulacion?transactionID=${transactionID}&saved=1`
-    }
-    else if (tipoDeIntervenciones === 'acido') {
-      labQuery = `api/getLabAcido?transactionID=${transactionID}&saved=1`
-    }
-    else if (tipoDeIntervenciones === 'apuntalado') {
-      labQuery = `api/getLabApuntalado?transactionID=${transactionID}&saved=1`
-    }
 
     Promise.all([
       fetch(`api/getFields?transactionID=${transactionID}&saved=1`).then(r => r.json()),
@@ -250,8 +239,6 @@ import Loading from '../../Common/Loading'
       fetch(`api/getCedulaEstimulacion?transactionID=${transactionID}&saved=1`).then(r => r.json()),   
       fetch(`api/getCedulaAcido?transactionID=${transactionID}&saved=1`).then(r => r.json()),   
       fetch(`api/getCedulaApuntalado?transactionID=${transactionID}&saved=1`).then(r => r.json()),      
-      // fetch(`api/getLabResults?transactionID=${transactionID}`).then(r => r.json()),
-      fetch(labQuery).then(r => r.json()),
       fetch(`api/getCosts?transactionID=${transactionID}&saved=1`).then(r => r.json()),
     ])
       .catch(error => {

@@ -464,62 +464,6 @@ const INSERT_CEDULA_APUNTALADO_QUERY = {
     loadTransaction: `SELECT * FROM IntervencionesCedulaApuntalado WHERE TRANSACTION_ID = ?`    
 }
 
-const INSERT_LAB_RESULTS_QUERY = {
-    save: `INSERT INTO _IntervencionesLabResultsSave (
-        RESULT_ID, LAB_ID, INTERVENTION_ID, WELL_FORMACION_ID, SISTEMA, 
-        TIEMPO_DE_ROMPIMIENTO, INTERFASE, SOLIDOS_DESPUES_DE_FILTRAR, RESULTADO, TRANSACTION_ID) VALUES ?`,
-    submit: `INSERT INTO IntervencionesLabResults (
-        RESULT_ID, LAB_ID, INTERVENTION_ID, WELL_FORMACION_ID, SISTEMA, 
-        TIEMPO_DE_ROMPIMIENTO, INTERFASE, SOLIDOS_DESPUES_DE_FILTRAR, RESULTADO, TRANSACTION_ID) VALUES ?`,
-    loadSave: `SELECT * FROM _IntervencionesLabResultsSave WHERE TRANSACTION_ID = ?`,
-    loadTransaction: `SELECT * FROM IntervencionesLabResults WHERE TRANSACTION_ID = ?`    
-}
-
-const INSERT_LAB_ACIDO_QUERY = {
-    save: `INSERT INTO _IntervencionesLabTestsAcidoSave (
-        LAB_ID, INTERVENTION_ID, WELL_FORMACION_ID, CONTENIDO_DE_ACEITE, CONTENIDO_DE_AGUA, 
-        CONTENIDO_DE_EMULSION, CONTENIDO_DE_SOLIDOS, TIPO_DE_SOLIDOS, DENSIDAD_DEL_ACEITE, 
-        DENSIDAD_DEL_AGUA, DENSIDAD_DE_LA_EMULSION, CONTENIDO_DE_ASFALTENOS, CONTENIDO_DE_PARAFINAS, 
-        CONTENIDO_DE_RESINAS, INDICE_DE_ESTABILIDAD_COLOIDAL, INDICE_DE_ESTABILIDAD_DEL_AGUA, PH, 
-        SALINIDAD, VISCOSIDAD_DEL_ACEITE, SISTEMA_ACIDO_SOLUBILIDAD, PESO_MUESTRA_INICIAL, 
-        PESO_MUESTRA_FINAL, SOLUBILIDAD, SISTEMA_ACIDO_GRABADO_DE_NUCLEOS, NUCLEO_DE_FORMACION, 
-        GRABADO, TIPO_DE_GEL_LINEAL, VISCOSIDAD_DEL_GEL_LINEAL, TIEMPO_DE_RETICULACION, 
-        PH_GEL_LINEAL, TIEMPO_DE_ROMPEDOR_DEL_GEL, TRANSACTION_ID) VALUES ?`,
-    submit: `INSERT INTO IntervencionesLabTestsAcido (
-        LAB_ID, INTERVENTION_ID, WELL_FORMACION_ID, CONTENIDO_DE_ACEITE, CONTENIDO_DE_AGUA, 
-        CONTENIDO_DE_EMULSION, CONTENIDO_DE_SOLIDOS, TIPO_DE_SOLIDOS, DENSIDAD_DEL_ACEITE, 
-        DENSIDAD_DEL_AGUA, DENSIDAD_DE_LA_EMULSION, CONTENIDO_DE_ASFALTENOS, CONTENIDO_DE_PARAFINAS, 
-        CONTENIDO_DE_RESINAS, INDICE_DE_ESTABILIDAD_COLOIDAL, INDICE_DE_ESTABILIDAD_DEL_AGUA, PH, 
-        SALINIDAD, VISCOSIDAD_DEL_ACEITE, SISTEMA_ACIDO_SOLUBILIDAD, PESO_MUESTRA_INICIAL, 
-        PESO_MUESTRA_FINAL, SOLUBILIDAD, SISTEMA_ACIDO_GRABADO_DE_NUCLEOS, NUCLEO_DE_FORMACION, 
-        GRABADO, TIPO_DE_GEL_LINEAL, VISCOSIDAD_DEL_GEL_LINEAL, TIEMPO_DE_RETICULACION, 
-        PH_GEL_LINEAL, TIEMPO_DE_ROMPEDOR_DEL_GEL, TRANSACTION_ID) VALUES ?`,
-    loadSave: `SELECT * FROM _IntervencionesLabTestsAcidoSave WHERE TRANSACTION_ID = ?`,
-    loadTransaction: `SELECT * FROM IntervencionesLabTestsAcido WHERE TRANSACTION_ID = ?`    
-}
-
-const INSERT_LAB_APUNTALADO_QUERY = {
-    save: `INSERT INTO _IntervencionesLabTestsApuntaladoSave (
-        LAB_ID, INTERVENTION_ID, WELL_FORMACION_ID, CONTENIDO_DE_ACEITE, CONTENIDO_DE_AGUA, 
-        CONTENIDO_DE_EMULSION, CONTENIDO_DE_SOLIDOS, TIPO_DE_SOLIDOS, DENSIDAD_DEL_ACEITE, 
-        DENSIDAD_DEL_AGUA, DENSIDAD_DE_LA_EMULSION, CONTENIDO_DE_ASFALTENOS, CONTENIDO_DE_PARAFINAS, 
-        CONTENIDO_DE_RESINAS, INDICE_DE_ESTABILIDAD_COLOIDAL, INDICE_DE_ESTABILIDAD_DEL_AGUA, PH, 
-        SALINIDAD, VISCOSIDAD_DEL_ACEITE, TIPO_DE_GEL_LINEAL, VISCOSIDAD_DEL_GEL_LINEAL, 
-        TIEMPO_DE_RETICULACION, PH_GEL_LINEAL, TIEMPO_DE_ROMPEDOR_DEL_GEL, TAMANO_DEL_APUNTALANTE, 
-        GRAVEDAD_ESPECIFICA, ESFERICIDAD, REDONDEO, TURBIDEZ, RESISTENCIA, 
-        PRUEBA_DE_SOLUBILIDAD_CON_ACIDO, TRANSACTION_ID) VALUES ?`,
-    submit: `INSERT INTO IntervencionesLabTestsApuntalado (
-        LAB_ID, INTERVENTION_ID, WELL_FORMACION_ID, CONTENIDO_DE_ACEITE, CONTENIDO_DE_AGUA, 
-        CONTENIDO_DE_EMULSION, CONTENIDO_DE_SOLIDOS, TIPO_DE_SOLIDOS, DENSIDAD_DEL_ACEITE, 
-        DENSIDAD_DEL_AGUA, DENSIDAD_DE_LA_EMULSION, CONTENIDO_DE_ASFALTENOS, CONTENIDO_DE_PARAFINAS, 
-        CONTENIDO_DE_RESINAS, INDICE_DE_ESTABILIDAD_COLOIDAL, INDICE_DE_ESTABILIDAD_DEL_AGUA, PH, 
-        SALINIDAD, VISCOSIDAD_DEL_ACEITE, TIPO_DE_GEL_LINEAL, VISCOSIDAD_DEL_GEL_LINEAL, 
-        TIEMPO_DE_RETICULACION, PH_GEL_LINEAL, TIEMPO_DE_ROMPEDOR_DEL_GEL, TAMANO_DEL_APUNTALANTE, 
-        GRAVEDAD_ESPECIFICA, ESFERICIDAD, REDONDEO, TURBIDEZ, RESISTENCIA, 
-        PRUEBA_DE_SOLUBILIDAD_CON_ACIDO, TRANSACTION_ID) VALUES ?`,
-    loadSave: `SELECT * FROM _IntervencionesLabTestsApuntaladoSave WHERE TRANSACTION_ID = ?`,
-    loadTransaction: `SELECT * FROM IntervencionesLabTestsApuntalado WHERE TRANSACTION_ID = ?`    
-}
 
 const INSERT_COSTS_QUERY = {
     save: `INSERT INTO _IntervencionesEstimatedCostsSave (
@@ -550,6 +494,83 @@ const INSERT_TRANSACTION = {
         (?, ?, ?, ?)`, 
 }
 
+
+const INSERT_LAB_TEST_CARACTERIZACION_FISICO = {
+    save: `INSERT INTO _IntervencionesLabTestsCaracterizacionFisicoSave (
+        LAB_ID, INTERVENTION_ID, WELL_FORMACION_ID, PORENTAJE_DE_ACEITE, PORENTAJE_DE_AGUA, 
+        PORENTAJE_DE_EMULSION, PORENTAJE_DE_SOLIDOS, PORENTAJE_DE_ASFALTENOS, PORENTAJE_DE_PARAFINAS, 
+        PORENTAJE_DE_RESINAS_ASFALTICAS, PORENTAJE_DE_CONTENIDO_DE_SOLIDOS, DENSIDAD_DEL_ACEITE, 
+        DENSIDAD_DEL_AGUA, DENSIDAD_DE_LA_EMULSION, VISCOSIDAD_DEL_ACEITE, VISCOSIDAD_DE_LA_EMULSION, 
+        PH_DEL_AGUA, SALINIDAD_DEL_AGUA, SALINIDAD_DEL_ACEITE, TRANSACTION_ID
+    ) VALUES ?`,
+    submit: `INSERT INTO IntervencionesLabTestsCaracterizacionFisico (
+        LAB_ID, INTERVENTION_ID, WELL_FORMACION_ID, PORENTAJE_DE_ACEITE, PORENTAJE_DE_AGUA, 
+        PORENTAJE_DE_EMULSION, PORENTAJE_DE_SOLIDOS, PORENTAJE_DE_ASFALTENOS, PORENTAJE_DE_PARAFINAS, 
+        PORENTAJE_DE_RESINAS_ASFALTICAS, PORENTAJE_DE_CONTENIDO_DE_SOLIDOS, DENSIDAD_DEL_ACEITE, 
+        DENSIDAD_DEL_AGUA, DENSIDAD_DE_LA_EMULSION, VISCOSIDAD_DEL_ACEITE, VISCOSIDAD_DE_LA_EMULSION, 
+        PH_DEL_AGUA, SALINIDAD_DEL_AGUA, SALINIDAD_DEL_ACEITE, TRANSACTION_ID
+    ) VALUES ?`,
+}
+
+const INSERT_LAB_TEST_PRUEBAS_DE_SOLUBILIDAD = {
+    save: `INSERT INTO _IntervencionesLabTestsPruebasDeSolubilidadSave (
+    LAB_ID, INTERVENTION_ID, WELL_FORMACION_ID, TIPO_DE_MUESTRA, PESO_DE_LA_MUESTRA, TIPO_DE_SISTEMA_QUIMICO, 
+    PESO_FINAL_DE_LA_MUESTRA, SOLUBILIDAD, TRANSACTION_ID) VALUES 
+    ?`,
+    submit: `INSERT INTO IntervencionesLabTestsPruebasDeSolubilidad (
+    LAB_ID, INTERVENTION_ID, WELL_FORMACION_ID, TIPO_DE_MUESTRA, PESO_DE_LA_MUESTRA, TIPO_DE_SISTEMA_QUIMICO, 
+    PESO_FINAL_DE_LA_MUESTRA, SOLUBILIDAD, TRANSACTION_ID) VALUES 
+    ?`
+}
+
+
+
+const INSERT_LAB_TEST_PRUEBAS_DE_COMPATIBILIDAD = {
+    save: `INSERT INTO _IntervencionesLabTestsPruebasDeCompatibilidadSave (
+    ID, LAB_ID, INTERVENTION_ID, WELL_FORMACION_ID, DISENO, SISTEMA, 
+    ACEITE_DEL_POZO, TIEMPO_DE_ROMPIMIENTO, SEPARACION_DE_FASES, SOLIDOS, CONDICion, 
+    TRANSACTION_ID) VALUES ?`,
+    submit: `INSERT INTO IntervencionesLabTestsPruebasDeCompatibilidad (
+    ID, LAB_ID, INTERVENTION_ID, WELL_FORMACION_ID, DISENO, SISTEMA, 
+    ACEITE_DEL_POZO, TIEMPO_DE_ROMPIMIENTO, SEPARACION_DE_FASES, SOLIDOS, CONDICion, 
+    TRANSACTION_ID) VALUES ?`,
+}
+
+const INSERT_LAB_TEST_PRUEBAS_PARA_APUNTALANTE = {
+    save: `INSERT INTO _IntervencionesLabTestsPruebasParaApuntalanteSave (
+    LAB_ID, INTERVENTION_ID, WELL_FORMACION_ID, ESFERICIDAD, REDONDEZ, 
+    RESISTENCIA_A_LA_COMPRESION, MALLA, AGLUTINAMIENTO, TURBIDEZ, SOLUBILIDAD, 
+    TRANSACTION_ID) VALUES 
+    ?`,
+    submit: `INSERT INTO IntervencionesLabTestsPruebasParaApuntalante (
+    LAB_ID, INTERVENTION_ID, WELL_FORMACION_ID, ESFERICIDAD, REDONDEZ, 
+    RESISTENCIA_A_LA_COMPRESION, MALLA, AGLUTINAMIENTO, TURBIDEZ, SOLUBILIDAD, 
+    TRANSACTION_ID) VALUES 
+    ?`,
+}
+
+const INSERT_LAB_TEST_PRUEBAS_GEL_DE_FRACTURA = {
+    save: `INSERT INTO _IntervencionesLabTestsPruebasGelDeFracturaSave (
+    LAB_ID, INTERVENTION_ID, WELL_FORMACION_ID, HIDRATACION, TIEMPO_DE_ACTIVACION_DEL_GEL, 
+    DETERMINACION_DE_PH, TIEMPO_DE_ROMPIMIENTO, DOSIFICATION_DE_QUEBRADORES, VISCOSIDAD_DEL_GEL_DE_FRACTURA, TRANSACTION_ID) VALUES 
+    ?`,
+    submit: `INSERT INTO IntervencionesLabTestsPruebasGelDeFractura (
+    LAB_ID, INTERVENTION_ID, WELL_FORMACION_ID, HIDRATACION, TIEMPO_DE_ACTIVACION_DEL_GEL, 
+    DETERMINACION_DE_PH, TIEMPO_DE_ROMPIMIENTO, DOSIFICATION_DE_QUEBRADORES, VISCOSIDAD_DEL_GEL_DE_FRACTURA, TRANSACTION_ID) VALUES 
+    ?`,
+}
+
+const INSERT_LAB_TEST_PRUEBAS_DE_GRABADO = {
+    save: `INSERT INTO _IntervencionesLabTestsPruebasDeGrabadoSave (
+    ID, LAB_ID, INTERVENTION_ID, WELL_FORMACION_ID, SISTEMA_ACIDO, TIEMPO_DE_CONTACTO, GRABADO, TRANSACTION_ID
+    ) VALUES ?`,
+    submit: `INSERT INTO IntervencionesLabTestsPruebasDeGrabado (
+    ID, LAB_ID, INTERVENTION_ID, WELL_FORMACION_ID, SISTEMA_ACIDO, TIEMPO_DE_CONTACTO, GRABADO, TRANSACTION_ID
+    ) VALUES ?`,
+}
+
+
+const DUMMY_QUERY = 'SELECT(1) FROM Users LIMIT 1'
 
 export const getFields = async (transID, action, cb) => {
   connection.query(INSERT_FIELDS_QUERY[action], [transID], (err, results) => {
@@ -597,8 +618,6 @@ export const getAnalisisAgua = async (transID, action, cb) => {
 
 export const getEmboloViajero = async (transID, action, cb) => {
     connection.query(INSERT_EMBOLO_VIAJERO_QUERY[action], [transID], (err, results) => {
-        console.log(err)
-        console.log(results)
         cb(results)
     })
 }
@@ -643,11 +662,7 @@ export const getWellPressure = async (transID, action, cb) => {
 }
 
 export const getWellAforos = async (transID, action, cb) => {
-    console.log('queirying well afroso', action)
-    console.log(INSERT_WELL_AFOROS_QUERY[action])
   connection.query(INSERT_WELL_AFOROS_QUERY[action], [transID], (err, results) => {
-    console.log('i didi it', err)
-    console.log(results)
     cb(results)
    })
 }
@@ -704,21 +719,7 @@ export const getCedulaApuntalado = async (transID, action, cb) => {
         cb(results)
     })
 }
-export const getLabResults = async (transID, action, cb) => {
-    connection.query(INSERT_LAB_RESULTS_QUERY[action], [transID], (err, results) => {
-        cb(results)
-    })
-}
-export const getLabAcido = async (transID, action, cb) => {
-    connection.query(INSERT_LAB_ACIDO_QUERY[action], [transID], (err, results) => {
-        cb(results)
-    })
-}
-export const getLabApuntalado = async (transID, action, cb) => {
-    connection.query(INSERT_LAB_APUNTALADO_QUERY[action], [transID], (err, results) => {
-        cb(results)
-    })
-}
+
 export const getCosts = async (transID, action, cb) => {
     connection.query(INSERT_COSTS_QUERY[action], [transID], (err, results) => {
         cb(results)
@@ -739,8 +740,6 @@ export const create = async (body, action, cb) => {
   // const { pozo } = JSON.parse(body.fichaTecnicaDelPozoHighLevel)
   // console.log('pzo', pozo)
 
-
-  console.log('inside create', action)
 
   const finalObj = {}
   for(let k of allKeys) {
@@ -905,7 +904,7 @@ export const create = async (body, action, cb) => {
       simResultsFile = finalObj.resultadosSimulacionApuntalado.imgName
   }
 
-
+  console.log('hererererer ', pruebasDeLaboratorioData)
 
   // write to db
   console.log('pozo', pozo)
@@ -1036,7 +1035,7 @@ export const create = async (body, action, cb) => {
                   console.log('agua', err)
                   console.log('agua', results)
 
-                  let query = 'SELECT(1) FROM WellProductionSystemsEmboloViajero'
+                  let query = 'SELECT(1) FROM Users LIMIT 1'
 
                   switch(tipoDeSistemo) {
                     case 'emboloViajero':
@@ -1144,7 +1143,6 @@ export const create = async (body, action, cb) => {
 
                       values = []
 
-                      console.log(presionDataPozo)
 
                       presionDataPozo.forEach(i => {
                         values.push([wellFormacionID, i.fecha, i.Qo, i.Np, i.Pws, i.Pr, transactionID])
@@ -1268,32 +1266,14 @@ export const create = async (body, action, cb) => {
                                   }
 
                                   values = []
-
                                   const labResultValues = []
-                                  const labExtraValues = []
 
                                   console.log(pruebasDeLaboratorioData)
-                                  if (pruebasDeLaboratorioData && pruebasDeLaboratorioData[0].sistemasTable && pruebasDeLaboratorioData[0].sistemasTable.length > 0) {
+                                  if (pruebasDeLaboratorioData && pruebasDeLaboratorioData[0]) {
                                     pruebasDeLaboratorioData.forEach(i => {
                                     const labID = Math.floor(Math.random() * 1000000000)
+                                    i.labID = labID
                                     values.push([labID, interventionID, wellFormacionID, i.type, i.fechaMuestreo, i.fechaPrueba, i.compania, i.superviso, i.obervaciones, transactionID])
-                                    if (i.sistemasTable) {
-                                        i.sistemasTable.forEach(i => {
-                                          let resultID = Math.floor(Math.random() * 1000000000)
-                                          labResultValues.push([resultID, labID, interventionID, wellFormacionID, i.sistem, i.tiempoRompimiento, i.interfase, i.solidosFiltrar, i.resultado, transactionID])
-                                        })
-                                    }
-                                    let newRow = [labID, interventionID, wellFormacionID, i.contenidoDeAceite, i.contenidoDeAgua, i.contenidoDeEmulsion, i.contenidoDeSolidos, i.tipoDeSolidos, i.densidadDelAceite, i.densidadDelAgua, i.densidadDeLaEmulsion, i.contenidoDeAsfaltenos, i.contenidoDeParafinas, i.contenidoDeResinas, i.indiceDeEstabilidadDelColoidal, i.indiceDeEstabilidadDelAgua, i.pH, i.salinidad, i.viscosidadDelAceite, transactionID]
-                                    if (tipoDeIntervenciones === 'acido') {
-                                      newRow = newRow.slice(0, -1)
-                                      newRow = newRow.concat([i.sistemAcido, i.pesoMuestraInicial, i.pesoMuestraFinal, i.solubilidad, i.sistemAcidoGrabado, i.nucleoDeFormacion, i.grabado, i.tipoDeGelLineal, i.viscosidadDelGelLineal, i.tiempoDeReticulacion, i.pHGelLineal, i.tiempoDeRompedorDelGel, transactionID])
-                                      labExtraValues.push(newRow)
-                                    }
-                                    else if (tipoDeIntervenciones === 'apuntalado') {
-                                      newRow = newRow.slice(0, -1)
-                                      newRow = newRow.concat([i.tipoDeGelLineal, i.viscosidadDelGelLineal, i.tiempoDeReticulacion, i.pHGelLineal, i.tiempoDeRompedorDelGel, i.tamanoDelApuntalante, i.gravedadEspecifica, i.esfericidad, i.redondeo, i.turbidez, i.psi, i.pruebaDeSolubilidadConAcida, transactionID])
-                                      labExtraValues.push(newRow)
-                                    }
                                   })
                                   
                                   }
@@ -1354,28 +1334,6 @@ export const create = async (body, action, cb) => {
                                         })
                                       }
 
-                                      connection.query((action === 'save' ? INSERT_LAB_RESULTS_QUERY.save : INSERT_LAB_RESULTS_QUERY.submit), [labResultValues], (err, results) => {
-                                        console.log('lab results', err)
-                                        console.log('lab results', results)
-                                        if (err) {
-                                          return connection.rollback(function() {
-                                            console.log('rolling back!!! 2')
-                                            cb(err)
-                                          })
-                                        }
-
-                                        query =  tipoDeIntervenciones === 'estimulacion' ? `select(1) FROM Users LIMIT 1` : tipoDeIntervenciones === 'acido' ? (action === 'save' ? INSERT_LAB_ACIDO_QUERY.save : INSERT_LAB_ACIDO_QUERY.submit) : (action === 'save' ? INSERT_LAB_APUNTALADO_QUERY.save : INSERT_LAB_APUNTALADO_QUERY.submit)
-                                        
-                                        connection.query(query, [labExtraValues], (err, results) => {
-                                          console.log('lab extras', err)
-                                          console.log('lab extras', results)
-                                          // TODO: Re-add this error handler when labs are ready
-                                          if (err) {
-                                            // return connection.rollback(function() {
-                                            //   console.log('rolling back!!! 2')
-                                            //   cb(err)
-                                            // })
-                                          }
 
                                           values = []
                                           estimacionCostosData.forEach(i => {
@@ -1420,23 +1378,159 @@ export const create = async (body, action, cb) => {
                                                   })
                                                 }
 
-                                                connection.commit(function(err) {
-                                                    if (err) {
+
+                                                values = []
+                                                let caracterizacionFisicoData = pruebasDeLaboratorioData.filter(i => i.type === 'caracterizacionFisico')
+                                                
+                                                caracterizacionFisicoData.forEach(i => {
+                                                  values.push([i.labID, interventionID, wellFormacionID, i.percentAceite, i.percentAgua, i.percentEmulsion,
+                                                    i.percentSolidos, i.percentAsfaltenos, i.percentParafinas, i.percentResinasAsfalticas, i.percentContenidoDeSolidos,
+                                                    i.densityAceite, i.densityAgua, i.densityEmulsion, i.viscosityAceite, i.viscosityEmulsion,
+                                                    i.phDelAgua, i.salinidadDelAgua, i.salinidadDelAceite, transactionID])
+                                                })
+
+                                                connection.query(action === 'save' ? INSERT_LAB_TEST_CARACTERIZACION_FISICO.save : INSERT_LAB_TEST_CARACTERIZACION_FISICO.submit, [values], (err, results) => {
+                                                  console.log('lab test caracterizacionFisico', err)
+                                                  console.log('lab test caracterizacionFisico', results)
+                                                  if (err) {
+                                                    return connection.rollback(function() {
+                                                      console.log('rolling back!!! 2')
                                                       cb(err)
+                                                    })
+                                                  }
+
+
+                                                  values = []
+                                                  let pruebasSolubilidadData = pruebasDeLaboratorioData.filter(i => i.type === 'pruebasDeSolubilidad')
+                                                
+                                                  pruebasSolubilidadData.forEach(i => {
+                                                    values.push([i.labID, interventionID, wellFormacionID, i.tipoDeMuestra, i.pesoDeLaMuestra, i.tipoDeSistemaEmpleado,
+                                                      i.pesoDeLaMuestraFinal, i.solubilidad, transactionID])
+                                                  })
+
+                                                  connection.query(action === 'save' ? INSERT_LAB_TEST_PRUEBAS_DE_SOLUBILIDAD.save : INSERT_LAB_TEST_PRUEBAS_DE_SOLUBILIDAD.submit, [values], (err, results) => {
+                                                    console.log('lab test solubildad', err)
+                                                    console.log('lab test solubildad', results)
+                                                    if (err) {
                                                       return connection.rollback(function() {
-                                                        console.log('something went terrible')
-                                                        throw err;
-                                                      });
+                                                        console.log('rolling back!!! 2')
+                                                        cb(err)
+                                                      })
                                                     }
-                                                    console.log('success!');
-                                                    var log = 'Post ' + results + ' added';
-                                                    console.log(log)
-                                                    cb(null)
+
+                                                    values = []
+                                                    let pruebasCompatibilidadData = pruebasDeLaboratorioData.filter(i => i.type === 'pruebasDeCompatibilidad')
+                                                  
+        
+                                                    pruebasCompatibilidadData.forEach(i => {
+                                                      i.compatabilidadTable.forEach(j => {
+                                                        let id = Math.floor(Math.random() * 1000000000)
+                                                        values.push([id, i.labID, interventionID, wellFormacionID, j.diseno, j.sistema, j.aceiteDelPozo,
+                                                          j.tiempoDeRompimiento, j.separacionDeFases, j.solidos, j.condicion, transactionID])
+                                                      })
+                                                    })
+
+
+                                                    connection.query(action === 'save' ? INSERT_LAB_TEST_PRUEBAS_DE_COMPATIBILIDAD.save : INSERT_LAB_TEST_PRUEBAS_DE_COMPATIBILIDAD.submit, [values], (err, results) => {
+                                                      console.log('lab test compatibilidad', err)
+                                                      console.log('lab test compatibilidad', results)
+
+
+                                                      if (err) {
+                                                        return connection.rollback(function() {
+                                                          console.log('rolling back!!! 2')
+                                                          cb(err)
+                                                        })
+                                                      }
+
+
+                                                      values = []
+                                                      let pruebasApuntalanteData = pruebasDeLaboratorioData.filter(i => i.type === 'pruebasParaApuntalante')
+                                                    
+          
+                                                      pruebasApuntalanteData.forEach(i => {
+                                                        values.push([i.labID, interventionID, wellFormacionID, i.esfericidad, i.redondez, i.resistenciaCompresion,
+                                                          i.malla, i.aglutinamiento, i.turbidez, i.solubilidad, transactionID])
+                                                      })
+
+                                                      connection.query(action === 'save' ? INSERT_LAB_TEST_PRUEBAS_PARA_APUNTALANTE.save : INSERT_LAB_TEST_PRUEBAS_PARA_APUNTALANTE.submit, [values], (err, results) => {
+                                                        console.log('lab test apuntalante', err)
+                                                        console.log('lab test apuntalante', results)
+
+
+                                                        if (err) {
+                                                          return connection.rollback(function() {
+                                                            console.log('rolling back!!! 2')
+                                                            cb(err)
+                                                          })
+                                                        }
+
+                                                        values = []
+                                                        let pruebasGelDeFracturaData = pruebasDeLaboratorioData.filter(i => i.type === 'pruebasGelDeFractura')
+                                                      
+            
+                                                        pruebasGelDeFracturaData.forEach(i => {
+                                                          values.push([i.labID, interventionID, wellFormacionID, i.hidratacionDelFluido, i.tiempoDeActivacion, i.determinacionDePh,
+                                                            i.tiempoDeRompimiento, i.dosificacionDeQuebradors, i.viscosidadDelGelDeFractura, transactionID])
+                                                        })
+
+                                                        connection.query(action === 'save' ? INSERT_LAB_TEST_PRUEBAS_GEL_DE_FRACTURA.save : INSERT_LAB_TEST_PRUEBAS_GEL_DE_FRACTURA.submit, [values], (err, results) => {
+                                                          console.log('lab test fractura', err)
+                                                          console.log('lab test fractura', results)
+
+
+                                                          if (err) {
+                                                            return connection.rollback(function() {
+                                                              console.log('rolling back!!! 2')
+                                                              cb(err)
+                                                            })
+                                                          }
+
+                                                          values = []
+                                                          let pruebasGrabadoData = pruebasDeLaboratorioData.filter(i => i.type === 'pruebasDeGrabado')
+                                                        
+              
+                                                          pruebasGrabadoData.forEach(i => {
+                                                            i.grabadoTable.forEach(j => {
+                                                              let id = Math.floor(Math.random() * 1000000000)
+                                                              values.push([id, i.labID, interventionID, wellFormacionID, j.sistemaAcido, j.tiempoDeContacto,
+                                                              j.grabado, transactionID])
+                                                            })
+                                                          })
+
+                                                          connection.query(action === 'save' ? INSERT_LAB_TEST_PRUEBAS_DE_GRABADO.save : INSERT_LAB_TEST_PRUEBAS_DE_GRABADO.submit, [values], (err, results) => {
+                                                            console.log('lab test grabado', err)
+                                                            console.log('lab test grabado', results)
+
+
+                                                            if (err) {
+                                                              return connection.rollback(function() {
+                                                                console.log('rolling back!!! 2')
+                                                                cb(err)
+                                                              })
+                                                            }
+
+                                                            connection.commit(function(err) {
+                                                                if (err) {
+                                                                  cb(err)
+                                                                  return connection.rollback(function() {
+                                                                    console.log('something went terrible')
+                                                                    throw err;
+                                                                  });
+                                                                }
+                                                                console.log('success!');
+                                                                var log = 'Post ' + results + ' added';
+                                                                console.log(log)
+                                                                cb(null)
+                                                            })
+                                                          })
+                                                        })
+                                                      })
+                                                    })
+                                                  })
                                                 })
                                               })
                                             })
-                                          })
-                                        })
                                       })
                                     })
                                   })
