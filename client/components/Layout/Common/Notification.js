@@ -1,7 +1,7 @@
 import React, { Component } from 'react'
 import { connect } from 'react-redux'
 import { ToastContainer, toast } from 'react-toastify'
-import { setIsLoading } from '../../../redux/actions/global'
+import { setIsLoading, resetNotification } from '../../../redux/actions/global'
 import 'react-toastify/dist/ReactToastify.css'
 
 const Toasty = ({ type, notification }) => {
@@ -28,41 +28,8 @@ const Toasty = ({ type, notification }) => {
   )
 }
 
-// class Notification extends Component {
-//   constructor(props) {
-//     super(props)
-//     this.state = {
-//       notify: false
-//     }
-//   }
-
-//   componentDidUpdate(prevProps) {
-//     const type = 'success'
-//     const toastProps = {
-//       position: 'top-right',
-//       autoClose: false,
-//       // hideProgressBar: false,
-//       closeOnClick: true,
-//       // pauseOnHover: true,
-//       type,
-//       newestOnTop: true,
-//       draggable: true,
-//       draggablePercent: 60,
-//     }
-//     const { isSaved } = this.props
-//     if (isSaved) {
-//       this.props.setSaved(false)
-//       toast(<Toasty type={type} notification="successful save" />, { ...toastProps })
-//     }
-//   }
-
-//   render() {
-//     return <ToastContainer />
-//   }
-// }
-
-const Notification = ({ saved, loaded, submitted, setLoading }) => {
-  console.log('Notifying?', saved, loaded)
+const Notification = ({ notificationText, showNotification, notificationType, resetNotifications }) => {
+  // console.log('Notifying?', saved, loaded)
     const toastProps = {
       position: 'top-right',
       autoClose: 5000,
@@ -74,24 +41,29 @@ const Notification = ({ saved, loaded, submitted, setLoading }) => {
       draggablePercent: 60,
     }
     const toastPropsCopy = { ...toastProps }
-    let notification = ''
-    if (saved !== null) {
-      toastPropsCopy.type = saved
-      notification = saved === 'success' ? '¡Exito! Su información se ha guardado' : '¡Error! Su información no se guardó'
-      setLoading({ saved: null })
-    } else if (loaded !== null) {
-      toastPropsCopy.type = loaded
-      notification = loaded === 'success' ? '¡Descarga existosa!' : '¡Error! Su información no se descargó'
-      setLoading({ loaded: null })
-    } else if (submitted !== null) {
-      toastPropsCopy.type = submitted
-      notification = loaded === 'success' ? '¡Exito! Su información se ha guardado' : '¡Error! Su información no se guardó'
-      setLoading({ submitted: null })
+    if (showNotification) {
+      toastPropsCopy.type = notificationType
+      toast(<Toasty type={notificationType} notification={notificationText} />, toastPropsCopy)
+      resetNotifications()
     }
+    // let notification = ''
+    // if (saved !== null) {
+    //   toastPropsCopy.type = saved
+    //   notification = saved === 'success' ? '¡Exito! Su información se ha guardado' : '¡Error! Su información no se guardó'
+    //   setLoading({ saved: null })
+    // } else if (loaded !== null) {
+    //   toastPropsCopy.type = loaded
+    //   notification = loaded === 'success' ? '¡Descarga existosa!' : '¡Error! Su información no se descargó'
+    //   setLoading({ loaded: null })
+    // } else if (submitted !== null) {
+    //   toastPropsCopy.type = submitted
+    //   notification = loaded === 'success' ? '¡Exito! Su información se ha guardado' : '¡Error! Su información no se guardó'
+    //   setLoading({ submitted: null })
+    // }
 
-    if (saved || loaded || submitted) {
-      toast(<Toasty type={submitted} notification={notification} />, toastPropsCopy)
-    }
+    // if (saved || loaded || submitted) {
+    //   toast(<Toasty type={submitted} notification={notification} />, toastPropsCopy)
+    // }
     
     return <ToastContainer />
 }
@@ -100,10 +72,15 @@ const mapStateToProps = state => ({
   saved: state.getIn(['global', 'saved']),
   loaded: state.getIn(['global', 'loaded']),
   submitted: state.getIn(['global', 'submitted']),
+  text: state.getIn(['global', 'notificationText']),
+  showNotification: state.getIn(['global', 'showNotification']),
+  notificationText: state.getIn(['global', 'notificationText']),
+  notificationType: state.getIn(['global', 'notificationType']),
 })
 
 const mapDispatchToProps = dispatch => ({
   setLoading: obj => dispatch(setIsLoading(obj)),
+  resetNotifications: () => dispatch(resetNotification())
 })
 
 export default connect(mapStateToProps, mapDispatchToProps)(Notification)

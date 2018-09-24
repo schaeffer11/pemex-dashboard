@@ -55,20 +55,22 @@ const appReducer = combineReducers({
 })
 
 const rootReducer = (state, action) => {
-  const user = state.get('user')
-  const app = state.get('app')
-  const global = state.get('global')
-  const router = state.get('router')
-  const forms = state.get('forms')
-
-  if (action.type === 'LOAD_SAVE') {
-    const { saved } = action
-    const newState = { ...saved, user, app, global, router, forms }
-    return state = fromJS(newState)
-  }
-
-  if (action.type === 'RESET_APP') {
-    return state = Map({ user, app })
+  // We remove persisted state so we need to ensure a state exists for the following:
+  if (state) {
+    const user = state.get('user')
+    const app = state.get('app')
+    const global = state.get('global')
+    const router = state.get('router')
+    const forms = state.get('forms')
+  
+    if (action.type === 'LOAD_SAVE') {
+      const { saved } = action
+      const newState = { ...saved, user, app, global, router, forms }
+      return state = fromJS(newState)
+    }
+    if (action.type === 'RESET_APP') {
+      return state = Map({ user, app })
+    }
   }
   return appReducer(state, action)
 }
