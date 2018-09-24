@@ -5,10 +5,10 @@ import axios from 'axios'
 
 import PropuestaDeApuntalado from './PropuestaDeApuntalado'
 import PruebasDeLaboratorio from '../PruebasDeLaboratorio'
-import PruebasDeLaboratorioApuntaladoExtra from './PruebasDeLaboratorioApuntaladoExtra'
+import PruebasDeLaboratorioExtra from '../PruebasDeLaboratorioExtra'
 import ResultadosDeLaSimulacionApuntalado from './ResultadosDeLaSimulacionApuntalado'
 import EstimacionIncProduccionApuntalado from './EstimacionIncProduccionApuntalado'
-import EstimacionCostosApuntalado from './EstimacionCostosApuntalado'
+import EstimacionCostos from '../EstimacionCostos'
 import { setShowForms } from '../../../../../redux/actions/global'
 
 @autobind class ApuntaladoMultiStepForm extends Component {
@@ -22,10 +22,10 @@ import { setShowForms } from '../../../../../redux/actions/global'
     this.forms = [
       {'title' : 'Propuesta de Fracturamiento Apuntalado', 'content': <PropuestaDeApuntalado/> },  
       {'title' : 'Pruebas de Laboratorio', 'content': <PruebasDeLaboratorio/> },
-      {'title' : 'Pruebas de Laboratorio de Fracturamiento Apuntalado', 'content': <PruebasDeLaboratorioApuntaladoExtra/> },
+      {'title' : 'Pruebas de Laboratorio de Fracturamiento Apuntalado', 'content': <PruebasDeLaboratorioExtra/> },
       {'title' : 'Resultados de la Simulacion de Fracturamiento Apuntalado', 'content': <ResultadosDeLaSimulacionApuntalado/> },
       {'title' : 'Estimacion del Incremento de Produccion', 'content': <EstimacionIncProduccionApuntalado/> },
-      {'title' : 'Estimacion de Costos de Fracturamiento Apuntalado', 'content': <EstimacionCostosApuntalado/> }
+      {'title' : 'Estimacion de Costos de Fracturamiento Apuntalado', 'content': <EstimacionCostos/> }
     ];
 
   }

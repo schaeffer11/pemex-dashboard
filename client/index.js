@@ -24,7 +24,7 @@ const history = createBrowserHistory()
 const composeEnhancer = window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__ || compose
 const store = createStore(
   connectRouter(history)(rootReducer),
-  persistedState,
+  // persistedState,
   composeEnhancer(
     applyMiddleware( 
       thunk,

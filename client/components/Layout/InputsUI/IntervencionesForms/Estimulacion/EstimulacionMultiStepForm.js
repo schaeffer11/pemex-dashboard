@@ -5,10 +5,10 @@ import axios from 'axios'
 
 import PropuestaDeEstimulacion from './PropuestaDeEstimulacion'
 import PruebasDeLaboratorio from '../PruebasDeLaboratorio'
-import PruebasDeLaboratorioEstimulacionExtra from './PruebasDeLaboratorioEstimulacionExtra'
+import PruebasDeLaboratorioExtra from '../PruebasDeLaboratorioExtra'
 import ResultadosDeLaSimulacionEstimulacion from './ResultadosDeLaSimulacionEstimulacion'
 import EstimacionIncProduccionEstimulacion from './EstimacionIncProduccionEstimulacion'
-import EstimacionCostosEstimulacion from './EstimacionCostosEstimulacion'
+import EstimacionCostos from '../EstimacionCostos'
 import { setShowForms } from '../../../../../redux/actions/global'
 
 @autobind class EstimulacionMultiStepForm extends Component {
@@ -22,10 +22,10 @@ import { setShowForms } from '../../../../../redux/actions/global'
     this.forms = [
       {'title' : 'Propuesta de Tratamiento de Estimulacion', 'content': <PropuestaDeEstimulacion/> },  
       {'title' : 'Pruebas de Laboratorio', 'content': <PruebasDeLaboratorio/> },
-      {'title' : 'Pruebas de Laboratorio de Estimulacion', 'content': <PruebasDeLaboratorioEstimulacionExtra/> },
+      {'title' : 'Pruebas de Laboratorio de Estimulacion', 'content': <PruebasDeLaboratorioExtra/> },
       {'title' : 'Resultados de la Simulacion de Estimulacion', 'content': <ResultadosDeLaSimulacionEstimulacion/> },
       {'title' : 'Estimacion del Incremento de Produccion', 'content': <EstimacionIncProduccionEstimulacion/> },
-      {'title' : 'Estimacion de Costos de Estimulacion', 'content': <EstimacionCostosEstimulacion/> }
+      {'title' : 'Estimacion de Costos de Estimulacion', 'content': <EstimacionCostos/> }
     ];
 
   }

@@ -11,6 +11,8 @@ import BaseIntervenciones from './IntervencionesForms/BaseIntervenciones'
 import PozoMultiStepForm from './PozoForms/PozoMultiStepForm'
 import { setShowForms } from '../../../redux/actions/global'
 import { submitForm } from '../../../redux/actions/pozoFormActions'
+import Notification from '../Common/Notification'
+import Loading from '../Common/Loading'
 
 @autobind class InputsUI extends Component {
   constructor(props) {
@@ -87,9 +89,11 @@ import { submitForm } from '../../../redux/actions/pozoFormActions'
           <div className="tab-content">
             { form }
           </div>
-          <button className="submit save-button" disabled={pozoFormSubmitting} onClick={(e) => this.handleSubmit('save')}>{pozoFormSubmitting ? 'Saving...' : 'Save'}</button>
+          <button className="submit save-button" disabled={pozoFormSubmitting} onClick={(e) => this.handleSubmit('save')}>{pozoFormSubmitting ? 'Ahorro...' : 'Guardar'}</button>
           <button className="submit submit-button" disabled={pozoFormSubmitting} onClick={(e) => this.handleSubmit('submit')}>{pozoFormSubmitting ? 'Enviando...' : 'Enviar'}</button>
           <div style={{height: '10px'}}></div>
+          <Notification />
+          <Loading />
         </div>
       )
     }      

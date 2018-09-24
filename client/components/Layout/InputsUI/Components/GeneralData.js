@@ -7,8 +7,10 @@ import objectPath from 'object-path'
 
 import { setObjetivo, setAlcances, setTipoDeIntervenciones } from '../../../../redux/actions/intervencionesEstimulacion'
 import { setSubdireccion, setActivo, setCampo, setPozo, setFormacion, setChecked } from '../../../../redux/actions/pozo'
-import { setShowForms } from '../../../../redux/actions/global'
+import { setShowForms, setIsLoading } from '../../../../redux/actions/global'
 import { InputRow, InputRowUnitless, InputRowSelectUnitless, TextAreaUnitless } from '../../Common/InputRow'
+import Notification from '../../Common/Notification'
+import Loading from '../../Common/Loading'
 // import {withValidate} from '../../Common/Validate'
 
 @autobind class GeneralData extends Component {
@@ -198,34 +200,18 @@ import { InputRow, InputRowUnitless, InputRowSelectUnitless, TextAreaUnitless } 
 
   
   async handleLoad() {
-    let { user, formData } = this.props
+    let { user, formData, setLoading } = this.props
+    setLoading({ isLoading: true, loadText: 'Descargando' })
     user = user.toJS()
     formData = formData.toJS()
 
-
     const wellID = formData.pozo
     const userID = user.id
-
-    console.log(wellID, userID)
 
     let data = await fetch(`/api/getSave?userID=${userID}`)
       .then(res => res.json())
 
     let { transactionID, tipoDeIntervenciones } = data
-
-    console.log(transactionID)
-
-    let labQuery
-
-    if (tipoDeIntervenciones === 'estimulacion') {
-      labQuery = `api/getCedulaEstimulacion?transactionID=${transactionID}&saved=1`
-    }
-    else if (tipoDeIntervenciones === 'acido') {
-      labQuery = `api/getLabAcido?transactionID=${transactionID}&saved=1`
-    }
-    else if (tipoDeIntervenciones === 'apuntalado') {
-      labQuery = `api/getLabApuntalado?transactionID=${transactionID}&saved=1`
-    }
 
     Promise.all([
       fetch(`api/getFields?transactionID=${transactionID}&saved=1`).then(r => r.json()),
@@ -253,11 +239,18 @@ import { InputRow, InputRowUnitless, InputRowSelectUnitless, TextAreaUnitless } 
       fetch(`api/getCedulaEstimulacion?transactionID=${transactionID}&saved=1`).then(r => r.json()),   
       fetch(`api/getCedulaAcido?transactionID=${transactionID}&saved=1`).then(r => r.json()),   
       fetch(`api/getCedulaApuntalado?transactionID=${transactionID}&saved=1`).then(r => r.json()),      
-      // fetch(`api/getLabResults?transactionID=${transactionID}`).then(r => r.json()),
-      fetch(labQuery).then(r => r.json()),
-      // fetch(`api/getCosts?transactionID=${transactionID}`).then(r => r.json()),
+      fetch(`api/getCosts?transactionID=${transactionID}&saved=1`).then(r => r.json()),
     ])
-      .catch(error => console.log('some error i found', error))
+      .catch(error => {
+        console.log('some error i found', error)
+        // setLoading({ isLoading: false, loaded: 'error' })
+        setLoading({ 
+          isLoading: false,
+          showNotification: true,
+          notificationType: 'error',
+          notificationText: `No se ha descargado informacion del pozo: ${pozo}`
+        })
+      })
       .then((results) => {
         const newState = {}
         console.log(results)
@@ -269,7 +262,12 @@ import { InputRow, InputRowUnitless, InputRowSelectUnitless, TextAreaUnitless } 
             })
           })
         })
-
+        setLoading({ 
+          isLoading: false,
+          showNotification: true,
+          notificationType: 'success',
+          notificationText: `Se ha descargado informacion del pozo: ${wellID}`
+        })
         this.props.loadFromSave(newState)
       })
   }
@@ -285,16 +283,15 @@ import { InputRow, InputRowUnitless, InputRowSelectUnitless, TextAreaUnitless } 
       <div className='form general-data'>
         { this.makeGeneralForm() }
         { this.makeGeneralInterventionForm() }
-        <button className="submit submit-load" onClick={this.handleLoad} >Load</button>
-        <button className='submit submit-continue' disabled={this.checkIncomplete()} onClick={(e) => setShowForms(true)} >Continue</button>
+        <button className="submit submit-load" onClick={this.handleLoad} >Cargar borrdador</button>
+        <button className='submit submit-continue' disabled={this.checkIncomplete()} onClick={(e) => setShowForms(true)} >Siguiente</button>
         <button className="submit download-template" onClick={this.downloadMasterTemplate}>{'Descarga el Formato General'}</button>
+        <Notification />
+        <Loading />
       </div>
     )
   }
 }
-
-
-
 
 const validate = values => {
     const errors = {}
@@ -333,6 +330,7 @@ const mapDispatchToProps = dispatch => ({
   setTipoDeIntervenciones : val => dispatch(setTipoDeIntervenciones(val)),
   setShowForms : val => dispatch(setShowForms(val)),
   loadFromSave: values => {dispatch(testLoadFromSave(values))},
+  setLoading: obj => dispatch(setIsLoading(obj))
 })
 
 // export default withValidate(
