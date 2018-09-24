@@ -211,7 +211,7 @@ app.get('/getFields', async (req, res) => {
   getFields(transactionID, action, (data) => {
     const finalObj = {}
     
-    if (data.length > 0) {
+    if (data && data.length > 0) {
       Object.keys(data[0]).forEach(key => {
         if (map[key]) {
           const { parent, child } = map[key]
@@ -263,7 +263,7 @@ app.get('/getWell', async (req, res) => {
   getWell(transactionID, action, (data) => {
     const finalObj = {}
     
-    if (data.length > 0) {console.log(data)
+    if (data && data.length > 0) {console.log(data)
       Object.keys(data[0]).forEach(key => {
         if (map[key]) {
           const { parent, child } = map[key]
@@ -296,7 +296,7 @@ app.get('/getHistIntervenciones', async (req, res) => {
   getHistIntervenciones(transactionID, action, (data) => {
     const finalObj = {}
 
-    if (data.length > 0) {
+    if (data && data.length > 0) {
       data.forEach((d, index) => {
         const innerObj = {}
         Object.keys(d).forEach(k => {
@@ -354,7 +354,7 @@ app.get('/getLayer', async (req, res) => {
 
   getLayer(transactionID, action, (data) => {
     const finalObj = {}
-    if (data.length > 0) {
+    if (data && data.length > 0) {
       data.forEach((d, index) => {
         const innerObj = {}
         Object.keys(d).forEach(k => {
@@ -405,7 +405,7 @@ app.get('/getMudLoss', async (req, res) => {
 
   getMudLoss(transactionID, action, (data) => {
     const finalObj = {}
-    if (data.length > 0) {
+    if (data && data.length > 0) {
       data.forEach((d, index) => {
         const innerObj = {}
         Object.keys(d).forEach(k => {
@@ -465,7 +465,7 @@ app.get('/getMecanico', async (req, res) => {
 
   getMecanico(transactionID, action, (data) => {
     
-    if (data.length > 0) {const finalObj = {}
+    if (data && data.length > 0) {const finalObj = {}
       Object.keys(data[0]).forEach(key => {
         if (map[key]) {
           const { parent, child } = map[key]
@@ -512,7 +512,7 @@ app.get('/getAnalisisAgua', async (req, res) => {
 
   getAnalisisAgua(transactionID, action, (data) => {
     
-    if (data.length > 0) {const finalObj = {}
+    if (data && data.length > 0) {const finalObj = {}
       Object.keys(data[0]).forEach(key => {
         if (map[key]) {
           const { parent, child } = map[key]
@@ -800,7 +800,7 @@ app.get('/getFieldPressure', async (req, res) => {
 
   getFieldPressure(transactionID, action, (data) => {
     const finalObj = {}
-    if (data.length > 0) {
+    if (data && data.length > 0) {
       data.forEach((d, index) => {
         const innerObj = {}
         Object.keys(d).forEach(k => {
@@ -852,7 +852,7 @@ app.get('/getWellPressure', async (req, res) => {
 
   getWellPressure(transactionID, action, (data) => {
     const finalObj = {}
-    if (data.length > 0) {
+    if (data && data.length > 0) {
       data.forEach((d, index) => {
         const innerObj = {}
         Object.keys(d).forEach(k => {
@@ -955,7 +955,7 @@ app.get('/getWellProduccion', async (req, res) => {
 
   getWellProduccion(transactionID, action, (data) => {
     const finalObj = {}
-    if (data.length > 0) {
+    if (data && data.length > 0) {
       data.forEach((d, index) => {
         const innerObj = {}
         Object.keys(d).forEach(k => {
@@ -1303,7 +1303,7 @@ app.get('/getCedulaEstimulacion', async (req, res) => {
 
   getCedulaEstimulacion(transactionID, action, (data) => {
     let finalObj = {}
-    if (data.length > 0) {
+    if (data && data.length > 0) {
       data.forEach((d, index) => {
         const innerObj = {}
         Object.keys(d).forEach(k => {
@@ -1359,7 +1359,7 @@ app.get('/getCedulaAcido', async (req, res) => {
 
   getCedulaAcido(transactionID, action, (data) => {
     let finalObj = {}
-    if (data.length > 0) {
+    if (data && data.length > 0) {
       data.forEach((d, index) => {
         const innerObj = {}
         Object.keys(d).forEach(k => {
@@ -1417,7 +1417,7 @@ app.get('/getCedulaApuntalado', async (req, res) => {
 
   getCedulaApuntalado(transactionID, action, (data) => {
     let finalObj = {}
-    if (data.length > 0) {
+    if (data && data.length > 0) {
       data.forEach((d, index) => {
         const innerObj = {}
         Object.keys(d).forEach(k => {
@@ -1463,7 +1463,7 @@ app.get('/getCedulaAcido', async (req, res) => {
 
   getCedulaAcido(transactionID, action, (data) => {
     let finalObj = {}
-    if (data.length > 0) {
+    if (data && data.length > 0) {
       data.forEach((d, index) => {
         const innerObj = {}
         Object.keys(d).forEach(k => {
@@ -1509,7 +1509,7 @@ app.get('/getCosts', async (req, res) => {
 
   getCosts(transactionID, action, (data) => {
     let finalObj = {}
-    if (data.length > 0) {
+    if (data && data.length > 0) {
       data.forEach((d, index) => {
         const innerObj = {}
         Object.keys(d).forEach(k => {
