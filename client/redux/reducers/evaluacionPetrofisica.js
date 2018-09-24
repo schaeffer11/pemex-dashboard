@@ -23,7 +23,8 @@ const initialState = Map({
         densidad: '',
         length: 1
     }],
-    imgURL: null
+    imgURL: null,
+    checked: []
 })
 
 
@@ -37,6 +38,8 @@ const evaluacionPetrofisica = (state = initialState, action) => {
         return state.set('imgURL', fromJS(action.value))
     case 'set_evaluacionPetrofisica':
         return state = fromJS(action.value)
+    case 'set_checked' :
+        return state.set('checked', fromJS(action.value))
     default:
       return state
   }

@@ -57,6 +57,7 @@
     "react": "^16.4.2",
     "react-bootstrap": "^0.32.3",
     "react-date-picker": "^6.12.1",
+    "react-datepicker": "^1.6.0",
     "react-dom": "^16.4.2",
     "react-highcharts": "^16.0.2",
     "react-redux": "^5.0.7",

@@ -11,6 +11,25 @@ import { InputRow, InputRowUnitless, InputRowSelectUnitless, TextAreaUnitless } 
 @autobind class BaseIntervenciones extends Component {
   constructor(props) {
     super(props)
+
+    this.estimulacionMultiStepForm = React.createRef();
+    this.acidoMultiStepForm = React.createRef();
+    this.apuntaladoMultiStepForm = React.createRef();
+  }
+
+  validate(){
+    let { formData } = this.props
+    formData = formData.toJS()
+
+    let { tipoDeIntervenciones } = formData
+    let valid = false
+    switch(tipoDeIntervenciones){
+      case 'estimulacion':
+         valid = this.estimulacionMultiStepForm.current.getWrappedInstance().validate()
+         break;
+    }
+
+    return true
   }
 
   render() {
@@ -22,13 +41,13 @@ import { InputRow, InputRowUnitless, InputRowSelectUnitless, TextAreaUnitless } 
     let form;
     switch(tipoDeIntervenciones){
             case 'estimulacion': 
-              form = <EstimulacionMultiStepForm/>
+              form = <EstimulacionMultiStepForm ref={this.estimulacionMultiStepForm} />
               break;
             case 'acido':
-              form = <AcidoMultiStepForm/>
+              form = <AcidoMultiStepForm ref={this.acidoMultiStepForm}/>
               break;
             case 'apuntalado':
-              form = <ApuntaladoMultiStepForm/>
+              form = <ApuntaladoMultiStepForm ref={this.apuntaladoMultiStepForm}/>
               break; 
     }
 
@@ -48,6 +67,6 @@ const mapDispatchToProps = dispatch => ({
 
 })
 
-export default connect(mapStateToProps, mapDispatchToProps)(BaseIntervenciones)
+export default connect(mapStateToProps, mapDispatchToProps, null, { withRef: true })(BaseIntervenciones)
 
 
