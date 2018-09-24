@@ -57,7 +57,7 @@ import { setFichaTecnicaDelCampo, setFichaTecnicaDelPozo, setEvaluacionPetrofisi
     if (transactionID) {
       let data = await fetch(`api/getFields?transactionID=${transactionID}`).then(r => r.json())
 
-      if (!data.err) {
+      if (data && !data.err) {
         setFichaTecnicaDelCampo(data.fichaTecnicaDelCampo)
         setLoading({ 
           isLoading: false,
@@ -95,7 +95,7 @@ import { setFichaTecnicaDelCampo, setFichaTecnicaDelPozo, setEvaluacionPetrofisi
       let data = await fetch(`api/getWell?transactionID=${transactionID}`).then(r => r.json())
       let interventionData = await fetch(`api/getHistIntervenciones?transactionID=${transactionID}`).then(r => r.json())
 
-      if (!data.err && !interventionData.err) {
+      if (data && !data.err && !interventionData.err) {
         let newObj = data.fichaTecnicaDelPozo
         newObj.historialIntervencionesData = interventionData.fichaTecnicaDelPozo.historialIntervencionesData
 
@@ -123,7 +123,7 @@ import { setFichaTecnicaDelCampo, setFichaTecnicaDelPozo, setEvaluacionPetrofisi
       let data = await fetch(`api/getMudLoss?transactionID=${transactionID}`).then(r => r.json())
       let layerData = await fetch(`api/getLayer?transactionID=${transactionID}`).then(r => r.json())
 
-      if (!data.err && !layerData.err) {
+      if (data && !data.err && !layerData.err) {
 
         let newObj = data.evaluacionPetrofisica
         newObj.layerData = layerData.evaluacionPetrofisica.layerData
@@ -150,7 +150,7 @@ import { setFichaTecnicaDelCampo, setFichaTecnicaDelPozo, setEvaluacionPetrofisi
     if (transactionID) {
       let data = await fetch(`api/getMecanico?transactionID=${transactionID}`).then(r => r.json())
 
-      if (!data.err) {
+      if (data && !data.err) {
         setMecanicoYAparejoDeProduccion(data.mecanicoYAparejoDeProduccion)
       }
     }
@@ -171,7 +171,7 @@ import { setFichaTecnicaDelCampo, setFichaTecnicaDelPozo, setEvaluacionPetrofisi
     if (transactionID) {
       let data = await fetch(`api/getAnalisisAgua?transactionID=${transactionID}`).then(r => r.json())
 
-      if (!data.err) {
+      if (data && !data.err) {
         setAnalisisDelAgua(data.analisisDelAgua)
       }
     }
@@ -216,7 +216,7 @@ import { setFichaTecnicaDelCampo, setFichaTecnicaDelPozo, setEvaluacionPetrofisi
           data = await  fetch(`api/getBombeoMecanico?transactionID=${transactionID}`).then(r => r.json())
         }
 
-        if (!data.err) {
+        if (data && !data.err) {
         
           let newObj = data.sistemasArtificialesDeProduccion
           newObj.tipoDeSistemo = type
@@ -248,7 +248,7 @@ import { setFichaTecnicaDelCampo, setFichaTecnicaDelPozo, setEvaluacionPetrofisi
     if (transactionID) {
       let data = await fetch(`api/getFieldPressure?transactionID=${transactionID}`).then(r => r.json())
 
-      if (!data.err) {
+      if (data && !data.err) {
 
         let newObj = data.historicoDePresion.presionDataCampo
 
@@ -274,7 +274,7 @@ import { setFichaTecnicaDelCampo, setFichaTecnicaDelPozo, setEvaluacionPetrofisi
     if (transactionID) {
       let data = await fetch(`api/getWellPressure?transactionID=${transactionID}`).then(r => r.json())
 
-      if (!data.err) {
+      if (data && !data.err) {
 
         let newObj = data.historicoDePresion.presionDataPozo
 
