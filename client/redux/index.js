@@ -13,18 +13,13 @@ import propuestaEstimulacion from './reducers/propuestaEstimulacion'
 import propuestaAcido from './reducers/propuestaAcido'
 import propuestaApuntalado from './reducers/propuestaApuntalado'
 import pruebasDeLaboratorio from './reducers/pruebasDeLaboratorio'
-import pruebasDeLaboratorioAcido from './reducers/pruebasDeLaboratorioAcido'
-import pruebasDeLaboratorioApuntalado from './reducers/pruebasDeLaboratorioApuntalado'
-import pruebasDeLaboratorioEstimulacion from './reducers/pruebasDeLaboratorioEstimulacion'
 import resultadosSimulacionEstimulacion from './reducers/resultadosSimulacionEstimulacion'
 import resultadosSimulacionAcido from './reducers/resultadosSimulacionAcido'
 import resultadosSimulacionApuntalado from './reducers/resultadosSimulacionApuntalado'
 import estIncProduccionEstimulacion from './reducers/estIncProduccionEstimulacion'
 import estIncProduccionAcido from './reducers/estIncProduccionAcido'
 import estIncProduccionApuntalado from './reducers/estIncProduccionApuntalado'
-import estCostEstimulacion from './reducers/estCostEstimulacion'
-import estCostAcido from './reducers/estCostAcido'
-import estCostApuntalado from './reducers/estCostApuntalado'
+import estCost from './reducers/estCost'
 import evaluacionPetrofisica from './reducers/evaluacionPetrofisica'
 import historicoDePresion from './reducers/historicoDePresion'
 import historicoDeProduccion from './reducers/historicoDeProduccion'
@@ -52,9 +47,7 @@ const appReducer = combineReducers({
   estIncProduccionEstimulacion,
   estIncProduccionAcido,
   estIncProduccionApuntalado,
-  estCostEstimulacion,
-  estCostAcido,
-  estCostApuntalado,
+  estCost,
   evaluacionPetrofisica,
   historicoDePresion,
   historicoDeProduccion,
@@ -62,20 +55,22 @@ const appReducer = combineReducers({
 })
 
 const rootReducer = (state, action) => {
-  const user = state.get('user')
-  const app = state.get('app')
-  const global = state.get('global')
-  const router = state.get('router')
-  const forms = state.get('forms')
-
-  if (action.type === 'LOAD_SAVE') {
-    const { saved } = action
-    const newState = { ...saved, user, app, global, router, forms }
-    return state = fromJS(newState)
-  }
-
-  if (action.type === 'RESET_APP') {
-    return state = Map({ user, app })
+  // We remove persisted state so we need to ensure a state exists for the following:
+  if (state) {
+    const user = state.get('user')
+    const app = state.get('app')
+    const global = state.get('global')
+    const router = state.get('router')
+    const forms = state.get('forms')
+  
+    if (action.type === 'LOAD_SAVE') {
+      const { saved } = action
+      const newState = { ...saved, user, app, global, router, forms }
+      return state = fromJS(newState)
+    }
+    if (action.type === 'RESET_APP') {
+      return state = Map({ user, app })
+    }
   }
   return appReducer(state, action)
 }

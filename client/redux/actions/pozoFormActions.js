@@ -1,5 +1,6 @@
 import axios from 'axios'
 import {validatePozo} from '../../../common/utils/validation/pozoValidator'
+import { setIsSaved, setIsLoading } from '../../redux/actions/global'
 import Immutable from 'immutable'
 
 function bufferToBase64(buf) {
@@ -32,6 +33,8 @@ function getBase64FromURL(imgURL) {
 
 export function submitForm(action) {
   return async (dispatch, getState) => {
+    console.log('submitting something')
+    dispatch(setIsLoading({ isLoading: true, loadText: 'Guardando' }))
     const ignore = {
       app: true,
       router: true,
@@ -106,9 +109,24 @@ export function submitForm(action) {
         body: formData,
       })
         .then(r => r.json())
-        .then(r => {
-          console.log('server response', r)
-          // dispatch({ type: 'RESET_APP' })
+        .then(({ isSaved }) => {
+          let notificationType = ''
+          let notificationText = ''
+          if (isSaved) {
+            notificationType = 'success'
+            notificationText = 'Su información se ha guardado'
+          } else {
+            notificationType = 'error'
+            notificationText = 'Su información no se guardó'
+          }
+          // const notificationType = isSaved ? 'success' : 'error'
+          // dispatch(setIsLoading({ isLoading: false, saved }))
+          dispatch(setIsLoading({
+            notificationType,
+            notificationText,
+            isLoading: false,
+            showNotification: true,
+          }))
         })
     }
     else if (action === 'submit') {
@@ -117,9 +135,25 @@ export function submitForm(action) {
         body: formData,
       })
         .then(r => r.json())
-        .then(r => {
-          console.log('server response', r)
+        .then(({ isSubmitted }) => {
+          let notificationType = ''
+          let notificationText = ''
+          if (isSubmitted) {
+            notificationType = 'success'
+            notificationText = 'Su información se ha guardado'
+          } else {
+            notificationType = 'error'
+            notificationText = 'Su información no se guardó'
+          }
+          // const submitted = isSubmitted ? 'success' : 'error'
+          // dispatch(setIsLoading({ isLoading: false, submitted }))
           // dispatch({ type: 'RESET_APP' })
+          dispatch(setIsLoading({
+            notificationType,
+            notificationText,
+            isLoading: false,
+            showNotification: true,
+          }))
         })
     }
   }

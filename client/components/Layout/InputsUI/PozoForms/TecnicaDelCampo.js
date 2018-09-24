@@ -12,6 +12,11 @@ let fluidoOptions = [
     { label: 'Gas Hemedo', value: 'Gas Hemedo' },
     { label: 'Gas Seco', value: 'Gas Seco' },
 ]
+ 
+let litologiaOptions = [
+    { label: 'Arenas', value: 'Arenas' },
+    { label: 'Carbonatos', value: 'Carbonatos'}
+]
 @autobind class TecnicaDelCampo extends Component {
   constructor(props) {
     super(props)
@@ -152,8 +157,8 @@ let fluidoOptions = [
         <div className='header'>
           Formacion
         </div>
-        <InputRowUnitless header="Litología" name='litologiaField' value={litologiaField} onChange={setLitologiaField} onBlur={this.validate} errors={this.state.errors} />
-        <InputRow header="Espesor neto" name='espesorNetoField' value={espesorNetoField} onChange={setEspesorNetoField} unit='m' onBlur={this.validate} errors={this.state.errors} />
+        <InputRowSelectUnitless header='Litología' name='litologiaField' value={litologiaField} callback={(e) => setLitologiaField(e.value)} options={litologiaOptions} onBlur={this.validate} errors={this.state.errors}/>
+        <InputRow header="Espesor neto" name='espesorNetoField'value={espesorNetoField} onChange={setEspesorNetoField} unit='m' onBlur={this.validate} errors={this.state.errors} />
         <InputRow header="Porosidad" name='porosidadField' value={porosidadField} onChange={setPorosidadField} unit='%' onBlur={this.validate} errors={this.state.errors} />
         <InputRow header="Sw" name='swField' value={swField} onChange={setSwField} unit='%' onBlur={this.validate} errors={this.state.errors} />
         <InputRow header="K promedio" name='kPromedioField' value={kPromedioField} onChange={setKPromedioField} unit='mD' onBlur={this.validate} errors={this.state.errors} />

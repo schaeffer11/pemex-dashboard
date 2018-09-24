@@ -277,7 +277,7 @@ let mudLossColumns = [
           />
 
         </div>
-        <button className='new-row-button' onClick={this.addNewRow}> + </button>
+        <button className='new-row-button' onClick={this.addNewRow}>Añadir un renglón</button>
       </div>
     )
   }
@@ -313,7 +313,7 @@ let mudLossColumns = [
           />
 
         </div>
-        <button className='new-row-button' onClick={this.addNewRowMudLoss}> + </button>
+        <button className='new-row-button' onClick={this.addNewRowMudLoss}>Añadir un renglón</button>
       </div>
     )
   }

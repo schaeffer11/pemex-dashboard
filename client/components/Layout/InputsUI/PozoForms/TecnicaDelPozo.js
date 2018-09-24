@@ -226,7 +226,7 @@ let columns = [
             getTdProps={this.deleteRow}
           />
         </div>
-        <button className='new-row-button' onClick={this.addNewRow}> + </button>
+        <button className='new-row-button' onClick={this.addNewRow}>Añadir un renglón</button>
       </div>
     )
   }

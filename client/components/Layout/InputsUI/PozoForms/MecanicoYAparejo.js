@@ -114,10 +114,10 @@ let tratamientoPorOptions = [
         </div>
         TIPO
         <InputRowSelectUnitless header="Tipo de terminación" value={tipoDeTerminacion} callback={this.handleSelectTipoDeTerminacion} options={tipoDeTerminacionOptions} name='tipoDeTerminacion' onBlur={this.validate} errors={this.state.errors} />
-        <InputRow header="h (intervalo productor)" value={hIntervaloProductor} onChange={setHIntervaloProductor} name='hIntervaloProductor' unit='m' onBlur={this.validate} errors={this.state.errors} />
-        <InputRow header="Empacador" name='empacador' value={empacador} onChange={setEmpacador} unit='m' onBlur={this.validate} errors={this.state.errors} />
+        <InputRow header="h (intervalo productor)" value={hIntervaloProductor} onChange={setHIntervaloProductor} name='hIntervaloProductor' unit='mv' onBlur={this.validate} errors={this.state.errors} />
+        <InputRow header="Empacador" name='empacador' value={empacador} onChange={setEmpacador} unit='mv' onBlur={this.validate} errors={this.state.errors} />
         <InputRow header="Presión dif. empacador" name='presionDifEmpacador' value={presionDifEmpacador} onChange={setPresionDifEmpacador} unit='psi' onBlur={this.validate} errors={this.state.errors} />
-        <InputRow header="Profundidad Sensor P y T" name='sensorPyt' value={sensorPyt} onChange={setSensorPyt} unit='m' onBlur={this.validate} errors={this.state.errors} />
+        <InputRow header="Profundidad Sensor P y T" name='sensorPyt' value={sensorPyt} onChange={setSensorPyt} unit='mv' onBlur={this.validate} errors={this.state.errors} />
         LINER
         <InputRowSelectUnitless header="Tipo de liner" name='tipoDeLiner' value={tipoDeLiner} options={tipoDeLinerOptions} callback={(e) => setTipoDeLiner(e.value)} onBlur={this.validate} errors={this.state.errors} />
         <InputRow header="Diámetro de liner" name='diametroDeLiner' value={diametroDeLiner} onChange={setDiametroDeLiner} unit='pg' onBlur={this.validate} errors={this.state.errors} />
