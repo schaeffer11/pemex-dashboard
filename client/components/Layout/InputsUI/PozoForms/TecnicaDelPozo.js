@@ -2,7 +2,7 @@ import React, { Component } from 'react'
 import autobind from 'autobind-decorator'
 import { connect } from 'react-redux'
 import ReactTable from 'react-table'
-
+import DatePicker from 'react-datepicker'
 import {withValidate} from '../../Common/Validate'
 import { InputRow, InputRowUnitless, InputRowSelectUnitless, InputDate } from '../../Common/InputRow'
 import { setTipoDeSistemo, setHistorialIntervencionesData, setIntervaloProductor, setEspesorBruto, setEspesorNeto, setCaliza, setDolomia, setArcilla, setPorosidad, setPermeabilidad, setSw, setCaa, setCga, setTipoDePozo, setPwsFecha, setPwfFecha, setDeltaPPerMes, setTyac, setPvt, setAparejoDeProduccion, setProfEmpacador, setProfSensorPYT, setTipoDeSap, formData, setChecked } from '../../../../redux/actions/pozo'
@@ -22,7 +22,9 @@ let columns = [
     Header: 'Fecha',
     accessor: 'fecha',
     width: 150,
-    cell: 'renderEditable',
+    Cell: row => {
+        return (<DatePicker selected={row.original.startDate} />)
+    }
   }, { 
     Header: 'Historial de Intervenciones',
     accessor: 'intervenciones',
@@ -42,13 +44,13 @@ let columns = [
 
   componentDidMount(){
     this.validate()
-    //this.containsErrors()
-    //this.props.containsErrors(this, this.state.containsErrors)
+    this.containsErrors()
+    this.props.containsErrors(this, this.state.containsErrors)
   }
 
   componentDidUpdate(){
-    //this.containsErrors()
-    //this.props.containsErrors(this, this.state.containsErrors)
+    this.containsErrors()
+    this.props.containsErrors(this, this.state.containsErrors)
   }
 
   containsErrors(){
@@ -294,11 +296,11 @@ const validate = values => {
     }
 
     if(!values.pwsFecha ){
-       errors.pws = {message: "Este campo no puede estar vacio"}
+       errors.pwsFecha = {message: "Este campo no puede estar vacio"}
     }
 
     if(!values.pwfFecha ){
-       errors.pwf = {message: "Este campo no puede estar vacio"}
+       errors.pwfFecha = {message: "Este campo no puede estar vacio"}
     }
 
     if(!values.deltaPPerMes ){

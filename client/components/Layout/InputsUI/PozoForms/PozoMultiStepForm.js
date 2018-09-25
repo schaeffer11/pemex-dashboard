@@ -16,7 +16,7 @@ import HistoricoDeProduccion from './HistoricoDeProduccion'
 import AnalisisDelAgua from './AnalisisDelAgua'
 
 import { setFichaTecnicaDelCampo, setFichaTecnicaDelPozo, setEvaluacionPetrofisica, setMecanicoYAparejoDeProduccion, 
-  setAnalisisDelAgua, setSistemasArtificialesDeProduccion, setPresionDataCampo, setPresionDataPozo, setHistoricoProduccion } from '../../../../redux/actions/pozo'
+  setAnalisisDelAgua, setSistemasArtificialesDeProduccion, setPresionDataCampo, setPresionDataPozo, setHistoricoProduccion, setChecked } from '../../../../redux/actions/pozo'
 
 @autobind class PozoMultiStepForm extends Component {
 
@@ -464,17 +464,32 @@ import { setFichaTecnicaDelCampo, setFichaTecnicaDelPozo, setEvaluacionPetrofisi
   }
 
   validate() {
-    return (
-      this.fichaTecnicaDelCampo.selector.props.forceValidation() &&
-      this.fichaTecnicaDelPozo.selector.props.forceValidation() &&
-      this.evaluacionPetrofisica.selector.props.forceValidation() &&
-      this.mecanicoYAparejo.selector.props.forceValidation() &&
-      this.analisisDelAgua.selector.props.forceValidation() &&
-      this.sistemasArtificialesDeProduccion.selector.props.forceValidation() &&
-      this.historicoDePresionCampo.selector.props.forceValidation() &&
-      this.historicoDePresionPozo.selector.props.forceValidation() &&
-      this.historicoDeProduccion.selector.props.forceValidation() 
-    )
+    let { setChecked } = this.props
+
+    const forms = [
+      this.fichaTecnicaDelCampo,
+      this.fichaTecnicaDelPozo,
+      this.evaluacionPetrofisica,
+      this.mecanicoYAparejo,
+      this.analisisDelAgua,
+      this.sistemasArtificialesDeProduccion,
+      this.historicoDePresionCampo,
+      this.historicoDePresionPozo,
+      this.historicoDeProduccion
+    ];
+
+    let allErrors = {}
+    let allChecked = []
+    forms.forEach((form) => {
+
+      let {errors, checked} = form.selector.props.forceValidation()
+      allErrors = Object.assign({}, allErrors, errors);
+      allChecked.push(...checked)
+    });
+
+    setChecked(allChecked)
+
+    return allErrors.length == 0;
   }
 
   render() {
@@ -540,7 +555,8 @@ const mapDispatchToProps = dispatch => ({
   setPresionDataPozo : values => {dispatch(setPresionDataPozo(values))},
   setPresionDataCampo : values => {dispatch(setPresionDataCampo(values))},
   setHistoricoProduccion : values => {dispatch(setHistoricoProduccion(values))},
-  setLoading: obj => {dispatch(setIsLoading(obj))}
+  setLoading: obj => {dispatch(setIsLoading(obj))},
+  setChecked: values => {dispatch(setChecked(values))}
 })
 
 const mapStateToProps = state => ({

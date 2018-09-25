@@ -141,14 +141,14 @@ export const InputRowCosts = ({ header, name, unit, value, onChange, index, onBl
 }
 
 export const InputDate = ({ name, onChange, value, header, onBlur, errors }) => {
-
+  console.log('what are these errors?', name, errors, value, objValue)
   const errorElements = generateErrorElements(name, errors)
-
   let handleSelect = (date, event) => {
     if(date)
-      onChange(date.format())
+    onChange(date.format())
   }
-
+  const objValue = value ? moment(value) : null 
+ 
   return (
      <div className='input-row input-row-unitless'>
       <div className='label'>
@@ -156,10 +156,12 @@ export const InputDate = ({ name, onChange, value, header, onBlur, errors }) => 
       </div>
       <DatePicker
         dateFormat="DD/MM/YYYY"
-        name={name} 
+        name={name}
+        showMonthDropdown
+        showYearDropdown
         onChange={handleSelect}
         onBlur={onBlur}
-        selected={moment(value)}
+        selected={objValue}
         locale="es-mx"
         key="es-mx"
       />

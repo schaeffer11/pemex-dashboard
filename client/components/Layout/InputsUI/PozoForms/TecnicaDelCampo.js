@@ -157,13 +157,13 @@ let litologiaOptions = [
         <div className='header'>
           Formacion
         </div>
-        <InputRowSelectUnitless header='Litología' name='litologia' value={litologiaField} callback={(e) => setLitologiaField(e.value)} options={litologiaOptions} onBlur={this.validate} errors={this.state.errors}/>
-        <InputRow header="Espesor neto" name='espesorNeto'value={espesorNetoField} onChange={setEspesorNetoField} unit='m' onBlur={this.validate} errors={this.state.errors} />
-        <InputRow header="Porosidad" name='porosidad' value={porosidadField} onChange={setPorosidadField} unit='%' onBlur={this.validate} errors={this.state.errors} />
-        <InputRow header="Sw" name='Sw' value={swField} onChange={setSwField} unit='%' onBlur={this.validate} errors={this.state.errors} />
-        <InputRow header="K promedio" name='kPromedio' value={kPromedioField} onChange={setKPromedioField} unit='mD' onBlur={this.validate} errors={this.state.errors} />
-        <InputRow header="CAA" name='caa' value={caaField} onChange={setCaaField} unit='m' onBlur={this.validate} errors={this.state.errors} />
-        <InputRow header="CGA" name='cga' value={cgaField} onChange={setCgaField} unit='m' onBlur={this.validate} errors={this.state.errors} />
+        <InputRowSelectUnitless header='Litología' name='litologiaField' value={litologiaField} callback={(e) => setLitologiaField(e.value)} options={litologiaOptions} onBlur={this.validate} errors={this.state.errors}/>
+        <InputRow header="Espesor neto" name='espesorNetoField'value={espesorNetoField} onChange={setEspesorNetoField} unit='m' onBlur={this.validate} errors={this.state.errors} />
+        <InputRow header="Porosidad" name='porosidadField' value={porosidadField} onChange={setPorosidadField} unit='%' onBlur={this.validate} errors={this.state.errors} />
+        <InputRow header="Sw" name='swField' value={swField} onChange={setSwField} unit='%' onBlur={this.validate} errors={this.state.errors} />
+        <InputRow header="K promedio" name='kPromedioField' value={kPromedioField} onChange={setKPromedioField} unit='mD' onBlur={this.validate} errors={this.state.errors} />
+        <InputRow header="CAA" name='caaField' value={caaField} onChange={setCaaField} unit='m' onBlur={this.validate} errors={this.state.errors} />
+        <InputRow header="CGA" name='cgaField' value={cgaField} onChange={setCgaField} unit='m' onBlur={this.validate} errors={this.state.errors} />
       </div>
     )
   }

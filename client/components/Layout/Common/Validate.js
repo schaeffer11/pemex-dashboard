@@ -31,11 +31,9 @@ export function withValidate(validationFunction, WrappedComponent) {
     }
 
     setAllFieldsAsChecked(){
-      const data = this.formData.toJS()
+      const data = this.formData.toJS();
       const allFields = Object.keys(data)
-      let checked = data.checked || []
-      checked =  [...checked, ...allFields] //[...new Set([...checked, ...allFields])]; [...checked, ...allFields]
-      this.setChecked(checked);
+      return allFields
     }
 
     validate(field, values){
@@ -63,14 +61,10 @@ export function withValidate(validationFunction, WrappedComponent) {
 
     forceValidation(){
       const values = this.formData.toJS();
-
-      // Check all fields so that their errors will appear to the user
-      this.setAllFieldsAsChecked()
-
-      const {errors, checked} = this.validateAll(values)
-
-      console.log(errors)
-      return Object.entries(errors).length == 0
+      let {errors} = this.validateAll(values)
+      let checked = this.setAllFieldsAsChecked()
+  
+      return {errors, checked} 
     }
 
     render(){
