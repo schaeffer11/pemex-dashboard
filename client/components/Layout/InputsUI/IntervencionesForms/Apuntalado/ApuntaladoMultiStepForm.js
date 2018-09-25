@@ -9,6 +9,7 @@ import PruebasDeLaboratorioExtra from '../PruebasDeLaboratorioExtra'
 import ResultadosDeLaSimulacionApuntalado from './ResultadosDeLaSimulacionApuntalado'
 import EstimacionIncProduccionApuntalado from './EstimacionIncProduccionApuntalado'
 import EstimacionCostos from '../EstimacionCostos'
+import { setChecked } from '../../../../../redux/actions/intervencionesEstimulacion'
 import { setShowForms } from '../../../../../redux/actions/global'
 
 @autobind class ApuntaladoMultiStepForm extends Component {
@@ -19,13 +20,20 @@ import { setShowForms } from '../../../../../redux/actions/global'
       currentStep: 0
     }
 
+    this.propuestaDeApuntalado = React.createRef();
+    this.pruebasDeLaboratorio = React.createRef();
+    this.pruebasDeLaboratorioEstimulacionExtra = React.createRef();
+    this.resultadosDeLaSimulacionApuntalado = React.createRef();
+    this.estimacionIncProduccionApuntalado = React.createRef();
+    this.estimacionCostosEstimulacion = React.createRef();
+
     this.forms = [
-      {'title' : 'Propuesta de Fracturamiento Apuntalado', 'content': <PropuestaDeApuntalado/> },  
-      {'title' : 'Pruebas de Laboratorio', 'content': <PruebasDeLaboratorio/> },
-      {'title' : 'Pruebas de Laboratorio de Fracturamiento Apuntalado', 'content': <PruebasDeLaboratorioExtra/> },
-      {'title' : 'Resultados de la Simulacion de Fracturamiento Apuntalado', 'content': <ResultadosDeLaSimulacionApuntalado/> },
-      {'title' : 'Estimacion del Incremento de Produccion', 'content': <EstimacionIncProduccionApuntalado/> },
-      {'title' : 'Estimacion de Costos de Fracturamiento Apuntalado', 'content': <EstimacionCostos/> }
+      {'title' : 'Propuesta de Fracturamiento Apuntalado', 'content': <PropuestaDeApuntalado ref={Ref =>this.propuestaDeApuntalado =Ref }/> },  
+      {'title' : 'Pruebas de Laboratorio', 'content': <PruebasDeLaboratorio ref={Ref =>this.pruebasDeLaboratorio =Ref }/> },
+      {'title' : 'Pruebas de Laboratorio de Fracturamiento Apuntalado', 'content': <PruebasDeLaboratorioExtra ref={Ref =>this.pruebasDeLaboratorioEstimulacionExtra =Ref }/> },
+      {'title' : 'Resultados de la Simulacion de Fracturamiento Apuntalado', 'content': <ResultadosDeLaSimulacionApuntalado ref={Ref =>this.resultadosDeLaSimulacionApuntalado =Ref }/> },
+      {'title' : 'Estimacion del Incremento de Produccion', 'content': <EstimacionIncProduccionApuntalado ref={Ref =>this.estimacionIncProduccionApuntalado =Ref }/> },
+      {'title' : 'Estimacion de Costos de Fracturamiento Apuntalado', 'content': <EstimacionCostos ref={Ref =>this.estimacionCostosEstimulacion =Ref }/> }
     ];
 
   }
@@ -50,6 +58,33 @@ import { setShowForms } from '../../../../../redux/actions/global'
         currentStep: this.state.currentStep - 1
       })
     }
+  }
+
+    validate(){
+    let { setChecked } = this.props
+
+    const forms = [
+      this.propuestaDeApuntalado,
+//      this.pruebasDeLaboratorio,
+//      this.pruebasDeLaboratorioEstimulacionExtra,
+      this.resultadosDeLaSimulacionApuntalado,
+      this.estimacionIncProduccionApuntalado,
+//      this.estimacionCostosEstimulacion
+    ];
+
+    let allErrors = {}
+    let allChecked = []
+    forms.forEach((form) => {
+
+      let {errors, checked} = form.selector.props.forceValidation()
+      allErrors = Object.assign({}, allErrors, errors);
+      allChecked.push(...checked)
+    });
+
+    setChecked(allChecked)
+
+    return allErrors.length == 0;
+
   }
 
   render() {
@@ -78,6 +113,12 @@ import { setShowForms } from '../../../../../redux/actions/global'
 
             {this.forms[this.state.currentStep].content}
           </div>
+          <div style={{display: 'none'}}>
+            {this.forms.map((form, index) => {
+               if(index != this.state.currentStep)
+                 return this.forms[index].content}
+            )}
+          </div>
          </div>
      );
   }
@@ -86,6 +127,7 @@ import { setShowForms } from '../../../../../redux/actions/global'
 
 const mapDispatchToProps = dispatch => ({
     setShowForms : values => { dispatch(setShowForms(values))},
+    setChecked: val => dispatch(setChecked(val))
 })
 
 const mapStateToProps = state => ({
@@ -100,4 +142,4 @@ const mapStateToProps = state => ({
 })
 
 
-export default connect(mapStateToProps, mapDispatchToProps)(ApuntaladoMultiStepForm);
+export default connect(mapStateToProps, mapDispatchToProps, null, { withRef: true })(ApuntaladoMultiStepForm);

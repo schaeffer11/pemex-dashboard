@@ -143,12 +143,13 @@ export const InputRowCosts = ({ header, name, unit, value, onChange, index, onBl
 export const InputDate = ({ name, onChange, value, header, onBlur, errors }) => {
 
   const errorElements = generateErrorElements(name, errors)
-
   let handleSelect = (date, event) => {
     if(date)
       onChange(date.format())
   }
 
+  const objValue = value ? moment(value) : null 
+ 
   return (
      <div className='input-row input-row-unitless'>
       <div className='label'>
@@ -159,7 +160,7 @@ export const InputDate = ({ name, onChange, value, header, onBlur, errors }) => 
         name={name} 
         onChange={handleSelect}
         onBlur={onBlur}
-        selected={moment(value)}
+        selected={objValue}
         locale="es-mx"
         key="es-mx"
       />

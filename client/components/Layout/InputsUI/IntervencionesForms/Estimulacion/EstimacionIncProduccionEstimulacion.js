@@ -278,5 +278,5 @@ const mapDispatchToProps = dispatch => ({
 
 export default withValidate(
   validate,
-  connect(mapStateToProps, mapDispatchToProps)(EstimacionIncProduccionEstimulacion)
+  connect(mapStateToProps, mapDispatchToProps, null ,{withRef: true})(EstimacionIncProduccionEstimulacion)
 )
