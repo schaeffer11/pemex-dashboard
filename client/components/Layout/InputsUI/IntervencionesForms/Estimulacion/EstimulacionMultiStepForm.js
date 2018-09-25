@@ -9,6 +9,7 @@ import PruebasDeLaboratorioExtra from '../PruebasDeLaboratorioExtra'
 import ResultadosDeLaSimulacionEstimulacion from './ResultadosDeLaSimulacionEstimulacion'
 import EstimacionIncProduccionEstimulacion from './EstimacionIncProduccionEstimulacion'
 import EstimacionCostos from '../EstimacionCostos'
+import { setChecked } from '../../../../../redux/actions/intervencionesEstimulacion'
 import { setShowForms } from '../../../../../redux/actions/global'
 
 @autobind class EstimulacionMultiStepForm extends Component {
@@ -19,13 +20,20 @@ import { setShowForms } from '../../../../../redux/actions/global'
       currentStep: 0
     }
 
+    this.propuestaDeEstimulacion = React.createRef();
+    this.pruebasDeLaboratorio = React.createRef();
+    this.pruebasDeLaboratorioEstimulacionExtra = React.createRef();
+    this.resultadosDeLaSimulacionEstimulacion = React.createRef();
+    this.estimacionIncProduccionEstimulacion = React.createRef();
+    this.estimacionCostosEstimulacion = React.createRef();
+
     this.forms = [
-      {'title' : 'Propuesta de Tratamiento de Estimulacion', 'content': <PropuestaDeEstimulacion/> },  
-      {'title' : 'Pruebas de Laboratorio', 'content': <PruebasDeLaboratorio/> },
-      {'title' : 'Pruebas de Laboratorio de Estimulacion', 'content': <PruebasDeLaboratorioExtra/> },
-      {'title' : 'Resultados de la Simulacion de Estimulacion', 'content': <ResultadosDeLaSimulacionEstimulacion/> },
-      {'title' : 'Estimacion del Incremento de Produccion', 'content': <EstimacionIncProduccionEstimulacion/> },
-      {'title' : 'Estimacion de Costos de Estimulacion', 'content': <EstimacionCostos/> }
+      {'title' : 'Propuesta de Tratamiento de Estimulacion', 'content': <PropuestaDeEstimulacion ref={Ref =>this.propuestaDeEstimulacion =Ref }/> },  
+      {'title' : 'Pruebas de Laboratorio', 'content': <PruebasDeLaboratorio ref={Ref => this.pruebasDeLaboratorio=Ref }/> },
+      {'title' : 'Pruebas de Laboratorio de Estimulacion', 'content': <PruebasDeLaboratorioExtra ref={Ref =>this.pruebasDeLaboratorioEstimulacionExtra =Ref }/> },
+      {'title' : 'Resultados de la Simulacion de Estimulacion', 'content': <ResultadosDeLaSimulacionEstimulacion ref={Ref =>this.resultadosDeLaSimulacionEstimulacion =Ref }/> },
+      {'title' : 'Estimacion del Incremento de Produccion', 'content': <EstimacionIncProduccionEstimulacion ref={Ref =>this.estimacionIncProduccionEstimulacion =Ref } /> },
+      {'title' : 'Estimacion de Costos de Estimulacion', 'content': <EstimacionCostos ref={Ref =>this.estimacionCostosEstimulacion =Ref }/> }
     ];
 
   }
@@ -52,8 +60,35 @@ import { setShowForms } from '../../../../../redux/actions/global'
     }
   }
 
+  validate(){
+    let { setChecked } = this.props
+
+    const forms = [
+      this.propuestaDeEstimulacion,
+//      this.pruebasDeLaboratorio,
+//      this.pruebasDeLaboratorioEstimulacionExtra,
+      this.resultadosDeLaSimulacionEstimulacion,
+      this.estimacionIncProduccionEstimulacion,
+//      this.estimacionCostosEstimulacion
+    ];
+
+    let allErrors = {}
+    let allChecked = []
+    forms.forEach((form) => {
+
+      let {errors, checked} = form.selector.props.forceValidation()
+      allErrors = Object.assign({}, allErrors, errors);
+      allChecked.push(...checked)
+    });
+
+    setChecked(allChecked)
+
+    return allErrors.length == 0;
+
+  }
+
   render() {
-        let { setShowForms } = this.props
+     let { setShowForms } = this.props
      let className = 'subtab'
      let title = this.forms[this.state.currentStep].title
      let estimulacionFormSubmitting = this.props.forms.get('estimulacionFormSubmitting')
@@ -77,6 +112,13 @@ import { setShowForms } from '../../../../../redux/actions/global'
             </div>
 
             {this.forms[this.state.currentStep].content}
+
+          </div>
+          <div style={{display: 'none'}}>
+            {this.forms.map((form, index) => {
+               if(index != this.state.currentStep)
+                 return this.forms[index].content}
+            )}
           </div>
          </div>
      );
@@ -85,6 +127,7 @@ import { setShowForms } from '../../../../../redux/actions/global'
 
 const mapDispatchToProps = dispatch => ({
     setShowForms : values => { dispatch(setShowForms(values))},
+    setChecked: val => dispatch(setChecked(val))
 })
 
 const mapStateToProps = state => ({
@@ -94,8 +137,8 @@ const mapStateToProps = state => ({
   propuestaEstimulacion: state.get('propuestaEstimulacion'),
   resultadosSimulacionEstimulacion: state.get('resultadosSimulacionEstimulacion'),
   estIncProduccionEstimulacion: state.get('estIncProduccionEstimulacion'),
-  estCostEstimulacion: state.get('estCostEstimulacion')
+  estCostEstimulacion: state.get('estCostEstimulacion'),
 })
 
-export default connect(mapStateToProps, mapDispatchToProps)(EstimulacionMultiStepForm);
+export default connect(mapStateToProps, mapDispatchToProps, null, { withRef: true })(EstimulacionMultiStepForm);
 

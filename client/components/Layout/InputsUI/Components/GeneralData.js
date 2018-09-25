@@ -73,7 +73,7 @@ import Loading from '../../Common/Loading'
     let { objetivo, alcances, tipoDeIntervenciones } = interventionFormData
     let { subdireccion, activo, campo, pozo, formacion } = formData
 
-    if (!!(objetivo) && !!(alcances) && !!(tipoDeIntervenciones) && !!(subdireccion) && !!(activo) && !!(campo)  && !!(pozo) && !!(formacion)) {
+    if (!!(objetivo) && !!(alcances) && !!(tipoDeIntervenciones) && !!(subdireccion) && !!(activo) && !!(campo) && !!(pozo) && !!(formacion)) {
       return false
     }
 

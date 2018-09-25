@@ -9,6 +9,7 @@ import PropuestaDeAcido from './PropuestaDeAcido'
 import PruebasDeLaboratorio from '../PruebasDeLaboratorio'
 import PruebasDeLaboratorioExtra from '../PruebasDeLaboratorioExtra'
 import ResultadosDeLaSimulacionAcido from './ResultadosDeLaSimulacionAcido'
+import { setChecked } from '../../../../../redux/actions/intervencionesEstimulacion'
 import { setShowForms } from '../../../../../redux/actions/global'
 
 @autobind class AcidoMultiStepForm extends Component {
@@ -19,13 +20,20 @@ import { setShowForms } from '../../../../../redux/actions/global'
       currentStep: 0
     }
 
+    this.propuestaDeAcido = React.createRef();
+    this.pruebasDeLaboratorio = React.createRef();
+    this.pruebasDeLaboratorioExtra = React.createRef();
+    this.resultadosDeLaSimulacionAcido = React.createRef();
+    this.estimacionIncProduccionAcido = React.createRef();
+    this.estimacionCostos = React.createRef();
+
     this.forms = [
-      {'title' : 'Propuesta de Fracturamiento Acido', 'content': < PropuestaDeAcido/> },  
-      {'title' : 'Pruebas de Laboratorio', 'content': <PruebasDeLaboratorio/> },
-      {'title' : 'Pruebas de Laboratorio de Fracturamiento Acido', 'content': <PruebasDeLaboratorioExtra/> },
-      {'title' : 'Resultados de la Simulacion de Fracturamiento Acido', 'content': <ResultadosDeLaSimulacionAcido/> },
-      {'title' : 'Estimacion del Incremento de Produccion', 'content': <EstimacionIncProduccionAcido/> },
-      {'title' : 'Estimacion de Costos de Fracturamiento Acido', 'content': <EstimacionCostos/> }
+      {'title' : 'Propuesta de Fracturamiento Acido', 'content': <PropuestaDeAcido ref={Ref =>this.propuestaDeAcido =Ref } /> },  
+      {'title' : 'Pruebas de Laboratorio', 'content': <PruebasDeLaboratorio ref={Ref =>this.pruebasDeLaboratorio =Ref }/> },
+      {'title' : 'Pruebas de Laboratorio de Fracturamiento Acido', 'content': <PruebasDeLaboratorioExtra ref={Ref =>this.pruebasDeLaboratorioExtra =Ref }/> },
+      {'title' : 'Resultados de la Simulacion de Fracturamiento Acido', 'content': <ResultadosDeLaSimulacionAcido ref={Ref =>this.resultadosDeLaSimulacionAcido =Ref }/> },
+      {'title' : 'Estimacion del Incremento de Produccion', 'content': <EstimacionIncProduccionAcido ref={Ref =>this.estimacionIncProduccionAcido =Ref }/> },
+      {'title' : 'Estimacion de Costos de Fracturamiento Acido', 'content': <EstimacionCostos ref={Ref =>this.estimacionCostos =Ref }/> }
     ];
 
   }
@@ -50,6 +58,33 @@ import { setShowForms } from '../../../../../redux/actions/global'
         currentStep: this.state.currentStep - 1
       })
     }
+  }
+
+  validate(){
+    let { setChecked } = this.props
+
+    const forms = [
+      this.propuestaDeAcido,
+//      this.pruebasDeLaboratorio,
+//      this.pruebasDeLaboratorioEstimulacionExtra,
+        this.resultadosDeLaSimulacionAcido,
+        this.estimacionIncProduccionAcido,
+//      this.estimacionCostos
+    ];
+
+    let allErrors = {}
+    let allChecked = []
+    forms.forEach((form) => {
+
+      let {errors, checked} = form.selector.props.forceValidation()
+      allErrors = Object.assign({}, allErrors, errors);
+      allChecked.push(...checked)
+    });
+
+    setChecked(allChecked)
+
+    return allErrors.length == 0;
+
   }
 
   render() {
@@ -78,6 +113,12 @@ import { setShowForms } from '../../../../../redux/actions/global'
 
             {this.forms[this.state.currentStep].content}
           </div>
+          <div style={{display: 'none'}}>
+            {this.forms.map((form, index) => {
+               if(index != this.state.currentStep)
+                 return this.forms[index].content}
+            )}
+          </div>
          </div>
      );
   }
@@ -86,6 +127,7 @@ import { setShowForms } from '../../../../../redux/actions/global'
 
 const mapDispatchToProps = dispatch => ({
     setShowForms : values => { dispatch(setShowForms(values))},
+    setChecked: val => dispatch(setChecked(val))
 })
 
 const mapStateToProps = state => ({
@@ -96,8 +138,8 @@ const mapStateToProps = state => ({
   pruebasDeLaboratorioAcido: state.get('pruebasDeLaboratorioAcido'),
   resultadosSimulacionAcido: state.get('resultadosSimulacionAcido'),
   estIncProduccionAcido: state.get('estIncProduccionAcido'),
-  estCostAcido: state.get('estCostAcido')
+  estCostAcido: state.get('estCostAcido'),
 })
 
 
-export default connect(mapStateToProps, mapDispatchToProps)(AcidoMultiStepForm);
+export default connect(mapStateToProps, mapDispatchToProps, null, { withRef: true })(AcidoMultiStepForm);

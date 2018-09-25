@@ -20,7 +20,14 @@ import Loading from '../Common/Loading'
     this.state = { 
       selectedTab: 'Pozo',
       selectedSubtab: 'tecnicaDelPozo',
+      error: ''
     }
+
+    this.pozoMultiStepFormRef = React.createRef();
+    this.intervencionesFormRef = React.createRef();
+
+    this.pozoMultiStepForm = React.createElement(PozoMultiStepForm, { ref: this.pozoMultiStepFormRef });
+    this.intervencionesForm = React.createElement(BaseIntervenciones,  { ref: this.intervencionesFormRef});
   }
 
 
@@ -49,11 +56,22 @@ import Loading from '../Common/Loading'
   }
 
   handleSubmit(action){
-    console.log('hanlding sub', action)
-    this.props.submitPozoForm(action)
+    if( this.validate() ){
+      this.props.submitPozoForm(action)
+      this.setState({'error': ''})
+      console.log('Validate Succeeded')
+    } else {
+      this.setState({'error': 'Esta forma contiene errores. Todos los campos son requeridos.'})
+      console.log('Validate Failed')
+    }
   }
 
-
+  validate(){
+    return (
+      this.pozoMultiStepFormRef.current.getWrappedInstance().validate() &
+      this.intervencionesFormRef.current.getWrappedInstance().validate()
+    )
+  }
 
   render() {
     let { selectedTab, selectedSubtab, error } = this.state
@@ -67,12 +85,15 @@ import Loading from '../Common/Loading'
 
 
     let form = null
+    let otherForm = null
 
     if (selectedTab === 'Pozo' && pagesPozo[selectedSubtab]) {
-      form = <PozoMultiStepForm />
+      form = this.pozoMultiStepForm
+      otherForm = this.intervencionesForm
     }
     else if (selectedTab === 'Intervenciones') {
-      form = <BaseIntervenciones />
+      form = this.intervencionesForm
+      otherForm = this.pozoMultiStepForm
     }
 
     if (!showForms) {
@@ -89,8 +110,12 @@ import Loading from '../Common/Loading'
           <div className="tab-content">
             { form }
           </div>
-          <button className="submit save-button" disabled={pozoFormSubmitting} onClick={(e) => this.handleSubmit('save')}>{pozoFormSubmitting ? 'Ahorro...' : 'Guardar'}</button>
+          <div style={{display: 'none'}}>
+            { otherForm }
+          </div>
+          <button className="submit save-button" disabled={pozoFormSubmitting} onClick={(e) => this.handleSubmit('save')}>{pozoFormSubmitting ? 'Guardando...' : 'Guardar'}</button>
           <button className="submit submit-button" disabled={pozoFormSubmitting} onClick={(e) => this.handleSubmit('submit')}>{pozoFormSubmitting ? 'Enviando...' : 'Enviar'}</button>
+          <div className="form-error">{this.state.error}</div> 
           <div style={{height: '10px'}}></div>
           <Notification />
           <Loading />

@@ -2,9 +2,9 @@ import React, { Component } from 'react'
 import autobind from 'autobind-decorator'
 import { connect } from 'react-redux'
 import ReactTable from 'react-table'
-
+import DatePicker from 'react-datepicker'
 import {withValidate} from '../../Common/Validate'
-import { InputRow, InputRowUnitless, InputRowSelectUnitless } from '../../Common/InputRow'
+import { InputRow, InputRowUnitless, InputRowSelectUnitless, InputDate } from '../../Common/InputRow'
 import { setTipoDeSistemo, setHistorialIntervencionesData, setIntervaloProductor, setEspesorBruto, setEspesorNeto, setCaliza, setDolomia, setArcilla, setPorosidad, setPermeabilidad, setSw, setCaa, setCga, setTipoDePozo, setPwsFecha, setPwfFecha, setDeltaPPerMes, setTyac, setPvt, setAparejoDeProduccion, setProfEmpacador, setProfSensorPYT, setTipoDeSap, formData, setChecked } from '../../../../redux/actions/pozo'
 
 let columns = [
@@ -22,9 +22,11 @@ let columns = [
     Header: 'Fecha',
     accessor: 'fecha',
     width: 150,
-    cell: 'renderEditable',
+    Cell: row => {
+        return (<DatePicker selected={row.original.startDate} />)
+    }
   }, { 
-    Header: 'Hisorial de Intervenciones',
+    Header: 'Historial de Intervenciones',
     accessor: 'intervenciones',
     cell: 'renderEditable',
   }
@@ -94,7 +96,7 @@ let columns = [
         <div className='header'>
           Los Datos de Formación
         </div>
-        <InputRow header="Intervalos(s) productor(es)" type='number' name='intervalosProductores' value={intervaloProductor}  onChange={setIntervaloProductor} unit='md/mv' onBlur={this.validate} errors={this.state.errors} />
+        <InputRow header="Intervalos(s) productor(es)" type='number' name='intervaloProductor' value={intervaloProductor}  onChange={setIntervaloProductor} unit='md/mv' onBlur={this.validate} errors={this.state.errors} />
         <InputRow header="Espesor bruto" name='espesorBruto' value={espesorBruto} onChange={setEspesorBruto} unit='m' onBlur={this.validate} errors={this.state.errors} />
         <InputRow header="Espesor neto" name='espesorNeto' value={espesorNeto} onChange={setEspesorNeto} unit='m' onBlur={this.validate} errors={this.state.errors} />
         <InputRow header="Caliza" name='caliza' value={caliza} onChange={setCaliza} unit='%' onBlur={this.validate} errors={this.state.errors} />
@@ -136,9 +138,9 @@ let columns = [
           Los Datos de Pozo
         </div>
           <InputRowSelectUnitless header="Tipo de pozo" value={tipoDePozo} callback={(e) => setTipoDePozo(e.value)}  name='tipoDePozo' options={wellOptions} onBlur={this.validate} errors={this.state.errors} />
-          <InputRow header="Pws (fecha)" name='pws' value={pwsFecha} onChange={setPwsFecha} unit='Kg/cm2' onBlur={this.validate} errors={this.state.errors} />
-          <InputRow header="Pwf (fecha)" name='pwf' value={pwfFecha} onChange={setPwfFecha} unit='Kg/cm2' onBlur={this.validate} errors={this.state.errors} />
-          <InputRow header="Δp/mes" name='deltaPperMes' value={deltaPPerMes} onChange={setDeltaPPerMes} unit='Kg/cm2/mes' onBlur={this.validate} errors={this.state.errors} />
+          <InputDate header="Pws (fecha)" name='pwsFecha' value={pwsFecha} onChange={setPwsFecha} unit='Kg/cm2' onBlur={this.validate} errors={this.state.errors} />
+          <InputDate header="Pwf (fecha)" name='pwfFecha' value={pwfFecha} onChange={setPwfFecha} unit='Kg/cm2' onBlur={this.validate} errors={this.state.errors} />
+          <InputRow header="Δp/mes" name='deltaPPerMes' value={deltaPPerMes} onChange={setDeltaPPerMes} unit='Kg/cm2/mes' onBlur={this.validate} errors={this.state.errors} />
           <InputRow header="Tyac" name='tyac' value={tyac} onChange={setTyac} unit='°C' onBlur={this.validate} errors={this.state.errors} />
           <InputRow header="PVT" name='pvt' value={pvt} onChange={setPvt} unit='Pozo' onBlur={this.validate} errors={this.state.errors} />
           <InputRow header="Aparejo de producción" value={aparejoDeProduccion} onChange={setAparejoDeProduccion} name='aparejoDeProduccion' unit='pg' onBlur={this.validate} errors={this.state.errors} />
@@ -245,8 +247,8 @@ let columns = [
 const validate = values => {
     const errors = {}
 
-    if(!values.intervalosProductores ){
-       errors.intervalosProductores = {message: "Este campo no puede estar vacio"}
+    if(!values.intervaloProductor ){
+       errors.intervaloProductor = {message: "Este campo no puede estar vacio"}
     }
 
     if(!values.espesorBruto ){
@@ -293,16 +295,16 @@ const validate = values => {
        errors.tipoDePozo = {message: "Este campo no puede estar vacio"}
     }
 
-    if(!values.pws ){
-       errors.pws = {message: "Este campo no puede estar vacio"}
+    if(!values.pwsFecha ){
+       errors.pwsFecha = {message: "Este campo no puede estar vacio"}
     }
 
-    if(!values.pwf ){
-       errors.pwf = {message: "Este campo no puede estar vacio"}
+    if(!values.pwfFecha ){
+       errors.pwfFecha = {message: "Este campo no puede estar vacio"}
     }
 
-    if(!values.deltaPperMes ){
-       errors.deltaPperMes = {message: "Este campo no puede estar vacio"}
+    if(!values.deltaPPerMes ){
+       errors.deltaPPerMes = {message: "Este campo no puede estar vacio"}
     }
 
     if(!values.tyac ){
@@ -323,10 +325,6 @@ const validate = values => {
 
     if(!values.profSensorPYT ){
        errors.profSensorPYT = {message: "Este campo no puede estar vacio"}
-    }
-
-    if(!values.TipoDeSap ){
-       errors.TipoDeSap = {message: "Este campo no puede estar vacio"}
     }
 
     return errors

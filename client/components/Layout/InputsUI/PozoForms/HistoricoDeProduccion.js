@@ -1,7 +1,7 @@
 import React, { Component } from 'react'
 import autobind from 'autobind-decorator'
 import { connect } from 'react-redux'
-import { InputRow, InputRowUnitless, InputRowSelectUnitless } from '../../Common/InputRow'
+import { InputRow, InputRowUnitless, InputRowSelectUnitless, InputDate } from '../../Common/InputRow'
 import {withValidate} from '../../Common/Validate'
 import { setFecha, setTiempo, setEstrangulado, setPtp, setTtp, setPbaj, setTbaj, setPsep, setTsep, setQl, setQo, setQg, setQw, setRga, setSalinidad, setPh, setProduccionData, setChecked } from '../../../../redux/actions/pozo'
 import ReactTable from 'react-table'
@@ -135,7 +135,7 @@ let columns = [
         <div className='header'>
           Aforo
         </div>
-        <InputRow header="Fecha" name='fecha' unit='dd/mmm/aa' value={fecha} onChange={setFecha} onBlur={this.validate} errors={this.state.errors} />
+        <InputDate header="Fecha" name='fecha' unit='dd/mmm/aa' value={fecha} onChange={setFecha} onBlur={this.validate} errors={this.state.errors} />
         <InputRow header="Tiempo" name='tiempo' unit='hrs' value={tiempo} onChange={setTiempo} onBlur={this.validate} errors={this.state.errors} />
         <InputRow header="Estrangulador" name='estrangulado' unit='pg' value={estrangulado} onChange={setEstrangulado} onBlur={this.validate} errors={this.state.errors} />
         <InputRow header="PTP" name='ptp' unit='Kg/cm2' value={ptp} onChange={setPtp} onBlur={this.validate} errors={this.state.errors} />

@@ -1,7 +1,8 @@
 import React, { Component } from 'react'
 import { connect } from 'react-redux'
 import autobind from 'autobind-decorator'
-import { setPresionDataPozo } from '../../../../redux/actions/pozo'
+import {withValidate} from '../../Common/Validate'
+import { setPresionDataPozo, setChecked } from '../../../../redux/actions/pozo'
 import ReactTable from 'react-table'
 
 let columns = [
@@ -72,6 +73,22 @@ let columns = [
       })
     }
   }
+
+  validate(event){
+    let {setChecked, formData} = this.props
+    formData = formData.toJS()
+
+    let field = event ? event.target.name : null
+    let {errors, checked} = this.props.validate(field, formData)
+
+    this.setState({
+      errors: errors,
+    })
+
+    if(event && event.target.name){
+      setChecked(checked)
+    }
+  } 
 
   renderEditable(cellInfo) {
     let { setPresionDataPozo, formData } = this.props
@@ -152,6 +169,12 @@ let columns = [
   }
 }
 
+const validate = values => {
+    const errors = {}
+
+    return errors
+}
+
 const mapStateToProps = state => ({
   forms: state.get('forms'),
   formData: state.get('historicoDePresion'),
@@ -159,6 +182,10 @@ const mapStateToProps = state => ({
 
 const mapDispatchToProps = dispatch => ({
     setPresionDataPozo: val => dispatch(setPresionDataPozo(val)),
+    setChecked: val => dispatch(setChecked(val))
 })
 
-export default connect(mapStateToProps, mapDispatchToProps)(HistoricoDePresionPozo)
+export default withValidate(
+  validate,
+  connect(mapStateToProps, mapDispatchToProps)(HistoricoDePresionPozo)
+)

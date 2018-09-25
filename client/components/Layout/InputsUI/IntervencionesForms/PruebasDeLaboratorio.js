@@ -230,4 +230,4 @@ const mapDispatchToProps = dispatch => ({
   setPruebasDeLaboratorioData: val => dispatch(setPruebasDeLaboratorioData(val)),
 })
 
-export default connect(mapStateToProps, mapDispatchToProps)(PruebasDeLaboratorioEstimulacion)
+export default connect(mapStateToProps, mapDispatchToProps, null, { withRef: true })(PruebasDeLaboratorioEstimulacion)
