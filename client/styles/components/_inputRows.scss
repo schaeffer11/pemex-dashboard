@@ -104,8 +104,15 @@
   }
 }
 
-.react-datepicker__input-container {
-  input[type=text] {
-     font-size: .825em;
+.react-datepicker-wrapper{
+  max-width: 100%;
+
+  .react-datepicker__input-container {
+    max-width: inherit;
+
+    input[type=text] {
+      max-width: inherit;
+      font-size: .825em;
+    }
   }
 }
