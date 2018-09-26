@@ -145,7 +145,7 @@ export const InputDate = ({ name, onChange, value, header, onBlur, errors }) => 
   const errorElements = generateErrorElements(name, errors)
   let handleSelect = (date, event) => {
     if(date)
-      onChange(date.format())
+      onChange(date.toISOString())
   }
 
   const objValue = value ? moment(value) : null 
@@ -156,13 +156,14 @@ export const InputDate = ({ name, onChange, value, header, onBlur, errors }) => 
         {header}
       </div>
       <DatePicker
-        dateFormat="DD/MM/YYYY"
+        isClearable={true}
+        dateFormat="L"
         name={name} 
+        onKeyDown={(e) => {e.preventDefault(); return false; }} //Disable input from user
         onChange={handleSelect}
         onBlur={onBlur}
         selected={objValue}
         locale="es-mx"
-        key="es-mx"
       />
       {errorElements}
     </div>
