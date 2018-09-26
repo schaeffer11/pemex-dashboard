@@ -44,6 +44,9 @@ const companyOptions = [
   constructor(props) {
     super(props)
     this.state = {
+      containsErrors: false,
+      errors: [],
+      checked: []
     }
   }
 
@@ -220,7 +223,7 @@ const companyOptions = [
       }
     ]
 
-    const objectTemplate = {item: '', cost: '', compania: ''}
+    const objectTemplate = {}
 /*
     columns.forEach(column => {
       column.cell === 'renderEditable' ? column.Cell = this.renderEditable : null
@@ -242,6 +245,9 @@ const companyOptions = [
             getTdProps={this.deleteRow}
           />
         </div>
+        { this.state.errors.estimacionCostosData && this.state.errors.estimacionCostosData.checked &&
+          <div className="error">{this.state.errors.estimacionCostosData.message}</div>
+        }
       </div>
     )
   }
