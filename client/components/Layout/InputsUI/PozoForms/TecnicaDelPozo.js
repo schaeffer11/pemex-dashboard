@@ -5,8 +5,9 @@ import ReactTable from 'react-table'
 import moment from 'moment'
 import DatePicker from 'react-datepicker'
 import {withValidate} from '../../Common/Validate'
+import InputTable from '../../Common/InputTable'
 import { InputRow, InputRowUnitless, InputRowSelectUnitless, InputDate } from '../../Common/InputRow'
-import { setTipoDeSistemo, setHistorialIntervencionesData, setIntervaloProductor, setEspesorBruto, setEspesorNeto, setCaliza, setDolomia, setArcilla, setPorosidad, setPermeabilidad, setSw, setCaa, setCga, setTipoDePozo, setPwsFecha, setPwfFecha, setDeltaPPerMes, setTyac, setPvt, setAparejoDeProduccion, setProfEmpacador, setProfSensorPYT, setTipoDeSap, formData, setChecked } from '../../../../redux/actions/pozo'
+import { setTipoDeSistemo, setHistorialIntervencionesData, setIntervaloProductor, setEspesorBruto, setEspesorNeto, setCaliza, setDolomia, setArcilla, setPorosidad, setPermeabilidad, setSw, setCaa, setCga, setTipoDePozo, setPwsFecha, setPwfFecha, setDeltaPPerMes, setTyac, setPvt, setAparejoDeProduccion, setProfEmpacador, setProfSensorPYT, setTipoDeSap, formData, setChecked, setIntervalos } from '../../../../redux/actions/pozo'
 
 let columns = [
   {
@@ -201,6 +202,22 @@ let columns = [
     setHistorialIntervencionesData([...historialIntervencionesData, {index: historialIntervencionesData.length, fecha: '', intervenciones: '', length: historialIntervencionesData.length + 1, 'edited': false}])
   }
 
+  addNewIntervalosRow() {
+    let { formData, setIntervalos } = this.props
+    formData = formData.toJS()
+    let { intervalos } = formData
+
+    intervalos[0].length = 2
+
+    setIntervalos([...intervalos, {
+      base: '',
+      cima: '',
+      espesor: '',
+      length: intervalos.length + 1,
+      index: intervalos.length,
+    }])
+  }
+
 
   deleteRow(state, rowInfo, column, instance) {
     let { formData, setHistorialIntervencionesData } = this.props
@@ -221,6 +238,67 @@ let columns = [
         }
       }
     }
+  }
+
+
+  makeIntervalosTable() {
+    let { formData, setIntervalos } = this.props
+    formData = formData.toJS()
+    const { intervalos } = formData
+    const objectTemplate = {}
+    const columns = [
+      {
+        Header: '',
+        accessor: 'delete',
+        width: 35,
+        resizable: false,
+        Cell: row => {
+          console.log('ok what are we?', row.original.length, row.original)
+          if (row.original.length > 1) {
+            return (<div style={{color: 'white', background: 'red', borderRadius: '4px', textAlign: 'center', cursor: 'pointer'}}>X</div>)
+          }
+        }
+      },
+      {
+        Header: 'Cima',
+        accessor: 'cima',
+        cell: 'renderEditable',
+      },
+      {
+        Header: 'Base',
+        accessor: 'base',
+        cell: 'renderEditable',
+      },
+      {
+        Header: 'Espesor',
+        accessor: 'espesor',
+      }
+    ]
+
+    return (
+      <div className='intervalos-form' >
+        <div className='header'>
+          Cedula De Tratamiento
+        </div>
+        <div className='table'>
+          <InputTable
+            className="-striped"
+            data={intervalos}
+            newRow={objectTemplate}
+            setData={setIntervalos}
+            columns={columns}
+            showPagination={false}
+            showPageSizeOptions={false}
+            pageSize={intervalos.length}
+            sortable={false}
+          />
+        {/* { this.state.errors.cedulaData && this.state.errors.cedulaData.checked &&
+          <div className="error">{this.state.errors.cedulaData.message}</div>
+        } */}
+        <button className='new-row-button' onClick={this.addNewIntervalosRow}>Añadir un renglón</button>
+        </div>
+      </div>
+    )
   }
 
 
@@ -269,6 +347,7 @@ let columns = [
         { this.makePozoForm() }
         { this.makeFormacionForm() }
         { this.makeHistoricalInterventionsInput() }
+        {this.makeIntervalosTable()}
       </div>
     )
   }
@@ -399,7 +478,8 @@ const mapDispatchToProps = dispatch => ({
   setProfSensorPYT: val => dispatch(setProfSensorPYT(val)),
   setTipoDeSistemo: val => dispatch(setTipoDeSistemo(val)),
   setHistorialIntervencionesData: val => dispatch(setHistorialIntervencionesData(val)),
-  setChecked: val => dispatch(setChecked(val))
+  setChecked: val => dispatch(setChecked(val)),
+  setIntervalos: val => dispatch(setIntervalos(val))
 })
 
 export default withValidate(

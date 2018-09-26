@@ -30,6 +30,13 @@ export const setProfEmpacador = value => ({ type: 'set_profEmpacador', value})
 export const setProfSensorPYT = value => ({ type: 'set_profSensorPYT', value})
 export const setTipoDeSap = value => ({ type: 'set_tipoDeSap', value})
 export const setHistorialIntervencionesData = value => ({ type: 'set_historialIntervencionesData', value})
+export const setIntervalos = value => ({
+  type: 'set_intervalos', 
+  value: value.map(elem => {
+    elem.espesor = elem.base - elem.cima
+    return elem
+  })
+})
 export const setFichaTecnicaDelPozo = value => ({ type: 'set_fichaTecnicaDelPozo', value})
 
 //FichaTecnicaDelCampo

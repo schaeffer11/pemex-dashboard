@@ -280,7 +280,7 @@
 		display: grid;
 		grid-template-columns: 25% 25% 25% 25%;
 		grid-column-gap: 10px;
-		grid-template-areas: "pozo formacion intervenciones intervenciones";
+		grid-template-areas: "pozo formacion intervalos intervenciones";
 		
 		.formacion-form {
 			grid-area: formacion;
@@ -292,6 +292,9 @@
 
 		.intervenciones-form {
 			grid-area: intervenciones;
+		}
+		.intervalos-form {
+			grid-area: intervalos;
 		}
 
 		.geomecanica-form {
