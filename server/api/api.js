@@ -86,11 +86,30 @@ app.get('/getFieldWellMapping', (req, res) => {
 })
 
 
-app.get('/getSave', (req, res) => {
-    let { userID, wellID } = req.query
+app.get('/getAllSaves', (req, res) => {
+    let { userID } = req.query
     
-    connection.query(`SELECT * FROM SavedInputs WHERE USER_ID = ? ORDER BY INSERT_TIME DESC LIMIT 1`, 
-      [userID, wellID], (err, results) => {
+    connection.query(`SELECT SAVE_NAME, TRANSACTION_ID FROM SavedInputs WHERE USER_ID = ? ORDER BY INSERT_TIME DESC `, 
+      [userID], (err, data) => {
+
+        data = data.map(i => ({
+          name: i.SAVE_NAME,
+          id: i.TRANSACTION_ID
+        }))
+
+        res.json(data)
+    })
+})
+
+
+
+
+
+app.get('/getSave', (req, res) => {
+    let { transactionID } = req.query
+    
+    connection.query(`SELECT * FROM SavedInputs WHERE TRANSACTION_ID = ?`, 
+      [transactionID], (err, results) => {
 
         let transactionID = null
         let tipoDeIntervenciones = null
@@ -154,6 +173,7 @@ app.post('/well', async (req, res) => {
 
 
 app.post('/wellSave', async (req, res) => {
+
   // TODO: Find a way to clean up callbacks from createWell
   createWell(req.body, 'save', err => {
     if (err) {

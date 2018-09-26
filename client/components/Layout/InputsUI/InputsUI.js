@@ -13,6 +13,8 @@ import { setShowForms } from '../../../redux/actions/global'
 import { submitForm } from '../../../redux/actions/pozoFormActions'
 import Notification from '../Common/Notification'
 import Loading from '../Common/Loading'
+import AriaModal from 'react-aria-modal'
+import '../../../styles/components/_query_modal.css'
 
 @autobind class InputsUI extends Component {
   constructor(props) {
@@ -20,6 +22,7 @@ import Loading from '../Common/Loading'
     this.state = { 
       selectedTab: 'Pozo',
       selectedSubtab: 'tecnicaDelPozo',
+      isOpen: false,
       error: ''
     }
 
@@ -37,7 +40,8 @@ import Loading from '../Common/Loading'
     this.setState({
       selectedTab: val,
       selectedSubtab: selectedSub,
-      error: ''
+      error: '',
+      saveName: null,
     })
   }
 
@@ -55,19 +59,37 @@ import Loading from '../Common/Loading'
 
   }
 
-  handleSubmit(action){
-    if( this.validate() ){
-      this.props.submitPozoForm(action)
+  handleSubmit(action) {
+    let { saveName } = this.state
+
+    console.log('herehre', saveName)
+    if( action === 'save' || this.validate() ){
+      this.props.submitPozoForm(action, saveName)
       this.setState({'error': ''})
       console.log('Validate Succeeded')
     } else {
       this.setState({'error': 'Esta forma contiene errores. Todos los campos son requeridos.'})
+      this.scrollToBottom()
       console.log('Validate Failed')
     }
+    this.deactivateModal()
   }
 
-  handleSave(action) {
-    this.props.submitPozoForm(action)
+  scrollToBottom() {
+    this.testScroll.scrollIntoView({ behaviour: 'smooth'})
+  }
+
+  deactivateModal() {
+    this.setState({
+      isOpen: false,
+      saveName: null
+    })
+  }
+
+  activateModal() {
+    this.setState({
+      isOpen: true,
+    })
   }
 
   validate(){
@@ -77,8 +99,41 @@ import Loading from '../Common/Loading'
     )
   }
 
+  buildModal(pozoFormSubmitting) {
+    let {saveName} = this.state
+
+    return (
+      <AriaModal
+        titleId="save-modal"
+        onExit={this.deactivateModal}
+        underlayClickExits={true}
+        verticallyCenter={true}
+        focusDialog={true}
+        dialogClass="queryModalPartialReset"
+        dialogStyle={{verticalAlign: '', textAlign: 'center', maxHeight: '80%', marginTop: '2%'}}
+
+      >
+      <div className="modalTest" >
+        <div className="modal-title">
+          Save Work 
+        </div>
+        <div className="modal-info"> 
+          Please enter a name to remember this save by
+        </div>
+        <div className="modal-body">
+          <input onChange={(e) => this.setState({saveName: e.target.value})}></input>
+          <br></br>
+          <button className="submit save-button" disabled={!saveName} onClick={(e) => this.handleSubmit('save')}>{pozoFormSubmitting ? 'Ahorro...' : 'Guardar'}</button>
+        </div> 
+      </div>
+      </AriaModal>
+    )
+  }
+
+
+
   render() {
-    let { selectedTab, selectedSubtab, error } = this.state
+    let { selectedTab, selectedSubtab, error, isOpen, saveName } = this.state
     let { global } = this.props
     let pozoFormSubmitting = this.props.formsState.get('pozoFormSubmitting')
     const errors = this.props.formsState.get('pozoFormError')
@@ -86,7 +141,6 @@ import Loading from '../Common/Loading'
     global = global.toJS()
 
     let { showForms } = global
-
 
     let form = null
     let otherForm = null
@@ -117,12 +171,16 @@ import Loading from '../Common/Loading'
           <div style={{display: 'none'}}>
             { otherForm }
           </div>
-          <button className="submit save-button" disabled={pozoFormSubmitting} onClick={(e) => this.handleSave('save')}>{pozoFormSubmitting ? 'Guardando...' : 'Guardar'}</button>
+          <button className="submit save-button" disabled={pozoFormSubmitting} onClick={(e) => this.activateModal(pozoFormSubmitting)}>{pozoFormSubmitting ? 'Ahorro...' : 'Guardar'}</button>
           <button className="submit submit-button" disabled={pozoFormSubmitting} onClick={(e) => this.handleSubmit('submit')}>{pozoFormSubmitting ? 'Enviando...' : 'Enviar'}</button>
           <div className="form-error">{this.state.error}</div> 
           <div style={{height: '10px'}}></div>
           <Notification />
           <Loading />
+          { isOpen ? this.buildModal() : null }
+          <div style={{ float:"left", clear: "both" }}
+            ref={(el) => { this.testScroll = el; }}>
+          </div>
         </div>
       )
     }      
@@ -137,7 +195,7 @@ const mapStateToProps = state => ({
 })
 
 const mapDispatchToProps = dispatch => ({
-  submitPozoForm: values => {dispatch(submitForm(values))},
+  submitPozoForm: (action, name) => {dispatch(submitForm(action, name))},
 })
 
 export default connect(mapStateToProps, mapDispatchToProps)(InputsUI)
