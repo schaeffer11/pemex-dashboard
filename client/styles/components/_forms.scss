@@ -13,6 +13,19 @@ input[type=text], input[type=password], {
   }
 }
 
+.ReactTable {
+  input[type="number"] {
+   width: 100%;
+  }
+}
+
+.table-select {
+  + .error {
+    color: red;
+    text-align: center;
+  }
+}
+
 .select-input {
   & > div {
     min-height: unset !important;
