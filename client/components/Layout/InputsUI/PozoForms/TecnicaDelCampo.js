@@ -41,7 +41,7 @@ let litologiaOptions = [
   }
 
   containsErrors(){
-    let foundErrors = false
+   let foundErrors = false
     for (const key of Object.keys(this.state.errors)) {
       if(this.state.errors[key].checked)
         foundErrors = true
@@ -49,10 +49,9 @@ let litologiaOptions = [
 
     if(foundErrors !== this.state.containsErrors){
       this.setState({
-        foundErrors: foundErrors
+        containsErrors: foundErrors
       })
     }
-
   }
 
   validate(event){
@@ -230,11 +229,9 @@ const validate = values => {
     if(!values.fechaDeExplotacionField ){
        errors.fechaDeExplotacionField = {message: "Este campo no puede estar vacio"}
     }
-/*
     if(!values.numeroDePozoOperandoField ){
        errors.numeroDePozoOperandoField = {message: "Este campo no puede estar vacio"}
     }
-*/
     if(!values.pInicialAnoField ){
        errors.pInicialAnoField = {message: "Este campo no puede estar vacio"}
     }
