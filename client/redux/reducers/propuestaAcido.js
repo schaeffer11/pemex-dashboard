@@ -1,6 +1,6 @@
 import { Map, fromJS } from 'immutable'
 
-const initialState = Map({ 
+const initialState = fromJS({ 
     intervalo: '',
     longitudDeIntervalo: '',
     volAparejo: '',
