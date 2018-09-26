@@ -230,8 +230,11 @@ app.get('/getFields', async (req, res) => {
   }
   getFields(transactionID, action, (data) => {
     const finalObj = {}
-    
+
     if (data && data.length > 0) {
+      data[0].P_ACTUAL_FECHA ? data[0].P_ACTUAL_FECHA = data[0].P_ACTUAL_FECHA.toJSON().slice(0, 10) : null
+      data[0].FECHA_DE_EXPLOTACION ? data[0].FECHA_DE_EXPLOTACION = data[0].FECHA_DE_EXPLOTACION.toJSON().slice(0, 10) : null
+
       Object.keys(data[0]).forEach(key => {
         if (map[key]) {
           const { parent, child } = map[key]
@@ -283,7 +286,9 @@ app.get('/getWell', async (req, res) => {
   getWell(transactionID, action, (data) => {
     const finalObj = {}
     
-    if (data && data.length > 0) {console.log(data)
+    if (data && data.length > 0) {
+      data[0].PWS_FECHA ? data[0].PWS_FECHA = data[0].PWS_FECHA.toJSON().slice(0, 10) : null
+      data[0].PWF_FECHA ? data[0].PWF_FECHA = data[0].PWF_FECHA.toJSON().slice(0, 10) : null
       Object.keys(data[0]).forEach(key => {
         if (map[key]) {
           const { parent, child } = map[key]
@@ -318,6 +323,7 @@ app.get('/getHistIntervenciones', async (req, res) => {
 
     if (data && data.length > 0) {
       data.forEach((d, index) => {
+        d.DATE = d.DATE.toJSON().slice(0, 10)
         const innerObj = {}
         Object.keys(d).forEach(k => {
           if (map[k]) {
@@ -822,6 +828,7 @@ app.get('/getFieldPressure', async (req, res) => {
     const finalObj = {}
     if (data && data.length > 0) {
       data.forEach((d, index) => {
+        d.FECHA ? d.FECHA = d.FECHA.toJSON().slice(0, 10) : null
         const innerObj = {}
         Object.keys(d).forEach(k => {
           if (map[k]) {
@@ -874,6 +881,7 @@ app.get('/getWellPressure', async (req, res) => {
     const finalObj = {}
     if (data && data.length > 0) {
       data.forEach((d, index) => {
+        d.FECHA ? d.FECHA = d.FECHA.toJSON().slice(0, 10) : null
         const innerObj = {}
         Object.keys(d).forEach(k => {
           if (map[k]) {
@@ -977,6 +985,7 @@ app.get('/getWellProduccion', async (req, res) => {
     const finalObj = {}
     if (data && data.length > 0) {
       data.forEach((d, index) => {
+        d.Fecha ? d.Fecha = d.Fecha.toJSON().slice(0, 10) : null
         const innerObj = {}
         Object.keys(d).forEach(k => {
           if (map[k]) {
@@ -1279,6 +1288,8 @@ app.get('/getLabTest', async (req, res) => {
   getLabTest(transactionID, action, (data) => {
     const finalObj = {}
     data.forEach((d, index) => {
+      d.FECHA_DE_MUESTREO ? d.FECHA_DE_MUESTREO = d.FECHA_DE_MUESTREO.toJSON().slice(0, 10) : null
+      d.FECHA_DE_PRUEBA ? d.FECHA_DE_PRUEBA = d.FECHA_DE_PRUEBA.toJSON().slice(0, 10) : null
       const innerObj = {}
       Object.keys(d).forEach(k => {
         if (map[k]) {

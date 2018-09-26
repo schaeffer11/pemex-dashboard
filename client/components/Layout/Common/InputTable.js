@@ -70,7 +70,7 @@ import DatePicker from 'react-datepicker'
         onKeyDown={(e) => {e.preventDefault(); return false; }} //Disable input from user
         onChange={ e => {
           if(e){
-            data[cellInfo.index][cellInfo.column.id] = e.toISOString();
+            data[cellInfo.index][cellInfo.column.id] = e.format('YYYY-MM-DD');
             setData(data)
           }
         }}

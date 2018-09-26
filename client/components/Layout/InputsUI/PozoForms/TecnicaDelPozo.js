@@ -183,7 +183,7 @@ let columns = [
         onKeyDown={(e) => {e.preventDefault(); return false; }} //Disable input from user
         onChange={ e => {
           if(e){
-            historialIntervencionesData[cellInfo.index][cellInfo.column.id] = e.toISOString();
+            historialIntervencionesData[cellInfo.index][cellInfo.column.id] = e.format('YYYY-MM-DD');
             setHistorialIntervencionesData(historialIntervencionesData)
           }
         }} 

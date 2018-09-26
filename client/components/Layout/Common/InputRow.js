@@ -145,7 +145,7 @@ export const InputDate = ({ name, onChange, value, header, onBlur, errors }) => 
   const errorElements = generateErrorElements(name, errors)
   let handleSelect = (date, event) => {
     if(date)
-      onChange(date.toISOString())
+      onChange(date.format('YYYY-MM-DD'))
   }
   const objValue = value ? moment(value) : null 
  
