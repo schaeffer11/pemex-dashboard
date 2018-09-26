@@ -31,9 +31,9 @@ function getBase64FromURL(imgURL) {
   })
 }
 
-export function submitForm(action) {
+export function submitForm(action, saveName) {
   return async (dispatch, getState) => {
-    console.log('submitting something')
+
     dispatch(setIsLoading({ isLoading: true, loadText: 'Guardando' }))
     const ignore = {
       app: true,
@@ -102,6 +102,8 @@ export function submitForm(action) {
     if(action === 'submit'){
       runValidation(allKeys, filteredKeys)
     }
+
+    formData.append('saveName', JSON.stringify(saveName))
 
     if (action === 'save') {
       fetch('/api/wellSave', {

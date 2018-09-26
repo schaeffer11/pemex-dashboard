@@ -487,8 +487,8 @@ const INSERT_INTERVENTION_IMAGE_QUERY = {
 
 const INSERT_TRANSACTION = {
     save: `INSERT INTO SavedInputs (
-        TRANSACTION_ID, USER_ID, WELL_FORMACION_ID, TIPO_DE_INTERVENCIONES) VALUES
-        (?, ?, ?, ?)`,
+        TRANSACTION_ID, USER_ID, WELL_FORMACION_ID, TIPO_DE_INTERVENCIONES, SAVE_NAME) VALUES
+        (?, ?, ?, ?, ?)`,
     submit: `INSERT INTO Transactions (
         TRANSACTION_ID, USER_ID, FIELD_FORMACION_ID, WELL_FORMACION_ID) VALUES
         (?, ?, ?, ?)`, 
@@ -774,6 +774,9 @@ export const create = async (body, action, cb) => {
 
   let userID = finalObj.user.id
 
+  let saveName = finalObj.saveName
+
+  console.log('thisthsithisthists', saveName)
 
   let { subdireccion, activo, campo, pozo, formacion } = finalObj.fichaTecnicaDelPozoHighLevel
 
@@ -904,11 +907,7 @@ export const create = async (body, action, cb) => {
       simResultsFile = finalObj.resultadosSimulacionApuntalado.imgName
   }
 
-  console.log('hererererer ', pruebasDeLaboratorioData)
-
   // write to db
-  console.log('pozo', pozo)
-  console.log('campo', campo)
   
   let fieldFormacionID = campo
   let wellFormacionID = pozo
@@ -1370,7 +1369,7 @@ export const create = async (body, action, cb) => {
                                                 })
                                               }
 
-                                              values = action === 'save' ? [transactionID, userID, wellFormacionID, tipoDeIntervenciones] : [transactionID, userID, fieldFormacionID, wellFormacionID]
+                                              values = action === 'save' ? [transactionID, userID, wellFormacionID, tipoDeIntervenciones, saveName] : [transactionID, userID, fieldFormacionID, wellFormacionID]
                                               connection.query((action === 'save' ? INSERT_TRANSACTION.save : INSERT_TRANSACTION.submit), values, (err, results) => {
                                                 console.log('transaction', err)
                                                 console.log('transaction', results)
