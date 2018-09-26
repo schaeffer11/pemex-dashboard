@@ -267,8 +267,11 @@ let columns = [
             sortable={false}
             getTdProps={this.deleteRow}
           />
-        <button className='new-row-button' onClick={this.addNewRow}>Añadir un renglón</button>
         </div>
+        { this.state.errors.cedulaData && this.state.errors.cedulaData.checked &&
+          <div className="error">{this.state.errors.cedulaData.message}</div>
+        }
+        <button className='new-row-button' onClick={this.addNewRow}>Añadir un renglón</button>
       </div>
     )
   }
@@ -361,6 +364,17 @@ const validate = values => {
 
     if(!values.diametroDeDisparos){
       errors.diametroDeDisparos = {message: "Este campo no puede estar vacio"}
+    }
+
+    if(!values.cedulaData){
+      errors.cedulaData = {message: "Esta forma no puede estar vacia"}
+    }else {
+      values.cedulaData.forEach((row, index) => {
+        let hasEmpty = Object.values(row).find((value) => { return value.toString().trim() == '' })
+        if(hasEmpty !== undefined){
+            errors.cedulaData = {message: "Ningun campo puede estar vacio."}
+        }
+      })
     }
 
     return errors

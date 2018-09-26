@@ -220,6 +220,9 @@ import { setSistemasArtificialesImgURL, setTipoDeSistemo, setPresionDeCabeza, se
           Upload Sistem of Produccion Image (spanish)
         </div>
         <input type='file' accept="image/*" onChange={this.handleFileUpload}></input>
+        { this.state.errors.imgURL && this.state.errors.imgURL.checked &&
+          <div className="error">{this.state.errors.imgURL.message}</div>
+        }
         {imgURL ? <img className='img-preview' src={imgURL}></img> : null }
       </div>
     )
@@ -274,6 +277,9 @@ const validate = values => {
        errors.tipoDeSistemo = {message: "Este campo no puede estar vacio"}
     }
 
+    if(!values.imgURL ){
+       errors.imgURL = {message: "Este campo no puede estar vacio"}
+    }
     return errors
 }
 

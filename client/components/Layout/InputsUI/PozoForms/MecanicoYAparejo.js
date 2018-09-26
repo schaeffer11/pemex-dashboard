@@ -177,6 +177,10 @@ let tratamientoPorOptions = [
           Upload Well Bore Diagram (spanish)
         </div>
         <input type='file' accept="image/*" onChange={(e) => this.handleFileUpload(e, setImgBoreDiagramURL)}></input>
+        imgBoreDiagramURL
+        { this.state.errors.imgBoreDiagramURL && this.state.errors.imgBoreDiagramURL.checked &&
+          <div className="error">{this.state.errors.imgBoreDiagramURL.message}</div>
+        }
         {imgURL ? <img className='img-preview' src={imgURL}></img> : null }
       </div>
     )
@@ -281,6 +285,10 @@ const validate = values => {
 
     if(!values.volumenDeEspacioAnular ){
        errors.volumenDeEspacioAnular = {message: "Este campo no puede estar vacio"}
+    }
+
+    if(!values.imgBoreDiagramURL){
+      errors.imgBoreDiagramURL = {message: "Ningun campo puede estar vacio."}
     }
 
     return errors

@@ -4,6 +4,7 @@ import { connect } from 'react-redux'
 import { InputRow, InputRowUnitless, InputRowSelectUnitless, InputDate } from '../../Common/InputRow'
 import {withValidate} from '../../Common/Validate'
 import { setFecha, setTiempo, setEstrangulado, setPtp, setTtp, setPbaj, setTbaj, setPsep, setTsep, setQl, setQo, setQg, setQw, setRga, setSalinidad, setPh, setProduccionData, setChecked } from '../../../../redux/actions/pozo'
+import InputTable from '../../Common/InputTable'
 import ReactTable from 'react-table'
 
 let columns = [
@@ -20,55 +21,55 @@ let columns = [
   }, {
     Header: 'Fecha',
     accessor: 'fecha',
-    cell: 'renderEditable',
+    cell: 'renderDate',
   }, { 
     Header: 'Dias',
     accessor: 'dias',
-    cell: 'renderEditable',
+    cell: 'renderNumber',
   }, { 
     Header: 'Qo (bbl/d)',
     accessor: 'qo',
-    cell: 'renderEditable',
+    cell: 'renderNumber',
   }, { 
     Header: 'Qw (bbl/d)',
     accessor: 'qw',
-    cell: 'renderEditable',
+    cell: 'renderNumber',
   }, { 
     Header: 'Qg_Cal (MMpc/d)',
     accessor: 'qg',
-    cell: 'renderEditable',
+    cell: 'renderNumber',
   }, { 
     Header: 'Qgl (MMpc/d)',
     accessor: 'qgl',
-    cell: 'renderEditable',
+    cell: 'renderNumber',
   }, { 
     Header: 'Np (MMbbl)',
     accessor: 'np',
-    cell: 'renderEditable',
+    cell: 'renderNumber',
   }, { 
     Header: 'Wp (MMbbl)',
     accessor: 'wp',
-    cell: 'renderEditable',
+    cell: 'renderNumber',
   }, { 
     Header: 'Gp (MMMpc)',
     accessor: 'gp',
-    cell: 'renderEditable',
+    cell: 'renderNumber',
   }, { 
     Header: 'Gi (MMMpc)',
     accessor: 'gi',
-    cell: 'renderEditable',
+    cell: 'renderNumber',
   }, { 
     Header: 'RGA (m3/m3)',
     accessor: 'rga',
-    cell: 'renderEditable',
+    cell: 'renderNumber',
   }, { 
     Header: 'Fw Fraction',
     accessor: 'fw',
-    cell: 'renderEditable',
+    cell: 'renderNumber',
   }, { 
     Header: 'Pozos Prod Activos',
     accessor: 'pozosProdActivos',
-    cell: 'renderEditable',
+    cell: 'renderNumber',
   }
 ]
 
@@ -206,20 +207,24 @@ let columns = [
   }
 
   makeHistoricoDeProduccionInput() {
-    let { formData } = this.props
+    let { formData ,setProduccionData } = this.props
     formData = formData.toJS()
     let { produccionData } = formData
 
+    const objectTemplate = {fecha: '', dias: '', qo: '', qo: '', qw: '', qg: '', qgl: '', np: '', wp: '', gp: '', gi: '', rga: '', fw: '', pozosProdActivos:''}
+/*
     columns.forEach(column => {
       column.cell === 'renderEditable' ? column.Cell = this.renderEditable : null
     })
-
+*/
     return (
       <div className='historico-produccion' >
         <div className='table'>
-          <ReactTable
+          <InputTable
             className="-striped"
             data={produccionData}
+            newRow={objectTemplate}
+            setData={setProduccionData}
             columns={columns}
             showPagination={false}
             showPageSizeOptions={false}
@@ -227,8 +232,11 @@ let columns = [
             sortable={false}
             getTdProps={this.deleteRow}
           />
-        <button className='new-row-button' onClick={this.addNewRow}>Añadir un renglón</button>
         </div>
+        { this.state.errors.produccionData && this.state.errors.produccionData.checked &&
+          <div className="error">{this.state.errors.produccionData.message}</div>
+        }
+        <button className='new-row-button' onClick={this.addNewRow}>Añadir un renglón</button>
       </div>
     )
   }
@@ -311,6 +319,16 @@ const validate = values => {
        errors.ph = {message: "Este campo no puede estar vacio"}
     }
 
+    if(!values.produccionData){
+      errors.produccionData = {message: "Esta forma no puede estar vacia"}
+    }else {
+      values.produccionData.forEach((row, index) => {
+        let hasEmpty = Object.values(row).find((value) => { return value.toString().trim() == '' })
+        if(hasEmpty !== undefined){
+            errors.produccionData = {message: "Ningun campo puede estar vacio."}
+        }
+      })
+    }
 
     return errors
 }

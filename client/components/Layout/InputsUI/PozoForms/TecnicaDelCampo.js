@@ -1,5 +1,6 @@
 import React, { Component } from 'react'
 import autobind from 'autobind-decorator'
+import InputTable from '../../Common/InputTable'
 import { InputRow, InputRowUnitless, InputRowSelectUnitless, InputDate } from '../../Common/InputRow'
 import {withValidate} from '../../Common/Validate'
 import { connect } from 'react-redux'
