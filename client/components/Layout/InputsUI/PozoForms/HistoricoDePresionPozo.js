@@ -186,7 +186,7 @@ const validate = values => {
       errors.presionDataPozo = {message: "Esta forma no puede estar vacia"}
     }else {
       values.presionDataPozo.forEach((row, index) => {
-        let hasEmpty = Object.values(row).find((value) => { return value.toString().trim() == '' })
+        let hasEmpty = Object.values(row).find((value) => { return value === null || value.toString().trim() == '' })
         if(hasEmpty !== undefined){
             errors.presionDataPozo = {message: "Ningun campo puede estar vacio."}
         }

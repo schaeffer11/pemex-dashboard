@@ -323,7 +323,7 @@ app.get('/getHistIntervenciones', async (req, res) => {
 
     if (data && data.length > 0) {
       data.forEach((d, index) => {
-        d.DATE = d.DATE.toJSON().slice(0, 10)
+        d.DATE ? d.DATE = d.DATE.toJSON().slice(0, 10) : null
         const innerObj = {}
         Object.keys(d).forEach(k => {
           if (map[k]) {
@@ -1528,10 +1528,12 @@ app.get('/getCosts', async (req, res) => {
 
   let action = saved ? 'loadSave' : 'loadTransaction'
   
+
   const map = {
     ITEM: { child: 'item' }, 
     COMPANY: { child: 'compania' }, 
-    COST: { child: 'cost' }, 
+    COST_MNX: { child: 'cost' }, 
+    COST_DLS: { child: 'costDLS' }
 
   }
 
@@ -1539,6 +1541,7 @@ app.get('/getCosts', async (req, res) => {
   const innerParent = 'estimacionCostosData'
 
   getCosts(transactionID, action, (data) => {
+    console.log('datatatat', data)
     let finalObj = {}
     if (data && data.length > 0) {
       data.forEach((d, index) => {
@@ -1553,13 +1556,15 @@ app.get('/getCosts', async (req, res) => {
         objectPath.set(innerObj, 'index', index)
         objectPath.push(finalObj, `${mainParent}.${innerParent}`, innerObj)
       })
+      finalObj['estCost'].MNXtoDLS = data[0].MNXtoDLS
     }
     else {
       finalObj = {
         'estCost': {
           "estimacionCostosData": [
             {}
-          ]
+          ],
+          "MNXtoDLS": 1
         }
       }
     }

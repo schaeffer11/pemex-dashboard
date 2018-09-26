@@ -17,6 +17,7 @@ export const setCedulaData = value => ({ type: 'set_cedulaData', value})
 
 export const setPruebasDeLaboratorioData = value => ({ type: 'set_pruebasDeLaboratorioData', value})
 export const setEstimacionCostosData = value => ({ type: 'set_estimacionCostos', value})
+export const setMNXtoDLS = value => ({ type: 'set_MNXtoDLS', value})
 
 export const setLabEvidenceImgURL = value => ({ type: 'set_labEvidenceImgURL', value})
 

@@ -1,7 +1,7 @@
 import { Map, fromJS } from 'immutable'
 
 const initialState = Map({
-    fecha: '',
+    fecha: null,
     tiempo: '',
     estrangulado: '',
     ptp: '',
@@ -19,7 +19,7 @@ const initialState = Map({
     ph: '',
     checked: [],
     produccionData: [{
-        fecha: '',
+        fecha: null,
         dias: '',
         qo: '',
         qw: '',

@@ -14,7 +14,7 @@ const generateErrorElements = ( name = '', errors = [] ) => {
   return ''
 }
 
-export const InputRow = ({ header, type='number', name, unit, value, onChange, onBlur, index, errors = [] }) => {
+export const InputRow = ({ header, type='number', name, unit, value, onChange, onBlur, index, errors = [], style = {} }) => {
 
   let handleChange = (e) => {
     onChange(e.target.value, e)
@@ -23,7 +23,7 @@ export const InputRow = ({ header, type='number', name, unit, value, onChange, o
   const errorElements = generateErrorElements(name, errors)
 
   return (
-    <div className='input-row'>
+    <div className='input-row' style={style}>
       <div className='label'>
         {header}
       </div>

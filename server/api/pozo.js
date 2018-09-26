@@ -467,9 +467,9 @@ const INSERT_CEDULA_APUNTALADO_QUERY = {
 
 const INSERT_COSTS_QUERY = {
     save: `INSERT INTO _IntervencionesEstimatedCostsSave (
-        COST_ID, INTERVENTION_ID, ITEM, COMPANY, COST, TRANSACTION_ID) VALUES ?`,
+        COST_ID, INTERVENTION_ID, ITEM, COMPANY, COST_MNX, COST_DLS, MNXtoDLS, TRANSACTION_ID) VALUES ?`,
     submit: `INSERT INTO IntervencionesEstimatedCosts (
-        COST_ID, INTERVENTION_ID, ITEM, COMPANY, COST, TRANSACTION_ID) VALUES ?`,
+        COST_ID, INTERVENTION_ID, ITEM, COMPANY, COST_MNX, COST_DLS, MNXtoDLS, TRANSACTION_ID) VALUES ?`,
     loadSave: `SELECT * FROM _IntervencionesEstimatedCostsSave WHERE TRANSACTION_ID = ?`,
     loadTransaction: `SELECT * FROM IntervencionesEstimatedCosts WHERE TRANSACTION_ID = ?`    
 }
@@ -833,7 +833,7 @@ export const create = async (body, action, cb) => {
 
   let { pruebasDeLaboratorioData } = finalObj.pruebasDeLaboratorio
 
-  let { estimacionCostosData } = finalObj.estCost
+  let { estimacionCostosData, MNXtoDLS } = finalObj.estCost
 
   if (tipoDeIntervenciones === 'estimulacion') {
       //Propuesta Estimulaction
@@ -916,6 +916,8 @@ export const create = async (body, action, cb) => {
   let intervalID
   let zoneID
 
+
+  console.log('herererrererrerererreer', MNXtoDLS)
   connection.beginTransaction(function(err) {
     if (err) { throw err; }
 
@@ -1339,7 +1341,7 @@ export const create = async (body, action, cb) => {
                                           values = []
                                           estimacionCostosData.forEach(i => {
                                             let costID = Math.floor(Math.random() * 1000000000)
-                                            values.push([costID, interventionID, i.item, i.compania, i.cost, transactionID])
+                                            values.push([costID, interventionID, i.item, i.compania, i.cost, i.costDLS, MNXtoDLS, transactionID])
                                           })
 
                                           connection.query((action === 'save' ? INSERT_COSTS_QUERY.save : INSERT_COSTS_QUERY.submit), [values], (err, results) => {

@@ -2,10 +2,10 @@ import { Map, fromJS } from 'immutable'
 
 const initialState = Map({ 
 	descubrimientoField: '',
-    fechaDeExplotacionField: '',
+    fechaDeExplotacionField: null,
     numeroDePozosOperandoField: '',
     pInicialAnoField: '',
-    pActualFechaField: '',
+    pActualFechaField: null,
     dpPerAnoField: '',
     tyacField: '',
     prField: '',

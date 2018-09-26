@@ -253,7 +253,6 @@ let columns = [
         width: 35,
         resizable: false,
         Cell: row => {
-          console.log('ok what are we?', row.original.length, row.original)
           if (row.original.length > 1) {
             return (<div style={{color: 'white', background: 'red', borderRadius: '4px', textAlign: 'center', cursor: 'pointer'}}>X</div>)
           }
@@ -275,6 +274,7 @@ let columns = [
       }
     ]
 
+    //TODO: handle new intervals in redux/database
     return (
       <div className='intervalos-form' >
         <div className='header'>
@@ -289,7 +289,7 @@ let columns = [
             columns={columns}
             showPagination={false}
             showPageSizeOptions={false}
-            pageSize={intervalos.length}
+            pageSize={!intervalos ? 1 : intervalos.length}
             sortable={false}
           />
         {/* { this.state.errors.cedulaData && this.state.errors.cedulaData.checked &&
@@ -440,7 +440,7 @@ const validate = values => {
       errors.historialIntervencionesData = {message: "Esta forma no puede estar vacia"}
     }else {
       values.historialIntervencionesData.forEach((row, index) => {
-        if(row.fecha.trim() == '' || row.intervenciones.trim() == ''){
+        if(!row.fecha || row.intervenciones.trim() == ''){
             errors.historialIntervencionesData = {message: "Ningun campo puede estar vacio."}
         }
       })

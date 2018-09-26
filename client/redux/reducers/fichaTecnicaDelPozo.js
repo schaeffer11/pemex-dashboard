@@ -13,8 +13,8 @@ const initialState = fromJS({
   caa: '',
   cga: '',
   tipoDePozo: '',
-  pwsFecha: '',
-  pwfFecha: '',
+  pwsFecha: null,
+  pwfFecha: null,
   deltaPPerMes: '',
   tyac: '',
   pvt: '',
@@ -23,7 +23,7 @@ const initialState = fromJS({
   profSensorPYT: '',
   tipoDeSap: '',
   historialIntervencionesData: [{
-    fecha: '',
+    fecha: null,
     intervenciones: '',
     errors: []
   }],

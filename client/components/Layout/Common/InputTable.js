@@ -90,7 +90,6 @@ import DatePicker from 'react-datepicker'
 
   deleteRow(state, rowInfo, column, instance) {
     let {data, setData} = this.props
-    console.log('deleting from inside class', data)
 
     return {
       onClick: e => {
@@ -101,7 +100,6 @@ import DatePicker from 'react-datepicker'
             i.index = index
             i.length = data.length
           })
-          console.log('after splicing', data)
 
           setData(data)
         }
@@ -127,7 +125,7 @@ import DatePicker from 'react-datepicker'
       <ReactTable { ...this.props } 
         columns={columns}
         getTdProps={this.deleteRow} 
-        pageSize={data.length}
+        pageSize={!data ? 1 : data.length}
       />
 
     )

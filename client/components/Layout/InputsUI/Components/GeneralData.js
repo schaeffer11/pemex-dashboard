@@ -354,9 +354,6 @@ import '../../../../styles/components/_query_modal.css'
     let { isOpen, selectedSave } = this.state
     let { setShowForms } = this.props
 
-
-    console.log(selectedSave)
-
     return (
       <div className='form general-data'>
         { this.makeGeneralForm() }
