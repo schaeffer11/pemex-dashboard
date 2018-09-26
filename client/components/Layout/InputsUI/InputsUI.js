@@ -66,6 +66,10 @@ import Loading from '../Common/Loading'
     }
   }
 
+  handleSave(action) {
+    this.props.submitPozoForm(action)
+  }
+
   validate(){
     return (
       this.pozoMultiStepFormRef.current.getWrappedInstance().validate() &
@@ -113,7 +117,7 @@ import Loading from '../Common/Loading'
           <div style={{display: 'none'}}>
             { otherForm }
           </div>
-          <button className="submit save-button" disabled={pozoFormSubmitting} onClick={(e) => this.handleSubmit('save')}>{pozoFormSubmitting ? 'Guardando...' : 'Guardar'}</button>
+          <button className="submit save-button" disabled={pozoFormSubmitting} onClick={(e) => this.handleSave('save')}>{pozoFormSubmitting ? 'Guardando...' : 'Guardar'}</button>
           <button className="submit submit-button" disabled={pozoFormSubmitting} onClick={(e) => this.handleSubmit('submit')}>{pozoFormSubmitting ? 'Enviando...' : 'Enviar'}</button>
           <div className="form-error">{this.state.error}</div> 
           <div style={{height: '10px'}}></div>

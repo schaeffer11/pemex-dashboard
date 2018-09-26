@@ -141,13 +141,12 @@ export const InputRowCosts = ({ header, name, unit, value, onChange, index, onBl
 }
 
 export const InputDate = ({ name, onChange, value, header, onBlur, errors }) => {
-
+  console.log('what are these errors?', name, errors, value, objValue)
   const errorElements = generateErrorElements(name, errors)
   let handleSelect = (date, event) => {
     if(date)
       onChange(date.toISOString())
   }
-
   const objValue = value ? moment(value) : null 
  
   return (
