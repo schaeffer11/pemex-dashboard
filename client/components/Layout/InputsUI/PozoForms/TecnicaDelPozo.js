@@ -262,12 +262,12 @@ let columns = [
       {
         Header: 'Cima',
         accessor: 'cima',
-        cell: 'renderEditable',
+        cell: 'renderNumber',
       },
       {
         Header: 'Base',
         accessor: 'base',
-        cell: 'renderEditable',
+        cell: 'renderNumber',
       },
       {
         Header: 'Espesor',
@@ -278,7 +278,7 @@ let columns = [
     return (
       <div className='intervalos-form' >
         <div className='header'>
-          Cedula De Tratamiento
+          Intervalos
         </div>
         <div className='table'>
           <InputTable
