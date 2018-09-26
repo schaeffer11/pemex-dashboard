@@ -114,5 +114,9 @@
       max-width: inherit;
       font-size: .825em;
     }
+
+    .react-datepicker__close-icon::after {
+      background: $primary-green;
+    }
   }
 }

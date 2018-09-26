@@ -513,7 +513,7 @@ import { setFichaTecnicaDelCampo, setFichaTecnicaDelPozo, setEvaluacionPetrofisi
             {this.forms.map( (tab, index) => {
                const active = this.state.currentStep === index ? 'active' : ''; 
                const tabError = tab.error ? 'error' : ''
-               return <div className={`${className} ${active} ${tabError}`} onClick={() => this.handleClick(index)} key={index}><span></span> {tab.title} </div>
+               return <div className={`${className} ${active}`} onClick={() => this.handleClick(index)} key={index}><span></span> {tab.title} </div>
                }
             )}
         </div>

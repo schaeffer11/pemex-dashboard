@@ -1,5 +1,6 @@
 import React, { Component } from 'react'
 import autobind from 'autobind-decorator'
+import InputTable from '../../../Common/InputTable'
 import ReactTable from 'react-table'
 import { connect } from 'react-redux'
 import {withValidate} from '../../../Common/Validate'
@@ -32,47 +33,47 @@ let columns = [
   }, { 
     Header: 'Concentracion de Apuntalante (lbm/gal)',
     accessor: 'concentraciDeApuntalante',
-    cell: 'renderEditable',
+    cell: 'renderNumber',
   }, { 
     Header: 'Vol. Liq. (m3)',
     accessor: 'volLiquid',
-    cell: 'renderEditable',
+    cell: 'renderNumber',
   }, { 
     Header: 'Gasto N2 (m3/min)',
     accessor: 'gastoN2',
-    cell: 'renderEditable',
+    cell: 'renderNumber',
   }, { 
     Header: 'Gasto Liquido (bpm)',
     accessor: 'gastoLiqudo',
-    cell: 'renderEditable',
+    cell: 'renderNumber',
   }, { 
     Header: 'Gasto en fondo (bpm)',
     accessor: 'gastoEnFondo',
-    cell: 'renderEditable',
+    cell: 'renderNumber',
   }, { 
     Header: 'Calidad (%)',
     accessor: 'calidad',
-    cell: 'renderEditable',
+    cell: 'renderNumber',
   }, { 
     Header: 'Vol. N2 (m3 std)',
     accessor: 'volN2',
-    cell: 'renderEditable',
+    cell: 'renderNumber',
   }, { 
     Header: 'Vol. Liq. Acum. (m3)',
     accessor: 'volLiquidoAcum',
-    cell: 'renderEditable',
+    cell: 'renderNumber',
   }, { 
     Header: 'Vol. N2 Acum. (m3 std)',
     accessor: 'volN2Acum',
-    cell: 'renderEditable',
+    cell: 'renderNumber',
   }, { 
     Header: 'Rel. N2/Liq (m3 std/m3)',
     accessor: 'relN2Liq',
-    cell: 'renderEditable',
+    cell: 'renderNumber',
   }, { 
     Header: 'Tiempo (min)',
     accessor: 'tiempo',
-    cell: 'renderEditable',
+    cell: 'renderNumber',
   }
 ]
 
@@ -239,14 +240,16 @@ let columns = [
 
 
   makeCedulaTable() {
-    let { formData } = this.props
+    let { formData, setCedulaData } = this.props
     formData = formData.toJS()
     let { cedulaData } = formData
 
+    const objectTemplate = {}
+/*
     columns.forEach(column => {
       column.cell === 'renderEditable' ? column.Cell = this.renderEditable : null
     })
-
+*/
     let length = 1
     if (cedulaData) {
       length = cedulaData.length
@@ -257,9 +260,11 @@ let columns = [
           Cedula De Tratamiento
         </div>
         <div className='table'>
-          <ReactTable
+          <InputTable
             className="-striped"
             data={cedulaData}
+            newRow={objectTemplate}
+            setData={setCedulaData}
             columns={columns}
             showPagination={false}
             showPageSizeOptions={false}
@@ -267,8 +272,11 @@ let columns = [
             sortable={false}
             getTdProps={this.deleteRow}
           />
-        <button className='new-row-button' onClick={this.addNewRow}>Añadir un renglón</button>
         </div>
+        { this.state.errors.cedulaData && this.state.errors.cedulaData.checked &&
+          <div className="error">{this.state.errors.cedulaData.message}</div>
+        }
+        <button className='new-row-button' onClick={this.addNewRow}>Añadir un renglón</button>
       </div>
     )
   }
@@ -361,6 +369,17 @@ const validate = values => {
 
     if(!values.diametroDeDisparos){
       errors.diametroDeDisparos = {message: "Este campo no puede estar vacio"}
+    }
+
+    if(!values.cedulaData){
+      errors.cedulaData = {message: "Esta forma no puede estar vacia"}
+    }else {
+      values.cedulaData.forEach((row, index) => {
+        let hasEmpty = Object.values(row).find((value) => { return value.toString().trim() == '' })
+        if(hasEmpty !== undefined){
+            errors.cedulaData = {message: "Ningun campo puede estar vacio."}
+        }
+      })
     }
 
     return errors

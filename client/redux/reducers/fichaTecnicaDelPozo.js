@@ -25,7 +25,7 @@ const initialState = Map({
     historialIntervencionesData: [{
         fecha: '',
         intervenciones: '',
-        checked: []
+        errors: []
     }]
 })
 

@@ -3,6 +3,7 @@ import autobind from 'autobind-decorator'
 import { connect } from 'react-redux'
 import {withValidate} from '../../Common/Validate'
 import { setImgURL, setLayerData, setMudLossData, setChecked } from '../../../../redux/actions/pozo'
+import InputTable from '../../Common/InputTable'
 import ReactTable from 'react-table'
 import { freemem } from 'os';
 
@@ -20,48 +21,48 @@ let layerColumns = [
   }, {
     Header: 'Interval',
     accessor: 'interval',
-    cell: 'renderEditable',
+    cell: 'renderNumber',
   }, { 
     Header: 'Cima (md)',
     accessor: 'cimaMD',
-    cell: 'renderEditable',
+    cell: 'renderNumber',
 
   }, { 
     Header: 'Base (md)',
     accessor: 'baseMD',
-    cell: 'renderEditable',
+    cell: 'renderNumber',
   }, { 
     Header: 'Cima (mv)',
     accessor: 'cimaMV',
-    cell: 'renderEditable',
+    cell: 'renderNumber',
   }, { 
     Header: 'Base (mv)',
     accessor: 'baseMV',
-    cell: 'renderEditable',
+    cell: 'renderNumber',
   }, { 
     Header: 'V arc.(%)',
     accessor: 'vArc',
-    cell: 'renderEditable',
+    cell: 'renderNumber',
   }, { 
     Header: 'Porosity (%',
     accessor: 'porosity',
-    cell: 'renderEditable',
+    cell: 'renderNumber',
   }, { 
     Header: 'Sw. (%)',
     accessor: 'sw',
-    cell: 'renderEditable',
+    cell: 'renderNumber',
   }, { 
     Header: 'Dens. (gr/cc)',
     accessor: 'dens',
-    cell: 'renderEditable',
+    cell: 'renderNumber',
   }, { 
     Header: 'Resis. (ohm)',
     accessor: 'resis',
-    cell: 'renderEditable',
+    cell: 'renderNumber',
   }, { 
     Header: 'Perm. (mD)',
     accessor: 'perm',
-    cell: 'renderEditable',
+    cell: 'renderNumber',
   }
 ]
 
@@ -79,19 +80,19 @@ let mudLossColumns = [
   }, {
     Header: 'Cima (md)',
     accessor: 'cimaMD',
-    cell: 'renderEditable',
+    cell: 'renderNumber',
   }, { 
     Header: 'Base (md)',
     accessor: 'baseMD',
-    cell: 'renderEditable',
+    cell: 'renderNumber',
   }, { 
     Header: 'Lodo perdido (m3)',
     accessor: 'lodoPerdido',
-    cell: 'renderEditable',
+    cell: 'renderNumber',
   }, { 
     Header: 'Densidad (gr/cc)',
     accessor: 'densidad',
-    cell: 'renderEditable',
+    cell: 'renderNumber',
   }
 ]
 
@@ -253,11 +254,12 @@ let mudLossColumns = [
     let { setLayerData, formData } = this.props
     formData = formData.toJS()
     let { layerData } = formData
-
+    let objectTemplate = {cimaMD: '', baseMD: '', lodoPerdido: '', densidad: ''}
+/*
     layerColumns.forEach(column => {
       column.cell === 'renderEditable' ? column.Cell = this.renderEditable : null
     })
-
+*/
     return (
       <div style={{marginBot: '20px'}}> 
         <div className='header'>
@@ -265,9 +267,11 @@ let mudLossColumns = [
         </div>
         <div className='table'>
 
-          <ReactTable
+          <InputTable
             className="-striped"
             data={layerData}
+            newRow={objectTemplate}
+            setData={setLayerData}
             columns={layerColumns}
             showPagination={false}
             showPageSizeOptions={false}
@@ -277,6 +281,9 @@ let mudLossColumns = [
           />
 
         </div>
+        { this.state.errors.layerData && this.state.errors.layerData.checked &&
+          <div className="error">{this.state.errors.layerData.message}</div>
+        }
         <button className='new-row-button' onClick={this.addNewRow}>Añadir un renglón</button>
       </div>
     )
@@ -289,10 +296,12 @@ let mudLossColumns = [
     formData = formData.toJS()
     let { mudLossData } = formData
 
+    let objectTemplate = {cimaMD: '', baseMD: '', lodoPerdido: '', densidad: ''}
+/*
     mudLossColumns.forEach(column => {
       column.cell === 'renderEditable' ? column.Cell = this.renderEditableMudLoss : null
     })
-
+*/
 
     return (
       <div style={{marginBot: '20px'}}> 
@@ -301,9 +310,11 @@ let mudLossColumns = [
         </div>
         <div className='table'>
 
-          <ReactTable
+          <InputTable
             className="-striped"
             data={mudLossData}
+            newRow={objectTemplate}
+            setData={setMudLossData}
             columns={mudLossColumns}
             showPagination={false}
             showPageSizeOptions={false}
@@ -313,6 +324,9 @@ let mudLossColumns = [
           />
 
         </div>
+        { this.state.errors.mudLossData && this.state.errors.mudLossData.checked &&
+          <div className="error">{this.state.errors.mudLossData.message}</div>
+        }
         <button className='new-row-button' onClick={this.addNewRowMudLoss}>Añadir un renglón</button>
       </div>
     )
@@ -335,10 +349,14 @@ let mudLossColumns = [
     return (
       <div style={{marginBot: '20px'}}>
         <div className='header'>
-          Upload Well Log File (spanish)
+          Cargar el Archivo de Registro del Pozo
+          {/*Upload Well Log File (spanish)*/}
         </div>
         <input type='file' accept="image/*" onChange={this.handleFileUpload}></input>
         {imgURL ? <img className='img-preview' src={imgURL}></img> : null }
+        { this.state.errors.imgURL && this.state.errors.imgURL.checked &&
+          <div className="error">{this.state.errors.imgURL.message}</div>
+        }
       </div>
     )
   }
@@ -357,7 +375,34 @@ let mudLossColumns = [
 }
 
 const validate = values => {
-    const errors = {}
+    let errors = {}
+
+    if(!values.layerData){
+      errors.layerData = {message: "Esta forma no puede estar vacia"}
+    }else {
+      values.layerData.forEach((row, index) => {
+        let hasEmpty = Object.values(row).find((value) => { return value.toString().trim() == '' })
+        if(hasEmpty !== undefined){
+            errors.layerData = {message: "Ningun campo puede estar vacio."}
+        }
+      })
+    }
+
+    if(!values.mudLossData){
+      errors.mudLossData = {message: "Esta forma no puede estar vacia"}
+    }else {
+      values.mudLossData.forEach((row, index) => {
+        let hasEmpty = Object.values(row).find((value) => { return value.toString().trim() == '' })
+        if(hasEmpty !== undefined){
+            errors.mudLossData = {message: "Ningun campo puede estar vacio."}
+        }
+      })
+    }
+
+    if(!values.imgURL){
+      errors.imgURL = {message: "Ningun campo puede estar vacio."}
+    }
+
     return errors
 }
 

@@ -4,6 +4,8 @@ import ReactTable from 'react-table'
 import { connect } from 'react-redux'
 import 'react-table/react-table.css'
 import Select from 'react-select'
+import InputTable from '../../Common/InputTable'
+import {withValidate} from '../../Common/Validate'
 
 import { InputRow, InputRowUnitless, InputRowSelectUnitless, TextAreaUnitless } from '../../Common/InputRow'
 import { setEstimacionCostosData } from '../../../../redux/actions/intervencionesEstimulacion'
@@ -42,6 +44,9 @@ const companyOptions = [
   constructor(props) {
     super(props)
     this.state = {
+      containsErrors: false,
+      errors: [],
+      checked: []
     }
   }
 
@@ -51,6 +56,37 @@ const companyOptions = [
 
   componentDidUpdate(prevProps) {
 
+  }
+
+  containsErrors(){
+    let foundErrors = false
+    for (const key of Object.keys(this.state.errors)) {
+      if(this.state.errors[key].checked)
+        foundErrors = true
+    }
+
+    if(foundErrors !== this.state.containsErrors){
+      this.setState({
+        containsErrors: foundErrors
+      })
+    }
+
+  }
+
+  validate(event){
+    let {setChecked, formData} = this.props
+    formData = formData.toJS()
+
+    let field = event ? event.target.name : null
+    let {errors, checked} = this.props.validate(field, formData)
+
+    this.setState({
+      errors: errors,
+    })
+
+    if(event && event.target.name){
+      setChecked(checked)
+    }
   }
 
   renderEditable(cellInfo) {
@@ -161,9 +197,9 @@ const companyOptions = [
                 </div>)
               }
       }, { 
-        Header: 'Cost (MNX)',
+        Header: 'Costo (MNX)',
         accessor: 'cost',
-        cell: 'renderEditable',
+        cell: 'renderNumber',
         maxWidth: 180,
         resizable: false
       }, { 
@@ -187,16 +223,20 @@ const companyOptions = [
       }
     ]
 
+    const objectTemplate = {}
+/*
     columns.forEach(column => {
       column.cell === 'renderEditable' ? column.Cell = this.renderEditable : null
     })
-
+*/
     return (
       <div className='generales-form' >
         <div className='table-select'>
-          <ReactTable
+          <InputTable
             className="-striped"
             data={estimacionCostosData}
+            newRow={objectTemplate}
+            setData={setEstimacionCostosData}
             columns={columns}
             showPagination={false}
             showPageSizeOptions={false}
@@ -205,6 +245,9 @@ const companyOptions = [
             getTdProps={this.deleteRow}
           />
         </div>
+        { this.state.errors.estimacionCostosData && this.state.errors.estimacionCostosData.checked &&
+          <div className="error">{this.state.errors.estimacionCostosData.message}</div>
+        }
       </div>
     )
   }
@@ -223,6 +266,22 @@ const companyOptions = [
   }
 }
 
+const validate = values => {
+    let errors = {}
+
+    if(!values.estimacionCostosData){
+      errors.estimacionCostosData = {message: "Esta forma no puede estar vacia"}
+    }else {
+      values.estimacionCostosData.forEach((row, index) => {
+        let hasEmpty = Object.values(row).find((value) => { return value.toString().trim() == '' })
+        if(hasEmpty !== undefined){
+            errors.estimacionCostosData = {message: "Ningun campo puede estar vacio."}
+        }
+      })
+    }
+    
+    return errors
+}
 
 const mapStateToProps = state => ({
   formData: state.get('estCost'),
@@ -232,4 +291,8 @@ const mapDispatchToProps = dispatch => ({
   setEstimacionCostosData: val => dispatch(setEstimacionCostosData(val)),
 })
 
-export default connect(mapStateToProps, mapDispatchToProps)(EstimacionCostos)
+export default withValidate(
+  validate,
+  connect(mapStateToProps, mapDispatchToProps)(EstimacionCostos)
+)
+

@@ -2,6 +2,7 @@ import React, { Component } from 'react'
 import autobind from 'autobind-decorator'
 import { connect } from 'react-redux'
 import ReactTable from 'react-table'
+import moment from 'moment'
 import DatePicker from 'react-datepicker'
 import {withValidate} from '../../Common/Validate'
 import { InputRow, InputRowUnitless, InputRowSelectUnitless, InputDate } from '../../Common/InputRow'
@@ -22,9 +23,7 @@ let columns = [
     Header: 'Fecha',
     accessor: 'fecha',
     width: 150,
-    Cell: row => {
-        return (<DatePicker selected={row.original.startDate} />)
-    }
+    cell: 'renderDate'
   }, { 
     Header: 'Historial de Intervenciones',
     accessor: 'intervenciones',
@@ -169,6 +168,29 @@ let columns = [
     );
   }
 
+  renderDate(cellInfo){
+    let { setHistorialIntervencionesData, formData } = this.props
+    formData = formData.toJS()
+    let { historialIntervencionesData } = formData
+
+    const date = historialIntervencionesData[cellInfo.index][cellInfo.column.id]
+    const val = date ? moment(date) : null;
+    return (
+      <DatePicker 
+        isClearable={true}
+        locale="es-mx"
+        dateFormat="L"
+        onKeyDown={(e) => {e.preventDefault(); return false; }} //Disable input from user
+        onChange={ e => {
+          if(e){
+            historialIntervencionesData[cellInfo.index][cellInfo.column.id] = e.toISOString();
+            setHistorialIntervencionesData(historialIntervencionesData)
+          }
+        }} 
+        selected={val} />
+    )
+  }
+
   addNewRow() {
     let { formData, setHistorialIntervencionesData } = this.props
     formData = formData.toJS()
@@ -208,7 +230,12 @@ let columns = [
     let { historialIntervencionesData } = formData
 
     columns.forEach(column => {
-      column.cell === 'renderEditable' ? column.Cell = this.renderEditable : null
+      if(column.cell === 'renderEditable')
+        column.Cell = this.renderEditable
+      else if(column.cell === 'renderDate')
+        column.Cell = this.renderDate
+      else 
+        column.Cell = null
     })
 
     return (
@@ -228,6 +255,9 @@ let columns = [
             getTdProps={this.deleteRow}
           />
         </div>
+        { this.state.errors.historialIntervencionesData &&
+          <div className="error">{this.state.errors.historialIntervencionesData.message}</div>
+        }
         <button className='new-row-button' onClick={this.addNewRow}>Añadir un renglón</button>
       </div>
     )
@@ -325,6 +355,16 @@ const validate = values => {
 
     if(!values.profSensorPYT ){
        errors.profSensorPYT = {message: "Este campo no puede estar vacio"}
+    }
+
+    if(!values.historialIntervencionesData){
+      errors.historialIntervencionesData = {message: "Esta forma no puede estar vacia"}
+    }else {
+      values.historialIntervencionesData.forEach((row, index) => {
+        if(row.fecha.trim() == '' || row.intervenciones.trim() == ''){
+            errors.historialIntervencionesData = {message: "Ningun campo puede estar vacio."}
+        }
+      })
     }
 
     return errors

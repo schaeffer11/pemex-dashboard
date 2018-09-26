@@ -3,6 +3,7 @@ import { connect } from 'react-redux'
 import autobind from 'autobind-decorator'
 import {withValidate} from '../../Common/Validate'
 import { setPresionDataCampo, setChecked } from '../../../../redux/actions/pozo'
+import InputTable from '../../Common/InputTable'
 import ReactTable from 'react-table'
 
 let columns = [
@@ -19,23 +20,23 @@ let columns = [
   }, {
     Header: 'Fecha',
     accessor: 'fecha',
-    cell: 'renderEditable',
+    cell: 'renderDate',
   }, { 
     Header: 'Qo (Mbpd)',
     accessor: 'Qo',
-    cell: 'renderEditable',
+    cell: 'renderNumber',
   }, { 
     Header: 'Np (MMbls)',
     accessor: 'Np',
-    cell: 'renderEditable',
+    cell: 'renderNumber',
   }, { 
     Header: 'Pws (Kg/cm2)',
     accessor: 'Pws',
-    cell: 'renderEditable',
+    cell: 'renderNumber',
   }, { 
     Header: 'Pr (Kg/cm2)',
     accessor: 'Pr',
-    cell: 'renderEditable',
+    cell: 'renderNumber',
   }
 ]
 
@@ -43,11 +44,13 @@ let columns = [
   constructor(props) {
     super(props)
     this.state = { 
-      containsErrors: false
+      containsErrors: false,
+      errors: []
     }
   }
 
   componentDidMount(){
+    this.validate()
     this.containsErrors()
     this.props.containsErrors(this, this.state.containsErrors)
   }
@@ -58,18 +61,15 @@ let columns = [
   }
 
   containsErrors(){
-    const {forms} = this.props
-    const errors = forms.get('pozoFormError')
-
-    var foundErrors = errors.find(error => {
-      return [].includes(error.field)
-    })
-
-    foundErrors = foundErrors === undefined ? false : true
+    let foundErrors = false
+    for (const key of Object.keys(this.state.errors)) {
+      if(this.state.errors[key].checked)
+        foundErrors = true
+    }
 
     if(foundErrors !== this.state.containsErrors){
       this.setState({
-        containsErrors: foundErrors === undefined
+        containsErrors: foundErrors
       })
     }
   }
@@ -141,36 +141,55 @@ let columns = [
   }
 
   render() {
-    let { formData } = this.props
+    let { formData, setPresionDataCampo } = this.props
     formData = formData.toJS()
     let { presionDataCampo } = formData
 
+    const objectTemplate = {fecha: '', Qo: '', Np: '', Pws: '', Pr: ''}
+
+/*
     columns.forEach(column => {
       column.cell === 'renderEditable' ? column.Cell = this.renderEditable : null
     })
-
+*/
     return (
       <div className='generales-form' >
         <div className='table-select'>
-          <ReactTable
+          <InputTable
             className="-striped"
             data={presionDataCampo}
+            newRow={objectTemplate}
+            setData={setPresionDataCampo}
             columns={columns}
             showPagination={false}
             showPageSizeOptions={false}
             pageSize={presionDataCampo.length}
             sortable={false}
             getTdProps={this.deleteRow}
-          />
-        <button className='new-row-button' onClick={this.addNewRow}>Añadir un renglón</button>
+          />        
         </div>
+        { this.state.errors.presionDataCampo && this.state.errors.presionDataCampo.checked &&
+          <div className="error">{this.state.errors.presionDataCampo.message}</div>
+        }
+        <button className='new-row-button' onClick={this.addNewRow}>Añadir un renglón</button>
       </div>
     )
   }
 }
 
 const validate = values => {
-    const errors = {}
+    let errors = {}
+
+    if(!values.presionDataCampo){
+      errors.presionDataCampo = {message: "Esta forma no puede estar vacia"}
+    }else {
+      values.presionDataCampo.forEach((row, index) => {
+        let hasEmpty = Object.values(row).find((value) => { return value.toString().trim() == '' })
+        if(hasEmpty !== undefined){
+            errors.presionDataCampo = {message: "Ningun campo puede estar vacio."}
+        }
+      })
+    }
 
     return errors
 }
