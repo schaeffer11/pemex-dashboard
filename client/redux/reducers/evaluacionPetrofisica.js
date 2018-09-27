@@ -1,6 +1,6 @@
 import { Map, fromJS } from 'immutable'
 
-const initialState = Map({ 
+const initialState = fromJS({ 
     layerData: [{
         index: 0,
         interval: 1,

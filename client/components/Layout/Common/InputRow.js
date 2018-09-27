@@ -56,6 +56,42 @@ export const InputRowUnitless = ({ header, type='text', name, unit, value, onCha
     )
 }
 
+export const InputRowSelectMulti = ({ header, name, value, options, callback, onBlur, index, errors=[] }) => {
+  if (!options) {
+    options = []
+  }
+   //Suplement the event object with the properties that are not provided by the Select component
+   let handleBlur = (e) => {
+    if(onBlur && onBlur instanceof Function){
+      e.target.name = name
+      e.target.value = options.find(i=>i.value === value)
+      onBlur(e)
+    }
+  }
+  {/* value={options.find(i=>i.value === value) || null}
+        onChange={callback}
+        onBlur={handleBlur} */}
+
+  return (
+    <div className='input-row input-row-unitless'>
+      <div className='label'>
+        {header}
+      </div>
+      <Select
+        className='input'
+        isMulti
+        simpleValue={true}
+        options={options}
+        onChange={callback}
+        name={name}
+        index={index}
+        onBlur={handleBlur}
+      />
+      {/* { errorElements } */}
+    </div>
+    )
+}
+
 export const InputRowSelectUnitless = ({ header, name, value, options, callback, onBlur, index, errors=[] }) => {
 
   if (!options) {

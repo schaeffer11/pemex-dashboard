@@ -57,6 +57,13 @@ import DatePicker from 'react-datepicker'
     );
   }
 
+  renderSelect() {
+    let {data, setData} = this.props
+    return (
+      <div>welcome to the machine</div>
+    )
+  }
+
   renderDate(cellInfo){
     let {data, setData} = this.props
 
@@ -116,6 +123,8 @@ import DatePicker from 'react-datepicker'
         column.Cell = this.renderDate
       else if(column.cell === 'renderNumber')
         column.Cell = this.renderNumber
+      else if(column.cell === 'renderSelect')
+        column.Cell = this.renderSelect
       else if(column.cell)
         column.Cell = null
     })
