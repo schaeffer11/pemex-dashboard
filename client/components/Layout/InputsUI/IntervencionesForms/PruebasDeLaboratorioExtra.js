@@ -537,7 +537,7 @@ const grabadoOptions = [
         accessor: 'sistemaAcido',
         cell: 'renderEditable',
       }, {
-        Header: 'Tiempo de contacto (min)',
+        Header: <div>Tiempo de contacto<br></br>(min)</div>,
         accessor: 'tiempoDeContacto',
         cell: 'renderEditable',
       }, {

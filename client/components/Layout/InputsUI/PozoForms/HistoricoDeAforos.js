@@ -31,43 +31,43 @@ let columns = [
     accessor: 'estrangulador',
     cell: 'renderNumber',
   }, { 
-    Header: 'PTP',
+    Header: <div>P<sub>TP</sub></div>,
     accessor: 'ptp',
     cell: 'renderNumber',
   }, { 
-    Header: 'TTP',
+    Header: <div>T<sub>TP</sub></div>,
     accessor: 'ttp',
     cell: 'renderNumber',
   }, { 
-    Header: 'PBAJ',
+    Header: <div>P<sub>BAJ</sub></div>,
     accessor: 'pbaj',
     cell: 'renderNumber',
   }, { 
-    Header: 'TBAJ',
+    Header: <div>T<sub>BAJ</sub></div>,
     accessor: 'tbaj',
     cell: 'renderNumber',
   }, { 
-    Header: 'Psep',
+    Header: <div>P<sub>sep</sub></div>,
     accessor: 'psep',
     cell: 'renderNumber',
   }, { 
-    Header: 'Tsep',
+    Header: <div>T<sub>sep</sub></div>,
     accessor: 'tsep',
     cell: 'renderNumber',
   }, { 
-    Header: 'Ql',
+    Header: <div>Q<sub>i</sub></div>,
     accessor: 'ql',
     cell: 'renderNumber',
   }, { 
-    Header: 'Qo',
+    Header: <div>Q<sub>o</sub></div>,
     accessor: 'qo',
     cell: 'renderNumber',
   }, { 
-    Header: 'Qg',
+    Header: <div>Q<sub>g</sub></div>,
     accessor: 'qg',
     cell: 'renderNumber',
   }, { 
-    Header: 'Qw',
+    Header: <div>Q<sub>w</sub></div>,
     accessor: 'qw',
     cell: 'renderNumber',
   }, { 

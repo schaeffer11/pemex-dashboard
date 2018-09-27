@@ -24,7 +24,7 @@ let columns = [
     accessor: 'fecha',
     cell: 'renderDate',
   }, { 
-    Header: 'Pr (Kg/cm2)',
+    Header: <div>Pr<br></br>(Kg/cm<sup>2</sup>)</div>,
     accessor: 'Pr',
     cell: 'renderNumber',
   }

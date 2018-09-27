@@ -16,7 +16,7 @@ export const itemOptions = [
   { label: 'Costo de sistema reactivo', value: 'Costo de sistema reactivo' },
   { label: 'Costo de sistema no reactivo', value: 'Costo de sistema no reactivo' },
   { label: 'Costo de divergentes', value: 'Costo de divergentes' },
-  { label: 'Costo de N2', value: 'Costo de N2' },
+  { label: <div>Costo de N<sub>2</sub></div>, value: 'Costo de N2' },
   { label: 'Costo de HCl', value: 'Costo de HCl' },
   { label: 'Costo Unidades de alta presion', value: 'Costo Unidades de alta presion' },
   { label: 'Costo del gel de fractura', value: 'Costo del gel de fractura' },
@@ -197,14 +197,14 @@ const companyOptions = [
                 </div>)
               }
       }, { 
-        Header: 'Costo (MNX)',
+        Header: <div>Costo<br></br>(MNX)</div>,
 
         accessor: 'cost',
         cell: 'renderNumber',
         maxWidth: 180,
         resizable: false
       }, { 
-      Header: 'Costo (DLS)',
+      Header: <div>Costo<br></br>(DLS)</div>,
         accessor: 'costDLS',
         cell: 'renderNumber',
         maxWidth: 180,

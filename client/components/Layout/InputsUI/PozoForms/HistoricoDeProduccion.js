@@ -27,47 +27,47 @@ let columns = [
     accessor: 'dias',
     cell: 'renderNumber',
   }, { 
-    Header: 'Qo (bbl/d)',
+    Header: <div>Qo<br></br>(bbl/d)</div>,
     accessor: 'qo',
     cell: 'renderNumber',
   }, { 
-    Header: 'Qw (bbl/d)',
+    Header: <div>Qw<br></br>(bbl/d)</div>,
     accessor: 'qw',
     cell: 'renderNumber',
   }, { 
-    Header: 'Qg (MMpc/d)',
+    Header: <div>Qg<br></br>(MMpc/d)</div>,
     accessor: 'qg',
     cell: 'renderNumber',
   }, { 
-    Header: 'Qgi (MMpc/d)',
+    Header: <div>Qgi<br></br>(MMpc/d)</div>,
     accessor: 'qgi',
     cell: 'renderNumber',
   }, { 
-    Header: 'Volumen O (bbl)',
+    Header: <div>Volumen O<br></br>(bbl)</div>,
     accessor: 'qo_vol',
   }, { 
-    Header: 'Volumen W (bbl)',
+    Header: <div>Volumen W<br></br>(bbl)</div>,
     accessor: 'qw_vol',
   }, { 
-    Header: 'Volumen G (MMpc)',
+    Header: <div>Volumen G<br></br>(MMpc)</div>,
     accessor: 'qg_vol',
   }, { 
-    Header: 'Volumen Gi (MMpc',
+    Header: <div>Volumen Gi<br></br>(MMpc</div>,
     accessor: 'qgi_vol',
   }, { 
-    Header: 'Np (MMbbl)',
+    Header: <div>Np<br></br>(MMbbl)</div>,
     accessor: 'np',
   }, { 
-    Header: 'Wp (MMbbl)',
+    Header: <div>Wp<br></br>(MMbbl)</div>,
     accessor: 'wp',
   }, { 
-    Header: 'Gp (MMMpc)',
+    Header: <div>Gp<br></br>(MMMpc)</div>,
     accessor: 'gp',
   }, { 
-    Header: 'Gi (MMMpc)',
+    Header: <div>Gi<br></br>(MMMpc)</div>,
     accessor: 'gi',
   }, { 
-    Header: 'RGA (m3/m3)',
+    Header: <div>RGA<br></br>(m<sup>3</sup>/m<sup>3</sup>)</div>,
     accessor: 'rga',
   }, { 
     Header: 'Fw Fraction',
