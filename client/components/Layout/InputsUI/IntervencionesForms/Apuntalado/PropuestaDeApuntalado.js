@@ -2,80 +2,12 @@ import React, { Component } from 'react'
 import autobind from 'autobind-decorator'
 import InputTable from '../../../Common/InputTable'
 import ReactTable from 'react-table'
+import Select from 'react-select'
 import { connect } from 'react-redux'
 import {withValidate} from '../../../Common/Validate'
 import { InputRow, InputRowUnitless, InputRowSelectUnitless } from '../../../Common/InputRow'
-import { setCedulaData, setModuloYoungArena, setModuloYoungLutitas, setRelacPoissonArena, setRelacPoissonLutatas, setGradienteDeFractura, setDensidadDeDisparos, setDiametroDeDisparos, setIntervalo, setLongitudDeIntervalo, setVolAparejo, setCapacidadTotalDelPozo, setVolumenPrecolchonN2, setVolumenDeApuntalante, setVolumenDeGelDeFractura, setVolumenDesplazamiento, setVolumenTotalDeLiquido, setChecked } from '../../../../../redux/actions/intervencionesApuntalado'
+import { setCedulaData, setModuloYoungArena, setModuloYoungLutitas, setRelacPoissonArena, setRelacPoissonLutatas, setGradienteDeFractura, setDensidadDeDisparos, setDiametroDeDisparos, setIntervalo, setLongitudDeIntervalo, setVolAparejo, setCapacidadTotalDelPozo, setVolumenPrecolchonN2, setVolumenDeApuntalante, setVolumenDeGelDeFractura, setVolumenDesplazamiento, setVolumenTotalDeLiquido, setChecked, setPropuestaCompany } from '../../../../../redux/actions/intervencionesApuntalado'
 
-let columns = [
-  {
-    Header: '',
-    accessor: 'delete',
-    width: 35,
-    resizable: false,
-    Cell: row => {
-      if (row.original.length > 1) {
-        return (<div style={{color: 'white', background: 'red', borderRadius: '4px', textAlign: 'center', cursor: 'pointer'}}>X</div>)
-      }
-    }
-  }, {
-    Header: 'Etapa',
-    accessor: 'etapa',
-    cell: 'renderEditable',
-  }, { 
-    Header: 'Sistema (NR-R-D)',
-    accessor: 'sistema',
-    cell: 'renderEditable',
-  }, { 
-    Header: 'Tipo de Apuntalante',
-    accessor: 'tipoDeApuntalante',
-    cell: 'renderEditable',
-  }, { 
-    Header: 'Concentracion de Apuntalante (lbm/gal)',
-    accessor: 'concentraciDeApuntalante',
-    cell: 'renderNumber',
-  }, { 
-    Header: 'Vol. Liq. (m3)',
-    accessor: 'volLiquid',
-    cell: 'renderNumber',
-  }, { 
-    Header: 'Gasto N2 (m3/min)',
-    accessor: 'gastoN2',
-    cell: 'renderNumber',
-  }, { 
-    Header: 'Gasto Liquido (bpm)',
-    accessor: 'gastoLiqudo',
-    cell: 'renderNumber',
-  }, { 
-    Header: 'Gasto en fondo (bpm)',
-    accessor: 'gastoEnFondo',
-    cell: 'renderNumber',
-  }, { 
-    Header: 'Calidad (%)',
-    accessor: 'calidad',
-    cell: 'renderNumber',
-  }, { 
-    Header: 'Vol. N2 (m3 std)',
-    accessor: 'volN2',
-    cell: 'renderNumber',
-  }, { 
-    Header: 'Vol. Liq. Acum. (m3)',
-    accessor: 'volLiquidoAcum',
-    cell: 'renderNumber',
-  }, { 
-    Header: 'Vol. N2 Acum. (m3 std)',
-    accessor: 'volN2Acum',
-    cell: 'renderNumber',
-  }, { 
-    Header: 'Rel. N2/Liq (m3 std/m3)',
-    accessor: 'relN2Liq',
-    cell: 'renderNumber',
-  }, { 
-    Header: 'Tiempo (min)',
-    accessor: 'tiempo',
-    cell: 'renderNumber',
-  }
-]
 
 @autobind class PropuestaDeApuntalado extends Component {
   constructor(props) {
@@ -131,22 +63,53 @@ let columns = [
   }
 
   makeGeneralForm() {
-    let { setIntervalo, setLongitudDeIntervalo, setVolAparejo, setCapacidadTotalDelPozo, formData } = this.props
+    let { formData, intervalos, setPropuestaCompany } = this.props
     formData = formData.toJS()
-    let { intervalo, longitudDeIntervalo, volAparejo, capacidadTotalDelPozo } = formData
+    let { propuestaCompany } = formData
+    const companyOptions = [
+      { label: 'Halliburton', value: 'Halliburton' },
+      { label: 'Schlumberger', value: 'Schlumberger' },
+      { label: 'PFM', value: 'PFM' },
+      { label: 'Chemiservices', value: 'Chemiservices' },
+      { label: 'BJ', value: 'BJ' },
+      { label: 'Weatherford',
+      value: 'Weatherford' }
+    ]
 
     return (
       <div className='general-form' >
         <div className='header'>
           General
         </div>
-        <InputRowUnitless header="Intervalo(s)" name='intervalo' value={intervalo} onChange={setIntervalo} errors={this.state.errors} onBlur={this.validate}/>
-        <InputRow header="Longitud de intervalo a tratar" name='longitudDeIntervalo' unit='m' value={longitudDeIntervalo} onChange={setLongitudDeIntervalo} errors={this.state.errors} onBlur={this.validate}/>
-        <InputRow header="Vol. Aparejo (VAP)" name='longitudDeIntervalo' unit='m3' value={volAparejo} onChange={setVolAparejo} errors={this.state.errors} onBlur={this.validate}/>
-        <InputRow header="Capacidad total del pozo (cima/base)" name='capacidadTotalDelPozo' unit='m3/m3' value={capacidadTotalDelPozo} onChange={setCapacidadTotalDelPozo} errors={this.state.errors} onBlur={this.validate}/>
+        <InputRowSelectUnitless
+          header="Compañía"
+          name="company"
+          options={companyOptions}
+          onBlur={this.validate}
+          value={propuestaCompany}
+          callback={e => setPropuestaCompany(e.value)}
+        />
       </div>
     )
   }
+
+  // makeGeneralForm() {
+  //   let { setIntervalo, intervalos, setLongitudDeIntervalo, setVolAparejo, setCapacidadTotalDelPozo, formData } = this.props
+  //   formData = formData.toJS()
+  //   let { intervalo, longitudDeIntervalo, volAparejo, capacidadTotalDelPozo } = formData
+
+  //   return (
+  //     <div className='general-form' >
+  //       <div className='header'>
+  //         General
+  //       </div>
+  //       <InputRowUnitless header="Intervalo(s)" name='intervalo' value={intervalo} onChange={setIntervalo} errors={this.state.errors} onBlur={this.validate}/>
+  //       <InputRow header="Longitud de intervalo a tratar" name='longitudDeIntervalo' unit='m' value={longitudDeIntervalo} onChange={setLongitudDeIntervalo} errors={this.state.errors} onBlur={this.validate}/>
+  //       <InputRow header="Vol. Aparejo (VAP)" name='longitudDeIntervalo' unit='m3' value={volAparejo} onChange={setVolAparejo} errors={this.state.errors} onBlur={this.validate}/>
+  //       <InputRow header="Capacidad total del pozo (cima/base)" name='capacidadTotalDelPozo' unit='m3/m3' value={capacidadTotalDelPozo} onChange={setCapacidadTotalDelPozo} errors={this.state.errors} onBlur={this.validate}/>
+  //     </div>
+  //   )
+  // }
 
   makeDetallesForm() {
     let { setVolumenPrecolchonN2, setVolumenDeApuntalante, setVolumenDeGelDeFractura, setVolumenDesplazamiento, setVolumenTotalDeLiquido, formData } = this.props
@@ -238,18 +201,147 @@ let columns = [
     }
   }
 
-
-  makeCedulaTable() {
+  handleSelect(row, e) {
+    console.log('row', row)
     let { formData, setCedulaData } = this.props
     formData = formData.toJS()
     let { cedulaData } = formData
 
+    cedulaData[row.index][row.column.id] = e
+
+    setCedulaData(cedulaData)
+  }
+
+  makeCedulaTable() {
+    let { formData, setCedulaData, intervalos } = this.props
+    formData = formData.toJS()
+    intervalos = intervalos.toJS()
+    let { cedulaData } = formData
+
+    const intervaloOptions = intervalos.map(elem =>({
+      value: `${elem.baseMD}-${elem.cimaMD}`,
+      label: `${elem.baseMD}-${elem.cimaMD}`,
+    }))
+
+    const sistemaOptions = [
+      { value: 'reactivo', label: 'Reactivo' },
+      { value: 'no-reactivo', label: 'No Reactivo' },
+      { value: 'pre-colchon', label: 'Pre-colchón' },
+      { value: 'divergente', label: 'Divergente' },
+      { value: 'desplasamiento', label: 'Desplasamiento' },
+    ]
+
+    const columns = [
+      {
+        Header: '',
+        accessor: 'delete',
+        width: 35,
+        resizable: false,
+        Cell: row => {
+          if (row.original.length > 1) {
+            return (<div style={{color: 'white', background: 'red', borderRadius: '4px', textAlign: 'center', cursor: 'pointer'}}>X</div>)
+          }
+        }
+      }, {
+        Header: 'Etapa',
+        accessor: 'etapa',
+      }, 
+      {
+        Header: 'Intervalo',
+        accessor: 'intervalo',
+        width: 200,
+        resizable: false,
+        style: {overflow: 'visible'},
+        Cell: row => {
+          return (
+            <div>
+              <Select
+                className='input'
+                simpleValue={true}
+                options={intervaloOptions}
+                value={intervaloOptions.find(i=>i.value === row.original.intervalo) || null}
+                onChange={(e) => this.handleSelect(row, e.value)} 
+              />
+            </div>
+          )
+        }
+      },
+      {
+        Header: 'Sistema',
+        accessor: 'sistema',
+        width: 200,
+        resizable: false,
+        style: {overflow: 'visible'},
+        Cell: row => {
+          return (
+            <div>
+              <Select
+                className='input'
+                simpleValue={true}
+                options={sistemaOptions}
+                value={sistemaOptions.find(i=>i.value === row.original.sistema) || null}
+                onChange={(e) => this.handleSelect(row, e.value)} 
+              />
+            </div>
+          )
+        }
+      },
+      {
+        Header: 'Nombre Comercial',
+        accessor: 'nombreComercial',
+        cell: 'renderEditable',
+      },
+      { 
+        Header: 'Tipo de Apuntalante',
+        accessor: 'tipoDeApuntalante',
+        cell: 'renderEditable',
+      }, { 
+        Header: 'Concentracion de Apuntalante (lbm/gal)',
+        accessor: 'concentraciDeApuntalante',
+        cell: 'renderNumber',
+      }, { 
+        Header: 'Vol. Liq. (m3)',
+        accessor: 'volLiquid',
+        cell: 'renderNumber',
+      }, { 
+        Header: 'Gasto N2 (m3/min)',
+        accessor: 'gastoN2',
+        cell: 'renderNumber',
+      }, { 
+        Header: 'Gasto Liquido (bpm)',
+        accessor: 'gastoLiqudo',
+        cell: 'renderNumber',
+      }, { 
+        Header: 'Gasto en fondo (bpm)',
+        accessor: 'gastoEnFondo',
+        cell: 'renderNumber',
+      }, { 
+        Header: 'Calidad (%)',
+        accessor: 'calidad',
+        cell: 'renderNumber',
+      }, { 
+        Header: 'Vol. N2 (m3 std)',
+        accessor: 'volN2',
+        cell: 'renderNumber',
+      }, { 
+        Header: 'Vol. Liq. Acum. (m3)',
+        accessor: 'volLiquidoAcum',
+        cell: 'renderNumber',
+      }, { 
+        Header: 'Vol. N2 Acum. (m3 std)',
+        accessor: 'volN2Acum',
+        cell: 'renderNumber',
+      }, { 
+        Header: 'Rel. N2/Liq (m3 std/m3)',
+        accessor: 'relN2Liq',
+        cell: 'renderNumber',
+      }, { 
+        Header: 'Tiempo (min)',
+        accessor: 'tiempo',
+        cell: 'renderNumber',
+      }
+    ]
     const objectTemplate = {}
-/*
-    columns.forEach(column => {
-      column.cell === 'renderEditable' ? column.Cell = this.renderEditable : null
-    })
-*/
     let length = 1
     if (cedulaData) {
       length = cedulaData.length
@@ -259,7 +351,7 @@ let columns = [
         <div className='header'>
           Cedula De Tratamiento
         </div>
-        <div className='table'>
+        <div className='table-select'>
           <InputTable
             className="-striped"
             data={cedulaData}
@@ -387,6 +479,7 @@ const validate = values => {
 
 const mapStateToProps = state => ({
   formData: state.get('propuestaApuntalado'),
+  intervalos: state.getIn(['evaluacionPetrofisica', 'layerData']),
 })
 
 const mapDispatchToProps = dispatch => ({
@@ -407,6 +500,7 @@ const mapDispatchToProps = dispatch => ({
   setGradienteDeFractura: val => dispatch(setGradienteDeFractura(val)),
   setDensidadDeDisparos: val => dispatch(setDensidadDeDisparos(val)),
   setDiametroDeDisparos: val => dispatch(setDiametroDeDisparos(val)),
+  setPropuestaCompany: val => dispatch(setPropuestaCompany(val)),
   setChecked: val => dispatch(setChecked(val))
 })
 

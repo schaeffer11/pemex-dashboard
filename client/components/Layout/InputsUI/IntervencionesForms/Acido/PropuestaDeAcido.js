@@ -6,7 +6,7 @@ import ReactTable from 'react-table'
 import {withValidate} from '../../../Common/Validate'
 import Select from 'react-select'
 import { InputRowUnitless, InputRow, InputRowSelectUnitless, InputRowSelectMulti } from '../../../Common/InputRow'
-import { setCedulaData, setModuloYoungArena, setModuloYoungLutitas, setRelacPoissonArena, setRelacPoissonLutatas, setGradienteDeFractura, setDensidadDeDisparos, setDiametroDeDisparos, setIntervalo, setLongitudDeIntervalo, setVolAparejo, setCapacidadTotalDelPozo, setVolumenPrecolchonN2, setVolumenSistemaNoReativo, setVolumenSistemaReactivo, setVolumenSistemaDivergente, setVolumenDesplazamientoLiquido, setVolumenDesplazamientoGelLineal, setChecked, setPropuestaDeAcidoCompany } from '../../../../../redux/actions/intervencionesAcido'
+import { setCedulaData, setModuloYoungArena, setModuloYoungLutitas, setRelacPoissonArena, setRelacPoissonLutatas, setGradienteDeFractura, setDensidadDeDisparos, setDiametroDeDisparos, setIntervalo, setLongitudDeIntervalo, setVolAparejo, setCapacidadTotalDelPozo, setVolumenPrecolchonN2, setVolumenSistemaNoReativo, setVolumenSistemaReactivo, setVolumenSistemaDivergente, setVolumenDesplazamientoLiquido, setVolumenDesplazamientoGelLineal, setChecked, setPropuestaCompany } from '../../../../../redux/actions/intervencionesAcido'
 
 
 
@@ -64,9 +64,9 @@ containsErrors(){
   }
 
   makeGeneralForm() {
-    let { formData, intervalos, setPropuestaDeAcidoCompany } = this.props
+    let { formData, intervalos, setPropuestaCompany } = this.props
     formData = formData.toJS()
-    let { company } = formData
+    let { propuestaCompany } = formData
     intervalos = intervalos.toJS()
     const companyOptions = [
       { label: 'Halliburton', value: 'Halliburton' },
@@ -94,8 +94,8 @@ containsErrors(){
           name="company"
           options={companyOptions}
           onBlur={this.validate}
-          value={company}
-          callback={e => setPropuestaDeAcidoCompany(e.value)}
+          value={propuestaCompany}
+          callback={e => setPropuestaCompany(e.value)}
         />
       </div>
     )
@@ -350,11 +350,6 @@ containsErrors(){
         cell: 'renderNumber',
       }
     ]
-/*
-    columns.forEach(column => {
-      column.cell === 'renderEditable' ? column.Cell = this.renderEditable : null
-    })
-*/
     return (
       <div className='generales-form' >
         <div className='header'>
@@ -513,7 +508,7 @@ const mapDispatchToProps = dispatch => ({
   setGradienteDeFractura: val => dispatch(setGradienteDeFractura(val)),
   setDensidadDeDisparos: val => dispatch(setDensidadDeDisparos(val)),
   setDiametroDeDisparos: val => dispatch(setDiametroDeDisparos(val)),
-  setPropuestaDeAcidoCompany: val => dispatch(setPropuestaDeAcidoCompany(val)),
+  setPropuestaCompany: val => dispatch(setPropuestaCompany(val)),
   setChecked: val => dispatch(setChecked(val))
 })
 

@@ -17,8 +17,8 @@ const initialState = fromJS({
     relacPoissonLutatas: '',
     gradienteDeFractura: '',
     densidadDeDisparos: '',
-    diametroDeDisparos: '',  
-    company: '',
+    diametroDeDisparos: '',
+    propuestaCompany: '',
     cedulaData: [{
         etapa: 1,
         index: 0,
@@ -82,8 +82,8 @@ const propuestaAcido = (state = initialState, action) => {
         return state.set('cedulaData', fromJS(action.value))
     case 'set_checked' :
         return state.set('checked', fromJS(action.value))
-    case 'set_propuestaDeAcidoCompany':
-        return state.set('company', fromJS(action.value))
+    case 'set_propuestaCompany':
+        return state.set('propuestaCompany', fromJS(action.value))
     default:
       return state
   }
