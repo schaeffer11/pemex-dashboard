@@ -121,11 +121,11 @@ import { setCedulaData, setModuloYoungArena, setModuloYoungLutitas, setRelacPois
         <div className='header'>
           Detalles
         </div>
-        <InputRow header="Volumen Precolchon N2" name='volumenPrecolchonN2' unit='m3' value={volumenPrecolchonN2} onChange={setVolumenPrecolchonN2} errors={this.state.errors} onBlur={this.validate}/>
+        {/* <InputRow header="Volumen Precolchon N2" name='volumenPrecolchonN2' unit='m3' value={volumenPrecolchonN2} onChange={setVolumenPrecolchonN2} errors={this.state.errors} onBlur={this.validate}/>
         <InputRow header="Volumen De apuntalante" name='volumenDeApuntalante' unit='m3' value={volumenDeApuntalante} onChange={setVolumenDeApuntalante} errors={this.state.errors} onBlur={this.validate}/>
         <InputRow header="Volumen de gel de fractura" name='volumenDeGelDeFractura' unit='m3' value={volumenDeGelDeFractura} onChange={setVolumenDeGelDeFractura} errors={this.state.errors} onBlur={this.validate}/>
         <InputRow header="Volumen Desplazamiento" name='volumenDesplazamiento' unit='m3' value={volumenDesplazamiento} onChange={setVolumenDesplazamiento} errors={this.state.errors} onBlur={this.validate}/>
-        <InputRow header="Volumen Total de Liqudo" name='volumenTotalDeLiquido' unit='m3' value={volumenTotalDeLiquido} onChange={setVolumenTotalDeLiquido} errors={this.state.errors} onBlur={this.validate}/>
+        <InputRow header="Volumen Total de Liqudo" name='volumenTotalDeLiquido' unit='m3' value={volumenTotalDeLiquido} onChange={setVolumenTotalDeLiquido} errors={this.state.errors} onBlur={this.validate}/> */}
       </div>
     )
   }
