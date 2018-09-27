@@ -7,6 +7,38 @@ export const setPozo = value => ({ type: 'set_pozo', value})
 export const setFormacion = value => ({ type: 'set_formacion', value})
 export const setChecked = value => ({ type: 'set_checked', value}) 
 
+//FichaTecnicaDelPozo
+export const setIntervaloProductor = value => ({ type: 'set_intervaloProductor', value})
+export const setEspesorBruto = value => ({ type: 'set_espesorBruto', value})
+export const setEspesorNeto = value => ({ type: 'set_espesorNeto', value})
+export const setCaliza = value => ({ type: 'set_caliza', value})
+export const setDolomia = value => ({ type: 'set_dolomia', value})
+export const setArcilla = value => ({ type: 'set_arcilla', value})
+export const setPorosidad = value => ({ type: 'set_porosidad', value})
+export const setPermeabilidad = value => ({ type: 'set_permeabilidad', value})
+export const setSw = value => ({ type: 'set_sw', value})
+export const setCaa = value => ({ type: 'set_caa', value})
+export const setCga = value => ({ type: 'set_cga', value})
+export const setTipoDePozo = value => ({ type: 'set_tipoDePozo', value})
+export const setPwsFecha = value => ({ type: 'set_pwsFecha', value})
+export const setPwfFecha = value => ({ type: 'set_pwfFecha', value})
+export const setDeltaPPerMes = value => ({ type: 'set_deltaPPerMes', value})
+export const setTyac = value => ({ type: 'set_tyac', value})
+export const setPvt = value => ({ type: 'set_pvt', value})
+export const setAparejoDeProduccion = value => ({ type: 'set_aparejoDeProduccion', value})
+export const setProfEmpacador = value => ({ type: 'set_profEmpacador', value})
+export const setProfSensorPYT = value => ({ type: 'set_profSensorPYT', value})
+export const setTipoDeSap = value => ({ type: 'set_tipoDeSap', value})
+export const setHistorialIntervencionesData = value => ({ type: 'set_historialIntervencionesData', value})
+// export const setIntervalos = value => ({
+//   type: 'set_intervalos', 
+//   value: value.map(elem => {
+//     elem.espesor = elem.base - elem.cima
+//     return elem
+//   })
+// })
+export const setFichaTecnicaDelPozo = value => ({ type: 'set_fichaTecnicaDelPozo', value})
+
 
 //FichaTecnicaDelCampo
 export const setDescubrimientoField = value => ({ type: 'set_descubrimientoField', value})
@@ -129,7 +161,16 @@ export const setSistemasArtificialesImgURL = value => ({ type: 'set_sistemasArti
 export const setSistemasArtificialesDeProduccion = value => ({ type: 'set_sistemasArtificialesDeProduccion', value})
 
 //EvaluacionPetrofisica
-export const setLayerData = value => ({ type: 'set_layerData', value})
+export const setLayerData = value => ({
+  type: 'set_layerData',
+  value: value.map((elem, i) => {
+    elem.interval = i + 1
+    elem.baseMD = parseFloat(elem.baseMD)
+    elem.cimaMD = parseFloat(elem.cimaMD)
+    elem.espesor = Math.round((elem.baseMD - elem.cimaMD) * 100) / 100
+    return elem
+  })
+})
 export const setMudLossData = value => ({ type: 'set_mudLossData', value})
 export const setImgURL = value => ({ type: 'set_imgURL', value})
 export const setEvaluacionPetrofisica = value => ({ type: 'set_evaluacionPetrofisica', value})

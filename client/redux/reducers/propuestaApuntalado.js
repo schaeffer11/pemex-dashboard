@@ -16,10 +16,14 @@ const initialState = Map({
     relacPoissonLutatas: '',
     gradienteDeFractura: '',
     densidadDeDisparos: '',
-    diametroDeDisparos: '',    
+    diametroDeDisparos: '',
+    propuestaCompany: '', 
     cedulaData: [{
-        etapa: '',
+        etapa: 1,
+        index: 0,
         sistema: '',
+        intervalo: '',
+        nombreComercial: '',
         tipoDeApuntalante: '',
         concentraciDeApuntalante: '',
         volLiquid: '',
@@ -75,6 +79,8 @@ const propuestaApuntalado = (state = initialState, action) => {
         return state.set('cedulaData', fromJS(action.value))
     case 'set_checked' :
         return state.set('checked', fromJS(action.value))
+    case 'set_propuestaCompany':
+        return state.set('propuestaCompany', fromJS(action.value))
     default:
       return state
   }

@@ -4,79 +4,10 @@ import { connect } from 'react-redux'
 import InputTable from '../../../Common/InputTable'
 import ReactTable from 'react-table'
 import {withValidate} from '../../../Common/Validate'
-import { InputRow, InputRowUnitless, InputRowSelectUnitless } from '../../../Common/InputRow'
-import { setCedulaData, setModuloYoungArena, setModuloYoungLutitas, setRelacPoissonArena, setRelacPoissonLutatas, setGradienteDeFractura, setDensidadDeDisparos, setDiametroDeDisparos, setIntervalo, setLongitudDeIntervalo, setVolAparejo, setCapacidadTotalDelPozo, setVolumenPrecolchonN2, setVolumenSistemaNoReativo, setVolumenSistemaReactivo, setVolumenSistemaDivergente, setVolumenDesplazamientoLiquido, setVolumenDesplazamientoGelLineal, setChecked } from '../../../../../redux/actions/intervencionesAcido'
+import Select from 'react-select'
+import { InputRowUnitless, InputRow, InputRowSelectUnitless, InputRowSelectMulti } from '../../../Common/InputRow'
+import { setCedulaData, setModuloYoungArena, setModuloYoungLutitas, setRelacPoissonArena, setRelacPoissonLutatas, setGradienteDeFractura, setDensidadDeDisparos, setDiametroDeDisparos, setIntervalo, setLongitudDeIntervalo, setVolAparejo, setCapacidadTotalDelPozo, setVolumenPrecolchonN2, setVolumenSistemaNoReativo, setVolumenSistemaReactivo, setVolumenSistemaDivergente, setVolumenDesplazamientoLiquido, setVolumenDesplazamientoGelLineal, setChecked, setPropuestaCompany } from '../../../../../redux/actions/intervencionesAcido'
 
-
-let columns = [
-  {
-    Header: '',
-    accessor: 'delete',
-    width: 35,
-    resizable: false,
-    Cell: row => {
-      if (row.original.length > 1) {
-        return (<div style={{color: 'white', background: 'red', borderRadius: '4px', textAlign: 'center', cursor: 'pointer'}}>X</div>)
-      }
-    }
-  }, {
-    Header: 'Etapa',
-    accessor: 'etapa',
-    cell: 'renderEditable',
-  }, { 
-    Header: 'Sistema (NR-R-D)',
-    accessor: 'sistema',
-    cell: 'renderEditable',
-  }, { 
-    Header: 'Tipo de Apuntalante',
-    accessor: 'tipoDeApuntalante',
-    cell: 'renderEditable',
-  }, { 
-    Header: 'Concentracion de Apuntalante (lbm/gal)',
-    accessor: 'concentraciDeApuntalante',
-    cell: 'renderNumber',
-  }, { 
-    Header: 'Vol. Liq. (m3)',
-    accessor: 'volLiquid',
-    cell: 'renderNumber',
-  }, { 
-    Header: 'Gasto N2 (m3/min)',
-    accessor: 'gastoN2',
-    cell: 'renderNumber',
-  }, { 
-    Header: 'Gasto Liquido (bpm)',
-    accessor: 'gastoLiqudo',
-    cell: 'renderNumber',
-  }, { 
-    Header: 'Gasto en fondo (bpm)',
-    accessor: 'gastoEnFondo',
-    cell: 'renderNumber',
-  }, { 
-    Header: 'Calidad (%)',
-    accessor: 'calidad',
-    cell: 'renderNumber',
-  }, { 
-    Header: 'Vol. N2 (m3 std)',
-    accessor: 'volN2',
-    cell: 'renderNumber',
-  }, { 
-    Header: 'Vol. Liq. Acum. (m3)',
-    accessor: 'volLiquidoAcum',
-    cell: 'renderNumber',
-  }, { 
-    Header: 'Vol. N2 Acum. (m3 std)',
-    accessor: 'volN2Acum',
-    cell: 'renderNumber',
-  }, { 
-    Header: 'Rel. N2/Liq (m3 std/m3)',
-    accessor: 'relN2Liq',
-    cell: 'renderNumber',
-  }, { 
-    Header: 'Tiempo (min)',
-    accessor: 'tiempo',
-    cell: 'renderNumber',
-  }
-]
 
 
 @autobind class PropuestaDeAcido extends Component {
@@ -133,39 +64,74 @@ containsErrors(){
   }
 
   makeGeneralForm() {
-    let { setIntervalo, setLongitudDeIntervalo, setVolAparejo, setCapacidadTotalDelPozo, formData } = this.props
+    let { formData, setPropuestaCompany } = this.props
     formData = formData.toJS()
-    let { intervalo, longitudDeIntervalo, volAparejo, capacidadTotalDelPozo } = formData
-    
+    let { propuestaCompany } = formData
+    const companyOptions = [
+      { label: 'Halliburton', value: 'Halliburton' },
+      { label: 'Schlumberger', value: 'Schlumberger' },
+      { label: 'PFM', value: 'PFM' },
+      { label: 'Chemiservices', value: 'Chemiservices' },
+      { label: 'BJ', value: 'BJ' },
+      { label: 'Weatherford',
+      value: 'Weatherford' }
+    ]
+
     return (
       <div className='general-form' >
         <div className='header'>
           General
         </div>
+        {/* <InputRowSelectMulti header="Intervalo(s)" callback={handleIntervalosChange} name="intervalo_t" options={intervaloOptions} />
         <InputRowUnitless header="Intervalo(s)" name='intervalo' value={intervalo} onChange={setIntervalo} errors={this.state.errors} onBlur={this.validate}/>
         <InputRow header="Longitud de intervalo a tratar" name='longitudDeIntervalo' unit='m' value={longitudDeIntervalo} onChange={setLongitudDeIntervalo} errors={this.state.errors} onBlur={this.validate}/>
-        <InputRow header="Vol. Aparejo (VAP)" name='volAparejo' unit={<div>m<sup>3</sup></div>} value={volAparejo} onChange={setVolAparejo} errors={this.state.errors} onBlur={this.validate}/>
-        <InputRow header="Capacidad total del pozo (cima/base)" name='capacidadTotalDelPozo' unit={<div>m<sup>3</sup>/m<sup>3</sup></div>} value={capacidadTotalDelPozo} onChange={setCapacidadTotalDelPozo} errors={this.state.errors} onBlur={this.validate}/>
+        <InputRow header="Vol. Aparejo (VAP)" name='volAparejo' unit='m3' value={volAparejo} onChange={setVolAparejo} errors={this.state.errors} onBlur={this.validate}/>
+        <InputRow header="Capacidad total del pozo (cima/base)" name='capacidadTotalDelPozo' unit='m3/m3' value={capacidadTotalDelPozo} onChange={setCapacidadTotalDelPozo} errors={this.state.errors} onBlur={this.validate}/> */}
+        {/* InputRowSelectUnitless header='Tipo de Fluido' name='tipoDeFluidoField' value={tipoDeFluidoField} callback={(e) => setTipoDeFluidoField(e.value)} options={fluidoOptions} onBlur={this.validate} errors={this.state.errors} */}
+        <InputRowSelectUnitless
+          header="Compañía"
+          name="company"
+          options={companyOptions}
+          onBlur={this.validate}
+          value={propuestaCompany}
+          callback={e => setPropuestaCompany(e.value)}
+        />
+
       </div>
     )
   }
 
   makeDetallesForm() {
-    let { setVolumenPrecolchonN2, setVolumenSistemaNoReativo, setVolumenSistemaReactivo, setVolumenSistemaDivergente, setVolumenDesplazamientoLiquido, setVolumenDesplazamientoGelLineal, formData } = this.props
+    let { formData } = this.props
     formData = formData.toJS()
-    let { volumenPrecolchonN2, volumenSistemaNoReativo, volumenSistemaReactivo, volumenSistemaDivergente, volumenDesplazamientoLiquido, volumenDesplazamientoGelLineal} = formData
+    const { cedulaData } = formData
+
+    // const getVolumes = (system, vol, data) => {
+    //   return data.filter(elem => elem.sistema === system)
+    //     .reduce((accum, curr) => parseFloat(accum) + parseFloat(curr[vol]), 0)
+    // }
+
+    // const divergenteVolume = getVolumes('divergente', 'volumenPrecolchonN2', cedulaData)
     
     return (
       <div className='detalles-form' >
         <div className='header'>
           Detalles
         </div>
+          volumenes totales de sistemas en cedula
+        {/* <InputRow header="Volumen precolchón (gel lineal o N2)" name='volumenPrecolchonN2' unit='m3' value={volumenPrecolchonN2} onChange={setVolumenPrecolchonN2} errors={this.state.errors} onBlur={this.validate}/>
+        <InputRow header="Volumen sistema no reactivo" name='volumenSistemaNoReativo' unit='m3' value={volumenSistemaNoReativo} onChange={setVolumenSistemaNoReativo} errors={this.state.errors} onBlur={this.validate}/>
+        <InputRow header="Volumen sistema reactivo" name='volumenSistemaReactivo' unit='m3' value={volumenSistemaReactivo} onChange={setVolumenSistemaReactivo} errors={this.state.errors} onBlur={this.validate}/>
+        <InputRow header="Volumen sistema divergente" name='volumenSistemaDivergente' unit='m3' value={volumenSistemaDivergente} onChange={setVolumenSistemaDivergente} errors={this.state.errors} onBlur={this.validate}/>
+        <InputRow header="Volumen desplazamiento líquido" name='volumenDesplazamientoLiquido' unit='m3' value={volumenDesplazamientoLiquido} onChange={setVolumenDesplazamientoLiquido} errors={this.state.errors} onBlur={this.validate}/>
+        <InputRow header="Volumen desplazamiento gel lineal" name='volumenDesplazamientoGelLineal' unit='m3' value={volumenDesplazamientoGelLineal} onChange={setVolumenDesplazamientoGelLineal} errors={this.state.errors} onBlur={this.validate}/> */}
         <InputRow header={<div>Volumen precolchón (gel lineal o N<sub>2</sub>)</div>} name='volumenPrecolchonN2' unit={<div>m<sup>3</sup></div>} value={volumenPrecolchonN2} onChange={setVolumenPrecolchonN2} errors={this.state.errors} onBlur={this.validate}/>
         <InputRow header="Volumen sistema no reactivo" name='volumenSistemaNoReativo' unit={<div>m<sup>3</sup></div>} value={volumenSistemaNoReativo} onChange={setVolumenSistemaNoReativo} errors={this.state.errors} onBlur={this.validate}/>
         <InputRow header="Volumen sistema reactivo" name='volumenSistemaReactivo' unit={<div>m<sup>3</sup></div>} value={volumenSistemaReactivo} onChange={setVolumenSistemaReactivo} errors={this.state.errors} onBlur={this.validate}/>
         <InputRow header="Volumen sistema divergente" name='volumenSistemaDivergente' unit={<div>m<sup>3</sup></div>} value={volumenSistemaDivergente} onChange={setVolumenSistemaDivergente} errors={this.state.errors} onBlur={this.validate}/>
         <InputRow header="Volumen desplazamiento líquido" name='volumenDesplazamientoLiquido' unit={<div>m<sup>3</sup></div>} value={volumenDesplazamientoLiquido} onChange={setVolumenDesplazamientoLiquido} errors={this.state.errors} onBlur={this.validate}/>
         <InputRow header="Volumen desplazamiento gel lineal" name='volumenDesplazamientoGelLineal' unit={<div>m<sup>3</sup></div>} value={volumenDesplazamientoGelLineal} onChange={setVolumenDesplazamientoGelLineal} errors={this.state.errors} onBlur={this.validate}/>
+
       </div>
     )
   }
@@ -216,7 +182,16 @@ containsErrors(){
 
     cedulaData[0].length = 2
 
-    setCedulaData([...cedulaData, {index: cedulaData.length, type: '', fechaMuestreo: '', fechaPrueba: '', compania: '', superviso: '', length: cedulaData.length + 1, 'edited': false}])
+    setCedulaData([...cedulaData, {
+      index: cedulaData.length,
+      type: '',
+      fechaMuestreo: '',
+      fechaPrueba: '',
+      compania: '',
+      superviso: '',
+      length: cedulaData.length + 1,
+      'edited': false
+    }])
   }
 
 
@@ -241,24 +216,153 @@ containsErrors(){
     }
   }
 
-
-  makeCedulaTable() {
+  handleSelect(row, e) {
+    console.log('row', row)
     let { formData, setCedulaData } = this.props
     formData = formData.toJS()
     let { cedulaData } = formData
 
+    cedulaData[row.index][row.column.id] = e
+
+    setCedulaData(cedulaData)
+  }
+  makeCedulaTable() {
+    let { formData, setCedulaData, intervalos } = this.props
+    formData = formData.toJS()
+    let { cedulaData } = formData
+    intervalos = intervalos.toJS()
+
+    const intervaloOptions = intervalos.map(elem =>({
+      value: `${elem.baseMD}-${elem.cimaMD}`,
+      label: `${elem.baseMD}-${elem.cimaMD}`,
+    }))
+    
+    const sistemaOptions = [
+      { value: 'reactivo', label: 'Reactivo' },
+      { value: 'no-reactivo', label: 'No Reactivo' },
+      { value: 'pre-colchon', label: 'Pre-colchón' },
+      { value: 'divergente', label: 'Divergente' },
+      { value: 'desplasamiento', label: 'Desplasamiento' },
+    ]
+
     const objectTemplate = {}
-/*
-    columns.forEach(column => {
-      column.cell === 'renderEditable' ? column.Cell = this.renderEditable : null
-    })
-*/
+
+    let columns = [
+      {
+        Header: '',
+        accessor: 'delete',
+        width: 35,
+        resizable: false,
+        Cell: row => {
+          if (row.original.length > 1) {
+            return (<div style={{color: 'white', background: 'red', borderRadius: '4px', textAlign: 'center', cursor: 'pointer'}}>X</div>)
+          }
+        }
+      }, {
+        Header: 'Etapa',
+        accessor: 'etapa',
+      },
+      {
+        Header: 'Intervalo',
+        accessor: 'intervalo',
+        width: 200,
+        resizable: false,
+        style: {overflow: 'visible'},
+        Cell: row => {
+          return (
+            <div>
+              <Select
+                className='input'
+                simpleValue={true}
+                options={intervaloOptions}
+                value={intervaloOptions.find(i=>i.value === row.original.intervalo) || null}
+                onChange={(e) => this.handleSelect(row, e.value)} 
+              />
+            </div>
+          )
+        }
+      },
+      {
+        Header: 'Sistema',
+        accessor: 'sistema',
+        width: 200,
+        resizable: false,
+        style: {overflow: 'visible'},
+        Cell: row => {
+          return (
+            <div>
+              <Select
+                className='input'
+                simpleValue={true}
+                options={sistemaOptions}
+                value={sistemaOptions.find(i=>i.value === row.original.sistema) || null}
+                onChange={(e) => this.handleSelect(row, e.value)} 
+              />
+            </div>
+          )
+        }
+      },
+      {
+        Header: 'Nombre Comercial',
+        accessor: 'nombreComercial',
+        cell: 'renderEditable',
+      },
+      {
+        Header: 'Tipo de Apuntalante',
+        accessor: 'tipoDeApuntalante',
+        cell: 'renderEditable',
+      }, { 
+        Header: 'Concentracion de Apuntalante (lbm/gal)',
+        accessor: 'concentraciDeApuntalante',
+        cell: 'renderNumber',
+      }, { 
+        Header: 'Vol. Liq. (m3)',
+        accessor: 'volLiquid',
+        cell: 'renderNumber',
+      }, { 
+        Header: 'Gasto N2 (m3/min)',
+        accessor: 'gastoN2',
+        cell: 'renderNumber',
+      }, { 
+        Header: 'Gasto Liquido (bpm)',
+        accessor: 'gastoLiqudo',
+        cell: 'renderNumber',
+      }, { 
+        Header: 'Gasto en fondo (bpm)',
+        accessor: 'gastoEnFondo',
+        cell: 'renderNumber',
+      }, { 
+        Header: 'Calidad (%)',
+        accessor: 'calidad',
+        cell: 'renderNumber',
+      }, { 
+        Header: 'Vol. N2 (m3 std)',
+        accessor: 'volN2',
+        cell: 'renderNumber',
+      }, { 
+        Header: 'Vol. Liq. Acum. (m3)',
+        accessor: 'volLiquidoAcum',
+        cell: 'renderNumber',
+      }, { 
+        Header: 'Vol. N2 Acum. (m3 std)',
+        accessor: 'volN2Acum',
+        cell: 'renderNumber',
+      }, { 
+        Header: 'Rel. N2/Liq (m3 std/m3)',
+        accessor: 'relN2Liq',
+        cell: 'renderNumber',
+      }, { 
+        Header: 'Tiempo (min)',
+        accessor: 'tiempo',
+        cell: 'renderNumber',
+      }
+    ]
     return (
       <div className='generales-form' >
         <div className='header'>
           Cedula De Tratamiento
         </div>
-        <div className='table'>
+        <div className='table-select'>
           <InputTable
             className="-striped"
             data={cedulaData}
@@ -389,6 +493,7 @@ const validate = values => {
 
 const mapStateToProps = state => ({
   formData: state.get('propuestaAcido'),
+  intervalos: state.getIn(['evaluacionPetrofisica', 'layerData']),
 })
 
 const mapDispatchToProps = dispatch => ({
@@ -410,6 +515,7 @@ const mapDispatchToProps = dispatch => ({
   setGradienteDeFractura: val => dispatch(setGradienteDeFractura(val)),
   setDensidadDeDisparos: val => dispatch(setDensidadDeDisparos(val)),
   setDiametroDeDisparos: val => dispatch(setDiametroDeDisparos(val)),
+  setPropuestaCompany: val => dispatch(setPropuestaCompany(val)),
   setChecked: val => dispatch(setChecked(val))
 })
 
