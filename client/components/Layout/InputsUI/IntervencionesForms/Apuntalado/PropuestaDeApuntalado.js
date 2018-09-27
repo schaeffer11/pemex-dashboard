@@ -63,7 +63,7 @@ import { setCedulaData, setModuloYoungArena, setModuloYoungLutitas, setRelacPois
   }
 
   makeGeneralForm() {
-    let { formData, intervalos, setPropuestaCompany } = this.props
+    let { formData, setPropuestaCompany } = this.props
     formData = formData.toJS()
     let { propuestaCompany } = formData
     const companyOptions = [

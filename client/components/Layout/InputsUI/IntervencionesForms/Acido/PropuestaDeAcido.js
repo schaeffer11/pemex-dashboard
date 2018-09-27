@@ -64,10 +64,9 @@ containsErrors(){
   }
 
   makeGeneralForm() {
-    let { formData, intervalos, setPropuestaCompany } = this.props
+    let { formData, setPropuestaCompany } = this.props
     formData = formData.toJS()
     let { propuestaCompany } = formData
-    intervalos = intervalos.toJS()
     const companyOptions = [
       { label: 'Halliburton', value: 'Halliburton' },
       { label: 'Schlumberger', value: 'Schlumberger' },
