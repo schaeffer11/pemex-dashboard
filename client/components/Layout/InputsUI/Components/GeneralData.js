@@ -4,6 +4,8 @@ import Select from 'react-select'
 import { connect } from 'react-redux'
 import { compose } from 'redux'
 import objectPath from 'object-path'
+import AriaModal from 'react-aria-modal'
+import '../../../../styles/components/_query_modal.css'
 
 import { setObjetivo, setAlcances, setTipoDeIntervenciones } from '../../../../redux/actions/intervencionesEstimulacion'
 import { setSubdireccion, setActivo, setCampo, setPozo, setFormacion, setChecked } from '../../../../redux/actions/pozo'
@@ -11,8 +13,7 @@ import { setShowForms, setIsLoading } from '../../../../redux/actions/global'
 import { InputRow, InputRowUnitless, InputRowSelectUnitless, TextAreaUnitless } from '../../Common/InputRow'
 import Notification from '../../Common/Notification'
 import Loading from '../../Common/Loading'
-import AriaModal from 'react-aria-modal'
-import '../../../../styles/components/_query_modal.css'
+
 
 // import {withValidate} from '../../Common/Validate'
 
@@ -24,7 +25,6 @@ import '../../../../styles/components/_query_modal.css'
       // errors: [],
       // checked: [],
       isOpen: false,
-      fieldWellOptions: [],
       saveOptions: [],
       selectedSave: null
     }
@@ -34,15 +34,6 @@ import '../../../../styles/components/_query_modal.css'
     let { user } = this.props
     user = user.toJS()
     const userID = user.id
-    
-    fetch('/api/getFieldWellMapping')
-      .then(r => r.json())
-      .then(r => {
-
-        this.setState({
-          fieldWellOptions: r
-        })
-    })
 
     fetch(`/api/getAllSaves?userID=${userID}`)
       .then(r => r.json())
@@ -179,8 +170,7 @@ import '../../../../styles/components/_query_modal.css'
   }
 
   makeGeneralForm() {
-    let { fieldWellOptions } = this.state
-    let { setActivo, setCampo, setPozo, setFormacion, formData  } = this.props
+    let { setActivo, setCampo, setPozo, setFormacion, formData, fieldWellOptions  } = this.props
 
 
     formData = formData.toJS()

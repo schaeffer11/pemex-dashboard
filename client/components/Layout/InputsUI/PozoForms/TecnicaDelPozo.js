@@ -4,6 +4,7 @@ import { connect } from 'react-redux'
 import ReactTable from 'react-table'
 import moment from 'moment'
 import DatePicker from 'react-datepicker'
+
 import {withValidate} from '../../Common/Validate'
 import InputTable from '../../Common/InputTable'
 import { InputRow, InputRowUnitless, InputRowSelectUnitless, InputDate } from '../../Common/InputRow'
@@ -38,7 +39,7 @@ let columns = [
     this.state = {
       containsErrors: false,
       errors: [],
-      checked: []
+      checked: [],
     }
   }
 
@@ -342,6 +343,8 @@ let columns = [
       </div>
     )
   }
+
+
   render() {
 
     return (

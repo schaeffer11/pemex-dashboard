@@ -1,9 +1,10 @@
 import React, { Component } from 'react'
 import autobind from 'autobind-decorator'
 import { connect } from 'react-redux'
+import AriaModal from 'react-aria-modal'
+import '../../../../styles/components/_query_modal.css'
 
-import { setIsLoading } from '../../../../redux/actions/global'
-import { setShowForms } from '../../../../redux/actions/global'
+import { setIsLoading, setShowForms } from '../../../../redux/actions/global'
 import TecnicaDelPozo from './TecnicaDelPozo'
 import TecnicaDelCampo from './TecnicaDelCampo'
 import SistemasArtificialesDeProduccion from './SistemasArtificialesDeProduccion'
@@ -14,6 +15,7 @@ import HistoricoDePresionPozo from './HistoricoDePresionPozo'
 import HistoricoDeAforos from './HistoricoDeAforos'
 import HistoricoDeProduccion from './HistoricoDeProduccion'
 import AnalisisDelAgua from './AnalisisDelAgua'
+import { InputRow, InputRowUnitless, InputRowSelectUnitless, InputDate } from '../../Common/InputRow'
 
 import { setFichaTecnicaDelCampo, setFichaTecnicaDelPozo, setEvaluacionPetrofisica, setMecanicoYAparejoDeProduccion, 
   setAnalisisDelAgua, setSistemasArtificialesDeProduccion, setPresionDataCampo, setPresionDataPozo, setHistoricoProduccion, setHistoricoDeAforos, setChecked } from '../../../../redux/actions/pozo'
@@ -23,7 +25,12 @@ import { setFichaTecnicaDelCampo, setFichaTecnicaDelPozo, setEvaluacionPetrofisi
   constructor(props) {
     super(props)
     this.state = {
-      currentStep: 0
+      currentStep: 0,
+      isOpen: false,
+      selectedTransaction: null,
+      transactionOptions: [],
+      selectedField: null,
+      selectedWell: null,
     }
 
     this.fichaTecnicaDelCampo = React.createRef();
@@ -491,8 +498,105 @@ import { setFichaTecnicaDelCampo, setFichaTecnicaDelPozo, setEvaluacionPetrofisi
     return allErrors.length == 0;
   }
 
+  deactivateModal() {
+    this.setState({
+      isOpen: false,
+      // transactionName: null
+    })
+  }
+
+  activateModal() {
+    this.setState({
+      isOpen: true,
+    })
+  }
+
+  handleSelectTransaction(id) {
+    this.setState({
+      selectedTransaction: id
+    })
+  }
+
+  handleSelectField(e) {
+    this.setState({
+      selectedField: e.value
+    })
+  }
+  
+  handleSelectWell(e) {
+    this.setState({
+      selectedWell: e.value
+    })
+  }
+
+  buildModal() {
+    let { transactionOptions, selectedTransaction, selectedField, selectedWell } = this.state
+
+    console.log(selectedField, selectedWell)
+
+    let fieldWellOptions = []
+    let fieldOptions = []
+    let wellOptions = []
+
+    if (fieldWellOptions.length > 0) {
+      fieldWellOptions.forEach(item => {
+        if (!fieldOptions.map(i => i.value).includes(item.FIELD_FORMACION_ID)) {
+          fieldOptions.push({label: item.FIELD_NAME, value: item.FIELD_FORMACION_ID})
+        }
+      })
+    }
+
+    if (selectedField && fieldWellOptions.length > 0) {
+      wellOptions = fieldWellOptions.filter(i => i.FIELD_FORMACION_ID === parseInt(selectedField)).map(i => ({ label: i.WELL_NAME, value: i.WELL_FORMACION_ID}))
+    }
+
+
+    console.log('im here', transactionOptions, selectedTransaction)
+    return (
+      <AriaModal
+        titleId="save-modal"
+        onExit={this.deactivateModal}
+        underlayClickExits={true}
+        verticallyCenter={true}
+        focusDialog={true}
+        dialogClass="queryModalPartialReset"
+        dialogStyle={{verticalAlign: '', textAlign: 'center', maxHeight: '80%', marginTop: '2%'}}
+
+      >
+      <div className="modalTest" >
+        <div className="modal-title">
+          Load Data from database 
+        </div>
+        <div className="modal-info"> 
+          Please select which well you would like to load data from
+
+
+          <InputRowSelectUnitless header="Campo" name="campo" value={selectedField} options={fieldOptions} callback={this.handleSelectField} name='campo' />
+          <InputRowSelectUnitless header="Pozo" name="pozo" value={selectedWell} options={wellOptions} callback={this.handleSelectWell} name='pozo' />
+          <button className="submit submit-load-options" disabled={!selectedField || !selectedWell} onClick={this.handleLoad}>Cargar borrdador</button>
+
+        </div>
+        <div className="modal-body">
+ {/*           {transactionOptions.map(i => {
+              let className = i.id === selectedTransaction ? 'save-item active-save' : 'save-item'
+              return (
+                <div className={className} onClick={(e) => this.handleSelectTransaction(i.id)}>{i.name}</div>
+                )
+            })}*/}
+        </div> 
+        <button className="submit submit-load" onClick={this.handleLoad} >Cargar borrdador</button>
+      </div>
+      </AriaModal>
+    )
+  }
+
+
+
+
+
   render() {
     let { setShowForms } = this.props
+    let { isOpen } = this.state
     let className = 'subtab'
     let title = this.forms[this.state.currentStep].title
     
@@ -505,6 +609,7 @@ import { setFichaTecnicaDelCampo, setFichaTecnicaDelPozo, setEvaluacionPetrofisi
 
     let loadFunctions = [this.loadTecnicaDelCampo, this.loadTecnicaDelPozo, this.loadEvaluacionPetrofisica, this.loadMecanicoYAparejo, this.loadAnalisisDelAgua, this.loadSistemasArtificialesDeProduccion, this.loadHistoricoDePresionCampo, this.loadHistoricoDePresionPozo, this.loadHistoricoDeProduccion]
     let loadFunction =loadFunctions[this.state.currentStep]
+            // <button className="cta load" onClick={loadFunction}>Cargar última intervención</button> 
 
     return (
        <div className={`multistep-form ${submitting} ${errorClass}`}>
@@ -522,7 +627,7 @@ import { setFichaTecnicaDelCampo, setFichaTecnicaDelPozo, setEvaluacionPetrofisi
             { title }
             <button className="cta next" onClick={this.handleNextSubtab}>Siguiente</button>
             <button className="cta prev" onClick={this.handlePrevSubtab}>Anterior</button> 
-            <button className="cta load" onClick={loadFunction}>Cargar última intervención</button> 
+            <button className="cta load" onClick={this.activateModal}>Cargar última intervención</button> 
           </div>
 
           {this.forms[this.state.currentStep].content}
@@ -538,6 +643,7 @@ import { setFichaTecnicaDelCampo, setFichaTecnicaDelPozo, setEvaluacionPetrofisi
         { errors.length > 0 &&
             <div className="error">Se han encontrado errores en la forma.</div>
         }
+      { isOpen ? this.buildModal() : null }
        </div>
      );
   }

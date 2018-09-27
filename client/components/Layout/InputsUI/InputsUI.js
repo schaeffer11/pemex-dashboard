@@ -23,7 +23,8 @@ import '../../../styles/components/_query_modal.css'
       selectedTab: 'Pozo',
       selectedSubtab: 'tecnicaDelPozo',
       isOpen: false,
-      error: ''
+      error: '', 
+      fieldWellOptions: []
     }
 
     this.pozoMultiStepFormRef = React.createRef();
@@ -53,6 +54,15 @@ import '../../../styles/components/_query_modal.css'
   }
 
   componentDidMount() {
+    fetch('/api/getFieldWellMapping')
+      .then(r => r.json())
+      .then(r => {
+
+        this.setState({
+          fieldWellOptions: r
+        })
+    })
+
   }
 
   componentDidUpdate(prevProps) {
@@ -133,7 +143,7 @@ import '../../../styles/components/_query_modal.css'
 
 
   render() {
-    let { selectedTab, selectedSubtab, error, isOpen, saveName } = this.state
+    let { selectedTab, selectedSubtab, error, isOpen, saveName, fieldWellOptions } = this.state
     let { global } = this.props
     let pozoFormSubmitting = this.props.formsState.get('pozoFormSubmitting')
     const errors = this.props.formsState.get('pozoFormError')
@@ -157,7 +167,7 @@ import '../../../styles/components/_query_modal.css'
     if (!showForms) {
       return ( 
         <div className="input-forms">
-          <GeneralData />
+          <GeneralData fieldWellOptions={fieldWellOptions}/>
         </div>
       )  
     } 
