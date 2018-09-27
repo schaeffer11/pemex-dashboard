@@ -27,11 +27,11 @@ import '../../../styles/components/_query_modal.css'
       fieldWellOptions: []
     }
 
-    this.pozoMultiStepFormRef = React.createRef();
-    this.intervencionesFormRef = React.createRef();
+    // this.pozoMultiStepFormRef = React.createRef();
+    // this.intervencionesFormRef = React.createRef();
 
-    this.pozoMultiStepForm = React.createElement(PozoMultiStepForm, { ref: this.pozoMultiStepFormRef });
-    this.intervencionesForm = React.createElement(BaseIntervenciones,  { ref: this.intervencionesFormRef});
+    // this.pozoMultiStepForm = React.createElement(PozoMultiStepForm, { fieldWellOptions: this.state.fieldWellOptions }, { ref: this.pozoMultiStepFormRef });
+    // this.intervencionesForm = React.createElement(BaseIntervenciones,  { ref: this.intervencionesFormRef});
   }
 
 
@@ -150,18 +150,20 @@ import '../../../styles/components/_query_modal.css'
 
     global = global.toJS()
 
+    console.log('field Options in parent', fieldWellOptions)
+
     let { showForms } = global
 
     let form = null
     let otherForm = null
 
     if (selectedTab === 'Pozo' && pagesPozo[selectedSubtab]) {
-      form = this.pozoMultiStepForm
-      otherForm = this.intervencionesForm
+      form = <PozoMultiStepForm fieldWellOptions={fieldWellOptions} />
+      otherForm = <BaseIntervenciones fieldWellOptions={fieldWellOptions} />
     }
     else if (selectedTab === 'Intervenciones') {
-      form = this.intervencionesForm
-      otherForm = this.pozoMultiStepForm
+      form = <BaseIntervenciones fieldWellOptions={fieldWellOptions} />
+      otherForm = <PozoMultiStepForm fieldWellOptions={fieldWellOptions} />
     }
 
     if (!showForms) {

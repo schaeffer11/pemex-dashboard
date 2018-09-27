@@ -373,16 +373,16 @@ const validate = values => {
        errors.diametroDeDisparos = {message: "Este campo no puede estar vacio"}
     }
 
-    if(!values.cedulaData){
-      errors.cedulaData = {message: "Esta forma no puede estar vacia"}
-    }else {
-      values.cedulaData.forEach((row, index) => {
-        let hasEmpty = Object.values(row).find((value) => { return value.toString().trim() == '' })
-        if(hasEmpty !== undefined){
-            errors.cedulaData = {message: "Ningun campo puede estar vacio."}
-        }
-      })
-    }
+    // if(!values.cedulaData){
+    //   errors.cedulaData = {message: "Esta forma no puede estar vacia"}
+    // }else {
+    //   values.cedulaData.forEach((row, index) => {
+    //     let hasEmpty = Object.values(row).find((value) => { return value.toString().trim() == '' })
+    //     if(hasEmpty !== undefined){
+    //         errors.cedulaData = {message: "Ningun campo puede estar vacio."}
+    //     }
+    //   })
+    // }
 
     return errors
 }

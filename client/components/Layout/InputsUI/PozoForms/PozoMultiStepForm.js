@@ -531,10 +531,8 @@ import { setFichaTecnicaDelCampo, setFichaTecnicaDelPozo, setEvaluacionPetrofisi
 
   buildModal() {
     let { transactionOptions, selectedTransaction, selectedField, selectedWell } = this.state
+    let { fieldWellOptions } = this.props
 
-    console.log(selectedField, selectedWell)
-
-    let fieldWellOptions = []
     let fieldOptions = []
     let wellOptions = []
 
@@ -595,7 +593,7 @@ import { setFichaTecnicaDelCampo, setFichaTecnicaDelPozo, setEvaluacionPetrofisi
 
 
   render() {
-    let { setShowForms } = this.props
+    let { setShowForms, fieldWellOptions } = this.props
     let { isOpen } = this.state
     let className = 'subtab'
     let title = this.forms[this.state.currentStep].title
@@ -609,7 +607,9 @@ import { setFichaTecnicaDelCampo, setFichaTecnicaDelPozo, setEvaluacionPetrofisi
 
     let loadFunctions = [this.loadTecnicaDelCampo, this.loadTecnicaDelPozo, this.loadEvaluacionPetrofisica, this.loadMecanicoYAparejo, this.loadAnalisisDelAgua, this.loadSistemasArtificialesDeProduccion, this.loadHistoricoDePresionCampo, this.loadHistoricoDePresionPozo, this.loadHistoricoDeProduccion]
     let loadFunction =loadFunctions[this.state.currentStep]
-            // <button className="cta load" onClick={loadFunction}>Cargar última intervención</button> 
+    
+
+    console.log('fieldOptions', fieldWellOptions)
 
     return (
        <div className={`multistep-form ${submitting} ${errorClass}`}>
