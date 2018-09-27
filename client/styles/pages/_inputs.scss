@@ -278,9 +278,9 @@
 
 	.tecnica-del-pozo {
 		display: grid;
-		grid-template-columns: 25% 25% 25% 25%;
+		grid-template-columns: 25% 25% 50%;
 		grid-column-gap: 10px;
-		grid-template-areas: "pozo formacion intervenciones intervenciones";
+		grid-template-areas: "pozo formacion intervenciones";
 		
 		.formacion-form {
 			grid-area: formacion;
@@ -376,18 +376,39 @@
 
 	.historico-de-produccion {
 		display: grid;
-		grid-template-columns: 33% 67%;
+		grid-template-columns: 100%;
 		grid-column-gap: 10px;
-		grid-template-areas: 'aforo prod';
+		grid-template-areas: 'prod';
 
-		.aforo-form {
-			grid-area: aforo;
-		}
 
 		.historico-produccion {
 			grid-area: prod;
 		}
 	}
+
+	.historico-presion-campo {
+		display: grid;
+		grid-template-columns: 50% 50%;
+		grid-column-gap: 10px;
+		grid-template-areas: 'presion depth';
+
+		presion-table {
+			grid-area: presion;
+		}
+	}
+	
+	.historico-presion-pozo {
+		display: grid;
+		grid-template-columns: 50% 50%;
+		grid-column-gap: 10px;
+		grid-template-areas: 'presion depth';
+
+		presion-table {
+			grid-area: presion;
+		}
+	}
+
+
 
 	.analisis-del-agua {
 		display: grid;
@@ -622,6 +643,13 @@
 			width: 50%;
 		}
 	}
+
+        .form-error {
+          margin: auto;
+          text-align: center;
+          color: red;
+          margin: 1rem auto;
+        }
 
 }
 

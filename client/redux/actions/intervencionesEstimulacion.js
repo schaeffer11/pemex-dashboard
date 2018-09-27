@@ -13,10 +13,18 @@ export const setVolumenSistemaDivergente = value => ({ type: 'set_volumenSistema
 export const setVolumenDesplazamientoLiquido = value => ({ type: 'set_volumenDesplazamientoLiquido', value})
 export const setVolumenDesplazamientoN2 = value => ({ type: 'set_volumenDesplazamientoN2', value})
 export const setVolumenTotalDeLiquido = value => ({ type: 'set_volumenTotalDeLiquido', value})
-export const setCedulaData = value => ({ type: 'set_cedulaData', value})
+export const setPropuestaCompany = value => ({ type: 'set_propuestaCompany', value})
+export const setCedulaData = value => ({
+  type: 'set_cedulaData',
+  value: value.map(elem => {
+    elem.etapa = elem.index + 1
+    return elem
+  })
+})
 
 export const setPruebasDeLaboratorioData = value => ({ type: 'set_pruebasDeLaboratorioData', value})
 export const setEstimacionCostosData = value => ({ type: 'set_estimacionCostos', value})
+export const setMNXtoDLS = value => ({ type: 'set_MNXtoDLS', value})
 
 export const setLabEvidenceImgURL = value => ({ type: 'set_labEvidenceImgURL', value})
 

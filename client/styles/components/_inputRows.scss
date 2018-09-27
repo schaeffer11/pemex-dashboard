@@ -103,3 +103,20 @@
     font-size: .875rem;
   }
 }
+
+.react-datepicker-wrapper{
+  max-width: 100%;
+
+  .react-datepicker__input-container {
+    max-width: inherit;
+
+    input[type=text] {
+      max-width: inherit;
+      font-size: .825em;
+    }
+
+    .react-datepicker__close-icon::after {
+      background: $primary-green;
+    }
+  }
+}

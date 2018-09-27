@@ -31,9 +31,9 @@ function getBase64FromURL(imgURL) {
   })
 }
 
-export function submitForm(action) {
+export function submitForm(action, saveName) {
   return async (dispatch, getState) => {
-    console.log('submitting something')
+
     dispatch(setIsLoading({ isLoading: true, loadText: 'Guardando' }))
     const ignore = {
       app: true,
@@ -98,8 +98,13 @@ export function submitForm(action) {
         formData.append(k, JSON.stringify(innerObj))
       }
     }
+   
+    if(action === 'submit'){
+      runValidation(allKeys, filteredKeys)
+    }
 
-    console.log(action)
+    formData.append('saveName', JSON.stringify(saveName))
+
     if (action === 'save') {
       fetch('/api/wellSave', {
         method: 'POST',
@@ -153,12 +158,15 @@ export function submitForm(action) {
           }))
         })
     }
-
-
-
-
   }
 }
+
+export function runValidation(allKeys, filteredKeys){
+  //console.log(allKeys)
+  //console.log(filteredKeys)
+}
+
+
 
 // export function submitForm(fields) {
 //   return (dispatch, getState) => {

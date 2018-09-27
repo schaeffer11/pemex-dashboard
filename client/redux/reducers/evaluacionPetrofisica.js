@@ -1,13 +1,14 @@
 import { Map, fromJS } from 'immutable'
 
-const initialState = Map({ 
+const initialState = fromJS({ 
     layerData: [{
         index: 0,
-        interval: '',
+        interval: 1,
         cimaMD: '',
         baseMD: '',
-        cimaMV: '',
-        baseMV: '',
+        espesor: 0,
+        // cimaMV: '',
+        // baseMV: '',
         vArc: '',
         porosity: '',
         sw: '',
@@ -23,7 +24,8 @@ const initialState = Map({
         densidad: '',
         length: 1
     }],
-    imgURL: null
+    imgURL: null,
+    checked: []
 })
 
 
@@ -37,6 +39,8 @@ const evaluacionPetrofisica = (state = initialState, action) => {
         return state.set('imgURL', fromJS(action.value))
     case 'set_evaluacionPetrofisica':
         return state = fromJS(action.value)
+    case 'set_checked' :
+        return state.set('checked', fromJS(action.value))
     default:
       return state
   }

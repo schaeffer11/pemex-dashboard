@@ -8,7 +8,6 @@ export function withValidate(validationFunction, WrappedComponent) {
     
     constructor(props, context) {
       super(props, context)
-
     }
 
     componentDidMount(){
@@ -31,6 +30,12 @@ export function withValidate(validationFunction, WrappedComponent) {
       }
     }
 
+    setAllFieldsAsChecked(){
+      const data = this.formData.toJS();
+      const allFields = Object.keys(data)
+      return allFields
+    }
+
     validate(field, values){
       const errors = validationFunction(values)
  
@@ -50,10 +55,22 @@ export function withValidate(validationFunction, WrappedComponent) {
       }
     }
 
+    validateAll(values){
+      return this.validate(null, values)
+    }
+
+    forceValidation(){
+      const values = this.formData.toJS();
+      let {errors} = this.validateAll(values)
+      let checked = this.setAllFieldsAsChecked()
+  
+      return {errors, checked} 
+    }
+
     render(){
       const {forwardedRef, ...rest} = this.props;
 
-      return (<WrappedComponent validate={this.validate} ref={forwardedRef} {...rest}/>);
+      return (<WrappedComponent setAllFieldsAsChecked={this.setAllFieldsAsChecked} forceValidation={this.forceValidation} validate={this.validate} validateAll={this.validateAll} ref={forwardedRef} {...rest}/>);
     }
   }
 

@@ -4,8 +4,8 @@ const initialState = Map({
     pruebasDeLaboratorioData: [{
         index: 0,
         type: null,
-        fechaMuestreo: '',
-        fechaPrueba: '',
+        fechaMuestreo: null,
+        fechaPrueba: null,
         compania: '',
         superviso: '',
         length: 1

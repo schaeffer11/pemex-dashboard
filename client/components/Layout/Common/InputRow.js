@@ -1,6 +1,8 @@
 import React from 'react'
 import Select from 'react-select'
-import DatePicker from 'react-date-picker'
+import DatePicker from 'react-datepicker'
+import moment from 'moment'
+import datepicker from "react-datepicker/dist/react-datepicker.css";
 
 const generateErrorElements = ( name = '', errors = [] ) => {
   let rowError = errors[name]
@@ -12,7 +14,7 @@ const generateErrorElements = ( name = '', errors = [] ) => {
   return ''
 }
 
-export const InputRow = ({ header, type='number', name, unit, value, onChange, onBlur, index, errors = [] }) => {
+export const InputRow = ({ header, type='number', name, unit, value, onChange, onBlur, index, errors = [], style = {} }) => {
 
   let handleChange = (e) => {
     onChange(e.target.value, e)
@@ -21,7 +23,7 @@ export const InputRow = ({ header, type='number', name, unit, value, onChange, o
   const errorElements = generateErrorElements(name, errors)
 
   return (
-    <div className='input-row'>
+    <div className='input-row' style={style}>
       <div className='label'>
         {header}
       </div>
@@ -50,6 +52,42 @@ export const InputRowUnitless = ({ header, type='text', name, unit, value, onCha
       </div>
       <input className='input' type={type} value={value} onChange={handleChange} onBlur={onBlur} name={name} index={index}/>
       { errorElements }
+    </div>
+    )
+}
+
+export const InputRowSelectMulti = ({ header, name, value, options, callback, onBlur, index, errors=[] }) => {
+  if (!options) {
+    options = []
+  }
+   //Suplement the event object with the properties that are not provided by the Select component
+   let handleBlur = (e) => {
+    if(onBlur && onBlur instanceof Function){
+      e.target.name = name
+      e.target.value = options.find(i=>i.value === value)
+      onBlur(e)
+    }
+  }
+  {/* value={options.find(i=>i.value === value) || null}
+        onChange={callback}
+        onBlur={handleBlur} */}
+
+  return (
+    <div className='input-row input-row-unitless'>
+      <div className='label'>
+        {header}
+      </div>
+      <Select
+        className='input'
+        isMulti
+        simpleValue={true}
+        options={options}
+        onChange={callback}
+        name={name}
+        index={index}
+        onBlur={handleBlur}
+      />
+      {/* { errorElements } */}
     </div>
     )
 }
@@ -138,17 +176,30 @@ export const InputRowCosts = ({ header, name, unit, value, onChange, index, onBl
     )
 }
 
-export const InputDate = ({ onChange, value, header }) => {
+export const InputDate = ({ name, onChange, value, header, onBlur, errors }) => {
+  const errorElements = generateErrorElements(name, errors)
+  let handleSelect = (date, event) => {
+    if(date)
+      onChange(date.format('YYYY-MM-DD'))
+  }
+  const objValue = value ? moment(value) : null 
+ 
   return (
      <div className='input-row input-row-unitless'>
       <div className='label'>
         {header}
       </div>
       <DatePicker
-        onChange={onChange}
-        value={value}
-        locale="es-MX"
+        isClearable={true}
+        dateFormat="L"
+        name={name} 
+        onKeyDown={(e) => {e.preventDefault(); return false; }} //Disable input from user
+        onChange={handleSelect}
+        onBlur={onBlur}
+        selected={objValue}
+        locale="es-mx"
       />
+      {errorElements}
     </div>
     
   )

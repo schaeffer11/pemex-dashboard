@@ -4,6 +4,8 @@ import Select from 'react-select'
 import { connect } from 'react-redux'
 import { compose } from 'redux'
 import objectPath from 'object-path'
+import AriaModal from 'react-aria-modal'
+import '../../../../styles/components/_query_modal.css'
 
 import { setObjetivo, setAlcances, setTipoDeIntervenciones } from '../../../../redux/actions/intervencionesEstimulacion'
 import { setSubdireccion, setActivo, setCampo, setPozo, setFormacion, setChecked } from '../../../../redux/actions/pozo'
@@ -11,6 +13,8 @@ import { setShowForms, setIsLoading } from '../../../../redux/actions/global'
 import { InputRow, InputRowUnitless, InputRowSelectUnitless, TextAreaUnitless } from '../../Common/InputRow'
 import Notification from '../../Common/Notification'
 import Loading from '../../Common/Loading'
+
+
 // import {withValidate} from '../../Common/Validate'
 
 @autobind class GeneralData extends Component {
@@ -20,23 +24,24 @@ import Loading from '../../Common/Loading'
       // containsErrors: false,
       // errors: [],
       // checked: [],
-      fieldWellOptions: []
+      isOpen: false,
+      saveOptions: [],
+      selectedSave: null
     }
   }
 
   componentDidMount(){
-    // this.validate()
-    // this.containsErrors()
-    // this.props.containsErrors(this, this.state.containsErrors)
-    
-    fetch('/api/getFieldWellMapping')
-      .then(r => r.json())
-      .then(r => {
+    let { user } = this.props
+    user = user.toJS()
+    const userID = user.id
 
+    fetch(`/api/getAllSaves?userID=${userID}`)
+      .then(r => r.json())
+      .then( r => {
         this.setState({
-          fieldWellOptions: r
+          saveOptions: r
         })
-    })
+      })
   }
 
   componentDidUpdate(){
@@ -73,12 +78,69 @@ import Loading from '../../Common/Loading'
     let { objetivo, alcances, tipoDeIntervenciones } = interventionFormData
     let { subdireccion, activo, campo, pozo, formacion } = formData
 
-    if (!!(objetivo) && !!(alcances) && !!(tipoDeIntervenciones) && !!(subdireccion) && !!(activo) && !!(campo)  && !!(pozo) && !!(formacion)) {
+    if (!!(objetivo) && !!(alcances) && !!(tipoDeIntervenciones) && !!(subdireccion) && !!(activo) && !!(campo) && !!(pozo) && !!(formacion)) {
       return false
     }
 
     return true
   }
+
+  deactivateModal() {
+    this.setState({
+      isOpen: false,
+      saveName: null
+    })
+  }
+
+  activateModal() {
+    this.setState({
+      isOpen: true,
+    })
+  }
+
+  buildModal() {
+    let { saveOptions, selectedSave } = this.state
+
+
+    console.log('im here', saveOptions, selectedSave)
+    return (
+      <AriaModal
+        titleId="save-modal"
+        onExit={this.deactivateModal}
+        underlayClickExits={true}
+        verticallyCenter={true}
+        focusDialog={true}
+        dialogClass="queryModalPartialReset"
+        dialogStyle={{verticalAlign: '', textAlign: 'center', maxHeight: '80%', marginTop: '2%'}}
+
+      >
+      <div className="modalTest" >
+        <div className="modal-title">
+          Load Data 
+        </div>
+        <div className="modal-info"> 
+          Please select which save you would like to load
+        </div>
+        <div className="modal-body">
+            {saveOptions.map(i => {
+              let className = i.id === selectedSave ? 'save-item active-save' : 'save-item'
+              return (
+                <div className={className} onClick={(e) => this.handleSelectSave(i.id)}>{i.name}</div>
+                )
+            })}
+        </div> 
+        <button className="submit submit-load" onClick={this.handleLoad} >Cargar borrdador</button>
+      </div>
+      </AriaModal>
+    )
+  }
+
+  handleSelectSave(id) {
+    this.setState({
+      selectedSave: id
+    })
+  }
+
 
   makeGeneralInterventionForm() {
     let { setObjetivo, setAlcances, setTipoDeIntervenciones, interventionFormData } = this.props
@@ -108,17 +170,13 @@ import Loading from '../../Common/Loading'
   }
 
   makeGeneralForm() {
-    let { fieldWellOptions } = this.state
-    let { setActivo, setCampo, setPozo, setFormacion, formData, forms } = this.props
+    let { setActivo, setCampo, setPozo, setFormacion, formData, fieldWellOptions  } = this.props
 
 
     formData = formData.toJS()
     
-
-    forms = forms.toJS()
-
     let { subdireccion, activo, campo, pozo, formacion } = formData
-    const errors = forms.pozoFormError
+
 
     let subdireccionOptions = [
       {label: 'Subdirección de Especialidad Técnica de Explotación (SETE)', value: 'SETE'},
@@ -200,7 +258,13 @@ import Loading from '../../Common/Loading'
 
   
   async handleLoad() {
+    let { selectedSave } = this.state
     let { user, formData, setLoading } = this.props
+
+    this.setState({
+      isOpen: false
+    })
+
     setLoading({ isLoading: true, loadText: 'Descargando' })
     user = user.toJS()
     formData = formData.toJS()
@@ -208,7 +272,7 @@ import Loading from '../../Common/Loading'
     const wellID = formData.pozo
     const userID = user.id
 
-    let data = await fetch(`/api/getSave?userID=${userID}`)
+    let data = await fetch(`/api/getSave?transactionID=${selectedSave}`)
       .then(res => res.json())
 
     let { transactionID, tipoDeIntervenciones } = data
@@ -277,17 +341,19 @@ import Loading from '../../Common/Loading'
   }
 
   render() {
+    let { isOpen, selectedSave } = this.state
     let { setShowForms } = this.props
 
     return (
       <div className='form general-data'>
         { this.makeGeneralForm() }
         { this.makeGeneralInterventionForm() }
-        <button className="submit submit-load" onClick={this.handleLoad} >Cargar borrdador</button>
+        <button className="submit submit-load" onClick={this.activateModal}> Cargar borrdador</button>
         <button className='submit submit-continue' disabled={this.checkIncomplete()} onClick={(e) => setShowForms(true)} >Siguiente</button>
         <button className="submit download-template" onClick={this.downloadMasterTemplate}>{'Descarga el Formato General'}</button>
         <Notification />
         <Loading />
+        { isOpen ? this.buildModal() : null }
       </div>
     )
   }

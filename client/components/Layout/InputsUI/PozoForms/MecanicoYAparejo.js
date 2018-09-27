@@ -151,10 +151,10 @@ let tratamientoPorOptions = [
         </div>
         VOLUMEN
         <InputRowSelectUnitless header="Tratamiento por" name='tratamientoPor' value={tratamientoPor} callback={(e) => setTratamientoPor(e.value)} options={tratamientoPorOptions} onBlur={this.validate} errors={this.state.errors} />
-        <InputRow header="Volumen aparejo de producción" name='volumenAparejoDeProduccion' value={volumenAparejoDeProduccion} onChange={setVolumenAparejoDeProduccion} unit='m3' onBlur={this.validate} errors={this.state.errors} />
-        <InputRow header="Volumen @ cima de intervalo" name='volumenCimaDeIntervalo' value={volumenCimaDeIntervalo} onChange={setVolumenCimaDeIntervalo} unit='m3' onBlur={this.validate} errors={this.state.errors} />
-        <InputRow header="Volumen @ base de intervalo" name='volumenBaseDeIntervalo' value={volumenBaseDeIntervalo} onChange={setVolumenBaseDeIntervalo} unit='m3' onBlur={this.validate} errors={this.state.errors} />
-        <InputRow header="Volumen de espacio anular (EA)" name='volumenDeEspacioAnular' value={volumenDeEspacioAnular} onChange={setVolumenDeEspacioAnular} unit='m3' onBlur={this.validate} errors={this.state.errors} />
+        <InputRow header="Volumen aparejo de producción" name='volumenAparejoDeProduccion' value={volumenAparejoDeProduccion} onChange={setVolumenAparejoDeProduccion} unit={<div>m<sup>3</sup></div>} onBlur={this.validate} errors={this.state.errors} />
+        <InputRow header="Volumen @ cima de intervalo" name='volumenCimaDeIntervalo' value={volumenCimaDeIntervalo} onChange={setVolumenCimaDeIntervalo} unit={<div>m<sup>3</sup></div>} onBlur={this.validate} errors={this.state.errors} />
+        <InputRow header="Volumen @ base de intervalo" name='volumenBaseDeIntervalo' value={volumenBaseDeIntervalo} onChange={setVolumenBaseDeIntervalo} unit={<div>m<sup>3</sup></div>} onBlur={this.validate} errors={this.state.errors} />
+        <InputRow header="Volumen de espacio anular (EA)" name='volumenDeEspacioAnular' value={volumenDeEspacioAnular} onChange={setVolumenDeEspacioAnular} unit={<div>m<sup>3</sup></div>} onBlur={this.validate} errors={this.state.errors} />
       </div>
     )
   }
@@ -177,6 +177,10 @@ let tratamientoPorOptions = [
           Upload Well Bore Diagram (spanish)
         </div>
         <input type='file' accept="image/*" onChange={(e) => this.handleFileUpload(e, setImgBoreDiagramURL)}></input>
+        imgBoreDiagramURL
+        { this.state.errors.imgBoreDiagramURL && this.state.errors.imgBoreDiagramURL.checked &&
+          <div className="error">{this.state.errors.imgBoreDiagramURL.message}</div>
+        }
         {imgURL ? <img className='img-preview' src={imgURL}></img> : null }
       </div>
     )
@@ -263,10 +267,6 @@ const validate = values => {
        errors.penetracion = {message: "Este campo no puede estar vacio"}
     }
 
-    if(!values.tipoDeSAP ){
-       errors.tipoDeSAP = {message: "Este campo no puede estar vacio"}
-    }
-
     if(!values.tratamientoPor ){
        errors.tratamientoPor = {message: "Este campo no puede estar vacio"}
     }
@@ -285,6 +285,10 @@ const validate = values => {
 
     if(!values.volumenDeEspacioAnular ){
        errors.volumenDeEspacioAnular = {message: "Este campo no puede estar vacio"}
+    }
+
+    if(!values.imgBoreDiagramURL){
+      errors.imgBoreDiagramURL = {message: "Ningun campo puede estar vacio."}
     }
 
     return errors

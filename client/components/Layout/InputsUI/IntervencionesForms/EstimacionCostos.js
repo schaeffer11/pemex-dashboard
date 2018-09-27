@@ -4,9 +4,11 @@ import ReactTable from 'react-table'
 import { connect } from 'react-redux'
 import 'react-table/react-table.css'
 import Select from 'react-select'
+import InputTable from '../../Common/InputTable'
+import {withValidate} from '../../Common/Validate'
 
 import { InputRow, InputRowUnitless, InputRowSelectUnitless, TextAreaUnitless } from '../../Common/InputRow'
-import { setEstimacionCostosData } from '../../../../redux/actions/intervencionesEstimulacion'
+import { setEstimacionCostosData, setMNXtoDLS } from '../../../../redux/actions/intervencionesEstimulacion'
 
 export const itemOptions = [
   { label: 'Costo de Servicios', value: 'Costo de Servicios' },
@@ -14,7 +16,7 @@ export const itemOptions = [
   { label: 'Costo de sistema reactivo', value: 'Costo de sistema reactivo' },
   { label: 'Costo de sistema no reactivo', value: 'Costo de sistema no reactivo' },
   { label: 'Costo de divergentes', value: 'Costo de divergentes' },
-  { label: 'Costo de N2', value: 'Costo de N2' },
+  { label: <div>Costo de N<sub>2</sub></div>, value: 'Costo de N2' },
   { label: 'Costo de HCl', value: 'Costo de HCl' },
   { label: 'Costo Unidades de alta presion', value: 'Costo Unidades de alta presion' },
   { label: 'Costo del gel de fractura', value: 'Costo del gel de fractura' },
@@ -42,6 +44,9 @@ const companyOptions = [
   constructor(props) {
     super(props)
     this.state = {
+      containsErrors: false,
+      errors: [],
+      checked: []
     }
   }
 
@@ -51,6 +56,37 @@ const companyOptions = [
 
   componentDidUpdate(prevProps) {
 
+  }
+
+  containsErrors(){
+    let foundErrors = false
+    for (const key of Object.keys(this.state.errors)) {
+      if(this.state.errors[key].checked)
+        foundErrors = true
+    }
+
+    if(foundErrors !== this.state.containsErrors){
+      this.setState({
+        containsErrors: foundErrors
+      })
+    }
+
+  }
+
+  validate(event){
+    let {setChecked, formData} = this.props
+    formData = formData.toJS()
+
+    let field = event ? event.target.name : null
+    let {errors, checked} = this.props.validate(field, formData)
+
+    this.setState({
+      errors: errors,
+    })
+
+    if(event && event.target.name){
+      setChecked(checked)
+    }
   }
 
   renderEditable(cellInfo) {
@@ -128,9 +164,9 @@ const companyOptions = [
 
 
   makeGeneralesForm() {
-    let { setEstimacionCostosData, formData } = this.props
+    let { setEstimacionCostosData, setMNXtoDLS, formData } = this.props
     formData = formData.toJS()
-    let { estimacionCostosData } = formData
+    let { estimacionCostosData, MNXtoDLS } = formData
 
     let columns = [{
       Header: '',
@@ -161,9 +197,16 @@ const companyOptions = [
                 </div>)
               }
       }, { 
-        Header: 'Cost (MNX)',
+        Header: <div>Costo<br></br>(MNX)</div>,
+
         accessor: 'cost',
-        cell: 'renderEditable',
+        cell: 'renderNumber',
+        maxWidth: 180,
+        resizable: false
+      }, { 
+      Header: <div>Costo<br></br>(DLS)</div>,
+        accessor: 'costDLS',
+        cell: 'renderNumber',
         maxWidth: 180,
         resizable: false
       }, { 
@@ -187,16 +230,24 @@ const companyOptions = [
       }
     ]
 
+    const objectTemplate = {}
+/*
     columns.forEach(column => {
       column.cell === 'renderEditable' ? column.Cell = this.renderEditable : null
     })
-
+*/
     return (
       <div className='generales-form' >
+        <InputRow header="Conversion Rate" name='MNXtoDLS' value={MNXtoDLS} onChange={setMNXtoDLS} unit={'pesos to 1 DLS'} style={{width: '40%', marginBottom: '10px'}}/>
+        <div className='header'>
+          Cost Table
+        </div>
         <div className='table-select'>
-          <ReactTable
+          <InputTable
             className="-striped"
             data={estimacionCostosData}
+            newRow={objectTemplate}
+            setData={setEstimacionCostosData}
             columns={columns}
             showPagination={false}
             showPageSizeOptions={false}
@@ -205,24 +256,60 @@ const companyOptions = [
             getTdProps={this.deleteRow}
           />
         </div>
+        { this.state.errors.estimacionCostosData && this.state.errors.estimacionCostosData.checked &&
+          <div className="error">{this.state.errors.estimacionCostosData.message}</div>
+        }
       </div>
     )
   }
 
   render() {
-        let { setEstimacionCostosData, formData } = this.props
+    let { setEstimacionCostosData, formData } = this.props
     formData = formData.toJS()
-    let { estimacionCostosData } = formData
+    let { estimacionCostosData, MNXtoDLS } = formData
+
+    let dlsSum = 0
+    let mnxSum = 0
+
+    estimacionCostosData.forEach(i => {
+      if (i.cost) {
+        mnxSum += parseFloat(i.cost)
+      }
+      if (i.costDLS) {
+        dlsSum += parseFloat(i.costDLS)
+      }
+    })
 
     return (
       <div className="form pruebas-de-laboratorio-estimulacion">
           { this.makeGeneralesForm() }
           <button className='new-row-button' onClick={this.addNewRow}>Añadir un renglón</button>
+
+
+          <div>Cost in MNX  - ${mnxSum} </div>
+          <div>Cost in USD  - ${dlsSum} (${dlsSum * MNXtoDLS} MNX) </div>
+          <div>Total Cost   - ${mnxSum + (dlsSum * MNXtoDLS)} MNX </div>
       </div>
     )
   }
 }
 
+const validate = values => {
+    let errors = {}
+
+    if(!values.estimacionCostosData){
+      errors.estimacionCostosData = {message: "Esta forma no puede estar vacia"}
+    }else {
+      values.estimacionCostosData.forEach((row, index) => {
+        let hasEmpty = Object.values(row).find((value) => { return value.toString().trim() == '' })
+        if(hasEmpty !== undefined){
+            errors.estimacionCostosData = {message: "Ningun campo puede estar vacio."}
+        }
+      })
+    }
+    
+    return errors
+}
 
 const mapStateToProps = state => ({
   formData: state.get('estCost'),
@@ -230,6 +317,11 @@ const mapStateToProps = state => ({
 
 const mapDispatchToProps = dispatch => ({
   setEstimacionCostosData: val => dispatch(setEstimacionCostosData(val)),
+  setMNXtoDLS: val => dispatch(setMNXtoDLS(val)),
 })
 
-export default connect(mapStateToProps, mapDispatchToProps)(EstimacionCostos)
+export default withValidate(
+  validate,
+  connect(mapStateToProps, mapDispatchToProps)(EstimacionCostos)
+)
+

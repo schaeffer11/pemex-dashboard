@@ -13,6 +13,8 @@ import { setShowForms } from '../../../redux/actions/global'
 import { submitForm } from '../../../redux/actions/pozoFormActions'
 import Notification from '../Common/Notification'
 import Loading from '../Common/Loading'
+import AriaModal from 'react-aria-modal'
+import '../../../styles/components/_query_modal.css'
 
 @autobind class InputsUI extends Component {
   constructor(props) {
@@ -20,7 +22,16 @@ import Loading from '../Common/Loading'
     this.state = { 
       selectedTab: 'Pozo',
       selectedSubtab: 'tecnicaDelPozo',
+      isOpen: false,
+      error: '', 
+      fieldWellOptions: []
     }
+
+    // this.pozoMultiStepFormRef = React.createRef();
+    // this.intervencionesFormRef = React.createRef();
+
+    // this.pozoMultiStepForm = React.createElement(PozoMultiStepForm, { fieldWellOptions: this.state.fieldWellOptions }, { ref: this.pozoMultiStepFormRef });
+    // this.intervencionesForm = React.createElement(BaseIntervenciones,  { ref: this.intervencionesFormRef});
   }
 
 
@@ -30,7 +41,8 @@ import Loading from '../Common/Loading'
     this.setState({
       selectedTab: val,
       selectedSubtab: selectedSub,
-      error: ''
+      error: '',
+      saveName: null,
     })
   }
 
@@ -42,43 +54,122 @@ import Loading from '../Common/Loading'
   }
 
   componentDidMount() {
+    fetch('/api/getFieldWellMapping')
+      .then(r => r.json())
+      .then(r => {
+
+        this.setState({
+          fieldWellOptions: r
+        })
+    })
+
   }
 
   componentDidUpdate(prevProps) {
 
   }
 
-  handleSubmit(action){
-    console.log('hanlding sub', action)
-    this.props.submitPozoForm(action)
+  handleSubmit(action) {
+    let { saveName } = this.state
+
+    console.log('herehre', saveName)
+    if( action === 'save' || this.validate() ){
+      this.props.submitPozoForm(action, saveName)
+      this.setState({'error': ''})
+      console.log('Validate Succeeded')
+    } else {
+      this.setState({'error': 'Esta forma contiene errores. Todos los campos son requeridos.'})
+      this.scrollToBottom()
+      console.log('Validate Failed')
+    }
+    this.deactivateModal()
+  }
+
+  scrollToBottom() {
+    this.testScroll.scrollIntoView({ behaviour: 'smooth'})
+  }
+
+  deactivateModal() {
+    this.setState({
+      isOpen: false,
+      saveName: null
+    })
+  }
+
+  activateModal() {
+    this.setState({
+      isOpen: true,
+    })
+  }
+
+  validate(){
+    return (
+      this.pozoMultiStepFormRef.current.getWrappedInstance().validate() &
+      this.intervencionesFormRef.current.getWrappedInstance().validate()
+    )
+  }
+
+  buildModal(pozoFormSubmitting) {
+    let {saveName} = this.state
+
+    return (
+      <AriaModal
+        titleId="save-modal"
+        onExit={this.deactivateModal}
+        underlayClickExits={true}
+        verticallyCenter={true}
+        focusDialog={true}
+        dialogClass="queryModalPartialReset"
+        dialogStyle={{verticalAlign: '', textAlign: 'center', maxHeight: '80%', marginTop: '2%'}}
+
+      >
+      <div className="modalTest" >
+        <div className="modal-title">
+          Save Work 
+        </div>
+        <div className="modal-info"> 
+          Please enter a name to remember this save by
+        </div>
+        <div className="modal-body">
+          <input onChange={(e) => this.setState({saveName: e.target.value})}></input>
+          <br></br>
+          <button className="submit save-button" disabled={!saveName} onClick={(e) => this.handleSubmit('save')}>{pozoFormSubmitting ? 'Ahorro...' : 'Guardar'}</button>
+        </div> 
+      </div>
+      </AriaModal>
+    )
   }
 
 
 
   render() {
-    let { selectedTab, selectedSubtab, error } = this.state
+    let { selectedTab, selectedSubtab, error, isOpen, saveName, fieldWellOptions } = this.state
     let { global } = this.props
     let pozoFormSubmitting = this.props.formsState.get('pozoFormSubmitting')
     const errors = this.props.formsState.get('pozoFormError')
 
     global = global.toJS()
 
+    console.log('field Options in parent', fieldWellOptions)
+
     let { showForms } = global
 
-
     let form = null
+    let otherForm = null
 
     if (selectedTab === 'Pozo' && pagesPozo[selectedSubtab]) {
-      form = <PozoMultiStepForm />
+      form = <PozoMultiStepForm fieldWellOptions={fieldWellOptions} />
+      otherForm = <BaseIntervenciones fieldWellOptions={fieldWellOptions} />
     }
     else if (selectedTab === 'Intervenciones') {
-      form = <BaseIntervenciones />
+      form = <BaseIntervenciones fieldWellOptions={fieldWellOptions} />
+      otherForm = <PozoMultiStepForm fieldWellOptions={fieldWellOptions} />
     }
 
     if (!showForms) {
       return ( 
         <div className="input-forms">
-          <GeneralData />
+          <GeneralData fieldWellOptions={fieldWellOptions}/>
         </div>
       )  
     } 
@@ -89,11 +180,19 @@ import Loading from '../Common/Loading'
           <div className="tab-content">
             { form }
           </div>
-          <button className="submit save-button" disabled={pozoFormSubmitting} onClick={(e) => this.handleSubmit('save')}>{pozoFormSubmitting ? 'Ahorro...' : 'Guardar'}</button>
+          <div style={{display: 'none'}}>
+            { otherForm }
+          </div>
+          <button className="submit save-button" disabled={pozoFormSubmitting} onClick={(e) => this.activateModal(pozoFormSubmitting)}>{pozoFormSubmitting ? 'Ahorro...' : 'Guardar'}</button>
           <button className="submit submit-button" disabled={pozoFormSubmitting} onClick={(e) => this.handleSubmit('submit')}>{pozoFormSubmitting ? 'Enviando...' : 'Enviar'}</button>
+          <div className="form-error">{this.state.error}</div> 
           <div style={{height: '10px'}}></div>
           <Notification />
           <Loading />
+          { isOpen ? this.buildModal() : null }
+          <div style={{ float:"left", clear: "both" }}
+            ref={(el) => { this.testScroll = el; }}>
+          </div>
         </div>
       )
     }      
@@ -108,7 +207,7 @@ const mapStateToProps = state => ({
 })
 
 const mapDispatchToProps = dispatch => ({
-  submitPozoForm: values => {dispatch(submitForm(values))},
+  submitPozoForm: (action, name) => {dispatch(submitForm(action, name))},
 })
 
 export default connect(mapStateToProps, mapDispatchToProps)(InputsUI)

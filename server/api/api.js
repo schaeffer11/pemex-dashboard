@@ -86,11 +86,30 @@ app.get('/getFieldWellMapping', (req, res) => {
 })
 
 
-app.get('/getSave', (req, res) => {
-    let { userID, wellID } = req.query
+app.get('/getAllSaves', (req, res) => {
+    let { userID } = req.query
     
-    connection.query(`SELECT * FROM SavedInputs WHERE USER_ID = ? ORDER BY INSERT_TIME DESC LIMIT 1`, 
-      [userID, wellID], (err, results) => {
+    connection.query(`SELECT SAVE_NAME, TRANSACTION_ID FROM SavedInputs WHERE USER_ID = ? ORDER BY INSERT_TIME DESC `, 
+      [userID], (err, data) => {
+
+        data = data.map(i => ({
+          name: i.SAVE_NAME,
+          id: i.TRANSACTION_ID
+        }))
+
+        res.json(data)
+    })
+})
+
+
+
+
+
+app.get('/getSave', (req, res) => {
+    let { transactionID } = req.query
+    
+    connection.query(`SELECT * FROM SavedInputs WHERE TRANSACTION_ID = ?`, 
+      [transactionID], (err, results) => {
 
         let transactionID = null
         let tipoDeIntervenciones = null
@@ -154,6 +173,7 @@ app.post('/well', async (req, res) => {
 
 
 app.post('/wellSave', async (req, res) => {
+
   // TODO: Find a way to clean up callbacks from createWell
   createWell(req.body, 'save', err => {
     if (err) {
@@ -175,8 +195,10 @@ app.get('/getFields', async (req, res) => {
     FIELD_FORMACION_ID: { parent: 'fichaTecnicaDelPozoHighLevel', child: 'campo'},
     DESCUBRIMIENTO: { parent: 'fichaTecnicaDelCampo', child: 'descubrimientoField' },
     FECHA_DE_EXPLOTACION: { parent: 'fichaTecnicaDelCampo', child: 'fechaDeExplotacionField' },
-    P_INICIAL_ANO: { parent: 'fichaTecnicaDelCampo', child: 'pInicialAnoField'},
     NUMERO_DE_POZOS_OPERANDO: { parent: 'fichaTecnicaDelCampo', child: 'numeroDePozosOperandoField' },
+    P_INICIAL: { parent: 'fichaTecnicaDelCampo', child: 'pInicialField'},
+    P_INICIAL_ANO: { parent: 'fichaTecnicaDelCampo', child: 'pInicialAnoField'},
+    P_ACTUAL: { parent: 'fichaTecnicaDelCampo', child: 'pActualField'},
     P_ACTUAL_FECHA: { parent: 'fichaTecnicaDelCampo', child: 'pActualFechaField'},
     DP_PER_ANO: { parent: 'fichaTecnicaDelCampo', child: 'dpPerAnoField' },
     TYAC: { parent: 'fichaTecnicaDelCampo', child: 'tyacField' },
@@ -210,8 +232,11 @@ app.get('/getFields', async (req, res) => {
   }
   getFields(transactionID, action, (data) => {
     const finalObj = {}
-    
+
     if (data && data.length > 0) {
+      data[0].P_ACTUAL_FECHA ? data[0].P_ACTUAL_FECHA = data[0].P_ACTUAL_FECHA.toJSON().slice(0, 10) : null
+      data[0].FECHA_DE_EXPLOTACION ? data[0].FECHA_DE_EXPLOTACION = data[0].FECHA_DE_EXPLOTACION.toJSON().slice(0, 10) : null
+
       Object.keys(data[0]).forEach(key => {
         if (map[key]) {
           const { parent, child } = map[key]
@@ -251,6 +276,8 @@ app.get('/getWell', async (req, res) => {
     TIPO_DE_POZO: { parent: 'fichaTecnicaDelPozo', child: 'tipoDePozo'},
     PWS_FECHA: { parent: 'fichaTecnicaDelPozo', child: 'pwsFecha'},
     PWF_FECHA: { parent: 'fichaTecnicaDelPozo', child: 'pwfFecha'},
+    PWS: { parent: 'fichaTecnicaDelPozo', child: 'pws'},
+    PWF: { parent: 'fichaTecnicaDelPozo', child: 'pwf'},
     DELTA_P_PER_MES: { parent: 'fichaTecnicaDelPozo', child: 'deltaPPerMes'},
     TYAC: { parent: 'fichaTecnicaDelPozo', child: 'tyac'},
     PVT: { parent: 'fichaTecnicaDelPozo', child: 'pvt'},
@@ -263,7 +290,9 @@ app.get('/getWell', async (req, res) => {
   getWell(transactionID, action, (data) => {
     const finalObj = {}
     
-    if (data && data.length > 0) {console.log(data)
+    if (data && data.length > 0) {
+      data[0].PWS_FECHA ? data[0].PWS_FECHA = data[0].PWS_FECHA.toJSON().slice(0, 10) : null
+      data[0].PWF_FECHA ? data[0].PWF_FECHA = data[0].PWF_FECHA.toJSON().slice(0, 10) : null
       Object.keys(data[0]).forEach(key => {
         if (map[key]) {
           const { parent, child } = map[key]
@@ -298,6 +327,7 @@ app.get('/getHistIntervenciones', async (req, res) => {
 
     if (data && data.length > 0) {
       data.forEach((d, index) => {
+        d.DATE ? d.DATE = d.DATE.toJSON().slice(0, 10) : null
         const innerObj = {}
         Object.keys(d).forEach(k => {
           if (map[k]) {
@@ -786,12 +816,8 @@ app.get('/getFieldPressure', async (req, res) => {
 
   let action = saved ? 'loadSave' : 'loadTransaction'
 
-
   const map = {
     FECHA: { child: 'fecha' },
-    QO: { child: 'Qo' },
-    NP: { child: 'Np' },
-    PWS: { child: 'Pws' },
     PR: { child: 'Pr' } 
   }
 
@@ -802,6 +828,7 @@ app.get('/getFieldPressure', async (req, res) => {
     const finalObj = {}
     if (data && data.length > 0) {
       data.forEach((d, index) => {
+        d.FECHA ? d.FECHA = d.FECHA.toJSON().slice(0, 10) : null
         const innerObj = {}
         Object.keys(d).forEach(k => {
           if (map[k]) {
@@ -813,7 +840,7 @@ app.get('/getFieldPressure', async (req, res) => {
         objectPath.set(innerObj, 'index', index)
         objectPath.push(finalObj, `${mainParent}.${innerParent}`, innerObj)
       })
-
+      finalObj['historicoDePresion'].pressureDepthCampo = data[0].PRESSURE_DEPTH
       res.json(finalObj)
     }
     else if (action === 'loadTransaction'){
@@ -824,7 +851,8 @@ app.get('/getFieldPressure', async (req, res) => {
         mainParent: {
           innerParent: [
           {}
-          ]
+          ],
+          presionDataCampo: ''
         }
       })
     }
@@ -841,9 +869,6 @@ app.get('/getWellPressure', async (req, res) => {
 
   const map = {
     FECHA: { child: 'fecha' },
-    QO: { child: 'Qo' },
-    NP: { child: 'Np' },
-    PWS: { child: 'Pws' },
     PR: { child: 'Pr' } 
   }
 
@@ -854,6 +879,7 @@ app.get('/getWellPressure', async (req, res) => {
     const finalObj = {}
     if (data && data.length > 0) {
       data.forEach((d, index) => {
+        d.FECHA ? d.FECHA = d.FECHA.toJSON().slice(0, 10) : null
         const innerObj = {}
         Object.keys(d).forEach(k => {
           if (map[k]) {
@@ -865,7 +891,7 @@ app.get('/getWellPressure', async (req, res) => {
         objectPath.set(innerObj, 'index', index)
         objectPath.push(finalObj, `${mainParent}.${innerParent}`, innerObj)
       })
-
+      finalObj['historicoDePresion'].pressureDepthPozo = data[0].PRESSURE_DEPTH
       res.json(finalObj)
     }
     else if (action === 'loadTransaction'){
@@ -876,7 +902,8 @@ app.get('/getWellPressure', async (req, res) => {
         mainParent: {
           innerParent: [
           {}
-          ]
+          ],
+          presionDataPozo: ''
         }
       })
     }
@@ -890,35 +917,45 @@ app.get('/getWellAforos', async (req, res) => {
 
   let action = saved ? 'loadSave' : 'loadTransaction'
 
- 
   const map = {
-    FECHA: { parent: 'historicoDeProduccion', child: 'fecha' }, 
-    ESTRANGULADOR: { parent: 'historicoDeProduccion', child: 'estrangulado' },
-    PTP: { parent: 'historicoDeProduccion', child: 'ptp' }, 
-    TTP: { parent: 'historicoDeProduccion', child: 'ttp' }, 
-    PBAJ: { parent: 'historicoDeProduccion', child: 'pbaj' }, 
-    TBAJ: { parent: 'historicoDeProduccion', child: 'tbaj' }, 
-    PSEP: { parent: 'historicoDeProduccion', child: 'psep' },
-    TSEP: { parent: 'historicoDeProduccion', child: 'tsep' }, 
-    QL: { parent: 'historicoDeProduccion', child: 'ql' }, 
-    QO: { parent: 'historicoDeProduccion', child: 'qo'},
-    QG: { parent: 'historicoDeProduccion', child: 'qg' }, 
-    QW: { parent: 'historicoDeProduccion', child: 'qw' }, 
-    RGA: { parent: 'historicoDeProduccion', child: 'rga' },
-    SALINIDAD: { parent: 'historicoDeProduccion', child: 'salinidad'},
-    PH: { parent: 'historicoDeProduccion', child: 'ph'},
+    FECHA: { child: 'fecha' }, 
+    TIEMPO: { child: 'tiempo' },
+    ESTRANGULADOR: { child: 'estrangulador' },
+    PTP: { child: 'ptp' }, 
+    TTP: { child: 'ttp' }, 
+    PBAJ: { child: 'pbaj' }, 
+    TBAJ: { child: 'tbaj' }, 
+    PSEP: { child: 'psep' },
+    TSEP: { child: 'tsep' }, 
+    QL: { child: 'ql' }, 
+    QO: { child: 'qo'},
+    QG: { child: 'qg' }, 
+    QW: { child: 'qw' }, 
+    RGA: { child: 'rga' },
+    SALINIDAD: { child: 'salinidad'},
+    PH: { child: 'ph'},
   }
+
+  const mainParent = 'historicoDeAforos'
+  const innerParent = 'aforosData'
 
   getWellAforos(transactionID, action, (data) => {
     const finalObj = {}
+    if (data && data.length > 0) {
+      data.forEach((d, index) => {
+        d.FECHA ? d.FECHA = d.FECHA.toJSON().slice(0, 10) : null
+        const innerObj = {}
+        Object.keys(d).forEach(k => {
+          if (map[k]) {
+            const { child } = map[k]
+            objectPath.set(innerObj, child, d[k])
+          }
+        })
+        objectPath.set(innerObj, 'length', data.length)
+        objectPath.set(innerObj, 'index', index)
+        objectPath.push(finalObj, `${mainParent}.${innerParent}`, innerObj)
+      })
 
-    if (data[0]) {
-      Object.keys(data[0]).forEach(key => {
-        if (map[key]) {
-          const { parent, child } = map[key]
-          objectPath.set(finalObj, `${parent}.${child}`, data[0][key])
-        }
-      })   
       res.json(finalObj)
     }
     else {
@@ -939,15 +976,18 @@ app.get('/getWellProduccion', async (req, res) => {
     Dias: { child: 'dias' },
     QO: { child: 'qo' },
     QW: { child: 'qw' },
-    QG_CAL: { child: 'qg' },
-    QGL: { child: 'qgl' },
+    QG: { child: 'qg' },
+    QGI: { child: 'qgi' },
+    QO_VOLUME: { child: 'qo_vol' },
+    QW_VOLUME: { child: 'qw_vol' },
+    QG_VOLUME: { child: 'qg_vol' },
+    QGI_VOLUME: { child: 'qgi_vol' },
     NP: { child: 'np' },
     WP: { child: 'wp' },
     GP: { child: 'gp' },
     GI: { child: 'gi' },
     RGA: { child: 'rga' },
-    FW_FRACTION: { child: 'fw' },
-    POZOS_PROD_ACTIVOS: { child: 'pozosProdActivos' }, 
+    FW_FRACTION: { child: 'fw' }, 
   }
 
   const mainParent = 'historicoDeProduccion'
@@ -957,6 +997,7 @@ app.get('/getWellProduccion', async (req, res) => {
     const finalObj = {}
     if (data && data.length > 0) {
       data.forEach((d, index) => {
+        d.Fecha ? d.Fecha = d.Fecha.toJSON().slice(0, 10) : null
         const innerObj = {}
         Object.keys(d).forEach(k => {
           if (map[k]) {
@@ -1259,6 +1300,8 @@ app.get('/getLabTest', async (req, res) => {
   getLabTest(transactionID, action, (data) => {
     const finalObj = {}
     data.forEach((d, index) => {
+      d.FECHA_DE_MUESTREO ? d.FECHA_DE_MUESTREO = d.FECHA_DE_MUESTREO.toJSON().slice(0, 10) : null
+      d.FECHA_DE_PRUEBA ? d.FECHA_DE_PRUEBA = d.FECHA_DE_PRUEBA.toJSON().slice(0, 10) : null
       const innerObj = {}
       Object.keys(d).forEach(k => {
         if (map[k]) {
@@ -1497,10 +1540,12 @@ app.get('/getCosts', async (req, res) => {
 
   let action = saved ? 'loadSave' : 'loadTransaction'
   
+
   const map = {
     ITEM: { child: 'item' }, 
     COMPANY: { child: 'compania' }, 
-    COST: { child: 'cost' }, 
+    COST_MNX: { child: 'cost' }, 
+    COST_DLS: { child: 'costDLS' }
 
   }
 
@@ -1508,6 +1553,7 @@ app.get('/getCosts', async (req, res) => {
   const innerParent = 'estimacionCostosData'
 
   getCosts(transactionID, action, (data) => {
+    console.log('datatatat', data)
     let finalObj = {}
     if (data && data.length > 0) {
       data.forEach((d, index) => {
@@ -1522,13 +1568,15 @@ app.get('/getCosts', async (req, res) => {
         objectPath.set(innerObj, 'index', index)
         objectPath.push(finalObj, `${mainParent}.${innerParent}`, innerObj)
       })
+      finalObj['estCost'].MNXtoDLS = data[0].MNXtoDLS
     }
     else {
       finalObj = {
         'estCost': {
           "estimacionCostosData": [
             {}
-          ]
+          ],
+          "MNXtoDLS": 1
         }
       }
     }

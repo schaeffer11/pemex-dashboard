@@ -4,7 +4,8 @@ import ReactTable from 'react-table'
 import { connect } from 'react-redux'
 import 'react-table/react-table.css'
 import Select from 'react-select'
-
+import {withValidate} from '../../Common/Validate'
+import InputTable from '../../Common/InputTable'
 import { InputRow, InputRowUnitless, InputRowSelectUnitless, TextAreaUnitless } from '../../Common/InputRow'
 import { setPruebasDeLaboratorioData } from '../../../../redux/actions/intervencionesEstimulacion'
 
@@ -30,6 +31,9 @@ const companyOptions = [
   constructor(props) {
     super(props)
     this.state = {
+      containsErrors: false,
+      errors: [],
+      checked: []
     }
   }
 
@@ -39,6 +43,36 @@ const companyOptions = [
 
   componentDidUpdate(prevProps) {
 
+  }
+
+  containsErrors(){
+    let foundErrors = false
+    for (const key of Object.keys(this.state.errors)) {
+      if(this.state.errors[key].checked)
+        foundErrors = true
+    }
+
+    if(foundErrors !== this.state.containsErrors){
+      this.setState({
+        containsErrors: foundErrors
+      })
+    }
+  }
+
+  validate(event){
+    let {setChecked, formData} = this.props
+    formData = formData.toJS()
+
+    let field = event ? event.target.name : null
+    let {errors, checked} = this.props.validate(field, formData)
+
+    this.setState({
+      errors: errors,
+    })
+
+    if(event && event.target.name){
+      setChecked(checked)
+    }
   }
 
   renderEditable(cellInfo) {
@@ -151,13 +185,13 @@ const companyOptions = [
       }, { 
         Header: 'Fecha de Muestreo',
         accessor: 'fechaMuestreo',
-        cell: 'renderEditable',
+        cell: 'renderDate',
         maxWidth: 180,
         resizable: false
       }, { 
         Header: 'Fecha de prueba',
         accessor: 'fechaPrueba',
-        cell: 'renderEditable',
+        cell: 'renderDate',
         maxWidth: 180,
         resizable: false
       }, { 
@@ -185,16 +219,22 @@ const companyOptions = [
       },
     ]
 
+    const objectTemplate = {type: '', fechaMuestreo: '', fechaPrueba: '', compania: '', superviso: ''}
+
+/*
     columns.forEach(column => {
       column.cell === 'renderEditable' ? column.Cell = this.renderEditable : null
     })
+*/
 
     return (
       <div className='generales-form' >
         <div className='table-select'>
-          <ReactTable
+          <InputTable
             className="-striped"
             data={pruebasDeLaboratorioData}
+            newRow={objectTemplate}
+            setData={setPruebasDeLaboratorioData}
             columns={columns}
             showPagination={false}
             showPageSizeOptions={false}
@@ -203,6 +243,9 @@ const companyOptions = [
             getTdProps={this.deleteRow}
           />
         </div>
+        { this.state.errors.pruebasDeLaboratorioData && this.state.errors.pruebasDeLaboratorioData.checked &&
+          <div className="error">{this.state.errors.pruebasDeLaboratorioData.message}</div>
+        }
       </div>
     )
   }
@@ -221,6 +264,22 @@ const companyOptions = [
   }
 }
 
+const validate = values => {
+    let errors = {}
+
+    if(!values.pruebasDeLaboratorioData){
+      errors.pruebasDeLaboratorioData = {message: "Esta forma no puede estar vacia"}
+    }else {
+      values.pruebasDeLaboratorioData.forEach((row, index) => {
+        let hasEmpty = Object.values(row).find((value) => { return value.toString().trim() == '' })
+        if(hasEmpty !== undefined){
+            errors.pruebasDeLaboratorioData = {message: "Ningun campo puede estar vacio."}
+        }
+      })
+    }
+
+    return errors
+}
 
 const mapStateToProps = state => ({
   formData: state.get('pruebasDeLaboratorio'),
@@ -230,4 +289,7 @@ const mapDispatchToProps = dispatch => ({
   setPruebasDeLaboratorioData: val => dispatch(setPruebasDeLaboratorioData(val)),
 })
 
-export default connect(mapStateToProps, mapDispatchToProps)(PruebasDeLaboratorioEstimulacion)
+export default withValidate(
+  validate,
+  connect(mapStateToProps, mapDispatchToProps, null, { withRef: true })(PruebasDeLaboratorioEstimulacion)
+)
