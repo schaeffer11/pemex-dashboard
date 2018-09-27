@@ -233,8 +233,8 @@ containsErrors(){
     intervalos = intervalos.toJS()
 
     const intervaloOptions = intervalos.map(elem =>({
-      value: `${elem.baseMD}-${elem.cimaMD}`,
-      label: `${elem.baseMD}-${elem.cimaMD}`,
+      value: `${elem.cimaMD}-${elem.baseMD}`,
+      label: `${elem.cimaMD}-${elem.baseMD}`,
     }))
     
     const sistemaOptions = [

@@ -1,6 +1,5 @@
 import Blowfish from 'xs-blowfish'
 import prompt from 'prompt-promise'
-import inquirer from 'inquirer'
 import appConfig from '../../app-config.js'
 import db from '../lib/db'
 
