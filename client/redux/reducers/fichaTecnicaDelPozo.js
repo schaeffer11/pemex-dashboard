@@ -27,15 +27,15 @@ const initialState = fromJS({
     intervenciones: '',
     errors: []
   }],
-  intervalos: [
-    {
-      cima: '',
-      base: '',
-      espesor: '',
-      length: 1,
-      index: 0,
-    }
-  ]
+  // intervalos: [
+  //   {
+  //     cima: '',
+  //     base: '',
+  //     espesor: '',
+  //     length: 1,
+  //     index: 0,
+  //   }
+  // ]
 })
 
 const fichaTecnicaDelPozo = (state = initialState, action) => {
@@ -88,8 +88,8 @@ const fichaTecnicaDelPozo = (state = initialState, action) => {
       return state.set('checked', fromJS(action.value))
     case 'set_fichaTecnicaDelPozo':
       return state = fromJS(action.value)
-    case 'set_intervalos': 
-      return state.set('intervalos', fromJS(action.value))
+    // case 'set_intervalos': 
+    //   return state.set('intervalos', fromJS(action.value))
     default:
       return state
   }

@@ -21,30 +21,36 @@ let layerColumns = [
   }, {
     Header: 'Interval',
     accessor: 'interval',
-    cell: 'renderNumber',
+    // cell: 'renderNumber',
   }, { 
     Header: 'Cima (md)',
     accessor: 'cimaMD',
     cell: 'renderNumber',
 
-  }, { 
+  }, {
     Header: 'Base (md)',
     accessor: 'baseMD',
     cell: 'renderNumber',
-  }, { 
-    Header: 'Cima (mv)',
-    accessor: 'cimaMV',
-    cell: 'renderNumber',
-  }, { 
-    Header: 'Base (mv)',
-    accessor: 'baseMV',
-    cell: 'renderNumber',
-  }, { 
+  },
+  {
+    Header: 'Espesor (m)',
+    accessor: 'espesor',
+  },
+  // { 
+  //   Header: 'Cima (mv)',
+  //   accessor: 'cimaMV',
+  //   cell: 'renderNumber',
+  // }, { 
+  //   Header: 'Base (mv)',
+  //   accessor: 'baseMV',
+  //   cell: 'renderNumber',
+  // },
+   { 
     Header: 'V arc.(%)',
     accessor: 'vArc',
     cell: 'renderNumber',
   }, { 
-    Header: 'Porosity (%',
+    Header: 'Porosity (%)',
     accessor: 'porosity',
     cell: 'renderNumber',
   }, { 
@@ -194,7 +200,7 @@ let mudLossColumns = [
 
     layerData[0].length = 2
 
-    setLayerData([...layerData, {index: layerData.length, interval: '', cimaMD: '', baseMD: '', cimaMV: '', baseMV: '', vArc: '', porosity: '', sw: '', dens: '', resis: '', perm: '', length: layerData.length + 1}])
+    setLayerData([...layerData, {index: layerData.length, interval: '', cimaMD: '', baseMD: '', espesor: '', vArc: '', porosity: '', sw: '', dens: '', resis: '', perm: '', length: layerData.length + 1}])
   }
 
   addNewRowMudLoss() {

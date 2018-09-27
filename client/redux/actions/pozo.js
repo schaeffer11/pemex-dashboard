@@ -30,13 +30,13 @@ export const setProfEmpacador = value => ({ type: 'set_profEmpacador', value})
 export const setProfSensorPYT = value => ({ type: 'set_profSensorPYT', value})
 export const setTipoDeSap = value => ({ type: 'set_tipoDeSap', value})
 export const setHistorialIntervencionesData = value => ({ type: 'set_historialIntervencionesData', value})
-export const setIntervalos = value => ({
-  type: 'set_intervalos', 
-  value: value.map(elem => {
-    elem.espesor = elem.base - elem.cima
-    return elem
-  })
-})
+// export const setIntervalos = value => ({
+//   type: 'set_intervalos', 
+//   value: value.map(elem => {
+//     elem.espesor = elem.base - elem.cima
+//     return elem
+//   })
+// })
 export const setFichaTecnicaDelPozo = value => ({ type: 'set_fichaTecnicaDelPozo', value})
 
 //FichaTecnicaDelCampo
@@ -124,7 +124,16 @@ export const setSistemasArtificialesImgURL = value => ({ type: 'set_sistemasArti
 export const setSistemasArtificialesDeProduccion = value => ({ type: 'set_sistemasArtificialesDeProduccion', value})
 
 //EvaluacionPetrofisica
-export const setLayerData = value => ({ type: 'set_layerData', value})
+export const setLayerData = value => ({
+  type: 'set_layerData',
+  value: value.map((elem, i) => {
+    elem.interval = i + 1
+    elem.baseMD = parseFloat(elem.baseMD)
+    elem.cimaMD = parseFloat(elem.cimaMD)
+    elem.espesor = Math.round((elem.baseMD - elem.cimaMD) * 100) / 100
+    return elem
+  })
+})
 export const setMudLossData = value => ({ type: 'set_mudLossData', value})
 export const setImgURL = value => ({ type: 'set_imgURL', value})
 export const setEvaluacionPetrofisica = value => ({ type: 'set_evaluacionPetrofisica', value})
