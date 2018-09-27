@@ -1,7 +1,6 @@
 import React, { Component } from 'react'
 import autobind from 'autobind-decorator'
 import { connect } from 'react-redux'
-import axios from 'axios';
 
 import { setIsLoading } from '../../../../redux/actions/global'
 import { setShowForms } from '../../../../redux/actions/global'
@@ -12,11 +11,12 @@ import EvaluacionPetrofisica from './EvaluacionPetrofisica'
 import MecanicoYAparejo from './MecanicoYAparejo'
 import HistoricoDePresionCampo from './HistoricoDePresionCampo'
 import HistoricoDePresionPozo from './HistoricoDePresionPozo'
+import HistoricoDeAforos from './HistoricoDeAforos'
 import HistoricoDeProduccion from './HistoricoDeProduccion'
 import AnalisisDelAgua from './AnalisisDelAgua'
 
 import { setFichaTecnicaDelCampo, setFichaTecnicaDelPozo, setEvaluacionPetrofisica, setMecanicoYAparejoDeProduccion, 
-  setAnalisisDelAgua, setSistemasArtificialesDeProduccion, setPresionDataCampo, setPresionDataPozo, setHistoricoProduccion, setChecked } from '../../../../redux/actions/pozo'
+  setAnalisisDelAgua, setSistemasArtificialesDeProduccion, setPresionDataCampo, setPresionDataPozo, setHistoricoProduccion, setHistoricoDeAforos, setChecked } from '../../../../redux/actions/pozo'
 
 @autobind class PozoMultiStepForm extends Component {
 
@@ -35,6 +35,7 @@ import { setFichaTecnicaDelCampo, setFichaTecnicaDelPozo, setEvaluacionPetrofisi
     this.historicoDePresionCampo = React.createRef();
     this.historicoDePresionPozo = React.createRef();
     this.historicoDeProduccion = React.createRef();
+    this.historicoDeAforos = React.createRef();
     
 
     // TODO: Refactor the tabs to be children instead
@@ -47,6 +48,7 @@ import { setFichaTecnicaDelCampo, setFichaTecnicaDelPozo, setEvaluacionPetrofisi
       {'title' : 'Información de Sistemas Artificiales de Producción', 'type':'SistemasArtificialesDeProduccion', 'content': <SistemasArtificialesDeProduccion ref={Ref => this.sistemasArtificialesDeProduccion=Ref } containsErrors={this.containsErrors}  /> },
       {'title' : 'Histórico de Presión - Campo', 'type':'HistoricoDePresionCampo', 'content': <HistoricoDePresionCampo ref={Ref => this.historicoDePresionCampo=Ref } containsErrors={this.containsErrors}  /> },
       {'title' : 'Histórico de Presión - Pozo', 'type':'HistoricoDePresionPozo', 'content': <HistoricoDePresionPozo ref={Ref => this.historicoDePresionPozo=Ref } containsErrors={this.containsErrors}  /> },
+      {'title' : 'Histórico de Aforos', 'type':'HistoricoDeAforos', 'content': <HistoricoDeAforos ref={Ref => this.historicoDeAforos=Ref } containsErrors={this.containsErrors} /> },
       {'title' : 'Histórico de Producción', 'type':'HistoricoDeProduccion', 'content': <HistoricoDeProduccion ref={Ref => this.historicoDeProduccion=Ref } containsErrors={this.containsErrors}  /> },
     ];
   }
@@ -97,8 +99,6 @@ import { setFichaTecnicaDelCampo, setFichaTecnicaDelPozo, setEvaluacionPetrofisi
       .then(res => res.json())
       .then(res => res.transactionID)
 
-    console.log(transactionID)
-
     if (transactionID) {
       let data = await fetch(`api/getWell?transactionID=${transactionID}`).then(r => r.json())
       let interventionData = await fetch(`api/getHistIntervenciones?transactionID=${transactionID}`).then(r => r.json())
@@ -139,7 +139,6 @@ import { setFichaTecnicaDelCampo, setFichaTecnicaDelPozo, setEvaluacionPetrofisi
       .then(res => res.json())
       .then(res => res.transactionID)
 
-    console.log(transactionID)
 
     if (transactionID) {
       let data = await fetch(`api/getMudLoss?transactionID=${transactionID}`).then(r => r.json())
@@ -324,7 +323,6 @@ import { setFichaTecnicaDelCampo, setFichaTecnicaDelPozo, setEvaluacionPetrofisi
       .then(res => res.json())
       .then(res => res.transactionID)
 
-    console.log(transactionID)
 
     if (transactionID) {
       let data = await fetch(`api/getFieldPressure?transactionID=${transactionID}`).then(r => r.json())
@@ -393,6 +391,8 @@ import { setFichaTecnicaDelCampo, setFichaTecnicaDelPozo, setEvaluacionPetrofisi
   }
 
 
+
+
   async loadHistoricoDeProduccion() {
     let { fichaTecnicaDelPozoHighLevel, setHistoricoProduccion, setLoading } = this.props
     fichaTecnicaDelPozoHighLevel = fichaTecnicaDelPozoHighLevel.toJS()
@@ -412,7 +412,6 @@ import { setFichaTecnicaDelCampo, setFichaTecnicaDelPozo, setEvaluacionPetrofisi
         let newObj = aforosData.historicoDeProduccion
         newObj.produccionData = produccionData.historicoDeProduccion.produccionData
 
-        console.log(newObj)
         setHistoricoProduccion(newObj)
         setLoading({ 
           isLoading: false,
@@ -555,6 +554,7 @@ const mapDispatchToProps = dispatch => ({
   setPresionDataPozo : values => {dispatch(setPresionDataPozo(values))},
   setPresionDataCampo : values => {dispatch(setPresionDataCampo(values))},
   setHistoricoProduccion : values => {dispatch(setHistoricoProduccion(values))},
+  setHistoricoDeAforos: values => {dispatch(HistoricoDeAforos(values))},
   setLoading: obj => {dispatch(setIsLoading(obj))},
   setChecked: values => {dispatch(setChecked(values))}
 })
@@ -569,6 +569,7 @@ const mapStateToProps = state => ({
   sistemasArtificialesDeProduccion: state.get('sistemasArtificialesDeProduccion'),
   mecanicoYAparejoDeProduccion: state.get('mecanicoYAparejoDeProduccion'),
   analisisDelAgua: state.get('analisisDelAgua'),
+  historicoDeAforos: state.get('historicoDeAforos'),
   user: state.get('user')
 })
 

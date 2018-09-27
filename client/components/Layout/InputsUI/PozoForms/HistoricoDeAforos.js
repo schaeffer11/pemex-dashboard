@@ -3,7 +3,7 @@ import autobind from 'autobind-decorator'
 import { connect } from 'react-redux'
 import { InputRow, InputRowUnitless, InputRowSelectUnitless, InputDate } from '../../Common/InputRow'
 import {withValidate} from '../../Common/Validate'
-import { setProduccionData, setChecked } from '../../../../redux/actions/pozo'
+import { setAforosData, setChecked } from '../../../../redux/actions/pozo'
 import InputTable from '../../Common/InputTable'
 import ReactTable from 'react-table'
 
@@ -23,65 +23,70 @@ let columns = [
     accessor: 'fecha',
     cell: 'renderDate',
   }, { 
-    Header: 'Dias',
-    accessor: 'dias',
+    Header: 'Tiempo',
+    accessor: 'tiempo',
     cell: 'renderNumber',
   }, { 
-    Header: 'Qo (bbl/d)',
+    Header: 'Estrangulador',
+    accessor: 'estrangulador',
+    cell: 'renderNumber',
+  }, { 
+    Header: 'PTP',
+    accessor: 'ptp',
+    cell: 'renderNumber',
+  }, { 
+    Header: 'TTP',
+    accessor: 'ttp',
+    cell: 'renderNumber',
+  }, { 
+    Header: 'PBAJ',
+    accessor: 'pbaj',
+    cell: 'renderNumber',
+  }, { 
+    Header: 'TBAJ',
+    accessor: 'tbaj',
+    cell: 'renderNumber',
+  }, { 
+    Header: 'Psep',
+    accessor: 'psep',
+    cell: 'renderNumber',
+  }, { 
+    Header: 'Tsep',
+    accessor: 'tsep',
+    cell: 'renderNumber',
+  }, { 
+    Header: 'Ql',
+    accessor: 'ql',
+    cell: 'renderNumber',
+  }, { 
+    Header: 'Qo',
     accessor: 'qo',
     cell: 'renderNumber',
   }, { 
-    Header: 'Qw (bbl/d)',
-    accessor: 'qw',
-    cell: 'renderNumber',
-  }, { 
-    Header: 'Qg (MMpc/d)',
+    Header: 'Qg',
     accessor: 'qg',
     cell: 'renderNumber',
   }, { 
-    Header: 'Qgi (MMpc/d)',
-    accessor: 'qgi',
+    Header: 'Qw',
+    accessor: 'qw',
     cell: 'renderNumber',
   }, { 
-    Header: 'Volumen O (bbl)',
-    accessor: 'qo_vol',
-  }, { 
-    Header: 'Volumen W (bbl)',
-    accessor: 'qw_vol',
-  }, { 
-    Header: 'Volumen G (MMpc)',
-    accessor: 'qg_vol',
-  }, { 
-    Header: 'Volumen Gi (MMpc',
-    accessor: 'qgi_vol',
-  }, { 
-    Header: 'Np (MMbbl)',
-    accessor: 'np',
-  }, { 
-    Header: 'Wp (MMbbl)',
-    accessor: 'wp',
-  }, { 
-    Header: 'Gp (MMMpc)',
-    accessor: 'gp',
-  }, { 
-    Header: 'Gi (MMMpc)',
-    accessor: 'gi',
-  }, { 
-    Header: 'RGA (m3/m3)',
+    Header: 'RGA',
     accessor: 'rga',
+    cell: 'renderNumber',
   }, { 
-    Header: 'Fw Fraction',
-    accessor: 'fw',
+    Header: 'Salinidad',
+    accessor: 'salinidad',
+    cell: 'renderNumber',
+  }, { 
+    Header: 'pH',
+    accessor: 'ph',
+    cell: 'renderNumber',
   }
 ]
 
 
-
-
-
-
-
-@autobind class HistoricoDeProduccion extends Component {
+@autobind class HistoricoDeAforos extends Component {
   constructor(props) {
     super(props)
     this.state = {
@@ -132,64 +137,81 @@ let columns = [
     }
   }
 
+  renderEditable(cellInfo) {
+    let { setAforosData, formData } = this.props
+    formData = formData.toJS()
+    let { aforosData } = formData
+
+    return (
+      <div
+        style={{ backgroundColor: "#fafafa" }}
+        contentEditable
+        suppressContentEditableWarning
+        onBlur={e => {
+          aforosData[cellInfo.index][cellInfo.column.id] = e.target.innerHTML;
+          setAforosData(aforosData)
+        }}
+      >{aforosData[cellInfo.index][cellInfo.column.id]}</div>
+    );
+  }
 
   addNewRow() {
-    let { formData, setProduccionData } = this.props
+    let { formData, setAforosData } = this.props
     formData = formData.toJS()
-    let { produccionData } = formData
+    let { aforosData } = formData
 
-    produccionData[0].length = 2
+    aforosData[0].length = 2
 
-    setProduccionData([...produccionData, {index: produccionData.length, fecha: null, dias: '', qo: '', qw: '', qg: '', qgi: '', qo_vol: '', qw_vol: '', qg_vol: '', qgi_vol: '', np: '', wp: '', gp: '', gi: '', rga: '', fw: '', length: produccionData.length + 1, 'edited': false}])
+    setAforosData([...aforosData, {index: aforosData.length, fecha: null, tiempo: '', estrangulador: '', ptp: '', ttp: '', pbaj: '',tbaj: '',psep: '',tsep: '', ql: '',qo: '', qg: '', qw: '', rga: '', salinidad: '', ph: '', length: aforosData.length + 1, 'edited': false}])
   }
 
 
   deleteRow(state, rowInfo, column, instance) {
-    let { formData, setProduccionData } = this.props
+    let { formData, setAforosData } = this.props
     formData = formData.toJS()
-    let { produccionData } = formData
+    let { aforosData } = formData
 
     return {
       onClick: e => {
-        if (column.id === 'delete' && produccionData.length > 1) {
-          produccionData.splice(rowInfo.original.index, 1)
+        if (column.id === 'delete' && aforosData.length > 1) {
+          aforosData.splice(rowInfo.original.index, 1)
 
-          produccionData.forEach((i, index) => {
+          aforosData.forEach((i, index) => {
             i.index = index
-            i.length = produccionData.length
+            i.length = aforosData.length
           }) 
 
-          setProduccionData(produccionData)
+          setAforosData(aforosData)
         }
       }
     }
   }
 
-  makeHistoricoDeProduccionInput() {
-    let { formData ,setProduccionData } = this.props
+  makeHistoricoDeAforosInput() {
+    let { formData ,setAforosData } = this.props
     formData = formData.toJS()
-    let { produccionData } = formData
+    let { aforosData } = formData
 
-    const objectTemplate = {fecha: null, dias: '', qo: '', qw: '', qg: '', qgi: '', qo_vol: '', qw_vol: '', qg_vol: '', qgi_vol: '', np: '', wp: '', gp: '', gi: '', rga: '', fw: ''}
+    const objectTemplate = {fecha: null, tiempo: '', estrangulador: '', ptp: '', ttp: '', pbaj: '',tbaj: '',psep: '',tsep: '', ql: '',qo: '', qg: '', qw: '', rga: '', salinidad: '', ph: ''}
 
     return (
       <div className='historico-produccion' >
         <div className='table'>
           <InputTable
             className="-striped"
-            data={produccionData}
+            data={aforosData}
             newRow={objectTemplate}
-            setData={setProduccionData}
+            setData={setAforosData}
             columns={columns}
             showPagination={false}
             showPageSizeOptions={false}
-            pageSize={produccionData.length}
+            pageSize={aforosData.length}
             sortable={false}
             getTdProps={this.deleteRow}
           />
         </div>
-        { this.state.errors.produccionData && this.state.errors.produccionData.checked &&
-          <div className="error">{this.state.errors.produccionData.message}</div>
+        { this.state.errors.aforosData && this.state.errors.aforosData.checked &&
+          <div className="error">{this.state.errors.aforosData.message}</div>
         }
         <button className='new-row-button' onClick={this.addNewRow}>Añadir un renglón</button>
       </div>
@@ -197,10 +219,9 @@ let columns = [
   }
 
   render() {
-
     return (
       <div className="form historico-de-produccion">
-        { this.makeHistoricoDeProduccionInput() }
+        { this.makeHistoricoDeAforosInput() }
       </div>
     )
   }
@@ -209,13 +230,13 @@ let columns = [
 const validate = values => {
     const errors = {}
 
-    if(!values.produccionData){
-      errors.produccionData = {message: "Esta forma no puede estar vacia"}
+    if(!values.aforosData){
+      errors.aforosData = {message: "Esta forma no puede estar vacia"}
     }else {
-      values.produccionData.forEach((row, index) => {
+      values.aforosData.forEach((row, index) => {
         let hasEmpty = Object.values(row).find((value) => { return value === null || value.toString().trim() == '' })
         if(hasEmpty !== undefined){
-            errors.produccionData = {message: "Ningun campo puede estar vacio."}
+            errors.aforosData = {message: "Ningun campo puede estar vacio."}
         }
       })
     }
@@ -225,15 +246,15 @@ const validate = values => {
 
 const mapStateToProps = state => ({
   forms: state.get('forms'),
-  formData: state.get('historicoDeProduccion'),
+  formData: state.get('historicoDeAforos'),
 })
 
 const mapDispatchToProps = dispatch => ({
-    setProduccionData: val => dispatch(setProduccionData(val)),
+    setAforosData: val => dispatch(setAforosData(val)),
     setChecked: val => dispatch(setChecked(val))    
 })
 
 export default withValidate(
   validate,
-  connect(mapStateToProps, mapDispatchToProps)(HistoricoDeProduccion)
+  connect(mapStateToProps, mapDispatchToProps)(HistoricoDeAforos)
 )

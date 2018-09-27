@@ -812,12 +812,8 @@ app.get('/getFieldPressure', async (req, res) => {
 
   let action = saved ? 'loadSave' : 'loadTransaction'
 
-
   const map = {
     FECHA: { child: 'fecha' },
-    QO: { child: 'Qo' },
-    NP: { child: 'Np' },
-    PWS: { child: 'Pws' },
     PR: { child: 'Pr' } 
   }
 
@@ -840,7 +836,7 @@ app.get('/getFieldPressure', async (req, res) => {
         objectPath.set(innerObj, 'index', index)
         objectPath.push(finalObj, `${mainParent}.${innerParent}`, innerObj)
       })
-
+      finalObj['historicoDePresion'].pressureDepthCampo = data[0].PRESSURE_DEPTH
       res.json(finalObj)
     }
     else if (action === 'loadTransaction'){
@@ -851,7 +847,8 @@ app.get('/getFieldPressure', async (req, res) => {
         mainParent: {
           innerParent: [
           {}
-          ]
+          ],
+          presionDataCampo: ''
         }
       })
     }
@@ -868,9 +865,6 @@ app.get('/getWellPressure', async (req, res) => {
 
   const map = {
     FECHA: { child: 'fecha' },
-    QO: { child: 'Qo' },
-    NP: { child: 'Np' },
-    PWS: { child: 'Pws' },
     PR: { child: 'Pr' } 
   }
 
@@ -893,7 +887,7 @@ app.get('/getWellPressure', async (req, res) => {
         objectPath.set(innerObj, 'index', index)
         objectPath.push(finalObj, `${mainParent}.${innerParent}`, innerObj)
       })
-
+      finalObj['historicoDePresion'].pressureDepthPozo = data[0].PRESSURE_DEPTH
       res.json(finalObj)
     }
     else if (action === 'loadTransaction'){
@@ -904,7 +898,8 @@ app.get('/getWellPressure', async (req, res) => {
         mainParent: {
           innerParent: [
           {}
-          ]
+          ],
+          presionDataPozo: ''
         }
       })
     }
@@ -918,35 +913,45 @@ app.get('/getWellAforos', async (req, res) => {
 
   let action = saved ? 'loadSave' : 'loadTransaction'
 
- 
   const map = {
-    FECHA: { parent: 'historicoDeProduccion', child: 'fecha' }, 
-    ESTRANGULADOR: { parent: 'historicoDeProduccion', child: 'estrangulado' },
-    PTP: { parent: 'historicoDeProduccion', child: 'ptp' }, 
-    TTP: { parent: 'historicoDeProduccion', child: 'ttp' }, 
-    PBAJ: { parent: 'historicoDeProduccion', child: 'pbaj' }, 
-    TBAJ: { parent: 'historicoDeProduccion', child: 'tbaj' }, 
-    PSEP: { parent: 'historicoDeProduccion', child: 'psep' },
-    TSEP: { parent: 'historicoDeProduccion', child: 'tsep' }, 
-    QL: { parent: 'historicoDeProduccion', child: 'ql' }, 
-    QO: { parent: 'historicoDeProduccion', child: 'qo'},
-    QG: { parent: 'historicoDeProduccion', child: 'qg' }, 
-    QW: { parent: 'historicoDeProduccion', child: 'qw' }, 
-    RGA: { parent: 'historicoDeProduccion', child: 'rga' },
-    SALINIDAD: { parent: 'historicoDeProduccion', child: 'salinidad'},
-    PH: { parent: 'historicoDeProduccion', child: 'ph'},
+    FECHA: { child: 'fecha' }, 
+    TIEMPO: { child: 'tiempo' },
+    ESTRANGULADOR: { child: 'estrangulador' },
+    PTP: { child: 'ptp' }, 
+    TTP: { child: 'ttp' }, 
+    PBAJ: { child: 'pbaj' }, 
+    TBAJ: { child: 'tbaj' }, 
+    PSEP: { child: 'psep' },
+    TSEP: { child: 'tsep' }, 
+    QL: { child: 'ql' }, 
+    QO: { child: 'qo'},
+    QG: { child: 'qg' }, 
+    QW: { child: 'qw' }, 
+    RGA: { child: 'rga' },
+    SALINIDAD: { child: 'salinidad'},
+    PH: { child: 'ph'},
   }
+
+  const mainParent = 'historicoDeAforos'
+  const innerParent = 'aforosData'
 
   getWellAforos(transactionID, action, (data) => {
     const finalObj = {}
+    if (data && data.length > 0) {
+      data.forEach((d, index) => {
+        d.FECHA ? d.FECHA = d.FECHA.toJSON().slice(0, 10) : null
+        const innerObj = {}
+        Object.keys(d).forEach(k => {
+          if (map[k]) {
+            const { child } = map[k]
+            objectPath.set(innerObj, child, d[k])
+          }
+        })
+        objectPath.set(innerObj, 'length', data.length)
+        objectPath.set(innerObj, 'index', index)
+        objectPath.push(finalObj, `${mainParent}.${innerParent}`, innerObj)
+      })
 
-    if (data[0]) {
-      Object.keys(data[0]).forEach(key => {
-        if (map[key]) {
-          const { parent, child } = map[key]
-          objectPath.set(finalObj, `${parent}.${child}`, data[0][key])
-        }
-      })   
       res.json(finalObj)
     }
     else {
@@ -967,15 +972,18 @@ app.get('/getWellProduccion', async (req, res) => {
     Dias: { child: 'dias' },
     QO: { child: 'qo' },
     QW: { child: 'qw' },
-    QG_CAL: { child: 'qg' },
-    QGL: { child: 'qgl' },
+    QG: { child: 'qg' },
+    QGI: { child: 'qgi' },
+    QO_VOLUME: { child: 'qo_vol' },
+    QW_VOLUME: { child: 'qw_vol' },
+    QG_VOLUME: { child: 'qg_vol' },
+    QGI_VOLUME: { child: 'qgi_vol' },
     NP: { child: 'np' },
     WP: { child: 'wp' },
     GP: { child: 'gp' },
     GI: { child: 'gi' },
     RGA: { child: 'rga' },
-    FW_FRACTION: { child: 'fw' },
-    POZOS_PROD_ACTIVOS: { child: 'pozosProdActivos' }, 
+    FW_FRACTION: { child: 'fw' }, 
   }
 
   const mainParent = 'historicoDeProduccion'

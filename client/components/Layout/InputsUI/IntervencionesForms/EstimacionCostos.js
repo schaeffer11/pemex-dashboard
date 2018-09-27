@@ -271,14 +271,12 @@ const companyOptions = [
     let dlsSum = 0
     let mnxSum = 0
 
-    console.log(estimacionCostosData)
-
     estimacionCostosData.forEach(i => {
       if (i.cost) {
-        mnxSum += parseInt(i.cost)
+        mnxSum += parseFloat(i.cost)
       }
       if (i.costDLS) {
-        dlsSum += parseInt(i.costDLS)
+        dlsSum += parseFloat(i.costDLS)
       }
     })
 
