@@ -7,7 +7,7 @@ import DatePicker from 'react-datepicker'
 import {withValidate} from '../../Common/Validate'
 import InputTable from '../../Common/InputTable'
 import { InputRow, InputRowUnitless, InputRowSelectUnitless, InputDate } from '../../Common/InputRow'
-import { setTipoDeSistemo, setHistorialIntervencionesData, setIntervaloProductor, setEspesorBruto, setEspesorNeto, setCaliza, setDolomia, setArcilla, setPorosidad, setPermeabilidad, setSw, setCaa, setCga, setTipoDePozo, setPwsFecha, setPwfFecha, setDeltaPPerMes, setTyac, setPvt, setAparejoDeProduccion, setProfEmpacador, setProfSensorPYT, setTipoDeSap, formData, setChecked, setIntervalos } from '../../../../redux/actions/pozo'
+import { setTipoDeSistemo, setPws, setPwf, setHistorialIntervencionesData, setIntervaloProductor, setEspesorBruto, setEspesorNeto, setCaliza, setDolomia, setArcilla, setPorosidad, setPermeabilidad, setSw, setCaa, setCga, setTipoDePozo, setPwsFecha, setPwfFecha, setDeltaPPerMes, setTyac, setPvt, setAparejoDeProduccion, setProfEmpacador, setProfSensorPYT, setTipoDeSap, formData, setChecked, setIntervalos } from '../../../../redux/actions/pozo'
 
 let columns = [
   {
@@ -114,7 +114,7 @@ let columns = [
   makePozoForm() {
     let { tipoDeSistemo, setTipoDePozo, setPwsFecha, setPwfFecha, setDeltaPPerMes, setTyac, setPvt, setAparejoDeProduccion, setProfEmpacador, setProfSensorPYT, setTipoDeSistemo, formData } = this.props 
     formData = formData.toJS()
-    let { tipoDePozo, pwsFecha, pwfFecha, deltaPPerMes, tyac, pvt, aparejoDeProduccion, profEmpacador, profSensorPYT } = formData
+    let { tipoDePozo, pwsFecha, pwfFecha, pws, pwf, deltaPPerMes, tyac, pvt, aparejoDeProduccion, profEmpacador, profSensorPYT } = formData
 
     let wellOptions = [
       { label: 'Productor', value: 'Productor' },
@@ -138,9 +138,11 @@ let columns = [
           Los Datos de Pozo
         </div>
           <InputRowSelectUnitless header="Tipo de pozo" value={tipoDePozo} callback={(e) => setTipoDePozo(e.value)}  name='tipoDePozo' options={wellOptions} onBlur={this.validate} errors={this.state.errors} />
-          <InputDate header="Pws (fecha)" name='pwsFecha' value={pwsFecha} onChange={setPwsFecha} unit='Kg/cm2' onBlur={this.validate} errors={this.state.errors} />
-          <InputDate header="Pwf (fecha)" name='pwfFecha' value={pwfFecha} onChange={setPwfFecha} unit='Kg/cm2' onBlur={this.validate} errors={this.state.errors} />
-          <InputRow header="Δp/mes" name='deltaPPerMes' value={deltaPPerMes} onChange={setDeltaPPerMes} unit='Kg/cm2/mes' onBlur={this.validate} errors={this.state.errors} />
+          <InputRow header="Pws" name='pws' value={pws} onChange={setPws} unit={<div>Kg/cm<sup>2</sup></div>} onBlur={this.validate} errors={this.state.errors} />
+          <InputDate header="Pws (fecha)" name='pwsFecha' value={pwsFecha} onChange={setPwsFecha} onBlur={this.validate} errors={this.state.errors} />
+          <InputRow header="Pwf" name='pwf' value={pwf} onChange={setPwf} unit={<div>Kg/cm<sup>2</sup></div>} onBlur={this.validate} errors={this.state.errors} />
+          <InputDate header="Pwf (fecha)" name='pwfFecha' value={pwfFecha} onChange={setPwfFecha} onBlur={this.validate} errors={this.state.errors} />
+          <InputRow header="Δp/mes" name='deltaPPerMes' value={deltaPPerMes} onChange={setDeltaPPerMes} unit={<div>Kg/cm<sup>2</sup>/mes</div>} onBlur={this.validate} errors={this.state.errors} />
           <InputRow header="Tyac" name='tyac' value={tyac} onChange={setTyac} unit='°C' onBlur={this.validate} errors={this.state.errors} />
           <InputRow header="PVT" name='pvt' value={pvt} onChange={setPvt} unit='Pozo' onBlur={this.validate} errors={this.state.errors} />
           <InputRow header="Aparejo de producción" value={aparejoDeProduccion} onChange={setAparejoDeProduccion} name='aparejoDeProduccion' unit='pg' onBlur={this.validate} errors={this.state.errors} />
@@ -470,6 +472,8 @@ const mapDispatchToProps = dispatch => ({
   setTipoDePozo: val => dispatch(setTipoDePozo(val)),
   setPwsFecha: val => dispatch(setPwsFecha(val)),
   setPwfFecha: val => dispatch(setPwfFecha(val)),
+  setPws: val => dispatch(setPws(val)),
+  setPwf: val => dispatch(setPwf(val)),
   setDeltaPPerMes: val => dispatch(setDeltaPPerMes(val)),
   setTyac: val => dispatch(setTyac(val)),
   setPvt: val => dispatch(setPvt(val)),

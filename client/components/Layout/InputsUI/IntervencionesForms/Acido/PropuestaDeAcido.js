@@ -144,8 +144,8 @@ containsErrors(){
         </div>
         <InputRowUnitless header="Intervalo(s)" name='intervalo' value={intervalo} onChange={setIntervalo} errors={this.state.errors} onBlur={this.validate}/>
         <InputRow header="Longitud de intervalo a tratar" name='longitudDeIntervalo' unit='m' value={longitudDeIntervalo} onChange={setLongitudDeIntervalo} errors={this.state.errors} onBlur={this.validate}/>
-        <InputRow header="Vol. Aparejo (VAP)" name='volAparejo' unit='m3' value={volAparejo} onChange={setVolAparejo} errors={this.state.errors} onBlur={this.validate}/>
-        <InputRow header="Capacidad total del pozo (cima/base)" name='capacidadTotalDelPozo' unit='m3/m3' value={capacidadTotalDelPozo} onChange={setCapacidadTotalDelPozo} errors={this.state.errors} onBlur={this.validate}/>
+        <InputRow header="Vol. Aparejo (VAP)" name='volAparejo' unit={<div>m<sup>3</sup></div>} value={volAparejo} onChange={setVolAparejo} errors={this.state.errors} onBlur={this.validate}/>
+        <InputRow header="Capacidad total del pozo (cima/base)" name='capacidadTotalDelPozo' unit={<div>m<sup>3</sup>/m<sup>3</sup></div>} value={capacidadTotalDelPozo} onChange={setCapacidadTotalDelPozo} errors={this.state.errors} onBlur={this.validate}/>
       </div>
     )
   }
@@ -160,12 +160,12 @@ containsErrors(){
         <div className='header'>
           Detalles
         </div>
-        <InputRow header="Volumen precolchón (gel lineal o N2)" name='volumenPrecolchonN2' unit='m3' value={volumenPrecolchonN2} onChange={setVolumenPrecolchonN2} errors={this.state.errors} onBlur={this.validate}/>
-        <InputRow header="Volumen sistema no reactivo" name='volumenSistemaNoReativo' unit='m3' value={volumenSistemaNoReativo} onChange={setVolumenSistemaNoReativo} errors={this.state.errors} onBlur={this.validate}/>
-        <InputRow header="Volumen sistema reactivo" name='volumenSistemaReactivo' unit='m3' value={volumenSistemaReactivo} onChange={setVolumenSistemaReactivo} errors={this.state.errors} onBlur={this.validate}/>
-        <InputRow header="Volumen sistema divergente" name='volumenSistemaDivergente' unit='m3' value={volumenSistemaDivergente} onChange={setVolumenSistemaDivergente} errors={this.state.errors} onBlur={this.validate}/>
-        <InputRow header="Volumen desplazamiento líquido" name='volumenDesplazamientoLiquido' unit='m3' value={volumenDesplazamientoLiquido} onChange={setVolumenDesplazamientoLiquido} errors={this.state.errors} onBlur={this.validate}/>
-        <InputRow header="Volumen desplazamiento gel lineal" name='volumenDesplazamientoGelLineal' unit='m3' value={volumenDesplazamientoGelLineal} onChange={setVolumenDesplazamientoGelLineal} errors={this.state.errors} onBlur={this.validate}/>
+        <InputRow header={<div>Volumen precolchón (gel lineal o N<sub>2</sub>)</div>} name='volumenPrecolchonN2' unit={<div>m<sup>3</sup></div>} value={volumenPrecolchonN2} onChange={setVolumenPrecolchonN2} errors={this.state.errors} onBlur={this.validate}/>
+        <InputRow header="Volumen sistema no reactivo" name='volumenSistemaNoReativo' unit={<div>m<sup>3</sup></div>} value={volumenSistemaNoReativo} onChange={setVolumenSistemaNoReativo} errors={this.state.errors} onBlur={this.validate}/>
+        <InputRow header="Volumen sistema reactivo" name='volumenSistemaReactivo' unit={<div>m<sup>3</sup></div>} value={volumenSistemaReactivo} onChange={setVolumenSistemaReactivo} errors={this.state.errors} onBlur={this.validate}/>
+        <InputRow header="Volumen sistema divergente" name='volumenSistemaDivergente' unit={<div>m<sup>3</sup></div>} value={volumenSistemaDivergente} onChange={setVolumenSistemaDivergente} errors={this.state.errors} onBlur={this.validate}/>
+        <InputRow header="Volumen desplazamiento líquido" name='volumenDesplazamientoLiquido' unit={<div>m<sup>3</sup></div>} value={volumenDesplazamientoLiquido} onChange={setVolumenDesplazamientoLiquido} errors={this.state.errors} onBlur={this.validate}/>
+        <InputRow header="Volumen desplazamiento gel lineal" name='volumenDesplazamientoGelLineal' unit={<div>m<sup>3</sup></div>} value={volumenDesplazamientoGelLineal} onChange={setVolumenDesplazamientoGelLineal} errors={this.state.errors} onBlur={this.validate}/>
       </div>
     )
   }

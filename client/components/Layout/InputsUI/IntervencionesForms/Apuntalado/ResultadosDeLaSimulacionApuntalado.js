@@ -70,7 +70,7 @@ import { connect } from 'react-redux'
         <InputRow header="Longitud apuntalada" name='longitudApuntalada' unit="m" value={longitudApuntalada} onChange={setLongitudApuntalada}  errors={this.state.errors} onBlur={this.validate}/>
         <InputRow header="Altura total de fractura" name='alturaTotalDeFractura' unit="m" value={alturaTotalDeFractura} onChange={setAlturaTotalDeFractura}  errors={this.state.errors} onBlur={this.validate}/>
         <InputRow header="Ancho promedio" name='anchoPromedio' unit="pg." value={anchoPromedio} onChange={setAnchoPromedio}  errors={this.state.errors} onBlur={this.validate}/>
-        <InputRow header="Concentración Areal" name='concentractionAreal' unit="lb/pg2" value={concentractionAreal} onChange={setConcentractionAreal}  errors={this.state.errors} onBlur={this.validate}/>
+        <InputRow header="Concentración Areal" name='concentractionAreal' unit={<div>lb/pg<sup>2</sup></div>} value={concentractionAreal} onChange={setConcentractionAreal}  errors={this.state.errors} onBlur={this.validate}/>
         <InputRow header="Conductividad" name='conductividad' unit="mD*ft" value={conductividad} onChange={setConductividad}  errors={this.state.errors} onBlur={this.validate}/>
         <InputRow header="FCD" name='fcd' unit="adim." value={fcd} onChange={setFcd}  errors={this.state.errors} onBlur={this.validate}/>
         <InputRow header="Presión neta" name='presionNeta' unit="psi" value={presionNeta} onChange={setPresionNeta}  errors={this.state.errors} onBlur={this.validate}/>

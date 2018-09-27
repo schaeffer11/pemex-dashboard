@@ -142,8 +142,8 @@ let columns = [
         </div>
         <InputRowUnitless header="Intervalo(s)" name='intervalo' value={intervalo} onChange={setIntervalo} errors={this.state.errors} onBlur={this.validate}/>
         <InputRow header="Longitud de intervalo a tratar" name='longitudDeIntervalo' unit='m' value={longitudDeIntervalo} onChange={setLongitudDeIntervalo} errors={this.state.errors} onBlur={this.validate}/>
-        <InputRow header="Vol. Aparejo (VAP)" name='longitudDeIntervalo' unit='m3' value={volAparejo} onChange={setVolAparejo} errors={this.state.errors} onBlur={this.validate}/>
-        <InputRow header="Capacidad total del pozo (cima/base)" name='capacidadTotalDelPozo' unit='m3/m3' value={capacidadTotalDelPozo} onChange={setCapacidadTotalDelPozo} errors={this.state.errors} onBlur={this.validate}/>
+        <InputRow header="Vol. Aparejo (VAP)" name='longitudDeIntervalo' unit={<div>m<sup>3</sup></div>} value={volAparejo} onChange={setVolAparejo} errors={this.state.errors} onBlur={this.validate}/>
+        <InputRow header="Capacidad total del pozo (cima/base)" name='capacidadTotalDelPozo' unit={<div>m<sup>3</sup>/m<sup>3</sup></div>} value={capacidadTotalDelPozo} onChange={setCapacidadTotalDelPozo} errors={this.state.errors} onBlur={this.validate}/>
       </div>
     )
   }
@@ -158,11 +158,11 @@ let columns = [
         <div className='header'>
           Detalles
         </div>
-        <InputRow header="Volumen Precolchon N2" name='volumenPrecolchonN2' unit='m3' value={volumenPrecolchonN2} onChange={setVolumenPrecolchonN2} errors={this.state.errors} onBlur={this.validate}/>
-        <InputRow header="Volumen De apuntalante" name='volumenDeApuntalante' unit='m3' value={volumenDeApuntalante} onChange={setVolumenDeApuntalante} errors={this.state.errors} onBlur={this.validate}/>
-        <InputRow header="Volumen de gel de fractura" name='volumenDeGelDeFractura' unit='m3' value={volumenDeGelDeFractura} onChange={setVolumenDeGelDeFractura} errors={this.state.errors} onBlur={this.validate}/>
-        <InputRow header="Volumen Desplazamiento" name='volumenDesplazamiento' unit='m3' value={volumenDesplazamiento} onChange={setVolumenDesplazamiento} errors={this.state.errors} onBlur={this.validate}/>
-        <InputRow header="Volumen Total de Liqudo" name='volumenTotalDeLiquido' unit='m3' value={volumenTotalDeLiquido} onChange={setVolumenTotalDeLiquido} errors={this.state.errors} onBlur={this.validate}/>
+        <InputRow header={<div>Volumen precolchón N<sub>2</sub></div>} name='volumenPrecolchonN2' unit={<div>m<sup>3</sup></div>} value={volumenPrecolchonN2} onChange={setVolumenPrecolchonN2} errors={this.state.errors} onBlur={this.validate}/>
+        <InputRow header="Volumen de apuntalante" name='volumenDeApuntalante' unit={<div>m<sup>3</sup></div>} value={volumenDeApuntalante} onChange={setVolumenDeApuntalante} errors={this.state.errors} onBlur={this.validate}/>
+        <InputRow header="Volumen de gel de fractura" name='volumenDeGelDeFractura' unit={<div>m<sup>3</sup></div>} value={volumenDeGelDeFractura} onChange={setVolumenDeGelDeFractura} errors={this.state.errors} onBlur={this.validate}/>
+        <InputRow header="Volumen desplazamiento" name='volumenDesplazamiento' unit={<div>m<sup>3</sup></div>} value={volumenDesplazamiento} onChange={setVolumenDesplazamiento} errors={this.state.errors} onBlur={this.validate}/>
+        <InputRow header="Volumen total de líquido" name='volumenTotalDeLiquido' unit={<div>m<sup>3</sup></div>} value={volumenTotalDeLiquido} onChange={setVolumenTotalDeLiquido} errors={this.state.errors} onBlur={this.validate}/>
       </div>
     )
   }

@@ -11,24 +11,24 @@ import { addObject, signedURL, deleteObject, getBuckets } from '../aws/index';
 const INSERT_FIELDS_QUERY = {
     save: `INSERT INTO _FieldsDataSave (
       FIELD_FORMACION_ID, SUBDIRECCION, ACTIVO, FORMACION, DESCUBRIMIENTO, FECHA_DE_EXPLOTACION,
-      NUMERO_DE_POZOS_OPERANDO, P_INICIAL_ANO, P_ACTUAL_FECHA, DP_PER_ANO, TYAC, PR, TIPO_DE_FLUIDO, DENSIDAD_DEL_ACEITE, P_SAT,
+      NUMERO_DE_POZOS_OPERANDO, P_INICIAL, P_INICIAL_ANO, P_ACTUAL, P_ACTUAL_FECHA, DP_PER_ANO, TYAC, PR, TIPO_DE_FLUIDO, DENSIDAD_DEL_ACEITE, P_SAT,
       RGA_FLUIDO, SALINIDAD, PVT_REPRESENTATIVO, LITOLOGIA, ESPESOR_NETO, POROSIDAD, SW, K_PROMEDIO, CAA, CGA,
       QO, QG, RGA, FW, NP, GP, WP, RESERVA_REMANENTE_DE_ACEITE, RESERVA_REMONENTE_DE_GAS, RESERVA_REMANENTE_DE_PETROLEO_CRUDO_EQUIVALENTE,
       H2S, CO2, N2, TRANSACTION_ID) VALUES
       (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, 
        ?, ?, ?, ?, ?, ?, ?, ?, ?, ?,
        ?, ?, ?, ?, ?, ?, ?, ?, ?, ?,
-       ?, ?, ?, ?, ?, ?, ?, ?, ?)`,
+       ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`,
     submit: `INSERT INTO FieldsData (
       FIELD_FORMACION_ID, SUBDIRECCION, ACTIVO, FORMACION, DESCUBRIMIENTO, FECHA_DE_EXPLOTACION,
-      NUMERO_DE_POZOS_OPERANDO, P_INICIAL_ANO, P_ACTUAL_FECHA, DP_PER_ANO, TYAC, PR, TIPO_DE_FLUIDO, DENSIDAD_DEL_ACEITE, P_SAT,
+      NUMERO_DE_POZOS_OPERANDO, P_INICIAL, P_INICIAL_ANO, P_ACTUAL, P_ACTUAL_FECHA, DP_PER_ANO, TYAC, PR, TIPO_DE_FLUIDO, DENSIDAD_DEL_ACEITE, P_SAT,
       RGA_FLUIDO, SALINIDAD, PVT_REPRESENTATIVO, LITOLOGIA, ESPESOR_NETO, POROSIDAD, SW, K_PROMEDIO, CAA, CGA,
       QO, QG, RGA, FW, NP, GP, WP, RESERVA_REMANENTE_DE_ACEITE, RESERVA_REMONENTE_DE_GAS, RESERVA_REMANENTE_DE_PETROLEO_CRUDO_EQUIVALENTE,
       H2S, CO2, N2, TRANSACTION_ID) VALUES
       (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, 
        ?, ?, ?, ?, ?, ?, ?, ?, ?, ?,
        ?, ?, ?, ?, ?, ?, ?, ?, ?, ?,
-       ?, ?, ?, ?, ?, ?, ?, ?, ?)`,
+       ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`,
     loadSave: `SELECT * FROM _FieldsDataSave WHERE TRANSACTION_ID = ?`,
     loadTransaction: `SELECT * FROM FieldsData WHERE TRANSACTION_ID = ?`
 }
@@ -39,11 +39,11 @@ const INSERT_WELL_QUERY = {
         FORMACION, INTERVALO_PRODUCTOR, ESPESOR_BRUTO,
         ESPESOR_NETO, CALIZA, DOLOMIA, ARCILLA, POROSIDAD,
         PERMEABILIDAD, SW, CAA, CGA, TIPO_DE_POZO,
-        PWS_FECHA, PWF_FECHA, DELTA_P_PER_MES, TYAC, PVT,
+        PWS, PWS_FECHA, PWF, PWF_FECHA, DELTA_P_PER_MES, TYAC, PVT,
         APAREJO_DE_PRODUCCION, PROF_EMPACADOR, PROF_SENSOR_PYT, TIPO_DE_SISTEMA, TRANSACTION_ID) VALUES
         (?, ?, ?, ?, ?, ?, ?, ?, ?, ?,
          ?, ?, ?, ?, ?, ?, ?, ?, ?, ?,
-         ?, ?, ?, ?, ?, ?)`,
+         ?, ?, ?, ?, ?, ?, ?, ?)`,
     submit: `INSERT INTO WellsData (
         WELL_FORMACION_ID, SUBDIRECCION, ACTIVO,
         FORMACION, INTERVALO_PRODUCTOR, ESPESOR_BRUTO,
@@ -778,7 +778,7 @@ export const create = async (body, action, cb) => {
 
   let { subdireccion, activo, campo, pozo, formacion } = finalObj.fichaTecnicaDelPozoHighLevel
 
-  let { descubrimientoField, fechaDeExplotacionField, numeroDePozosOperandoField, pInicialAnoField, pActualFechaField,
+  let { descubrimientoField, fechaDeExplotacionField, numeroDePozosOperandoField, pInicialField, pInicialAnoField, pActualField, pActualFechaField,
     dpPerAnoField, tyacField, prField, tipoDeFluidoField, densidadDelAceiteField, pSatField,
     rgaFluidoField, salinidadField, pvtRepresentativoField, litologiaField, espesorNetoField,
     porosidadField, swField, kPromedioField, caaField, cgaField,
@@ -787,7 +787,7 @@ export const create = async (body, action, cb) => {
     h2sField, co2Field, n2Field } = finalObj.fichaTecnicaDelCampo
 
   let { intervaloProductor, espesorBruto, espesorNeto, caliza,
-    dolomia, arcilla, porosidad, permeabilidad, sw, caa, cga, tipoDePozo, pwsFecha, pwfFecha,
+    dolomia, arcilla, porosidad, permeabilidad, sw, caa, cga, tipoDePozo, pws, pwsFecha, pwf, pwfFecha,
     deltaPPerMes, tyac, pvt, aparejoDeProduccion, profEmpacador, profSensorPYT, tipoDeSap, historialIntervencionesData } = finalObj.fichaTecnicaDelPozo
   
   let { layerData, mudLossData } = finalObj.evaluacionPetrofisica
@@ -916,15 +916,13 @@ export const create = async (body, action, cb) => {
   let intervalID
   let zoneID
 
-
-  console.log('herererrererrerererreer', MNXtoDLS)
   connection.beginTransaction(function(err) {
     if (err) { throw err; }
 
     const errors = []
     connection.query((action === 'save' ? INSERT_FIELDS_QUERY.save : INSERT_FIELDS_QUERY.submit), [
     fieldFormacionID, subdireccion, activo, formacion,
-    descubrimientoField, fechaDeExplotacionField, numeroDePozosOperandoField, pInicialAnoField, pActualFechaField,
+    descubrimientoField, fechaDeExplotacionField, numeroDePozosOperandoField, pInicialField, pInicialAnoField, pActualField, pActualFechaField,
     dpPerAnoField, tyacField, prField, tipoDeFluidoField, densidadDelAceiteField, pSatField,
     rgaFluidoField, salinidadField, pvtRepresentativoField, litologiaField, espesorNetoField,
     porosidadField, swField, kPromedioField, caaField, cgaField,
@@ -943,7 +941,7 @@ export const create = async (body, action, cb) => {
       wellFormacionID, subdireccion, activo,
       formacion, intervaloProductor, espesorBruto, espesorNeto, caliza,
       dolomia, arcilla, porosidad, permeabilidad, sw,
-      caa, cga, tipoDePozo, pwsFecha, pwfFecha,
+      caa, cga, tipoDePozo, pws, pwsFecha, pwf, pwfFecha,
       deltaPPerMes, tyac, pvt, aparejoDeProduccion, profEmpacador,
       profSensorPYT, tipoDeSistemo, transactionID ], (err, results) => {
         if (err) {
