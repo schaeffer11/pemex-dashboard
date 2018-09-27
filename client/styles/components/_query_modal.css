@@ -1,0 +1,48 @@
+.modalTest {
+  background: #fff;
+  outline: 0;
+  min-width: 250px;
+  border-radius: 4px;
+  padding: 15px;
+}
+
+
+.modal-title {
+  font-size: 1.3em;
+  margin: 0;
+  display: inline;
+}
+
+.modal-info {
+  font-size: 1.1em;
+  padding: .3em;
+}
+
+.modal-body { 
+  height: 200px;
+  border-bottom: solid 1px;
+  overflow-y: auto;
+  margin-bottom: 10px;
+}
+
+.save-item {
+  height: 30px;
+  background: #f2f2f2;
+
+}
+
+.save-item:nth-child(even) {
+  background: #e6e6e6;
+}
+
+.save-item:hover {
+  background: #bebebe;
+}
+
+.save-item:active {
+  background: #6699FF;
+}
+
+.active-save {
+  background: #3399FF !important;
+}

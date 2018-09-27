@@ -23,10 +23,9 @@ let layerColumns = [
     accessor: 'interval',
     // cell: 'renderNumber',
   }, { 
-    Header: 'Cima (md)',
+    Header: <div>Cima<br></br>(md)</div>,
     accessor: 'cimaMD',
     cell: 'renderNumber',
-
   }, {
     Header: 'Base (md)',
     accessor: 'baseMD',
@@ -35,38 +34,32 @@ let layerColumns = [
   {
     Header: 'Espesor (m)',
     accessor: 'espesor',
-  },
-  // { 
-  //   Header: 'Cima (mv)',
-  //   accessor: 'cimaMV',
-  //   cell: 'renderNumber',
-  // }, { 
-  //   Header: 'Base (mv)',
-  //   accessor: 'baseMV',
-  //   cell: 'renderNumber',
-  // },
-   { 
-    Header: 'V arc.(%)',
+  }, { 
+    Header: <div>Base<br></br>(md)</div>,
+    accessor: 'baseMD',
+    cell: 'renderNumber',
+  }, { 
+    Header: <div>V arc.<br></br>(%)</div>,
     accessor: 'vArc',
     cell: 'renderNumber',
   }, { 
-    Header: 'Porosity (%)',
+    Header: <div>Porosity<br></br>(%)</div>,
     accessor: 'porosity',
     cell: 'renderNumber',
   }, { 
-    Header: 'Sw. (%)',
+    Header: <div>Sw.<br></br>(%)</div>,
     accessor: 'sw',
     cell: 'renderNumber',
   }, { 
-    Header: 'Dens. (gr/cc)',
+    Header: <div>Dens.<br></br>(gr/cc)</div>,
     accessor: 'dens',
     cell: 'renderNumber',
   }, { 
-    Header: 'Resis. (ohm)',
+    Header: <div>Resis.<br></br>(ohm)</div>,
     accessor: 'resis',
     cell: 'renderNumber',
   }, { 
-    Header: 'Perm. (mD)',
+    Header: <div>Perm<br></br>(md)</div>,
     accessor: 'perm',
     cell: 'renderNumber',
   }
@@ -84,19 +77,19 @@ let mudLossColumns = [
       }
     }
   }, {
-    Header: 'Cima (md)',
+    Header: <div>Cima<br></br>(md)</div>,
     accessor: 'cimaMD',
     cell: 'renderNumber',
   }, { 
-    Header: 'Base (md)',
+    Header: <div>Base<br></br>(md)</div>,
     accessor: 'baseMD',
     cell: 'renderNumber',
   }, { 
-    Header: 'Lodo perdido (m3)',
+    Header: <div>Lodo perdido<br></br>(m<sup>3</sup>)</div>,
     accessor: 'lodoPerdido',
     cell: 'renderNumber',
   }, { 
-    Header: 'Densidad (gr/cc)',
+    Header: <div>Densidad<br></br>(gr/cc)</div>,
     accessor: 'densidad',
     cell: 'renderNumber',
   }

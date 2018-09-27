@@ -3,7 +3,7 @@ import autobind from 'autobind-decorator'
 import { connect } from 'react-redux'
 import { InputRow, InputRowUnitless, InputRowSelectUnitless, InputDate } from '../../Common/InputRow'
 import {withValidate} from '../../Common/Validate'
-import { setFecha, setTiempo, setEstrangulado, setPtp, setTtp, setPbaj, setTbaj, setPsep, setTsep, setQl, setQo, setQg, setQw, setRga, setSalinidad, setPh, setProduccionData, setChecked } from '../../../../redux/actions/pozo'
+import { setProduccionData, setChecked } from '../../../../redux/actions/pozo'
 import InputTable from '../../Common/InputTable'
 import ReactTable from 'react-table'
 
@@ -27,51 +27,57 @@ let columns = [
     accessor: 'dias',
     cell: 'renderNumber',
   }, { 
-    Header: 'Qo (bbl/d)',
+    Header: <div>Qo<br></br>(bbl/d)</div>,
     accessor: 'qo',
     cell: 'renderNumber',
   }, { 
-    Header: 'Qw (bbl/d)',
+    Header: <div>Qw<br></br>(bbl/d)</div>,
     accessor: 'qw',
     cell: 'renderNumber',
   }, { 
-    Header: 'Qg_Cal (MMpc/d)',
+    Header: <div>Qg<br></br>(MMpc/d)</div>,
     accessor: 'qg',
     cell: 'renderNumber',
   }, { 
-    Header: 'Qgl (MMpc/d)',
-    accessor: 'qgl',
+    Header: <div>Qgi<br></br>(MMpc/d)</div>,
+    accessor: 'qgi',
     cell: 'renderNumber',
   }, { 
-    Header: 'Np (MMbbl)',
+    Header: <div>Volumen O<br></br>(bbl)</div>,
+    accessor: 'qo_vol',
+  }, { 
+    Header: <div>Volumen W<br></br>(bbl)</div>,
+    accessor: 'qw_vol',
+  }, { 
+    Header: <div>Volumen G<br></br>(MMpc)</div>,
+    accessor: 'qg_vol',
+  }, { 
+    Header: <div>Volumen Gi<br></br>(MMpc</div>,
+    accessor: 'qgi_vol',
+  }, { 
+    Header: <div>Np<br></br>(MMbbl)</div>,
     accessor: 'np',
-    cell: 'renderNumber',
   }, { 
-    Header: 'Wp (MMbbl)',
+    Header: <div>Wp<br></br>(MMbbl)</div>,
     accessor: 'wp',
-    cell: 'renderNumber',
   }, { 
-    Header: 'Gp (MMMpc)',
+    Header: <div>Gp<br></br>(MMMpc)</div>,
     accessor: 'gp',
-    cell: 'renderNumber',
   }, { 
-    Header: 'Gi (MMMpc)',
+    Header: <div>Gi<br></br>(MMMpc)</div>,
     accessor: 'gi',
-    cell: 'renderNumber',
   }, { 
-    Header: 'RGA (m3/m3)',
+    Header: <div>RGA<br></br>(m<sup>3</sup>/m<sup>3</sup>)</div>,
     accessor: 'rga',
-    cell: 'renderNumber',
   }, { 
     Header: 'Fw Fraction',
     accessor: 'fw',
-    cell: 'renderNumber',
-  }, { 
-    Header: 'Pozos Prod Activos',
-    accessor: 'pozosProdActivos',
-    cell: 'renderNumber',
   }
 ]
+
+
+
+
 
 
 
@@ -126,53 +132,6 @@ let columns = [
     }
   }
 
-  makeAforoForm() {
-    let { setFecha, setTiempo, setEstrangulado, setPtp, setTtp, setPbaj, setTbaj, setPsep, setTsep, setQl, setQo, setQg, setQw, setRga, setSalinidad, setPh, setProduccionData, formData } = this.props
-    formData = formData.toJS()
-    let { fecha, tiempo, estrangulado, ptp, ttp, pbaj, tbaj, psep, tsep, ql, qo, qg, qw, rga, salinidad, ph, produccionData } = formData 
-
-    return (
-      <div className='aforo-form' >
-        <div className='header'>
-          Aforo
-        </div>
-        <InputDate header="Fecha" name='fecha' unit='dd/mmm/aa' value={fecha} onChange={setFecha} onBlur={this.validate} errors={this.state.errors} />
-        <InputRow header="Tiempo" name='tiempo' unit='hrs' value={tiempo} onChange={setTiempo} onBlur={this.validate} errors={this.state.errors} />
-        <InputRow header="Estrangulador" name='estrangulado' unit='pg' value={estrangulado} onChange={setEstrangulado} onBlur={this.validate} errors={this.state.errors} />
-        <InputRow header="PTP" name='ptp' unit='Kg/cm2' value={ptp} onChange={setPtp} onBlur={this.validate} errors={this.state.errors} />
-        <InputRow header="TTP" name='ttp' unit='°C' value={ttp} onChange={setTtp} onBlur={this.validate} errors={this.state.errors} />
-        <InputRow header="PBAJ" name='pbaj' unit='Kg/cm2' value={pbaj} onChange={setPbaj} onBlur={this.validate} errors={this.state.errors} />
-        <InputRow header="TBAJ" name='tbaj' unit='°C' value={tbaj} onChange={setTbaj} onBlur={this.validate} errors={this.state.errors} />
-        <InputRow header="Psep" name='psep' unit='Kg/cm2' value={psep} onChange={setPsep} onBlur={this.validate} errors={this.state.errors} />
-        <InputRow header="Tsep" name='tsep' unit='°C' value={tsep} onChange={setTsep} onBlur={this.validate} errors={this.state.errors} />
-        <InputRow header="Ql" name='ql' unit='bpd' value={ql} onChange={setQl} onBlur={this.validate} errors={this.state.errors} />
-        <InputRow header="Qo" name='qo' unit='bpd' value={qo} onChange={setQo} onBlur={this.validate} errors={this.state.errors} />
-        <InputRow header="Qg" name='qg' unit='MMpcd' value={qg} onChange={setQg} onBlur={this.validate} errors={this.state.errors} />
-        <InputRow header="Qw" name='qw' unit='bpd' value={qw} onChange={setQw} onBlur={this.validate} errors={this.state.errors} />  
-        <InputRow header="RGA" name='rga' unit='m3/m3' value={rga} onChange={setRga} onBlur={this.validate} errors={this.state.errors} />
-        <InputRow header="Salinidad" name='salinidad' unit='ppm' value={salinidad} onChange={setSalinidad} onBlur={this.validate} errors={this.state.errors} />
-        <InputRow header="pH" name='ph' unit='Adim.' value={ph} onChange={setPh} onBlur={this.validate} errors={this.state.errors} />
-      </div>
-    )
-  }
-
-  renderEditable(cellInfo) {
-    let { setProduccionData, formData } = this.props
-    formData = formData.toJS()
-    let { produccionData } = formData
-
-    return (
-      <div
-        style={{ backgroundColor: "#fafafa" }}
-        contentEditable
-        suppressContentEditableWarning
-        onBlur={e => {
-          produccionData[cellInfo.index][cellInfo.column.id] = e.target.innerHTML;
-          setProduccionData(produccionData)
-        }}
-      >{produccionData[cellInfo.index][cellInfo.column.id]}</div>
-    );
-  }
 
   addNewRow() {
     let { formData, setProduccionData } = this.props
@@ -181,7 +140,7 @@ let columns = [
 
     produccionData[0].length = 2
 
-    setProduccionData([...produccionData, {index: produccionData.length, fecha: '', dias: '', qo: '', qo: '', qw: '', qg: '', qgl: '', np: '', wp: '', gp: '', gi: '', rga: '', fw: '', pozosProdActivos: '', length: produccionData.length + 1, 'edited': false}])
+    setProduccionData([...produccionData, {index: produccionData.length, fecha: null, dias: '', qo: '', qw: '', qg: '', qgi: '', qo_vol: '', qw_vol: '', qg_vol: '', qgi_vol: '', np: '', wp: '', gp: '', gi: '', rga: '', fw: '', length: produccionData.length + 1, 'edited': false}])
   }
 
 
@@ -211,12 +170,8 @@ let columns = [
     formData = formData.toJS()
     let { produccionData } = formData
 
-    const objectTemplate = {fecha: '', dias: '', qo: '', qo: '', qw: '', qg: '', qgl: '', np: '', wp: '', gp: '', gi: '', rga: '', fw: '', pozosProdActivos:''}
-/*
-    columns.forEach(column => {
-      column.cell === 'renderEditable' ? column.Cell = this.renderEditable : null
-    })
-*/
+    const objectTemplate = {fecha: null, dias: '', qo: '', qw: '', qg: '', qgi: '', qo_vol: '', qw_vol: '', qg_vol: '', qgi_vol: '', np: '', wp: '', gp: '', gi: '', rga: '', fw: ''}
+
     return (
       <div className='historico-produccion' >
         <div className='table'>
@@ -242,9 +197,9 @@ let columns = [
   }
 
   render() {
+
     return (
       <div className="form historico-de-produccion">
-        { this.makeAforoForm() }
         { this.makeHistoricoDeProduccionInput() }
       </div>
     )
@@ -254,76 +209,11 @@ let columns = [
 const validate = values => {
     const errors = {}
 
-    if(!values.fecha ){
-       errors.fecha = {message: "Este campo no puede estar vacio"}
-    }
-
-    if(!values.tiempo ){
-       errors.tiempo = {message: "Este campo no puede estar vacio"}
-    }
-
-    if(!values.estrangulado ){
-       errors.estrangulado = {message: "Este campo no puede estar vacio"}
-    }
-
-    if(!values.ptp ){
-       errors.ptp = {message: "Este campo no puede estar vacio"}
-    }
-
-    if(!values.ttp ){
-       errors.ttp = {message: "Este campo no puede estar vacio"}
-    }
-
-    if(!values.pbaj ){
-       errors.pbaj = {message: "Este campo no puede estar vacio"}
-    }
-
-    if(!values.tbaj ){
-       errors.tbaj = {message: "Este campo no puede estar vacio"}
-    }
-
-    if(!values.psep ){
-       errors.psep = {message: "Este campo no puede estar vacio"}
-    }
-
-    if(!values.tsep ){
-       errors.tsep = {message: "Este campo no puede estar vacio"}
-    }
-
-    if(!values.ql ){
-       errors.ql = {message: "Este campo no puede estar vacio"}
-    }
-
-    if(!values.qo ){
-       errors.qo = {message: "Este campo no puede estar vacio"}
-    }
-
-    if(!values.qg ){
-       errors.qg = {message: "Este campo no puede estar vacio"}
-    }
-
-    if(!values.qw ){
-       errors.qw = {message: "Este campo no puede estar vacio"}
-    }
-
-    if(!values.rga ){
-       errors.rga = {message: "Este campo no puede estar vacio"}
-    }
-
-    if(!values.salinidad ){
-       errors.salinidad = {message: "Este campo no puede estar vacio"}
-    }
-
-
-    if(!values.ph ){
-       errors.ph = {message: "Este campo no puede estar vacio"}
-    }
-
     if(!values.produccionData){
       errors.produccionData = {message: "Esta forma no puede estar vacia"}
     }else {
       values.produccionData.forEach((row, index) => {
-        let hasEmpty = Object.values(row).find((value) => { return value.toString().trim() == '' })
+        let hasEmpty = Object.values(row).find((value) => { return value === null || value.toString().trim() == '' })
         if(hasEmpty !== undefined){
             errors.produccionData = {message: "Ningun campo puede estar vacio."}
         }
@@ -339,22 +229,6 @@ const mapStateToProps = state => ({
 })
 
 const mapDispatchToProps = dispatch => ({
-    setFecha: val => dispatch(setFecha(val)),
-    setTiempo: val => dispatch(setTiempo(val)),
-    setEstrangulado: val => dispatch(setEstrangulado(val)),
-    setPtp: val => dispatch(setPtp(val)),
-    setTtp: val => dispatch(setTtp(val)),
-    setPbaj: val => dispatch(setPbaj(val)),
-    setTbaj: val => dispatch(setTbaj(val)),
-    setPsep: val => dispatch(setPsep(val)),
-    setTsep: val => dispatch(setTsep(val)),
-    setQl: val => dispatch(setQl(val)),
-    setQo: val => dispatch(setQo(val)),
-    setQg: val => dispatch(setQg(val)),
-    setQw: val => dispatch(setQw(val)),
-    setRga: val => dispatch(setRga(val)),
-    setSalinidad: val => dispatch(setSalinidad(val)),
-    setPh: val => dispatch(setPh(val)),
     setProduccionData: val => dispatch(setProduccionData(val)),
     setChecked: val => dispatch(setChecked(val))    
 })

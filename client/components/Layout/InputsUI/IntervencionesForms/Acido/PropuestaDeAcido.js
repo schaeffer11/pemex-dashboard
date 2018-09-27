@@ -96,6 +96,7 @@ containsErrors(){
           value={propuestaCompany}
           callback={e => setPropuestaCompany(e.value)}
         />
+
       </div>
     )
   }
@@ -124,6 +125,13 @@ containsErrors(){
         <InputRow header="Volumen sistema divergente" name='volumenSistemaDivergente' unit='m3' value={volumenSistemaDivergente} onChange={setVolumenSistemaDivergente} errors={this.state.errors} onBlur={this.validate}/>
         <InputRow header="Volumen desplazamiento líquido" name='volumenDesplazamientoLiquido' unit='m3' value={volumenDesplazamientoLiquido} onChange={setVolumenDesplazamientoLiquido} errors={this.state.errors} onBlur={this.validate}/>
         <InputRow header="Volumen desplazamiento gel lineal" name='volumenDesplazamientoGelLineal' unit='m3' value={volumenDesplazamientoGelLineal} onChange={setVolumenDesplazamientoGelLineal} errors={this.state.errors} onBlur={this.validate}/> */}
+        <InputRow header={<div>Volumen precolchón (gel lineal o N<sub>2</sub>)</div>} name='volumenPrecolchonN2' unit={<div>m<sup>3</sup></div>} value={volumenPrecolchonN2} onChange={setVolumenPrecolchonN2} errors={this.state.errors} onBlur={this.validate}/>
+        <InputRow header="Volumen sistema no reactivo" name='volumenSistemaNoReativo' unit={<div>m<sup>3</sup></div>} value={volumenSistemaNoReativo} onChange={setVolumenSistemaNoReativo} errors={this.state.errors} onBlur={this.validate}/>
+        <InputRow header="Volumen sistema reactivo" name='volumenSistemaReactivo' unit={<div>m<sup>3</sup></div>} value={volumenSistemaReactivo} onChange={setVolumenSistemaReactivo} errors={this.state.errors} onBlur={this.validate}/>
+        <InputRow header="Volumen sistema divergente" name='volumenSistemaDivergente' unit={<div>m<sup>3</sup></div>} value={volumenSistemaDivergente} onChange={setVolumenSistemaDivergente} errors={this.state.errors} onBlur={this.validate}/>
+        <InputRow header="Volumen desplazamiento líquido" name='volumenDesplazamientoLiquido' unit={<div>m<sup>3</sup></div>} value={volumenDesplazamientoLiquido} onChange={setVolumenDesplazamientoLiquido} errors={this.state.errors} onBlur={this.validate}/>
+        <InputRow header="Volumen desplazamiento gel lineal" name='volumenDesplazamientoGelLineal' unit={<div>m<sup>3</sup></div>} value={volumenDesplazamientoGelLineal} onChange={setVolumenDesplazamientoGelLineal} errors={this.state.errors} onBlur={this.validate}/>
+
       </div>
     )
   }
@@ -469,16 +477,16 @@ const validate = values => {
        errors.diametroDeDisparos = {message: "Este campo no puede estar vacio"}
     }
 
-    if(!values.cedulaData){
-      errors.cedulaData = {message: "Esta forma no puede estar vacia"}
-    }else {
-      values.cedulaData.forEach((row, index) => {
-        let hasEmpty = Object.values(row).find((value) => { return value.toString().trim() == '' })
-        if(hasEmpty !== undefined){
-            errors.cedulaData = {message: "Ningun campo puede estar vacio."}
-        }
-      })
-    }
+    // if(!values.cedulaData){
+    //   errors.cedulaData = {message: "Esta forma no puede estar vacia"}
+    // }else {
+    //   values.cedulaData.forEach((row, index) => {
+    //     let hasEmpty = Object.values(row).find((value) => { return value.toString().trim() == '' })
+    //     if(hasEmpty !== undefined){
+    //         errors.cedulaData = {message: "Ningun campo puede estar vacio."}
+    //     }
+    //   })
+    // }
 
     return errors
 }

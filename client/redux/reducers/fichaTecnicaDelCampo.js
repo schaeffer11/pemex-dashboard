@@ -2,10 +2,12 @@ import { Map, fromJS } from 'immutable'
 
 const initialState = Map({ 
 	descubrimientoField: '',
-    fechaDeExplotacionField: '',
+    fechaDeExplotacionField: null,
     numeroDePozosOperandoField: '',
-    pInicialAnoField: '',
-    pActualFechaField: '',
+    pInicialAnoField: null,
+    pActualFechaField: null,
+    pInicialField: '',
+    pActualField: '',
     dpPerAnoField: '',
     tyacField: '',
     prField: '',
@@ -51,6 +53,10 @@ const fichaTecnicaDelCampo = (state = initialState, action) => {
         return state.set('pInicialAnoField', fromJS(action.value))
     case 'set_pActualFechaField':
         return state.set('pActualFechaField', fromJS(action.value))
+    case 'set_pInicialField':
+        return state.set('pInicialField', fromJS(action.value))
+    case 'set_pActualField':
+        return state.set('pActualField', fromJS(action.value))
     case 'set_dpPerAnoField':
         return state.set('dpPerAnoField', fromJS(action.value))
     case 'set_tyacField':

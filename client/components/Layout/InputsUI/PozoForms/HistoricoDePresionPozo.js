@@ -1,10 +1,12 @@
 import React, { Component } from 'react'
 import { connect } from 'react-redux'
 import autobind from 'autobind-decorator'
-import {withValidate} from '../../Common/Validate'
-import { setPresionDataPozo, setChecked } from '../../../../redux/actions/pozo'
-import InputTable from '../../Common/InputTable'
 import ReactTable from 'react-table'
+
+import {withValidate} from '../../Common/Validate'
+import { setPresionDataPozo, setPressureDepthPozo, setChecked } from '../../../../redux/actions/pozo'
+import InputTable from '../../Common/InputTable'
+import { InputRow } from '../../Common/InputRow'
 
 let columns = [
   {
@@ -22,19 +24,7 @@ let columns = [
     accessor: 'fecha',
     cell: 'renderDate',
   }, { 
-    Header: 'Qo (Mbpd)',
-    accessor: 'Qo',
-    cell: 'renderNumber',
-  }, { 
-    Header: 'Np (MMbls)',
-    accessor: 'Np',
-    cell: 'renderNumber',
-  }, { 
-    Header: 'Pws (Kg/cm2)',
-    accessor: 'Pws',
-    cell: 'renderNumber',
-  }, { 
-    Header: 'Pr (Kg/cm2)',
+    Header: <div>Pr<br></br>(Kg/cm<sup>2</sup>)</div>,
     accessor: 'Pr',
     cell: 'renderNumber',
   }
@@ -93,7 +83,7 @@ let columns = [
   renderEditable(cellInfo) {
     let { setPresionDataPozo, formData } = this.props
     formData = formData.toJS()
-    let { presionDataPozo } = formData
+    let { presionDataPozo, pressureDepthPozo } = formData
 
     return (
       <div
@@ -115,7 +105,7 @@ let columns = [
 
     presionDataPozo[0].length = 2
 
-    setPresionDataPozo([...presionDataPozo, {index: presionDataPozo.length, fecha: '', Qo: '', Np: '', Pws: '', Pr: '', length: presionDataPozo.length + 1, 'edited': false}])
+    setPresionDataPozo([...presionDataPozo, {index: presionDataPozo.length, fecha: null, Pr: '', length: presionDataPozo.length + 1, 'edited': false}])
   }
 
 
@@ -141,39 +131,37 @@ let columns = [
   }
 
   render() {
-    let { formData, setPresionDataPozo } = this.props
+    let { formData, setPresionDataPozo, setPressureDepthPozo } = this.props
     formData = formData.toJS()
-    let { presionDataPozo } = formData
+    let { presionDataPozo, pressureDepthPozo } = formData
 
-     const objectTemplate = {fecha: '', Qo: '', Np: '', Pws: '', Pr: ''}
-
-/*
-    columns.forEach(column => {
-      column.cell === 'renderEditable' ? column.Cell = this.renderEditable : null
-    })
-*/
+     const objectTemplate = {fecha: null, Pr: ''}
 
     return (
-      <div className='generales-form' >
-        <div className='table-select'>
-          <InputTable
-            className="-striped"
-            data={presionDataPozo}
-            newRow={objectTemplate}
-            setData={setPresionDataPozo}
-            columns={columns}
-            showPagination={false}
-            showPageSizeOptions={false}
-            pageSize={presionDataPozo.length}
-            sortable={false}
-            getTdProps={this.deleteRow}
-          />
+      <div className='historico-presion-pozo' >
+        <div className='presion-table'>
+          <div className='table-select'>
+            <InputTable
+              className="-striped"
+              data={presionDataPozo}
+              newRow={objectTemplate}
+              setData={setPresionDataPozo}
+              columns={columns}
+              showPagination={false}
+              showPageSizeOptions={false}
+              pageSize={presionDataPozo.length}
+              sortable={false}
+              getTdProps={this.deleteRow}
+            />
+          </div>
+          <button className='new-row-button' onClick={this.addNewRow}>Añadir un renglón</button>
         </div>
-        { this.state.errors.presionDataPozo && this.state.errors.presionDataPozo.checked &&
-          <div className="error">{this.state.errors.presionDataPozo.message}</div>
-        }
-        <button className='new-row-button' onClick={this.addNewRow}>Añadir un renglón</button>
-
+        <div className='depth'>
+          <InputRow header="Pressure Depth" name='pressureDepthPozo' value={pressureDepthPozo} onChange={setPressureDepthPozo} unit={'md'} />
+        </div>
+          { this.state.errors.presionDataPozo && this.state.errors.presionDataPozo.checked &&
+            <div className="error">{this.state.errors.presionDataPozo.message}</div>
+          }
       </div>
     )
   }
@@ -186,7 +174,7 @@ const validate = values => {
       errors.presionDataPozo = {message: "Esta forma no puede estar vacia"}
     }else {
       values.presionDataPozo.forEach((row, index) => {
-        let hasEmpty = Object.values(row).find((value) => { return value.toString().trim() == '' })
+        let hasEmpty = Object.values(row).find((value) => { return value === null || value.toString().trim() == '' })
         if(hasEmpty !== undefined){
             errors.presionDataPozo = {message: "Ningun campo puede estar vacio."}
         }
@@ -203,7 +191,8 @@ const mapStateToProps = state => ({
 
 const mapDispatchToProps = dispatch => ({
     setPresionDataPozo: val => dispatch(setPresionDataPozo(val)),
-    setChecked: val => dispatch(setChecked(val))
+    setChecked: val => dispatch(setChecked(val)),
+    setPressureDepthPozo: val => dispatch(setPressureDepthPozo(val)),
 })
 
 export default withValidate(
