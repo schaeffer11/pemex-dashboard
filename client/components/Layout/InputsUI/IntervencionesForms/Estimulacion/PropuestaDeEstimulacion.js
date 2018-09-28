@@ -135,10 +135,8 @@ import { setCedulaData, setIntervalo, setLongitudDeIntervalo, setVolAparejo, set
     let { cedulaData } = formData
 
     const calculateVolumes = (data, fluid, sistema = null) => {
-      console.log('calculating things', sistema)
       return data.filter(elem => elem.sistema === sistema || sistema === null)
         .reduce((accumulator, currentValue) => {
-          console.log('fluid', fluid, currentValue[fluid])
           if (currentValue[fluid]) {
             return accumulator + currentValue[fluid]
           }
@@ -252,7 +250,6 @@ import { setCedulaData, setIntervalo, setLongitudDeIntervalo, setVolAparejo, set
   }
 
   handleSelect(row, e) {
-    console.log('row', row)
     let { formData, setCedulaData } = this.props
     formData = formData.toJS()
     let { cedulaData } = formData

@@ -106,10 +106,8 @@ containsErrors(){
     formData = formData.toJS()
     const { cedulaData } = formData
     const calculateVolumes = (data, fluid, sistema = null) => {
-      console.log('calculating things', sistema)
       return data.filter(elem => elem.sistema === sistema || sistema === null)
         .reduce((accumulator, currentValue) => {
-          console.log('fluid', fluid, currentValue[fluid])
           if (currentValue[fluid]) {
             return accumulator + currentValue[fluid]
           }
@@ -250,7 +248,6 @@ containsErrors(){
   }
 
   handleSelect(row, e) {
-    console.log('row', row)
     let { formData, setCedulaData } = this.props
     formData = formData.toJS()
     let { cedulaData } = formData
@@ -372,22 +369,18 @@ containsErrors(){
       {
         Header: 'Vol. Liq. (m3)',
         accessor: 'volLiquid',
-        // cell: 'renderNumber',
       },
       { 
         Header: 'Vol. N2 (m3 std)',
         accessor: 'volN2',
-        // cell: 'renderNumber',
       },
       { 
         Header: 'Vol. Liq. Acum. (m3)',
         accessor: 'volLiquidoAcum',
-        // cell: 'renderNumber',
       }, 
       { 
         Header: 'Vol. N2 Acum. (m3 std)',
         accessor: 'volN2Acum',
-        // cell: 'renderNumber',
       }, 
       {
         Header: 'Calidad (%)',
