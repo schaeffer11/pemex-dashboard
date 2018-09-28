@@ -880,7 +880,8 @@ app.get('/getWellPressure', async (req, res) => {
 
   const map = {
     FECHA: { child: 'fecha' },
-    PR: { child: 'Pr' } 
+    PWS: { child: 'Pws' },
+    PWF: { child: 'Pwf'} 
   }
 
   const mainParent = 'historicoDePresion'
@@ -914,7 +915,7 @@ app.get('/getWellPressure', async (req, res) => {
           innerParent: [
           {}
           ],
-          presionDataPozo: ''
+          pressureDepthPozo: ''
         }
       })
     }
@@ -1087,18 +1088,8 @@ app.get('/getInterventionEstimulacion', async (req, res) => {
     VOLUMEN_DISPLAZAMIENTO_LIQUIDO: { parent: 'propuestaEstimulacion', child: 'volumenDesplazamientoLiquido' }, 
     VOLUMEN_DESPLAZAMIENTO_N2: { parent: 'propuestaEstimulacion', child: 'volumenDesplazamientoN2' },
     VOLUMEN_TOTAL_DE_LIQUIDO: { parent: 'propuestaEstimulacion', child: 'volumenTotalDeLiquido' }, 
-    VOLUMEN_DEL_SISTEMA_ACIDO_LIMPIEZA: { parent: 'resultadosSimulacionEstimulacion', child: 'volumenDelSistemaAcidoLimpieza' },
-    VOLUMEN_DEL_SISTEMA_NO_ACIDO_LIMPIEZA: { parent: 'resultadosSimulacionEstimulacion', child: 'volumenDelSistemaNoAcidoLimpieza' }, 
     TIPO_DE_COLOCACION: { parent: 'resultadosSimulacionEstimulacion', child: 'tipoDeColocacion' },
     TIEMPO_DE_CONTACTO: { parent: 'resultadosSimulacionEstimulacion', child: 'tiempoDeContacto' }, 
-    NUMERO_DE_ETAPAS: { parent: 'resultadosSimulacionEstimulacion', child: 'numeroDeEtapas' }, 
-    VOLUMEN_DEL_SISTEMA_ACIDO: { parent: 'resultadosSimulacionEstimulacion', child: 'volumenDelSistemAcido' }, 
-    VOLUMEN_DEL_SISTEMA_NO_ACIDO: { parent: 'resultadosSimulacionEstimulacion', child: 'volumenDelSistemNoAcido' }, 
-    VOLUMEN_DE_DIVERGENTE: { parent: 'resultadosSimulacionEstimulacion', child: 'volumenDeDivergente' }, 
-    VOLUMEN_DE_N2: { parent: 'resultadosSimulacionEstimulacion', child: 'volumenDeN2' },
-    CALIDAD_DE_ESPUMA: { parent: 'resultadosSimulacionEstimulacion', child: 'calidadDeEspuma' }, 
-    VOLUMEN_DE_PRECOLCHON_N2: { parent: 'resultadosSimulacionEstimulacion', child: 'volumenDePrecolchonN2' }, 
-    VOLUMEN_DE_DESPLAZAMIENTO: { parent: 'resultadosSimulacionEstimulacion', child: 'volumenDeDesplazamiento' }, 
     PENETRACION_RADIAL: { parent: 'resultadosSimulacionEstimulacion', child: 'penetracionRadial' }, 
     LONGITUD_DE_AGUJERO_DE_GUSANO: { parent: 'resultadosSimulacionEstimulacion', child: 'longitudDeAgujeroDeGusano' },
     EST_INC_ESTRANGULADOR: { parent: 'estIncProduccionEstimulacion', child: 'estIncEstrangulador' },
@@ -1433,21 +1424,6 @@ app.get('/getLabTest', async (req, res) => {
         pruebasDeLaboratorioData: outData
       }
     }
-    // data.forEach((d, index) => {
-    //   d.FECHA_DE_MUESTREO ? d.FECHA_DE_MUESTREO = d.FECHA_DE_MUESTREO.toJSON().slice(0, 10) : null
-    //   d.FECHA_DE_PRUEBA ? d.FECHA_DE_PRUEBA = d.FECHA_DE_PRUEBA.toJSON().slice(0, 10) : null
-    //   const innerObj = {}
-    //   Object.keys(d).forEach(k => {
-    //     if (map[k]) {
-    //       const { child } = map[k]
-    //       objectPath.set(innerObj, child, d[k])
-    //     }
-    //   })
-    //   objectPath.set(innerObj, 'length', data.length)
-    //   objectPath.set(innerObj, 'index', index)
-    //   objectPath.push(finalObj, `${mainParent}.${innerParent}`, innerObj)
-    // })
-
     res.json(finalObj)
   })
 })
@@ -1643,7 +1619,9 @@ app.get('/getCosts', async (req, res) => {
     ITEM: { child: 'item' }, 
     COMPANY: { child: 'compania' }, 
     COST_MNX: { child: 'cost' }, 
-    COST_DLS: { child: 'costDLS' }
+    COST_DLS: { child: 'costDLS' },
+    FECHA: { child: 'fecha' },
+    MNXtoDLS: { child: 'MNXtoDLS'}
 
   }
 
@@ -1651,10 +1629,10 @@ app.get('/getCosts', async (req, res) => {
   const innerParent = 'estimacionCostosData'
 
   getCosts(transactionID, action, (data) => {
-    console.log('datatatat', data)
     let finalObj = {}
     if (data && data.length > 0) {
       data.forEach((d, index) => {
+         d.FECHA ? d.FECHA = d.FECHA.toJSON().slice(0, 10) : null
         const innerObj = {}
         Object.keys(d).forEach(k => {
           if (map[k]) {
@@ -1666,15 +1644,13 @@ app.get('/getCosts', async (req, res) => {
         objectPath.set(innerObj, 'index', index)
         objectPath.push(finalObj, `${mainParent}.${innerParent}`, innerObj)
       })
-      finalObj['estCost'].MNXtoDLS = data[0].MNXtoDLS
     }
     else {
       finalObj = {
         'estCost': {
           "estimacionCostosData": [
             {}
-          ],
-          "MNXtoDLS": 1
+          ]
         }
       }
     }

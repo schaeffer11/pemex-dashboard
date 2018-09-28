@@ -23,59 +23,59 @@ let columns = [
     accessor: 'fecha',
     cell: 'renderDate',
   }, { 
-    Header: 'Tiempo',
+    Header: <div>Tiempo<br/>(hrs)</div>,
     accessor: 'tiempo',
     cell: 'renderNumber',
   }, { 
-    Header: 'Estrangulador',
+    Header: <div>Estrangulador<br/>(pg)</div>,
     accessor: 'estrangulador',
     cell: 'renderNumber',
   }, { 
-    Header: <div>P<sub>TP</sub></div>,
+    Header: <div>P<sub>TP</sub><br/>(kg/cm<sup>2</sup>)</div>,
     accessor: 'ptp',
     cell: 'renderNumber',
   }, { 
-    Header: <div>T<sub>TP</sub></div>,
+    Header: <div>T<sub>TP</sub><br/>(°C)</div>,
     accessor: 'ttp',
     cell: 'renderNumber',
   }, { 
-    Header: <div>P<sub>BAJ</sub></div>,
+    Header: <div>P<sub>BAJ</sub><br/>(kg/cm<sup>2</sup>)</div>,
     accessor: 'pbaj',
     cell: 'renderNumber',
   }, { 
-    Header: <div>T<sub>BAJ</sub></div>,
+    Header: <div>T<sub>BAJ</sub><br/>(°C)</div>,
     accessor: 'tbaj',
     cell: 'renderNumber',
   }, { 
-    Header: <div>P<sub>sep</sub></div>,
+    Header: <div>P<sub>sep</sub><br/>(kg/cm<sup>2</sup>)</div>,
     accessor: 'psep',
     cell: 'renderNumber',
   }, { 
-    Header: <div>T<sub>sep</sub></div>,
+    Header: <div>T<sub>sep</sub><br/>(°C)</div>,
     accessor: 'tsep',
     cell: 'renderNumber',
   }, { 
-    Header: <div>Q<sub>i</sub></div>,
-    accessor: 'ql',
-    cell: 'renderNumber',
-  }, { 
-    Header: <div>Q<sub>o</sub></div>,
+    Header: <div>Q<sub>o</sub><br/>(bbl/d)</div>,
     accessor: 'qo',
     cell: 'renderNumber',
   }, { 
-    Header: <div>Q<sub>g</sub></div>,
-    accessor: 'qg',
-    cell: 'renderNumber',
-  }, { 
-    Header: <div>Q<sub>w</sub></div>,
+    Header: <div>Q<sub>w</sub><br/>(bbl/d)</div>,
     accessor: 'qw',
     cell: 'renderNumber',
   }, { 
-    Header: 'RGA',
+    Header: <div>Q<sub>g</sub><br/>(MMpc/d)</div>,
+    accessor: 'qg',
+    cell: 'renderNumber',
+  }, { 
+    Header: <div>Q<sub>gi</sub><br/>(MMpc/d)</div>,
+    accessor: 'ql',
+    cell: 'renderNumber',
+  }, { 
+    Header: <div>RGA<br/>m<sup>3</sup>/m<sup>3</sup></div>,
     accessor: 'rga',
     cell: 'renderNumber',
   }, { 
-    Header: 'Salinidad',
+    Header: <div>Salinidad<br/>(ppm)</div>,
     accessor: 'salinidad',
     cell: 'renderNumber',
   }, { 

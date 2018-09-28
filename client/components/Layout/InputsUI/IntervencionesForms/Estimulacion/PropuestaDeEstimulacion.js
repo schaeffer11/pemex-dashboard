@@ -6,7 +6,7 @@ import Select from 'react-select'
 import { connect } from 'react-redux'
 import {withValidate} from '../../../Common/Validate'
 import { InputRow, InputRowUnitless, InputRowSelectUnitless, CalculatedValue } from '../../../Common/InputRow'
-import { setCedulaData, setIntervalo, setLongitudDeIntervalo, setVolAparejo, setCapacidadTotalDelPozo, setVolumenPrecolchonN2, setVolumenSistemaNoReativo, setVolumenSistemaReactivo, setVolumenSistemaDivergente, setVolumenDesplazamientoLiquido, setVolumenDesplazamientoN2, setVolumenTotalDeLiquido, setChecked, setPropuestaCompany } from '../../../../../redux/actions/intervencionesEstimulacion'
+import { setTipoDeColocacion, setTiempoDeContacto, setCedulaData, setTipoDeEstimulacion, setIntervalo, setLongitudDeIntervalo, setVolAparejo, setCapacidadTotalDelPozo, setVolumenPrecolchonN2, setVolumenSistemaNoReativo, setVolumenSistemaReactivo, setVolumenSistemaDivergente, setVolumenDesplazamientoLiquido, setVolumenDesplazamientoN2, setVolumenTotalDeLiquido, setChecked, setPropuestaCompany } from '../../../../../redux/actions/intervencionesEstimulacion'
 
 
 @autobind class PropuestaDeEstimulacion extends Component {
@@ -82,9 +82,9 @@ import { setCedulaData, setIntervalo, setLongitudDeIntervalo, setVolAparejo, set
   }
 
   makeGeneralForm() {
-    let { formData, setPropuestaCompany } = this.props
+    let { formData, setPropuestaCompany, setTipoDeEstimulacion } = this.props
     formData = formData.toJS()
-    let { propuestaCompany } = formData
+    let { propuestaCompany, tipoDeEstimulacion } = formData
     const companyOptions = [
       { label: 'Halliburton', value: 'Halliburton' },
       { label: 'Schlumberger', value: 'Schlumberger' },
@@ -94,6 +94,12 @@ import { setCedulaData, setIntervalo, setLongitudDeIntervalo, setVolAparejo, set
       { label: 'Weatherford',
       value: 'Weatherford' }
     ]
+
+    const estimulacionOptions = [
+      { label: 'Limpieza', value: 'limpieza'},
+      { label: 'Matricial', value: 'matricial'}
+    ]
+
 
     return (
       <div className='general-form' >
@@ -108,27 +114,46 @@ import { setCedulaData, setIntervalo, setLongitudDeIntervalo, setVolAparejo, set
           value={propuestaCompany}
           callback={e => setPropuestaCompany(e.value)}
         />
+        <InputRowSelectUnitless
+          header="Type of Stimulation"
+          name="tipoDeEstimulacion"
+          options={estimulacionOptions}
+          onBlur={this.validate}
+          value={tipoDeEstimulacion}
+          callback={e => setTipoDeEstimulacion(e.value)}
+        />
       </div>
     )
   }
 
-  // makeGeneralForm() {
-  //   let { setIntervalo, setLongitudDeIntervalo, setVolAparejo, setCapacidadTotalDelPozo,formData } = this.props
-  //   formData = formData.toJS()
-  //   let { intervalo, longitudDeIntervalo, volAparejo, capacidadTotalDelPozo } = formData
+  makeLimpiezaForm() {
+    let { setTipoDeColocacion, setTiempoDeContacto, formData } = this.props
+    formData = formData.toJS()
+    let { tipoDeColocacion, tiempoDeContacto } = formData
+    
+    const colocacionOptions = [
+      { label: 'Directo', value: 'Directo'},
+      { label: 'Tuberia Flexible', value: 'Tuberia Flexible'}
+    ]
 
-  //   return (
-  //     <div className='general-form' >
-  //       <div className='header'>
-  //         General
-  //       </div>
-  //       <InputRowUnitless header="Intervalo(s)" name='intervalo' value={intervalo} onChange={setIntervalo} errors={this.state.errors} onBlur={this.validate}/>
-  //       <InputRow header="Longitud de intervalo a tratar" name='longitudDeIntervalo' unit='m' value={longitudDeIntervalo} onChange={setLongitudDeIntervalo} errors={this.state.errors} onBlur={this.validate}/>
-  //       <InputRow header="Vol. aparejo (VAP)" name='' unit='m3' name='volAparejo' value={volAparejo} onChange={setVolAparejo} errors={this.state.errors} onBlur={this.validate}/>
-  //       <InputRow header="Capacidad total del pozo (cima/base)" name='capacidadTotalDelPozo' unit='m3/m3' value={capacidadTotalDelPozo} onChange={setCapacidadTotalDelPozo} errors={this.state.errors} onBlur={this.validate}/>
-  //     </div>
-  //   )
-  // }
+    return (
+      <div className='limpieza-form' >
+        <div className='header'>
+          Limpieza de Aparejo
+        </div>
+        <InputRowSelectUnitless 
+          header="Tipo de colocación" 
+          name='tipoDeColocacion' 
+          options={colocacionOptions}
+          onBlur={this.validate} 
+          value={tipoDeColocacion} 
+          callback={(e) => setTipoDeColocacion(e.value)} 
+        />
+        <InputRow header="Tiempo de contacto" name='tiempoDeContacto' unit="min" value={tiempoDeContacto} onChange={setTiempoDeContacto} errors={this.state.errors} onBlur={this.validate} />
+      </div>
+    )
+  }
+
   makeDetallesForm() {
     let { formData } = this.props
     formData = formData.toJS()
@@ -188,7 +213,7 @@ import { setCedulaData, setIntervalo, setLongitudDeIntervalo, setVolAparejo, set
           unit={<div>m<sup>3</sup></div>} 
         />
         <CalculatedValue
-          header={<div>"Volumen total de líquido</div>}
+          header={<div>Volumen total de líquido</div>}
           value={totalLiquidVolume}
           unit={<div>m<sup>3</sup></div>} 
         />
@@ -416,12 +441,16 @@ import { setCedulaData, setIntervalo, setLongitudDeIntervalo, setVolAparejo, set
 
 
   render() {
+    let { formData } = this.props
+    formData = formData.toJS()
+    let { tipoDeEstimulacion } = formData
 
     return (
       <div className="form propuesta-de-estimulacion">
         <div className='top'>
           <div className="left">
             { this.makeGeneralForm() }
+            { tipoDeEstimulacion === 'limpieza' ? this.makeLimpiezaForm() : null}
           </div>
           <div className="right">
  
@@ -500,6 +529,9 @@ const mapDispatchToProps = dispatch => ({
   setVolumenTotalDeLiquido: val => dispatch(setVolumenTotalDeLiquido(val)),
   setCedulaData: val => dispatch(setCedulaData(val)),
   setPropuestaCompany: val => dispatch(setPropuestaCompany(val)),
+  setTipoDeEstimulacion: val => dispatch(setTipoDeEstimulacion(val)),
+  setTipoDeColocacion: val => dispatch(setTipoDeColocacion(val)), 
+  setTiempoDeContacto: val => dispatch(setTiempoDeContacto(val)),
   setChecked: val => dispatch(setChecked(val))
 })
 

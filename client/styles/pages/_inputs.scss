@@ -638,9 +638,47 @@
 		}
 	}
 
-	.estimacion-costos-apuntalado {
-		.costos-form {
-			width: 50%;
+	.estimated-costs {
+
+
+		.costs-form {
+			grid-area: table;
+		}
+		
+		.values {
+			font-size: 30px;
+		}
+
+
+		.kpis {
+			display: grid;
+			width: 70%;
+			position: relative;
+			left: 15%;
+			grid-template-columns: 33% 33% 33%;
+			grid-template-areas: 'mnx usd sum';
+			margin-top: 40px;
+			padding-top: 15px;
+			border-top: solid 3px;
+		
+			.mnx {
+				grid-area: mnx;
+				text-align: center;
+
+			}
+
+			.usd {
+				grid-area: usd;
+				text-align: center;
+
+			}
+
+			.sum {
+				grid-area: sum;
+				text-align: center;
+
+
+			}
 		}
 	}
 

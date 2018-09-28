@@ -7,7 +7,8 @@ const initialState = Map({
     }],
     presionDataPozo: [{
         fecha: null,
-        Pr: '',
+        Pws: '',
+        Pwf: '',
     }],
     pressureDepthPozo: '',
     pressureDepthCampo: '',
