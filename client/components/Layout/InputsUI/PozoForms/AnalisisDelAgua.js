@@ -32,9 +32,10 @@ import { setPH, setTemperaturaDeConductividad, setResistividad, setSalinidadConC
   containsErrors(){
         let foundErrors = false
         let errors = Object.assign({}, this.state.errors);
-        let checked = this.props.formData.get('checked')
+      let {formData} = this.props
+      formData = formData.toJS()
 
-        checked = checked ? checked.toJS() : []
+      const checked = formData.checked  || []
         checked.forEach((checked) => {
             if(errors[checked]){
                 errors[checked].checked = true

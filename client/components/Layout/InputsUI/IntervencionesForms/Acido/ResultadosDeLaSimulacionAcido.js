@@ -25,17 +25,25 @@ import { connect } from 'react-redux'
   }
 
   containsErrors(){
-    let foundErrors = false
-    for (const key of Object.keys(this.state.errors)) {
-      if(this.state.errors[key].checked)
-        foundErrors = true
-    }
+        let foundErrors = false
+        let errors = Object.assign({}, this.state.errors);
+        let {formData} = this.props
+        formData = formData.toJS()
 
-    if(foundErrors !== this.state.containsErrors){
-      this.setState({
-        containsErrors: foundErrors
-      })
-    }
+        const checked = formData.checked  || []
+        checked.forEach((checked) => {
+            if(errors[checked]){
+                errors[checked].checked = true
+                foundErrors = true
+            }
+        })
+
+        if(foundErrors !== this.state.containsErrors){
+            this.setState({
+                errors: errors,
+                containsErrors: foundErrors
+            })
+        }
   }
 
   validate(event){
