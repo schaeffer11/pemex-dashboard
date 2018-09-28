@@ -371,7 +371,7 @@ const mapDispatchToProps = dispatch => ({
   setVolumenDesplazamientoN2: val => dispatch(setVolumenDesplazamientoN2(val)),
   setVolumenTotalDeLiquido: val => dispatch(setVolumenTotalDeLiquido(val)),
   setCedulaData: val => dispatch(setCedulaData(val)),
-  setChecked: val => dispatch(setChecked(val))
+  setChecked: val => dispatch(setChecked(val, 'propuestaEstimulacion'))
 })
 
 export default withValidate(

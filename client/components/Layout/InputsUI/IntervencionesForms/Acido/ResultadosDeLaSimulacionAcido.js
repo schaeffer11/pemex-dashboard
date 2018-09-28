@@ -101,6 +101,9 @@ import { connect } from 'react-redux'
         </div>
         <input type='file' accept="image/*"  onChange={(e) => this.handleFileUpload(e, setEvidenceSimulationAcidoImgURL)} multiple></input>
         {imgURL ? <img className='img-preview' src={imgURL}></img> : null }
+          { this.state.errors.evidenceSimulationAcidoImgURL && this.state.errors.evidenceSimulationAcidoImgURL.checked &&
+          <div className="error">{this.state.errors.evidenceSimulationAcidoImgURL.message}</div>
+          }
       </div>
     )
   }
@@ -165,6 +168,7 @@ const validate = values => {
 }
 
 const mapStateToProps = state => ({
+  forms: state.get('forms'),
   formData: state.get('resultadosSimulacionAcido'),
 })
 
@@ -179,7 +183,7 @@ const mapDispatchToProps = dispatch => ({
   setPresionNeta: val => dispatch(setPresionNeta(val)),
   setEficienciaDeFluidoDeFractura: val => dispatch(setEficienciaDeFluidoDeFractura(val)),
   setEvidenceSimulationAcidoImgURL: val => dispatch(setEvidenceSimulationAcidoImgURL(val)),
-  setChecked: val => dispatch(setChecked(val))
+  setChecked: val => dispatch(setChecked(val, 'resultadosSimulacionAcido'))
 })
 
 export default withValidate(

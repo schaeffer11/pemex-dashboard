@@ -273,7 +273,7 @@ const mapDispatchToProps = dispatch => ({
   setEstIncGastoCompromisoQg: val => dispatch(setEstIncGastoCompromisoQg(val)),
   setObervacionesEstIncEstim: val => dispatch(setObervacionesEstIncEstim(val)),
   setEstIncProdEstimulationImgURL: val => dispatch(setEstIncProdEstimulationImgURL(val)),
-  setChecked: val => dispatch(setChecked(val))
+  setChecked: val => dispatch(setChecked(val, 'estIncProduccionEstimulacion'))
 })
 
 export default withValidate(

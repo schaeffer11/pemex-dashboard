@@ -229,6 +229,7 @@ const validate = values => {
 }
 
 const mapStateToProps = state => ({
+  forms: state.get('forms'),
   formData: state.get('estIncProduccionAcido'),
 })
 
@@ -251,7 +252,7 @@ const mapDispatchToProps = dispatch => ({
   setEstIncGastoCompromisoQg: val => dispatch(setEstIncGastoCompromisoQg(val)),
   setObervacionesEstIncAcido: val => dispatch(setObervacionesEstIncAcido(val)),
   setEstIncProdAcidoImgURL: val => dispatch(setEstIncProdAcidoImgURL(val)),
-  setChecked: val => dispatch(setChecked(val))
+  setChecked: val => dispatch(setChecked(val, 'estIncProduccionAcido'))
 })
 
 export default withValidate(

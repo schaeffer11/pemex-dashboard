@@ -136,6 +136,11 @@ containsErrors(){
         </div>
         <input type='file' accept="image/*"  onChange={(e) => this.handleFileUpload(e, setEvidenceSimulationImgURL)} multiple></input>
         {imgURL ? <img className='img-preview' src={imgURL}></img> : null }
+
+          { this.state.errors.evidenceSimulationImgURL && this.state.errors.evidenceSimulationImgURL.checked &&
+          <div className="error">{this.state.errors.imgBoreDiagramURL.message}</div>
+          }
+
       </div>
     )
   }
@@ -217,6 +222,10 @@ const validate = values => {
        errors.longitudDeAgujeroDeGusano = {message: "Este campo no puede estar vacio"}
     }
 
+    if(!values.evidenceSimulationImgURL){
+        errors.longitudDeAgujeroDeGusano = {message: "Este campo no puede estar vacio"}
+    }
+
     return errors
 }
 
@@ -241,7 +250,7 @@ const mapDispatchToProps = dispatch => ({
   setPenetracionRadial: val => dispatch(setPenetracionRadial(val)),
   setLongitudDeAgujeroDeGusano: val => dispatch(setLongitudDeAgujeroDeGusano(val)),
   setEvidenceSimulationImgURL: val => dispatch(setEvidenceSimulationImgURL(val)),
-  setChecked: val => dispatch(setChecked(val))
+  setChecked: val => dispatch(setChecked(val, 'resultadosSimulacionEstimulacion'))
 })
 
 export default withValidate(

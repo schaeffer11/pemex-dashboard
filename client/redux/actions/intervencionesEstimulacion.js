@@ -64,4 +64,8 @@ export const setEstCostDeDivergenes = value => ({ type: 'set_estCostDeDivergenes
 export const setEstCostDeN2 = value => ({ type: 'set_estCostDeN2', value})
 export const setEstCostHCL = value => ({ type: 'set_estCostHCL', value})
 
-export const setChecked = value => ({ type: 'set_checked', value})
+export const setChecked = (value, form)  => ({
+   type: 'set_forms_checked',
+   form: form,
+   value: value
+})

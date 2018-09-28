@@ -51,7 +51,6 @@ import { setFichaTecnicaDelCampo, setFichaTecnicaDelPozo, setEvaluacionPetrofisi
     ];
   }
 
-
   async loadTecnicaDelCampo() {
     let { fichaTecnicaDelPozoHighLevel, setFichaTecnicaDelCampo, setLoading } = this.props
     fichaTecnicaDelPozoHighLevel = fichaTecnicaDelPozoHighLevel.toJS()
@@ -481,13 +480,10 @@ import { setFichaTecnicaDelCampo, setFichaTecnicaDelPozo, setEvaluacionPetrofisi
     let allErrors = {}
     let allChecked = []
     forms.forEach((form) => {
-
       let {errors, checked} = form.selector.props.forceValidation()
       allErrors = Object.assign({}, allErrors, errors);
-      allChecked.push(...checked)
     });
 
-    setChecked(allChecked)
 
     return allErrors.length == 0;
   }
@@ -499,16 +495,12 @@ import { setFichaTecnicaDelCampo, setFichaTecnicaDelPozo, setEvaluacionPetrofisi
     
     let pozoFormSubmitting = this.props.formsState.get('pozoFormSubmitting')
     const submitting = pozoFormSubmitting ? 'submitting' : ''
-    const errors = this.props.formsState.get('pozoFormError')
-
-    const errorClass = errors.length ? 'error' : ''
-
 
     let loadFunctions = [this.loadTecnicaDelCampo, this.loadTecnicaDelPozo, this.loadEvaluacionPetrofisica, this.loadMecanicoYAparejo, this.loadAnalisisDelAgua, this.loadSistemasArtificialesDeProduccion, this.loadHistoricoDePresionCampo, this.loadHistoricoDePresionPozo, this.loadHistoricoDeProduccion]
     let loadFunction =loadFunctions[this.state.currentStep]
 
     return (
-       <div className={`multistep-form ${submitting} ${errorClass}`}>
+       <div className={`multistep-form ${submitting}`}>
         <div className="subtabs">
             {this.forms.map( (tab, index) => {
                const active = this.state.currentStep === index ? 'active' : ''; 
@@ -536,9 +528,6 @@ import { setFichaTecnicaDelCampo, setFichaTecnicaDelPozo, setEvaluacionPetrofisi
           )}
         </div>
       
-        { errors.length > 0 &&
-            <div className="error">Se han encontrado errores en la forma.</div>
-        }
        </div>
      );
   }

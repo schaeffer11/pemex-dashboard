@@ -273,7 +273,7 @@ import { setSistemasArtificialesImgURL, setTipoDeSistemo, setPresionDeCabeza, se
 const validate = values => {
     const errors = {}
 
-    if(!values.tipoDeSistemo ){
+    if(!values.tipoDeSistemo || values.tipoDeAnalisis == 'none' ){
        errors.tipoDeSistemo = {message: "Este campo no puede estar vacio"}
     }
 
@@ -332,7 +332,7 @@ const mapDispatchToProps = dispatch => ({
   setNivelDinamico: val => dispatch(setNivelDinamico(val)),
   setNivelEstatico  : val => dispatch(setNivelEstatico(val)),
   setSistemasArtificialesImgURL: val => dispatch(setSistemasArtificialesImgURL(val)),
-  setChecked: val => dispatch(setChecked(val))
+  setChecked: val => dispatch(setChecked(val, 'sistemasArtificialesDeProduccion'))
 })
 
 export default withValidate(

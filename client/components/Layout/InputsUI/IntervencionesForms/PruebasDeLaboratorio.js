@@ -7,7 +7,7 @@ import Select from 'react-select'
 import {withValidate} from '../../Common/Validate'
 import InputTable from '../../Common/InputTable'
 import { InputRow, InputRowUnitless, InputRowSelectUnitless, TextAreaUnitless } from '../../Common/InputRow'
-import { setPruebasDeLaboratorioData } from '../../../../redux/actions/intervencionesEstimulacion'
+import { setPruebasDeLaboratorioData, setChecked } from '../../../../redux/actions/intervencionesEstimulacion'
 
 export const options = [
   { label: 'Caracterización Fisico-química de fluidos', value: 'caracterizacionFisico' },
@@ -39,10 +39,12 @@ const companyOptions = [
 
 
   componentDidMount() {
+      this.validate()
+      this.containsErrors()
   }
 
   componentDidUpdate(prevProps) {
-
+      this.containsErrors()
   }
 
   containsErrors(){
@@ -270,8 +272,9 @@ const validate = values => {
     if(!values.pruebasDeLaboratorioData){
       errors.pruebasDeLaboratorioData = {message: "Esta forma no puede estar vacia"}
     }else {
+      const fields = ['compania', 'fechaMuestreo', 'fechaPrueba', 'superviso', 'type']
       values.pruebasDeLaboratorioData.forEach((row, index) => {
-        let hasEmpty = Object.values(row).find((value) => { return value.toString().trim() == '' })
+        let hasEmpty = Object.entries(row).find(([key, value]) => {return fields.includes(key) && value && value.toString().trim() == '' })
         if(hasEmpty !== undefined){
             errors.pruebasDeLaboratorioData = {message: "Ningun campo puede estar vacio."}
         }
@@ -282,11 +285,13 @@ const validate = values => {
 }
 
 const mapStateToProps = state => ({
+  forms: state.get('forms'),
   formData: state.get('pruebasDeLaboratorio'),
 })
 
 const mapDispatchToProps = dispatch => ({
   setPruebasDeLaboratorioData: val => dispatch(setPruebasDeLaboratorioData(val)),
+  setChecked: values => {dispatch(setChecked(values, 'pruebasDeLaboratorio'))}
 })
 
 export default withValidate(

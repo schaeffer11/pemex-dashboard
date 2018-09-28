@@ -35,7 +35,8 @@ const initialState = fromJS({
       length: 1,
       index: 0,
     }
-  ]
+  ],
+  checked:[]
 })
 
 const fichaTecnicaDelPozo = (state = initialState, action) => {
@@ -90,6 +91,10 @@ const fichaTecnicaDelPozo = (state = initialState, action) => {
       return state = fromJS(action.value)
     case 'set_intervalos': 
       return state.set('intervalos', fromJS(action.value))
+    case 'set_forms_checked' :
+        if(action.form == 'fichaTecnicaDelPozo')
+          return state.set('checked', fromJS(action.value))
+        return state
     default:
       return state
   }

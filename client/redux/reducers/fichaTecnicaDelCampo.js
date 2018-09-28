@@ -109,8 +109,10 @@ const fichaTecnicaDelCampo = (state = initialState, action) => {
         return state.set('co2Field', fromJS(action.value))
     case 'set_n2Field':
         return state.set('n2Field', fromJS(action.value))
-    case 'set_checked' :
-        return state.set('checked', fromJS(action.value))
+    case 'set_forms_checked' :
+        if(action.form == 'fichaTecnicaDelCampo')
+          return state.set('checked', fromJS(action.value))
+        return state
     case 'set_fichaTecnicaDelCampo':
         return state = fromJS(action.value)
     default:

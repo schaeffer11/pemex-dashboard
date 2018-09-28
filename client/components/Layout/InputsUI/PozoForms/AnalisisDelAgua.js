@@ -250,7 +250,7 @@ const mapDispatchToProps = dispatch => ({
   setCarbonatos: val => dispatch(setCarbonatos(val)),
   setDensidadAt15: val => dispatch(setDensidadAt15(val)),
   setDensidadAt20: val => dispatch(setDensidadAt20(val)),
-  setChecked: val => dispatch(setChecked(val))
+  setChecked: val => dispatch(setChecked(val, 'analisisDelAgua'))
 })
 
 export default withValidate(

@@ -149,7 +149,7 @@ const mapDispatchToProps = dispatch => ({
   setEstCostDeDivergenes: val => dispatch(setEstCostDeDivergenes(val)),
   setEstCostDeN2: val => dispatch(setEstCostDeN2(val)),
   setEstCostHCL: val => dispatch(setEstCostHCL(val)),
-  setChecked: val => dispatch(setChecked(val))
+  setChecked: val => dispatch(setChecked(val, 'estCostEstimulacion'))
 })
 
 export default withValidate(

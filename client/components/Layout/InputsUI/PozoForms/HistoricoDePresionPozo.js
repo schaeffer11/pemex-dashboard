@@ -203,7 +203,7 @@ const mapStateToProps = state => ({
 
 const mapDispatchToProps = dispatch => ({
     setPresionDataPozo: val => dispatch(setPresionDataPozo(val)),
-    setChecked: val => dispatch(setChecked(val))
+    setChecked: val => dispatch(setChecked(val, 'historicoDePresion'))
 })
 
 export default withValidate(

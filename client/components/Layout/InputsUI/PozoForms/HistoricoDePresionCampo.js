@@ -201,7 +201,7 @@ const mapStateToProps = state => ({
 
 const mapDispatchToProps = dispatch => ({
     setPresionDataCampo: val => dispatch(setPresionDataCampo(val)),
-    setChecked: val => dispatch(setChecked(val))   
+    setChecked: val => dispatch(setChecked(val, 'historicoDePresion'))   
 })
 
 

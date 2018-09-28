@@ -1,5 +1,6 @@
 import React, { Component } from 'react'
 import autobind from 'autobind-decorator'
+import { List, Map, is } from 'immutable' 
 import { InputRow, InputRowUnitless, InputRowSelectUnitless } from '../../Common/InputRow'
 import {withValidate} from '../../Common/Validate'
 import { setTipoDeTerminacion, setHIntervaloProductor, setEmpacador, setPresionDifEmpacador, setSensorPyt, setTipoDeLiner, setDiametroDeLiner, setTipoDePistolas, setDensidadDeDisparosMecanico, setFase, setDiametroDeOrificio, setPenetracion, setTipoDeSAP, setTratamientoPor, setVolumenAparejoDeProduccion, setVolumenCimaDeIntervalo, setVolumenBaseDeIntervalo, setVolumenDeEspacioAnular, setImgBoreDiagramURL, setImgAparejoDeProduccionURL, setChecked} from '../../../../redux/actions/pozo'
@@ -48,6 +49,15 @@ let tratamientoPorOptions = [
   }
 
   containsErrors(){
+    let {setChecked, formData} = this.props
+    formData = formData.toJS()
+
+    if(formData.checked.length != this.state.checked.length){
+      this.setState({
+        checked: formData.checked
+      }) 
+    }
+ 
     let foundErrors = false
     for (const key of Object.keys(this.state.errors)) {
       if(this.state.errors[key].checked)
@@ -76,7 +86,7 @@ let tratamientoPorOptions = [
     if(event && event.target.name){
       setChecked(checked)
     }
-
+    return errors
   }
 
   handleSelectTerminacion(val) {
@@ -177,7 +187,6 @@ let tratamientoPorOptions = [
           Upload Well Bore Diagram (spanish)
         </div>
         <input type='file' accept="image/*" onChange={(e) => this.handleFileUpload(e, setImgBoreDiagramURL)}></input>
-        imgBoreDiagramURL
         { this.state.errors.imgBoreDiagramURL && this.state.errors.imgBoreDiagramURL.checked &&
           <div className="error">{this.state.errors.imgBoreDiagramURL.message}</div>
         }
@@ -320,7 +329,7 @@ const mapDispatchToProps = dispatch => ({
   setVolumenDeEspacioAnular: val => dispatch(setVolumenDeEspacioAnular(val)),
   setImgBoreDiagramURL: val => dispatch(setImgBoreDiagramURL(val)),
   setImgAparejoDeProduccionURL: val => dispatch(setImgAparejoDeProduccionURL(val)),
-  setChecked: val => dispatch(setChecked(val))
+  setChecked: val => dispatch(setChecked(val, 'mecanicoYAparejoDeProduccion'))
 })
 
 

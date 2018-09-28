@@ -36,7 +36,7 @@ let litologiaOptions = [
   }
 
   componentDidUpdate(){
-    //this.containsErrors()
+    this.containsErrors()
     //this.props.containsErrors(this, this.state.containsErrors)
   }
 
@@ -91,7 +91,7 @@ let litologiaOptions = [
         </div>
         <InputRowUnitless header="Descubrimiento" name='descubrimientoField' value={descubrimientoField} onChange={setDescubrimientoField} onBlur={this.validate} errors={this.state.errors}/>
         <InputDate header="Fecha de explotación" name='fechaDeExplotacionField' value={fechaDeExplotacionField} onChange={setFechaDeExplotacionField} onBlur={this.validate} errors={this.state.errors}/>
-        <InputRowUnitless header="No. de pozo operando" name='numeroDePozoOperandoField' value={numeroDePozosOperandoField} onChange={setNumeroDePozosOperandoField} onBlur={this.validate} errors={this.state.errors}/>
+        <InputRowUnitless header="No. de pozo operando" name='numeroDePozosOperandoField' value={numeroDePozosOperandoField} onChange={setNumeroDePozosOperandoField} onBlur={this.validate} errors={this.state.errors}/>
       </div>
     )
   }
@@ -229,8 +229,8 @@ const validate = values => {
     if(!values.fechaDeExplotacionField ){
        errors.fechaDeExplotacionField = {message: "Este campo no puede estar vacio"}
     }
-    if(!values.numeroDePozoOperandoField ){
-       errors.numeroDePozoOperandoField = {message: "Este campo no puede estar vacio"}
+    if(!values.numeroDePozosOperandoField ){
+       errors.numeroDePozosOperandoField = {message: "Este campo no puede estar vacio"}
     }
     if(!values.pInicialAnoField ){
        errors.pInicialAnoField = {message: "Este campo no puede estar vacio"}
@@ -410,7 +410,7 @@ const mapDispatchToProps = dispatch => ({
   setCo2Field: val => dispatch(setCo2Field(val)),
   setN2Field: val => dispatch(setN2Field(val)),
   setTipoDeFluidoField: val => dispatch(setTipoDeFluidoField(val)),
-  setChecked: val => dispatch(setChecked(val))
+  setChecked: val => dispatch(setChecked(val, 'fichaTecnicaDelCampo'))
 })
 
 export default withValidate(

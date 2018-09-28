@@ -61,8 +61,10 @@ const estIncProduccionApuntalado = (state = initialState, action) => {
         return state.set('obervacionesEstIncApuntalado', fromJS(action.value))
     case 'set_estIncProdApuntaladoImgURL':
         return state.set('imgURL', fromJS(action.value))
-    case 'set_checked' :
-        return state.set('checked', fromJS(action.value))   
+    case 'set_forms_checked' :
+        if(action.form == 'estIncProduccionApuntalado')
+           return state.set('checked', fromJS(action.value))
+        return state
     default:
       return state
   }

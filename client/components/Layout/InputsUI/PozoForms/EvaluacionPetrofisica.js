@@ -415,7 +415,7 @@ const mapDispatchToProps = dispatch => ({
   setImgURL: val => dispatch(setImgURL(val)),
   setLayerData: val => dispatch(setLayerData(val)),
   setMudLossData: val => dispatch(setMudLossData(val)),
-  setChecked: val => dispatch(setChecked(val))
+  setChecked: val => dispatch(setChecked(val, 'evaluacionPetrofisica'))
 })
 
 

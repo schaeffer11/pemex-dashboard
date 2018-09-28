@@ -55,13 +55,20 @@ let columns = [
 
   containsErrors(){
     let foundErrors = false
-    for (const key of Object.keys(this.state.errors)) {
-      if(this.state.errors[key].checked)
-        foundErrors = true
-    }
+    let errors = Object.assign({}, this.state.errors);
+    let checked = this.props.formData.get('checked')
+
+    checked = checked ? checked.toJS() : []
+    checked.forEach((checked) => {
+        if(errors[checked]){
+           errors[checked].checked = true
+           foundErrors = true
+        }
+    })
 
     if(foundErrors !== this.state.containsErrors){
       this.setState({
+        errors: errors,
         containsErrors: foundErrors
       })
     }
@@ -71,6 +78,7 @@ let columns = [
   validate(event){
     let {setChecked, formData} = this.props
     formData = formData.toJS()
+      let { intervalos } = formData
 
     let field = event ? event.target.name : null
     let {errors, checked} = this.props.validate(field, formData)
@@ -292,9 +300,9 @@ let columns = [
             pageSize={!intervalos ? 1 : intervalos.length}
             sortable={false}
           />
-        {/* { this.state.errors.cedulaData && this.state.errors.cedulaData.checked &&
-          <div className="error">{this.state.errors.cedulaData.message}</div>
-        } */}
+        { this.state.errors.intervalos && this.state.errors.intervalos.checked &&
+          <div className="error">{this.state.errors.intervalos.message}</div>
+        }
         <button className='new-row-button' onClick={this.addNewIntervalosRow}>Añadir un renglón</button>
         </div>
       </div>
@@ -446,12 +454,22 @@ const validate = values => {
       })
     }
 
+    if(!values.intervalos){
+            errors.intervalos = {message: "Esta forma no puede estar vacia"}
+        }else {
+            values.intervalos.forEach((row, index) => {
+            if(row.espesor.toString().trim() == '' || row.cima.trim() == '' || row.base.trim() == ''){
+              errors.intervalos = {message: "Ningun campo puede estar vacio."}
+            }
+        })
+    }
     return errors
 }
 
 const mapStateToProps = state => ({
   forms: state.get('forms'),
   formData: state.get('fichaTecnicaDelPozo'),
+  checked: state.get('fichaTecnicaDelPozo').get('checked'),
   tipoDeSistemo: state.getIn(['sistemasArtificialesDeProduccion', 'tipoDeSistemo'])
 })
 
@@ -478,7 +496,7 @@ const mapDispatchToProps = dispatch => ({
   setProfSensorPYT: val => dispatch(setProfSensorPYT(val)),
   setTipoDeSistemo: val => dispatch(setTipoDeSistemo(val)),
   setHistorialIntervencionesData: val => dispatch(setHistorialIntervencionesData(val)),
-  setChecked: val => dispatch(setChecked(val)),
+  setChecked: val => dispatch(setChecked(val, 'fichaTecnicaDelPozo')),
   setIntervalos: val => dispatch(setIntervalos(val))
 })
 
