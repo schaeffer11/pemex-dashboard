@@ -7,7 +7,40 @@ import { connect } from 'react-redux'
 import {withValidate} from '../../../Common/Validate'
 import { InputRow, InputRowUnitless, InputRowSelectUnitless, CalculatedValue } from '../../../Common/InputRow'
 import { setCedulaData, setIntervalo, setLongitudDeIntervalo, setVolAparejo, setCapacidadTotalDelPozo, setVolumenPrecolchonN2, setVolumenSistemaNoReativo, setVolumenSistemaReactivo, setVolumenSistemaDivergente, setVolumenDesplazamientoLiquido, setVolumenDesplazamientoN2, setVolumenTotalDeLiquido, setChecked, setPropuestaCompany } from '../../../../../redux/actions/intervencionesEstimulacion'
+import { setEspesorBruto } from '../../../../../redux/actions/pozo'
 
+const round = (num, exp = 2) => Math.round(num * Math.pow(10, exp)) / Math.pow(10, exp)
+const espesorBruto = (data) => {
+  /**
+   * From cedula data get only unique intervalos and sort by cimas (array[0])
+   * Espesor bruto is the difference between the highest top (cima) intervalo and the lowest bottom (base) intervalo
+   */
+  const uniq = {}
+  const intervalos = data.map(elem => elem.intervalo).filter(elem => {
+    if (uniq[elem] || elem === '') {
+      return false
+    }
+    return uniq[elem] = true
+  }).sort((a, b) => {
+    const aCima = parseFloat(a.split('-')[0])
+    const bCima = parseFloat(b.split('-')[0])
+    return aCima - bCima
+  })
+  const cima = parseFloat(intervalos[0].split('-')[0])
+  const base = parseFloat(intervalos[intervalos.length - 1].split('-')[1])
+  console.log('intervalos', intervalos, cima, base)
+  return base - cima
+}
+
+const calculateVolumes = (data, fluid, sistema = null) => {
+  return data.filter(elem => elem.sistema === sistema || sistema === null)
+    .reduce((accumulator, currentValue) => {
+      if (currentValue[fluid]) {
+        return accumulator + currentValue[fluid]
+      }
+      return accumulator
+    }, 0)
+}
 
 @autobind class PropuestaDeEstimulacion extends Component {
   constructor(props) {
@@ -142,16 +175,6 @@ import { setCedulaData, setIntervalo, setLongitudDeIntervalo, setVolAparejo, set
     formData = formData.toJS()
     let { cedulaData } = formData
 
-    const calculateVolumes = (data, fluid, sistema = null) => {
-      return data.filter(elem => elem.sistema === sistema || sistema === null)
-        .reduce((accumulator, currentValue) => {
-          if (currentValue[fluid]) {
-            return accumulator + currentValue[fluid]
-          }
-          return accumulator
-        }, 0)
-    }
-
     const reactivoVolume = calculateVolumes(cedulaData, 'volLiquid', 'reactivo')
     const noReactivoVolume = calculateVolumes(cedulaData, 'volLiquid', 'no-reactivo')
     const divergenteVolume = calculateVolumes(cedulaData, 'volLiquid', 'divergente')
@@ -223,6 +246,7 @@ import { setCedulaData, setIntervalo, setLongitudDeIntervalo, setVolAparejo, set
   }
 
   addNewRow() {
+    console.log('adding new Row')
     let { formData, setCedulaData } = this.props
     formData = formData.toJS()
     let { cedulaData } = formData
@@ -267,6 +291,28 @@ import { setCedulaData, setIntervalo, setLongitudDeIntervalo, setVolAparejo, set
     setCedulaData(cedulaData)
   }
 
+  setAllData(data) {
+    const { setCedulaData } = this.props
+    const cedulaData = data.map((row, i) => {
+      let { sistema, relN2Liq, gastoLiqudo, volLiquid } = row
+      if (sistema === 'desplazamientoN2' || sistema === 'pre-colchon') {
+        row.volLiquid = 0
+        row.gastoLiqudo = 0
+        row.relN2Liq = 0
+        row.tiempo = round(row.volN2 / row.gastoN2)
+      } else {
+        row.gastoN2 = round(relN2Liq / 6.291 * gastoLiqudo)
+        row.volN2 = round((6.291 * volLiquid / gastoLiqudo) * row.gastoN2)
+        row.tiempo = round((volLiquid * 6.291) / gastoLiqudo)
+      }
+      const prev = data[i - 1]
+      row.volLiquidoAcum = prev ? round(parseFloat(prev.volLiquidoAcum) + parseFloat(row.volLiquid)) : row.volLiquid
+      row.volN2Acum = prev ? round(parseFloat(prev.volN2Acum) + parseFloat(row.volN2)) : row.volN2
+      return row
+    })
+    setCedulaData(cedulaData)
+  }
+
   makeCedulaTable() {
     let { formData, setCedulaData, intervalos } = this.props
     formData = formData.toJS()
@@ -283,7 +329,8 @@ import { setCedulaData, setIntervalo, setLongitudDeIntervalo, setVolAparejo, set
       { value: 'no-reactivo', label: 'No Reactivo' },
       { value: 'pre-colchon', label: 'Pre-colchón' },
       { value: 'divergente', label: 'Divergente' },
-      { value: 'desplazamiento', label: 'desplazamiento' },
+      { value: 'desplazamiento', label: 'Desplazamiento Liquido' },
+      { value: 'desplazamientoN2', label: 'Desplazamiento N2' },
     ]
 
     const objectTemplate = {etapa: '', intervalo: '', sistema: '', volLiquid: '', gastoN2: '', gastoLiqudo: '', gastoEnFondo: '', calidad: '', volN2: '', volLiquidoAcum: '', volN2Acum: '', relN2Liq: '', tiempo: '' }
@@ -347,14 +394,24 @@ import { setCedulaData, setIntervalo, setLongitudDeIntervalo, setVolAparejo, set
         accessor: 'nombreComercial',
         cell: 'renderEditable',
       },
-      { 
-        Header: 'Tiempo (min)',
-        accessor: 'tiempo',
-        cell: 'renderNumber',
+      {
+        Header: 'Vol. Liq. (m3)',
+        accessor: 'volLiquid',
+        cell: 'renderNumberDisable',
       },
       { 
         Header: 'Gasto Liquido (bpm)',
         accessor: 'gastoLiqudo',
+        cell: 'renderNumberDisable',
+      },
+      {
+        Header: 'Rel. N2/Liq (m3 std/m3)',
+        accessor: 'relN2Liq',
+        cell: 'renderNumberDisable',
+      },
+      {
+        Header: 'Calidad (%)',
+        accessor: 'calidad',
         cell: 'renderNumber',
       },
       { 
@@ -365,33 +422,28 @@ import { setCedulaData, setIntervalo, setLongitudDeIntervalo, setVolAparejo, set
       { 
         Header: 'Gasto N2 (m3/min)',
         accessor: 'gastoN2',
-        cell: 'renderNumber',
+        cell: 'renderNumberDisable',
       }, 
-      {
-        Header: 'Vol. Liq. (m3)',
-        accessor: 'volLiquid',
-      },
+      
       { 
         Header: 'Vol. N2 (m3 std)',
         accessor: 'volN2',
+        cell: 'renderNumberDisable'
       },
       { 
         Header: 'Vol. Liq. Acum. (m3)',
         accessor: 'volLiquidoAcum',
+        // cell: 'renderNumber'
       },
       { 
         Header: 'Vol. N2 Acum. (m3 std)',
         accessor: 'volN2Acum',
       },
-      {
-        Header: 'Calidad (%)',
-        accessor: 'calidad',
-        cell: 'renderNumber',
-      },
-       {
-        Header: 'Rel. N2/Liq (m3 std/m3)',
-        accessor: 'relN2Liq',
-        cell: 'renderNumber',
+      
+      { 
+        Header: 'Tiempo (min)',
+        accessor: 'tiempo',
+        // cell: 'renderNumber',
       },
     ]
 
@@ -405,7 +457,7 @@ import { setCedulaData, setIntervalo, setLongitudDeIntervalo, setVolAparejo, set
             className="-striped"
             data={cedulaData}
             newRow={objectTemplate}
-            setData={setCedulaData}
+            setData={this.setAllData}
             columns={columns}
             showPagination={false}
             showPageSizeOptions={false}
@@ -433,7 +485,7 @@ import { setCedulaData, setIntervalo, setLongitudDeIntervalo, setVolAparejo, set
           </div>
           <div className="right">
  
-            { this.makeDetallesForm() }
+            {/* { this.makeDetallesForm() } */}
           </div>
         </div>
         <div className='bot'>
@@ -509,6 +561,7 @@ const mapDispatchToProps = dispatch => ({
   setCedulaData: val => dispatch(setCedulaData(val)),
   setChecked: val => dispatch(setChecked(val, 'propuestaEstimulacion')),
   setPropuestaCompany: val => dispatch(setPropuestaCompany(val)),
+  setEspesorBruto: val => dispatch(setEspesorBruto(val)),
 })
 
 export default withValidate(
