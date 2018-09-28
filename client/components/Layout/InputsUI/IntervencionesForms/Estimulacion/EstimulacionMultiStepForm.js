@@ -65,7 +65,7 @@ import { setShowForms } from '../../../../../redux/actions/global'
 
     const forms = [
       this.propuestaDeEstimulacion,
-//      this.pruebasDeLaboratorio,
+      this.pruebasDeLaboratorio,
 //      this.pruebasDeLaboratorioEstimulacionExtra,
       this.resultadosDeLaSimulacionEstimulacion,
       this.estimacionIncProduccionEstimulacion,
@@ -78,10 +78,8 @@ import { setShowForms } from '../../../../../redux/actions/global'
 
       let {errors, checked} = form.selector.props.forceValidation()
       allErrors = Object.assign({}, allErrors, errors);
-      allChecked.push(...checked)
     });
 
-    setChecked(allChecked)
 
     return allErrors.length == 0;
 

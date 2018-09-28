@@ -74,6 +74,10 @@ const analisisDelAgua = (state = initialState, action) => {
         return state.set('checked', fromJS(action.value))
     case 'set_analisisDelAgua':
         return state = fromJS(action.value)
+    case 'set_forms_checked' :
+        if(action.form == 'analisisDelAgua')
+          return state.set('checked', fromJS(action.value))
+        return state
     default:
       return state
   }

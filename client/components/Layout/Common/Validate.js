@@ -40,7 +40,7 @@ export function withValidate(validationFunction, WrappedComponent) {
       const errors = validationFunction(values)
  
 
-      let checked  = this.formData.get('checked') ? this.formData.get('checked') : []
+      let checked = this.formData.get('checked') || [];
       if(checked.indexOf(field) === -1)
         checked = [...checked, field]
 
@@ -63,6 +63,10 @@ export function withValidate(validationFunction, WrappedComponent) {
       const values = this.formData.toJS();
       let {errors} = this.validateAll(values)
       let checked = this.setAllFieldsAsChecked()
+
+      if(this.setChecked){
+        this.setChecked(checked)
+      }
   
       return {errors, checked} 
     }

@@ -9,13 +9,18 @@ const initialState = Map({
         costDLS: '',
         MNXtoDLS: '',
         companiea: '',
-    }]
+    }],
+    checked: []
 })
 
 const estCostAcido = (state = initialState, action) => {
   switch (action.type) {
     case 'set_estimacionCostos':
         return state.set('estimacionCostosData', fromJS(action.value))
+    case 'set_forms_checked' :
+        if(action.form == 'estCost')
+            return state.set('checked', fromJS(action.value))
+        return state
     default:
       return state
   }

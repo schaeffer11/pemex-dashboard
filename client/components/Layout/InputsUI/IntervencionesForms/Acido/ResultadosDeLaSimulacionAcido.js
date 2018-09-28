@@ -25,17 +25,25 @@ import { connect } from 'react-redux'
   }
 
   containsErrors(){
-    let foundErrors = false
-    for (const key of Object.keys(this.state.errors)) {
-      if(this.state.errors[key].checked)
-        foundErrors = true
-    }
+        let foundErrors = false
+        let errors = Object.assign({}, this.state.errors);
+        let {formData} = this.props
+        formData = formData.toJS()
 
-    if(foundErrors !== this.state.containsErrors){
-      this.setState({
-        containsErrors: foundErrors
-      })
-    }
+        const checked = formData.checked  || []
+        checked.forEach((checked) => {
+            if(errors[checked]){
+                errors[checked].checked = true
+                foundErrors = true
+            }
+        })
+
+        if(foundErrors !== this.state.containsErrors){
+            this.setState({
+                errors: errors,
+                containsErrors: foundErrors
+            })
+        }
   }
 
   validate(event){
@@ -101,6 +109,9 @@ import { connect } from 'react-redux'
         </div>
         <input type='file' accept="image/*"  onChange={(e) => this.handleFileUpload(e, setEvidenceSimulationAcidoImgURL)} multiple></input>
         {imgURL ? <img className='img-preview' src={imgURL}></img> : null }
+          { this.state.errors.evidenceSimulationAcidoImgURL && this.state.errors.evidenceSimulationAcidoImgURL.checked &&
+          <div className="error">{this.state.errors.e.message}</div>
+          }
       </div>
     )
   }
@@ -165,6 +176,7 @@ const validate = values => {
 }
 
 const mapStateToProps = state => ({
+  forms: state.get('forms'),
   formData: state.get('resultadosSimulacionAcido'),
 })
 
@@ -179,7 +191,7 @@ const mapDispatchToProps = dispatch => ({
   setPresionNeta: val => dispatch(setPresionNeta(val)),
   setEficienciaDeFluidoDeFractura: val => dispatch(setEficienciaDeFluidoDeFractura(val)),
   setEvidenceSimulationAcidoImgURL: val => dispatch(setEvidenceSimulationAcidoImgURL(val)),
-  setChecked: val => dispatch(setChecked(val))
+  setChecked: val => dispatch(setChecked(val, 'resultadosSimulacionAcido'))
 })
 
 export default withValidate(

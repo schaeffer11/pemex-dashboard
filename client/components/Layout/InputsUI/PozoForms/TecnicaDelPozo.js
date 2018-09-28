@@ -67,13 +67,21 @@ let columns = [
 
   containsErrors(){
     let foundErrors = false
-    for (const key of Object.keys(this.state.errors)) {
-      if(this.state.errors[key].checked)
-        foundErrors = true
-    }
+    let errors = Object.assign({}, this.state.errors);
+      let {formData} = this.props
+      formData = formData.toJS()
+
+      const checked = formData.checked  || []
+    checked.forEach((checked) => {
+        if(errors[checked]){
+           errors[checked].checked = true
+           foundErrors = true
+        }
+    })
 
     if(foundErrors !== this.state.containsErrors){
       this.setState({
+        errors: errors,
         containsErrors: foundErrors
       })
     }
@@ -83,6 +91,7 @@ let columns = [
   validate(event){
     let {setChecked, formData} = this.props
     formData = formData.toJS()
+      let { intervalos } = formData
 
     let field = event ? event.target.name : null
     let {errors, checked} = this.props.validate(field, formData)
@@ -358,6 +367,16 @@ const validate = values => {
       })
     }
 
+    /* Form has been removed
+    if(!values.intervalos){
+            errors.intervalos = {message: "Esta forma no puede estar vacia"}
+        }else {
+            values.intervalos.forEach((row, index) => {
+            if(row.espesor.toString().trim() == '' || row.cima.trim() == '' || row.base.trim() == ''){
+              errors.intervalos = {message: "Ningun campo puede estar vacio."}
+            }
+        })
+    }*/
     return errors
 }
 
@@ -365,6 +384,7 @@ const mapStateToProps = state => ({
   forms: state.get('forms'),
   formData: state.get('fichaTecnicaDelPozo'),
   generalData: state.get('fichaTecnicaDelPozoHighLevel'),
+  checked: state.get('fichaTecnicaDelPozo').get('checked'),
   tipoDeSistemo: state.getIn(['sistemasArtificialesDeProduccion', 'tipoDeSistemo'])
 })
 
@@ -391,6 +411,7 @@ const mapDispatchToProps = dispatch => ({
   setProfSensorPYT: val => dispatch(setProfSensorPYT(val)),
   setTipoDeSistemo: val => dispatch(setTipoDeSistemo(val)),
   setHistorialIntervencionesData: val => dispatch(setHistorialIntervencionesData(val)),
+  setChecked: val => dispatch(setChecked(val, 'fichaTecnicaDelPozo')),
 })
 
 export default withValidate(

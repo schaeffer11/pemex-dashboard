@@ -8,7 +8,7 @@ import InputTable from '../../Common/InputTable'
 import {withValidate} from '../../Common/Validate'
 
 import { InputRow, InputRowUnitless, InputRowSelectUnitless, TextAreaUnitless } from '../../Common/InputRow'
-import { setEstimacionCostosData, setMNXtoDLS } from '../../../../redux/actions/intervencionesEstimulacion'
+import {setChecked, setEstimacionCostosData, setMNXtoDLS} from '../../../../redux/actions/intervencionesEstimulacion'
 
 export const itemOptions = [
   { label: 'Costo de Servicios', value: 'Costo de Servicios' },
@@ -52,10 +52,12 @@ const companyOptions = [
 
 
   componentDidMount() {
+      this.validate()
+      this.containsErrors()
   }
 
   componentDidUpdate(prevProps) {
-
+      this.containsErrors()
   }
 
   containsErrors(){
@@ -322,16 +324,18 @@ const validate = values => {
 }
 
 const mapStateToProps = state => ({
+  forms: state.get('forms'),
   formData: state.get('estCost'),
 })
 
 const mapDispatchToProps = dispatch => ({
   setEstimacionCostosData: val => dispatch(setEstimacionCostosData(val)),
   setMNXtoDLS: val => dispatch(setMNXtoDLS(val)),
+    setChecked: values => {dispatch(setChecked(values, 'estCost'))}
 })
 
 export default withValidate(
   validate,
-  connect(mapStateToProps, mapDispatchToProps)(EstimacionCostos)
+  connect(mapStateToProps, mapDispatchToProps, null, { withRef: true })(EstimacionCostos)
 )
 
