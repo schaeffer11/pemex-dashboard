@@ -99,7 +99,7 @@ let columns = [
           Los Datos de Formación
         </div>
         {/* <InputRow header="Intervalos(s) productor(es)" type='number' name='intervaloProductor' value={intervaloProductor}  onChange={setIntervaloProductor} unit='md/mv' onBlur={this.validate} errors={this.state.errors} /> */}
-        {/* <InputRow header="Espesor bruto" name='espesorBruto' value={espesorBruto} onChange={setEspesorBruto} unit='m' onBlur={this.validate} errors={this.state.errors} /> */}
+         <InputRow header="Espesor bruto" name='espesorBruto' value={espesorBruto} onChange={setEspesorBruto} unit='m' onBlur={this.validate} errors={this.state.errors} /> 
         {/* <InputRow header="Espesor neto" name='espesorNeto' value={espesorNeto} onChange={setEspesorNeto} unit='m' onBlur={this.validate} errors={this.state.errors} /> */}
         <InputRow header="Caliza" name='caliza' value={caliza} onChange={setCaliza} unit='%' onBlur={this.validate} errors={this.state.errors} />
         <InputRow header="Dolomia" name='dolomia' value={dolomia} onChange={setDolomia} unit='%' onBlur={this.validate} errors={this.state.errors} />
@@ -114,7 +114,7 @@ let columns = [
   }
 
   makePozoForm() {
-    let { tipoDeSistemo, setTipoDePozo, setPwsFecha, setPwfFecha, setDeltaPPerMes, setTyac, setPvt, setAparejoDeProduccion, setProfEmpacador, setProfSensorPYT, setTipoDeSistemo, formData } = this.props 
+    let { tipoDeSistemo, setTipoDePozo, setPws, setPwf, setPwsFecha, setPwfFecha, setDeltaPPerMes, setTyac, setPvt, setAparejoDeProduccion, setProfEmpacador, setProfSensorPYT, setTipoDeSistemo, formData } = this.props 
     formData = formData.toJS()
     let { tipoDePozo, pwsFecha, pwfFecha, pws, pwf, deltaPPerMes, tyac, pvt, aparejoDeProduccion, profEmpacador, profSensorPYT } = formData
 
@@ -361,17 +361,10 @@ let columns = [
 const validate = values => {
     const errors = {}
 
-    if(!values.intervaloProductor ){
-       errors.intervaloProductor = {message: "Este campo no puede estar vacio"}
-    }
 
-    if(!values.espesorBruto ){
-       errors.espesorBruto = {message: "Este campo no puede estar vacio"}
-    }
-
-    if(!values.espesorNeto ){
-       errors.espesorNeto = {message: "Este campo no puede estar vacio"}
-    }
+    // if(!values.espesorBruto ){
+    //    errors.espesorBruto = {message: "Este campo no puede estar vacio"}
+    // }
 
     if(!values.caliza ){
        errors.caliza = {message: "Este campo no puede estar vacio"}

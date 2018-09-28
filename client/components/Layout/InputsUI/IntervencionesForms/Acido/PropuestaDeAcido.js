@@ -409,46 +409,6 @@ containsErrors(){
 const validate = values => {
     const errors = {}
 
-    if(!values.intervalo){
-      errors.intervalo = {message: "Este campo no puede estar vacio"}
-    }
-
-    if(!values.longitudDeIntervalo){ 
-      errors.longitudDeIntervalo = {message: "Este campo no puede estar vacio"}
-    }
-
-    if(!values.volAparejo){ 
-      errors.volAparejo = {message: "Este campo no puede estar vacio"}
-    }
-
-    if(!values.capacidadTotalDelPozo){ 
-      errors.capacidadTotalDelPozo = {message: "Este campo no puede estar vacio"}
-    }
-
-    if(!values.volumenPrecolchonN2 ){
-       errors.volumenPrecolchonN2 = {message: "Este campo no puede estar vacio"}
-    }
-
-    if(!values.volumenSistemaNoReativo ){
-       errors.volumenSistemaNoReativo = {message: "Este campo no puede estar vacio"}
-    }
-
-    if(!values.volumenSistemaReactivo ){
-       errors.volumenSistemaReactivo = {message: "Este campo no puede estar vacio"}
-    }
-
-    if(!values.volumenSistemaDivergente ){
-       errors.volumenSistemaDivergente = {message: "Este campo no puede estar vacio"}
-    }
-
-    if(!values.volumenDesplazamientoLiquido ){
-       errors.volumenDesplazamientoLiquido = {message: "Este campo no puede estar vacio"}
-    }
-
-    if(!values.volumenDesplazamientoGelLineal ){
-       errors.volumenDesplazamientoGelLineal = {message: "Este campo no puede estar vacio"}
-    }
-
     if(!values.moduloYoungArena ){
        errors.moduloYoungArena = {message: "Este campo no puede estar vacio"}
     }
@@ -477,16 +437,16 @@ const validate = values => {
        errors.diametroDeDisparos = {message: "Este campo no puede estar vacio"}
     }
 
-    // if(!values.cedulaData){
-    //   errors.cedulaData = {message: "Esta forma no puede estar vacia"}
-    // }else {
-    //   values.cedulaData.forEach((row, index) => {
-    //     let hasEmpty = Object.values(row).find((value) => { return value.toString().trim() == '' })
-    //     if(hasEmpty !== undefined){
-    //         errors.cedulaData = {message: "Ningun campo puede estar vacio."}
-    //     }
-    //   })
-    // }
+    if(!values.cedulaData){
+      errors.cedulaData = {message: "Esta forma no puede estar vacia"}
+    }else {
+      values.cedulaData.forEach((row, index) => {
+        let hasEmpty = Object.values(row).find((value) => { return value === null || value.toString().trim() == '' })
+        if(hasEmpty !== undefined){
+            errors.cedulaData = {message: "Ningun campo puede estar vacio."}
+        }
+      })
+    }
 
     return errors
 }

@@ -225,7 +225,7 @@ const validate = values => {
     if(!values.fechaDeExplotacionField ){
        errors.fechaDeExplotacionField = {message: "Este campo no puede estar vacio"}
     }
-    if(!values.numeroDePozoOperandoField ){
+    if(!values.numeroDePozosOperandoField ){
        errors.numeroDePozoOperandoField = {message: "Este campo no puede estar vacio"}
     }
     if(!values.pInicialField) {
