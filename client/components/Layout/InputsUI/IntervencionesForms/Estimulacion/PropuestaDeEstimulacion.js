@@ -108,11 +108,6 @@ import { setCedulaData, setIntervalo, setLongitudDeIntervalo, setVolAparejo, set
           value={propuestaCompany}
           callback={e => setPropuestaCompany(e.value)}
         />
-
-        {/* <InputRowUnitless header="Intervalo(s)" name='intervalo' value={intervalo} onChange={setIntervalo} errors={this.state.errors} onBlur={this.validate}/>
-        <InputRow header="Longitud de intervalo a tratar" name='longitudDeIntervalo' unit='m' value={longitudDeIntervalo} onChange={setLongitudDeIntervalo} errors={this.state.errors} onBlur={this.validate}/>
-        <InputRow header="Vol. aparejo (VAP)" name='' unit={<div>m<sup>3</sup></div>} name='volAparejo' value={volAparejo} onChange={setVolAparejo} errors={this.state.errors} onBlur={this.validate}/>
-        <InputRow header="Capacidad total del pozo (cima/base)" name='capacidadTotalDelPozo' unit={<div>m<sup>3</sup>/m<sup>3</sup></div>} value={capacidadTotalDelPozo} onChange={setCapacidadTotalDelPozo} errors={this.state.errors} onBlur={this.validate}/> */}
       </div>
     )
   }
@@ -134,11 +129,10 @@ import { setCedulaData, setIntervalo, setLongitudDeIntervalo, setVolAparejo, set
   //     </div>
   //   )
   // }
-
   makeDetallesForm() {
-    let { setVolumenPrecolchonN2, setVolumenSistemaNoReativo, setVolumenSistemaReactivo, setVolumenSistemaDivergente, setVolumenDesplazamientoLiquido, setVolumenDesplazamientoN2, setVolumenTotalDeLiquido, formData } = this.props
+    let { formData } = this.props
     formData = formData.toJS()
-    let { volumenPrecolchonN2, volumenSistemaNoReativo, volumenSistemaReactivo, volumenSistemaDivergente, volumenDesplazamientoLiquido, volumenDesplazamientoN2, volumenTotalDeLiquido, cedulaData } = formData
+    let { cedulaData } = formData
 
     const calculateVolumes = (data, fluid, sistema = null) => {
       console.log('calculating things', sistema)
@@ -159,16 +153,7 @@ import { setCedulaData, setIntervalo, setLongitudDeIntervalo, setVolAparejo, set
     const desplazamientoGasVolume = calculateVolumes(cedulaData, 'volN2', 'desplazamiento')
     const precolchonGasVolume = calculateVolumes(cedulaData, 'volN2', 'pre-colchon')
     const totalLiquidVolume = calculateVolumes(cedulaData, 'volLiquid')
-    // console.log('reactivo vol', reactivoVolume)
-    // console.log('noReactivo vol', noReactivoVolume)
-    // console.log('divergente vol', divergenteVolume)
-    // console.log('desplazamientoLiquid vol', desplazamientoLiquidVolume)
-    // console.log('desplazamientoGasVolume vol', desplazamientoGasVolume)
-    // console.log('precolchonGas vol', precolchonGasVolume)
-    // console.log('allLiquid vol', allLiquidVolume)
 
-
-    
     return (
       <div className='detalles-form' >
         <div className='header'>
@@ -259,8 +244,7 @@ import { setCedulaData, setIntervalo, setLongitudDeIntervalo, setVolAparejo, set
           cedulaData.forEach((i, index) => {
             i.index = index
             i.length = cedulaData.length
-          }) 
-
+          })
           setCedulaData(cedulaData)
         }
       }

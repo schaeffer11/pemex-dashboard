@@ -14,12 +14,8 @@ export const setVolumenDesplazamientoLiquido = value => ({ type: 'set_volumenDes
 export const setVolumenDesplazamientoN2 = value => ({ type: 'set_volumenDesplazamientoN2', value})
 export const setVolumenTotalDeLiquido = value => ({ type: 'set_volumenTotalDeLiquido', value})
 export const setPropuestaCompany = value => ({ type: 'set_propuestaCompany', value})
-export const setCedulaData = value => ({
+export const setCedulaData = (value) => ({
   type: 'set_cedulaData',
-  // value: value.map(elem => {
-  //   elem.etapa = elem.index + 1
-  //   return elem
-  // })
   value: value.map((row, i) => {
     row.etapa = row.index + 1
     row.volLiquid = parseFloat(row.gastoLiqudo) * parseFloat(row.tiempo)
@@ -30,7 +26,7 @@ export const setCedulaData = value => ({
     row.volLiquidoAcum = prev ? prev.volLiquidoAcum + row.volLiquid : row.volLiquid
     row.volN2Acum = prev ? prev.volN2Acum + row.volN2 : row.volN2
     return row
-  })
+  }),
 })
 
 export const setPruebasDeLaboratorioData = value => ({ type: 'set_pruebasDeLaboratorioData', value})
