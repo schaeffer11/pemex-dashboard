@@ -140,7 +140,12 @@ import { setCedulaData, setIntervalo, setLongitudDeIntervalo, setVolAparejo, set
     formData = formData.toJS()
     let { volumenPrecolchonN2, volumenSistemaNoReativo, volumenSistemaReactivo, volumenSistemaDivergente, volumenDesplazamientoLiquido, volumenDesplazamientoN2, volumenTotalDeLiquido } = formData
 
+    const calculateVolumes = (data, sistema, ) => {
+      data.filter(elem => elem.sistema === sistema)
+        .reduce((accumulator, currentValue) => {
 
+        }, 0)
+    }
     
     return (
       <div className='detalles-form' >
