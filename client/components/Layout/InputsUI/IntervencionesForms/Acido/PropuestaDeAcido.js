@@ -342,54 +342,54 @@ containsErrors(){
         accessor: 'tipoDeApuntalante',
         cell: 'renderEditable',
       }, { 
-        Header: 'Concentracion de Apuntalante (lbm/gal)',
+        Header: <div>Concentracion de Apuntalante<br/>(lbm/gal)</div>,
         accessor: 'concentraciDeApuntalante',
         cell: 'renderNumber',
       },
       { 
-        Header: 'Tiempo (min)',
+        Header: <div>Tiempo<br/>(min)</div>,
         accessor: 'tiempo',
         cell: 'renderNumber',
       },
       {
-        Header: 'Gasto Liquido (bpm)',
+        Header: <div>Gasto Liquido<br/>(bpm)</div>,
         accessor: 'gastoLiqudo',
         cell: 'renderNumber',
       },
       {
-        Header: 'Gasto N2 (m3/min)',
+        Header: <div>Gasto N2<br/>(m<sup>3</sup>/min)</div>,
         accessor: 'gastoN2',
         cell: 'renderNumber',
       },
       {
-        Header: 'Gasto en fondo (bpm)',
+        Header: <div>Gasto en fondo<br/>(bpm)</div>,
         accessor: 'gastoEnFondo',
         cell: 'renderNumber',
       },
       {
-        Header: 'Vol. Liq. (m3)',
+        Header: <div>Vol. Liq.<br/>(m<sup>3</sup>)</div>,
         accessor: 'volLiquid',
       },
       { 
-        Header: 'Vol. N2 (m3 std)',
+        Header: <div>Vol. N2<br/>(m<sup>3</sup> std)</div>,
         accessor: 'volN2',
       },
       { 
-        Header: 'Vol. Liq. Acum. (m3)',
+        Header: <div>Vol. Liq. Acum.<br/>(m<sup>3</sup>)</div>,
         accessor: 'volLiquidoAcum',
       }, 
       { 
-        Header: 'Vol. N2 Acum. (m3 std)',
+        Header: <div>Vol. N2 Acum.<br/>(m<sup>3</sup> std)</div>,
         accessor: 'volN2Acum',
       }, 
       {
-        Header: 'Calidad (%)',
+        Header: <div>Calidad<br/>(%)</div>,
         accessor: 'calidad',
         cell: 'renderNumber',
       }, 
       
       { 
-        Header: 'Rel. N2/Liq (m3 std/m3)',
+        Header: <div>Rel. N2/Liq<br/>(m<sup>3</sup> std/m3)</div>,
         accessor: 'relN2Liq',
         cell: 'renderNumber',
       },

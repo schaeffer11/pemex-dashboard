@@ -1273,34 +1273,180 @@ app.get('/getLabTest', async (req, res) => {
   let action = saved ? 'loadSave' : 'loadTransaction'
 
 
-  const map = {
-    TIPO_DE_ANALISIS: { child: 'type' }, 
-    FECHA_DE_MUESTREO: { child: 'fechnaMuesetreo' }, 
-    FECHA_DE_PRUEBA: { child: 'fechaPrueba' }, 
-    COMPANIA: { child: 'compania' }, 
-    PERSONAL_DE_PEMEX_QUE_SUPERVISO: { child: 'superviso' }, 
-    OBSERVACIONES: { child: 'obervaciones' },
-  }
-
-  const mainParent = 'pruebasDeLaboratorio'
-  const innerParent = 'pruebasDeLaboratorioData'
-
   getLabTest(transactionID, action, (data) => {
-    const finalObj = {}
-    data.forEach((d, index) => {
-      d.FECHA_DE_MUESTREO ? d.FECHA_DE_MUESTREO = d.FECHA_DE_MUESTREO.toJSON().slice(0, 10) : null
-      d.FECHA_DE_PRUEBA ? d.FECHA_DE_PRUEBA = d.FECHA_DE_PRUEBA.toJSON().slice(0, 10) : null
-      const innerObj = {}
-      Object.keys(d).forEach(k => {
-        if (map[k]) {
-          const { child } = map[k]
-          objectPath.set(innerObj, child, d[k])
-        }
-      })
-      objectPath.set(innerObj, 'length', data.length)
-      objectPath.set(innerObj, 'index', index)
-      objectPath.push(finalObj, `${mainParent}.${innerParent}`, innerObj)
+    let labIDs = []
+    let outData = []
+
+    data.forEach(i => {
+      if (!labIDs.includes(i.LAB_ID)) {
+        labIDs.push(i.LAB_ID)
+      }
     })
+
+    labIDs.forEach((id, index) => {
+      let subset = data.filter(i => i.LAB_ID === id)
+      console.log(subset)
+      let type
+      if (subset.length > 0) {
+        type = subset[0].TIPO_DE_ANALISIS
+        let i = subset[0]
+
+        if (type === 'caracterizacionFisico') {
+          outData.push({
+            edited: true,
+            index: index,
+            length: labIDs.length,
+            type: type,
+            fechaMuestreo: (i.FECHA_DE_MUESTREO ? i.FECHA_DE_MUESTREO = i.FECHA_DE_MUESTREO.toJSON().slice(0, 10) : null),
+            fechaPrueba : (i.FECHA_DE_PRUEBA ? i.FECHA_DE_PRUEBA = i.FECHA_DE_PRUEBA.toJSON().slice(0, 10) : null),
+            compania: i.COMPANIA,
+            superviso: i.PERSONAL_DE_PEMEX_QUE_SUPERVISO,
+            obervaciones: i.OBSERVACIONES,
+            percentAceite: i.PORENTAJE_DE_ACEITE,
+            percentAgua: i.PORENTAJE_DE_AGUA,
+            percentEmulsion: i.PORENTAJE_DE_EMULSION,
+            percentSolidos: i.PORENTAJE_DE_SOLIDOS,
+            percentAsfaltenos: i.PORENTAJE_DE_ASFALTENOS,
+            percentParafinas: i.PORENTAJE_DE_PARAFINAS,
+            percentResinasAsfalticas: i.PORENTAJE_DE_RESINAS_ASFALTICAS,
+            percentContenidoDeSolidos: i.PORENTAJE_DE_CONTENIDO_DE_SOLIDOS,
+            densityAceite: i.DENSIDAD_DEL_ACEITE,
+            densityAgua: i.DENSIDAD_DEL_AGUA,
+            densityEmulsion: i.DENSIDAD_DE_LA_EMULSION,
+            viscosityAceite: i.VISCOSIDAD_DEL_ACEITE,
+            viscosityEmulsion: i.VISCOSIDAD_DE_LA_EMULSION,
+            phDelAgua: i.PH_DEL_AGUA,
+            salinidadDelAgua: i.SALINIDAD_DEL_AGUA,
+            salinidadDelAceite: i.SALINIDAD_DEL_ACEITE,
+          })
+        }
+        else if (type === 'pruebasDeCompatibilidad') {
+          let table = []
+          subset.forEach(point => {
+            table.push({
+              diseno: point.DISENO,
+              sistema: point.SISTEMA,
+              aceiteDelPozo: point.ACEITE_DEL_POZO,
+              tiempoDeRompimiento: point.TIEMPO_DE_ROMPIMIENTO,
+              separacionDeFases: point.SEPARACION_DE_FASES,
+              solidos: point.SOLIDOS,
+              condicion: point.CONDICION,
+            })
+          })
+
+          outData.push({
+            edited: true,
+            index: index,
+            length: labIDs.length,
+            type: type,
+            fechaMuestreo: (i.FECHA_DE_MUESTREO ? i.FECHA_DE_MUESTREO = i.FECHA_DE_MUESTREO.toJSON().slice(0, 10) : null),
+            fechaPrueba : (i.FECHA_DE_PRUEBA ? i.FECHA_DE_PRUEBA = i.FECHA_DE_PRUEBA.toJSON().slice(0, 10) : null),
+            compania: i.COMPANIA,
+            superviso: i.PERSONAL_DE_PEMEX_QUE_SUPERVISO,
+            obervaciones: i.OBSERVACIONES,
+            compatabilidadTable: table
+          })
+        }
+        else if (type === 'pruebasDeGrabado') {
+          let table = []
+          subset.forEach(point => {
+            table.push({
+              sistemaAcido: point.SISTEMA_ACIDO,
+              tiempoDeContacto: point.TIEMPO_DE_CONTACTO,
+              grabado: point.GRABADO,
+            })
+          })
+          outData.push({
+            edited: true,
+            index: index,
+            length: labIDs.length,
+            type: type,
+            fechaMuestreo: (i.FECHA_DE_MUESTREO ? i.FECHA_DE_MUESTREO = i.FECHA_DE_MUESTREO.toJSON().slice(0, 10) : null),
+            fechaPrueba : (i.FECHA_DE_PRUEBA ? i.FECHA_DE_PRUEBA = i.FECHA_DE_PRUEBA.toJSON().slice(0, 10) : null),
+            compania: i.COMPANIA,
+            superviso: i.PERSONAL_DE_PEMEX_QUE_SUPERVISO,
+            obervaciones: i.OBSERVACIONES,
+            grabadoTable: table
+          })
+        }
+        else if (type === 'pruebasDeSolubilidad') {
+          outData.push({
+            edited: true,
+            index: index,
+            length: labIDs.length,
+            type: type,
+            fechaMuestreo: (i.FECHA_DE_MUESTREO ? i.FECHA_DE_MUESTREO = i.FECHA_DE_MUESTREO.toJSON().slice(0, 10) : null),
+            fechaPrueba : (i.FECHA_DE_PRUEBA ? i.FECHA_DE_PRUEBA = i.FECHA_DE_PRUEBA.toJSON().slice(0, 10) : null),
+            compania: i.COMPANIA,
+            superviso: i.PERSONAL_DE_PEMEX_QUE_SUPERVISO,
+            obervaciones: i.OBSERVACIONES,
+            tipoDeMuestra: i.TIPO_DE_MUESTRA,
+            pesoDeLaMuestra: i.PESO_DE_LA_MUESTRA,
+            tipoDeSistemaEmpleado: i.TIPO_DE_SISTEMA_QUIMICO,
+            pesoDeLaMuestraFinal: i.PESO_FINAL_DE_LA_MUESTRA,
+            solubilidad: i.SOLUBILIDAD,
+          })
+        }
+        else if (type === 'pruebasGelDeFractura') {
+          outData.push({
+            edited: true,
+            index: index,
+            length: labIDs.length,
+            type: type,
+            fechaMuestreo: (i.FECHA_DE_MUESTREO ? i.FECHA_DE_MUESTREO = i.FECHA_DE_MUESTREO.toJSON().slice(0, 10) : null),
+            fechaPrueba : (i.FECHA_DE_PRUEBA ? i.FECHA_DE_PRUEBA = i.FECHA_DE_PRUEBA.toJSON().slice(0, 10) : null),
+            compania: i.COMPANIA,
+            superviso: i.PERSONAL_DE_PEMEX_QUE_SUPERVISO,
+            obervaciones: i.OBSERVACIONES,
+            hidratacionDelFluido: i.HIDRATACION,
+            tiempoDeActivacion: i.TIEMPO_DE_ACTIVACION_DEL_GEL,
+            determinacionDePh: i.DETERMINACION_DE_PH,
+            tiempoDeRompimiento: i.TIEMPO_DE_ROMPIMIENTO_GEL,
+            dosificacionDeQuebradors: i.DOSIFICATION_DE_QUEBRADORES,
+            viscosidadDelGelDeFractura: i.VISCOSIDAD_DEL_GEL_DE_FRACTURA,
+          })
+        }
+        else if (type === 'pruebasParaApuntalante') {
+          outData.push({
+            edited: true,
+            index: index,
+            length: labIDs.length,
+            type: type,
+            fechaMuestreo: (i.FECHA_DE_MUESTREO ? i.FECHA_DE_MUESTREO = i.FECHA_DE_MUESTREO.toJSON().slice(0, 10) : null),
+            fechaPrueba : (i.FECHA_DE_PRUEBA ? i.FECHA_DE_PRUEBA = i.FECHA_DE_PRUEBA.toJSON().slice(0, 10) : null),
+            compania: i.COMPANIA,
+            superviso: i.PERSONAL_DE_PEMEX_QUE_SUPERVISO,
+            obervaciones: i.OBSERVACIONES,
+            esfericidad: i.ESFERICIDAD,
+            redondez: i.REDONDEZ,
+            resistenciaCompresion: i.RESISTENCIA_A_LA_COMPRESION,
+            malla: i.MALLA, 
+            aglutinamiento: i.AGLUTINAMIENTO,
+            turbidez: i.TURBIDEZ,
+            solubilidad: i.SOLUBILIDAD_APUNTALANTE
+          })
+        }
+      }
+    })
+    let finalObj = {
+      pruebasDeLaboratorio: {
+        pruebasDeLaboratorioData: outData
+      }
+    }
+    // data.forEach((d, index) => {
+    //   d.FECHA_DE_MUESTREO ? d.FECHA_DE_MUESTREO = d.FECHA_DE_MUESTREO.toJSON().slice(0, 10) : null
+    //   d.FECHA_DE_PRUEBA ? d.FECHA_DE_PRUEBA = d.FECHA_DE_PRUEBA.toJSON().slice(0, 10) : null
+    //   const innerObj = {}
+    //   Object.keys(d).forEach(k => {
+    //     if (map[k]) {
+    //       const { child } = map[k]
+    //       objectPath.set(innerObj, child, d[k])
+    //     }
+    //   })
+    //   objectPath.set(innerObj, 'length', data.length)
+    //   objectPath.set(innerObj, 'index', index)
+    //   objectPath.push(finalObj, `${mainParent}.${innerParent}`, innerObj)
+    // })
 
     res.json(finalObj)
   })
