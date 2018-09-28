@@ -79,6 +79,13 @@ app.post('/testing', (req, res) => {
 })
 
 
+app.get('/getSubmittedFieldWellMapping', (req, res) => {
+    connection.query(`SELECT * FROM FieldWellMapping WHERE HAS_DATA = 1`, (err, results) => {
+      res.json(results)
+    })
+})
+
+
 app.get('/getFieldWellMapping', (req, res) => {
     connection.query(`SELECT * FROM FieldWellMapping`, (err, results) => {
       res.json(results)

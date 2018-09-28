@@ -157,7 +157,14 @@ let columns = [
     let pvtOptions = []
 
     if (campo && fieldWellOptions.length > 0) {
-      pvtOptions = fieldWellOptions.filter(i => i.FIELD_FORMACION_ID === parseInt(campo)).map(i => ({ label: i.WELL_NAME, value: i.WELL_FORMACION_ID}))
+      let wellSubset = fieldWellOptions.filter(i => i.FIELD_FORMACION_ID === parseInt(campo))
+      let usedWells = []
+      wellSubset.forEach(i => {
+        if (!usedWells.includes(i.WELL_FORMACION_ID)) {
+          usedWells.push(i.WELL_FORMACION_ID)
+          pvtOptions.push({ label: i.WELL_NAME, value: i.WELL_FORMACION_ID})
+        }
+      })
     }
 
     return (
@@ -367,16 +374,6 @@ const validate = values => {
       })
     }
 
-    /* Form has been removed
-    if(!values.intervalos){
-            errors.intervalos = {message: "Esta forma no puede estar vacia"}
-        }else {
-            values.intervalos.forEach((row, index) => {
-            if(row.espesor.toString().trim() == '' || row.cima.trim() == '' || row.base.trim() == ''){
-              errors.intervalos = {message: "Ningun campo puede estar vacio."}
-            }
-        })
-    }*/
     return errors
 }
 

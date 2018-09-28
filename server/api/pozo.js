@@ -1508,19 +1508,24 @@ export const create = async (body, action, cb) => {
                                                               })
                                                             }
 
-                                                            connection.commit(function(err) {
-                                                                if (err) {
-                                                                  cb(err)
-                                                                  return connection.rollback(function() {
-                                                                    console.log('something went terrible')
-                                                                    throw err;
-                                                                  });
-                                                                }
-                                                                console.log('success!');
-                                                                var log = 'Post ' + results + ' added';
-                                                                console.log(log)
-                                                                cb(null)
+                                                            connection.query(action === 'save' ? DUMMY_QUERY : `UPDATE FieldWellMapping set HAS_DATA = 1 WHERE WELL_FORMACION_ID = ?`, [wellFormacionID], (err, results) => {
+                                                               
+                                                                connection.commit(function(err) {
+                                                                    if (err) {
+                                                                      cb(err)
+                                                                      return connection.rollback(function() {
+                                                                        console.log('something went terrible')
+                                                                        throw err;
+                                                                      });
+                                                                    }
+                                                                    console.log('success!');
+                                                                    var log = 'Post ' + results + ' added';
+                                                                    console.log(log)
+                                                                    cb(null)
+                                                                })
+
                                                             })
+
                                                           })
                                                         })
                                                       })
