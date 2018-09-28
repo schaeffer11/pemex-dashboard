@@ -21,7 +21,6 @@ let layerColumns = [
   }, {
     Header: 'Interval',
     accessor: 'interval',
-    // cell: 'renderNumber',
   }, { 
     Header: <div>Cima<br></br>(md)</div>,
     accessor: 'cimaMD',
@@ -32,7 +31,7 @@ let layerColumns = [
     cell: 'renderNumber',
   },
   {
-    Header: 'Espesor (m)',
+    Header: <div>Espesor<br></br>(md)</div>,
     accessor: 'espesor',
   }, { 
     Header: <div>V arc.<br></br>(%)</div>,

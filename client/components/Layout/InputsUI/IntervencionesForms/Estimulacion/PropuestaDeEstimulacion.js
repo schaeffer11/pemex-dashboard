@@ -139,6 +139,8 @@ import { setCedulaData, setIntervalo, setLongitudDeIntervalo, setVolAparejo, set
     let { setVolumenPrecolchonN2, setVolumenSistemaNoReativo, setVolumenSistemaReactivo, setVolumenSistemaDivergente, setVolumenDesplazamientoLiquido, setVolumenDesplazamientoN2, setVolumenTotalDeLiquido, formData } = this.props
     formData = formData.toJS()
     let { volumenPrecolchonN2, volumenSistemaNoReativo, volumenSistemaReactivo, volumenSistemaDivergente, volumenDesplazamientoLiquido, volumenDesplazamientoN2, volumenTotalDeLiquido } = formData
+
+
     
     return (
       <div className='detalles-form' >
@@ -229,8 +231,8 @@ import { setCedulaData, setIntervalo, setLongitudDeIntervalo, setVolAparejo, set
     let { cedulaData } = formData
 
     const intervaloOptions = intervalos.map(elem =>({
-      value: `${elem.baseMD}-${elem.cimaMD}`,
-      label: `${elem.baseMD}-${elem.cimaMD}`,
+      value: `${elem.cimaMD}-${elem.baseMD}`,
+      label: `${elem.cimaMD}-${elem.baseMD}`,
     }))
 
     const sistemaOptions = [
@@ -298,50 +300,56 @@ import { setCedulaData, setIntervalo, setLongitudDeIntervalo, setVolAparejo, set
         }
       },
       {
-        Header: 'Vol. Liq. (m3)',
-        accessor: 'volLiquid',
-        cell: 'renderNumber',
-      }, { 
-      Header: 'Nombre Comercial',
+        Header: 'Nombre Comercial',
         accessor: 'nombreComercial',
-        cell: 'renderNumber',
-      }, { 
-        Header: 'Gasto N2 (m3/min)',
-        accessor: 'gastoN2',
-        cell: 'renderNumber',
-      }, { 
-        Header: 'Gasto Liquido (bpm)',
-        accessor: 'gastoLiqudo',
-        cell: 'renderNumber',
-      }, { 
-        Header: 'Gasto en fondo (bpm)',
-        accessor: 'gastoEnFondo',
-        cell: 'renderNumber',
-      }, { 
-        Header: 'Calidad (%)',
-        accessor: 'calidad',
-        cell: 'renderNumber',
-      }, { 
-        Header: 'Vol. N2 (m3 std)',
-        accessor: 'volN2',
-        cell: 'renderNumber',
-      }, { 
-        Header: 'Vol. Liq. Acum. (m3)',
-        accessor: 'volLiquidoAcum',
-        cell: 'renderNumber',
-      }, { 
-        Header: 'Vol. N2 Acum. (m3 std)',
-        accessor: 'volN2Acum',
-        cell: 'renderNumber',
-      }, { 
-        Header: 'Rel. N2/Liq (m3 std/m3)',
-        accessor: 'relN2Liq',
-        cell: 'renderNumber',
-      }, { 
+        cell: 'renderEditable',
+      },
+      { 
         Header: 'Tiempo (min)',
         accessor: 'tiempo',
         cell: 'renderNumber',
-      }
+      },
+      { 
+        Header: 'Gasto Liquido (bpm)',
+        accessor: 'gastoLiqudo',
+        cell: 'renderNumber',
+      },
+      { 
+        Header: 'Gasto en fondo (bpm)',
+        accessor: 'gastoEnFondo',
+        cell: 'renderNumber',
+      },
+      { 
+        Header: 'Gasto N2 (m3/min)',
+        accessor: 'gastoN2',
+        cell: 'renderNumber',
+      }, 
+      {
+        Header: 'Vol. Liq. (m3)',
+        accessor: 'volLiquid',
+      },
+      { 
+        Header: 'Vol. N2 (m3 std)',
+        accessor: 'volN2',
+      },
+      { 
+        Header: 'Vol. Liq. Acum. (m3)',
+        accessor: 'volLiquidoAcum',
+      },
+      { 
+        Header: 'Vol. N2 Acum. (m3 std)',
+        accessor: 'volN2Acum',
+      },
+      {
+        Header: 'Calidad (%)',
+        accessor: 'calidad',
+        cell: 'renderNumber',
+      },
+       {
+        Header: 'Rel. N2/Liq (m3 std/m3)',
+        accessor: 'relN2Liq',
+        cell: 'renderNumber',
+      },
     ]
 
     return (
