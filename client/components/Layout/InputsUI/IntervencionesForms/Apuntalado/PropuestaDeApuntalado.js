@@ -406,42 +406,6 @@ import { setCedulaData, setModuloYoungArena, setModuloYoungLutitas, setRelacPois
 const validate = values => {
     const errors = {}
 
-    if(!values.intervalo){
-      errors.intervalo = {message: "Este campo no puede estar vacio"}
-    }
-
-    if(!values.longitudDeIntervalo){
-      errors.longitudDeIntervalo = {message: "Este campo no puede estar vacio"}
-    }
-
-    if(!values.longitudDeIntervalo){
-      errors.longitudDeIntervalo = {message: "Este campo no puede estar vacio"}
-    }
-
-    if(!values.capacidadTotalDelPozo){
-      errors.capacidadTotalDelPozo = {message: "Este campo no puede estar vacio"}
-    }
-
-    if(!values.volumenPrecolchonN2){
-      errors.volumenPrecolchonN2 = {message: "Este campo no puede estar vacio"}
-    }
-
-    if(!values.volumenDeApuntalante){
-      errors.volumenDeApuntalante = {message: "Este campo no puede estar vacio"}
-    }
-
-    if(!values.volumenDeGelDeFractura){
-      errors.volumenDeGelDeFractura = {message: "Este campo no puede estar vacio"}
-    }
-
-    if(!values.volumenDesplazamiento){
-      errors.volumenDesplazamiento = {message: "Este campo no puede estar vacio"}
-    }
-
-    if(!values.volumenTotalDeLiquido){
-      errors.volumenTotalDeLiquido = {message: "Este campo no puede estar vacio"}
-    }
-
     if(!values.moduloYoungArena){
       errors.moduloYoungArena = {message: "Este campo no puede estar vacio"}
     }
@@ -474,7 +438,7 @@ const validate = values => {
       errors.cedulaData = {message: "Esta forma no puede estar vacia"}
     }else {
       values.cedulaData.forEach((row, index) => {
-        let hasEmpty = Object.values(row).find((value) => { return value.toString().trim() == '' })
+        let hasEmpty = Object.values(row).find((value) => { return value === null || value.toString().trim() == '' })
         if(hasEmpty !== undefined){
             errors.cedulaData = {message: "Ningun campo puede estar vacio."}
         }

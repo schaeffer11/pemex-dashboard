@@ -182,9 +182,13 @@ import { setCedulaData, setIntervalo, setLongitudDeIntervalo, setVolAparejo, set
 
     cedulaData[0].length = 2
 
-    setCedulaData([...cedulaData, {index: cedulaData.length, type: '', fechaMuestreo: '', fechaPrueba: '', compania: '', superviso: '', length: cedulaData.length + 1, 'edited': false}])
+    setCedulaData([...cedulaData, {index: cedulaData.length, etapa: '', intervalo: '', nombreComercial: '', sistema: '', volLiquid: '', gastoN2: '', gastoLiqudo: '', gastoEnFondo: '', calidad: '', volN2: '', volLiquidoAcum: '', volN2Acum: '', relN2Liq: '', tiempo: '', length: cedulaData.length + 1, 'edited': false}])
   }
 
+
+
+
+ 
 
   deleteRow(state, rowInfo, column, instance) {
     let { formData, setCedulaData } = this.props
@@ -237,7 +241,7 @@ import { setCedulaData, setIntervalo, setLongitudDeIntervalo, setVolAparejo, set
       { value: 'desplasamiento', label: 'Desplasamiento' },
     ]
 
-    const objectTemplate = {}
+    const objectTemplate = {etapa: '', intervalo: '', sistema: '', volLiquid: '', gastoN2: '', gastoLiqudo: '', gastoEnFondo: '', calidad: '', volN2: '', volLiquidoAcum: '', volN2Acum: '', relN2Liq: '', tiempo: '' }
     const columns = [
       {
         Header: '',
@@ -296,6 +300,10 @@ import { setCedulaData, setIntervalo, setLongitudDeIntervalo, setVolAparejo, set
       {
         Header: 'Vol. Liq. (m3)',
         accessor: 'volLiquid',
+        cell: 'renderNumber',
+      }, { 
+      Header: 'Nombre Comercial',
+        accessor: 'nombreComercial',
         cell: 'renderNumber',
       }, { 
         Header: 'Gasto N2 (m3/min)',
@@ -388,22 +396,6 @@ import { setCedulaData, setIntervalo, setLongitudDeIntervalo, setVolAparejo, set
 const validate = values => {
     const errors = {}
 
-    if(!values.intervalo ){
-       errors.intervalo = {message: "Este campo no puede estar vacio"}
-    }
-
-    if(!values.longitudDeIntervalo ){
-       errors.longitudDeIntervalo = {message: "Este campo no puede estar vacio"}
-    }
-
-    if(!values.volAparejo ){
-       errors.volAparejo = {message: "Este campo no puede estar vacio"}
-    }
-
-    if(!values.capacidadTotalDelPozo ){
-       errors.capacidadTotalDelPozo = {message: "Este campo no puede estar vacio"}
-    }
-
     if(!values.volumenPrecolchonN2 ){
        errors.volumenPrecolchonN2 = {message: "Este campo no puede estar vacio"}
     }
@@ -436,7 +428,7 @@ const validate = values => {
       errors.cedulaData = {message: "Esta forma no puede estar vacia"}
     }else {
       values.cedulaData.forEach((row, index) => {
-        let hasEmpty = Object.values(row).find((value) => { return value.toString().trim() == '' })
+        let hasEmpty = Object.values(row).find((value) => {  return value === null || value.toString().trim() == '' })
         if(hasEmpty !== undefined){
             errors.cedulaData = {message: "Ningun campo puede estar vacio."}
         }

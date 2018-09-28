@@ -262,9 +262,7 @@ app.get('/getWell', async (req, res) => {
     SUBDIRECCION: { parent: 'fichaTecnicaDelPozoHighLevel', child: 'subdireccion'},
     ACTIVO: { parent: 'fichaTecnicaDelPozoHighLevel', child: 'activo'},
     FORMACION: { parent: 'fichaTecnicaDelPozoHighLevel', child: 'formacion'},
-    INTERVALO_PRODUCTOR: { parent: 'fichaTecnicaDelPozo', child: 'intervaloProductor'},
     ESPESOR_BRUTO: { parent: 'fichaTecnicaDelPozo', child: 'espesorBruto'},
-    ESPESOR_NETO: { parent: 'fichaTecnicaDelPozo', child: 'espesorNeto'},
     CALIZA: { parent: 'fichaTecnicaDelPozo', child: 'caliza'},
     DOLOMIA: { parent: 'fichaTecnicaDelPozo', child: 'dolomia'},
     ARCILLA: { parent: 'fichaTecnicaDelPozo', child: 'arcilla'},
@@ -369,8 +367,7 @@ app.get('/getLayer', async (req, res) => {
     INTERVALO: { child: 'interval' },
     CIMA_MD: { child: 'cimaMD'},
     BASE_MD: { child: 'baseMD'},
-    CIMA_MV: { child: 'cimaMV'},
-    BASE_MV: { child: 'baseMV' },
+    ESPESOR: { child: 'espesor'},
     V_ARC: { child: 'vArc'},
     POROSITY: { child: 'porosity'},
     SW: { child: 'sw'},
@@ -1069,10 +1066,6 @@ app.get('/getInterventionEstimulacion', async (req, res) => {
 
 
   const map = {
-    INTERVALO: { parent: 'propuestaEstimulacion', child: 'intervalo' }, 
-    LONGITUD_DE_INTERVALO_A_TRATAR: { parent: 'propuestaEstimulacion', child: 'longitudDeIntervalo' }, 
-    VOLUME_APAREJO: { parent: 'propuestaEstimulacion', child: 'volAparejo' }, 
-    CAPACIDAD_TOTAL_DEL_POZO: { parent: 'propuestaEstimulacion', child: 'capacidadTotalDelPozo' }, 
     VOLUMEN_PRECOLCHON_N2: { parent: 'propuestaEstimulacion', child: 'volumenPrecolchonN2' },
     VOLUMEN_SISTEMA_NO_REACTIVO: { parent: 'propuestaEstimulacion', child: 'volumenSistemaNoReativo' }, 
     VOLUMEN_SISTEM_REACTIVO: { parent: 'propuestaEstimulacion', child: 'volumenSistemaReactivo' }, 
@@ -1141,16 +1134,6 @@ app.get('/getInterventionAcido', async (req, res) => {
 
 
   const map = {
-    INTERVALO: { parent: 'propuestaAcido', child: 'intervalo' }, 
-    LONGITUD_DE_INTERVALO_A_TRATAR: { parent: 'propuestaAcido', child: 'longitudDeIntervalo' }, 
-    VOLUME_APAREJO: { parent: 'propuestaAcido', child: 'volAparejo' },
-    CAPACIDAD_TOTAL_DEL_POZO: { parent: 'propuestaAcido', child: 'capacidadTotalDelPozo' }, 
-    VOLUMEN_PRECOLCHON_N2: { parent: 'propuestaAcido', child: 'volumenPrecolchonN2' }, 
-    VOLUMEN_SISTEMA_NO_REACTIVO: { parent: 'propuestaAcido', child: 'volumenSistemaNoReativo' }, 
-    VOLUMEN_SISTEM_REACTIVO: { parent: 'propuestaAcido', child: 'volumenSistemaReactivo' }, 
-    VOLUMEN_SISTEMA_DIVERGENTE: { parent: 'propuestaAcido', child: 'volumenSistemaDivergente' },
-    VOLUMEN_DISPLAZAMIENTO_LIQUIDO: { parent: 'propuestaAcido', child: 'volumenDesplazamientoLiquido' }, 
-    VOLUMEN_DESPLAZAMIENTO_GEL_LINEAL: { parent: 'propuestaAcido', child: 'volumenDesplazamientoGelLineal' }, 
     MODULO_YOUNG_ARENA: { parent: 'propuestaAcido', child: 'moduloYoungArena' },
     MODULO_YOUNG_LUTITAS: { parent: 'propuestaAcido', child: 'moduloYoungLutitas' }, 
     RELAC_POISSON_ARENA: { parent: 'propuestaAcido', child: 'relacPoissonArena' }, 
@@ -1216,15 +1199,6 @@ app.get('/getInterventionApuntalado', async (req, res) => {
 
 
   const map = {
-    INTERVALO: { parent: 'propuestaApuntalado', child: 'intervalo' }, 
-    LONGITUD_DE_INTERVALO_A_TRATAR: { parent: 'propuestaApuntalado', child: 'longitudDeIntervalo' }, 
-    VOLUME_APAREJO: { parent: 'propuestaApuntalado', child: 'volAparejo' },
-    CAPACIDAD_TOTAL_DEL_POZO: { parent: 'propuestaApuntalado', child: 'capacidadTotalDelPozo' }, 
-    VOLUMEN_PRECOLCHON_N2: { parent: 'propuestaApuntalado', child: 'volumenPrecolchonN2' }, 
-    VOLUMEN_DE_APUNTALANTE: { parent: 'propuestaApuntalado', child: 'volumenDeApuntalante' }, 
-    VOLUMEN_DE_GEL_DE_FRACTURA: { parent: 'propuestaApuntalado', child: 'volumenDeGelDeFractura' }, 
-    VOLUMEN_DESPLAZAMIENTO: { parent: 'propuestaApuntalado', child: 'volumenDesplazamiento' },
-    VOLUMEN_TOTAL_DE_LIQUIDO: { parent: 'propuestaApuntalado', child: 'volumenTotalDeLiquido' }, 
     MODULO_YOUNG_ARENA: { parent: 'propuestaApuntalado', child: 'moduloYoungArena' },
     MODULO_YOUNG_LUTITAS: { parent: 'propuestaApuntalado', child: 'moduloYoungLutitas' }, 
     RELAC_POISSON_ARENA: { parent: 'propuestaApuntalado', child: 'relacPoissonArena' }, 
@@ -1326,7 +1300,9 @@ app.get('/getCedulaEstimulacion', async (req, res) => {
 
   const map = {
     ETAPA: { child: 'etapa' }, 
+    INTERVALO: { child: 'intervalo'},
     SISTEMA: { child: 'sistema' }, 
+    NOMBRE_COMERCIAL: { child: 'nombreComercial'},
     TIPO_DE_APUNTALANTE: { child: 'tipoDeApuntalante' }, 
     CONCENTRACION_DE_APUNTALANTE: { child: 'concentraciDeApuntalante' }, 
     VOL_LIQUID: { child: 'volLiquid' }, 
@@ -1359,10 +1335,12 @@ app.get('/getCedulaEstimulacion', async (req, res) => {
         objectPath.set(innerObj, 'index', index)
         objectPath.push(finalObj, `${mainParent}.${innerParent}`, innerObj)
       })
+      finalObj['propuestaEstimulacion'].propuestaCompany = data[0].COMPANIA
     }
     else {
       finalObj = {
         'propuestaEstimulacion': {
+          "propuestaCompany": '',
           "cedulaData": [
             {}
           ]
@@ -1382,7 +1360,9 @@ app.get('/getCedulaAcido', async (req, res) => {
 
   const map = {
     ETAPA: { child: 'etapa' }, 
+    INTERVALO: { child: 'intervalo' },
     SISTEMA: { child: 'sistema' }, 
+    NOMBRE_COMERCIAL: { child: 'nombreComercial' },
     TIPO_DE_APUNTALANTE: { child: 'tipoDeApuntalante' }, 
     CONCENTRACION_DE_APUNTALANTE: { child: 'concentraciDeApuntalante' }, 
     VOL_LIQUID: { child: 'volLiquid' }, 
@@ -1415,10 +1395,12 @@ app.get('/getCedulaAcido', async (req, res) => {
         objectPath.set(innerObj, 'index', index)
         objectPath.push(finalObj, `${mainParent}.${innerParent}`, innerObj)
       })
+      finalObj['propuestaAcido'].propuestaCompany = data[0].COMPANIA
     }
     else {
       finalObj = {
         'propuestaAcido': {
+          "propuestaCompany": '',
           "cedulaData": [
             {}
           ]
@@ -1436,11 +1418,11 @@ app.get('/getCedulaApuntalado', async (req, res) => {
 
   let action = saved ? 'loadSave' : 'loadTransaction'
 
-
-
   const map = {
     ETAPA: { child: 'etapa' }, 
+    INTERVALO: { child: 'intervalo' },
     SISTEMA: { child: 'sistema' }, 
+    NOMBRE_COMERCIAL: { child: 'nombreComercial' },
     TIPO_DE_APUNTALANTE: { child: 'tipoDeApuntalante' }, 
     CONCENTRACION_DE_APUNTALANTE: { child: 'concentraciDeApuntalante' }, 
     VOL_LIQUID: { child: 'volLiquid' }, 
@@ -1473,56 +1455,12 @@ app.get('/getCedulaApuntalado', async (req, res) => {
         objectPath.set(innerObj, 'index', index)
         objectPath.push(finalObj, `${mainParent}.${innerParent}`, innerObj)
       })
+      finalObj['propuestaApuntalado'].propuestaCompany = data[0].COMPANIA
     }
     else {
       finalObj = {
         'propuestaApuntalado': {
-          "cedulaData": [
-            {}
-          ]
-        }
-      }
-    }
-
-    res.json(finalObj)
-  })
-})
-
-
-app.get('/getCedulaAcido', async (req, res) => {
-  let { transactionID, saved } = req.query
-
-  let action = saved ? 'loadSave' : 'loadTransaction'
-
-  const map = {
-    ETAPA: { child: 'etapa' }, 
-    SISTEMA: { child: 'sistema' }, 
-    TIPO_DE_APUNTALANTE: { child: 'tipoDeApuntalante' }, 
-
-  }
-
-  const mainParent = 'propuestaAcido'
-  const innerParent = 'cedulaData'
-
-  getCedulaAcido(transactionID, action, (data) => {
-    let finalObj = {}
-    if (data && data.length > 0) {
-      data.forEach((d, index) => {
-        const innerObj = {}
-        Object.keys(d).forEach(k => {
-          if (map[k]) {
-            const { child } = map[k]
-            objectPath.set(innerObj, child, d[k])
-          }
-        })
-        objectPath.set(innerObj, 'length', data.length)
-        objectPath.set(innerObj, 'index', index)
-        objectPath.push(finalObj, `${mainParent}.${innerParent}`, innerObj)
-      })
-    }
-    else {
-      finalObj = {
-        'propuestaAcido': {
+          "propuestaCompany": '',
           "cedulaData": [
             {}
           ]

@@ -609,8 +609,6 @@ import { setFichaTecnicaDelCampo, setFichaTecnicaDelPozo, setEvaluacionPetrofisi
     let loadFunction =loadFunctions[this.state.currentStep]
     
 
-    console.log('fieldOptions', fieldWellOptions)
-
     return (
        <div className={`multistep-form ${submitting} ${errorClass}`}>
         <div className="subtabs">

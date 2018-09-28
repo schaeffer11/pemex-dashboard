@@ -287,8 +287,8 @@ const validate = values => {
        errors.volumenDeEspacioAnular = {message: "Este campo no puede estar vacio"}
     }
 
-    if(!values.imgBoreDiagramURL){
-      errors.imgBoreDiagramURL = {message: "Ningun campo puede estar vacio."}
+    if(!values.imgURL){
+      errors.imgURL = {message: "Ningun campo puede estar vacio."}
     }
 
     return errors

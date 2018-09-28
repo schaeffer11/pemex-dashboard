@@ -27,17 +27,13 @@ let layerColumns = [
     accessor: 'cimaMD',
     cell: 'renderNumber',
   }, {
-    Header: 'Base (md)',
+    Header: <div>Base<br></br>(md)</div>,
     accessor: 'baseMD',
     cell: 'renderNumber',
   },
   {
     Header: 'Espesor (m)',
     accessor: 'espesor',
-  }, { 
-    Header: <div>Base<br></br>(md)</div>,
-    accessor: 'baseMD',
-    cell: 'renderNumber',
   }, { 
     Header: <div>V arc.<br></br>(%)</div>,
     accessor: 'vArc',
