@@ -102,7 +102,21 @@ app.get('/getAllSaves', (req, res) => {
 })
 
 
+app.get('/getWellTransactions', (req, res) => {
+  let { wellID } = req.query
 
+  connection.query(`SELECT * FROM Transactions t JOIN Users u ON t.USER_ID = u.id WHERE WELL_FORMACION_ID = ? ORDER BY INSERT_TIME DESC`,
+      [wellID], (err, data) => {
+
+        data = data.map(i => ({
+          user: i.username,
+          date: i.INSERT_TIME,
+          id: i.TRANSACTION_ID
+        }))
+
+        res.json(data)
+    })
+})
 
 
 app.get('/getSave', (req, res) => {
