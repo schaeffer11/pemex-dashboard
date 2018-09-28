@@ -102,7 +102,7 @@ import { connect } from 'react-redux'
         <input type='file' accept="image/*"  onChange={(e) => this.handleFileUpload(e, setEvidenceSimulationAcidoImgURL)} multiple></input>
         {imgURL ? <img className='img-preview' src={imgURL}></img> : null }
           { this.state.errors.evidenceSimulationAcidoImgURL && this.state.errors.evidenceSimulationAcidoImgURL.checked &&
-          <div className="error">{this.state.errors.evidenceSimulationAcidoImgURL.message}</div>
+          <div className="error">{this.state.errors.e.message}</div>
           }
       </div>
     )

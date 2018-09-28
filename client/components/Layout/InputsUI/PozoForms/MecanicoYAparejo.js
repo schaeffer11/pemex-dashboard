@@ -49,26 +49,24 @@ let tratamientoPorOptions = [
   }
 
   containsErrors(){
-    let {setChecked, formData} = this.props
-    formData = formData.toJS()
+        let foundErrors = false
+        let errors = Object.assign({}, this.state.errors);
+        let checked = this.props.formData.get('checked')
 
-    if(formData.checked.length != this.state.checked.length){
-      this.setState({
-        checked: formData.checked
-      }) 
-    }
- 
-    let foundErrors = false
-    for (const key of Object.keys(this.state.errors)) {
-      if(this.state.errors[key].checked)
-        foundErrors = true
-    }
+        checked = checked ? checked.toJS() : []
+        checked.forEach((checked) => {
+            if(errors[checked]){
+                errors[checked].checked = true
+                foundErrors = true
+            }
+        })
 
-    if(foundErrors !== this.state.containsErrors){
-      this.setState({
-        containsErrors: foundErrors
-      })
-    }
+        if(foundErrors !== this.state.containsErrors){
+            this.setState({
+                errors: errors,
+                containsErrors: foundErrors
+            })
+        }
 
   }
 

@@ -55,8 +55,10 @@ const grabadoOptions = [
 @autobind class PruebasDeLaboratorioExtra extends Component {
   constructor(props) {
     super(props)
-    this.state = { 
-
+    this.state = {
+        containsErrors: false,
+        errors: [],
+        checked: []
     }
 
     let { setPruebasDeLaboratorioData, pruebasDeLaboratorio } = props
