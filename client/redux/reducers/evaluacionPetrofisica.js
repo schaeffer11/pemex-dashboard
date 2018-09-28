@@ -1,13 +1,14 @@
 import { Map, fromJS } from 'immutable'
 
-const initialState = Map({ 
+const initialState = fromJS({ 
     layerData: [{
         index: 0,
-        interval: '',
+        interval: 1,
         cimaMD: '',
         baseMD: '',
-        cimaMV: '',
-        baseMV: '',
+        espesor: 0,
+        // cimaMV: '',
+        // baseMV: '',
         vArc: '',
         porosity: '',
         sw: '',

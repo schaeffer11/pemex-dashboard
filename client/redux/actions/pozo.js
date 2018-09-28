@@ -12,44 +12,14 @@ export const setChecked = (value, form)  => ({
    value: value
 }) 
 
-//FichaTecnicaDelPozo
-export const setIntervaloProductor = value => ({ type: 'set_intervaloProductor', value})
-export const setEspesorBruto = value => ({ type: 'set_espesorBruto', value})
-export const setEspesorNeto = value => ({ type: 'set_espesorNeto', value})
-export const setCaliza = value => ({ type: 'set_caliza', value})
-export const setDolomia = value => ({ type: 'set_dolomia', value})
-export const setArcilla = value => ({ type: 'set_arcilla', value})
-export const setPorosidad = value => ({ type: 'set_porosidad', value})
-export const setPermeabilidad = value => ({ type: 'set_permeabilidad', value})
-export const setSw = value => ({ type: 'set_sw', value})
-export const setCaa = value => ({ type: 'set_caa', value})
-export const setCga = value => ({ type: 'set_cga', value})
-export const setTipoDePozo = value => ({ type: 'set_tipoDePozo', value})
-export const setPwsFecha = value => ({ type: 'set_pwsFecha', value})
-export const setPwfFecha = value => ({ type: 'set_pwfFecha', value})
-export const setDeltaPPerMes = value => ({ type: 'set_deltaPPerMes', value})
-export const setTyac = value => ({ type: 'set_tyac', value})
-export const setPvt = value => ({ type: 'set_pvt', value})
-export const setAparejoDeProduccion = value => ({ type: 'set_aparejoDeProduccion', value})
-export const setProfEmpacador = value => ({ type: 'set_profEmpacador', value})
-export const setProfSensorPYT = value => ({ type: 'set_profSensorPYT', value})
-export const setTipoDeSap = value => ({ type: 'set_tipoDeSap', value})
-export const setHistorialIntervencionesData = value => ({ type: 'set_historialIntervencionesData', value})
-export const setIntervalos = value => ({
-  type: 'set_intervalos', 
-  value: value.map(elem => {
-    elem.espesor = elem.base - elem.cima
-    return elem
-  })
-})
-export const setFichaTecnicaDelPozo = value => ({ type: 'set_fichaTecnicaDelPozo', value})
-
 //FichaTecnicaDelCampo
 export const setDescubrimientoField = value => ({ type: 'set_descubrimientoField', value})
 export const setFechaDeExplotacionField = value => ({ type: 'set_fechaDeExplotacionField', value})
 export const setNumeroDePozosOperandoField = value => ({ type: 'set_numeroDePozosOperandoField', value})
 export const setPInicialAnoField = value => ({ type: 'set_pInicialAnoField', value})
 export const setPActualFechaField = value => ({ type: 'set_pActualFechaField', value})
+export const setPInicialField = value => ({ type: 'set_pInicialField', value})
+export const setPActualField = value => ({ type: 'set_pActualField', value})
 export const setDpPerAnoField = value => ({ type: 'set_dpPerAnoField', value})
 export const setTyacField = value => ({ type: 'set_tyacField', value})
 export const setPrField = value => ({ type: 'set_prField', value})
@@ -81,6 +51,40 @@ export const setCo2Field = value => ({ type: 'set_co2Field', value})
 export const setN2Field = value => ({ type: 'set_n2Field', value})
 export const setFichaTecnicaDelCampo = value => ({ type: 'set_fichaTecnicaDelCampo', value})
 
+
+//FichaTecnicaDelPozo
+export const setIntervaloProductor = value => ({ type: 'set_intervaloProductor', value})
+export const setEspesorBruto = value => ({ type: 'set_espesorBruto', value})
+export const setEspesorNeto = value => ({ type: 'set_espesorNeto', value})
+export const setCaliza = value => ({ type: 'set_caliza', value})
+export const setDolomia = value => ({ type: 'set_dolomia', value})
+export const setArcilla = value => ({ type: 'set_arcilla', value})
+export const setPorosidad = value => ({ type: 'set_porosidad', value})
+export const setPermeabilidad = value => ({ type: 'set_permeabilidad', value})
+export const setSw = value => ({ type: 'set_sw', value})
+export const setCaa = value => ({ type: 'set_caa', value})
+export const setCga = value => ({ type: 'set_cga', value})
+export const setTipoDePozo = value => ({ type: 'set_tipoDePozo', value})
+export const setPwsFecha = value => ({ type: 'set_pwsFecha', value})
+export const setPwfFecha = value => ({ type: 'set_pwfFecha', value})
+export const setPws = value => ({ type: 'set_pws', value}) 
+export const setPwf = value => ({ type: 'set_pwf', value}) 
+export const setDeltaPPerMes = value => ({ type: 'set_deltaPPerMes', value})
+export const setTyac = value => ({ type: 'set_tyac', value})
+export const setPvt = value => ({ type: 'set_pvt', value})
+export const setAparejoDeProduccion = value => ({ type: 'set_aparejoDeProduccion', value})
+export const setProfEmpacador = value => ({ type: 'set_profEmpacador', value})
+export const setProfSensorPYT = value => ({ type: 'set_profSensorPYT', value})
+export const setTipoDeSap = value => ({ type: 'set_tipoDeSap', value})
+export const setHistorialIntervencionesData = value => ({ type: 'set_historialIntervencionesData', value})
+export const setIntervalos = value => ({
+  type: 'set_intervalos', 
+  value: value.map(elem => {
+    elem.espesor = elem.base - elem.cima
+    return elem
+  })
+})
+export const setFichaTecnicaDelPozo = value => ({ type: 'set_fichaTecnicaDelPozo', value})
 
 //InformacionDeSistemasArtificialsDeProduccion
 export const setTipoDeSistemo = value => ({ type: 'set_tipoDeSistemo', value})
@@ -129,7 +133,16 @@ export const setSistemasArtificialesImgURL = value => ({ type: 'set_sistemasArti
 export const setSistemasArtificialesDeProduccion = value => ({ type: 'set_sistemasArtificialesDeProduccion', value})
 
 //EvaluacionPetrofisica
-export const setLayerData = value => ({ type: 'set_layerData', value})
+export const setLayerData = value => ({
+  type: 'set_layerData',
+  value: value.map((elem, i) => {
+    elem.interval = i + 1
+    elem.baseMD = parseFloat(elem.baseMD)
+    elem.cimaMD = parseFloat(elem.cimaMD)
+    elem.espesor = Math.round((elem.baseMD - elem.cimaMD) * 100) / 100
+    return elem
+  })
+})
 export const setMudLossData = value => ({ type: 'set_mudLossData', value})
 export const setImgURL = value => ({ type: 'set_imgURL', value})
 export const setEvaluacionPetrofisica = value => ({ type: 'set_evaluacionPetrofisica', value})
@@ -160,27 +173,42 @@ export const setMecanicoYAparejoDeProduccion = value => ({ type: 'set_mecanicoYA
 //HistoricoDePresion
 export const setPresionDataCampo = value => ({ type: 'set_presionDataCampo', value})
 export const setPresionDataPozo = value => ({ type: 'set_presionDataPozo', value})
-
+export const setPressureDepthPozo = value => ({ type: 'set_pressureDepthPozo', value})
+export const setPressureDepthCampo = value => ({ type: 'set_pressureDepthCampo', value})
 
 //HistoricoDeProduccion
-export const setFecha = value => ({ type: 'set_fecha', value})
-export const setTiempo = value => ({ type: 'set_tiempo', value})
-export const setEstrangulado = value => ({ type: 'set_estrangulado', value})
-export const setPtp = value => ({ type: 'set_ptp', value})
-export const setTtp = value => ({ type: 'set_ttp', value})
-export const setPbaj = value => ({ type: 'set_pbaj', value})
-export const setTbaj = value => ({ type: 'set_tbaj', value})
-export const setPsep = value => ({ type: 'set_psep', value})
-export const setTsep = value => ({ type: 'set_tsep', value})
-export const setQl = value => ({ type: 'set_ql', value})
-export const setQo = value => ({ type: 'set_qo', value})
-export const setQg = value => ({ type: 'set_qg', value})
-export const setQw = value => ({ type: 'set_qw', value})
-export const setRga = value => ({ type: 'set_rga', value})
-export const setSalinidad = value => ({ type: 'set_salinidad', value})
-export const setPh = value => ({ type: 'set_ph', value})
-export const setProduccionData = value => ({ type: 'set_produccionData', value})
+export const setProduccionData = value => ({ 
+	type: 'set_produccionData',
+	value: value.map((row, i) => {
+        row.qo_vol = parseFloat(row.qo) * parseFloat(row.dias) 
+        row.qw_vol = parseFloat(row.qw) * parseFloat(row.dias) 
+        row.qg_vol = parseFloat(row.qg) * parseFloat(row.dias)
+        row.qgi_vol = parseFloat(row.qgi) * parseFloat(row.dias)
+        row.rga = parseFloat(row.qg) / parseFloat(row.qo)
+        row.fw = parseFloat(row.qw) / (parseFloat(row.qw) + parseFloat(row.qo))
+
+        let prev = value[i - 1]
+
+        row.np = prev ? prev.np + row.qo_vol : row.qo_vol
+        row.wp = prev ? prev.wp + row.qw_vol : row.qw_vol
+        row.gp = prev ? prev.gp + row.qg_vol : row.qg_vol
+        row.gi = prev ? prev.gi + row.qgi_vol : row.qgi_vol
+
+        return row
+      })
+  	})
+
 export const setHistoricoProduccion = value => ({ type: 'set_historicoProduccion', value})
+
+//HistoricoDeAforos
+export const setAforosData = value => ({ type: 'set_aforosData', value})
+export const setHistoricoDeAforos = value => ({ type: 'set_historicoDeAforos', value})
+    
+
+
+
+
+
 //AnalisisDelAgua
 export const setPH = value => ({ type: 'set_pH', value})
 export const setTemperaturaDeConductividad = value => ({ type: 'set_temperaturaDeConductividad', value})

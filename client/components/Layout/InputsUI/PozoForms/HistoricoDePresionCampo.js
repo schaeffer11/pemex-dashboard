@@ -1,10 +1,12 @@
 import React, { Component } from 'react'
 import { connect } from 'react-redux'
 import autobind from 'autobind-decorator'
-import {withValidate} from '../../Common/Validate'
-import { setPresionDataCampo, setChecked } from '../../../../redux/actions/pozo'
-import InputTable from '../../Common/InputTable'
 import ReactTable from 'react-table'
+
+import {withValidate} from '../../Common/Validate'
+import { setPresionDataCampo, setPressureDepthCampo, setChecked } from '../../../../redux/actions/pozo'
+import InputTable from '../../Common/InputTable'
+import { InputRow } from '../../Common/InputRow'
 
 let columns = [
   {
@@ -22,19 +24,7 @@ let columns = [
     accessor: 'fecha',
     cell: 'renderDate',
   }, { 
-    Header: 'Qo (Mbpd)',
-    accessor: 'Qo',
-    cell: 'renderNumber',
-  }, { 
-    Header: 'Np (MMbls)',
-    accessor: 'Np',
-    cell: 'renderNumber',
-  }, { 
-    Header: 'Pws (Kg/cm2)',
-    accessor: 'Pws',
-    cell: 'renderNumber',
-  }, { 
-    Header: 'Pr (Kg/cm2)',
+    Header: <div>Pr<br></br>(Kg/cm<sup>2</sup>)</div>,
     accessor: 'Pr',
     cell: 'renderNumber',
   }
@@ -123,7 +113,7 @@ let columns = [
 
     presionDataCampo[0].length = 2
 
-    setPresionDataCampo([...presionDataCampo, {index: presionDataCampo.length, fecha: '', Qo: '', Np: '', Pws: '', Pr: '', length: presionDataCampo.length + 1, 'edited': false}])
+    setPresionDataCampo([...presionDataCampo, {index: presionDataCampo.length, fecha: null, Pr: '', length: presionDataCampo.length + 1, 'edited': false}])
   }
 
 
@@ -149,11 +139,11 @@ let columns = [
   }
 
   render() {
-    let { formData, setPresionDataCampo } = this.props
+    let { formData, setPresionDataCampo, setPressureDepthCampo } = this.props
     formData = formData.toJS()
-    let { presionDataCampo } = formData
+    let { presionDataCampo, pressureDepthCampo } = formData
 
-    const objectTemplate = {fecha: '', Qo: '', Np: '', Pws: '', Pr: ''}
+    const objectTemplate = {fecha: null, Pr: ''}
 
 /*
     columns.forEach(column => {
@@ -161,25 +151,30 @@ let columns = [
     })
 */
     return (
-      <div className='generales-form' >
-        <div className='table-select'>
-          <InputTable
-            className="-striped"
-            data={presionDataCampo}
-            newRow={objectTemplate}
-            setData={setPresionDataCampo}
-            columns={columns}
-            showPagination={false}
-            showPageSizeOptions={false}
-            pageSize={presionDataCampo.length}
-            sortable={false}
-            getTdProps={this.deleteRow}
-          />        
+      <div className='historico-presion-campo' >
+        <div className='presion-table'>
+          <div className='table-select'>
+            <InputTable
+              className="-striped"
+              data={presionDataCampo}
+              newRow={objectTemplate}
+              setData={setPresionDataCampo}
+              columns={columns}
+              showPagination={false}
+              showPageSizeOptions={false}
+              pageSize={presionDataCampo.length}
+              sortable={false}
+              getTdProps={this.deleteRow}
+            />        
+          </div>
+          <button className='new-row-button' onClick={this.addNewRow}>Añadir un renglón</button>
+        </div>
+        <div className='depth'>
+          <InputRow header="Pressure Depth" name='pressureDepthCampo' value={pressureDepthCampo} onChange={setPressureDepthCampo} unit={'md'} />
         </div>
         { this.state.errors.presionDataCampo && this.state.errors.presionDataCampo.checked &&
           <div className="error">{this.state.errors.presionDataCampo.message}</div>
         }
-        <button className='new-row-button' onClick={this.addNewRow}>Añadir un renglón</button>
       </div>
     )
   }
@@ -209,7 +204,8 @@ const mapStateToProps = state => ({
 
 const mapDispatchToProps = dispatch => ({
     setPresionDataCampo: val => dispatch(setPresionDataCampo(val)),
-    setChecked: val => dispatch(setChecked(val, 'historicoDePresion'))   
+    setChecked: val => dispatch(setChecked(val, 'historicoDePresion')),
+    setPressureDepthCampo: val => dispatch(setPressureDepthCampo(val)),
 })
 
 

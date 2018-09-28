@@ -15,6 +15,8 @@ const initialState = fromJS({
   tipoDePozo: '',
   pwsFecha: null,
   pwfFecha: null,
+  pws: '',
+  pwf: '',
   deltaPPerMes: '',
   tyac: '',
   pvt: '',
@@ -27,16 +29,16 @@ const initialState = fromJS({
     intervenciones: '',
     errors: []
   }],
-  intervalos: [
-    {
-      cima: '',
-      base: '',
-      espesor: '',
-      length: 1,
-      index: 0,
-    }
-  ],
-  checked:[]
+  checked:[],
+  // intervalos: [
+  //   {
+  //     cima: '',
+  //     base: '',
+  //     espesor: '',
+  //     length: 1,
+  //     index: 0,
+  //   }
+  // ]
 })
 
 const fichaTecnicaDelPozo = (state = initialState, action) => {
@@ -69,6 +71,10 @@ const fichaTecnicaDelPozo = (state = initialState, action) => {
       return state.set('pwsFecha', fromJS(action.value))
     case 'set_pwfFecha':
       return state.set('pwfFecha', fromJS(action.value))
+    case 'set_pws':
+      return state.set('pws', fromJS(action.value))
+    case 'set_pwf':
+      return state.set('pwf', fromJS(action.value))
     case 'set_deltaPPerMes':
       return state.set('deltaPPerMes', fromJS(action.value))
     case 'set_tyac':
@@ -89,12 +95,12 @@ const fichaTecnicaDelPozo = (state = initialState, action) => {
       return state.set('checked', fromJS(action.value))
     case 'set_fichaTecnicaDelPozo':
       return state = fromJS(action.value)
-    case 'set_intervalos': 
-      return state.set('intervalos', fromJS(action.value))
     case 'set_forms_checked' :
         if(action.form == 'fichaTecnicaDelPozo')
           return state.set('checked', fromJS(action.value))
         return state
+    // case 'set_intervalos': 
+    //   return state.set('intervalos', fromJS(action.value))
     default:
       return state
   }

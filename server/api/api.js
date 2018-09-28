@@ -102,7 +102,21 @@ app.get('/getAllSaves', (req, res) => {
 })
 
 
+app.get('/getWellTransactions', (req, res) => {
+  let { wellID } = req.query
 
+  connection.query(`SELECT * FROM Transactions t JOIN Users u ON t.USER_ID = u.id WHERE WELL_FORMACION_ID = ? ORDER BY INSERT_TIME DESC`,
+      [wellID], (err, data) => {
+
+        data = data.map(i => ({
+          user: i.username,
+          date: i.INSERT_TIME,
+          id: i.TRANSACTION_ID
+        }))
+
+        res.json(data)
+    })
+})
 
 
 app.get('/getSave', (req, res) => {
@@ -195,8 +209,10 @@ app.get('/getFields', async (req, res) => {
     FIELD_FORMACION_ID: { parent: 'fichaTecnicaDelPozoHighLevel', child: 'campo'},
     DESCUBRIMIENTO: { parent: 'fichaTecnicaDelCampo', child: 'descubrimientoField' },
     FECHA_DE_EXPLOTACION: { parent: 'fichaTecnicaDelCampo', child: 'fechaDeExplotacionField' },
-    P_INICIAL_ANO: { parent: 'fichaTecnicaDelCampo', child: 'pInicialAnoField'},
     NUMERO_DE_POZOS_OPERANDO: { parent: 'fichaTecnicaDelCampo', child: 'numeroDePozosOperandoField' },
+    P_INICIAL: { parent: 'fichaTecnicaDelCampo', child: 'pInicialField'},
+    P_INICIAL_ANO: { parent: 'fichaTecnicaDelCampo', child: 'pInicialAnoField'},
+    P_ACTUAL: { parent: 'fichaTecnicaDelCampo', child: 'pActualField'},
     P_ACTUAL_FECHA: { parent: 'fichaTecnicaDelCampo', child: 'pActualFechaField'},
     DP_PER_ANO: { parent: 'fichaTecnicaDelCampo', child: 'dpPerAnoField' },
     TYAC: { parent: 'fichaTecnicaDelCampo', child: 'tyacField' },
@@ -260,9 +276,7 @@ app.get('/getWell', async (req, res) => {
     SUBDIRECCION: { parent: 'fichaTecnicaDelPozoHighLevel', child: 'subdireccion'},
     ACTIVO: { parent: 'fichaTecnicaDelPozoHighLevel', child: 'activo'},
     FORMACION: { parent: 'fichaTecnicaDelPozoHighLevel', child: 'formacion'},
-    INTERVALO_PRODUCTOR: { parent: 'fichaTecnicaDelPozo', child: 'intervaloProductor'},
     ESPESOR_BRUTO: { parent: 'fichaTecnicaDelPozo', child: 'espesorBruto'},
-    ESPESOR_NETO: { parent: 'fichaTecnicaDelPozo', child: 'espesorNeto'},
     CALIZA: { parent: 'fichaTecnicaDelPozo', child: 'caliza'},
     DOLOMIA: { parent: 'fichaTecnicaDelPozo', child: 'dolomia'},
     ARCILLA: { parent: 'fichaTecnicaDelPozo', child: 'arcilla'},
@@ -274,6 +288,8 @@ app.get('/getWell', async (req, res) => {
     TIPO_DE_POZO: { parent: 'fichaTecnicaDelPozo', child: 'tipoDePozo'},
     PWS_FECHA: { parent: 'fichaTecnicaDelPozo', child: 'pwsFecha'},
     PWF_FECHA: { parent: 'fichaTecnicaDelPozo', child: 'pwfFecha'},
+    PWS: { parent: 'fichaTecnicaDelPozo', child: 'pws'},
+    PWF: { parent: 'fichaTecnicaDelPozo', child: 'pwf'},
     DELTA_P_PER_MES: { parent: 'fichaTecnicaDelPozo', child: 'deltaPPerMes'},
     TYAC: { parent: 'fichaTecnicaDelPozo', child: 'tyac'},
     PVT: { parent: 'fichaTecnicaDelPozo', child: 'pvt'},
@@ -365,8 +381,7 @@ app.get('/getLayer', async (req, res) => {
     INTERVALO: { child: 'interval' },
     CIMA_MD: { child: 'cimaMD'},
     BASE_MD: { child: 'baseMD'},
-    CIMA_MV: { child: 'cimaMV'},
-    BASE_MV: { child: 'baseMV' },
+    ESPESOR: { child: 'espesor'},
     V_ARC: { child: 'vArc'},
     POROSITY: { child: 'porosity'},
     SW: { child: 'sw'},
@@ -812,12 +827,8 @@ app.get('/getFieldPressure', async (req, res) => {
 
   let action = saved ? 'loadSave' : 'loadTransaction'
 
-
   const map = {
     FECHA: { child: 'fecha' },
-    QO: { child: 'Qo' },
-    NP: { child: 'Np' },
-    PWS: { child: 'Pws' },
     PR: { child: 'Pr' } 
   }
 
@@ -840,7 +851,7 @@ app.get('/getFieldPressure', async (req, res) => {
         objectPath.set(innerObj, 'index', index)
         objectPath.push(finalObj, `${mainParent}.${innerParent}`, innerObj)
       })
-
+      finalObj['historicoDePresion'].pressureDepthCampo = data[0].PRESSURE_DEPTH
       res.json(finalObj)
     }
     else if (action === 'loadTransaction'){
@@ -851,7 +862,8 @@ app.get('/getFieldPressure', async (req, res) => {
         mainParent: {
           innerParent: [
           {}
-          ]
+          ],
+          presionDataCampo: ''
         }
       })
     }
@@ -868,9 +880,6 @@ app.get('/getWellPressure', async (req, res) => {
 
   const map = {
     FECHA: { child: 'fecha' },
-    QO: { child: 'Qo' },
-    NP: { child: 'Np' },
-    PWS: { child: 'Pws' },
     PR: { child: 'Pr' } 
   }
 
@@ -893,7 +902,7 @@ app.get('/getWellPressure', async (req, res) => {
         objectPath.set(innerObj, 'index', index)
         objectPath.push(finalObj, `${mainParent}.${innerParent}`, innerObj)
       })
-
+      finalObj['historicoDePresion'].pressureDepthPozo = data[0].PRESSURE_DEPTH
       res.json(finalObj)
     }
     else if (action === 'loadTransaction'){
@@ -904,7 +913,8 @@ app.get('/getWellPressure', async (req, res) => {
         mainParent: {
           innerParent: [
           {}
-          ]
+          ],
+          presionDataPozo: ''
         }
       })
     }
@@ -918,35 +928,45 @@ app.get('/getWellAforos', async (req, res) => {
 
   let action = saved ? 'loadSave' : 'loadTransaction'
 
- 
   const map = {
-    FECHA: { parent: 'historicoDeProduccion', child: 'fecha' }, 
-    ESTRANGULADOR: { parent: 'historicoDeProduccion', child: 'estrangulado' },
-    PTP: { parent: 'historicoDeProduccion', child: 'ptp' }, 
-    TTP: { parent: 'historicoDeProduccion', child: 'ttp' }, 
-    PBAJ: { parent: 'historicoDeProduccion', child: 'pbaj' }, 
-    TBAJ: { parent: 'historicoDeProduccion', child: 'tbaj' }, 
-    PSEP: { parent: 'historicoDeProduccion', child: 'psep' },
-    TSEP: { parent: 'historicoDeProduccion', child: 'tsep' }, 
-    QL: { parent: 'historicoDeProduccion', child: 'ql' }, 
-    QO: { parent: 'historicoDeProduccion', child: 'qo'},
-    QG: { parent: 'historicoDeProduccion', child: 'qg' }, 
-    QW: { parent: 'historicoDeProduccion', child: 'qw' }, 
-    RGA: { parent: 'historicoDeProduccion', child: 'rga' },
-    SALINIDAD: { parent: 'historicoDeProduccion', child: 'salinidad'},
-    PH: { parent: 'historicoDeProduccion', child: 'ph'},
+    FECHA: { child: 'fecha' }, 
+    TIEMPO: { child: 'tiempo' },
+    ESTRANGULADOR: { child: 'estrangulador' },
+    PTP: { child: 'ptp' }, 
+    TTP: { child: 'ttp' }, 
+    PBAJ: { child: 'pbaj' }, 
+    TBAJ: { child: 'tbaj' }, 
+    PSEP: { child: 'psep' },
+    TSEP: { child: 'tsep' }, 
+    QL: { child: 'ql' }, 
+    QO: { child: 'qo'},
+    QG: { child: 'qg' }, 
+    QW: { child: 'qw' }, 
+    RGA: { child: 'rga' },
+    SALINIDAD: { child: 'salinidad'},
+    PH: { child: 'ph'},
   }
+
+  const mainParent = 'historicoDeAforos'
+  const innerParent = 'aforosData'
 
   getWellAforos(transactionID, action, (data) => {
     const finalObj = {}
+    if (data && data.length > 0) {
+      data.forEach((d, index) => {
+        d.FECHA ? d.FECHA = d.FECHA.toJSON().slice(0, 10) : null
+        const innerObj = {}
+        Object.keys(d).forEach(k => {
+          if (map[k]) {
+            const { child } = map[k]
+            objectPath.set(innerObj, child, d[k])
+          }
+        })
+        objectPath.set(innerObj, 'length', data.length)
+        objectPath.set(innerObj, 'index', index)
+        objectPath.push(finalObj, `${mainParent}.${innerParent}`, innerObj)
+      })
 
-    if (data[0]) {
-      Object.keys(data[0]).forEach(key => {
-        if (map[key]) {
-          const { parent, child } = map[key]
-          objectPath.set(finalObj, `${parent}.${child}`, data[0][key])
-        }
-      })   
       res.json(finalObj)
     }
     else {
@@ -967,15 +987,18 @@ app.get('/getWellProduccion', async (req, res) => {
     Dias: { child: 'dias' },
     QO: { child: 'qo' },
     QW: { child: 'qw' },
-    QG_CAL: { child: 'qg' },
-    QGL: { child: 'qgl' },
+    QG: { child: 'qg' },
+    QGI: { child: 'qgi' },
+    QO_VOLUME: { child: 'qo_vol' },
+    QW_VOLUME: { child: 'qw_vol' },
+    QG_VOLUME: { child: 'qg_vol' },
+    QGI_VOLUME: { child: 'qgi_vol' },
     NP: { child: 'np' },
     WP: { child: 'wp' },
     GP: { child: 'gp' },
     GI: { child: 'gi' },
     RGA: { child: 'rga' },
-    FW_FRACTION: { child: 'fw' },
-    POZOS_PROD_ACTIVOS: { child: 'pozosProdActivos' }, 
+    FW_FRACTION: { child: 'fw' }, 
   }
 
   const mainParent = 'historicoDeProduccion'
@@ -1057,10 +1080,6 @@ app.get('/getInterventionEstimulacion', async (req, res) => {
 
 
   const map = {
-    INTERVALO: { parent: 'propuestaEstimulacion', child: 'intervalo' }, 
-    LONGITUD_DE_INTERVALO_A_TRATAR: { parent: 'propuestaEstimulacion', child: 'longitudDeIntervalo' }, 
-    VOLUME_APAREJO: { parent: 'propuestaEstimulacion', child: 'volAparejo' }, 
-    CAPACIDAD_TOTAL_DEL_POZO: { parent: 'propuestaEstimulacion', child: 'capacidadTotalDelPozo' }, 
     VOLUMEN_PRECOLCHON_N2: { parent: 'propuestaEstimulacion', child: 'volumenPrecolchonN2' },
     VOLUMEN_SISTEMA_NO_REACTIVO: { parent: 'propuestaEstimulacion', child: 'volumenSistemaNoReativo' }, 
     VOLUMEN_SISTEM_REACTIVO: { parent: 'propuestaEstimulacion', child: 'volumenSistemaReactivo' }, 
@@ -1129,16 +1148,6 @@ app.get('/getInterventionAcido', async (req, res) => {
 
 
   const map = {
-    INTERVALO: { parent: 'propuestaAcido', child: 'intervalo' }, 
-    LONGITUD_DE_INTERVALO_A_TRATAR: { parent: 'propuestaAcido', child: 'longitudDeIntervalo' }, 
-    VOLUME_APAREJO: { parent: 'propuestaAcido', child: 'volAparejo' },
-    CAPACIDAD_TOTAL_DEL_POZO: { parent: 'propuestaAcido', child: 'capacidadTotalDelPozo' }, 
-    VOLUMEN_PRECOLCHON_N2: { parent: 'propuestaAcido', child: 'volumenPrecolchonN2' }, 
-    VOLUMEN_SISTEMA_NO_REACTIVO: { parent: 'propuestaAcido', child: 'volumenSistemaNoReativo' }, 
-    VOLUMEN_SISTEM_REACTIVO: { parent: 'propuestaAcido', child: 'volumenSistemaReactivo' }, 
-    VOLUMEN_SISTEMA_DIVERGENTE: { parent: 'propuestaAcido', child: 'volumenSistemaDivergente' },
-    VOLUMEN_DISPLAZAMIENTO_LIQUIDO: { parent: 'propuestaAcido', child: 'volumenDesplazamientoLiquido' }, 
-    VOLUMEN_DESPLAZAMIENTO_GEL_LINEAL: { parent: 'propuestaAcido', child: 'volumenDesplazamientoGelLineal' }, 
     MODULO_YOUNG_ARENA: { parent: 'propuestaAcido', child: 'moduloYoungArena' },
     MODULO_YOUNG_LUTITAS: { parent: 'propuestaAcido', child: 'moduloYoungLutitas' }, 
     RELAC_POISSON_ARENA: { parent: 'propuestaAcido', child: 'relacPoissonArena' }, 
@@ -1204,15 +1213,6 @@ app.get('/getInterventionApuntalado', async (req, res) => {
 
 
   const map = {
-    INTERVALO: { parent: 'propuestaApuntalado', child: 'intervalo' }, 
-    LONGITUD_DE_INTERVALO_A_TRATAR: { parent: 'propuestaApuntalado', child: 'longitudDeIntervalo' }, 
-    VOLUME_APAREJO: { parent: 'propuestaApuntalado', child: 'volAparejo' },
-    CAPACIDAD_TOTAL_DEL_POZO: { parent: 'propuestaApuntalado', child: 'capacidadTotalDelPozo' }, 
-    VOLUMEN_PRECOLCHON_N2: { parent: 'propuestaApuntalado', child: 'volumenPrecolchonN2' }, 
-    VOLUMEN_DE_APUNTALANTE: { parent: 'propuestaApuntalado', child: 'volumenDeApuntalante' }, 
-    VOLUMEN_DE_GEL_DE_FRACTURA: { parent: 'propuestaApuntalado', child: 'volumenDeGelDeFractura' }, 
-    VOLUMEN_DESPLAZAMIENTO: { parent: 'propuestaApuntalado', child: 'volumenDesplazamiento' },
-    VOLUMEN_TOTAL_DE_LIQUIDO: { parent: 'propuestaApuntalado', child: 'volumenTotalDeLiquido' }, 
     MODULO_YOUNG_ARENA: { parent: 'propuestaApuntalado', child: 'moduloYoungArena' },
     MODULO_YOUNG_LUTITAS: { parent: 'propuestaApuntalado', child: 'moduloYoungLutitas' }, 
     RELAC_POISSON_ARENA: { parent: 'propuestaApuntalado', child: 'relacPoissonArena' }, 
@@ -1314,7 +1314,9 @@ app.get('/getCedulaEstimulacion', async (req, res) => {
 
   const map = {
     ETAPA: { child: 'etapa' }, 
+    INTERVALO: { child: 'intervalo'},
     SISTEMA: { child: 'sistema' }, 
+    NOMBRE_COMERCIAL: { child: 'nombreComercial'},
     TIPO_DE_APUNTALANTE: { child: 'tipoDeApuntalante' }, 
     CONCENTRACION_DE_APUNTALANTE: { child: 'concentraciDeApuntalante' }, 
     VOL_LIQUID: { child: 'volLiquid' }, 
@@ -1347,10 +1349,12 @@ app.get('/getCedulaEstimulacion', async (req, res) => {
         objectPath.set(innerObj, 'index', index)
         objectPath.push(finalObj, `${mainParent}.${innerParent}`, innerObj)
       })
+      finalObj['propuestaEstimulacion'].propuestaCompany = data[0].COMPANIA
     }
     else {
       finalObj = {
         'propuestaEstimulacion': {
+          "propuestaCompany": '',
           "cedulaData": [
             {}
           ]
@@ -1370,7 +1374,9 @@ app.get('/getCedulaAcido', async (req, res) => {
 
   const map = {
     ETAPA: { child: 'etapa' }, 
+    INTERVALO: { child: 'intervalo' },
     SISTEMA: { child: 'sistema' }, 
+    NOMBRE_COMERCIAL: { child: 'nombreComercial' },
     TIPO_DE_APUNTALANTE: { child: 'tipoDeApuntalante' }, 
     CONCENTRACION_DE_APUNTALANTE: { child: 'concentraciDeApuntalante' }, 
     VOL_LIQUID: { child: 'volLiquid' }, 
@@ -1403,10 +1409,12 @@ app.get('/getCedulaAcido', async (req, res) => {
         objectPath.set(innerObj, 'index', index)
         objectPath.push(finalObj, `${mainParent}.${innerParent}`, innerObj)
       })
+      finalObj['propuestaAcido'].propuestaCompany = data[0].COMPANIA
     }
     else {
       finalObj = {
         'propuestaAcido': {
+          "propuestaCompany": '',
           "cedulaData": [
             {}
           ]
@@ -1424,11 +1432,11 @@ app.get('/getCedulaApuntalado', async (req, res) => {
 
   let action = saved ? 'loadSave' : 'loadTransaction'
 
-
-
   const map = {
     ETAPA: { child: 'etapa' }, 
+    INTERVALO: { child: 'intervalo' },
     SISTEMA: { child: 'sistema' }, 
+    NOMBRE_COMERCIAL: { child: 'nombreComercial' },
     TIPO_DE_APUNTALANTE: { child: 'tipoDeApuntalante' }, 
     CONCENTRACION_DE_APUNTALANTE: { child: 'concentraciDeApuntalante' }, 
     VOL_LIQUID: { child: 'volLiquid' }, 
@@ -1461,56 +1469,12 @@ app.get('/getCedulaApuntalado', async (req, res) => {
         objectPath.set(innerObj, 'index', index)
         objectPath.push(finalObj, `${mainParent}.${innerParent}`, innerObj)
       })
+      finalObj['propuestaApuntalado'].propuestaCompany = data[0].COMPANIA
     }
     else {
       finalObj = {
         'propuestaApuntalado': {
-          "cedulaData": [
-            {}
-          ]
-        }
-      }
-    }
-
-    res.json(finalObj)
-  })
-})
-
-
-app.get('/getCedulaAcido', async (req, res) => {
-  let { transactionID, saved } = req.query
-
-  let action = saved ? 'loadSave' : 'loadTransaction'
-
-  const map = {
-    ETAPA: { child: 'etapa' }, 
-    SISTEMA: { child: 'sistema' }, 
-    TIPO_DE_APUNTALANTE: { child: 'tipoDeApuntalante' }, 
-
-  }
-
-  const mainParent = 'propuestaAcido'
-  const innerParent = 'cedulaData'
-
-  getCedulaAcido(transactionID, action, (data) => {
-    let finalObj = {}
-    if (data && data.length > 0) {
-      data.forEach((d, index) => {
-        const innerObj = {}
-        Object.keys(d).forEach(k => {
-          if (map[k]) {
-            const { child } = map[k]
-            objectPath.set(innerObj, child, d[k])
-          }
-        })
-        objectPath.set(innerObj, 'length', data.length)
-        objectPath.set(innerObj, 'index', index)
-        objectPath.push(finalObj, `${mainParent}.${innerParent}`, innerObj)
-      })
-    }
-    else {
-      finalObj = {
-        'propuestaAcido': {
+          "propuestaCompany": '',
           "cedulaData": [
             {}
           ]

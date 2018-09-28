@@ -4,10 +4,12 @@ import { connect } from 'react-redux'
 import ReactTable from 'react-table'
 import moment from 'moment'
 import DatePicker from 'react-datepicker'
+
 import {withValidate} from '../../Common/Validate'
 import InputTable from '../../Common/InputTable'
 import { InputRow, InputRowUnitless, InputRowSelectUnitless, InputDate } from '../../Common/InputRow'
-import { setTipoDeSistemo, setHistorialIntervencionesData, setIntervaloProductor, setEspesorBruto, setEspesorNeto, setCaliza, setDolomia, setArcilla, setPorosidad, setPermeabilidad, setSw, setCaa, setCga, setTipoDePozo, setPwsFecha, setPwfFecha, setDeltaPPerMes, setTyac, setPvt, setAparejoDeProduccion, setProfEmpacador, setProfSensorPYT, setTipoDeSap, formData, setChecked, setIntervalos } from '../../../../redux/actions/pozo'
+import { setTipoDeSistemo, setHistorialIntervencionesData, setIntervaloProductor, setEspesorBruto, setEspesorNeto, setCaliza, setDolomia, setArcilla, setPorosidad, setPermeabilidad, setSw, setCaa, setCga, setTipoDePozo, setPws, setPwf, setPwsFecha, setPwfFecha, setDeltaPPerMes, setTyac, setPvt, setAparejoDeProduccion, setProfEmpacador, setProfSensorPYT, setTipoDeSap, formData, setChecked } from '../../../../redux/actions/pozo'
+
 
 let columns = [
   {
@@ -38,7 +40,7 @@ let columns = [
     this.state = {
       containsErrors: false,
       errors: [],
-      checked: []
+      checked: [],
     }
   }
 
@@ -105,25 +107,25 @@ let columns = [
         <div className='header'>
           Los Datos de Formación
         </div>
-        <InputRow header="Intervalos(s) productor(es)" type='number' name='intervaloProductor' value={intervaloProductor}  onChange={setIntervaloProductor} unit='md/mv' onBlur={this.validate} errors={this.state.errors} />
-        <InputRow header="Espesor bruto" name='espesorBruto' value={espesorBruto} onChange={setEspesorBruto} unit='m' onBlur={this.validate} errors={this.state.errors} />
-        <InputRow header="Espesor neto" name='espesorNeto' value={espesorNeto} onChange={setEspesorNeto} unit='m' onBlur={this.validate} errors={this.state.errors} />
+        {/* <InputRow header="Intervalos(s) productor(es)" type='number' name='intervaloProductor' value={intervaloProductor}  onChange={setIntervaloProductor} unit='md/mv' onBlur={this.validate} errors={this.state.errors} /> */}
+         <InputRow header="Espesor bruto" name='espesorBruto' value={espesorBruto} onChange={setEspesorBruto} unit='m' onBlur={this.validate} errors={this.state.errors} /> 
+        {/* <InputRow header="Espesor neto" name='espesorNeto' value={espesorNeto} onChange={setEspesorNeto} unit='m' onBlur={this.validate} errors={this.state.errors} /> */}
         <InputRow header="Caliza" name='caliza' value={caliza} onChange={setCaliza} unit='%' onBlur={this.validate} errors={this.state.errors} />
         <InputRow header="Dolomia" name='dolomia' value={dolomia} onChange={setDolomia} unit='%' onBlur={this.validate} errors={this.state.errors} />
         <InputRow header="Arcilla" name='arcilla' value={arcilla} onChange={setArcilla} unit='%' onBlur={this.validate} errors={this.state.errors} />
         <InputRow header="Porosidad" name='porosidad' value={porosidad} onChange={setPorosidad} unit='%' onBlur={this.validate} errors={this.state.errors} />
         <InputRow header="Permeabilidad" name='permeabilidad' value={permeabilidad} onChange={setPermeabilidad} unit='mD' onBlur={this.validate} errors={this.state.errors} />
         <InputRow header="Sw" name='sw' value={sw} onChange={setSw} unit='%' onBlur={this.validate} errors={this.state.errors} />
-        <InputRow header="CAA" name='caa' value={caa} onChange={setCaa} unit='mvbnm' onBlur={this.validate} errors={this.state.errors} />
-        <InputRow header="CGA" name='cga' value={cga} onChange={setCga} unit='mvbnm' onBlur={this.validate} errors={this.state.errors} />
+        <InputRow header="CAA" title="Contacto agua-aceite" name='caa' value={caa} onChange={setCaa} unit='mvbnm' onBlur={this.validate} errors={this.state.errors} />
+        <InputRow header="CGA" title="Contacto gas-aceite" name='cga' value={cga} onChange={setCga} unit='mvbnm' onBlur={this.validate} errors={this.state.errors} />
       </div>
     )
   }
 
   makePozoForm() {
-    let { tipoDeSistemo, setTipoDePozo, setPwsFecha, setPwfFecha, setDeltaPPerMes, setTyac, setPvt, setAparejoDeProduccion, setProfEmpacador, setProfSensorPYT, setTipoDeSistemo, formData } = this.props 
+    let { tipoDeSistemo, setTipoDePozo, setPws, setPwf, setPwsFecha, setPwfFecha, setDeltaPPerMes, setTyac, setPvt, setAparejoDeProduccion, setProfEmpacador, setProfSensorPYT, setTipoDeSistemo, formData } = this.props 
     formData = formData.toJS()
-    let { tipoDePozo, pwsFecha, pwfFecha, deltaPPerMes, tyac, pvt, aparejoDeProduccion, profEmpacador, profSensorPYT } = formData
+    let { tipoDePozo, pwsFecha, pwfFecha, pws, pwf, deltaPPerMes, tyac, pvt, aparejoDeProduccion, profEmpacador, profSensorPYT } = formData
 
     let wellOptions = [
       { label: 'Productor', value: 'Productor' },
@@ -147,9 +149,11 @@ let columns = [
           Los Datos de Pozo
         </div>
           <InputRowSelectUnitless header="Tipo de pozo" value={tipoDePozo} callback={(e) => setTipoDePozo(e.value)}  name='tipoDePozo' options={wellOptions} onBlur={this.validate} errors={this.state.errors} />
-          <InputDate header="Pws (fecha)" name='pwsFecha' value={pwsFecha} onChange={setPwsFecha} unit='Kg/cm2' onBlur={this.validate} errors={this.state.errors} />
-          <InputDate header="Pwf (fecha)" name='pwfFecha' value={pwfFecha} onChange={setPwfFecha} unit='Kg/cm2' onBlur={this.validate} errors={this.state.errors} />
-          <InputRow header="Δp/mes" name='deltaPPerMes' value={deltaPPerMes} onChange={setDeltaPPerMes} unit='Kg/cm2/mes' onBlur={this.validate} errors={this.state.errors} />
+          <InputRow header="Pws" name='pws' value={pws} onChange={setPws} unit={<div>Kg/cm<sup>2</sup></div>} onBlur={this.validate} errors={this.state.errors} />
+          <InputDate header="Pws (fecha)" name='pwsFecha' value={pwsFecha} onChange={setPwsFecha} onBlur={this.validate} errors={this.state.errors} />
+          <InputRow header="Pwf" name='pwf' value={pwf} onChange={setPwf} unit={<div>Kg/cm<sup>2</sup></div>} onBlur={this.validate} errors={this.state.errors} />
+          <InputDate header="Pwf (fecha)" name='pwfFecha' value={pwfFecha} onChange={setPwfFecha} onBlur={this.validate} errors={this.state.errors} />
+          <InputRow header="Δp/mes" name='deltaPPerMes' value={deltaPPerMes} onChange={setDeltaPPerMes} unit={<div>Kg/cm<sup>2</sup>/mes</div>} onBlur={this.validate} errors={this.state.errors} />
           <InputRow header="Tyac" name='tyac' value={tyac} onChange={setTyac} unit='°C' onBlur={this.validate} errors={this.state.errors} />
           <InputRow header="PVT" name='pvt' value={pvt} onChange={setPvt} unit='Pozo' onBlur={this.validate} errors={this.state.errors} />
           <InputRow header="Aparejo de producción" value={aparejoDeProduccion} onChange={setAparejoDeProduccion} name='aparejoDeProduccion' unit='pg' onBlur={this.validate} errors={this.state.errors} />
@@ -211,105 +215,104 @@ let columns = [
     setHistorialIntervencionesData([...historialIntervencionesData, {index: historialIntervencionesData.length, fecha: '', intervenciones: '', length: historialIntervencionesData.length + 1, 'edited': false}])
   }
 
-  addNewIntervalosRow() {
-    let { formData, setIntervalos } = this.props
-    formData = formData.toJS()
-    let { intervalos } = formData
+  // addNewIntervalosRow() {
+  //   let { formData, setIntervalos } = this.props
+  //   formData = formData.toJS()
+  //   let { intervalos } = formData
 
-    intervalos[0].length = 2
+  //   intervalos[0].length = 2
 
-    setIntervalos([...intervalos, {
-      base: '',
-      cima: '',
-      espesor: '',
-      length: intervalos.length + 1,
-      index: intervalos.length,
-    }])
-  }
-
-
-  deleteRow(state, rowInfo, column, instance) {
-    let { formData, setHistorialIntervencionesData } = this.props
-    formData = formData.toJS()
-    let { historialIntervencionesData } = formData
-
-    return {
-      onClick: e => {
-        if (column.id === 'delete' && historialIntervencionesData.length > 1) {
-          historialIntervencionesData.splice(rowInfo.original.index, 1)
-
-          historialIntervencionesData.forEach((i, index) => {
-            i.index = index
-            i.length = historialIntervencionesData.length
-          }) 
-
-          setHistorialIntervencionesData(historialIntervencionesData)
-        }
-      }
-    }
-  }
+  //   setIntervalos([...intervalos, {
+  //     base: '',
+  //     cima: '',
+  //     espesor: '',
+  //     length: intervalos.length + 1,
+  //     index: intervalos.length,
+  //   }])
+  // }
 
 
-  makeIntervalosTable() {
-    let { formData, setIntervalos } = this.props
-    formData = formData.toJS()
-    const { intervalos } = formData
-    const objectTemplate = {}
-    const columns = [
-      {
-        Header: '',
-        accessor: 'delete',
-        width: 35,
-        resizable: false,
-        Cell: row => {
-          if (row.original.length > 1) {
-            return (<div style={{color: 'white', background: 'red', borderRadius: '4px', textAlign: 'center', cursor: 'pointer'}}>X</div>)
-          }
-        }
-      },
-      {
-        Header: 'Cima',
-        accessor: 'cima',
-        cell: 'renderEditable',
-      },
-      {
-        Header: 'Base',
-        accessor: 'base',
-        cell: 'renderEditable',
-      },
-      {
-        Header: 'Espesor',
-        accessor: 'espesor',
-      }
-    ]
+  // deleteRow(state, rowInfo, column, instance) {
+  //   let { formData, setHistorialIntervencionesData } = this.props
+  //   formData = formData.toJS()
+  //   let { historialIntervencionesData } = formData
 
-    //TODO: handle new intervals in redux/database
-    return (
-      <div className='intervalos-form' >
-        <div className='header'>
-          Cedula De Tratamiento
-        </div>
-        <div className='table'>
-          <InputTable
-            className="-striped"
-            data={intervalos}
-            newRow={objectTemplate}
-            setData={setIntervalos}
-            columns={columns}
-            showPagination={false}
-            showPageSizeOptions={false}
-            pageSize={!intervalos ? 1 : intervalos.length}
-            sortable={false}
-          />
-        { this.state.errors.intervalos && this.state.errors.intervalos.checked &&
-          <div className="error">{this.state.errors.intervalos.message}</div>
-        }
-        <button className='new-row-button' onClick={this.addNewIntervalosRow}>Añadir un renglón</button>
-        </div>
-      </div>
-    )
-  }
+  //   return {
+  //     onClick: e => {
+  //       if (column.id === 'delete' && historialIntervencionesData.length > 1) {
+  //         historialIntervencionesData.splice(rowInfo.original.index, 1)
 
+  //         historialIntervencionesData.forEach((i, index) => {
+  //           i.index = index
+  //           i.length = historialIntervencionesData.length
+  //         }) 
+
+  //         setHistorialIntervencionesData(historialIntervencionesData)
+  //       }
+  //     }
+  //   }
+  // }
+
+
+  // makeIntervalosTable() {
+  //   let { formData, setIntervalos } = this.props
+  //   formData = formData.toJS()
+  //   const { intervalos } = formData
+  //   const objectTemplate = {}
+  //   const columns = [
+  //     {
+  //       Header: '',
+  //       accessor: 'delete',
+  //       width: 35,
+  //       resizable: false,
+  //       Cell: row => {
+  //         console.log('ok what are we?', row.original.length, row.original)
+  //         if (row.original.length > 1) {
+  //           return (<div style={{color: 'white', background: 'red', borderRadius: '4px', textAlign: 'center', cursor: 'pointer'}}>X</div>)
+  //         }
+  //       }
+  //     },
+  //     {
+  //       Header: 'Cima',
+  //       accessor: 'cima',
+  //       cell: 'renderNumber',
+  //     },
+  //     {
+  //       Header: 'Base',
+  //       accessor: 'base',
+  //       cell: 'renderNumber',
+  //     },
+  //     {
+  //       Header: 'Espesor',
+  //       accessor: 'espesor',
+  //     }
+  //   ]
+
+  //   return (
+  //     <div className='intervalos-form' >
+  //       <div className='header'>
+  //         Intervalos
+  //       </div>
+  //       <div className='table'>
+  //         <InputTable
+  //           className="-striped"
+  //           data={intervalos}
+  //           newRow={objectTemplate}
+  //           setData={setIntervalos}
+  //           columns={columns}
+  //           showPagination={false}
+  //           showPageSizeOptions={false}
+  //           pageSize={intervalos.length}
+  //           sortable={false}
+  //         />
+  //       {/* { this.state.errors.cedulaData && this.state.errors.cedulaData.checked &&
+  //         <div className="error">{this.state.errors.cedulaData.message}</div>
+  //       } */}
+  //       <button className='new-row-button' onClick={this.addNewIntervalosRow}>Añadir un renglón</button>
+  //       </div>
+  //     </div>
+  //   )
+  // }
 
   makeHistoricalInterventionsInput() {
     let { setHistorialIntervencionesData, formData } = this.props
@@ -349,6 +352,8 @@ let columns = [
       </div>
     )
   }
+
+
   render() {
 
     return (
@@ -356,7 +361,7 @@ let columns = [
         { this.makePozoForm() }
         { this.makeFormacionForm() }
         { this.makeHistoricalInterventionsInput() }
-        {this.makeIntervalosTable()}
+        {/* {this.makeIntervalosTable()} */}
       </div>
     )
   }
@@ -365,17 +370,10 @@ let columns = [
 const validate = values => {
     const errors = {}
 
-    if(!values.intervaloProductor ){
-       errors.intervaloProductor = {message: "Este campo no puede estar vacio"}
-    }
 
-    if(!values.espesorBruto ){
-       errors.espesorBruto = {message: "Este campo no puede estar vacio"}
-    }
-
-    if(!values.espesorNeto ){
-       errors.espesorNeto = {message: "Este campo no puede estar vacio"}
-    }
+    // if(!values.espesorBruto ){
+    //    errors.espesorBruto = {message: "Este campo no puede estar vacio"}
+    // }
 
     if(!values.caliza ){
        errors.caliza = {message: "Este campo no puede estar vacio"}
@@ -455,6 +453,7 @@ const validate = values => {
       })
     }
 
+    /* Form has been removed
     if(!values.intervalos){
             errors.intervalos = {message: "Esta forma no puede estar vacia"}
         }else {
@@ -463,7 +462,7 @@ const validate = values => {
               errors.intervalos = {message: "Ningun campo puede estar vacio."}
             }
         })
-    }
+    }*/
     return errors
 }
 
@@ -489,6 +488,8 @@ const mapDispatchToProps = dispatch => ({
   setTipoDePozo: val => dispatch(setTipoDePozo(val)),
   setPwsFecha: val => dispatch(setPwsFecha(val)),
   setPwfFecha: val => dispatch(setPwfFecha(val)),
+  setPws: val => dispatch(setPws(val)),
+  setPwf: val => dispatch(setPwf(val)),
   setDeltaPPerMes: val => dispatch(setDeltaPPerMes(val)),
   setTyac: val => dispatch(setTyac(val)),
   setPvt: val => dispatch(setPvt(val)),
@@ -498,7 +499,7 @@ const mapDispatchToProps = dispatch => ({
   setTipoDeSistemo: val => dispatch(setTipoDeSistemo(val)),
   setHistorialIntervencionesData: val => dispatch(setHistorialIntervencionesData(val)),
   setChecked: val => dispatch(setChecked(val, 'fichaTecnicaDelPozo')),
-  setIntervalos: val => dispatch(setIntervalos(val))
+  // setIntervalos: val => dispatch(setIntervalos(val))
 })
 
 export default withValidate(

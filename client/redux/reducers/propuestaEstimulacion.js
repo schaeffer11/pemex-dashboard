@@ -12,8 +12,12 @@ const initialState = Map({
     volumenDesplazamientoLiquido: '',
     volumenDesplazamientoN2: '',
     volumenTotalDeLiquido: '',
+    propuestaCompany: '',
     cedulaData: [{
-        etapa: '',
+        etapa: 1,
+        index: 0,
+        intervalo: '',
+        nombreComercial: '',
         sistema: '',
         volLiquid: '',
         gastoN2: '',
@@ -60,6 +64,8 @@ const propuestaEstimulacion = (state = initialState, action) => {
         if(action.form == 'propuestaEstimulacion')
             return state.set('checked', fromJS(action.value))
         return state
+    case 'set_propuestaCompany':
+        return state.set('propuestaCompany', fromJS(action.value))
     default:
       return state
   }

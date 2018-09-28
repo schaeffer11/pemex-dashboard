@@ -23,13 +23,14 @@ import '../../../styles/components/_query_modal.css'
       selectedTab: 'Pozo',
       selectedSubtab: 'tecnicaDelPozo',
       isOpen: false,
-      error: ''
+      error: '', 
+      fieldWellOptions: []
     }
 
     this.pozoMultiStepFormRef = React.createRef();
     this.intervencionesFormRef = React.createRef();
 
-    this.pozoMultiStepForm = React.createElement(PozoMultiStepForm, { ref: this.pozoMultiStepFormRef });
+    this.pozoMultiStepForm = React.createElement(PozoMultiStepForm, { ref: this.pozoMultiStepFormRef, fieldWellOptions: this.state.fieldWellOptions });
     this.intervencionesForm = React.createElement(BaseIntervenciones,  { ref: this.intervencionesFormRef});
   }
 
@@ -53,6 +54,15 @@ import '../../../styles/components/_query_modal.css'
   }
 
   componentDidMount() {
+    fetch('/api/getFieldWellMapping')
+      .then(r => r.json())
+      .then(r => {
+
+        this.setState({
+          fieldWellOptions: r
+        })
+    })
+
   }
 
   componentDidUpdate(prevProps) {
@@ -93,10 +103,11 @@ import '../../../styles/components/_query_modal.css'
   }
 
   validate(){
-    return (
-      this.pozoMultiStepFormRef.current.getWrappedInstance().validate() &
-      this.intervencionesFormRef.current.getWrappedInstance().validate()
-    )
+    return true
+    // (
+    //   this.pozoMultiStepFormRef.current.getWrappedInstance().validate() &
+    //   this.intervencionesFormRef.current.getWrappedInstance().validate()
+    // )
   }
 
   buildModal(pozoFormSubmitting) {
@@ -133,7 +144,7 @@ import '../../../styles/components/_query_modal.css'
 
 
   render() {
-    let { selectedTab, selectedSubtab, error, isOpen, saveName } = this.state
+    let { selectedTab, selectedSubtab, error, isOpen, saveName, fieldWellOptions } = this.state
     let { global } = this.props
     let pozoFormSubmitting = this.props.formsState.get('pozoFormSubmitting')
     const errors = this.props.formsState.get('pozoFormError')
@@ -148,6 +159,7 @@ import '../../../styles/components/_query_modal.css'
     if (selectedTab === 'Pozo' && pagesPozo[selectedSubtab]) {
       form = this.pozoMultiStepForm
       otherForm = this.intervencionesForm
+
     }
     else if (selectedTab === 'Intervenciones') {
       form = this.intervencionesForm
@@ -157,7 +169,7 @@ import '../../../styles/components/_query_modal.css'
     if (!showForms) {
       return ( 
         <div className="input-forms">
-          <GeneralData />
+          <GeneralData fieldWellOptions={fieldWellOptions}/>
         </div>
       )  
     } 

@@ -77,8 +77,8 @@ import { setSistemasArtificialesImgURL, setTipoDeSistemo, setPresionDeCabeza, se
 
     return (
       <div className='sistemas-artificiales-form' >
-        <InputRow header="Presión de cabeza" name='' value={presionDeCabeza} onChange={setPresionDeCabeza} unit='Kg/cm2' errors={errors}/>
-        <InputRow header="Presión de linea o de separador" name='' value={presionDeLineaODeSeparador} onChange={setPresionDeLineaODeSeparador} unit='kg/cm2' errors={errors}/>
+        <InputRow header="Presión de cabeza" name='' value={presionDeCabeza} onChange={setPresionDeCabeza} unit={<div>Kg/cm<sup>2</sup></div>} errors={errors}/>
+        <InputRow header="Presión de linea o de separador" name='' value={presionDeLineaODeSeparador} onChange={setPresionDeLineaODeSeparador} unit={<div>Kg/cm<sup>2</sup></div>} errors={errors}/>
         <InputRowUnitless header="Número de descargas o ciclos" name='' value={numeroDeDescargasOCiclosEV} onChange={setNumeroDeDescargasOCiclosEV} errors={errors}/>
         <InputRowUnitless header="Volumen desplazado por ciclo" name='' value={volumenDesplazadoPorCircloEV} onChange={setVolumenDesplazadoPorCircloEV} errors={errors}/>
       </div>
@@ -96,14 +96,14 @@ import { setSistemasArtificialesImgURL, setTipoDeSistemo, setPresionDeCabeza, se
     
     return (
       <div className='sistemas-artificiales-form' >
-        <InputRow header="Presión de cabeza" name='' value={presionDeCabeza} onChange={setPresionDeCabeza} unit='Kg/cm2' errors={errors}/>
-        <InputRow header="Presión de linea o de separador" name='' value={presionDeLineaODeSeparador} onChange={setPresionDeLineaODeSeparador} unit='Kg/cm2' errors={errors}/>
-        <InputRow header="Presión de inyección" name='' value={presionDeInyeccionBN} onChange={setPresionDeInyeccionBN} unit='Kg/cm2' errors={errors}/>
-        <InputRow header="Presión de descarga" name='' value={presionDeDescargaBN} onChange={setPresionDeDescargaBN} unit='Kg/cm2' errors={errors}/>
+        <InputRow header="Presión de cabeza" name='' value={presionDeCabeza} onChange={setPresionDeCabeza} unit={<div>Kg/cm<sup>2</sup></div>} errors={errors}/>
+        <InputRow header="Presión de linea o de separador" name='' value={presionDeLineaODeSeparador} onChange={setPresionDeLineaODeSeparador} unit={<div>Kg/cm<sup>2</sup></div>} errors={errors}/>
+        <InputRow header="Presión de inyección" name='' value={presionDeInyeccionBN} onChange={setPresionDeInyeccionBN} unit={<div>Kg/cm<sup>2</sup></div>} errors={errors}/>
+        <InputRow header="Presión de descarga" name='' value={presionDeDescargaBN} onChange={setPresionDeDescargaBN} unit={<div>Kg/cm<sup>2</sup></div>} errors={errors}/>
         <InputRowUnitless header="Número de válvulas" value={numeroDeValvulasBN} onChange={setNumeroDeValvulasBN} name='' errors={errors} />
         <InputRow header="Profundidad de la válvula operante" name='' value={profundidadDeLaVulvulaOperanteBN} onChange={setProfundidadDeLaVulvulaOperanteBN} unit='m' errors={errors}/>
         <InputRow header="Orificio" name='' value={orificioBN} onChange={setOrificioBN} unit='pg' errors={errors}/>
-        <InputRow header="Volumen de gas inyectado" name='' value={volumenDeGasInyectadoBN} onChange={setVolumenDeGasInyectadoBN} unit='m3' errors={errors}/>
+        <InputRow header="Volumen de gas inyectado" name='' value={volumenDeGasInyectadoBN} onChange={setVolumenDeGasInyectadoBN} unit={<div>m<sup>3</sup></div>} errors={errors}/>
       </div>
     )
   }
@@ -117,8 +117,8 @@ import { setSistemasArtificialesImgURL, setTipoDeSistemo, setPresionDeCabeza, se
 
     return (
       <div className='sistemas-artificiales-form' >
-        <InputRow header="Presión de cabeza" name='' value={presionDeCabeza} onChange={setPresionDeCabeza} unit='Kg/cm2' errors={errors}/>
-        <InputRow header="Presión de linea o de separador" name='' value={presionDeLineaODeSeparador} onChange={setPresionDeLineaODeSeparador} unit='Kg/cm2' errors={errors}/>
+        <InputRow header="Presión de cabeza" name='' value={presionDeCabeza} onChange={setPresionDeCabeza} unit={<div>Kg/cm<sup>2</sup></div>} errors={errors}/>
+        <InputRow header="Presión de linea o de separador" name='' value={presionDeLineaODeSeparador} onChange={setPresionDeLineaODeSeparador} unit={<div>Kg/cm<sup>2</sup></div>} errors={errors}/>
         <InputRow header="Profundidad de la bomba" name='' value={profundidadDeLaBombaBH} onChange={setProfundidadDeLaBombaBH} unit='m' errors={errors}/>
         <InputRowUnitless header="Tipo y marca de bomba" value={tipoYMarcaDeBombaBH} onChange={setTipoYMarcaDeBombaBH} name='' errors={errors} />
         <InputRow header="Orificio" name='' value={orificioBH} onChange={setOrificioBH} unit='pg' errors={errors}/>
@@ -138,8 +138,8 @@ import { setSistemasArtificialesImgURL, setTipoDeSistemo, setPresionDeCabeza, se
 
     return (
       <div className='sistemas-artificiales-form' >
-        <InputRow header="Presión de cabeza" name='' value={presionDeCabeza} onChange={setPresionDeCabeza} unit='Kg/cm2' errors={errors}/>
-        <InputRow header="Presión de linea o de separador" name='' value={presionDeLineaODeSeparador} onChange={setPresionDeLineaODeSeparador} unit='Kg/cm2' errors={errors}/>
+        <InputRow header="Presión de cabeza" name='' value={presionDeCabeza} onChange={setPresionDeCabeza} unit={<div>Kg/cm<sup>2</sup></div>} errors={errors}/>
+        <InputRow header="Presión de linea o de separador" name='' value={presionDeLineaODeSeparador} onChange={setPresionDeLineaODeSeparador} unit={<div>Kg/cm<sup>2</sup></div>} errors={errors}/>
         <InputRowUnitless header="Motor y tipo de motor" name='' value={motorYTipoDeMotorBCP} onChange={setMotorYTipoDeMotorBCP} errors={errors}/>
         <InputRowUnitless header="Profundidad del motor" name='' value={profunidadDelMotorBCP} onChange={setProfunidadDelMotorBCP} errors={errors}/>
         <InputRow header="Velocidad" name='' unit='' value={velocidadBCP} onChange={setVelocidadBCP} errors={errors}/>
@@ -161,8 +161,8 @@ import { setSistemasArtificialesImgURL, setTipoDeSistemo, setPresionDeCabeza, se
 
     return (
       <div className='sistemas-artificiales-form' >
-        <InputRow header="Presión de cabeza" name='' value={presionDeCabeza} onChange={setPresionDeCabeza} unit='Kg/cm2' errors={errors}/>
-        <InputRow header="Presión de linea o de separador" name='' value={presionDeLineaODeSeparador} onChange={setPresionDeLineaODeSeparador} unit='Kg/cm2' errors={errors}/>
+        <InputRow header="Presión de cabeza" name='' value={presionDeCabeza} onChange={setPresionDeCabeza} unit={<div>Kg/cm<sup>2</sup></div>} errors={errors}/>
+        <InputRow header="Presión de linea o de separador" name='' value={presionDeLineaODeSeparador} onChange={setPresionDeLineaODeSeparador} unit={<div>Kg/cm<sup>2</sup></div>} errors={errors}/>
         <InputRow header="Profundidad del motor" name='' value={profundidadDelMotorBE} onChange={setProfundidadDelMotorBE} unit='m' errors={errors}/>
         <InputRow header="Diámetro" name='' value={diametroBE} onChange={setDiametroBE} unit='pg' errors={errors}/>
         <InputRow header="Volts" name='' value={voltsBE} onChange={setVoltsBE} unit='V' errors={errors}/>
@@ -185,8 +185,8 @@ import { setSistemasArtificialesImgURL, setTipoDeSistemo, setPresionDeCabeza, se
 
     return (
       <div className='sistemas-artificiales-form' >
-        <InputRow header="Presión de cabeza" name='' value={presionDeCabeza} onChange={setPresionDeCabeza} unit='Kg/cm2' errors={errors}/>
-        <InputRow header="Presión de linea o de separador" name='' value={presionDeLineaODeSeparador} onChange={setPresionDeLineaODeSeparador} unit='Kg/cm2' errors={errors}/>
+        <InputRow header="Presión de cabeza" name='' value={presionDeCabeza} onChange={setPresionDeCabeza} unit={<div>Kg/cm<sup>2</sup></div>} errors={errors}/>
+        <InputRow header="Presión de linea o de separador" name='' value={presionDeLineaODeSeparador} onChange={setPresionDeLineaODeSeparador} unit={<div>Kg/cm<sup>2</sup></div>} errors={errors}/>
         <InputRowUnitless header="Tipo de unidad" name='' value={tipoDeUnidadBM} onChange={setTipoDeUnidadBM} errors={errors}/>
         <InputRow header="Velocidad" name='' value={velocidadBM} onChange={setVelocidadBM} unit='EPM' errors={errors}/>
         <InputRow header="Longitud de carera" name='' value={longitudDeCareraBM} onChange={setLongitudDeCareraBM} unit='pg' errors={errors}/>

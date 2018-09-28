@@ -37,6 +37,23 @@ export const InputRow = ({ header, type='number', name, unit, value, onChange, o
     )
 }
 
+export const CalculatedValue = ({ header, name, unit, value, style={} }) => {
+  return (
+
+  <div className='input-row' style={style}>
+      <div className='label'>
+        {header}
+      </div>
+      <span className='input'>
+        {value}
+      </span>
+      <div className='unit'>
+        {unit}
+      </div>
+    </div>
+  )
+}
+
 export const InputRowUnitless = ({ header, type='text', name, unit, value, onChange, onBlur, index={index}, errors = [] }) => {
 
   let handleChange = (e) => {
@@ -52,6 +69,42 @@ export const InputRowUnitless = ({ header, type='text', name, unit, value, onCha
       </div>
       <input className='input' type={type} value={value} onChange={handleChange} onBlur={onBlur} name={name} index={index}/>
       { errorElements }
+    </div>
+    )
+}
+
+export const InputRowSelectMulti = ({ header, name, value, options, callback, onBlur, index, errors=[] }) => {
+  if (!options) {
+    options = []
+  }
+   //Suplement the event object with the properties that are not provided by the Select component
+   let handleBlur = (e) => {
+    if(onBlur && onBlur instanceof Function){
+      e.target.name = name
+      e.target.value = options.find(i=>i.value === value)
+      onBlur(e)
+    }
+  }
+  {/* value={options.find(i=>i.value === value) || null}
+        onChange={callback}
+        onBlur={handleBlur} */}
+
+  return (
+    <div className='input-row input-row-unitless'>
+      <div className='label'>
+        {header}
+      </div>
+      <Select
+        className='input'
+        isMulti
+        simpleValue={true}
+        options={options}
+        onChange={callback}
+        name={name}
+        index={index}
+        onBlur={handleBlur}
+      />
+      {/* { errorElements } */}
     </div>
     )
 }
