@@ -37,6 +37,23 @@ export const InputRow = ({ header, type='number', name, unit, value, onChange, o
     )
 }
 
+export const CalculatedValue = ({ header, name, unit, value, style={} }) => {
+  return (
+
+  <div className='input-row' style={style}>
+      <div className='label'>
+        {header}
+      </div>
+      <span className='input'>
+        {value}
+      </span>
+      <div className='unit'>
+        {unit}
+      </div>
+    </div>
+  )
+}
+
 export const InputRowUnitless = ({ header, type='text', name, unit, value, onChange, onBlur, index={index}, errors = [] }) => {
 
   let handleChange = (e) => {

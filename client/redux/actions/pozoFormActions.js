@@ -103,9 +103,10 @@ export function submitForm(action, saveName) {
       runValidation(allKeys, filteredKeys)
     }
 
-    formData.append('saveName', JSON.stringify(saveName))
 
     if (action === 'save') {
+      formData.append('saveName', JSON.stringify(saveName))
+
       fetch('/api/wellSave', {
         method: 'POST',
         body: formData,

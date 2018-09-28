@@ -27,11 +27,11 @@ import '../../../styles/components/_query_modal.css'
       fieldWellOptions: []
     }
 
-    // this.pozoMultiStepFormRef = React.createRef();
-    // this.intervencionesFormRef = React.createRef();
+    this.pozoMultiStepFormRef = React.createRef();
+    this.intervencionesFormRef = React.createRef();
 
-    // this.pozoMultiStepForm = React.createElement(PozoMultiStepForm, { fieldWellOptions: this.state.fieldWellOptions }, { ref: this.pozoMultiStepFormRef });
-    // this.intervencionesForm = React.createElement(BaseIntervenciones,  { ref: this.intervencionesFormRef});
+    this.pozoMultiStepForm = React.createElement(PozoMultiStepForm, { ref: this.pozoMultiStepFormRef, fieldWellOptions: this.state.fieldWellOptions });
+    this.intervencionesForm = React.createElement(BaseIntervenciones,  { ref: this.intervencionesFormRef});
   }
 
 
@@ -103,10 +103,11 @@ import '../../../styles/components/_query_modal.css'
   }
 
   validate(){
-    return (
-      this.pozoMultiStepFormRef.current.getWrappedInstance().validate() &
-      this.intervencionesFormRef.current.getWrappedInstance().validate()
-    )
+    return true
+    // (
+    //   this.pozoMultiStepFormRef.current.getWrappedInstance().validate() &
+    //   this.intervencionesFormRef.current.getWrappedInstance().validate()
+    // )
   }
 
   buildModal(pozoFormSubmitting) {
@@ -150,20 +151,19 @@ import '../../../styles/components/_query_modal.css'
 
     global = global.toJS()
 
-    console.log('field Options in parent', fieldWellOptions)
-
     let { showForms } = global
 
     let form = null
     let otherForm = null
 
     if (selectedTab === 'Pozo' && pagesPozo[selectedSubtab]) {
-      form = <PozoMultiStepForm fieldWellOptions={fieldWellOptions} />
-      otherForm = <BaseIntervenciones fieldWellOptions={fieldWellOptions} />
+      form = this.pozoMultiStepForm
+      otherForm = this.intervencionesForm
+
     }
     else if (selectedTab === 'Intervenciones') {
-      form = <BaseIntervenciones fieldWellOptions={fieldWellOptions} />
-      otherForm = <PozoMultiStepForm fieldWellOptions={fieldWellOptions} />
+      form = this.intervencionesForm
+      otherForm = this.pozoMultiStepForm
     }
 
     if (!showForms) {
