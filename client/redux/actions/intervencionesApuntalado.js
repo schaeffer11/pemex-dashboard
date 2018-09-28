@@ -108,4 +108,8 @@ export const setEstCostMinifrac = value => ({ type: 'set_estCostMinifrac', value
 export const setEstCostBacheNeutralizador = value => ({ type: 'set_estCostBacheNeutralizador', value})
 export const setEstCostProtectorDeArbol = value => ({ type: 'set_estCostProtectorDeArbol', value})
 
-export const setChecked = value => ({ type: 'set_checked', value})
+export const setChecked = (value, form)  => ({
+   type: 'set_forms_checked',
+   form: form,
+   value: value
+})

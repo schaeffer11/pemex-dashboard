@@ -1,0 +1,436 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="ChangeListManager">
+    <list default="true" id="2e5bf0f0-73e2-4434-9516-9002af263568" name="Default" comment="">
+      <change beforePath="" afterPath="$PROJECT_DIR$/client/components/Layout/InputsUI/PozoForms/HistoricoDeAforos.js" />
+      <change beforePath="" afterPath="$PROJECT_DIR$/client/redux/reducers/historicoDeAforos.js" />
+      <change beforePath="$PROJECT_DIR$/client/components/Layout/Common/InputRow.js" afterPath="$PROJECT_DIR$/client/components/Layout/Common/InputRow.js" />
+      <change beforePath="$PROJECT_DIR$/client/components/Layout/Common/InputTable.js" afterPath="$PROJECT_DIR$/client/components/Layout/Common/InputTable.js" />
+      <change beforePath="$PROJECT_DIR$/client/components/Layout/InputsUI/Components/GeneralData.js" afterPath="$PROJECT_DIR$/client/components/Layout/InputsUI/Components/GeneralData.js" />
+      <change beforePath="$PROJECT_DIR$/client/components/Layout/InputsUI/InputsUI.js" afterPath="$PROJECT_DIR$/client/components/Layout/InputsUI/InputsUI.js" />
+      <change beforePath="$PROJECT_DIR$/client/components/Layout/InputsUI/IntervencionesForms/Acido/EstimacionIncProduccionAcido.js" afterPath="$PROJECT_DIR$/client/components/Layout/InputsUI/IntervencionesForms/Acido/EstimacionIncProduccionAcido.js" />
+      <change beforePath="$PROJECT_DIR$/client/components/Layout/InputsUI/IntervencionesForms/Acido/PropuestaDeAcido.js" afterPath="$PROJECT_DIR$/client/components/Layout/InputsUI/IntervencionesForms/Acido/PropuestaDeAcido.js" />
+      <change beforePath="$PROJECT_DIR$/client/components/Layout/InputsUI/IntervencionesForms/Acido/ResultadosDeLaSimulacionAcido.js" afterPath="$PROJECT_DIR$/client/components/Layout/InputsUI/IntervencionesForms/Acido/ResultadosDeLaSimulacionAcido.js" />
+      <change beforePath="$PROJECT_DIR$/client/components/Layout/InputsUI/IntervencionesForms/Apuntalado/EstimacionIncProduccionApuntalado.js" afterPath="$PROJECT_DIR$/client/components/Layout/InputsUI/IntervencionesForms/Apuntalado/EstimacionIncProduccionApuntalado.js" />
+      <change beforePath="$PROJECT_DIR$/client/components/Layout/InputsUI/IntervencionesForms/Apuntalado/PropuestaDeApuntalado.js" afterPath="$PROJECT_DIR$/client/components/Layout/InputsUI/IntervencionesForms/Apuntalado/PropuestaDeApuntalado.js" />
+      <change beforePath="$PROJECT_DIR$/client/components/Layout/InputsUI/IntervencionesForms/Apuntalado/ResultadosDeLaSimulacionApuntalado.js" afterPath="$PROJECT_DIR$/client/components/Layout/InputsUI/IntervencionesForms/Apuntalado/ResultadosDeLaSimulacionApuntalado.js" />
+      <change beforePath="$PROJECT_DIR$/client/components/Layout/InputsUI/IntervencionesForms/EstimacionCostos.js" afterPath="$PROJECT_DIR$/client/components/Layout/InputsUI/IntervencionesForms/EstimacionCostos.js" />
+      <change beforePath="$PROJECT_DIR$/client/components/Layout/InputsUI/IntervencionesForms/Estimulacion/EstimacionIncProduccionEstimulacion.js" afterPath="$PROJECT_DIR$/client/components/Layout/InputsUI/IntervencionesForms/Estimulacion/EstimacionIncProduccionEstimulacion.js" />
+      <change beforePath="$PROJECT_DIR$/client/components/Layout/InputsUI/IntervencionesForms/Estimulacion/PropuestaDeEstimulacion.js" afterPath="$PROJECT_DIR$/client/components/Layout/InputsUI/IntervencionesForms/Estimulacion/PropuestaDeEstimulacion.js" />
+      <change beforePath="$PROJECT_DIR$/client/components/Layout/InputsUI/IntervencionesForms/Estimulacion/ResultadosDeLaSimulacionEstimulacion.js" afterPath="$PROJECT_DIR$/client/components/Layout/InputsUI/IntervencionesForms/Estimulacion/ResultadosDeLaSimulacionEstimulacion.js" />
+      <change beforePath="$PROJECT_DIR$/client/components/Layout/InputsUI/IntervencionesForms/PruebasDeLaboratorioExtra.js" afterPath="$PROJECT_DIR$/client/components/Layout/InputsUI/IntervencionesForms/PruebasDeLaboratorioExtra.js" />
+      <change beforePath="$PROJECT_DIR$/client/components/Layout/InputsUI/PozoForms/AnalisisDelAgua.js" afterPath="$PROJECT_DIR$/client/components/Layout/InputsUI/PozoForms/AnalisisDelAgua.js" />
+      <change beforePath="$PROJECT_DIR$/client/components/Layout/InputsUI/PozoForms/EvaluacionPetrofisica.js" afterPath="$PROJECT_DIR$/client/components/Layout/InputsUI/PozoForms/EvaluacionPetrofisica.js" />
+      <change beforePath="$PROJECT_DIR$/client/components/Layout/InputsUI/PozoForms/HistoricoDePresionCampo.js" afterPath="$PROJECT_DIR$/client/components/Layout/InputsUI/PozoForms/HistoricoDePresionCampo.js" />
+      <change beforePath="$PROJECT_DIR$/client/components/Layout/InputsUI/PozoForms/HistoricoDePresionPozo.js" afterPath="$PROJECT_DIR$/client/components/Layout/InputsUI/PozoForms/HistoricoDePresionPozo.js" />
+      <change beforePath="$PROJECT_DIR$/client/components/Layout/InputsUI/PozoForms/HistoricoDeProduccion.js" afterPath="$PROJECT_DIR$/client/components/Layout/InputsUI/PozoForms/HistoricoDeProduccion.js" />
+      <change beforePath="$PROJECT_DIR$/client/components/Layout/InputsUI/PozoForms/MecanicoYAparejo.js" afterPath="$PROJECT_DIR$/client/components/Layout/InputsUI/PozoForms/MecanicoYAparejo.js" />
+      <change beforePath="$PROJECT_DIR$/client/components/Layout/InputsUI/PozoForms/PozoMultiStepForm.js" afterPath="$PROJECT_DIR$/client/components/Layout/InputsUI/PozoForms/PozoMultiStepForm.js" />
+      <change beforePath="$PROJECT_DIR$/client/components/Layout/InputsUI/PozoForms/SistemasArtificialesDeProduccion.js" afterPath="$PROJECT_DIR$/client/components/Layout/InputsUI/PozoForms/SistemasArtificialesDeProduccion.js" />
+      <change beforePath="$PROJECT_DIR$/client/components/Layout/InputsUI/PozoForms/TecnicaDelCampo.js" afterPath="$PROJECT_DIR$/client/components/Layout/InputsUI/PozoForms/TecnicaDelCampo.js" />
+      <change beforePath="$PROJECT_DIR$/client/components/Layout/InputsUI/PozoForms/TecnicaDelPozo.js" afterPath="$PROJECT_DIR$/client/components/Layout/InputsUI/PozoForms/TecnicaDelPozo.js" />
+      <change beforePath="$PROJECT_DIR$/client/redux/actions/intervencionesAcido.js" afterPath="$PROJECT_DIR$/client/redux/actions/intervencionesAcido.js" />
+      <change beforePath="$PROJECT_DIR$/client/redux/actions/intervencionesApuntalado.js" afterPath="$PROJECT_DIR$/client/redux/actions/intervencionesApuntalado.js" />
+      <change beforePath="$PROJECT_DIR$/client/redux/actions/intervencionesEstimulacion.js" afterPath="$PROJECT_DIR$/client/redux/actions/intervencionesEstimulacion.js" />
+      <change beforePath="$PROJECT_DIR$/client/redux/actions/pozo.js" afterPath="$PROJECT_DIR$/client/redux/actions/pozo.js" />
+      <change beforePath="$PROJECT_DIR$/client/redux/actions/pozoFormActions.js" afterPath="$PROJECT_DIR$/client/redux/actions/pozoFormActions.js" />
+      <change beforePath="$PROJECT_DIR$/client/redux/index.js" afterPath="$PROJECT_DIR$/client/redux/index.js" />
+      <change beforePath="$PROJECT_DIR$/client/redux/reducers/evaluacionPetrofisica.js" afterPath="$PROJECT_DIR$/client/redux/reducers/evaluacionPetrofisica.js" />
+      <change beforePath="$PROJECT_DIR$/client/redux/reducers/fichaTecnicaDelCampo.js" afterPath="$PROJECT_DIR$/client/redux/reducers/fichaTecnicaDelCampo.js" />
+      <change beforePath="$PROJECT_DIR$/client/redux/reducers/fichaTecnicaDelPozo.js" afterPath="$PROJECT_DIR$/client/redux/reducers/fichaTecnicaDelPozo.js" />
+      <change beforePath="$PROJECT_DIR$/client/redux/reducers/historicoDePresion.js" afterPath="$PROJECT_DIR$/client/redux/reducers/historicoDePresion.js" />
+      <change beforePath="$PROJECT_DIR$/client/redux/reducers/historicoDeProduccion.js" afterPath="$PROJECT_DIR$/client/redux/reducers/historicoDeProduccion.js" />
+      <change beforePath="$PROJECT_DIR$/client/redux/reducers/propuestaAcido.js" afterPath="$PROJECT_DIR$/client/redux/reducers/propuestaAcido.js" />
+      <change beforePath="$PROJECT_DIR$/client/redux/reducers/propuestaApuntalado.js" afterPath="$PROJECT_DIR$/client/redux/reducers/propuestaApuntalado.js" />
+      <change beforePath="$PROJECT_DIR$/client/redux/reducers/propuestaEstimulacion.js" afterPath="$PROJECT_DIR$/client/redux/reducers/propuestaEstimulacion.js" />
+      <change beforePath="$PROJECT_DIR$/client/styles/components/_tables.scss" afterPath="$PROJECT_DIR$/client/styles/components/_tables.scss" />
+      <change beforePath="$PROJECT_DIR$/client/styles/pages/_inputs.scss" afterPath="$PROJECT_DIR$/client/styles/pages/_inputs.scss" />
+      <change beforePath="$PROJECT_DIR$/server/api/api.js" afterPath="$PROJECT_DIR$/server/api/api.js" />
+      <change beforePath="$PROJECT_DIR$/server/api/pozo.js" afterPath="$PROJECT_DIR$/server/api/pozo.js" />
+      <change beforePath="$PROJECT_DIR$/server/auth/users.js" afterPath="$PROJECT_DIR$/server/auth/users.js" />
+    </list>
+    <ignored path="$PROJECT_DIR$/dist-dev/client/js/" />
+    <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
+    <option name="TRACKING_ENABLED" value="true" />
+    <option name="SHOW_DIALOG" value="false" />
+    <option name="HIGHLIGHT_CONFLICTS" value="true" />
+    <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
+    <option name="LAST_RESOLUTION" value="IGNORE" />
+  </component>
+  <component name="FileEditorManager">
+    <leaf>
+      <file leaf-file-name="PozoMultiStepForm.js" pinned="false" current-in-tab="true">
+        <entry file="file://$PROJECT_DIR$/client/components/Layout/InputsUI/PozoForms/PozoMultiStepForm.js">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="165">
+              <caret line="742" column="7" lean-forward="true" selection-start-line="742" selection-start-column="7" selection-end-line="742" selection-end-column="7" />
+              <folding>
+                <element signature="e#0#40#0" expanded="true" />
+              </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="fichaTecnicaDelPozo.js" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/client/redux/reducers/fichaTecnicaDelPozo.js">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="179">
+              <caret line="40" column="6" lean-forward="false" selection-start-line="40" selection-start-column="6" selection-end-line="40" selection-end-column="6" />
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="TecnicaDelPozo.js" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/client/components/Layout/InputsUI/PozoForms/TecnicaDelPozo.js">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="173">
+              <caret line="455" column="28" lean-forward="false" selection-start-line="455" selection-start-column="28" selection-end-line="455" selection-end-column="28" />
+              <folding>
+                <element signature="e#0#40#0" expanded="true" />
+              </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="historicoDeProduccion.js" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/client/redux/reducers/historicoDeProduccion.js">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="223">
+              <caret line="32" column="20" lean-forward="false" selection-start-line="32" selection-start-column="20" selection-end-line="32" selection-end-column="20" />
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="HistoricoDePresionPozo.js" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/client/components/Layout/InputsUI/PozoForms/HistoricoDePresionPozo.js">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="212">
+              <caret line="202" column="69" lean-forward="false" selection-start-line="202" selection-start-column="69" selection-end-line="202" selection-end-column="69" />
+              <folding>
+                <element signature="e#0#40#0" expanded="true" />
+              </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="HistoricoDePresionCampo.js" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/client/components/Layout/InputsUI/PozoForms/HistoricoDePresionCampo.js">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="182">
+              <caret line="207" column="71" lean-forward="false" selection-start-line="207" selection-start-column="71" selection-end-line="207" selection-end-column="71" />
+              <folding>
+                <element signature="e#0#40#0" expanded="true" />
+              </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="historicoDePresion.js" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/client/redux/reducers/historicoDePresion.js">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="253">
+              <caret line="32" column="68" lean-forward="false" selection-start-line="32" selection-start-column="68" selection-end-line="32" selection-end-column="68" />
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="propuestaAcido.js" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/client/redux/reducers/propuestaAcido.js">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="226">
+              <caret line="87" column="66" lean-forward="false" selection-start-line="87" selection-start-column="66" selection-end-line="87" selection-end-column="66" />
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="propuestaApuntalado.js" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/client/redux/reducers/propuestaApuntalado.js">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="226">
+              <caret line="84" column="66" lean-forward="false" selection-start-line="84" selection-start-column="66" selection-end-line="84" selection-end-column="66" />
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="PropuestaDeAcido.js" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/client/components/Layout/InputsUI/IntervencionesForms/Acido/PropuestaDeAcido.js">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="212">
+              <caret line="524" column="65" lean-forward="false" selection-start-line="524" selection-start-column="65" selection-end-line="524" selection-end-column="65" />
+              <folding>
+                <element signature="e#0#40#0" expanded="true" />
+              </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+    </leaf>
+  </component>
+  <component name="FindInProjectRecents">
+    <findStrings>
+      <find>&lt;&lt;&lt;&lt;</find>
+      <find>&lt;&lt;&lt;</find>
+      <find>loadFunc</find>
+      <find>&lt;&lt;</find>
+    </findStrings>
+  </component>
+  <component name="Git.Settings">
+    <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
+  </component>
+  <component name="IdeDocumentHistory">
+    <option name="CHANGED_PATHS">
+      <list>
+        <option value="$PROJECT_DIR$/client/components/Layout/InputsUI/PozoForms/TecnicaDelCampo.js" />
+        <option value="$PROJECT_DIR$/client/redux/reducers/propuestaEstimulacion.js" />
+        <option value="$PROJECT_DIR$/client/components/Layout/InputsUI/IntervencionesForms/Apuntalado/PropuestaDeApuntalado.js" />
+        <option value="$PROJECT_DIR$/client/components/Layout/InputsUI/IntervencionesForms/Estimulacion/PropuestaDeEstimulacion.js" />
+        <option value="$PROJECT_DIR$/client/components/Layout/InputsUI/IntervencionesForms/Acido/PropuestaDeAcido.js" />
+        <option value="$PROJECT_DIR$/client/redux/reducers/propuestaApuntalado.js" />
+        <option value="$PROJECT_DIR$/client/redux/reducers/propuestaAcido.js" />
+        <option value="$PROJECT_DIR$/client/redux/reducers/historicoDeProduccion.js" />
+        <option value="$PROJECT_DIR$/client/components/Layout/InputsUI/PozoForms/HistoricoDePresionPozo.js" />
+        <option value="$PROJECT_DIR$/client/components/Layout/InputsUI/PozoForms/HistoricoDePresionCampo.js" />
+        <option value="$PROJECT_DIR$/client/redux/reducers/historicoDePresion.js" />
+        <option value="$PROJECT_DIR$/client/redux/reducers/fichaTecnicaDelPozo.js" />
+        <option value="$PROJECT_DIR$/client/components/Layout/InputsUI/PozoForms/TecnicaDelPozo.js" />
+        <option value="$PROJECT_DIR$/client/components/Layout/InputsUI/PozoForms/PozoMultiStepForm.js" />
+      </list>
+    </option>
+  </component>
+  <component name="JsBuildToolGruntFileManager" detection-done="true" sorting="DEFINITION_ORDER" />
+  <component name="JsBuildToolPackageJson" detection-done="true" sorting="DEFINITION_ORDER" />
+  <component name="JsGulpfileManager">
+    <detection-done>true</detection-done>
+    <sorting>DEFINITION_ORDER</sorting>
+  </component>
+  <component name="ProjectFrameBounds">
+    <option name="x" value="15" />
+    <option name="y" value="23" />
+    <option name="width" value="1400" />
+    <option name="height" value="833" />
+  </component>
+  <component name="ProjectView">
+    <navigator currentView="ProjectPane" proportions="" version="1">
+      <flattenPackages />
+      <showMembers />
+      <showModules />
+      <showLibraryContents />
+      <hideEmptyPackages />
+      <abbreviatePackageNames />
+      <autoscrollToSource />
+      <autoscrollFromSource />
+      <sortByType />
+      <manualOrder />
+      <foldersAlwaysOnTop value="true" />
+    </navigator>
+    <panes>
+      <pane id="ProjectPane" />
+      <pane id="Scope" />
+      <pane id="Scratches" />
+    </panes>
+  </component>
+  <component name="PropertiesComponent">
+    <property name="WebServerToolWindowFactoryState" value="false" />
+    <property name="HbShouldOpenHtmlAsHb" value="" />
+  </component>
+  <component name="RunDashboard">
+    <option name="ruleStates">
+      <list>
+        <RuleState>
+          <option name="name" value="ConfigurationTypeDashboardGroupingRule" />
+        </RuleState>
+        <RuleState>
+          <option name="name" value="StatusDashboardGroupingRule" />
+        </RuleState>
+      </list>
+    </option>
+  </component>
+  <component name="ShelveChangesManager" show_recycled="false">
+    <option name="remove_strategy" value="false" />
+  </component>
+  <component name="SvnConfiguration">
+    <configuration />
+  </component>
+  <component name="TaskManager">
+    <task active="true" id="Default" summary="Default task">
+      <changelist id="2e5bf0f0-73e2-4434-9516-9002af263568" name="Default" comment="" />
+      <created>1538142681036</created>
+      <option name="number" value="Default" />
+      <option name="presentableId" value="Default" />
+      <updated>1538142681036</updated>
+      <workItem from="1538142683919" duration="1194000" />
+    </task>
+    <servers />
+  </component>
+  <component name="TimeTrackingManager">
+    <option name="totallyTimeSpent" value="1194000" />
+  </component>
+  <component name="ToolWindowManager">
+    <frame x="15" y="23" width="1400" height="833" extended-state="0" />
+    <editor active="true" />
+    <layout>
+      <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.24945612" sideWeight="0.5" order="0" side_tool="false" content_ui="combo" />
+      <window_info id="TODO" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="6" side_tool="false" content_ui="tabs" />
+      <window_info id="Docker" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="false" weight="0.33" sideWeight="0.5" order="-1" side_tool="false" content_ui="tabs" />
+      <window_info id="Event Log" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="-1" side_tool="true" content_ui="tabs" />
+      <window_info id="Run" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
+      <window_info id="Version Control" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.3292683" sideWeight="0.5" order="-1" side_tool="false" content_ui="tabs" />
+      <window_info id="Structure" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.24945612" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
+      <window_info id="Terminal" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="-1" side_tool="false" content_ui="tabs" />
+      <window_info id="Debug" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.4" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
+      <window_info id="Favorites" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="-1" side_tool="true" content_ui="tabs" />
+      <window_info id="Cvs" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="4" side_tool="false" content_ui="tabs" />
+      <window_info id="Hierarchy" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="2" side_tool="false" content_ui="combo" />
+      <window_info id="Message" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="0" side_tool="false" content_ui="tabs" />
+      <window_info id="Commander" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.4" sideWeight="0.5" order="0" side_tool="false" content_ui="tabs" />
+      <window_info id="Find" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
+      <window_info id="Inspection" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.4" sideWeight="0.5" order="5" side_tool="false" content_ui="tabs" />
+      <window_info id="Ant Build" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
+    </layout>
+  </component>
+  <component name="TypeScriptGeneratedFilesManager">
+    <option name="version" value="1" />
+  </component>
+  <component name="VcsContentAnnotationSettings">
+    <option name="myLimit" value="2678400000" />
+  </component>
+  <component name="XDebuggerManager">
+    <breakpoint-manager />
+    <watches-manager />
+  </component>
+  <component name="editorHistoryManager">
+    <entry file="file://$PROJECT_DIR$/client/components/Layout/InputsUI/PozoForms/TecnicaDelCampo.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="60">
+          <caret line="234" column="0" lean-forward="true" selection-start-line="234" selection-start-column="0" selection-end-line="234" selection-end-column="0" />
+          <folding>
+            <element signature="e#0#40#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/client/components/Layout/InputsUI/IntervencionesForms/Estimulacion/PropuestaDeEstimulacion.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="197">
+          <caret line="509" column="72" lean-forward="false" selection-start-line="509" selection-start-column="72" selection-end-line="509" selection-end-column="72" />
+          <folding>
+            <element signature="e#0#40#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/client/redux/reducers/propuestaEstimulacion.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="241">
+          <caret line="67" column="66" lean-forward="false" selection-start-line="67" selection-start-column="66" selection-end-line="67" selection-end-column="66" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/client/components/Layout/InputsUI/IntervencionesForms/Apuntalado/PropuestaDeApuntalado.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="197">
+          <caret line="533" column="70" lean-forward="false" selection-start-line="533" selection-start-column="70" selection-end-line="533" selection-end-column="70" />
+          <folding>
+            <element signature="e#0#40#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/client/components/Layout/InputsUI/IntervencionesForms/Acido/PropuestaDeAcido.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="212">
+          <caret line="524" column="65" lean-forward="false" selection-start-line="524" selection-start-column="65" selection-end-line="524" selection-end-column="65" />
+          <folding>
+            <element signature="e#0#40#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/client/redux/reducers/propuestaApuntalado.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="226">
+          <caret line="84" column="66" lean-forward="false" selection-start-line="84" selection-start-column="66" selection-end-line="84" selection-end-column="66" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/client/redux/reducers/propuestaAcido.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="226">
+          <caret line="87" column="66" lean-forward="false" selection-start-line="87" selection-start-column="66" selection-end-line="87" selection-end-column="66" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/client/redux/reducers/historicoDeProduccion.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="223">
+          <caret line="32" column="20" lean-forward="false" selection-start-line="32" selection-start-column="20" selection-end-line="32" selection-end-column="20" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/client/components/Layout/InputsUI/PozoForms/HistoricoDePresionPozo.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="212">
+          <caret line="202" column="69" lean-forward="false" selection-start-line="202" selection-start-column="69" selection-end-line="202" selection-end-column="69" />
+          <folding>
+            <element signature="e#0#40#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/client/components/Layout/InputsUI/PozoForms/HistoricoDePresionCampo.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="182">
+          <caret line="207" column="71" lean-forward="false" selection-start-line="207" selection-start-column="71" selection-end-line="207" selection-end-column="71" />
+          <folding>
+            <element signature="e#0#40#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/client/redux/reducers/historicoDePresion.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="253">
+          <caret line="32" column="68" lean-forward="false" selection-start-line="32" selection-start-column="68" selection-end-line="32" selection-end-column="68" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/client/redux/reducers/fichaTecnicaDelPozo.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="179">
+          <caret line="40" column="6" lean-forward="false" selection-start-line="40" selection-start-column="6" selection-end-line="40" selection-end-column="6" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/client/components/Layout/InputsUI/PozoForms/TecnicaDelPozo.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="173">
+          <caret line="455" column="28" lean-forward="false" selection-start-line="455" selection-start-column="28" selection-end-line="455" selection-end-column="28" />
+          <folding>
+            <element signature="e#0#40#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/client/components/Layout/InputsUI/PozoForms/PozoMultiStepForm.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="165">
+          <caret line="742" column="7" lean-forward="true" selection-start-line="742" selection-start-column="7" selection-end-line="742" selection-end-column="7" />
+          <folding>
+            <element signature="e#0#40#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+  </component>
+</project>

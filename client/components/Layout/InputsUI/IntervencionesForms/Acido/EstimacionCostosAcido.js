@@ -64,6 +64,7 @@ import { connect } from 'react-redux'
 }
 
 const mapStateToProps = state => ({
+  forms: state.get('forms'),
   formData: state.get('estCostAcido'),
 })
 

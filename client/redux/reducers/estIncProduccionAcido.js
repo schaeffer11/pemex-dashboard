@@ -18,7 +18,8 @@ const initialState = Map({
     estIncGastoCompromisoQo: '',
     estIncGastoCompromisoQg: '',
     obervacionesEstIncAcido: '',
-    imgURL: null
+    imgURL: null,
+    checked: []
 })
 
 
@@ -60,8 +61,9 @@ const estIncProduccionAcido = (state = initialState, action) => {
         return state.set('obervacionesEstIncAcido', fromJS(action.value))
     case 'set_estIncProdAcidoImgURL':
         return state.set('imgURL', fromJS(action.value))
-    case 'set_checked' :
-        return state.set('checked', fromJS(action.value))   
+    case 'set_forms_checked' :
+        if(action.form == 'estIncProduccionAcido')
+          return state.set('checked', fromJS(action.value))
     default:
       return state
   }

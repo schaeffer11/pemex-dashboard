@@ -61,6 +61,7 @@ import { setFichaTecnicaDelCampo, setFichaTecnicaDelPozo, setEvaluacionPetrofisi
     ];
   }
 
+
   componentDidMount() {
     fetch('/api/getFieldWellMapping')
       .then(r => r.json())
@@ -572,13 +573,10 @@ import { setFichaTecnicaDelCampo, setFichaTecnicaDelPozo, setEvaluacionPetrofisi
     let allErrors = {}
     let allChecked = []
     forms.forEach((form) => {
-
       let {errors, checked} = form.selector.props.forceValidation()
       allErrors = Object.assign({}, allErrors, errors);
-      allChecked.push(...checked)
     });
 
-    setChecked(allChecked)
 
     return allErrors.length == 0;
   }
@@ -707,12 +705,12 @@ import { setFichaTecnicaDelCampo, setFichaTecnicaDelPozo, setEvaluacionPetrofisi
     
     let pozoFormSubmitting = this.props.formsState.get('pozoFormSubmitting')
     const submitting = pozoFormSubmitting ? 'submitting' : ''
+
     const errors = this.props.formsState.get('pozoFormError')
 
-    const errorClass = errors.length ? 'error' : ''
 
     return (
-       <div className={`multistep-form ${submitting} ${errorClass}`}>
+       <div className={`multistep-form ${submitting}`}>
         <div className="subtabs">
             {this.forms.map( (tab, index) => {
                const active = this.state.currentStep === index ? 'active' : ''; 
@@ -739,10 +737,7 @@ import { setFichaTecnicaDelCampo, setFichaTecnicaDelPozo, setEvaluacionPetrofisi
                return this.forms[index].content}
           )}
         </div>
-      
-        { errors.length > 0 &&
-            <div className="error">Se han encontrado errores en la forma.</div>
-        }
+
       { isOpen ? this.buildModal() : null }
        </div>
      );

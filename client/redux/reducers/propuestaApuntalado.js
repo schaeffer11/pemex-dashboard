@@ -77,8 +77,10 @@ const propuestaApuntalado = (state = initialState, action) => {
         return state.set('diametroDeDisparos', fromJS(action.value))
     case 'set_cedulaData':
         return state.set('cedulaData', fromJS(action.value))
-    case 'set_checked' :
-        return state.set('checked', fromJS(action.value))
+    case 'set_forms_checked' :
+        if(action.form == 'propuestaApuntalado')
+           return state.set('checked', fromJS(action.value))
+        return state
     case 'set_propuestaCompany':
         return state.set('propuestaCompany', fromJS(action.value))
     default:

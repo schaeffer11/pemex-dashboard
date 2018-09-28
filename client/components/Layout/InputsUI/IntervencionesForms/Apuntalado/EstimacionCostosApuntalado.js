@@ -198,7 +198,7 @@ const mapDispatchToProps = dispatch => ({
   setEstCostMinifrac: val => dispatch(setEstCostMinifrac(val)),
   setEstCostBacheNeutralizador: val => dispatch(setEstCostBacheNeutralizador(val)),
   setEstCostProtectorDeArbol: val => dispatch(setEstCostProtectorDeArbol(val)),
-  setChecked: val => dispatch(setChecked(val))
+  setChecked: val => dispatch(setChecked(val, 'estCostApuntalado'))
 })
 
 export default withValidate(

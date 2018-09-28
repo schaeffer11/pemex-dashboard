@@ -5,7 +5,12 @@ export const setActivo = value => ({ type: 'set_activo', value})
 export const setCampo = value => ({ type: 'set_campo', value})
 export const setPozo = value => ({ type: 'set_pozo', value})
 export const setFormacion = value => ({ type: 'set_formacion', value})
-export const setChecked = value => ({ type: 'set_checked', value}) 
+//export const setChecked = value => ({ type: 'set_checked', value})
+export const setChecked = (value, form)  => ({
+   type: 'set_forms_checked', 
+   form: form,
+   value: value
+}) 
 
 //FichaTecnicaDelCampo
 export const setDescubrimientoField = value => ({ type: 'set_descubrimientoField', value})

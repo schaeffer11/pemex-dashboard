@@ -32,13 +32,21 @@ import { setCedulaData, setIntervalo, setLongitudDeIntervalo, setVolAparejo, set
 
   containsErrors(){
     let foundErrors = false
-    for (const key of Object.keys(this.state.errors)) {
-      if(this.state.errors[key].checked)
-        foundErrors = true
-    }
+    let errors = Object.assign({}, this.state.errors);
+    let {formData} = this.props
+    formData = formData.toJS()
+
+    const checked = formData.checked  || []
+    checked.forEach((checked) => {
+        if(errors[checked]){
+           errors[checked].checked = true
+           foundErrors = true
+        }
+    })
 
     if(foundErrors !== this.state.containsErrors){
       this.setState({
+        errors: errors,
         containsErrors: foundErrors
       })
     }
@@ -499,8 +507,8 @@ const mapDispatchToProps = dispatch => ({
   setVolumenDesplazamientoN2: val => dispatch(setVolumenDesplazamientoN2(val)),
   setVolumenTotalDeLiquido: val => dispatch(setVolumenTotalDeLiquido(val)),
   setCedulaData: val => dispatch(setCedulaData(val)),
+  setChecked: val => dispatch(setChecked(val, 'propuestaEstimulacion')),
   setPropuestaCompany: val => dispatch(setPropuestaCompany(val)),
-  setChecked: val => dispatch(setChecked(val))
 })
 
 export default withValidate(
