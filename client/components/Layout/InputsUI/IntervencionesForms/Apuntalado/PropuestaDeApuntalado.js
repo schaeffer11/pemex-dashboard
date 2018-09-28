@@ -5,7 +5,7 @@ import ReactTable from 'react-table'
 import Select from 'react-select'
 import { connect } from 'react-redux'
 import {withValidate} from '../../../Common/Validate'
-import { InputRow, InputRowUnitless, InputRowSelectUnitless } from '../../../Common/InputRow'
+import { InputRow, CalculatedValue, InputRowUnitless, InputRowSelectUnitless } from '../../../Common/InputRow'
 import { setCedulaData, setModuloYoungArena, setModuloYoungLutitas, setRelacPoissonArena, setRelacPoissonLutatas, setGradienteDeFractura, setDensidadDeDisparos, setDiametroDeDisparos, setIntervalo, setLongitudDeIntervalo, setVolAparejo, setCapacidadTotalDelPozo, setVolumenPrecolchonN2, setVolumenDeApuntalante, setVolumenDeGelDeFractura, setVolumenDesplazamiento, setVolumenTotalDeLiquido, setChecked, setPropuestaCompany } from '../../../../../redux/actions/intervencionesApuntalado'
 
 
@@ -118,21 +118,67 @@ import { setCedulaData, setModuloYoungArena, setModuloYoungLutitas, setRelacPois
   // }
 
   makeDetallesForm() {
-    let { setVolumenPrecolchonN2, setVolumenDeApuntalante, setVolumenDeGelDeFractura, setVolumenDesplazamiento, setVolumenTotalDeLiquido, formData } = this.props
+    let { formData } = this.props
     formData = formData.toJS()
-    let { volumenPrecolchonN2, volumenDeApuntalante, volumenDeGelDeFractura, volumenDesplazamiento, volumenTotalDeLiquido } = formData
+    const { cedulaData } = formData
+    const calculateVolumes = (data, fluid, sistema = null) => {
+      return data.filter(elem => elem.sistema === sistema || sistema === null)
+        .reduce((accumulator, currentValue) => {
+          if (currentValue[fluid]) {
+            return accumulator + currentValue[fluid]
+          }
+          return accumulator
+        }, 0)
+    }
+
+    const reactivoVolume = calculateVolumes(cedulaData, 'volLiquid', 'reactivo')
+    const noReactivoVolume = calculateVolumes(cedulaData, 'volLiquid', 'no-reactivo')
+    const divergenteVolume = calculateVolumes(cedulaData, 'volLiquid', 'divergente')
+    const desplazamientoLiquidVolume = calculateVolumes(cedulaData, 'volLiquid', 'desplazamiento')
+    const desplazamientoGasVolume = calculateVolumes(cedulaData, 'volN2', 'desplazamiento')
+    const precolchonGasVolume = calculateVolumes(cedulaData, 'volN2', 'pre-colchon')
+    const totalLiquidVolume = calculateVolumes(cedulaData, 'volLiquid')
     
     return (
       <div className='detalles-form' >
         <div className='header'>
           Detalles
         </div>
-        {/* <InputRow header={<div>Volumen precolchón N<sub>2</sub></div>} name='volumenPrecolchonN2' unit={<div>m<sup>3</sup></div>} value={volumenPrecolchonN2} onChange={setVolumenPrecolchonN2} errors={this.state.errors} onBlur={this.validate}/>
-        <InputRow header="Volumen de apuntalante" name='volumenDeApuntalante' unit={<div>m<sup>3</sup></div>} value={volumenDeApuntalante} onChange={setVolumenDeApuntalante} errors={this.state.errors} onBlur={this.validate}/>
-        <InputRow header="Volumen de gel de fractura" name='volumenDeGelDeFractura' unit={<div>m<sup>3</sup></div>} value={volumenDeGelDeFractura} onChange={setVolumenDeGelDeFractura} errors={this.state.errors} onBlur={this.validate}/>
-        <InputRow header="Volumen desplazamiento" name='volumenDesplazamiento' unit={<div>m<sup>3</sup></div>} value={volumenDesplazamiento} onChange={setVolumenDesplazamiento} errors={this.state.errors} onBlur={this.validate}/>
-        <InputRow header="Volumen total de líquido" name='volumenTotalDeLiquido' unit={<div>m<sup>3</sup></div>} value={volumenTotalDeLiquido} onChange={setVolumenTotalDeLiquido} errors={this.state.errors} onBlur={this.validate}/> */}
-
+        <CalculatedValue
+          header={<div>Volumen precolchón N<sub>2</sub></div>}
+          value={precolchonGasVolume}
+          unit={<div>m<sup>3</sup></div>} 
+        />
+        <CalculatedValue
+          header={<div>Volumen sistema no reactivo</div>}
+          value={noReactivoVolume}
+          unit={<div>m<sup>3</sup></div>} 
+        />
+        <CalculatedValue
+          header={<div>Sistema no reactivo</div>}
+          value={reactivoVolume}
+          unit={<div>m<sup>3</sup></div>} 
+        />
+        <CalculatedValue
+          header={<div>Volumen sistema divergente</div>}
+          value={divergenteVolume}
+          unit={<div>m<sup>3</sup></div>} 
+        />
+        <CalculatedValue
+          header={<div>Volumen desplazamiento líquido</div>}
+          value={desplazamientoLiquidVolume}
+          unit={<div>m<sup>3</sup></div>} 
+        />
+        <CalculatedValue
+          header={<div>Volumen desplazamiento N<sub>2</sub></div>}
+          value={desplazamientoGasVolume}
+          unit={<div>m<sup>3</sup></div>} 
+        />
+        <CalculatedValue
+          header={<div>"Volumen total de líquido</div>}
+          value={totalLiquidVolume}
+          unit={<div>m<sup>3</sup></div>} 
+        />
       </div>
     )
   }
@@ -209,7 +255,6 @@ import { setCedulaData, setModuloYoungArena, setModuloYoungLutitas, setRelacPois
   }
 
   handleSelect(row, e) {
-    console.log('row', row)
     let { formData, setCedulaData } = this.props
     formData = formData.toJS()
     let { cedulaData } = formData
@@ -226,8 +271,8 @@ import { setCedulaData, setModuloYoungArena, setModuloYoungLutitas, setRelacPois
     let { cedulaData } = formData
 
     const intervaloOptions = intervalos.map(elem =>({
-      value: `${elem.baseMD}-${elem.cimaMD}`,
-      label: `${elem.baseMD}-${elem.cimaMD}`,
+      value: `${elem.cimaMD}-${elem.baseMD}`,
+      label: `${elem.cimaMD}-${elem.baseMD}`,
     }))
 
     const sistemaOptions = [
@@ -306,47 +351,54 @@ import { setCedulaData, setModuloYoungArena, setModuloYoungLutitas, setRelacPois
         Header: 'Concentracion de Apuntalante (lbm/gal)',
         accessor: 'concentraciDeApuntalante',
         cell: 'renderNumber',
-      }, { 
-        Header: 'Vol. Liq. (m3)',
-        accessor: 'volLiquid',
-        cell: 'renderNumber',
-      }, { 
-        Header: 'Gasto N2 (m3/min)',
-        accessor: 'gastoN2',
-        cell: 'renderNumber',
-      }, { 
-        Header: 'Gasto Liquido (bpm)',
-        accessor: 'gastoLiqudo',
-        cell: 'renderNumber',
-      }, { 
-        Header: 'Gasto en fondo (bpm)',
-        accessor: 'gastoEnFondo',
-        cell: 'renderNumber',
-      }, { 
-        Header: 'Calidad (%)',
-        accessor: 'calidad',
-        cell: 'renderNumber',
-      }, { 
-        Header: 'Vol. N2 (m3 std)',
-        accessor: 'volN2',
-        cell: 'renderNumber',
-      }, { 
-        Header: 'Vol. Liq. Acum. (m3)',
-        accessor: 'volLiquidoAcum',
-        cell: 'renderNumber',
-      }, { 
-        Header: 'Vol. N2 Acum. (m3 std)',
-        accessor: 'volN2Acum',
-        cell: 'renderNumber',
-      }, { 
-        Header: 'Rel. N2/Liq (m3 std/m3)',
-        accessor: 'relN2Liq',
-        cell: 'renderNumber',
-      }, { 
+      },
+      { 
         Header: 'Tiempo (min)',
         accessor: 'tiempo',
         cell: 'renderNumber',
-      }
+      },
+      {
+        Header: 'Gasto Liquido (bpm)',
+        accessor: 'gastoLiqudo',
+        cell: 'renderNumber',
+      },
+      {
+        Header: 'Gasto N2 (m3/min)',
+        accessor: 'gastoN2',
+        cell: 'renderNumber',
+      },
+      {
+        Header: 'Gasto en fondo (bpm)',
+        accessor: 'gastoEnFondo',
+        cell: 'renderNumber',
+      },
+      {
+        Header: 'Vol. Liq. (m3)',
+        accessor: 'volLiquid',
+      },
+      {
+        Header: 'Vol. N2 (m3 std)',
+        accessor: 'volN2',
+      },
+      {
+        Header: 'Vol. Liq. Acum. (m3)',
+        accessor: 'volLiquidoAcum',
+      },
+      {
+        Header: 'Vol. N2 Acum. (m3 std)',
+        accessor: 'volN2Acum',
+      },
+      {
+        Header: 'Calidad (%)',
+        accessor: 'calidad',
+        cell: 'renderNumber',
+      },
+      { 
+        Header: 'Rel. N2/Liq (m3 std/m3)',
+        accessor: 'relN2Liq',
+        cell: 'renderNumber',
+      },
+      
     ]
     const objectTemplate = {}
     let length = 1

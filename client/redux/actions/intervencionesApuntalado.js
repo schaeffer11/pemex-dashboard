@@ -15,12 +15,19 @@ export const setGradienteDeFractura = value => ({ type: 'set_gradienteDeFractura
 export const setDensidadDeDisparos = value => ({ type: 'set_densidadDeDisparos', value})
 export const setDiametroDeDisparos = value => ({ type: 'set_diametroDeDisparos', value})
 export const setPropuestaCompany = value => ({ type: 'set_propuestaCompany', value})
-export const setCedulaData = value => ({
+export const setCedulaData = (value) => ({
   type: 'set_cedulaData',
-  value: value.map(elem => {
-    elem.etapa = elem.index + 1
-    return elem
-  })
+  value: value.map((row, i) => {
+    row.etapa = row.index + 1
+    row.volLiquid = parseFloat(row.gastoLiqudo) * parseFloat(row.tiempo)
+    row.volN2 = parseFloat(row.gastoN2) * parseFloat(row.tiempo)
+
+    let prev = value[i - 1]
+
+    row.volLiquidoAcum = prev ? prev.volLiquidoAcum + row.volLiquid : row.volLiquid
+    row.volN2Acum = prev ? prev.volN2Acum + row.volN2 : row.volN2
+    return row
+  }),
 })
 
 export const setContenidoDeAceite = value => ({ type: 'set_contenidoDeAceite', value})
