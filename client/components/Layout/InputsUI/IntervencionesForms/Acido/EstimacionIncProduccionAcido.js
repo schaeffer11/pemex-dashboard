@@ -74,7 +74,7 @@ import { connect } from 'react-redux'
     return (
       <div className='modelado-form' >
         <div className='header'>
-          Modelado
+          Modelado (análisis nodal)
         </div>
         <InputRow header="Estrangulador" name='estIncEstrangulador' unit="pg" value={estIncEstrangulador} onChange={setEstIncEstrangulador} errors={this.state.errors} onBlur={this.validate}/>
         <InputRow header={<div>P<sub>TP</sub></div>} name='estIncPtp' unit={<div>Kg/cm<sup>2</sup></div>} value={estIncPtp} onChange={setEstIncPtp} errors={this.state.errors} onBlur={this.validate}/>
