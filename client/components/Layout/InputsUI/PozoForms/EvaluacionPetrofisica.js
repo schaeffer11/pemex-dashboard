@@ -31,8 +31,12 @@ let layerColumns = [
     cell: 'renderNumber',
   },
   {
-    Header: <div>Espesor<br></br>(md)</div>,
-    accessor: 'espesor',
+    Header: <div>Espesor Bruto<br></br>(md)</div>,
+    accessor: 'espesorBruto',
+  },{
+    Header: <div>Espesor Neto<br></br>(md)</div>,
+    accessor: 'espesorNeto',
+    cell: 'renderNumber',
   }, { 
     Header: <div>V arc.<br></br>(%)</div>,
     accessor: 'vArc',
@@ -195,7 +199,7 @@ let mudLossColumns = [
 
     layerData[0].length = 2
 
-    setLayerData([...layerData, {index: layerData.length, interval: '', cimaMD: '', baseMD: '', espesor: '', vArc: '', porosity: '', sw: '', dens: '', resis: '', perm: '', length: layerData.length + 1}])
+    setLayerData([...layerData, {index: layerData.length, interval: '', cimaMD: '', baseMD: '', espesorBruto: '', espesorNeto: '', vArc: '', porosity: '', sw: '', dens: '', resis: '', perm: '', length: layerData.length + 1}])
   }
 
   addNewRowMudLoss() {
