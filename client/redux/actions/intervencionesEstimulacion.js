@@ -17,7 +17,7 @@ export const setPropuestaCompany = value => ({ type: 'set_propuestaCompany', val
 export const setTipoDeEstimulacion = value => ({ type: 'set_tipoDeEstimulacion', value})
 export const setTipoDeColocacion = value => ({ type: 'set_tipoDeColocacion', value})
 export const setTiempoDeContacto = value => ({ type: 'set_tiempoDeContacto', value})
-export const setCedulaData = (value) => ({
+export const setCedulaData = (cedula, volumes) => ({
   type: 'set_cedulaData',
   volumes,
   cedula: cedula.map((row) => {

@@ -525,7 +525,7 @@ const mapDispatchToProps = dispatch => ({
   setVolumenSistemaDivergente: val => dispatch(setVolumenSistemaDivergente(val)),
   setVolumenDesplazamientoLiquido: val => dispatch(setVolumenDesplazamientoLiquido(val)),
   setVolumenDesplazamientoGelLineal: val => dispatch(setVolumenDesplazamientoGelLineal(val)),
-  setCedulaData: (cedula, volumes) => dispatch(setCedulaData(cedula, volumes)),
+  setCedulaData: (cedula, volumes = null) => dispatch(setCedulaData(cedula, volumes)),
   setModuloYoungArena: val => dispatch(setModuloYoungArena(val)),
   setModuloYoungLutitas: val => dispatch(setModuloYoungLutitas(val)),
   setRelacPoissonArena: val => dispatch(setRelacPoissonArena(val)),

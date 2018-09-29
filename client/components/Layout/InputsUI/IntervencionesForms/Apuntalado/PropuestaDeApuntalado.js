@@ -513,7 +513,7 @@ const mapDispatchToProps = dispatch => ({
   setVolumenDeGelDeFractura: val => dispatch(setVolumenDeGelDeFractura(val)),
   setVolumenDesplazamiento: val => dispatch(setVolumenDesplazamiento(val)),
   setVolumenTotalDeLiquido: val => dispatch(setVolumenTotalDeLiquido(val)),
-  setCedulaData: (cedula, volumes) => dispatch(setCedulaData(cedula, volumes)),
+  setCedulaData: (cedula, volumes = null) => dispatch(setCedulaData(cedula, volumes)),
   setModuloYoungArena: val => dispatch(setModuloYoungArena(val)),
   setModuloYoungLutitas: val => dispatch(setModuloYoungLutitas(val)),
   setRelacPoissonArena: val => dispatch(setRelacPoissonArena(val)),
