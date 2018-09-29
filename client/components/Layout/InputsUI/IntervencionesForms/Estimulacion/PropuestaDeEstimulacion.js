@@ -8,39 +8,7 @@ import {withValidate} from '../../../Common/Validate'
 import { InputRow, InputRowUnitless, InputRowSelectUnitless, CalculatedValue } from '../../../Common/InputRow'
 import { setCedulaData, setIntervalo, setLongitudDeIntervalo, setVolAparejo, setCapacidadTotalDelPozo, setVolumenPrecolchonN2, setVolumenSistemaNoReativo, setVolumenSistemaReactivo, setVolumenSistemaDivergente, setVolumenDesplazamientoLiquido, setVolumenDesplazamientoN2, setVolumenTotalDeLiquido, setChecked, setPropuestaCompany } from '../../../../../redux/actions/intervencionesEstimulacion'
 import { setEspesorBruto } from '../../../../../redux/actions/pozo'
-
-const round = (num, exp = 2) => Math.round(num * Math.pow(10, exp)) / Math.pow(10, exp)
-const espesorBruto = (data) => {
-  /**
-   * From cedula data get only unique intervalos and sort by cimas (array[0])
-   * Espesor bruto is the difference between the highest top (cima) intervalo and the lowest bottom (base) intervalo
-   */
-  const uniq = {}
-  const intervalos = data.map(elem => elem.intervalo).filter(elem => {
-    if (uniq[elem] || elem === '') {
-      return false
-    }
-    return uniq[elem] = true
-  }).sort((a, b) => {
-    const aCima = parseFloat(a.split('-')[0])
-    const bCima = parseFloat(b.split('-')[0])
-    return aCima - bCima
-  })
-  const cima = parseFloat(intervalos[0].split('-')[0])
-  const base = parseFloat(intervalos[intervalos.length - 1].split('-')[1])
-  console.log('intervalos', intervalos, cima, base)
-  return base - cima
-}
-
-const calculateVolumes = (data, fluid, sistema = null) => {
-  return data.filter(elem => elem.sistema === sistema || sistema === null)
-    .reduce((accumulator, currentValue) => {
-      if (currentValue[fluid]) {
-        return accumulator + currentValue[fluid]
-      }
-      return accumulator
-    }, 0)
-}
+import { round, calculateVolumes } from '../helpers'
 
 @autobind class PropuestaDeEstimulacion extends Component {
   constructor(props) {
@@ -153,35 +121,16 @@ const calculateVolumes = (data, fluid, sistema = null) => {
     )
   }
 
-  // makeGeneralForm() {
-  //   let { setIntervalo, setLongitudDeIntervalo, setVolAparejo, setCapacidadTotalDelPozo,formData } = this.props
-  //   formData = formData.toJS()
-  //   let { intervalo, longitudDeIntervalo, volAparejo, capacidadTotalDelPozo } = formData
-
-  //   return (
-  //     <div className='general-form' >
-  //       <div className='header'>
-  //         General
-  //       </div>
-  //       <InputRowUnitless header="Intervalo(s)" name='intervalo' value={intervalo} onChange={setIntervalo} errors={this.state.errors} onBlur={this.validate}/>
-  //       <InputRow header="Longitud de intervalo a tratar" name='longitudDeIntervalo' unit='m' value={longitudDeIntervalo} onChange={setLongitudDeIntervalo} errors={this.state.errors} onBlur={this.validate}/>
-  //       <InputRow header="Vol. aparejo (VAP)" name='' unit='m3' name='volAparejo' value={volAparejo} onChange={setVolAparejo} errors={this.state.errors} onBlur={this.validate}/>
-  //       <InputRow header="Capacidad total del pozo (cima/base)" name='capacidadTotalDelPozo' unit='m3/m3' value={capacidadTotalDelPozo} onChange={setCapacidadTotalDelPozo} errors={this.state.errors} onBlur={this.validate}/>
-  //     </div>
-  //   )
-  // }
   makeDetallesForm() {
     let { formData } = this.props
     formData = formData.toJS()
-    let { cedulaData } = formData
-
-    const reactivoVolume = calculateVolumes(cedulaData, 'volLiquid', 'reactivo')
-    const noReactivoVolume = calculateVolumes(cedulaData, 'volLiquid', 'no-reactivo')
-    const divergenteVolume = calculateVolumes(cedulaData, 'volLiquid', 'divergente')
-    const desplazamientoLiquidVolume = calculateVolumes(cedulaData, 'volLiquid', 'desplazamiento')
-    const desplazamientoGasVolume = calculateVolumes(cedulaData, 'volN2', 'desplazamiento')
-    const precolchonGasVolume = calculateVolumes(cedulaData, 'volN2', 'pre-colchon')
-    const totalLiquidVolume = calculateVolumes(cedulaData, 'volLiquid')
+    const { volumenSistemaReactivo,
+      volumenSistemaNoReativo,
+      volumenSistemaDivergente,
+      volumenDesplazamientoLiquido,
+      volumenDesplazamientoN2,
+      volumenPrecolchonN2,
+      volumenTotalDeLiquido } = formData
 
     return (
       <div className='detalles-form' >
@@ -190,37 +139,37 @@ const calculateVolumes = (data, fluid, sistema = null) => {
         </div>
         <CalculatedValue
           header={<div>Volumen precolchón N<sub>2</sub></div>}
-          value={precolchonGasVolume}
+          value={volumenPrecolchonN2}
           unit={<div>m<sup>3</sup></div>} 
         />
         <CalculatedValue
           header={<div>Volumen sistema no reactivo</div>}
-          value={noReactivoVolume}
+          value={volumenSistemaNoReativo}
           unit={<div>m<sup>3</sup></div>} 
         />
         <CalculatedValue
           header={<div>Sistema no reactivo</div>}
-          value={reactivoVolume}
+          value={volumenSistemaReactivo}
           unit={<div>m<sup>3</sup></div>} 
         />
         <CalculatedValue
           header={<div>Volumen sistema divergente</div>}
-          value={divergenteVolume}
+          value={volumenSistemaDivergente}
           unit={<div>m<sup>3</sup></div>} 
         />
         <CalculatedValue
           header={<div>Volumen desplazamiento líquido</div>}
-          value={desplazamientoLiquidVolume}
+          value={volumenDesplazamientoLiquido}
           unit={<div>m<sup>3</sup></div>} 
         />
         <CalculatedValue
           header={<div>Volumen desplazamiento N<sub>2</sub></div>}
-          value={desplazamientoGasVolume}
+          value={volumenDesplazamientoN2}
           unit={<div>m<sup>3</sup></div>} 
         />
         <CalculatedValue
           header={<div>"Volumen total de líquido</div>}
-          value={totalLiquidVolume}
+          value={volumenTotalDeLiquido}
           unit={<div>m<sup>3</sup></div>} 
         />
       </div>
@@ -310,7 +259,18 @@ const calculateVolumes = (data, fluid, sistema = null) => {
       row.volN2Acum = prev ? round(parseFloat(prev.volN2Acum) + parseFloat(row.volN2)) : row.volN2
       return row
     })
-    setCedulaData(cedulaData)
+
+    const volumes = {
+      volumenSistemaReactivo: calculateVolumes(cedulaData, 'volLiquid', 'reactivo'),
+      volumenSistemaNoReativo: calculateVolumes(cedulaData, 'volLiquid', 'no-reactivo'),
+      volumenSistemaDivergente: calculateVolumes(cedulaData, 'volLiquid', 'divergente'),
+      volumenDesplazamientoLiquido: calculateVolumes(cedulaData, 'volLiquid', 'desplazamiento'),
+      volumenDesplazamientoN2: calculateVolumes(cedulaData, 'volN2', 'desplazamiento'),
+      volumenPrecolchonN2: calculateVolumes(cedulaData, 'volN2', 'pre-colchon'),
+      volumenTotalDeLiquido: calculateVolumes(cedulaData, 'volLiquid'),
+    }
+
+    setCedulaData(cedulaData, volumes)
   }
 
   makeCedulaTable() {
@@ -433,7 +393,6 @@ const calculateVolumes = (data, fluid, sistema = null) => {
       { 
         Header: 'Vol. Liq. Acum. (m3)',
         accessor: 'volLiquidoAcum',
-        // cell: 'renderNumber'
       },
       { 
         Header: 'Vol. N2 Acum. (m3 std)',
@@ -443,7 +402,6 @@ const calculateVolumes = (data, fluid, sistema = null) => {
       { 
         Header: 'Tiempo (min)',
         accessor: 'tiempo',
-        // cell: 'renderNumber',
       },
     ]
 
@@ -485,7 +443,7 @@ const calculateVolumes = (data, fluid, sistema = null) => {
           </div>
           <div className="right">
  
-            {/* { this.makeDetallesForm() } */}
+            { this.makeDetallesForm() }
           </div>
         </div>
         <div className='bot'>
@@ -558,7 +516,7 @@ const mapDispatchToProps = dispatch => ({
   setVolumenDesplazamientoLiquido: val => dispatch(setVolumenDesplazamientoLiquido(val)),
   setVolumenDesplazamientoN2: val => dispatch(setVolumenDesplazamientoN2(val)),
   setVolumenTotalDeLiquido: val => dispatch(setVolumenTotalDeLiquido(val)),
-  setCedulaData: val => dispatch(setCedulaData(val)),
+  setCedulaData: (cedula, volumes) => dispatch(setCedulaData(cedula, volumes)),
   setChecked: val => dispatch(setChecked(val, 'propuestaEstimulacion')),
   setPropuestaCompany: val => dispatch(setPropuestaCompany(val)),
   setEspesorBruto: val => dispatch(setEspesorBruto(val)),

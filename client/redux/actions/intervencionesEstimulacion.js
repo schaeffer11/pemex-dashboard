@@ -14,20 +14,13 @@ export const setVolumenDesplazamientoLiquido = value => ({ type: 'set_volumenDes
 export const setVolumenDesplazamientoN2 = value => ({ type: 'set_volumenDesplazamientoN2', value})
 export const setVolumenTotalDeLiquido = value => ({ type: 'set_volumenTotalDeLiquido', value})
 export const setPropuestaCompany = value => ({ type: 'set_propuestaCompany', value})
-export const setCedulaData = (value) => ({
+export const setCedulaData = (cedula, volumes) => ({
   type: 'set_cedulaData',
-  value,
-  // value: value.map((row, i) => {
-  //   row.etapa = row.index + 1
-  //   row.volLiquid = parseFloat(row.gastoLiqudo) * parseFloat(row.tiempo)
-  //   row.volN2 = parseFloat(row.gastoN2) * parseFloat(row.tiempo)
-
-  //   let prev = value[i - 1]
-
-  //   row.volLiquidoAcum = prev ? prev.volLiquidoAcum + row.volLiquid : row.volLiquid
-  //   row.volN2Acum = prev ? prev.volN2Acum + row.volN2 : row.volN2
-  //   return row
-  // }),
+  volumes,
+  cedula: cedula.map((row) => {
+    row.etapa = row.index + 1
+    return row
+  }),
 })
 
 export const setPruebasDeLaboratorioData = value => ({ type: 'set_pruebasDeLaboratorioData', value})

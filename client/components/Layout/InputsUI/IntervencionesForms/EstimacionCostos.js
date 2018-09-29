@@ -303,7 +303,7 @@ const validate = values => {
       errors.estimacionCostosData = {message: "Esta forma no puede estar vacia"}
     }else {
       values.estimacionCostosData.forEach((row, index) => {
-        let hasEmpty = Object.values(row).find((value) => { return value.toString().trim() == '' })
+        let hasEmpty = Object.values(row).find((value) => { return value === null || value.toString().trim() == '' })
         if(hasEmpty !== undefined){
             errors.estimacionCostosData = {message: "Ningun campo puede estar vacio."}
         }
