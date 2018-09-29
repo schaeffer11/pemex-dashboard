@@ -240,10 +240,10 @@ const INSERT_FIELD_PRESSURE_QUERY = {
 
 const INSERT_WELL_PRESSURE_QUERY = {
     save: `INSERT INTO _WellHistoricalPressureSave (
-        WELL_FORMACION_ID, FECHA, PR, PRESSURE_DEPTH, TRANSACTION_ID) VALUES
+        WELL_FORMACION_ID, FECHA, PWS, PWF, PRESSURE_DEPTH, TRANSACTION_ID) VALUES
         ?`,
     submit: `INSERT INTO WellHistoricalPressure (
-        WELL_FORMACION_ID, FECHA, PR, PRESSURE_DEPTH, TRANSACTION_ID) VALUES
+        WELL_FORMACION_ID, FECHA, PWS, PWF, PRESSURE_DEPTH, TRANSACTION_ID) VALUES
         ?`,
     loadSave: `SELECT * FROM _WellHistoricalPressureSave WHERE TRANSACTION_ID = ?`,
     loadTransaction: `SELECT * FROM WellHistoricalPressure WHERE TRANSACTION_ID = ?`    
@@ -302,15 +302,13 @@ const INSERT_INTERVENTION_ESIMULACION_QUERY = {
         INTERVENTION_ID, WELL_FORMACION_ID,
         VOLUMEN_PRECOLCHON_N2,
         VOLUMEN_SISTEMA_NO_REACTIVO, VOLUMEN_SISTEM_REACTIVO, VOLUMEN_SISTEMA_DIVERGENTE, VOLUMEN_DISPLAZAMIENTO_LIQUIDO, VOLUMEN_DESPLAZAMIENTO_N2,
-        VOLUMEN_TOTAL_DE_LIQUIDO, VOLUMEN_DEL_SISTEMA_ACIDO_LIMPIEZA, VOLUMEN_DEL_SISTEMA_NO_ACIDO_LIMPIEZA, TIPO_DE_COLOCACION,
-        TIEMPO_DE_CONTACTO, NUMERO_DE_ETAPAS, VOLUMEN_DEL_SISTEMA_ACIDO, VOLUMEN_DEL_SISTEMA_NO_ACIDO, VOLUMEN_DE_DIVERGENTE, VOLUMEN_DE_N2,
-        CALIDAD_DE_ESPUMA, VOLUMEN_DE_PRECOLCHON_N2, VOLUMEN_DE_DESPLAZAMIENTO, PENETRACION_RADIAL, LONGITUD_DE_AGUJERO_DE_GUSANO,
+        VOLUMEN_TOTAL_DE_LIQUIDO, TIPO_DE_COLOCACION,
+        TIEMPO_DE_CONTACTO, PENETRACION_RADIAL, LONGITUD_DE_AGUJERO_DE_GUSANO,
         EST_INC_ESTRANGULADOR, EST_INC_Ptp, EST_INC_Ttp, EST_INC_Pbaj, EST_INC_Tbaj,
         EST_INC_Ptr, EST_INC_Qi, EST_INC_Qo, EST_INC_Qq, EST_INC_Qw,
         EST_INC_RGA, EST_INC_SALINIDAD, EST_INC_IP, EST_INC_DELTA_P, EST_INC_GASTO_COMPROMISO_Qo,
         EST_INC_GASTO_COMPROMISO_Qg, EST_INC_OBSERVACIONES, TRANSACTION_ID) VALUES
         (?, ?, ?, ?, ?, ?, ?, ?, ?, ?,
-         ?, ?, ?, ?, ?, ?, ?, ?, ?, ?,
          ?, ?, ?, ?, ?, ?, ?, ?, ?, ?,
          ?, ?, ?, ?, ?, ?, ?, ?, ?, ?,
          ?)`,
@@ -318,15 +316,13 @@ const INSERT_INTERVENTION_ESIMULACION_QUERY = {
         INTERVENTION_ID, WELL_FORMACION_ID,
         VOLUMEN_PRECOLCHON_N2,
         VOLUMEN_SISTEMA_NO_REACTIVO, VOLUMEN_SISTEM_REACTIVO, VOLUMEN_SISTEMA_DIVERGENTE, VOLUMEN_DISPLAZAMIENTO_LIQUIDO, VOLUMEN_DESPLAZAMIENTO_N2,
-        VOLUMEN_TOTAL_DE_LIQUIDO, VOLUMEN_DEL_SISTEMA_ACIDO_LIMPIEZA, VOLUMEN_DEL_SISTEMA_NO_ACIDO_LIMPIEZA, TIPO_DE_COLOCACION,
-        TIEMPO_DE_CONTACTO, NUMERO_DE_ETAPAS, VOLUMEN_DEL_SISTEMA_ACIDO, VOLUMEN_DEL_SISTEMA_NO_ACIDO, VOLUMEN_DE_DIVERGENTE, VOLUMEN_DE_N2,
-        CALIDAD_DE_ESPUMA, VOLUMEN_DE_PRECOLCHON_N2, VOLUMEN_DE_DESPLAZAMIENTO, PENETRACION_RADIAL, LONGITUD_DE_AGUJERO_DE_GUSANO,
+        VOLUMEN_TOTAL_DE_LIQUIDO, TIPO_DE_COLOCACION,
+        TIEMPO_DE_CONTACTO, PENETRACION_RADIAL, LONGITUD_DE_AGUJERO_DE_GUSANO,
         EST_INC_ESTRANGULADOR, EST_INC_Ptp, EST_INC_Ttp, EST_INC_Pbaj, EST_INC_Tbaj,
         EST_INC_Ptr, EST_INC_Qi, EST_INC_Qo, EST_INC_Qq, EST_INC_Qw,
         EST_INC_RGA, EST_INC_SALINIDAD, EST_INC_IP, EST_INC_DELTA_P, EST_INC_GASTO_COMPROMISO_Qo,
         EST_INC_GASTO_COMPROMISO_Qg, EST_INC_OBSERVACIONES, TRANSACTION_ID) VALUES
         (?, ?, ?, ?, ?, ?, ?, ?, ?, ?,
-         ?, ?, ?, ?, ?, ?, ?, ?, ?, ?,
          ?, ?, ?, ?, ?, ?, ?, ?, ?, ?,
          ?, ?, ?, ?, ?, ?, ?, ?, ?, ?,
          ?)`,     
@@ -407,7 +403,25 @@ const INSERT_LAB_TEST_QUERY = {
     submit: `INSERT INTO IntervencionesLabTests (
         LAB_ID, INTERVENTION_ID, WELL_FORMACION_ID, TIPO_DE_ANALISIS, FECHA_DE_MUESTREO, FECHA_DE_PRUEBA, COMPANIA, PERSONAL_DE_PEMEX_QUE_SUPERVISO, OBSERVACIONES, TRANSACTION_ID)
         VALUES ?`,
-    loadSave: `SELECT * FROM _IntervencionesLabTestsSave WHERE TRANSACTION_ID = ?`,
+    loadSave: `SELECT 
+            IL.LAB_ID, IL.TIPO_DE_ANALISIS, IL.FECHA_DE_MUESTREO, IL.FECHA_DE_PRUEBA, IL.COMPANIA, IL.PERSONAL_DE_PEMEX_QUE_SUPERVISO, IL.OBSERVACIONES,
+            CF.PORENTAJE_DE_ACEITE, CF.PORENTAJE_DE_AGUA, CF.PORENTAJE_DE_EMULSION, CF.PORENTAJE_DE_SOLIDOS, CF.PORENTAJE_DE_ASFALTENOS, CF.PORENTAJE_DE_PARAFINAS,
+            CF.PORENTAJE_DE_RESINAS_ASFALTICAS, CF.PORENTAJE_DE_CONTENIDO_DE_SOLIDOS, CF.DENSIDAD_DEL_ACEITE, CF.DENSIDAD_DEL_AGUA, CF.DENSIDAD_DE_LA_EMULSION,
+            CF.VISCOSIDAD_DEL_ACEITE, CF.VISCOSIDAD_DE_LA_EMULSION, CF.PH_DEL_AGUA, CF.SALINIDAD_DEL_AGUA, CF.SALINIDAD_DEL_ACEITE,
+            PC.DISENO, PC.SISTEMA, PC.ACEITE_DEL_POZO, PC.TIEMPO_DE_ROMPIMIENTO, PC.SEPARACION_DE_FASES, PC.SOLIDOS, PC.CONDICION,
+            PG.SISTEMA_ACIDO, PG.TIEMPO_DE_CONTACTO, PG.GRABADO,
+            PS.TIPO_DE_MUESTRA, PS.PESO_DE_LA_MUESTRA, PS.TIPO_DE_SISTEMA_QUIMICO, PS.PESO_FINAL_DE_LA_MUESTRA, PS.SOLUBILIDAD,
+            PGF.HIDRATACION, PGF.TIEMPO_DE_ACTIVACION_DEL_GEL, PGF.DETERMINACION_DE_PH, PGF.TIEMPO_DE_ROMPIMIENTO as TIEMPO_DE_ROMPIMIENTO_GEL,
+            PGF.DOSIFICATION_DE_QUEBRADORES, PGF.VISCOSIDAD_DEL_GEL_DE_FRACTURA, 
+            PPA.ESFERICIDAD, PPA.REDONDEZ, PPA.RESISTENCIA_A_LA_COMPRESION, PPA.MALLA, PPA.AGLUTINAMIENTO, PPA.TURBIDEZ, PPA.SOLUBILIDAD as SOLUBILIDAD_APUNTALANTE
+        FROM _IntervencionesLabTestsSave IL 
+        LEFT JOIN _IntervencionesLabTestsCaracterizacionFisicoSave CF ON IL.LAB_ID = CF.LAB_ID 
+        LEFT JOIN _IntervencionesLabTestsPruebasDeCompatibilidadSave PC ON IL.LAB_ID = PC.LAB_ID 
+        LEFT JOIN _IntervencionesLabTestsPruebasDeGrabadoSave PG ON IL.LAB_ID = PG.LAB_ID
+        LEFT JOIN _IntervencionesLabTestsPruebasDeSolubilidadSave PS ON IL.LAB_ID = PS.LAB_ID
+        LEFT JOIN _IntervencionesLabTestsPruebasGelDeFracturaSave PGF ON IL.LAB_ID = PGF.LAB_ID
+        LEFT JOIN _IntervencionesLabTestsPruebasParaApuntalanteSave PPA ON IL.LAB_ID = PPA.LAB_ID
+        WHERE IL.TRANSACTION_ID = ?`,
     loadTransaction: `SELECT * FROM IntervencionesLabTests WHERE TRANSACTION_ID = ?`    
 }
 
@@ -453,9 +467,9 @@ const INSERT_CEDULA_APUNTALADO_QUERY = {
 
 const INSERT_COSTS_QUERY = {
     save: `INSERT INTO _IntervencionesEstimatedCostsSave (
-        COST_ID, INTERVENTION_ID, ITEM, COMPANY, COST_MNX, COST_DLS, MNXtoDLS, TRANSACTION_ID) VALUES ?`,
+        COST_ID, INTERVENTION_ID, ITEM, FECHA, COMPANY, COST_MNX, COST_DLS, MNXtoDLS, TRANSACTION_ID) VALUES ?`,
     submit: `INSERT INTO IntervencionesEstimatedCosts (
-        COST_ID, INTERVENTION_ID, ITEM, COMPANY, COST_MNX, COST_DLS, MNXtoDLS, TRANSACTION_ID) VALUES ?`,
+        COST_ID, INTERVENTION_ID, ITEM, FECHA, COMPANY, COST_MNX, COST_DLS, MNXtoDLS, TRANSACTION_ID) VALUES ?`,
     loadSave: `SELECT * FROM _IntervencionesEstimatedCostsSave WHERE TRANSACTION_ID = ?`,
     loadTransaction: `SELECT * FROM IntervencionesEstimatedCosts WHERE TRANSACTION_ID = ?`    
 }
@@ -824,17 +838,15 @@ export const create = async (body, action, cb) => {
 
   let { pruebasDeLaboratorioData } = finalObj.pruebasDeLaboratorio
 
-  let { estimacionCostosData, MNXtoDLS } = finalObj.estCost
+  let { estimacionCostosData } = finalObj.estCost
 
   if (tipoDeIntervenciones === 'estimulacion') {
       //Propuesta Estimulaction
-      var { volumenPrecolchonN2, volumenSistemaNoReativo, volumenSistemaReactivo, volumenSistemaDivergente,
+      var { tipoDeColocacion, tiempoDeContacto, volumenPrecolchonN2, volumenSistemaNoReativo, volumenSistemaReactivo, volumenSistemaDivergente,
         volumenDesplazamientoLiquido, volumenDesplazamientoN2, volumenTotalDeLiquido } = finalObj.propuestaEstimulacion
 
       //Simulacion Resultados Estimulacion
-      var { volumenDelSistemaAcidoLimpieza, volumenDelSistemaNoAcidoLimpieza, tipoDeColocacion, tiempoDeContacto, numeroDeEtapas,
-        volumenDelSistemAcido, volumenDelSistemNoAcido, volumenDeDivergente, volumenDeN2, calidadDeEspuma,
-        volumenDePrecolchonN2, volumenDeDesplazamiento, penetracionRadial, longitudDeAgujeroDeGusano } = finalObj.resultadosSimulacionEstimulacion
+      var { penetracionRadial, longitudDeAgujeroDeGusano } = finalObj.resultadosSimulacionEstimulacion
 
       //EstIncProd
       var { estIncEstrangulador, estIncPtp, estIncTtp, estIncPbaj, estIncTbaj,
@@ -1130,7 +1142,7 @@ export const create = async (body, action, cb) => {
 
 
                       presionDataPozo.forEach(i => {
-                        values.push([wellFormacionID, i.fecha, i.Pr, pressureDepthPozo, transactionID])
+                        values.push([wellFormacionID, i.fecha, i.Pws, i.Pwf, pressureDepthPozo, transactionID])
                       })
 
                       connection.query((action === 'save' ? INSERT_WELL_PRESSURE_QUERY.save : INSERT_WELL_PRESSURE_QUERY.submit), [values], (err, results) => {
@@ -1206,9 +1218,7 @@ export const create = async (body, action, cb) => {
                                 values = tipoDeIntervenciones === 'estimulacion' ? [
                                     interventionID, wellFormacionID, volumenPrecolchonN2, volumenSistemaNoReativo, volumenSistemaReactivo, volumenSistemaDivergente,
                                     volumenDesplazamientoLiquido, volumenDesplazamientoN2, volumenTotalDeLiquido,
-                                    volumenDelSistemaAcidoLimpieza, volumenDelSistemaNoAcidoLimpieza, tipoDeColocacion, tiempoDeContacto, numeroDeEtapas,
-                                    volumenDelSistemAcido, volumenDelSistemNoAcido, volumenDeDivergente, volumenDeN2, calidadDeEspuma,
-                                    volumenDePrecolchonN2, volumenDeDesplazamiento, penetracionRadial, longitudDeAgujeroDeGusano,
+                                    tipoDeColocacion, tiempoDeContacto, penetracionRadial, longitudDeAgujeroDeGusano,
                                     estIncEstrangulador, estIncPtp, estIncTtp, estIncPbaj, estIncTbaj,
                                     estIncPtr, estIncQl, estIncQo, estIncQg, estIncQw,
                                     estIncRGA, estIncSalinidad, estIncIP, estIncDeltaP, estIncGastoCompromisoQo,
@@ -1322,7 +1332,7 @@ export const create = async (body, action, cb) => {
                                           values = []
                                           estimacionCostosData.forEach(i => {
                                             let costID = Math.floor(Math.random() * 1000000000)
-                                            values.push([costID, interventionID, i.item, i.compania, i.cost, i.costDLS, MNXtoDLS, transactionID])
+                                            values.push([costID, interventionID, i.item, i.fecha, i.compania, i.cost, i.costDLS, i.MNXtoDLS, transactionID])
                                           })
 
                                           connection.query((action === 'save' ? INSERT_COSTS_QUERY.save : INSERT_COSTS_QUERY.submit), [values], (err, results) => {
@@ -1498,19 +1508,24 @@ export const create = async (body, action, cb) => {
                                                               })
                                                             }
 
-                                                            connection.commit(function(err) {
-                                                                if (err) {
-                                                                  cb(err)
-                                                                  return connection.rollback(function() {
-                                                                    console.log('something went terrible')
-                                                                    throw err;
-                                                                  });
-                                                                }
-                                                                console.log('success!');
-                                                                var log = 'Post ' + results + ' added';
-                                                                console.log(log)
-                                                                cb(null)
+                                                            connection.query(action === 'save' ? DUMMY_QUERY : `UPDATE FieldWellMapping set HAS_DATA = 1 WHERE WELL_FORMACION_ID = ?`, [wellFormacionID], (err, results) => {
+                                                               
+                                                                connection.commit(function(err) {
+                                                                    if (err) {
+                                                                      cb(err)
+                                                                      return connection.rollback(function() {
+                                                                        console.log('something went terrible')
+                                                                        throw err;
+                                                                      });
+                                                                    }
+                                                                    console.log('success!');
+                                                                    var log = 'Post ' + results + ' added';
+                                                                    console.log(log)
+                                                                    cb(null)
+                                                                })
+
                                                             })
+
                                                           })
                                                         })
                                                       })

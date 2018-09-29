@@ -19,11 +19,3 @@ const siWithUnit = [
 /////////////////////////
 // Exporting Functions //
 /////////////////////////
-export const shortenNum = (num, digits, unit = '') => {
-  if (!num || typeof num !== 'number') {
-    return num
-  }
-
-  if (num < 0.001) {
-    return 0
-  }

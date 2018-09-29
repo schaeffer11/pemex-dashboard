@@ -24,8 +24,12 @@ let columns = [
     accessor: 'fecha',
     cell: 'renderDate',
   }, { 
-    Header: <div>Pr<br></br>(Kg/cm<sup>2</sup>)</div>,
-    accessor: 'Pr',
+    Header: <div>P<sub>ws</sub><br></br>(Kg/cm<sup>2</sup>)</div>,
+    accessor: 'Pws',
+    cell: 'renderNumber',
+   }, { 
+    Header: <div>P<sub>wf</sub><br></br>(Kg/cm<sup>2</sup>)</div>,
+    accessor: 'Pwf',
     cell: 'renderNumber',
   }
 ]
@@ -113,7 +117,7 @@ let columns = [
 
     presionDataPozo[0].length = 2
 
-    setPresionDataPozo([...presionDataPozo, {index: presionDataPozo.length, fecha: null, Pr: '', length: presionDataPozo.length + 1, 'edited': false}])
+    setPresionDataPozo([...presionDataPozo, {index: presionDataPozo.length, fecha: null, Pwf: '', Pws: '', length: presionDataPozo.length + 1, 'edited': false}])
   }
 
 
@@ -143,7 +147,7 @@ let columns = [
     formData = formData.toJS()
     let { presionDataPozo, pressureDepthPozo } = formData
 
-     const objectTemplate = {fecha: null, Pr: ''}
+     const objectTemplate = {fecha: null, Pws: '', Pwf: ''}
 
     return (
       <div className='historico-presion-pozo' >

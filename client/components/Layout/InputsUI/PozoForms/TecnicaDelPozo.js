@@ -8,7 +8,7 @@ import DatePicker from 'react-datepicker'
 import {withValidate} from '../../Common/Validate'
 import InputTable from '../../Common/InputTable'
 import { InputRow, InputRowUnitless, InputRowSelectUnitless, InputDate } from '../../Common/InputRow'
-import { setTipoDeSistemo, setHistorialIntervencionesData, setIntervaloProductor, setEspesorBruto, setEspesorNeto, setCaliza, setDolomia, setArcilla, setPorosidad, setPermeabilidad, setSw, setCaa, setCga, setTipoDePozo, setPws, setPwf, setPwsFecha, setPwfFecha, setDeltaPPerMes, setTyac, setPvt, setAparejoDeProduccion, setProfEmpacador, setProfSensorPYT, setTipoDeSap, formData, setChecked } from '../../../../redux/actions/pozo'
+import { setTipoDeSistemo, setHistorialIntervencionesData, setEspesorBruto, setCaliza, setDolomia, setArcilla, setPorosidad, setPermeabilidad, setSw, setCaa, setCga, setTipoDePozo, setPws, setPwf, setPwsFecha, setPwfFecha, setDeltaPPerMes, setTyac, setPvt, setAparejoDeProduccion, setProfEmpacador, setProfSensorPYT, setTipoDeSap, formData, setChecked } from '../../../../redux/actions/pozo'
 
 
 let columns = [
@@ -41,6 +41,7 @@ let columns = [
       containsErrors: false,
       errors: [],
       checked: [],
+      fieldWellOptions: []
     }
   }
 
@@ -48,6 +49,15 @@ let columns = [
     this.validate()
     this.containsErrors()
     this.props.containsErrors(this, this.state.containsErrors)
+
+     fetch('/api/getFieldWellMapping')
+      .then(r => r.json())
+      .then(r => {
+
+        this.setState({
+          fieldWellOptions: r
+        })
+    })
   }
 
   componentDidUpdate(){
@@ -97,9 +107,9 @@ let columns = [
   }
 
   makeFormacionForm() {
-    let { setIntervaloProductor, setEspesorBruto, setEspesorNeto, setCaliza, setDolomia, setArcilla, setPorosidad, setPermeabilidad, setSw, setCaa, setCga, formData } = this.props 
+    let { setEspesorBruto, setCaliza, setDolomia, setArcilla, setPorosidad, setPermeabilidad, setSw, setCaa, setCga, formData } = this.props 
     formData = formData.toJS()
-    let { intervaloProductor, espesorBruto, espesorNeto, caliza, dolomia, arcilla, porosidad, permeabilidad, sw, caa, cga } = formData
+    let { espesorBruto, caliza, dolomia, arcilla, porosidad, permeabilidad, sw, caa, cga } = formData
     const errors = []
 
     return (
@@ -107,9 +117,7 @@ let columns = [
         <div className='header'>
           Los Datos de Formación
         </div>
-        {/* <InputRow header="Intervalos(s) productor(es)" type='number' name='intervaloProductor' value={intervaloProductor}  onChange={setIntervaloProductor} unit='md/mv' onBlur={this.validate} errors={this.state.errors} /> */}
-         <InputRow header="Espesor bruto" name='espesorBruto' value={espesorBruto} onChange={setEspesorBruto} unit='m' onBlur={this.validate} errors={this.state.errors} /> 
-        {/* <InputRow header="Espesor neto" name='espesorNeto' value={espesorNeto} onChange={setEspesorNeto} unit='m' onBlur={this.validate} errors={this.state.errors} /> */}
+        <InputRow header="Espesor bruto" name='espesorBruto' value={espesorBruto} onChange={setEspesorBruto} unit='m' onBlur={this.validate} errors={this.state.errors} /> 
         <InputRow header="Caliza" name='caliza' value={caliza} onChange={setCaliza} unit='%' onBlur={this.validate} errors={this.state.errors} />
         <InputRow header="Dolomia" name='dolomia' value={dolomia} onChange={setDolomia} unit='%' onBlur={this.validate} errors={this.state.errors} />
         <InputRow header="Arcilla" name='arcilla' value={arcilla} onChange={setArcilla} unit='%' onBlur={this.validate} errors={this.state.errors} />
@@ -123,8 +131,11 @@ let columns = [
   }
 
   makePozoForm() {
-    let { tipoDeSistemo, setTipoDePozo, setPws, setPwf, setPwsFecha, setPwfFecha, setDeltaPPerMes, setTyac, setPvt, setAparejoDeProduccion, setProfEmpacador, setProfSensorPYT, setTipoDeSistemo, formData } = this.props 
+    let { fieldWellOptions } = this.state
+    let { tipoDeSistemo, setTipoDePozo, setPws, setPwf, setPwsFecha, setPwfFecha, setDeltaPPerMes, setTyac, setPvt, setAparejoDeProduccion, setProfEmpacador, setProfSensorPYT, setTipoDeSistemo, formData, generalData } = this.props 
     formData = formData.toJS()
+    generalData = generalData.toJS()
+    let { campo } = generalData
     let { tipoDePozo, pwsFecha, pwfFecha, pws, pwf, deltaPPerMes, tyac, pvt, aparejoDeProduccion, profEmpacador, profSensorPYT } = formData
 
     let wellOptions = [
@@ -143,6 +154,19 @@ let columns = [
       { label: 'Bombeo mecánico', value: 'bombeoMecanico' },
     ]
 
+    let pvtOptions = []
+
+    if (campo && fieldWellOptions.length > 0) {
+      let wellSubset = fieldWellOptions.filter(i => i.FIELD_FORMACION_ID === parseInt(campo))
+      let usedWells = []
+      wellSubset.forEach(i => {
+        if (!usedWells.includes(i.WELL_FORMACION_ID)) {
+          usedWells.push(i.WELL_FORMACION_ID)
+          pvtOptions.push({ label: i.WELL_NAME, value: i.WELL_FORMACION_ID})
+        }
+      })
+    }
+
     return (
       <div className='pozo-form' >
         <div className='header'>
@@ -155,11 +179,10 @@ let columns = [
           <InputDate header="Pwf (fecha)" name='pwfFecha' value={pwfFecha} onChange={setPwfFecha} onBlur={this.validate} errors={this.state.errors} />
           <InputRow header="Δp/mes" name='deltaPPerMes' value={deltaPPerMes} onChange={setDeltaPPerMes} unit={<div>Kg/cm<sup>2</sup>/mes</div>} onBlur={this.validate} errors={this.state.errors} />
           <InputRow header="Tyac" name='tyac' value={tyac} onChange={setTyac} unit='°C' onBlur={this.validate} errors={this.state.errors} />
-          <InputRow header="PVT" name='pvt' value={pvt} onChange={setPvt} unit='Pozo' onBlur={this.validate} errors={this.state.errors} />
+          <InputRowSelectUnitless header="PVT" name='pvt' value={pvt} callback={(e) => setPvt(e.value)} options={pvtOptions} onBlur={this.validate} errors={this.state.errors} />
           <InputRow header="Aparejo de producción" value={aparejoDeProduccion} onChange={setAparejoDeProduccion} name='aparejoDeProduccion' unit='pg' onBlur={this.validate} errors={this.state.errors} />
           <InputRow header="Prof. empacador" name='profEmpacador' value={profEmpacador} onChange={setProfEmpacador} unit='md' onBlur={this.validate} errors={this.state.errors} />
           <InputRow header="Prof. sensor P y T" name='profSensorPYT' value={profSensorPYT} onChange={setProfSensorPYT} unit='md' onBlur={this.validate} errors={this.state.errors} />
-          {/*<InputRowUnitless header="Tipo de SAP" name='TipoDeSap' value={tipoDeSistemo !== '' ? options.find(i => i.value === tipoDeSistemo).label: null} onChange={setTipoDeSistemo} onBlur={this.validate} errors={this.state.errors} />*/}
       </div>
     )
   }
@@ -215,105 +238,6 @@ let columns = [
     setHistorialIntervencionesData([...historialIntervencionesData, {index: historialIntervencionesData.length, fecha: '', intervenciones: '', length: historialIntervencionesData.length + 1, 'edited': false}])
   }
 
-  // addNewIntervalosRow() {
-  //   let { formData, setIntervalos } = this.props
-  //   formData = formData.toJS()
-  //   let { intervalos } = formData
-
-  //   intervalos[0].length = 2
-
-  //   setIntervalos([...intervalos, {
-  //     base: '',
-  //     cima: '',
-  //     espesor: '',
-  //     length: intervalos.length + 1,
-  //     index: intervalos.length,
-  //   }])
-  // }
-
-
-  // deleteRow(state, rowInfo, column, instance) {
-  //   let { formData, setHistorialIntervencionesData } = this.props
-  //   formData = formData.toJS()
-  //   let { historialIntervencionesData } = formData
-
-  //   return {
-  //     onClick: e => {
-  //       if (column.id === 'delete' && historialIntervencionesData.length > 1) {
-  //         historialIntervencionesData.splice(rowInfo.original.index, 1)
-
-  //         historialIntervencionesData.forEach((i, index) => {
-  //           i.index = index
-  //           i.length = historialIntervencionesData.length
-  //         }) 
-
-  //         setHistorialIntervencionesData(historialIntervencionesData)
-  //       }
-  //     }
-  //   }
-  // }
-
-
-  // makeIntervalosTable() {
-  //   let { formData, setIntervalos } = this.props
-  //   formData = formData.toJS()
-  //   const { intervalos } = formData
-  //   const objectTemplate = {}
-  //   const columns = [
-  //     {
-  //       Header: '',
-  //       accessor: 'delete',
-  //       width: 35,
-  //       resizable: false,
-  //       Cell: row => {
-  //         console.log('ok what are we?', row.original.length, row.original)
-  //         if (row.original.length > 1) {
-  //           return (<div style={{color: 'white', background: 'red', borderRadius: '4px', textAlign: 'center', cursor: 'pointer'}}>X</div>)
-  //         }
-  //       }
-  //     },
-  //     {
-  //       Header: 'Cima',
-  //       accessor: 'cima',
-  //       cell: 'renderNumber',
-  //     },
-  //     {
-  //       Header: 'Base',
-  //       accessor: 'base',
-  //       cell: 'renderNumber',
-  //     },
-  //     {
-  //       Header: 'Espesor',
-  //       accessor: 'espesor',
-  //     }
-  //   ]
-
-  //   return (
-  //     <div className='intervalos-form' >
-  //       <div className='header'>
-  //         Intervalos
-  //       </div>
-  //       <div className='table'>
-  //         <InputTable
-  //           className="-striped"
-  //           data={intervalos}
-  //           newRow={objectTemplate}
-  //           setData={setIntervalos}
-  //           columns={columns}
-  //           showPagination={false}
-  //           showPageSizeOptions={false}
-  //           pageSize={intervalos.length}
-  //           sortable={false}
-  //         />
-  //       {/* { this.state.errors.cedulaData && this.state.errors.cedulaData.checked &&
-  //         <div className="error">{this.state.errors.cedulaData.message}</div>
-  //       } */}
-  //       <button className='new-row-button' onClick={this.addNewIntervalosRow}>Añadir un renglón</button>
-  //       </div>
-  //     </div>
-  //   )
-  // }
-
   makeHistoricalInterventionsInput() {
     let { setHistorialIntervencionesData, formData } = this.props
     formData = formData.toJS()
@@ -353,7 +277,6 @@ let columns = [
     )
   }
 
-
   render() {
 
     return (
@@ -361,7 +284,6 @@ let columns = [
         { this.makePozoForm() }
         { this.makeFormacionForm() }
         { this.makeHistoricalInterventionsInput() }
-        {/* {this.makeIntervalosTable()} */}
       </div>
     )
   }
@@ -369,7 +291,6 @@ let columns = [
 
 const validate = values => {
     const errors = {}
-
 
     // if(!values.espesorBruto ){
     //    errors.espesorBruto = {message: "Este campo no puede estar vacio"}
@@ -453,30 +374,19 @@ const validate = values => {
       })
     }
 
-    /* Form has been removed
-    if(!values.intervalos){
-            errors.intervalos = {message: "Esta forma no puede estar vacia"}
-        }else {
-            values.intervalos.forEach((row, index) => {
-            if(row.espesor.toString().trim() == '' || row.cima.trim() == '' || row.base.trim() == ''){
-              errors.intervalos = {message: "Ningun campo puede estar vacio."}
-            }
-        })
-    }*/
     return errors
 }
 
 const mapStateToProps = state => ({
   forms: state.get('forms'),
   formData: state.get('fichaTecnicaDelPozo'),
+  generalData: state.get('fichaTecnicaDelPozoHighLevel'),
   checked: state.get('fichaTecnicaDelPozo').get('checked'),
   tipoDeSistemo: state.getIn(['sistemasArtificialesDeProduccion', 'tipoDeSistemo'])
 })
 
 const mapDispatchToProps = dispatch => ({
-  setIntervaloProductor: val => dispatch(setIntervaloProductor(val)),
   setEspesorBruto: val => dispatch(setEspesorBruto(val)),
-  setEspesorNeto: val => dispatch(setEspesorNeto(val)),
   setCaliza: val => dispatch(setCaliza(val)),
   setDolomia: val => dispatch(setDolomia(val)),
   setArcilla: val => dispatch(setArcilla(val)),
@@ -499,7 +409,6 @@ const mapDispatchToProps = dispatch => ({
   setTipoDeSistemo: val => dispatch(setTipoDeSistemo(val)),
   setHistorialIntervencionesData: val => dispatch(setHistorialIntervencionesData(val)),
   setChecked: val => dispatch(setChecked(val, 'fichaTecnicaDelPozo')),
-  // setIntervalos: val => dispatch(setIntervalos(val))
 })
 
 export default withValidate(

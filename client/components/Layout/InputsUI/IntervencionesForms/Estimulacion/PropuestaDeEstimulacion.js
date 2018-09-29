@@ -91,9 +91,9 @@ import { round, calculateVolumes, getSistemaOptions } from '../helpers'
   }
 
   makeGeneralForm() {
-    let { formData, setPropuestaCompany } = this.props
+    let { formData, setPropuestaCompany, setTipoDeEstimulacion } = this.props
     formData = formData.toJS()
-    let { propuestaCompany } = formData
+    let { propuestaCompany, tipoDeEstimulacion } = formData
     const companyOptions = [
       { label: 'Halliburton', value: 'Halliburton' },
       { label: 'Schlumberger', value: 'Schlumberger' },
@@ -103,6 +103,12 @@ import { round, calculateVolumes, getSistemaOptions } from '../helpers'
       { label: 'Weatherford',
       value: 'Weatherford' }
     ]
+
+    const estimulacionOptions = [
+      { label: 'Limpieza', value: 'limpieza'},
+      { label: 'Matricial', value: 'matricial'}
+    ]
+
 
     return (
       <div className='general-form' >
@@ -117,6 +123,42 @@ import { round, calculateVolumes, getSistemaOptions } from '../helpers'
           value={propuestaCompany}
           callback={e => setPropuestaCompany(e.value)}
         />
+        <InputRowSelectUnitless
+          header="Type of Stimulation"
+          name="tipoDeEstimulacion"
+          options={estimulacionOptions}
+          onBlur={this.validate}
+          value={tipoDeEstimulacion}
+          callback={e => setTipoDeEstimulacion(e.value)}
+        />
+      </div>
+    )
+  }
+
+  makeLimpiezaForm() {
+    let { setTipoDeColocacion, setTiempoDeContacto, formData } = this.props
+    formData = formData.toJS()
+    let { tipoDeColocacion, tiempoDeContacto } = formData
+    
+    const colocacionOptions = [
+      { label: 'Directo', value: 'Directo'},
+      { label: 'Tuberia Flexible', value: 'Tuberia Flexible'}
+    ]
+
+    return (
+      <div className='limpieza-form' >
+        <div className='header'>
+          Limpieza de Aparejo
+        </div>
+        <InputRowSelectUnitless 
+          header="Tipo de colocación" 
+          name='tipoDeColocacion' 
+          options={colocacionOptions}
+          onBlur={this.validate} 
+          value={tipoDeColocacion} 
+          callback={(e) => setTipoDeColocacion(e.value)} 
+        />
+        <InputRow header="Tiempo de contacto" name='tiempoDeContacto' unit="min" value={tiempoDeContacto} onChange={setTiempoDeContacto} errors={this.state.errors} onBlur={this.validate} />
       </div>
     )
   }
@@ -353,7 +395,7 @@ import { round, calculateVolumes, getSistemaOptions } from '../helpers'
         cell: 'renderNumberDisable',
       },
       { 
-        Header: 'Gasto Liquido (bpm)',
+        Header: <div>Gasto Liquido<br/>(bpm)</div>,
         accessor: 'gastoLiqudo',
         cell: 'renderNumberDisable',
       },
@@ -368,30 +410,28 @@ import { round, calculateVolumes, getSistemaOptions } from '../helpers'
         cell: 'renderNumber',
       },
       { 
-        Header: 'Gasto en fondo (bpm)',
+        Header: <div>Gasto en fondo<br/>(bpm)</div>,
         accessor: 'gastoEnFondo',
         cell: 'renderNumber',
       },
       { 
-        Header: 'Gasto N2 (m3/min)',
+        Header: <div>Gasto N2<br/>(m<sup>3</sup>/min)</div>,
         accessor: 'gastoN2',
         cell: 'renderNumberDisable',
       }, 
-      
       { 
-        Header: 'Vol. N2 (m3 std)',
+        Header: <div>Vol. N2<br/>(m<sup>3</sup> std)</div>,
         accessor: 'volN2',
         cell: 'renderNumberDisable'
       },
       { 
-        Header: 'Vol. Liq. Acum. (m3)',
+        Header: <div>Vol. Liq. Acum.<br/>(m<sup>3</sup>)</div>,
         accessor: 'volLiquidoAcum',
       },
       { 
-        Header: 'Vol. N2 Acum. (m3 std)',
+        Header: <div>Vol. N2 Acum.<br/>(m<sup>3</sup> std)</div>,
         accessor: 'volN2Acum',
-      },
-      
+      },     
       { 
         Header: 'Tiempo (min)',
         accessor: 'tiempo',
@@ -427,12 +467,16 @@ import { round, calculateVolumes, getSistemaOptions } from '../helpers'
 
 
   render() {
+    let { formData } = this.props
+    formData = formData.toJS()
+    let { tipoDeEstimulacion } = formData
 
     return (
       <div className="form propuesta-de-estimulacion">
         <div className='top'>
           <div className="left">
             { this.makeGeneralForm() }
+            { tipoDeEstimulacion === 'limpieza' ? this.makeLimpiezaForm() : null}
           </div>
           <div className="right">
  
@@ -512,7 +556,10 @@ const mapDispatchToProps = dispatch => ({
   setCedulaData: (cedula, volumes) => dispatch(setCedulaData(cedula, volumes)),
   setChecked: val => dispatch(setChecked(val, 'propuestaEstimulacion')),
   setPropuestaCompany: val => dispatch(setPropuestaCompany(val)),
-  setEspesorBruto: val => dispatch(setEspesorBruto(val)),
+  setTipoDeEstimulacion: val => dispatch(setTipoDeEstimulacion(val)),
+  setTipoDeColocacion: val => dispatch(setTipoDeColocacion(val)), 
+  setTiempoDeContacto: val => dispatch(setTiempoDeContacto(val)),
+  setChecked: val => dispatch(setChecked(val))
 })
 
 export default withValidate(

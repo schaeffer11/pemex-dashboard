@@ -361,7 +361,7 @@ import { round, calculateVolumes, getSistemaOptions } from '../helpers'
         accessor: 'tipoDeApuntalante',
         cell: 'renderEditable',
       }, { 
-        Header: 'Concentracion de Apuntalante (lbm/gal)',
+        Header: <div>Concentracion de Apuntalante<br/>(lbm/gal)</div>,
         accessor: 'concentraciDeApuntalante',
         cell: 'renderNumber',
       },
@@ -395,18 +395,17 @@ import { round, calculateVolumes, getSistemaOptions } from '../helpers'
         accessor: 'gastoN2',
         cell: 'renderNumberDisable',
       }, 
-      
       { 
-        Header: 'Vol. N2 (m3 std)',
+        Header: <div>Vol. N2<br/>(m<sup>3</sup> std)</div>,
         accessor: 'volN2',
         cell: 'renderNumberDisable'
       },
       { 
-        Header: 'Vol. Liq. Acum. (m3)',
+        Header: <div>Vol. Liq. Acum.<br/>(m<sup>3</sup>)</div>,
         accessor: 'volLiquidoAcum',
       },
       { 
-        Header: 'Vol. N2 Acum. (m3 std)',
+        Header: <div>Vol. N2 Acum.<br/>(m<sup>3</sup> std)</div>,
         accessor: 'volN2Acum',
       },
       

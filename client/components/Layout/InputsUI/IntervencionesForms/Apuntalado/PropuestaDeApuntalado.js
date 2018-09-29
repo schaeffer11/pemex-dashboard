@@ -349,7 +349,7 @@ import { round, calculateVolumes, getSistemaOptions } from '../helpers'
         accessor: 'tipoDeApuntalante',
         cell: 'renderEditable',
       }, { 
-        Header: 'Concentracion de Apuntalante (lbm/gal)',
+        Header: <div>Concentracion de Apuntalante<br/>(lbm/gal)</div>,
         accessor: 'concentraciDeApuntalante',
         cell: 'renderNumber',
       },

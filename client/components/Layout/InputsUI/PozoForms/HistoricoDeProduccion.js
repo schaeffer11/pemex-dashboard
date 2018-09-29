@@ -1,11 +1,12 @@
 import React, { Component } from 'react'
 import autobind from 'autobind-decorator'
 import { connect } from 'react-redux'
+import ReactTable from 'react-table'
+
 import { InputRow, InputRowUnitless, InputRowSelectUnitless, InputDate } from '../../Common/InputRow'
 import {withValidate} from '../../Common/Validate'
 import { setProduccionData, setChecked } from '../../../../redux/actions/pozo'
 import InputTable from '../../Common/InputTable'
-import ReactTable from 'react-table'
 
 let columns = [
   {
@@ -27,33 +28,33 @@ let columns = [
     accessor: 'dias',
     cell: 'renderNumber',
   }, { 
-    Header: <div>Qo<br></br>(bbl/d)</div>,
-    accessor: 'qo',
-    cell: 'renderNumber',
-  }, { 
-    Header: <div>Qw<br></br>(bbl/d)</div>,
-    accessor: 'qw',
-    cell: 'renderNumber',
-  }, { 
-    Header: <div>Qg<br></br>(MMpc/d)</div>,
-    accessor: 'qg',
-    cell: 'renderNumber',
-  }, { 
-    Header: <div>Qgi<br></br>(MMpc/d)</div>,
-    accessor: 'qgi',
-    cell: 'renderNumber',
-  }, { 
     Header: <div>Volumen O<br></br>(bbl)</div>,
     accessor: 'qo_vol',
+    cell: 'renderNumber',
   }, { 
     Header: <div>Volumen W<br></br>(bbl)</div>,
     accessor: 'qw_vol',
+    cell: 'renderNumber',
   }, { 
     Header: <div>Volumen G<br></br>(MMpc)</div>,
     accessor: 'qg_vol',
+    cell: 'renderNumber',
   }, { 
-    Header: <div>Volumen Gi<br></br>(MMpc</div>,
+    Header: <div>Volumen Gi<br></br>(MMpc)</div>,
     accessor: 'qgi_vol',
+    cell: 'renderNumber',
+  }, { 
+    Header: <div>Qo<br></br>(bbl/d)</div>,
+    accessor: 'qo',
+  }, { 
+    Header: <div>Qw<br></br>(bbl/d)</div>,
+    accessor: 'qw',
+  }, { 
+    Header: <div>Qg<br></br>(MMpc/d)</div>,
+    accessor: 'qg',
+  }, { 
+    Header: <div>Qgi<br></br>(MMpc/d)</div>,
+    accessor: 'qgi',
   }, { 
     Header: <div>Np<br></br>(MMbbl)</div>,
     accessor: 'np',
@@ -61,10 +62,10 @@ let columns = [
     Header: <div>Wp<br></br>(MMbbl)</div>,
     accessor: 'wp',
   }, { 
-    Header: <div>Gp<br></br>(MMMpc)</div>,
+    Header: <div>Gp<br></br>(MMpc)</div>,
     accessor: 'gp',
   }, { 
-    Header: <div>Gi<br></br>(MMMpc)</div>,
+    Header: <div>Gi<br></br>(MMpc)</div>,
     accessor: 'gi',
   }, { 
     Header: <div>RGA<br></br>(m<sup>3</sup>/m<sup>3</sup>)</div>,
@@ -72,6 +73,7 @@ let columns = [
   }, { 
     Header: 'Fw Fraction',
     accessor: 'fw',
+    Cell: row => <div>{(row.value * 100)}%</div>
   }
 ]
 

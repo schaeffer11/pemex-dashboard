@@ -13,6 +13,9 @@ const initialState = Map({
     volumenDesplazamientoN2: '',
     volumenTotalDeLiquido: '',
     propuestaCompany: '',
+    tipoDeEstimulacion: '',
+    tipoDeColocacion: '',
+    tiempoDeContacto: '',
     cedulaData: [{
         etapa: 1,
         index: 0,
@@ -70,6 +73,12 @@ const propuestaEstimulacion = (state = initialState, action) => {
         return state
     case 'set_propuestaCompany':
         return state.set('propuestaCompany', fromJS(action.value))
+    case 'set_tipoDeEstimulacion':
+        return state.set('tipoDeEstimulacion', fromJS(action.value))
+     case 'set_tipoDeColocacion':
+        return state.set('tipoDeColocacion', fromJS(action.value))
+    case 'set_tiempoDeContacto':
+        return state.set('tiempoDeContacto', fromJS(action.value))
     default:
       return state
   }

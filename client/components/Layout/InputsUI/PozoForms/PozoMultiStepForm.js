@@ -63,7 +63,7 @@ import { setFichaTecnicaDelCampo, setFichaTecnicaDelPozo, setEvaluacionPetrofisi
 
 
   componentDidMount() {
-    fetch('/api/getFieldWellMapping')
+    fetch('/api/getSubmittedFieldWellMapping')
       .then(r => r.json())
       .then(r => {
 
