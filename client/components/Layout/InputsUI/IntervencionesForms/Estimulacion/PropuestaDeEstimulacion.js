@@ -8,7 +8,7 @@ import {withValidate} from '../../../Common/Validate'
 import { InputRow, InputRowUnitless, InputRowSelectUnitless, CalculatedValue } from '../../../Common/InputRow'
 import { setCedulaData, setIntervalo, setLongitudDeIntervalo, setVolAparejo, setCapacidadTotalDelPozo, setVolumenPrecolchonN2, setVolumenSistemaNoReativo, setVolumenSistemaReactivo, setVolumenSistemaDivergente, setVolumenDesplazamientoLiquido, setVolumenDesplazamientoN2, setVolumenTotalDeLiquido, setChecked, setPropuestaCompany } from '../../../../../redux/actions/intervencionesEstimulacion'
 import { setEspesorBruto } from '../../../../../redux/actions/pozo'
-import { round, calculateVolumes } from '../helpers'
+import { round, calculateVolumes, getSistemaOptions } from '../helpers'
 
 @autobind class PropuestaDeEstimulacion extends Component {
   constructor(props) {
@@ -284,14 +284,7 @@ import { round, calculateVolumes } from '../helpers'
       label: `${elem.cimaMD}-${elem.baseMD}`,
     }))
 
-    const sistemaOptions = [
-      { value: 'reactivo', label: 'Reactivo' },
-      { value: 'no-reactivo', label: 'No Reactivo' },
-      { value: 'pre-colchon', label: 'Pre-colchón' },
-      { value: 'divergente', label: 'Divergente' },
-      { value: 'desplazamiento', label: 'Desplazamiento Liquido' },
-      { value: 'desplazamientoN2', label: 'Desplazamiento N2' },
-    ]
+    const sistemaOptions = getSistemaOptions()
 
     const objectTemplate = {etapa: '', intervalo: '', sistema: '', volLiquid: '', gastoN2: '', gastoLiqudo: '', gastoEnFondo: '', calidad: '', volN2: '', volLiquidoAcum: '', volN2Acum: '', relN2Liq: '', tiempo: '' }
     const columns = [

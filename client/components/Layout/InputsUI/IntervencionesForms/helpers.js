@@ -9,3 +9,12 @@ export const calculateVolumes = (data, fluid, sistema = null) => {
       return accumulator
     }, 0)
 }
+
+export const getSistemaOptions = () => [
+  { value: 'reactivo', label: 'Reactivo' },
+  { value: 'no-reactivo', label: 'No Reactivo' },
+  { value: 'pre-colchon', label: 'Pre-colchón' },
+  { value: 'divergente', label: 'Divergente' },
+  { value: 'desplazamiento', label: 'Desplazamiento Liquido' },
+  { value: 'desplazamientoN2', label: 'Desplazamiento N2' },
+]

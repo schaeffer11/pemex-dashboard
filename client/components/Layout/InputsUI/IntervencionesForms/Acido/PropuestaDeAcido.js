@@ -8,7 +8,7 @@ import Select from 'react-select'
 import { InputRowUnitless, CalculatedValue, InputRow, InputRowSelectUnitless, InputRowSelectMulti } from '../../../Common/InputRow'
 import { setCedulaData, setModuloYoungArena, setModuloYoungLutitas, setRelacPoissonArena, setRelacPoissonLutatas, setGradienteDeFractura, setDensidadDeDisparos, setDiametroDeDisparos, setIntervalo, setLongitudDeIntervalo, setVolAparejo, setCapacidadTotalDelPozo, setVolumenPrecolchonN2, setVolumenSistemaNoReativo, setVolumenSistemaReactivo, setVolumenSistemaDivergente, setVolumenDesplazamientoLiquido, setVolumenDesplazamientoGelLineal, setChecked, setPropuestaCompany } from '../../../../../redux/actions/intervencionesAcido'
 
-import { round, calculateVolumes } from '../helpers'
+import { round, calculateVolumes, getSistemaOptions } from '../helpers'
 
 
 
@@ -92,21 +92,14 @@ import { round, calculateVolumes } from '../helpers'
         <div className='header'>
           General
         </div>
-        {/* <InputRowSelectMulti header="Intervalo(s)" callback={handleIntervalosChange} name="intervalo_t" options={intervaloOptions} />
-        <InputRowUnitless header="Intervalo(s)" name='intervalo' value={intervalo} onChange={setIntervalo} errors={this.state.errors} onBlur={this.validate}/>
-        <InputRow header="Longitud de intervalo a tratar" name='longitudDeIntervalo' unit='m' value={longitudDeIntervalo} onChange={setLongitudDeIntervalo} errors={this.state.errors} onBlur={this.validate}/>
-        <InputRow header="Vol. Aparejo (VAP)" name='volAparejo' unit='m3' value={volAparejo} onChange={setVolAparejo} errors={this.state.errors} onBlur={this.validate}/>
-        <InputRow header="Capacidad total del pozo (cima/base)" name='capacidadTotalDelPozo' unit='m3/m3' value={capacidadTotalDelPozo} onChange={setCapacidadTotalDelPozo} errors={this.state.errors} onBlur={this.validate}/> */}
-        {/* InputRowSelectUnitless header='Tipo de Fluido' name='tipoDeFluidoField' value={tipoDeFluidoField} callback={(e) => setTipoDeFluidoField(e.value)} options={fluidoOptions} onBlur={this.validate} errors={this.state.errors} */}
-        <InputRowSelectUnitless
-          header="Compañía"
-          name="company"
-          options={companyOptions}
-          onBlur={this.validate}
-          value={propuestaCompany}
-          callback={e => setPropuestaCompany(e.value)}
-        />
-
+          <InputRowSelectUnitless
+            header="Compañía"
+            name="company"
+            options={companyOptions}
+            onBlur={this.validate}
+            value={propuestaCompany}
+            callback={e => setPropuestaCompany(e.value)}
+          />
       </div>
     )
   }
@@ -299,13 +292,7 @@ import { round, calculateVolumes } from '../helpers'
       label: `${elem.cimaMD}-${elem.baseMD}`,
     }))
     
-    const sistemaOptions = [
-      { value: 'reactivo', label: 'Reactivo' },
-      { value: 'no-reactivo', label: 'No Reactivo' },
-      { value: 'pre-colchon', label: 'Pre-colchón' },
-      { value: 'divergente', label: 'Divergente' },
-      { value: 'desplasamiento', label: 'Desplasamiento' },
-    ]
+    const sistemaOptions = getSistemaOptions()
 
     const objectTemplate = {}
 
