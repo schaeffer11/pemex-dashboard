@@ -94,44 +94,44 @@ let columns = [
     accessor: 'dias',
     cell: 'renderNumber',
   }, { 
-    Header: <div>Volumen O<br></br>(bbl)</div>,
+    Header: <div>V<sub>o</sub><br></br>(bbl)</div>,
     accessor: 'qo_vol',
     cell: 'renderNumber',
   }, { 
-    Header: <div>Volumen W<br></br>(bbl)</div>,
+    Header: <div>V<sub>w</sub><br></br>(bbl)</div>,
     accessor: 'qw_vol',
     cell: 'renderNumber',
   }, { 
-    Header: <div>Volumen G<br></br>(MMpc)</div>,
+    Header: <div>V<sub>g</sub><br></br>(MMpc)</div>,
     accessor: 'qg_vol',
     cell: 'renderNumber',
   }, { 
-    Header: <div>Volumen Gi<br></br>(MMpc)</div>,
+    Header: <div>V<sub>gi</sub><br></br>(MMpc)</div>,
     accessor: 'qgi_vol',
     cell: 'renderNumber',
   }, { 
-    Header: <div>Qo<br></br>(bbl/d)</div>,
+    Header: <div>Q<sub>o</sub><br></br>(bbl/d)</div>,
     accessor: 'qo',
   }, { 
-    Header: <div>Qw<br></br>(bbl/d)</div>,
+    Header: <div>Q<sub>w</sub><br></br>(bbl/d)</div>,
     accessor: 'qw',
   }, { 
-    Header: <div>Qg<br></br>(MMpc/d)</div>,
+    Header: <div>Q<sub>g</sub><br></br>(MMpc/d)</div>,
     accessor: 'qg',
   }, { 
-    Header: <div>Qgi<br></br>(MMpc/d)</div>,
+    Header: <div>Q<sub>gi</sub><br></br>(MMpc/d)</div>,
     accessor: 'qgi',
   }, { 
-    Header: <div>Np<br></br>(MMbbl)</div>,
+    Header: <div>N<sub>p</sub><br></br>(MMbbl)</div>,
     accessor: 'np',
   }, { 
-    Header: <div>Wp<br></br>(MMbbl)</div>,
+    Header: <div>W<sub>p</sub><br></br>(MMbbl)</div>,
     accessor: 'wp',
   }, { 
-    Header: <div>Gp<br></br>(MMpc)</div>,
+    Header: <div>G<sub>p</sub><br></br>(MMpc)</div>,
     accessor: 'gp',
   }, { 
-    Header: <div>Gi<br></br>(MMpc)</div>,
+    Header: <div>G<sub>i</sub><br></br>(MMpc)</div>,
     accessor: 'gi',
   }, { 
     Header: <div>RGA<br></br>(m<sup>3</sup>/m<sup>3</sup>)</div>,

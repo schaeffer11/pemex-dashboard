@@ -48,7 +48,7 @@ const LinkButton = ({ text, disabled , src, to}) => {
       <div className="home">
         <div className='title'>
           <div className='head'>
-            Pemex Exploracion y Produccion
+            Pemex Exploración y Producción
           </div>
           <div className='sub-text'>
             Subdirección de Especialidad<br></br>

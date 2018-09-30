@@ -102,11 +102,11 @@ let columns = [
     accessor: 'ttp',
     cell: 'renderNumber',
   }, { 
-    Header: <div>P<sub>BAJ</sub><br/>(kg/cm<sup>2</sup>)</div>,
+    Header: <div>P<sub>baj</sub><br/>(kg/cm<sup>2</sup>)</div>,
     accessor: 'pbaj',
     cell: 'renderNumber',
   }, { 
-    Header: <div>T<sub>BAJ</sub><br/>(°C)</div>,
+    Header: <div>T<sub>baj</sub><br/>(°C)</div>,
     accessor: 'tbaj',
     cell: 'renderNumber',
   }, { 

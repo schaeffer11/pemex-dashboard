@@ -6,7 +6,7 @@ import Select from 'react-select'
 import { connect } from 'react-redux'
 import {withValidate} from '../../../Common/Validate'
 import { InputRow, InputRowUnitless, InputRowSelectUnitless, CalculatedValue } from '../../../Common/InputRow'
-import { setCedulaData, setIntervalo, setLongitudDeIntervalo, setVolAparejo, setCapacidadTotalDelPozo, setVolumenPrecolchonN2, setVolumenSistemaNoReativo, setVolumenSistemaReactivo, setVolumenSistemaDivergente, setVolumenDesplazamientoLiquido, setVolumenDesplazamientoN2, setVolumenTotalDeLiquido, setChecked, setPropuestaCompany } from '../../../../../redux/actions/intervencionesEstimulacion'
+import { setCedulaData, setIntervalo, setLongitudDeIntervalo, setVolAparejo, setCapacidadTotalDelPozo, setVolumenPrecolchonN2, setVolumenSistemaNoReativo, setVolumenSistemaReactivo, setVolumenSistemaDivergente, setVolumenDesplazamientoLiquido, setVolumenDesplazamientoN2, setVolumenTotalDeLiquido, setChecked, setPropuestaCompany, setTipoDeEstimulacion, setTipoDeColocacion } from '../../../../../redux/actions/intervencionesEstimulacion'
 import { setEspesorBruto } from '../../../../../redux/actions/pozo'
 import { round, calculateVolumes, getSistemaOptions } from '../helpers'
 
@@ -124,7 +124,7 @@ import { round, calculateVolumes, getSistemaOptions } from '../helpers'
           callback={e => setPropuestaCompany(e.value)}
         />
         <InputRowSelectUnitless
-          header="Type of Stimulation"
+          header="Tipo de estimulación"
           name="tipoDeEstimulacion"
           options={estimulacionOptions}
           onBlur={this.validate}
@@ -142,7 +142,7 @@ import { round, calculateVolumes, getSistemaOptions } from '../helpers'
     
     const colocacionOptions = [
       { label: 'Directo', value: 'Directo'},
-      { label: 'Tuberia Flexible', value: 'Tuberia Flexible'}
+      { label: 'Tubería Flexible', value: 'Tuberia Flexible'}
     ]
 
     return (
@@ -177,40 +177,40 @@ import { round, calculateVolumes, getSistemaOptions } from '../helpers'
     return (
       <div className='detalles-form' >
         <div className='header'>
-          Detalles
+          Volumenes
         </div>
         <CalculatedValue
-          header={<div>Volumen precolchón N<sub>2</sub></div>}
+          header={<div>Precolchón N<sub>2</sub></div>}
           value={volumenPrecolchonN2}
           unit={<div>m<sup>3</sup></div>} 
         />
         <CalculatedValue
-          header={<div>Volumen sistema no reactivo</div>}
+          header={<div>Sistema no reactivo</div>}
           value={volumenSistemaNoReativo}
           unit={<div>m<sup>3</sup></div>} 
         />
         <CalculatedValue
-          header={<div>Sistema no reactivo</div>}
+          header={<div>Sistema reactivo</div>}
           value={volumenSistemaReactivo}
           unit={<div>m<sup>3</sup></div>} 
         />
         <CalculatedValue
-          header={<div>Volumen sistema divergente</div>}
+          header={<div>Sistema divergente</div>}
           value={volumenSistemaDivergente}
           unit={<div>m<sup>3</sup></div>} 
         />
         <CalculatedValue
-          header={<div>Volumen desplazamiento líquido</div>}
+          header={<div>Desplazamiento líquido</div>}
           value={volumenDesplazamientoLiquido}
           unit={<div>m<sup>3</sup></div>} 
         />
         <CalculatedValue
-          header={<div>Volumen desplazamiento N<sub>2</sub></div>}
+          header={<div>Desplazamiento N<sub>2</sub></div>}
           value={volumenDesplazamientoN2}
           unit={<div>m<sup>3</sup></div>} 
         />
         <CalculatedValue
-          header={<div>"Volumen total de líquido</div>}
+          header={<div>Total de líquido</div>}
           value={volumenTotalDeLiquido}
           unit={<div>m<sup>3</sup></div>} 
         />
@@ -355,6 +355,7 @@ import { round, calculateVolumes, getSistemaOptions } from '../helpers'
             <div>
               <Select
                 className='input'
+                placeholder='intervalo'
                 simpleValue={true}
                 options={intervaloOptions}
                 value={intervaloOptions.find(i=>i.value === row.original.intervalo) || null}
@@ -374,6 +375,7 @@ import { round, calculateVolumes, getSistemaOptions } from '../helpers'
           return (
             <div>
               <Select
+                placeholder='sistema'
                 className='input'
                 simpleValue={true}
                 options={sistemaOptions}
@@ -390,7 +392,7 @@ import { round, calculateVolumes, getSistemaOptions } from '../helpers'
         cell: 'renderEditable',
       },
       {
-        Header: 'Vol. Liq. (m3)',
+        Header: <div>Vol. Liq.<br/>(m<sup>3</sup>)</div>,
         accessor: 'volLiquid',
         cell: 'renderNumberDisable',
       },
@@ -400,12 +402,12 @@ import { round, calculateVolumes, getSistemaOptions } from '../helpers'
         cell: 'renderNumberDisable',
       },
       {
-        Header: 'Rel. N2/Liq (m3 std/m3)',
+        Header: <div>Rel. N<sub>2</sub>/Liq<br/>(m<sup>3</sup>std/m<sup>3)</sup></div>,
         accessor: 'relN2Liq',
         cell: 'renderNumberDisable',
       },
       {
-        Header: 'Calidad (%)',
+        Header: <div>Calidad<br/>(%)</div>,
         accessor: 'calidad',
         cell: 'renderNumber',
       },
@@ -415,12 +417,12 @@ import { round, calculateVolumes, getSistemaOptions } from '../helpers'
         cell: 'renderNumber',
       },
       { 
-        Header: <div>Gasto N2<br/>(m<sup>3</sup>/min)</div>,
+        Header: <div>Gasto N<sub>2</sub><br/>(m<sup>3</sup>/min)</div>,
         accessor: 'gastoN2',
         cell: 'renderNumberDisable',
       }, 
       { 
-        Header: <div>Vol. N2<br/>(m<sup>3</sup> std)</div>,
+        Header: <div>Vol. N<sub>2</sub><br/>(m<sup>3</sup> std)</div>,
         accessor: 'volN2',
         cell: 'renderNumberDisable'
       },
@@ -429,11 +431,11 @@ import { round, calculateVolumes, getSistemaOptions } from '../helpers'
         accessor: 'volLiquidoAcum',
       },
       { 
-        Header: <div>Vol. N2 Acum.<br/>(m<sup>3</sup> std)</div>,
+        Header: <div>Vol. N<sub>2</sub> Acum.<br/>(m<sup>3</sup> std)</div>,
         accessor: 'volN2Acum',
       },     
       { 
-        Header: 'Tiempo (min)',
+        Header: <div>Tiempo<br/>(min)</div>,
         accessor: 'tiempo',
       },
     ]
