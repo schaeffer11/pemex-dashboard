@@ -217,13 +217,13 @@ const companyOptions = [
         maxWidth: 180,
         resizable: false
       }, { 
-      Header: <div>Conversion<br></br>(MXN to DLS)</div>,
+      Header: <div>Paridad<br></br>(MXN a DLS)</div>,
         accessor: 'MNXtoDLS',
         cell: 'renderNumber',
         maxWidth: 180,
         resizable: false
       }, { 
-        Header: 'Compania',
+        Header: 'Compañia',
         accessor: 'compania',
         width: 300,
         resizable: false,
@@ -297,9 +297,9 @@ const companyOptions = [
 
 
           <div className='kpis'>
-            <div className='mnx'><div className='values'>${mnxSum}</div><br/>Cost in MXN</div>
-            <div className='usd'><div className='values'>${dlsSum} (${convertedDLSSum} MXN)</div><br/>Cost in USD</div>
-            <div className='sum'><div className='values'>${mnxSum + (convertedDLSSum)} MXN</div><br/>Total Cost</div>
+            <div className='mnx'><div className='values'>${mnxSum}</div><br/>Costo en MXN</div>
+            <div className='usd'><div className='values'>${dlsSum} (${convertedDLSSum} MXN)</div><br/>Costo en USD</div>
+            <div className='sum'><div className='values'>${mnxSum + (convertedDLSSum)} MXN</div><br/>Costo Total</div>
           </div>
       </div>
     )

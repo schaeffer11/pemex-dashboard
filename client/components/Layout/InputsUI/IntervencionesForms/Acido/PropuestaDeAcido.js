@@ -118,7 +118,7 @@ import { round, calculateVolumes, getSistemaOptions } from '../helpers'
     return (
       <div className='detalles-form' >
         <div className='header'>
-          Detalles
+          Volumenes
         </div>
         <CalculatedValue
           header={<div>Volumen precolchón N<sub>2</sub></div>}
@@ -131,7 +131,7 @@ import { round, calculateVolumes, getSistemaOptions } from '../helpers'
           unit={<div>m<sup>3</sup></div>} 
         />
         <CalculatedValue
-          header={<div>Sistema no reactivo</div>}
+          header={<div>Sistema reactivo</div>}
           value={volumenSistemaReactivo}
           unit={<div>m<sup>3</sup></div>} 
         />
@@ -366,37 +366,37 @@ import { round, calculateVolumes, getSistemaOptions } from '../helpers'
         cell: 'renderNumber',
       },
       {
-        Header: 'Vol. Liq. (m3)',
+        Header: <div>Vol. Liq.<br/>(m<sup>3</sup>)</div>,
         accessor: 'volLiquid',
         cell: 'renderNumberDisable',
       },
       { 
-        Header: 'Gasto Liquido (bpm)',
+        Header: <div>Gasto Liquido<br/>(bpm)</div>,
         accessor: 'gastoLiqudo',
         cell: 'renderNumberDisable',
       },
       {
-        Header: 'Rel. N2/Liq (m3 std/m3)',
+        Header: <div>Rel. N<sub>2</sub>/Liq<br/>(m<sup>3</sup>std/m<sup>3)</sup></div>,
         accessor: 'relN2Liq',
         cell: 'renderNumberDisable',
       },
       {
-        Header: 'Calidad (%)',
+        Header: <div>Calidad<br/>(%)</div>,
         accessor: 'calidad',
         cell: 'renderNumber',
       },
       { 
-        Header: 'Gasto en fondo (bpm)',
+        Header: <div>Gasto en fondo<br/>(bpm)</div>,
         accessor: 'gastoEnFondo',
         cell: 'renderNumber',
       },
       { 
-        Header: 'Gasto N2 (m3/min)',
+        Header: <div>Gasto N<sub>2</sub><br/>(m<sup>3</sup>/min)</div>,
         accessor: 'gastoN2',
         cell: 'renderNumberDisable',
       }, 
       { 
-        Header: <div>Vol. N2<br/>(m<sup>3</sup> std)</div>,
+        Header: <div>Vol. N<sub>2</sub><br/>(m<sup>3</sup> std)</div>,
         accessor: 'volN2',
         cell: 'renderNumberDisable'
       },
@@ -405,12 +405,11 @@ import { round, calculateVolumes, getSistemaOptions } from '../helpers'
         accessor: 'volLiquidoAcum',
       },
       { 
-        Header: <div>Vol. N2 Acum.<br/>(m<sup>3</sup> std)</div>,
+        Header: <div>Vol. N<sub>2</sub> Acum.<br/>(m<sup>3</sup> std)</div>,
         accessor: 'volN2Acum',
-      },
-      
+      },     
       { 
-        Header: 'Tiempo (min)',
+        Header: <div>Tiempo<br/>(min)</div>,
         accessor: 'tiempo',
       },
     ]

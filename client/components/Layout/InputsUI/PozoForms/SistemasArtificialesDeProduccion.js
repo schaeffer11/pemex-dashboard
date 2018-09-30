@@ -225,7 +225,7 @@ import { setSistemasArtificialesImgURL, setTipoDeSistemo, setPresionDeCabeza, se
     return (
       <div style={{marginBot: '20px'}}>
         <div className='header'>
-          Upload Sistem of Produccion Image (spanish)
+          Cargar imagen del sistema de producción
         </div>
         <input type='file' accept="image/*" onChange={this.handleFileUpload}></input>
         { this.state.errors.imgURL && this.state.errors.imgURL.checked &&
@@ -243,9 +243,9 @@ import { setSistemasArtificialesImgURL, setTipoDeSistemo, setPresionDeCabeza, se
     let { tipoDeSistemo } = formData
 
     let options = [
-      { label: 'Ninguna', value: 'none' },
+      { label: 'Ninguno', value: 'none' },
       { label: 'Embolo viajero', value: 'emboloViajero' },
-      { label: 'Bombeo neumatico', value: 'bombeoNeumatico' },
+      { label: 'Bombeo neumático', value: 'bombeoNeumatico' },
       { label: 'Bombeo hidráulico', value: 'bombeoHidraulico' },
       { label: 'Bombeo cavidades progresivas', value: 'bombeoCavidadesProgresivas' },
       { label: 'Bombeo electrocentrífugo', value: 'bombeoElectrocentrifugo' },

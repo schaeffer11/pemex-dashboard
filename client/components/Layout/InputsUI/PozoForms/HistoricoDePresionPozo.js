@@ -169,7 +169,7 @@ let columns = [
           <button className='new-row-button' onClick={this.addNewRow}>Añadir un renglón</button>
         </div>
         <div className='depth'>
-          <InputRow header="Pressure Depth" name='pressureDepthPozo' value={pressureDepthPozo} onChange={setPressureDepthPozo} unit={'md'} />
+          <InputRow header="Profundidad" name='pressureDepthPozo' value={pressureDepthPozo} onChange={setPressureDepthPozo} unit={'md'} />
         </div>
           { this.state.errors.presionDataPozo && this.state.errors.presionDataPozo.checked &&
             <div className="error">{this.state.errors.presionDataPozo.message}</div>
