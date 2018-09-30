@@ -11,6 +11,7 @@ import ReactDOM from 'react-dom'
 import App from './components/Layout/App'
 import rootReducer from './redux/index'
 import { loadState, saveState } from './lib/local-storage'
+import ReactHighCharts from 'react-highcharts'
 
 import 'bootstrap/dist/css/bootstrap.min.css';
 import './styles/app.scss'
@@ -59,6 +60,30 @@ fetch('/version')
 store.subscribe(() => {
   saveState(localStorageKey, store.getState())
 })
+
+ReactHighCharts.Highcharts.setOptions({
+    lang: {
+        loading: 'Cargando...',
+        months: ['Enero', 'Febrero', 'Marzo', 'Abril', 'Mayo', 'Junio', 'Julio', 'Agosto', 'Septiembre', 'Octubre', 'Noviembre', 'Diciembre'],
+        weekdays: ['Domingo', 'Lunes', 'Martes', 'Miércoles', 'Jueves', 'Viernes', 'Sábado'],
+        shortMonths: ['Ene', 'Feb', 'Mar', 'Abr', 'May', 'Jun', 'Jul', 'Ago', 'Sep', 'Oct', 'Nov', 'Dic'],
+        exportButtonTitle: "Exportar",
+        printButtonTitle: "Importar",
+        rangeSelectorFrom: "Desde",
+        rangeSelectorTo: "Hasta",
+        rangeSelectorZoom: "Período",
+        downloadPNG: 'Descargar imagen PNG',
+        downloadJPEG: 'Descargar imagen JPEG',
+        downloadPDF: 'Descargar imagen PDF',
+        downloadSVG: 'Descargar imagen SVG',
+        printChart: 'Imprimir',
+        resetZoom: 'Reiniciar zoom',
+        resetZoomTitle: 'Reiniciar zoom',
+        thousandsSep: ",",
+        decimalPoint: '.'
+    }
+});
+
 
 const bootstrap = () => {
   document.getElementById('app').classList.remove('isLoading', 'isRestoring')
