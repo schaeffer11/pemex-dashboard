@@ -36,24 +36,24 @@ const INSERT_FIELDS_QUERY = {
 const INSERT_WELL_QUERY = {
     save: `INSERT INTO _WellsDataSave (
         WELL_FORMACION_ID, SUBDIRECCION, ACTIVO,
-        FORMACION, ESPESOR_BRUTO,
+        FORMACION,
         CALIZA, DOLOMIA, ARCILLA, POROSIDAD,
         PERMEABILIDAD, SW, CAA, CGA, TIPO_DE_POZO,
         PWS, PWS_FECHA, PWF, PWF_FECHA, DELTA_P_PER_MES, TYAC, PVT,
         APAREJO_DE_PRODUCCION, PROF_EMPACADOR, PROF_SENSOR_PYT, TIPO_DE_SISTEMA, TRANSACTION_ID) VALUES
         (?, ?, ?, ?, ?, ?, ?, ?, ?, ?,
          ?, ?, ?, ?, ?, ?, ?, ?, ?, ?,
-         ?, ?, ?, ?, ?, ?)`,
+         ?, ?, ?, ?, ?)`,
     submit: `INSERT INTO WellsData (
         WELL_FORMACION_ID, SUBDIRECCION, ACTIVO,
-        FORMACION, ESPESOR_BRUTO,
+        FORMACION,
         CALIZA, DOLOMIA, ARCILLA, POROSIDAD,
         PERMEABILIDAD, SW, CAA, CGA, TIPO_DE_POZO,
         PWS, PWS_FECHA, PWF, PWF_FECHA, DELTA_P_PER_MES, TYAC, PVT,
         APAREJO_DE_PRODUCCION, PROF_EMPACADOR, PROF_SENSOR_PYT, TIPO_DE_SISTEMA, TRANSACTION_ID) VALUES
         (?, ?, ?, ?, ?, ?, ?, ?, ?, ?,
          ?, ?, ?, ?, ?, ?, ?, ?, ?, ?,
-         ?, ?, ?, ?, ?, ?)`,
+         ?, ?, ?, ?, ?)`,
     loadSave: `SELECT * FROM _WellsDataSave WHERE TRANSACTION_ID = ?`,
     loadTransaction: `SELECT * FROM WellsData WHERE TRANSACTION_ID = ?`    
 }
@@ -71,11 +71,11 @@ const INSERT_HIST_INTERVENCIONES_QUERY = {
 
 const INSERT_LAYER_QUERY = {
     save: `INSERT INTO _WellLayersSave (
-        INTERVAL_ID, WELL_FORMACION_ID, INTERVALO, CIMA_MD, BASE_MD, ESPESOR,
+        INTERVAL_ID, WELL_FORMACION_ID, INTERVALO, CIMA_MD, BASE_MD, ESPESOR_BRUTO, ESPESOR_NETO,
         V_ARC, POROSITY, SW, DENS, RESIS, PERMEABILIDAD, TRANSACTION_ID) VALUES
         ?`,
     submit: `INSERT INTO WellLayers (
-        INTERVAL_ID, WELL_FORMACION_ID, INTERVALO, CIMA_MD, BASE_MD, ESPESOR,
+        INTERVAL_ID, WELL_FORMACION_ID, INTERVALO, CIMA_MD, BASE_MD, ESPESOR_BRUTO, ESPESOR_NETO,
         V_ARC, POROSITY, SW, DENS, RESIS, PERMEABILIDAD, TRANSACTION_ID) VALUES
         ?`,
     loadSave: `SELECT * FROM _WellLayersSave WHERE TRANSACTION_ID = ?`,
@@ -803,7 +803,7 @@ export const create = async (body, action, cb) => {
     gpField, wpField, rraField, rrgField, rrpceField,
     h2sField, co2Field, n2Field } = finalObj.fichaTecnicaDelCampo
 
-  let { espesorBruto, caliza,
+  let { caliza,
     dolomia, arcilla, porosidad, permeabilidad, sw, caa, cga, tipoDePozo, pws, pwsFecha, pwf, pwfFecha,
     deltaPPerMes, tyac, pvt, aparejoDeProduccion, profEmpacador, profSensorPYT, tipoDeSap, historialIntervencionesData } = finalObj.fichaTecnicaDelPozo
   
@@ -951,7 +951,7 @@ export const create = async (body, action, cb) => {
       }
       connection.query((action === 'save' ? INSERT_WELL_QUERY.save : INSERT_WELL_QUERY.submit), [
       wellFormacionID, subdireccion, activo,
-      formacion, espesorBruto, caliza,
+      formacion, caliza,
       dolomia, arcilla, porosidad, permeabilidad, sw,
       caa, cga, tipoDePozo, pws, pwsFecha, pwf, pwfFecha,
       deltaPPerMes, tyac, pvt, aparejoDeProduccion, profEmpacador,
@@ -986,7 +986,7 @@ export const create = async (body, action, cb) => {
           layerData.forEach(i => {
             intervalID = Math.floor(Math.random() * 1000000000)
             values.push([intervalID, wellFormacionID, i.interval, i.cimaMD, i.baseMD,
-              i.espesor, i.vArc, i.porosity, i.sw, i.dens, i.resis, i.perm, transactionID])
+              i.espesorBruto, i.espesorNeto, i.vArc, i.porosity, i.sw, i.dens, i.resis, i.perm, transactionID])
           })
 
           connection.query((action === 'save' ? INSERT_LAYER_QUERY.save : INSERT_LAYER_QUERY.submit), [values], (err, results) => {
@@ -1290,7 +1290,6 @@ export const create = async (body, action, cb) => {
                                   }
                                   else {
                                     INSERT_LAB_TEST_QUERY.save = `SELECT(1) FROM Users LIMIT 1`
-                                    INSERT_LAB_RESULTS_QUERY.save = `SELECT(1) FROM Users LIMIT 1`
                                   }
 
                                   connection.query((action === 'save' ? INSERT_LAB_TEST_QUERY.save : INSERT_LAB_TEST_QUERY.submit), [values], (err, results) => {
