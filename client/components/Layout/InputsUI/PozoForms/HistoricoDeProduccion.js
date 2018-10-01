@@ -5,6 +5,7 @@ import ReactTable from 'react-table'
 
 import { InputRow, InputRowUnitless, InputRowSelectUnitless, InputDate } from '../../Common/InputRow'
 import {withValidate} from '../../Common/Validate'
+import ExcelUpload from '../../Common/ExcelUpload'
 import { setProduccionData, setChecked } from '../../../../redux/actions/pozo'
 import InputTable from '../../Common/InputTable'
 import ReactHighCharts from 'react-highcharts'
@@ -308,6 +309,16 @@ let columns = [
 
     return (
       <div className="form historico-de-produccion">
+        <ExcelUpload
+          headers={[
+            { name: 'fecha', type: 'date' },
+            { name: 'dias', type: 'number' },
+            { name: 'qo', type: 'number' },
+            { name: 'qw', type: 'number' },
+            { name: 'qg', type: 'number' },
+            { name: 'qgi', type: 'number' }
+          ]}
+        />
         { this.makeHistoricoDeProduccionInput() }
         { this.makeProductionGraph() }
       </div>

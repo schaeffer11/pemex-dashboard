@@ -661,7 +661,6 @@ import { setFichaTecnicaDelCampo, setFichaTecnicaDelPozo, setEvaluacionPetrofisi
         focusDialog={true}
         dialogClass="queryModalPartialReset"
         dialogStyle={{verticalAlign: '', textAlign: 'center', maxHeight: '80%', marginTop: '2%'}}
-
       >
       <div className="modalTest" >
         <div className="modal-title">
@@ -703,6 +702,7 @@ import { setFichaTecnicaDelCampo, setFichaTecnicaDelPozo, setEvaluacionPetrofisi
     const submitting = pozoFormSubmitting ? 'submitting' : ''
 
     const errors = this.props.formsState.get('pozoFormError')
+    console.log('what is this?', this.state, title)
 
 
     return (
@@ -723,17 +723,14 @@ import { setFichaTecnicaDelCampo, setFichaTecnicaDelPozo, setEvaluacionPetrofisi
             <button className="cta prev" onClick={this.handlePrevSubtab}>Anterior</button> 
             <button className="cta load" onClick={this.activateModal}>Descargar intervención</button> 
           </div>
-
           {this.forms[this.state.currentStep].content}
         </div>
-
         <div style={{display: 'none'}}>
           {this.forms.map((form, index) => {
              if(index != this.state.currentStep)
                return this.forms[index].content}
           )}
         </div>
-
       { isOpen ? this.buildModal() : null }
        </div>
      );
