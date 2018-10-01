@@ -131,10 +131,10 @@ import Loading from '../../Common/Loading'
       >
       <div className="modalTest" >
         <div className="modal-title">
-          Load Data 
+          Menu de descarga
         </div>
         <div className="modal-info"> 
-          Please select which save you would like to load
+          Seleccione borrador para descargar
         </div>
         <div className="modal-body">
             {saveOptions.map(i => {
@@ -174,7 +174,7 @@ import Loading from '../../Common/Loading'
         return (
           <div className='intervention-form'>
             <div className='header'>
-              Intervention Data
+              Intervención
             </div>
             <TextAreaUnitless header="Objetivo - Describir el objetivo de la intervención indicando la causa principal, tipo de tratamiento a aplicar y técnica de colocación de los sistemas." name='objetivo' className={'objetivo'} value={objetivo} onChange={setObjetivo} errors={this.state.errors} />
             <TextAreaUnitless header="Alcances - Describir los alcances que se pretenden obtener con la intervención programada a ejecutar." name='alcances' className={'alcances'} value={alcances} onChange={setAlcances} errors={this.state.errors}/>
@@ -304,7 +304,7 @@ import Loading from '../../Common/Loading'
     return (
       <div className='general-form'>
         <div className='header'>
-          General Data
+          Pozo
         </div>
         <InputRowSelectUnitless header='Subdirección' name="subdireccion" value={subdireccion} options={subdireccionOptions} callback={this.handleSelectSubdireccion} onBlur={this.validate} errors={this.state.errors} />
         <InputRowSelectUnitless header='Activo' name="activo" value={activo} options={activoOptions} callback={this.handleSelectActivo} onBlur={this.validate} errors={this.state.errors} />

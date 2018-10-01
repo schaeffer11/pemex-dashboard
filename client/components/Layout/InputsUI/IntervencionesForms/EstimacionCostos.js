@@ -248,7 +248,7 @@ const companyOptions = [
     return (
       <div className='costs-form' >
         <div className='header'>
-          Cost Table
+          Tabla de Costos
         </div>
         <div className='table-select'>
           <InputTable

@@ -227,7 +227,6 @@
         border: solid;
         border-width: 0px 1px 1px 1px;
 				border-color: $primary-green;
-				overflow-x: auto;
       }
     }
 
@@ -434,6 +433,7 @@
 	}
 
 	.propuesta-de-estimulacion {
+		overflow-x: auto;
 		.top {
 			display: grid;
 			grid-template-columns: 50% 50%;

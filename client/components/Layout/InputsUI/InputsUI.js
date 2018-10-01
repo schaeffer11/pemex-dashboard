@@ -126,10 +126,10 @@ import '../../../styles/components/_query_modal.css'
       >
       <div className="modalTest" >
         <div className="modal-title">
-          Save Work 
+          Guardar sesión
         </div>
         <div className="modal-info"> 
-          Please enter a name to remember this save by
+          Dar nombre a sesion a guardar
         </div>
         <div className="modal-body">
           <input onChange={(e) => this.setState({saveName: e.target.value})}></input>

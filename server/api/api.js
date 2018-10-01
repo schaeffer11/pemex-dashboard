@@ -18,6 +18,8 @@ import { create as createWell, getFields, getWell,
 
 const connection = db.getConnection(appConfig.users.database)
 const app = express()
+const env = process.env.NODE_ENV || 'dev'
+const isProduction = env === 'production'
 
 const upload = multer({
   limits: { fieldSize: 25 * 1024 * 1024 },
@@ -41,7 +43,7 @@ app.get('/woop', async (req, res) => {
 })
 
 app.get('/getTemplate', (req, res) => {
-  let localPath = path.join(__dirname, '../tempFile.xlsm')
+  let localPath = path.join(__dirname, isProduction ? '../' : '../../', 'tempFile.xlsm')
 
   res.sendFile(localPath)
 })
