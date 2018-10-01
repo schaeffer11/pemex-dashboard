@@ -9,7 +9,7 @@ html {
 
 .productspace {
 	grid-area: body;
-  overflow-y: scroll;
+  overflow-y: auto;
   height: 100%;
 
   .login {  
