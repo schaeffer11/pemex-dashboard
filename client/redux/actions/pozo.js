@@ -5,7 +5,12 @@ export const setActivo = value => ({ type: 'set_activo', value})
 export const setCampo = value => ({ type: 'set_campo', value})
 export const setPozo = value => ({ type: 'set_pozo', value})
 export const setFormacion = value => ({ type: 'set_formacion', value})
-export const setChecked = value => ({ type: 'set_checked', value}) 
+//export const setChecked = value => ({ type: 'set_checked', value})
+export const setChecked = (value, form)  => ({
+   type: 'set_forms_checked', 
+   form: form,
+   value: value
+}) 
 
 //FichaTecnicaDelCampo
 export const setDescubrimientoField = value => ({ type: 'set_descubrimientoField', value})
@@ -134,7 +139,7 @@ export const setLayerData = value => ({
     elem.interval = i + 1
     elem.baseMD = parseFloat(elem.baseMD)
     elem.cimaMD = parseFloat(elem.cimaMD)
-    elem.espesor = Math.round((elem.baseMD - elem.cimaMD) * 100) / 100
+    elem.espesorBruto = Math.round((elem.baseMD - elem.cimaMD) * 100) / 100
     return elem
   })
 })
@@ -175,19 +180,19 @@ export const setPressureDepthCampo = value => ({ type: 'set_pressureDepthCampo',
 export const setProduccionData = value => ({ 
 	type: 'set_produccionData',
 	value: value.map((row, i) => {
-        row.qo_vol = parseFloat(row.qo) * parseFloat(row.dias) 
-        row.qw_vol = parseFloat(row.qw) * parseFloat(row.dias) 
-        row.qg_vol = parseFloat(row.qg) * parseFloat(row.dias)
-        row.qgi_vol = parseFloat(row.qgi) * parseFloat(row.dias)
-        row.rga = parseFloat(row.qg) / parseFloat(row.qo)
-        row.fw = parseFloat(row.qw) / (parseFloat(row.qw) + parseFloat(row.qo))
+        row.qo = (parseFloat(row.qo_vol) / parseFloat(row.dias) ).toFixed(2)
+        row.qw = (parseFloat(row.qw_vol) / parseFloat(row.dias) ).toFixed(2)
+        row.qg = (parseFloat(row.qg_vol) / parseFloat(row.dias)).toFixed(2)
+        row.qgi = (parseFloat(row.qgi_vol) / parseFloat(row.dias)).toFixed(2)
+        row.rga = (parseFloat(row.qg) / parseFloat(row.qo) / 5.615).toFixed(2)
+        row.fw = (parseFloat(row.qw) / (parseFloat(row.qw) + parseFloat(row.qo))).toFixed(2)
 
         let prev = value[i - 1]
 
-        row.np = prev ? prev.np + row.qo_vol : row.qo_vol
-        row.wp = prev ? prev.wp + row.qw_vol : row.qw_vol
-        row.gp = prev ? prev.gp + row.qg_vol : row.qg_vol
-        row.gi = prev ? prev.gi + row.qgi_vol : row.qgi_vol
+        row.np = prev ? (parseFloat(prev.np) + parseFloat(row.qo_vol)).toFixed(2) : (parseFloat(row.qo_vol)).toFixed(2)
+        row.wp = prev ? (parseFloat(prev.wp) + parseFloat(row.qw_vol)).toFixed(2) : (parseFloat(row.qw_vol)).toFixed(2)
+        row.gp = prev ? (parseFloat(prev.gp) + parseFloat(row.qg_vol)).toFixed(2) : (parseFloat(row.qg_vol)).toFixed(2)
+        row.gi = prev ? (parseFloat(prev.gi) + parseFloat(row.qgi_vol)).toFixed(2) : (parseFloat(row.qgi_vol)).toFixed(2)
 
         return row
       })
@@ -201,10 +206,8 @@ export const setHistoricoDeAforos = value => ({ type: 'set_historicoDeAforos', v
     
 
 
-
-
-
 //AnalisisDelAgua
+export const setWaterAnalysisBool = value => ({ type: 'set_waterAnalysisBool', value})
 export const setPH = value => ({ type: 'set_pH', value})
 export const setTemperaturaDeConductividad = value => ({ type: 'set_temperaturaDeConductividad', value})
 export const setResistividad = value => ({ type: 'set_resistividad', value})

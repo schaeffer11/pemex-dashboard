@@ -7,7 +7,8 @@ const initialState = Map({
     }],
     presionDataPozo: [{
         fecha: null,
-        Pr: '',
+        Pws: '',
+        Pwf: '',
     }],
     pressureDepthPozo: '',
     pressureDepthCampo: '',
@@ -23,6 +24,10 @@ const historicoDePresion = (state = initialState, action) => {
         return state.set('presionDataPozo', fromJS(action.value))
     case 'set_checked' :
         return state.set('checked', fromJS(action.value))
+    case 'set_forms_checked' :
+        if(action.form == 'historicoDePresion')
+          return state.set('checked', fromJS(action.value))
+        return state
     case 'set_pressureDepthPozo':
         return state.set('pressureDepthPozo', fromJS(action.value))
     case 'set_pressureDepthCampo':

@@ -28,12 +28,12 @@ import { setShowForms } from '../../../../../redux/actions/global'
     this.estimacionCostosEstimulacion = React.createRef();
 
     this.forms = [
-      {'title' : 'Propuesta de Tratamiento de Estimulacion', 'content': <PropuestaDeEstimulacion ref={Ref =>this.propuestaDeEstimulacion =Ref }/> },  
+      {'title' : 'Propuesta de Tratamiento de Estimulación', 'content': <PropuestaDeEstimulacion ref={Ref =>this.propuestaDeEstimulacion =Ref }/> },  
       {'title' : 'Pruebas de Laboratorio', 'content': <PruebasDeLaboratorio ref={Ref => this.pruebasDeLaboratorio=Ref }/> },
-      {'title' : 'Pruebas de Laboratorio de Estimulacion', 'content': <PruebasDeLaboratorioExtra ref={Ref =>this.pruebasDeLaboratorioEstimulacionExtra =Ref }/> },
-      {'title' : 'Resultados de la Simulacion de Estimulacion', 'content': <ResultadosDeLaSimulacionEstimulacion ref={Ref =>this.resultadosDeLaSimulacionEstimulacion =Ref }/> },
-      {'title' : 'Estimacion del Incremento de Produccion', 'content': <EstimacionIncProduccionEstimulacion ref={Ref =>this.estimacionIncProduccionEstimulacion =Ref } /> },
-      {'title' : 'Estimacion de Costos de Estimulacion', 'content': <EstimacionCostos ref={Ref =>this.estimacionCostosEstimulacion =Ref }/> }
+      {'title' : 'Pruebas de Laboratorio de Estimulación', 'content': <PruebasDeLaboratorioExtra ref={Ref =>this.pruebasDeLaboratorioEstimulacionExtra =Ref }/> },
+      {'title' : 'Resultados de la Simulación de Estimulación', 'content': <ResultadosDeLaSimulacionEstimulacion ref={Ref =>this.resultadosDeLaSimulacionEstimulacion =Ref }/> },
+      {'title' : 'Estimación del Incremento de Producción', 'content': <EstimacionIncProduccionEstimulacion ref={Ref =>this.estimacionIncProduccionEstimulacion =Ref } /> },
+      {'title' : 'Estimación de Costos de Estimulación', 'content': <EstimacionCostos ref={Ref =>this.estimacionCostosEstimulacion =Ref }/> }
     ];
 
   }
@@ -65,7 +65,7 @@ import { setShowForms } from '../../../../../redux/actions/global'
 
     const forms = [
       this.propuestaDeEstimulacion,
-//      this.pruebasDeLaboratorio,
+      this.pruebasDeLaboratorio,
 //      this.pruebasDeLaboratorioEstimulacionExtra,
       this.resultadosDeLaSimulacionEstimulacion,
       this.estimacionIncProduccionEstimulacion,
@@ -78,10 +78,8 @@ import { setShowForms } from '../../../../../redux/actions/global'
 
       let {errors, checked} = form.selector.props.forceValidation()
       allErrors = Object.assign({}, allErrors, errors);
-      allChecked.push(...checked)
     });
 
-    setChecked(allChecked)
 
     return allErrors.length == 0;
 

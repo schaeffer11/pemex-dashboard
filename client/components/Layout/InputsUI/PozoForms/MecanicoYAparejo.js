@@ -1,5 +1,6 @@
 import React, { Component } from 'react'
 import autobind from 'autobind-decorator'
+import { List, Map, is } from 'immutable' 
 import { InputRow, InputRowUnitless, InputRowSelectUnitless } from '../../Common/InputRow'
 import {withValidate} from '../../Common/Validate'
 import { setTipoDeTerminacion, setHIntervaloProductor, setEmpacador, setPresionDifEmpacador, setSensorPyt, setTipoDeLiner, setDiametroDeLiner, setTipoDePistolas, setDensidadDeDisparosMecanico, setFase, setDiametroDeOrificio, setPenetracion, setTipoDeSAP, setTratamientoPor, setVolumenAparejoDeProduccion, setVolumenCimaDeIntervalo, setVolumenBaseDeIntervalo, setVolumenDeEspacioAnular, setImgBoreDiagramURL, setImgAparejoDeProduccionURL, setChecked} from '../../../../redux/actions/pozo'
@@ -48,17 +49,25 @@ let tratamientoPorOptions = [
   }
 
   containsErrors(){
-    let foundErrors = false
-    for (const key of Object.keys(this.state.errors)) {
-      if(this.state.errors[key].checked)
-        foundErrors = true
-    }
+        let foundErrors = false
+        let errors = Object.assign({}, this.state.errors);
+      let {formData} = this.props
+      formData = formData.toJS()
 
-    if(foundErrors !== this.state.containsErrors){
-      this.setState({
-        containsErrors: foundErrors
-      })
-    }
+      const checked = formData.checked  || []
+        checked.forEach((checked) => {
+            if(errors[checked]){
+                errors[checked].checked = true
+                foundErrors = true
+            }
+        })
+
+        if(foundErrors !== this.state.containsErrors){
+            this.setState({
+                errors: errors,
+                containsErrors: foundErrors
+            })
+        }
 
   }
 
@@ -76,7 +85,7 @@ let tratamientoPorOptions = [
     if(event && event.target.name){
       setChecked(checked)
     }
-
+    return errors
   }
 
   handleSelectTerminacion(val) {
@@ -174,10 +183,9 @@ let tratamientoPorOptions = [
     return (
       <div style={{marginBot: '20px'}}>
         <div className='header'>
-          Upload Well Bore Diagram (spanish)
+          Cargar diagrama del aparejo de producción
         </div>
         <input type='file' accept="image/*" onChange={(e) => this.handleFileUpload(e, setImgBoreDiagramURL)}></input>
-        imgBoreDiagramURL
         { this.state.errors.imgBoreDiagramURL && this.state.errors.imgBoreDiagramURL.checked &&
           <div className="error">{this.state.errors.imgBoreDiagramURL.message}</div>
         }
@@ -208,7 +216,7 @@ let tratamientoPorOptions = [
         <div className='right'>
           { this.makeCapacidadForm() }
           { this.makeBoreDiagramInput() }
-          { this.makeAparejoDeProduccionInput() }
+          {/* { this.makeAparejoDeProduccionInput() } */}
         </div>
       </div>
     )
@@ -320,7 +328,7 @@ const mapDispatchToProps = dispatch => ({
   setVolumenDeEspacioAnular: val => dispatch(setVolumenDeEspacioAnular(val)),
   setImgBoreDiagramURL: val => dispatch(setImgBoreDiagramURL(val)),
   setImgAparejoDeProduccionURL: val => dispatch(setImgAparejoDeProduccionURL(val)),
-  setChecked: val => dispatch(setChecked(val))
+  setChecked: val => dispatch(setChecked(val, 'mecanicoYAparejoDeProduccion'))
 })
 
 

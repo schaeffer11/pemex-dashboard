@@ -17,17 +17,14 @@ import PruebasDeLaboratorio from '../components/Layout/InputsUI/IntervencionesFo
 import PropuestaDeEstimulacion from '../components/Layout/InputsUI/IntervencionesForms/Estimulacion/PropuestaDeEstimulacion'
 import ResultadosDeLaSimulacionEstimulacion from '../components/Layout/InputsUI/IntervencionesForms/Estimulacion/ResultadosDeLaSimulacionEstimulacion'
 import EstimacionIncProduccionEstimulacion from '../components/Layout/InputsUI/IntervencionesForms/Estimulacion/EstimacionIncProduccionEstimulacion'
-import EstimacionCostosEstimulacion from '../components/Layout/InputsUI/IntervencionesForms/Estimulacion/EstimacionCostosEstimulacion'
 
 import PropuestaDeAcido from '../components/Layout/InputsUI/IntervencionesForms/Acido/PropuestaDeAcido'
 import ResultadosDeLaSimulacionAcido from '../components/Layout/InputsUI/IntervencionesForms/Acido/ResultadosDeLaSimulacionAcido'
 import EstimacionIncProduccionAcido from '../components/Layout/InputsUI/IntervencionesForms/Acido/EstimacionIncProduccionAcido'
-import EstimacionCostosAcido from '../components/Layout/InputsUI/IntervencionesForms/Acido/EstimacionCostosAcido'
 
 import PropuestaDeApuntalado from '../components/Layout/InputsUI/IntervencionesForms/Apuntalado/PropuestaDeApuntalado'
 import ResultadosDeLaSimulacionApuntalado from '../components/Layout/InputsUI/IntervencionesForms/Apuntalado/ResultadosDeLaSimulacionApuntalado'
 import EstimacionIncProduccionApuntalado from '../components/Layout/InputsUI/IntervencionesForms/Apuntalado/EstimacionIncProduccionApuntalado'
-import EstimacionCostosApuntalado from '../components/Layout/InputsUI/IntervencionesForms/Apuntalado/EstimacionCostosApuntalado'
 
 
 
@@ -103,7 +100,6 @@ export const pagesIntervenciones = {
             },
             estimacionDeCostos: {
               key: 'estimacionDeCostos',
-              form: <EstimacionCostosEstimulacion />,
               title: 'Estimacion de Costos de Estimulacion'
             },
       },
@@ -130,7 +126,6 @@ export const pagesIntervenciones = {
             },
             estimacionDeCostos: {
               key: 'estimacionDeCostos',
-              form: <EstimacionCostosAcido />,
               title: 'Estimacion de Costos de Fracturamiento Acido'
             },
       },
@@ -157,7 +152,6 @@ export const pagesIntervenciones = {
             },
             estimacionDeCostos: {
               key: 'estimacionDeCostos',
-              form: <EstimacionCostosApuntalado />,
               title: 'Estimacion de Costos de Fracturamiento Apuntalado'
             },
       }

@@ -79,6 +79,13 @@ app.post('/testing', (req, res) => {
 })
 
 
+app.get('/getSubmittedFieldWellMapping', (req, res) => {
+    connection.query(`SELECT * FROM FieldWellMapping WHERE HAS_DATA = 1`, (err, results) => {
+      res.json(results)
+    })
+})
+
+
 app.get('/getFieldWellMapping', (req, res) => {
     connection.query(`SELECT * FROM FieldWellMapping`, (err, results) => {
       res.json(results)
@@ -276,7 +283,6 @@ app.get('/getWell', async (req, res) => {
     SUBDIRECCION: { parent: 'fichaTecnicaDelPozoHighLevel', child: 'subdireccion'},
     ACTIVO: { parent: 'fichaTecnicaDelPozoHighLevel', child: 'activo'},
     FORMACION: { parent: 'fichaTecnicaDelPozoHighLevel', child: 'formacion'},
-    ESPESOR_BRUTO: { parent: 'fichaTecnicaDelPozo', child: 'espesorBruto'},
     CALIZA: { parent: 'fichaTecnicaDelPozo', child: 'caliza'},
     DOLOMIA: { parent: 'fichaTecnicaDelPozo', child: 'dolomia'},
     ARCILLA: { parent: 'fichaTecnicaDelPozo', child: 'arcilla'},
@@ -381,7 +387,8 @@ app.get('/getLayer', async (req, res) => {
     INTERVALO: { child: 'interval' },
     CIMA_MD: { child: 'cimaMD'},
     BASE_MD: { child: 'baseMD'},
-    ESPESOR: { child: 'espesor'},
+    ESPESOR_BRUTO: { child: 'espesorBruto'},
+    ESPESOR_NETO: { child: 'espesorNeto'},
     V_ARC: { child: 'vArc'},
     POROSITY: { child: 'porosity'},
     SW: { child: 'sw'},
@@ -880,7 +887,8 @@ app.get('/getWellPressure', async (req, res) => {
 
   const map = {
     FECHA: { child: 'fecha' },
-    PR: { child: 'Pr' } 
+    PWS: { child: 'Pws' },
+    PWF: { child: 'Pwf'} 
   }
 
   const mainParent = 'historicoDePresion'
@@ -914,7 +922,7 @@ app.get('/getWellPressure', async (req, res) => {
           innerParent: [
           {}
           ],
-          presionDataPozo: ''
+          pressureDepthPozo: ''
         }
       })
     }
@@ -1082,23 +1090,13 @@ app.get('/getInterventionEstimulacion', async (req, res) => {
   const map = {
     VOLUMEN_PRECOLCHON_N2: { parent: 'propuestaEstimulacion', child: 'volumenPrecolchonN2' },
     VOLUMEN_SISTEMA_NO_REACTIVO: { parent: 'propuestaEstimulacion', child: 'volumenSistemaNoReativo' }, 
-    VOLUMEN_SISTEM_REACTIVO: { parent: 'propuestaEstimulacion', child: 'volumenSistemaReactivo' }, 
+    VOLUMEN_SISTEMA_REACTIVO: { parent: 'propuestaEstimulacion', child: 'volumenSistemaReactivo' }, 
     VOLUMEN_SISTEMA_DIVERGENTE: { parent: 'propuestaEstimulacion', child: 'volumenSistemaDivergente' }, 
     VOLUMEN_DISPLAZAMIENTO_LIQUIDO: { parent: 'propuestaEstimulacion', child: 'volumenDesplazamientoLiquido' }, 
     VOLUMEN_DESPLAZAMIENTO_N2: { parent: 'propuestaEstimulacion', child: 'volumenDesplazamientoN2' },
     VOLUMEN_TOTAL_DE_LIQUIDO: { parent: 'propuestaEstimulacion', child: 'volumenTotalDeLiquido' }, 
-    VOLUMEN_DEL_SISTEMA_ACIDO_LIMPIEZA: { parent: 'resultadosSimulacionEstimulacion', child: 'volumenDelSistemaAcidoLimpieza' },
-    VOLUMEN_DEL_SISTEMA_NO_ACIDO_LIMPIEZA: { parent: 'resultadosSimulacionEstimulacion', child: 'volumenDelSistemaNoAcidoLimpieza' }, 
     TIPO_DE_COLOCACION: { parent: 'resultadosSimulacionEstimulacion', child: 'tipoDeColocacion' },
     TIEMPO_DE_CONTACTO: { parent: 'resultadosSimulacionEstimulacion', child: 'tiempoDeContacto' }, 
-    NUMERO_DE_ETAPAS: { parent: 'resultadosSimulacionEstimulacion', child: 'numeroDeEtapas' }, 
-    VOLUMEN_DEL_SISTEMA_ACIDO: { parent: 'resultadosSimulacionEstimulacion', child: 'volumenDelSistemAcido' }, 
-    VOLUMEN_DEL_SISTEMA_NO_ACIDO: { parent: 'resultadosSimulacionEstimulacion', child: 'volumenDelSistemNoAcido' }, 
-    VOLUMEN_DE_DIVERGENTE: { parent: 'resultadosSimulacionEstimulacion', child: 'volumenDeDivergente' }, 
-    VOLUMEN_DE_N2: { parent: 'resultadosSimulacionEstimulacion', child: 'volumenDeN2' },
-    CALIDAD_DE_ESPUMA: { parent: 'resultadosSimulacionEstimulacion', child: 'calidadDeEspuma' }, 
-    VOLUMEN_DE_PRECOLCHON_N2: { parent: 'resultadosSimulacionEstimulacion', child: 'volumenDePrecolchonN2' }, 
-    VOLUMEN_DE_DESPLAZAMIENTO: { parent: 'resultadosSimulacionEstimulacion', child: 'volumenDeDesplazamiento' }, 
     PENETRACION_RADIAL: { parent: 'resultadosSimulacionEstimulacion', child: 'penetracionRadial' }, 
     LONGITUD_DE_AGUJERO_DE_GUSANO: { parent: 'resultadosSimulacionEstimulacion', child: 'longitudDeAgujeroDeGusano' },
     EST_INC_ESTRANGULADOR: { parent: 'estIncProduccionEstimulacion', child: 'estIncEstrangulador' },
@@ -1148,6 +1146,13 @@ app.get('/getInterventionAcido', async (req, res) => {
 
 
   const map = {
+    VOLUMEN_PRECOLCHON_N2: { parent: 'propuestaAcido', child: 'volumenPrecolchonN2' },
+    VOLUMEN_SISTEMA_NO_REACTIVO: { parent: 'propuestaAcido', child: 'volumenSistemaNoReativo' }, 
+    VOLUMEN_SISTEMA_REACTIVO: { parent: 'propuestaAcido', child: 'volumenSistemaReactivo' }, 
+    VOLUMEN_SISTEMA_DIVERGENTE: { parent: 'propuestaAcido', child: 'volumenSistemaDivergente' }, 
+    VOLUMEN_DISPLAZAMIENTO_LIQUIDO: { parent: 'propuestaAcido', child: 'volumenDesplazamientoLiquido' }, 
+    VOLUMEN_DESPLAZAMIENTO_N2: { parent: 'propuestaAcido', child: 'volumenDesplazamientoN2' },
+    VOLUMEN_TOTAL_DE_LIQUIDO: { parent: 'propuestaAcido', child: 'volumenTotalDeLiquido' }, 
     MODULO_YOUNG_ARENA: { parent: 'propuestaAcido', child: 'moduloYoungArena' },
     MODULO_YOUNG_LUTITAS: { parent: 'propuestaAcido', child: 'moduloYoungLutitas' }, 
     RELAC_POISSON_ARENA: { parent: 'propuestaAcido', child: 'relacPoissonArena' }, 
@@ -1213,6 +1218,13 @@ app.get('/getInterventionApuntalado', async (req, res) => {
 
 
   const map = {
+    VOLUMEN_PRECOLCHON_N2: { parent: 'propuestaApuntalado', child: 'volumenPrecolchonN2' },
+    VOLUMEN_SISTEMA_NO_REACTIVO: { parent: 'propuestaApuntalado', child: 'volumenSistemaNoReativo' }, 
+    VOLUMEN_SISTEMA_REACTIVO: { parent: 'propuestaApuntalado', child: 'volumenSistemaReactivo' }, 
+    VOLUMEN_SISTEMA_DIVERGENTE: { parent: 'propuestaApuntalado', child: 'volumenSistemaDivergente' }, 
+    VOLUMEN_DISPLAZAMIENTO_LIQUIDO: { parent: 'propuestaApuntalado', child: 'volumenDesplazamientoLiquido' }, 
+    VOLUMEN_DESPLAZAMIENTO_N2: { parent: 'propuestaApuntalado', child: 'volumenDesplazamientoN2' },
+    VOLUMEN_TOTAL_DE_LIQUIDO: { parent: 'propuestaApuntalado', child: 'volumenTotalDeLiquido' }, 
     MODULO_YOUNG_ARENA: { parent: 'propuestaApuntalado', child: 'moduloYoungArena' },
     MODULO_YOUNG_LUTITAS: { parent: 'propuestaApuntalado', child: 'moduloYoungLutitas' }, 
     RELAC_POISSON_ARENA: { parent: 'propuestaApuntalado', child: 'relacPoissonArena' }, 
@@ -1273,35 +1285,171 @@ app.get('/getLabTest', async (req, res) => {
   let action = saved ? 'loadSave' : 'loadTransaction'
 
 
-  const map = {
-    TIPO_DE_ANALISIS: { child: 'type' }, 
-    FECHA_DE_MUESTREO: { child: 'fechnaMuesetreo' }, 
-    FECHA_DE_PRUEBA: { child: 'fechaPrueba' }, 
-    COMPANIA: { child: 'compania' }, 
-    PERSONAL_DE_PEMEX_QUE_SUPERVISO: { child: 'superviso' }, 
-    OBSERVACIONES: { child: 'obervaciones' },
-  }
-
-  const mainParent = 'pruebasDeLaboratorio'
-  const innerParent = 'pruebasDeLaboratorioData'
-
   getLabTest(transactionID, action, (data) => {
-    const finalObj = {}
-    data.forEach((d, index) => {
-      d.FECHA_DE_MUESTREO ? d.FECHA_DE_MUESTREO = d.FECHA_DE_MUESTREO.toJSON().slice(0, 10) : null
-      d.FECHA_DE_PRUEBA ? d.FECHA_DE_PRUEBA = d.FECHA_DE_PRUEBA.toJSON().slice(0, 10) : null
-      const innerObj = {}
-      Object.keys(d).forEach(k => {
-        if (map[k]) {
-          const { child } = map[k]
-          objectPath.set(innerObj, child, d[k])
-        }
-      })
-      objectPath.set(innerObj, 'length', data.length)
-      objectPath.set(innerObj, 'index', index)
-      objectPath.push(finalObj, `${mainParent}.${innerParent}`, innerObj)
+    let labIDs = []
+    let outData = []
+
+    data.forEach(i => {
+      if (!labIDs.includes(i.LAB_ID)) {
+        labIDs.push(i.LAB_ID)
+      }
     })
 
+    labIDs.forEach((id, index) => {
+      let subset = data.filter(i => i.LAB_ID === id)
+      console.log(subset)
+      let type
+      if (subset.length > 0) {
+        type = subset[0].TIPO_DE_ANALISIS
+        let i = subset[0]
+
+        if (type === 'caracterizacionFisico') {
+          outData.push({
+            edited: true,
+            index: index,
+            length: labIDs.length,
+            type: type,
+            fechaMuestreo: (i.FECHA_DE_MUESTREO ? i.FECHA_DE_MUESTREO = i.FECHA_DE_MUESTREO.toJSON().slice(0, 10) : null),
+            fechaPrueba : (i.FECHA_DE_PRUEBA ? i.FECHA_DE_PRUEBA = i.FECHA_DE_PRUEBA.toJSON().slice(0, 10) : null),
+            compania: i.COMPANIA,
+            superviso: i.PERSONAL_DE_PEMEX_QUE_SUPERVISO,
+            obervaciones: i.OBSERVACIONES,
+            percentAceite: i.PORENTAJE_DE_ACEITE,
+            percentAgua: i.PORENTAJE_DE_AGUA,
+            percentEmulsion: i.PORENTAJE_DE_EMULSION,
+            percentSolidos: i.PORENTAJE_DE_SOLIDOS,
+            percentAsfaltenos: i.PORENTAJE_DE_ASFALTENOS,
+            percentParafinas: i.PORENTAJE_DE_PARAFINAS,
+            percentResinasAsfalticas: i.PORENTAJE_DE_RESINAS_ASFALTICAS,
+            percentContenidoDeSolidos: i.PORENTAJE_DE_CONTENIDO_DE_SOLIDOS,
+            densityAceite: i.DENSIDAD_DEL_ACEITE,
+            densityAgua: i.DENSIDAD_DEL_AGUA,
+            densityEmulsion: i.DENSIDAD_DE_LA_EMULSION,
+            viscosityAceite: i.VISCOSIDAD_DEL_ACEITE,
+            viscosityEmulsion: i.VISCOSIDAD_DE_LA_EMULSION,
+            phDelAgua: i.PH_DEL_AGUA,
+            salinidadDelAgua: i.SALINIDAD_DEL_AGUA,
+            salinidadDelAceite: i.SALINIDAD_DEL_ACEITE,
+          })
+        }
+        else if (type === 'pruebasDeCompatibilidad') {
+          let table = []
+          subset.forEach(point => {
+            table.push({
+              diseno: point.DISENO,
+              sistema: point.SISTEMA,
+              aceiteDelPozo: point.ACEITE_DEL_POZO,
+              tiempoDeRompimiento: point.TIEMPO_DE_ROMPIMIENTO,
+              separacionDeFases: point.SEPARACION_DE_FASES,
+              solidos: point.SOLIDOS,
+              condicion: point.CONDICION,
+            })
+          })
+
+          outData.push({
+            edited: true,
+            index: index,
+            length: labIDs.length,
+            type: type,
+            fechaMuestreo: (i.FECHA_DE_MUESTREO ? i.FECHA_DE_MUESTREO = i.FECHA_DE_MUESTREO.toJSON().slice(0, 10) : null),
+            fechaPrueba : (i.FECHA_DE_PRUEBA ? i.FECHA_DE_PRUEBA = i.FECHA_DE_PRUEBA.toJSON().slice(0, 10) : null),
+            compania: i.COMPANIA,
+            superviso: i.PERSONAL_DE_PEMEX_QUE_SUPERVISO,
+            obervaciones: i.OBSERVACIONES,
+            compatabilidadTable: table
+          })
+        }
+        else if (type === 'pruebasDeGrabado') {
+          let table = []
+          subset.forEach(point => {
+            table.push({
+              sistemaAcido: point.SISTEMA_ACIDO,
+              tiempoDeContacto: point.TIEMPO_DE_CONTACTO,
+              grabado: point.GRABADO,
+            })
+          })
+          outData.push({
+            edited: true,
+            index: index,
+            length: labIDs.length,
+            type: type,
+            fechaMuestreo: (i.FECHA_DE_MUESTREO ? i.FECHA_DE_MUESTREO = i.FECHA_DE_MUESTREO.toJSON().slice(0, 10) : null),
+            fechaPrueba : (i.FECHA_DE_PRUEBA ? i.FECHA_DE_PRUEBA = i.FECHA_DE_PRUEBA.toJSON().slice(0, 10) : null),
+            compania: i.COMPANIA,
+            superviso: i.PERSONAL_DE_PEMEX_QUE_SUPERVISO,
+            obervaciones: i.OBSERVACIONES,
+            grabadoTable: table
+          })
+        }
+        else if (type === 'pruebasDeSolubilidad') {
+          outData.push({
+            edited: true,
+            index: index,
+            length: labIDs.length,
+            type: type,
+            fechaMuestreo: (i.FECHA_DE_MUESTREO ? i.FECHA_DE_MUESTREO = i.FECHA_DE_MUESTREO.toJSON().slice(0, 10) : null),
+            fechaPrueba : (i.FECHA_DE_PRUEBA ? i.FECHA_DE_PRUEBA = i.FECHA_DE_PRUEBA.toJSON().slice(0, 10) : null),
+            compania: i.COMPANIA,
+            superviso: i.PERSONAL_DE_PEMEX_QUE_SUPERVISO,
+            obervaciones: i.OBSERVACIONES,
+            tipoDeMuestra: i.TIPO_DE_MUESTRA,
+            pesoDeLaMuestra: i.PESO_DE_LA_MUESTRA,
+            tipoDeSistemaEmpleado: i.TIPO_DE_SISTEMA_QUIMICO,
+            pesoDeLaMuestraFinal: i.PESO_FINAL_DE_LA_MUESTRA,
+            solubilidad: i.SOLUBILIDAD,
+          })
+        }
+        else if (type === 'pruebasGelDeFractura') {
+          outData.push({
+            edited: true,
+            index: index,
+            length: labIDs.length,
+            type: type,
+            fechaMuestreo: (i.FECHA_DE_MUESTREO ? i.FECHA_DE_MUESTREO = i.FECHA_DE_MUESTREO.toJSON().slice(0, 10) : null),
+            fechaPrueba : (i.FECHA_DE_PRUEBA ? i.FECHA_DE_PRUEBA = i.FECHA_DE_PRUEBA.toJSON().slice(0, 10) : null),
+            compania: i.COMPANIA,
+            superviso: i.PERSONAL_DE_PEMEX_QUE_SUPERVISO,
+            obervaciones: i.OBSERVACIONES,
+            hidratacionDelFluido: i.HIDRATACION,
+            tiempoDeActivacion: i.TIEMPO_DE_ACTIVACION_DEL_GEL,
+            determinacionDePh: i.DETERMINACION_DE_PH,
+            tiempoDeRompimiento: i.TIEMPO_DE_ROMPIMIENTO_GEL,
+            dosificacionDeQuebradors: i.DOSIFICATION_DE_QUEBRADORES,
+            viscosidadDelGelDeFractura: i.VISCOSIDAD_DEL_GEL_DE_FRACTURA,
+          })
+        }
+        else if (type === 'pruebasParaApuntalante') {
+          outData.push({
+            edited: true,
+            index: index,
+            length: labIDs.length,
+            type: type,
+            fechaMuestreo: (i.FECHA_DE_MUESTREO ? i.FECHA_DE_MUESTREO = i.FECHA_DE_MUESTREO.toJSON().slice(0, 10) : null),
+            fechaPrueba : (i.FECHA_DE_PRUEBA ? i.FECHA_DE_PRUEBA = i.FECHA_DE_PRUEBA.toJSON().slice(0, 10) : null),
+            compania: i.COMPANIA,
+            superviso: i.PERSONAL_DE_PEMEX_QUE_SUPERVISO,
+            obervaciones: i.OBSERVACIONES,
+            esfericidad: i.ESFERICIDAD,
+            redondez: i.REDONDEZ,
+            resistenciaCompresion: i.RESISTENCIA_A_LA_COMPRESION,
+            malla: i.MALLA, 
+            aglutinamiento: i.AGLUTINAMIENTO,
+            turbidez: i.TURBIDEZ,
+            solubilidad: i.SOLUBILIDAD_APUNTALANTE
+          })
+        }
+      }
+    })
+
+    if (outData.length === 0) {
+      outData = [{}]
+    }
+    
+    let finalObj = {
+      pruebasDeLaboratorio: {
+        pruebasDeLaboratorioData: outData
+      }
+    }
     res.json(finalObj)
   })
 })
@@ -1497,7 +1645,9 @@ app.get('/getCosts', async (req, res) => {
     ITEM: { child: 'item' }, 
     COMPANY: { child: 'compania' }, 
     COST_MNX: { child: 'cost' }, 
-    COST_DLS: { child: 'costDLS' }
+    COST_DLS: { child: 'costDLS' },
+    FECHA: { child: 'fecha' },
+    MNXtoDLS: { child: 'MNXtoDLS'}
 
   }
 
@@ -1505,10 +1655,10 @@ app.get('/getCosts', async (req, res) => {
   const innerParent = 'estimacionCostosData'
 
   getCosts(transactionID, action, (data) => {
-    console.log('datatatat', data)
     let finalObj = {}
     if (data && data.length > 0) {
       data.forEach((d, index) => {
+         d.FECHA ? d.FECHA = d.FECHA.toJSON().slice(0, 10) : null
         const innerObj = {}
         Object.keys(d).forEach(k => {
           if (map[k]) {
@@ -1520,15 +1670,13 @@ app.get('/getCosts', async (req, res) => {
         objectPath.set(innerObj, 'index', index)
         objectPath.push(finalObj, `${mainParent}.${innerParent}`, innerObj)
       })
-      finalObj['estCost'].MNXtoDLS = data[0].MNXtoDLS
     }
     else {
       finalObj = {
         'estCost': {
           "estimacionCostosData": [
             {}
-          ],
-          "MNXtoDLS": 1
+          ]
         }
       }
     }

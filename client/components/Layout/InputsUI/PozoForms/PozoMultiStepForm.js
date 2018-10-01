@@ -61,8 +61,9 @@ import { setFichaTecnicaDelCampo, setFichaTecnicaDelPozo, setEvaluacionPetrofisi
     ];
   }
 
+
   componentDidMount() {
-    fetch('/api/getFieldWellMapping')
+    fetch('/api/getSubmittedFieldWellMapping')
       .then(r => r.json())
       .then(r => {
 
@@ -572,13 +573,10 @@ import { setFichaTecnicaDelCampo, setFichaTecnicaDelPozo, setEvaluacionPetrofisi
     let allErrors = {}
     let allChecked = []
     forms.forEach((form) => {
-
       let {errors, checked} = form.selector.props.forceValidation()
       allErrors = Object.assign({}, allErrors, errors);
-      allChecked.push(...checked)
     });
 
-    setChecked(allChecked)
 
     return allErrors.length == 0;
   }
@@ -667,15 +665,15 @@ import { setFichaTecnicaDelCampo, setFichaTecnicaDelPozo, setEvaluacionPetrofisi
       >
       <div className="modalTest" >
         <div className="modal-title">
-          Load Data from database 
         </div>
-        <div className="modal-info"> 
-          Please select which well you would like to load data from
+        <div className="modal-info">
+          Seleccione un pozo para descargar su información
+          {/* Please select which well you would like to load data from */}
 
 
           <InputRowSelectUnitless header="Campo" name="campo" value={selectedField} options={fieldOptions} callback={this.handleSelectField} name='campo' />
           <InputRowSelectUnitless header="Pozo" name="pozo" value={selectedWell} options={wellOptions} callback={this.handleSelectWell} name='pozo' />
-          <button className="submit submit-load-options" disabled={!selectedField || !selectedWell} onClick={this.fetchLoadFromDatabaseOptions}>Show Options</button>
+          <button className="submit submit-load-options" disabled={!selectedField || !selectedWell} onClick={this.fetchLoadFromDatabaseOptions}>Mostrar opciones</button>
 
         </div>
         <div className="modal-body">
@@ -686,17 +684,13 @@ import { setFichaTecnicaDelCampo, setFichaTecnicaDelPozo, setEvaluacionPetrofisi
               return (
                 <div className={className} onClick={(e) => this.handleSelectTransaction(i.id)}>{i.user} {date}</div>
                 )
-            }): <div> No values in database for selected parameters </div> }
+            }): null  }
         </div> 
-        <button className="submit submit-load" disabled={!selectedTransaction} onClick={this.handleLoad} >Cargar borrdador</button>
+        <button className="submit submit-load" disabled={!selectedTransaction} onClick={this.handleLoad} >Descargar borrdador</button>
       </div>
       </AriaModal>
     )
   }
-
-
-
-
 
   render() {
     let { fieldWellOptions } = this.state
@@ -707,12 +701,12 @@ import { setFichaTecnicaDelCampo, setFichaTecnicaDelPozo, setEvaluacionPetrofisi
     
     let pozoFormSubmitting = this.props.formsState.get('pozoFormSubmitting')
     const submitting = pozoFormSubmitting ? 'submitting' : ''
+
     const errors = this.props.formsState.get('pozoFormError')
 
-    const errorClass = errors.length ? 'error' : ''
 
     return (
-       <div className={`multistep-form ${submitting} ${errorClass}`}>
+       <div className={`multistep-form ${submitting}`}>
         <div className="subtabs">
             {this.forms.map( (tab, index) => {
                const active = this.state.currentStep === index ? 'active' : ''; 
@@ -727,7 +721,7 @@ import { setFichaTecnicaDelCampo, setFichaTecnicaDelPozo, setEvaluacionPetrofisi
             { title }
             <button className="cta next" onClick={this.handleNextSubtab}>Siguiente</button>
             <button className="cta prev" onClick={this.handlePrevSubtab}>Anterior</button> 
-            <button className="cta load" onClick={this.activateModal}>Cargar última intervención</button> 
+            <button className="cta load" onClick={this.activateModal}>Descargar intervención</button> 
           </div>
 
           {this.forms[this.state.currentStep].content}
@@ -739,10 +733,7 @@ import { setFichaTecnicaDelCampo, setFichaTecnicaDelPozo, setEvaluacionPetrofisi
                return this.forms[index].content}
           )}
         </div>
-      
-        { errors.length > 0 &&
-            <div className="error">Se han encontrado errores en la forma.</div>
-        }
+
       { isOpen ? this.buildModal() : null }
        </div>
      );

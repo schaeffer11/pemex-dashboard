@@ -24,8 +24,12 @@ let columns = [
     accessor: 'fecha',
     cell: 'renderDate',
   }, { 
-    Header: <div>Pr<br></br>(Kg/cm<sup>2</sup>)</div>,
-    accessor: 'Pr',
+    Header: <div>P<sub>ws</sub><br></br>(Kg/cm<sup>2</sup>)</div>,
+    accessor: 'Pws',
+    cell: 'renderNumber',
+   }, { 
+    Header: <div>P<sub>wf</sub><br></br>(Kg/cm<sup>2</sup>)</div>,
+    accessor: 'Pwf',
     cell: 'renderNumber',
   }
 ]
@@ -52,13 +56,21 @@ let columns = [
 
   containsErrors(){
     let foundErrors = false
-    for (const key of Object.keys(this.state.errors)) {
-      if(this.state.errors[key].checked)
-        foundErrors = true
-    }
+    let errors = Object.assign({}, this.state.errors);
+    let {formData} = this.props
+    formData = formData.toJS()
+
+    const checked = formData.checked  || []
+    checked.forEach((checked) => {
+        if(errors[checked]){
+           errors[checked].checked = true
+           foundErrors = true
+        }
+    })
 
     if(foundErrors !== this.state.containsErrors){
       this.setState({
+        errors: errors,
         containsErrors: foundErrors
       })
     }
@@ -105,7 +117,7 @@ let columns = [
 
     presionDataPozo[0].length = 2
 
-    setPresionDataPozo([...presionDataPozo, {index: presionDataPozo.length, fecha: null, Pr: '', length: presionDataPozo.length + 1, 'edited': false}])
+    setPresionDataPozo([...presionDataPozo, {index: presionDataPozo.length, fecha: null, Pwf: '', Pws: '', length: presionDataPozo.length + 1, 'edited': false}])
   }
 
 
@@ -135,7 +147,7 @@ let columns = [
     formData = formData.toJS()
     let { presionDataPozo, pressureDepthPozo } = formData
 
-     const objectTemplate = {fecha: null, Pr: ''}
+     const objectTemplate = {fecha: null, Pws: '', Pwf: ''}
 
     return (
       <div className='historico-presion-pozo' >
@@ -157,7 +169,7 @@ let columns = [
           <button className='new-row-button' onClick={this.addNewRow}>Añadir un renglón</button>
         </div>
         <div className='depth'>
-          <InputRow header="Pressure Depth" name='pressureDepthPozo' value={pressureDepthPozo} onChange={setPressureDepthPozo} unit={'md'} />
+          <InputRow header="Profundidad" name='pressureDepthPozo' value={pressureDepthPozo} onChange={setPressureDepthPozo} unit={'md'} />
         </div>
           { this.state.errors.presionDataPozo && this.state.errors.presionDataPozo.checked &&
             <div className="error">{this.state.errors.presionDataPozo.message}</div>
@@ -191,7 +203,7 @@ const mapStateToProps = state => ({
 
 const mapDispatchToProps = dispatch => ({
     setPresionDataPozo: val => dispatch(setPresionDataPozo(val)),
-    setChecked: val => dispatch(setChecked(val)),
+    setChecked: val => dispatch(setChecked(val, 'historicoDePresion')),
     setPressureDepthPozo: val => dispatch(setPressureDepthPozo(val)),
 })
 

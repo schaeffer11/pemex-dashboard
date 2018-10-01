@@ -19,7 +19,7 @@ let layerColumns = [
       }
     }
   }, {
-    Header: 'Interval',
+    Header: 'Intervalo',
     accessor: 'interval',
   }, { 
     Header: <div>Cima<br></br>(md)</div>,
@@ -31,8 +31,12 @@ let layerColumns = [
     cell: 'renderNumber',
   },
   {
-    Header: <div>Espesor<br></br>(md)</div>,
-    accessor: 'espesor',
+    Header: <div>Espesor Bruto<br></br>(md)</div>,
+    accessor: 'espesorBruto',
+  },{
+    Header: <div>Espesor Neto<br></br>(md)</div>,
+    accessor: 'espesorNeto',
+    cell: 'renderNumber',
   }, { 
     Header: <div>V arc.<br></br>(%)</div>,
     accessor: 'vArc',
@@ -113,18 +117,25 @@ let mudLossColumns = [
   }
 
   containsErrors(){
-    let foundErrors = false
-    for (const key of Object.keys(this.state.errors)) {
-      if(this.state.errors[key].checked)
-        foundErrors = true
-    }
+        let foundErrors = false
+        let errors = Object.assign({}, this.state.errors);
+      let {formData} = this.props
+      formData = formData.toJS()
 
-    if(foundErrors !== this.state.containsErrors){
-      this.setState({
-        containsErrors: foundErrors
-      })
-    }
+      const checked = formData.checked  || []
+        checked.forEach((checked) => {
+            if(errors[checked]){
+                errors[checked].checked = true
+                foundErrors = true
+            }
+        })
 
+        if(foundErrors !== this.state.containsErrors){
+            this.setState({
+                errors: errors,
+                containsErrors: foundErrors
+            })
+        }
   }
 
   validate(event){
@@ -188,7 +199,7 @@ let mudLossColumns = [
 
     layerData[0].length = 2
 
-    setLayerData([...layerData, {index: layerData.length, interval: '', cimaMD: '', baseMD: '', espesor: '', vArc: '', porosity: '', sw: '', dens: '', resis: '', perm: '', length: layerData.length + 1}])
+    setLayerData([...layerData, {index: layerData.length, interval: '', cimaMD: '', baseMD: '', espesorBruto: '', espesorNeto: '', vArc: '', porosity: '', sw: '', dens: '', resis: '', perm: '', length: layerData.length + 1}])
   }
 
   addNewRowMudLoss() {
@@ -375,7 +386,7 @@ const validate = values => {
       errors.layerData = {message: "Esta forma no puede estar vacia"}
     }else {
       values.layerData.forEach((row, index) => {
-        let hasEmpty = Object.values(row).find((value) => { return value.toString().trim() == '' })
+        let hasEmpty = Object.values(row).find((value) => { return value === null || value.toString().trim() == '' })
         if(hasEmpty !== undefined){
             errors.layerData = {message: "Ningun campo puede estar vacio."}
         }
@@ -409,7 +420,7 @@ const mapDispatchToProps = dispatch => ({
   setImgURL: val => dispatch(setImgURL(val)),
   setLayerData: val => dispatch(setLayerData(val)),
   setMudLossData: val => dispatch(setMudLossData(val)),
-  setChecked: val => dispatch(setChecked(val))
+  setChecked: val => dispatch(setChecked(val, 'evaluacionPetrofisica'))
 })
 
 

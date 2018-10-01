@@ -8,7 +8,7 @@ import InputTable from '../../Common/InputTable'
 import {withValidate} from '../../Common/Validate'
 
 import { InputRow, InputRowUnitless, InputRowSelectUnitless, TextAreaUnitless } from '../../Common/InputRow'
-import { setEstimacionCostosData, setMNXtoDLS } from '../../../../redux/actions/intervencionesEstimulacion'
+import {setChecked, setEstimacionCostosData, setMNXtoDLS} from '../../../../redux/actions/intervencionesEstimulacion'
 
 export const itemOptions = [
   { label: 'Costo de Servicios', value: 'Costo de Servicios' },
@@ -52,10 +52,12 @@ const companyOptions = [
 
 
   componentDidMount() {
+      this.validate()
+      this.containsErrors()
   }
 
   componentDidUpdate(prevProps) {
-
+      this.containsErrors()
   }
 
   containsErrors(){
@@ -115,7 +117,7 @@ const companyOptions = [
     let copy = estimacionCostosData
     copy[0].length = 2
 
-    setEstimacionCostosData([...copy, {index: estimacionCostosData.length, item: '', cost: '', compania: '', length: estimacionCostosData.length + 1}])
+    setEstimacionCostosData([...copy, {index: estimacionCostosData.length, item: '', cost: '', compania: '', costDLS: '', fecha: null, MNXtoDLS: '', length: estimacionCostosData.length + 1}])
   }
 
 
@@ -163,7 +165,7 @@ const companyOptions = [
 
 
 
-  makeGeneralesForm() {
+  makeCostsForm() {
     let { setEstimacionCostosData, setMNXtoDLS, formData } = this.props
     formData = formData.toJS()
     let { estimacionCostosData, MNXtoDLS } = formData
@@ -197,8 +199,13 @@ const companyOptions = [
                 </div>)
               }
       }, { 
-        Header: <div>Costo<br></br>(MNX)</div>,
-
+        Header: <div>Fecha</div>,
+        accessor: 'fecha',
+        cell: 'renderDate',
+        maxWidth: 180,
+        resizable: false
+      }, { 
+        Header: <div>Costo<br></br>(MXN)</div>,
         accessor: 'cost',
         cell: 'renderNumber',
         maxWidth: 180,
@@ -210,7 +217,13 @@ const companyOptions = [
         maxWidth: 180,
         resizable: false
       }, { 
-        Header: 'Compania',
+      Header: <div>Paridad<br></br>(MXN a DLS)</div>,
+        accessor: 'MNXtoDLS',
+        cell: 'renderNumber',
+        maxWidth: 180,
+        resizable: false
+      }, { 
+        Header: 'Compañia',
         accessor: 'compania',
         width: 300,
         resizable: false,
@@ -231,14 +244,9 @@ const companyOptions = [
     ]
 
     const objectTemplate = {}
-/*
-    columns.forEach(column => {
-      column.cell === 'renderEditable' ? column.Cell = this.renderEditable : null
-    })
-*/
+
     return (
-      <div className='generales-form' >
-        <InputRow header="Conversion Rate" name='MNXtoDLS' value={MNXtoDLS} onChange={setMNXtoDLS} unit={'pesos to 1 DLS'} style={{width: '40%', marginBottom: '10px'}}/>
+      <div className='costs-form' >
         <div className='header'>
           Cost Table
         </div>
@@ -259,6 +267,7 @@ const companyOptions = [
         { this.state.errors.estimacionCostosData && this.state.errors.estimacionCostosData.checked &&
           <div className="error">{this.state.errors.estimacionCostosData.message}</div>
         }
+        <button className='new-row-button' onClick={this.addNewRow}>Añadir un renglón</button>
       </div>
     )
   }
@@ -266,10 +275,11 @@ const companyOptions = [
   render() {
     let { setEstimacionCostosData, formData } = this.props
     formData = formData.toJS()
-    let { estimacionCostosData, MNXtoDLS } = formData
+    let { estimacionCostosData } = formData
 
     let dlsSum = 0
     let mnxSum = 0
+    let convertedDLSSum = 0
 
     estimacionCostosData.forEach(i => {
       if (i.cost) {
@@ -277,18 +287,20 @@ const companyOptions = [
       }
       if (i.costDLS) {
         dlsSum += parseFloat(i.costDLS)
+        convertedDLSSum += parseFloat(i.costDLS) * parseFloat(i.MNXtoDLS)
       }
     })
 
     return (
-      <div className="form pruebas-de-laboratorio-estimulacion">
-          { this.makeGeneralesForm() }
-          <button className='new-row-button' onClick={this.addNewRow}>Añadir un renglón</button>
+      <div className="form estimated-costs">
+          { this.makeCostsForm() }
 
 
-          <div>Cost in MNX  - ${mnxSum} </div>
-          <div>Cost in USD  - ${dlsSum} (${dlsSum * MNXtoDLS} MNX) </div>
-          <div>Total Cost   - ${mnxSum + (dlsSum * MNXtoDLS)} MNX </div>
+          <div className='kpis'>
+            <div className='mnx'><div className='values'>${mnxSum}</div><br/>Costo en MXN</div>
+            <div className='usd'><div className='values'>${dlsSum} (${convertedDLSSum} MXN)</div><br/>Costo en USD</div>
+            <div className='sum'><div className='values'>${mnxSum + (convertedDLSSum)} MXN</div><br/>Costo Total</div>
+          </div>
       </div>
     )
   }
@@ -301,7 +313,7 @@ const validate = values => {
       errors.estimacionCostosData = {message: "Esta forma no puede estar vacia"}
     }else {
       values.estimacionCostosData.forEach((row, index) => {
-        let hasEmpty = Object.values(row).find((value) => { return value.toString().trim() == '' })
+        let hasEmpty = Object.values(row).find((value) => { return value === null || value.toString().trim() == '' })
         if(hasEmpty !== undefined){
             errors.estimacionCostosData = {message: "Ningun campo puede estar vacio."}
         }
@@ -312,16 +324,18 @@ const validate = values => {
 }
 
 const mapStateToProps = state => ({
+  forms: state.get('forms'),
   formData: state.get('estCost'),
 })
 
 const mapDispatchToProps = dispatch => ({
   setEstimacionCostosData: val => dispatch(setEstimacionCostosData(val)),
   setMNXtoDLS: val => dispatch(setMNXtoDLS(val)),
+    setChecked: values => {dispatch(setChecked(values, 'estCost'))}
 })
 
 export default withValidate(
   validate,
-  connect(mapStateToProps, mapDispatchToProps)(EstimacionCostos)
+  connect(mapStateToProps, mapDispatchToProps, null, { withRef: true })(EstimacionCostos)
 )
 

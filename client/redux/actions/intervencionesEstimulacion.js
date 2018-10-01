@@ -14,40 +14,23 @@ export const setVolumenDesplazamientoLiquido = value => ({ type: 'set_volumenDes
 export const setVolumenDesplazamientoN2 = value => ({ type: 'set_volumenDesplazamientoN2', value})
 export const setVolumenTotalDeLiquido = value => ({ type: 'set_volumenTotalDeLiquido', value})
 export const setPropuestaCompany = value => ({ type: 'set_propuestaCompany', value})
-export const setCedulaData = (value) => ({
+export const setTipoDeEstimulacion = value => ({ type: 'set_tipoDeEstimulacion', value})
+export const setTipoDeColocacion = value => ({ type: 'set_tipoDeColocacion', value})
+export const setTiempoDeContacto = value => ({ type: 'set_tiempoDeContacto', value})
+export const setCedulaData = (cedula, volumes) => ({
   type: 'set_cedulaData',
-  value: value.map((row, i) => {
+  volumes,
+  cedula: cedula.map((row) => {
     row.etapa = row.index + 1
-    row.volLiquid = parseFloat(row.gastoLiqudo) * parseFloat(row.tiempo)
-    row.volN2 = parseFloat(row.gastoN2) * parseFloat(row.tiempo)
-
-    let prev = value[i - 1]
-
-    row.volLiquidoAcum = prev ? prev.volLiquidoAcum + row.volLiquid : row.volLiquid
-    row.volN2Acum = prev ? prev.volN2Acum + row.volN2 : row.volN2
     return row
   }),
 })
 
 export const setPruebasDeLaboratorioData = value => ({ type: 'set_pruebasDeLaboratorioData', value})
 export const setEstimacionCostosData = value => ({ type: 'set_estimacionCostos', value})
-export const setMNXtoDLS = value => ({ type: 'set_MNXtoDLS', value})
 
 export const setLabEvidenceImgURL = value => ({ type: 'set_labEvidenceImgURL', value})
 
-export const setVolumenDelSistemaAcidoLimpieza = value => ({ type: 'set_volumenDelSistemaAcidoLimpieza', value})
-export const setVolumenDelSistemaNoAcidoLimpieza = value => ({ type: 'set_volumenDelSistemaNoAcidoLimpieza', value})
-export const setTipoDeColocacion = value => ({ type: 'set_tipoDeColocacion', value})
-export const setTiempoDeContacto = value => ({ type: 'set_tiempoDeContacto', value})
-export const setEvidenceSimulationImgURL = value => ({ type: 'set_evidenceSimulationImgURL', value})
-export const setNumeroDeEtapas = value => ({ type: 'set_numeroDeEtapas', value})
-export const setVolumenDelSistemAcido = value => ({ type: 'set_volumenDelSistemAcido', value})
-export const setVolumenDelSistemNoAcido = value => ({ type: 'set_volumenDelSistemNoAcido', value})
-export const setVolumenDeDivergente = value => ({ type: 'set_volumenDeDivergente', value})
-export const setVolumenDeN2 = value => ({ type: 'set_volumenDeN2', value})
-export const setCalidadDeEspuma = value => ({ type: 'set_calidadDeEspuma', value})
-export const setVolumenDePrecolchonN2 = value => ({ type: 'set_volumenDePrecolchonN2', value})
-export const setVolumenDeDesplazamiento = value => ({ type: 'set_volumenDeDesplazamiento', value})
 export const setPenetracionRadial = value => ({ type: 'set_penetracionRadial', value})
 export const setLongitudDeAgujeroDeGusano = value => ({ type: 'set_longitudDeAgujeroDeGusano', value})
 
@@ -78,4 +61,8 @@ export const setEstCostDeDivergenes = value => ({ type: 'set_estCostDeDivergenes
 export const setEstCostDeN2 = value => ({ type: 'set_estCostDeN2', value})
 export const setEstCostHCL = value => ({ type: 'set_estCostHCL', value})
 
-export const setChecked = value => ({ type: 'set_checked', value})
+export const setChecked = (value, form)  => ({
+   type: 'set_forms_checked',
+   form: form,
+   value: value
+})

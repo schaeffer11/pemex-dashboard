@@ -6,8 +6,9 @@ import Select from 'react-select'
 import { connect } from 'react-redux'
 import {withValidate} from '../../../Common/Validate'
 import { InputRow, InputRowUnitless, InputRowSelectUnitless, CalculatedValue } from '../../../Common/InputRow'
-import { setCedulaData, setIntervalo, setLongitudDeIntervalo, setVolAparejo, setCapacidadTotalDelPozo, setVolumenPrecolchonN2, setVolumenSistemaNoReativo, setVolumenSistemaReactivo, setVolumenSistemaDivergente, setVolumenDesplazamientoLiquido, setVolumenDesplazamientoN2, setVolumenTotalDeLiquido, setChecked, setPropuestaCompany } from '../../../../../redux/actions/intervencionesEstimulacion'
-
+import { setCedulaData, setIntervalo, setLongitudDeIntervalo, setVolAparejo, setCapacidadTotalDelPozo, setVolumenPrecolchonN2, setVolumenSistemaNoReativo, setVolumenSistemaReactivo, setVolumenSistemaDivergente, setVolumenDesplazamientoLiquido, setVolumenDesplazamientoN2, setVolumenTotalDeLiquido, setChecked, setPropuestaCompany, setTipoDeEstimulacion, setTipoDeColocacion, setTiempoDeContacto } from '../../../../../redux/actions/intervencionesEstimulacion'
+import { setEspesorBruto } from '../../../../../redux/actions/pozo'
+import { round, calculateVolumes, getSistemaOptions } from '../helpers'
 
 @autobind class PropuestaDeEstimulacion extends Component {
   constructor(props) {
@@ -32,13 +33,21 @@ import { setCedulaData, setIntervalo, setLongitudDeIntervalo, setVolAparejo, set
 
   containsErrors(){
     let foundErrors = false
-    for (const key of Object.keys(this.state.errors)) {
-      if(this.state.errors[key].checked)
-        foundErrors = true
-    }
+    let errors = Object.assign({}, this.state.errors);
+    let {formData} = this.props
+    formData = formData.toJS()
+
+    const checked = formData.checked  || []
+    checked.forEach((checked) => {
+        if(errors[checked]){
+           errors[checked].checked = true
+           foundErrors = true
+        }
+    })
 
     if(foundErrors !== this.state.containsErrors){
       this.setState({
+        errors: errors,
         containsErrors: foundErrors
       })
     }
@@ -82,9 +91,9 @@ import { setCedulaData, setIntervalo, setLongitudDeIntervalo, setVolAparejo, set
   }
 
   makeGeneralForm() {
-    let { formData, setPropuestaCompany } = this.props
+    let { formData, setPropuestaCompany, setTipoDeEstimulacion } = this.props
     formData = formData.toJS()
-    let { propuestaCompany } = formData
+    let { propuestaCompany, tipoDeEstimulacion } = formData
     const companyOptions = [
       { label: 'Halliburton', value: 'Halliburton' },
       { label: 'Schlumberger', value: 'Schlumberger' },
@@ -94,6 +103,12 @@ import { setCedulaData, setIntervalo, setLongitudDeIntervalo, setVolAparejo, set
       { label: 'Weatherford',
       value: 'Weatherford' }
     ]
+
+    const estimulacionOptions = [
+      { label: 'Limpieza', value: 'limpieza'},
+      { label: 'Matricial', value: 'matricial'}
+    ]
+
 
     return (
       <div className='general-form' >
@@ -108,88 +123,95 @@ import { setCedulaData, setIntervalo, setLongitudDeIntervalo, setVolAparejo, set
           value={propuestaCompany}
           callback={e => setPropuestaCompany(e.value)}
         />
+        <InputRowSelectUnitless
+          header="Tipo de estimulación"
+          name="tipoDeEstimulacion"
+          options={estimulacionOptions}
+          onBlur={this.validate}
+          value={tipoDeEstimulacion}
+          callback={e => setTipoDeEstimulacion(e.value)}
+        />
       </div>
     )
   }
 
-  // makeGeneralForm() {
-  //   let { setIntervalo, setLongitudDeIntervalo, setVolAparejo, setCapacidadTotalDelPozo,formData } = this.props
-  //   formData = formData.toJS()
-  //   let { intervalo, longitudDeIntervalo, volAparejo, capacidadTotalDelPozo } = formData
+  makeLimpiezaForm() {
+    let { setTipoDeColocacion, setTiempoDeContacto, formData } = this.props
+    formData = formData.toJS()
+    let { tipoDeColocacion, tiempoDeContacto } = formData
+    
+    const colocacionOptions = [
+      { label: 'Directo', value: 'Directo'},
+      { label: 'Tubería Flexible', value: 'Tuberia Flexible'}
+    ]
 
-  //   return (
-  //     <div className='general-form' >
-  //       <div className='header'>
-  //         General
-  //       </div>
-  //       <InputRowUnitless header="Intervalo(s)" name='intervalo' value={intervalo} onChange={setIntervalo} errors={this.state.errors} onBlur={this.validate}/>
-  //       <InputRow header="Longitud de intervalo a tratar" name='longitudDeIntervalo' unit='m' value={longitudDeIntervalo} onChange={setLongitudDeIntervalo} errors={this.state.errors} onBlur={this.validate}/>
-  //       <InputRow header="Vol. aparejo (VAP)" name='' unit='m3' name='volAparejo' value={volAparejo} onChange={setVolAparejo} errors={this.state.errors} onBlur={this.validate}/>
-  //       <InputRow header="Capacidad total del pozo (cima/base)" name='capacidadTotalDelPozo' unit='m3/m3' value={capacidadTotalDelPozo} onChange={setCapacidadTotalDelPozo} errors={this.state.errors} onBlur={this.validate}/>
-  //     </div>
-  //   )
-  // }
+    return (
+      <div className='limpieza-form' >
+        <div className='header'>
+          Limpieza de Aparejo
+        </div>
+        <InputRowSelectUnitless 
+          header="Tipo de colocación" 
+          name='tipoDeColocacion' 
+          options={colocacionOptions}
+          onBlur={this.validate} 
+          value={tipoDeColocacion} 
+          callback={(e) => setTipoDeColocacion(e.value)} 
+        />
+        <InputRow header="Tiempo de contacto" name='tiempoDeContacto' unit="min" value={tiempoDeContacto} onChange={setTiempoDeContacto} errors={this.state.errors} onBlur={this.validate} />
+      </div>
+    )
+  }
+
   makeDetallesForm() {
     let { formData } = this.props
     formData = formData.toJS()
-    let { cedulaData } = formData
-
-    const calculateVolumes = (data, fluid, sistema = null) => {
-      return data.filter(elem => elem.sistema === sistema || sistema === null)
-        .reduce((accumulator, currentValue) => {
-          if (currentValue[fluid]) {
-            return accumulator + currentValue[fluid]
-          }
-          return accumulator
-        }, 0)
-    }
-
-    const reactivoVolume = calculateVolumes(cedulaData, 'volLiquid', 'reactivo')
-    const noReactivoVolume = calculateVolumes(cedulaData, 'volLiquid', 'no-reactivo')
-    const divergenteVolume = calculateVolumes(cedulaData, 'volLiquid', 'divergente')
-    const desplazamientoLiquidVolume = calculateVolumes(cedulaData, 'volLiquid', 'desplazamiento')
-    const desplazamientoGasVolume = calculateVolumes(cedulaData, 'volN2', 'desplazamiento')
-    const precolchonGasVolume = calculateVolumes(cedulaData, 'volN2', 'pre-colchon')
-    const totalLiquidVolume = calculateVolumes(cedulaData, 'volLiquid')
+    const { volumenSistemaReactivo,
+      volumenSistemaNoReativo,
+      volumenSistemaDivergente,
+      volumenDesplazamientoLiquido,
+      volumenDesplazamientoN2,
+      volumenPrecolchonN2,
+      volumenTotalDeLiquido } = formData
 
     return (
       <div className='detalles-form' >
         <div className='header'>
-          Detalles
+          Volumenes
         </div>
         <CalculatedValue
-          header={<div>Volumen precolchón N<sub>2</sub></div>}
-          value={precolchonGasVolume}
-          unit={<div>m<sup>3</sup></div>} 
-        />
-        <CalculatedValue
-          header={<div>Volumen sistema no reactivo</div>}
-          value={noReactivoVolume}
+          header={<div>Precolchón N<sub>2</sub></div>}
+          value={volumenPrecolchonN2}
           unit={<div>m<sup>3</sup></div>} 
         />
         <CalculatedValue
           header={<div>Sistema no reactivo</div>}
-          value={reactivoVolume}
+          value={volumenSistemaNoReativo}
           unit={<div>m<sup>3</sup></div>} 
         />
         <CalculatedValue
-          header={<div>Volumen sistema divergente</div>}
-          value={divergenteVolume}
+          header={<div>Sistema reactivo</div>}
+          value={volumenSistemaReactivo}
           unit={<div>m<sup>3</sup></div>} 
         />
         <CalculatedValue
-          header={<div>Volumen desplazamiento líquido</div>}
-          value={desplazamientoLiquidVolume}
+          header={<div>Sistema divergente</div>}
+          value={volumenSistemaDivergente}
           unit={<div>m<sup>3</sup></div>} 
         />
         <CalculatedValue
-          header={<div>Volumen desplazamiento N<sub>2</sub></div>}
-          value={desplazamientoGasVolume}
+          header={<div>Desplazamiento líquido</div>}
+          value={volumenDesplazamientoLiquido}
           unit={<div>m<sup>3</sup></div>} 
         />
         <CalculatedValue
-          header={<div>"Volumen total de líquido</div>}
-          value={totalLiquidVolume}
+          header={<div>Desplazamiento N<sub>2</sub></div>}
+          value={volumenDesplazamientoN2}
+          unit={<div>m<sup>3</sup></div>} 
+        />
+        <CalculatedValue
+          header={<div>Total de líquido</div>}
+          value={volumenTotalDeLiquido}
           unit={<div>m<sup>3</sup></div>} 
         />
       </div>
@@ -215,6 +237,7 @@ import { setCedulaData, setIntervalo, setLongitudDeIntervalo, setVolAparejo, set
   }
 
   addNewRow() {
+    console.log('adding new Row')
     let { formData, setCedulaData } = this.props
     formData = formData.toJS()
     let { cedulaData } = formData
@@ -259,6 +282,39 @@ import { setCedulaData, setIntervalo, setLongitudDeIntervalo, setVolAparejo, set
     setCedulaData(cedulaData)
   }
 
+  setAllData(data) {
+    const { setCedulaData } = this.props
+    const cedulaData = data.map((row, i) => {
+      let { sistema, relN2Liq, gastoLiqudo, volLiquid } = row
+      if (sistema === 'desplazamientoN2' || sistema === 'pre-colchon') {
+        row.volLiquid = 0
+        row.gastoLiqudo = 0
+        row.relN2Liq = 0
+        row.tiempo = round(row.volN2 / row.gastoN2)
+      } else {
+        row.gastoN2 = round(relN2Liq / 6.291 * gastoLiqudo)
+        row.volN2 = round((6.291 * volLiquid / gastoLiqudo) * row.gastoN2)
+        row.tiempo = round((volLiquid * 6.291) / gastoLiqudo)
+      }
+      const prev = data[i - 1]
+      row.volLiquidoAcum = prev ? round(parseFloat(prev.volLiquidoAcum) + parseFloat(row.volLiquid)) : row.volLiquid
+      row.volN2Acum = prev ? round(parseFloat(prev.volN2Acum) + parseFloat(row.volN2)) : row.volN2
+      return row
+    })
+
+    const volumes = {
+      volumenSistemaReactivo: calculateVolumes(cedulaData, 'volLiquid', 'reactivo'),
+      volumenSistemaNoReativo: calculateVolumes(cedulaData, 'volLiquid', 'no-reactivo'),
+      volumenSistemaDivergente: calculateVolumes(cedulaData, 'volLiquid', 'divergente'),
+      volumenDesplazamientoLiquido: calculateVolumes(cedulaData, 'volLiquid', 'desplazamiento'),
+      volumenDesplazamientoN2: calculateVolumes(cedulaData, 'volN2', 'desplazamiento'),
+      volumenPrecolchonN2: calculateVolumes(cedulaData, 'volN2', 'pre-colchon'),
+      volumenTotalDeLiquido: calculateVolumes(cedulaData, 'volLiquid'),
+    }
+
+    setCedulaData(cedulaData, volumes)
+  }
+
   makeCedulaTable() {
     let { formData, setCedulaData, intervalos } = this.props
     formData = formData.toJS()
@@ -270,13 +326,7 @@ import { setCedulaData, setIntervalo, setLongitudDeIntervalo, setVolAparejo, set
       label: `${elem.cimaMD}-${elem.baseMD}`,
     }))
 
-    const sistemaOptions = [
-      { value: 'reactivo', label: 'Reactivo' },
-      { value: 'no-reactivo', label: 'No Reactivo' },
-      { value: 'pre-colchon', label: 'Pre-colchón' },
-      { value: 'divergente', label: 'Divergente' },
-      { value: 'desplazamiento', label: 'desplazamiento' },
-    ]
+    const sistemaOptions = getSistemaOptions()
 
     const objectTemplate = {etapa: '', intervalo: '', sistema: '', volLiquid: '', gastoN2: '', gastoLiqudo: '', gastoEnFondo: '', calidad: '', volN2: '', volLiquidoAcum: '', volN2Acum: '', relN2Liq: '', tiempo: '' }
     const columns = [
@@ -305,6 +355,7 @@ import { setCedulaData, setIntervalo, setLongitudDeIntervalo, setVolAparejo, set
             <div>
               <Select
                 className='input'
+                placeholder='intervalo'
                 simpleValue={true}
                 options={intervaloOptions}
                 value={intervaloOptions.find(i=>i.value === row.original.intervalo) || null}
@@ -324,6 +375,7 @@ import { setCedulaData, setIntervalo, setLongitudDeIntervalo, setVolAparejo, set
           return (
             <div>
               <Select
+                placeholder='sistema'
                 className='input'
                 simpleValue={true}
                 options={sistemaOptions}
@@ -339,51 +391,52 @@ import { setCedulaData, setIntervalo, setLongitudDeIntervalo, setVolAparejo, set
         accessor: 'nombreComercial',
         cell: 'renderEditable',
       },
-      { 
-        Header: 'Tiempo (min)',
-        accessor: 'tiempo',
-        cell: 'renderNumber',
+      {
+        Header: <div>Vol. Liq.<br/>(m<sup>3</sup>)</div>,
+        accessor: 'volLiquid',
+        cell: 'renderNumberDisable',
       },
       { 
-        Header: 'Gasto Liquido (bpm)',
+        Header: <div>Gasto Liquido<br/>(bpm)</div>,
         accessor: 'gastoLiqudo',
+        cell: 'renderNumberDisable',
+      },
+      {
+        Header: <div>Rel. N<sub>2</sub>/Liq<br/>(m<sup>3</sup>std/m<sup>3)</sup></div>,
+        accessor: 'relN2Liq',
+        cell: 'renderNumberDisable',
+      },
+      {
+        Header: <div>Calidad<br/>(%)</div>,
+        accessor: 'calidad',
         cell: 'renderNumber',
       },
       { 
-        Header: 'Gasto en fondo (bpm)',
+        Header: <div>Gasto en fondo<br/>(bpm)</div>,
         accessor: 'gastoEnFondo',
         cell: 'renderNumber',
       },
       { 
-        Header: 'Gasto N2 (m3/min)',
+        Header: <div>Gasto N<sub>2</sub><br/>(m<sup>3</sup>/min)</div>,
         accessor: 'gastoN2',
-        cell: 'renderNumber',
+        cell: 'renderNumberDisable',
       }, 
-      {
-        Header: 'Vol. Liq. (m3)',
-        accessor: 'volLiquid',
-      },
       { 
-        Header: 'Vol. N2 (m3 std)',
+        Header: <div>Vol. N<sub>2</sub><br/>(m<sup>3</sup> std)</div>,
         accessor: 'volN2',
+        cell: 'renderNumberDisable'
       },
       { 
-        Header: 'Vol. Liq. Acum. (m3)',
+        Header: <div>Vol. Liq. Acum.<br/>(m<sup>3</sup>)</div>,
         accessor: 'volLiquidoAcum',
       },
       { 
-        Header: 'Vol. N2 Acum. (m3 std)',
+        Header: <div>Vol. N<sub>2</sub> Acum.<br/>(m<sup>3</sup> std)</div>,
         accessor: 'volN2Acum',
-      },
-      {
-        Header: 'Calidad (%)',
-        accessor: 'calidad',
-        cell: 'renderNumber',
-      },
-       {
-        Header: 'Rel. N2/Liq (m3 std/m3)',
-        accessor: 'relN2Liq',
-        cell: 'renderNumber',
+      },     
+      { 
+        Header: <div>Tiempo<br/>(min)</div>,
+        accessor: 'tiempo',
       },
     ]
 
@@ -397,7 +450,7 @@ import { setCedulaData, setIntervalo, setLongitudDeIntervalo, setVolAparejo, set
             className="-striped"
             data={cedulaData}
             newRow={objectTemplate}
-            setData={setCedulaData}
+            setData={this.setAllData}
             columns={columns}
             showPagination={false}
             showPageSizeOptions={false}
@@ -416,12 +469,16 @@ import { setCedulaData, setIntervalo, setLongitudDeIntervalo, setVolAparejo, set
 
 
   render() {
+    let { formData } = this.props
+    formData = formData.toJS()
+    let { tipoDeEstimulacion } = formData
 
     return (
       <div className="form propuesta-de-estimulacion">
         <div className='top'>
           <div className="left">
             { this.makeGeneralForm() }
+            { tipoDeEstimulacion === 'limpieza' ? this.makeLimpiezaForm() : null}
           </div>
           <div className="right">
  
@@ -498,8 +555,12 @@ const mapDispatchToProps = dispatch => ({
   setVolumenDesplazamientoLiquido: val => dispatch(setVolumenDesplazamientoLiquido(val)),
   setVolumenDesplazamientoN2: val => dispatch(setVolumenDesplazamientoN2(val)),
   setVolumenTotalDeLiquido: val => dispatch(setVolumenTotalDeLiquido(val)),
-  setCedulaData: val => dispatch(setCedulaData(val)),
+  setCedulaData: (cedula, volumes = null) => dispatch(setCedulaData(cedula, volumes)),
+  setChecked: val => dispatch(setChecked(val, 'propuestaEstimulacion')),
   setPropuestaCompany: val => dispatch(setPropuestaCompany(val)),
+  setTipoDeEstimulacion: val => dispatch(setTipoDeEstimulacion(val)),
+  setTipoDeColocacion: val => dispatch(setTipoDeColocacion(val)), 
+  setTiempoDeContacto: val => dispatch(setTiempoDeContacto(val)),
   setChecked: val => dispatch(setChecked(val))
 })
 

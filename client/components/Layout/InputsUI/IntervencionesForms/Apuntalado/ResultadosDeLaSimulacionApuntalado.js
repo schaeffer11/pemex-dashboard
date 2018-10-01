@@ -26,13 +26,21 @@ import { connect } from 'react-redux'
 
   containsErrors(){
     let foundErrors = false
-    for (const key of Object.keys(this.state.errors)) {
-      if(this.state.errors[key].checked)
-        foundErrors = true
-    }
+    let errors = Object.assign({}, this.state.errors);
+    let {formData} = this.props
+    formData = formData.toJS()
+
+    const checked = formData.checked  || []
+    checked.forEach((checked) => {
+        if(errors[checked]){
+           errors[checked].checked = true
+           foundErrors = true
+        }
+    })
 
     if(foundErrors !== this.state.containsErrors){
       this.setState({
+        errors: errors,
         containsErrors: foundErrors
       })
     }
@@ -70,7 +78,7 @@ import { connect } from 'react-redux'
         <InputRow header="Longitud apuntalada" name='longitudApuntalada' unit="m" value={longitudApuntalada} onChange={setLongitudApuntalada}  errors={this.state.errors} onBlur={this.validate}/>
         <InputRow header="Altura total de fractura" name='alturaTotalDeFractura' unit="m" value={alturaTotalDeFractura} onChange={setAlturaTotalDeFractura}  errors={this.state.errors} onBlur={this.validate}/>
         <InputRow header="Ancho promedio" name='anchoPromedio' unit="pg." value={anchoPromedio} onChange={setAnchoPromedio}  errors={this.state.errors} onBlur={this.validate}/>
-        <InputRow header="Concentración Areal" name='concentractionAreal' unit={<div>lb/pg<sup>2</sup></div>} value={concentractionAreal} onChange={setConcentractionAreal}  errors={this.state.errors} onBlur={this.validate}/>
+        <InputRow header="Concentración areal" name='concentractionAreal' unit={<div>lb/pg<sup>2</sup></div>} value={concentractionAreal} onChange={setConcentractionAreal}  errors={this.state.errors} onBlur={this.validate}/>
         <InputRow header="Conductividad" name='conductividad' unit="mD*ft" value={conductividad} onChange={setConductividad}  errors={this.state.errors} onBlur={this.validate}/>
         <InputRow header="FCD" name='fcd' unit="adim." value={fcd} onChange={setFcd}  errors={this.state.errors} onBlur={this.validate}/>
         <InputRow header="Presión neta" name='presionNeta' unit="psi" value={presionNeta} onChange={setPresionNeta}  errors={this.state.errors} onBlur={this.validate}/>
@@ -96,9 +104,12 @@ import { connect } from 'react-redux'
     return (
       <div style={{marginBot: '20px'}}>
         <div className='header'>
-          Upload Evidence of Simulation (sim results) (spanish)
+          Cargar evidencia de simulacion
         </div>
         <input type='file' accept="image/*"  onChange={(e) => this.handleFileUpload(e, setEvidenceSimulationApuntaladoImgURL)} multiple></input>
+          { this.state.errors.evidenceSimulationApuntaladoImgURL && this.state.errors.evidenceSimulationApuntaladoImgURL.checked &&
+          <div className="error">{this.state.errors.evidenceSimulationApuntaladoImgURL.message}</div>
+          }
         {imgURL ? <img className='img-preview' src={imgURL}></img> : null }
       </div>
     )
@@ -156,6 +167,10 @@ const validate = values => {
       errors.eficienciaDeFluidoDeFractura = {message: "Este campo no puede estar vacio"}
     }
 
+    if(!values.evidenceSimulationApuntaladoImgURL){
+        errors.evidenceSimulationApuntaladoImgURL = {message: "Este campo no puede estar vacio"}
+    }
+
     return errors
 }
 
@@ -173,7 +188,7 @@ const mapDispatchToProps = dispatch => ({
   setPresionNeta: val => dispatch(setPresionNeta(val)),
   setEficienciaDeFluidoDeFractura: val => dispatch(setEficienciaDeFluidoDeFractura(val)),
   setEvidenceSimulationApuntaladoImgURL: val => dispatch(setEvidenceSimulationApuntaladoImgURL(val)),
-  setChecked: val => dispatch(setChecked(val))
+  setChecked: val => dispatch(setChecked(val, 'resultadosSimulacionApuntalado'))
 })
 
 export default withValidate(

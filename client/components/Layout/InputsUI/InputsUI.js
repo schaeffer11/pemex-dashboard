@@ -30,7 +30,7 @@ import '../../../styles/components/_query_modal.css'
     this.pozoMultiStepFormRef = React.createRef();
     this.intervencionesFormRef = React.createRef();
 
-    this.pozoMultiStepForm = React.createElement(PozoMultiStepForm, { ref: this.pozoMultiStepFormRef, fieldWellOptions: this.state.fieldWellOptions });
+    this.pozoMultiStepForm = React.createElement(PozoMultiStepForm, { ref: this.pozoMultiStepFormRef });
     this.intervencionesForm = React.createElement(BaseIntervenciones,  { ref: this.intervencionesFormRef});
   }
 

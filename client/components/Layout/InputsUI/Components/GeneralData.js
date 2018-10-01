@@ -45,22 +45,37 @@ import Loading from '../../Common/Loading'
   }
 
   componentDidUpdate(){
-    //this.validate()
-    // this.containsErrors()
-    // this.props.containsErrors(this, this.state.containsErrors)
   }
 
   handleSelectSubdireccion(val) {
-    let { subdireccion, setSubdireccion, setActivo } = this.props
+    let { setSubdireccion, setActivo, setCampo, setPozo, formData } = this.props
+    formData = formData.toJS()
+    let { subdireccion } = formData
 
     if (subdireccion !== val.value) {
       setSubdireccion(val.value)
       setActivo('')   
+      setCampo('')
+      setPozo('')
+    }
+  }
+
+  handleSelectActivo(val) {
+    let { setSubdireccion, setActivo, setCampo, setPozo, formData } = this.props
+    formData = formData.toJS()
+    let { activo } = formData
+
+    if (activo !== val.value) {
+      setActivo(val.value) 
+      setCampo('')
+      setPozo('')  
     }
   }
 
   handleSelectField(val) {
-    let { campo, setCampo, setPozo } = this.props
+    let { setCampo, setPozo, formData } = this.props
+    formData = formData.toJS()
+    let { campo } = formData
 
     if (campo !== val.value) {
       setCampo(val.value)
@@ -129,7 +144,7 @@ import Loading from '../../Common/Loading'
                 )
             })}
         </div> 
-        <button className="submit submit-load" onClick={this.handleLoad} >Cargar borrdador</button>
+        <button className="submit submit-load" onClick={this.handleLoad}>Descargar borrador</button>
       </div>
       </AriaModal>
     )
@@ -178,38 +193,40 @@ import Loading from '../../Common/Loading'
     let { subdireccion, activo, campo, pozo, formacion } = formData
 
 
-    let subdireccionOptions = [
-      {label: 'Subdirección de Especialidad Técnica de Explotación (SETE)', value: 'SETE'},
-      {label: 'Subdirección de producción Bloques Aguas Someras AS-01', value: 'AS-01'},
-      {label: 'Subdirección de producción Bloques Aguas Someras AS-02', value: 'AS-02'},
-      {label: 'Subdirección de producción Bloques Sur', value: 'SUR'},
-      {label: 'Subdirección de producción Bloques Norte', value: 'NORTE'},
-    ]
+    // let subdireccionOptions = [
+    //   {label: 'Subdirección de Especialidad Técnica de Explotación (SETE)', value: 'SETE'},
+    //   {label: 'Subdirección de producción Bloques Aguas Someras AS-01', value: 'AS-01'},
+    //   {label: 'Subdirección de producción Bloques Aguas Someras AS-02', value: 'AS-02'},
+    //   {label: 'Subdirección de producción Bloques Sur', value: 'SUR'},
+    //   {label: 'Subdirección de producción Bloques Norte', value: 'NORTE'},
+    // ]
 
-    let activoOptionsMap = {
-      'SETE': [
-        {label: 'Gerencia de Producción (GP)', value: 'GP'}
-      ],
-      'AS-01': [
-        {label: 'Activo Integral Producción Bloque AS01-01', value: 'AS01-01'},
-        {label: 'Activo Integral Producción Bloque AS01-02', value: 'AS01-02'},
-      ],
-      'AS-02': [
-        {label: 'Activo Integral Producción Bloque AS01-03', value: 'AS01-03'},
-        {label: 'Activo Integral Producción Bloque AS01-04', value: 'AS01-04'},
-      ],
-      'SUR': [
-        {label: 'Activo Integral Producción Bloque S01', value: 'S01'},
-        {label: 'Activo Integral Producción Bloque S02', value: 'S02'},
-        {label: 'Activo Integral Producción Bloque S03', value: 'S03'},
-        {label: 'Activo Integral Producción Bloque S04', value: 'S04'},
-      ],
-      'NORTE': [
-        {label: 'Activo Integral Bloques N01', value: 'N01'},
-        {label: 'Activo Integral Bloques N02', value: 'N02'},
-        {label: 'Activo Integral Bloques N03', value: 'N03'},
-      ]
-    }
+    // let activoOptionsMap = {
+    //   'SETE': [
+    //     {label: 'Gerencia de Producción (GP)', value: 'GP'}
+    //   ],
+    //   'AS-01': [
+    //     {label: 'Activo Integral Producción Bloque AS01-01', value: 'AS01-01'},
+    //     {label: 'Activo Integral Producción Bloque AS01-02', value: 'AS01-02'},
+    //   ],
+    //   'AS-02': [
+    //     {label: 'Activo Integral Producción Bloque AS01-03', value: 'AS01-03'},
+    //     {label: 'Activo Integral Producción Bloque AS01-04', value: 'AS01-04'},
+    //   ],
+    //   'SUR': [
+    //     {label: 'Activo Integral Producción Bloque S01', value: 'S01'},
+    //     {label: 'Activo Integral Producción Bloque S02', value: 'S02'},
+    //     {label: 'Activo Integral Producción Bloque S03', value: 'S03'},
+    //     {label: 'Activo Integral Producción Bloque S04', value: 'S04'},
+    //   ],
+    //   'NORTE': [
+    //     {label: 'Activo Integral Bloques N01', value: 'N01'},
+    //     {label: 'Activo Integral Bloques N02', value: 'N02'},
+    //     {label: 'Activo Integral Bloques N03', value: 'N03'},
+    //   ]
+    // }
+
+    // let activoOptions = subdireccion ? activoOptionsMap[subdireccion] : []
 
     let formacionOptions = [
       {label: 'JSO', value: 'JSO'},
@@ -222,21 +239,65 @@ import Loading from '../../Common/Loading'
       {label: 'Eoceno', value: 'eoceno'},
     ]
 
-    let activoOptions = subdireccion ? activoOptionsMap[subdireccion] : []
 
+    let subdireccionOptions = []
+    let activoOptions = []
     let fieldOptions = []
     let wellOptions = []
 
+    let activoSubset = []
+    let fieldSubset = []
+
     if (fieldWellOptions.length > 0) {
       fieldWellOptions.forEach(item => {
-        if (!fieldOptions.map(i => i.value).includes(item.FIELD_FORMACION_ID)) {
-          fieldOptions.push({label: item.FIELD_NAME, value: item.FIELD_FORMACION_ID})
+        if (!subdireccionOptions.map(i => i.value).includes(item.SUBDIRECCION_ID)) {
+          subdireccionOptions.push({label: item.SUBDIRECCION_NAME, value: item.SUBDIRECCION_ID})
         }
       })
-    }
 
-    if (campo && fieldWellOptions.length > 0) {
-      wellOptions = fieldWellOptions.filter(i => i.FIELD_FORMACION_ID === parseInt(campo)).map(i => ({ label: i.WELL_NAME, value: i.WELL_FORMACION_ID}))
+      if (subdireccion) {
+        activoSubset = fieldWellOptions.filter(i => i.SUBDIRECCION_ID === parseInt(subdireccion))
+        let usedActivos = []
+        let activos = []
+        activoSubset.forEach(i => {
+          if (!usedActivos.includes(i.ACTIVO_ID)) {
+            usedActivos.push(i.ACTIVO_ID)
+            activos.push(i)
+          }
+        })
+        activoOptions = activos.map(i => ({label: i.ACTIVO_NAME, value: i.ACTIVO_ID}))
+      }
+
+      if (activo) {
+        fieldSubset = activoSubset.filter(i => i.ACTIVO_ID === parseInt(activo))
+        let usedFields = []
+        let fields = []
+        fieldSubset.forEach(i => {
+          if (!usedFields.includes(i.FIELD_FORMACION_ID)) {
+            usedFields.push(i.FIELD_FORMACION_ID)
+            fields.push(i)
+          }
+        })
+
+        fieldOptions = fields.map(i => ({label: i.FIELD_NAME, value: i.FIELD_FORMACION_ID}))
+      }
+
+      if (campo) {
+        let wellSubset = fieldSubset.filter(i => i.FIELD_FORMACION_ID === parseInt(campo))
+        let usedWells = []
+        let wells = []
+        wellSubset.forEach(i => {
+          if (!usedWells.includes(i.WELL_FORMACION_ID)) {
+            usedWells.push(i.WELL_FORMACION_ID)
+            wells.push(i)
+          }
+        })
+
+        console.log(wells)
+
+        wellOptions = wells.map(i => ({ label: i.WELL_NAME, value: i.WELL_FORMACION_ID}))
+
+      }
     }
 
 
@@ -246,11 +307,10 @@ import Loading from '../../Common/Loading'
           General Data
         </div>
         <InputRowSelectUnitless header='Subdirección' name="subdireccion" value={subdireccion} options={subdireccionOptions} callback={this.handleSelectSubdireccion} onBlur={this.validate} errors={this.state.errors} />
-        <InputRowSelectUnitless header='Activo' name="activo" value={activo} options={activoOptions} callback={(e) => setActivo(e.value)} onBlur={this.validate} errors={this.state.errors} />
+        <InputRowSelectUnitless header='Activo' name="activo" value={activo} options={activoOptions} callback={this.handleSelectActivo} onBlur={this.validate} errors={this.state.errors} />
         <InputRowSelectUnitless header="Campo" name="campo" value={campo} options={fieldOptions} callback={this.handleSelectField} onBlur={this.validate} name='campo' errors={this.state.errors} />
         <InputRowSelectUnitless header="Pozo" name="pozo" value={pozo} options={wellOptions} callback={(e) => setPozo(e.value)} onBlur={this.validate} name='pozo' errors={this.state.errors} />
         <InputRowSelectUnitless header="Formación" value={formacion} options={formacionOptions} callback={(e) => setFormacion(e.value)} onBlur={this.validate} name='formacion' errors={this.state.errors} />
-        <div style={{color: 'red'}}>TODO: agregar logica para subir resultados (add logic for upload results)</div>
       </div>
 
     )
@@ -348,7 +408,7 @@ import Loading from '../../Common/Loading'
       <div className='form general-data'>
         { this.makeGeneralForm() }
         { this.makeGeneralInterventionForm() }
-        <button className="submit submit-load" onClick={this.activateModal}> Cargar borrdador</button>
+        <button className="submit submit-load" onClick={this.activateModal}> Descargar borrador</button>
         <button className='submit submit-continue' disabled={this.checkIncomplete()} onClick={(e) => setShowForms(true)} >Siguiente</button>
         <button className="submit download-template" onClick={this.downloadMasterTemplate}>{'Descarga el Formato General'}</button>
         <Notification />

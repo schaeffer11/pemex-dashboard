@@ -1,6 +1,7 @@
 import { Map, fromJS } from 'immutable'
 
 const initialState = Map({ 
+    waterAnalysisBool: true,
     pH: '',
     temperaturaDeConductividad: '',
     resistividad: '',
@@ -28,52 +29,58 @@ const initialState = Map({
 
 const analisisDelAgua = (state = initialState, action) => {
   switch (action.type) {
+    case 'set_waterAnalysisBool':
+        return state.set('waterAnalysisBool', fromJS(action.value))
     case 'set_pH':
-        return state.set('pH', fromJS(action.value))
+        return state.set('pH', action.value.length > 0 ? fromJS(action.value) : null)
     case 'set_temperaturaDeConductividad':
-        return state.set('temperaturaDeConductividad', fromJS(action.value))
+        return state.set('temperaturaDeConductividad', action.value.length > 0 ? fromJS(action.value) : null)
     case 'set_resistividad':
-        return state.set('resistividad', fromJS(action.value))
+        return state.set('resistividad', action.value.length > 0 ? fromJS(action.value) : null)
     case 'set_salinidadConConductimetro':
-        return state.set('salinidadConConductimetro', fromJS(action.value))
+        return state.set('salinidadConConductimetro', action.value.length > 0 ? fromJS(action.value) : null)
     case 'set_solidosDisueltosTotales':
-        return state.set('solidosDisueltosTotales', fromJS(action.value))
+        return state.set('solidosDisueltosTotales', action.value.length > 0 ? fromJS(action.value) : null)
     case 'set_durezaTotalComoCaCO3':
-        return state.set('durezaTotalComoCaCO3', fromJS(action.value))
+        return state.set('durezaTotalComoCaCO3', action.value.length > 0 ? fromJS(action.value) : null)
     case 'set_durezaDeCalcioComoCaCO3':
-        return state.set('durezaDeCalcioComoCaCO3', fromJS(action.value))
+        return state.set('durezaDeCalcioComoCaCO3', action.value.length > 0 ? fromJS(action.value) : null)
     case 'set_durezaDeMagnesioComoCaCO3':
-        return state.set('durezaDeMagnesioComoCaCO3', fromJS(action.value))
+        return state.set('durezaDeMagnesioComoCaCO3', action.value.length > 0 ? fromJS(action.value) : null)
     case 'set_alcalinidadTotalComoCaCO3':
-        return state.set('alcalinidadTotalComoCaCO3', fromJS(action.value))
+        return state.set('alcalinidadTotalComoCaCO3', action.value.length > 0 ? fromJS(action.value) : null)
     case 'set_alcalinidadALaFenolftaleinaComoCaCO3':
-        return state.set('alcalinidadALaFenolftaleinaComoCaCO3', fromJS(action.value))
+        return state.set('alcalinidadALaFenolftaleinaComoCaCO3', action.value.length > 0 ? fromJS(action.value) : null)
     case 'set_salinidadComoNaCl':
-        return state.set('salinidadComoNaCl', fromJS(action.value))
+        return state.set('salinidadComoNaCl', action.value.length > 0 ? fromJS(action.value) : null)
     case 'set_sodio':
-        return state.set('sodio', fromJS(action.value))
+        return state.set('sodio', action.value.length > 0 ? fromJS(action.value) : null)
     case 'set_calcio':
-        return state.set('calcio', fromJS(action.value))
+        return state.set('calcio', action.value.length > 0 ? fromJS(action.value) : null)
     case 'set_magnesio':
-        return state.set('magnesio', fromJS(action.value))
+        return state.set('magnesio', action.value.length > 0 ? fromJS(action.value) : null)
     case 'set_fierro':
-        return state.set('fierro', fromJS(action.value))
+        return state.set('fierro', action.value.length > 0 ? fromJS(action.value) : null)
     case 'set_cloruros':
-        return state.set('cloruros', fromJS(action.value))
+        return state.set('cloruros', action.value.length > 0 ? fromJS(action.value) : null)
     case 'set_bicarbonatos':
-        return state.set('bicarbonatos', fromJS(action.value))
+        return state.set('bicarbonatos', action.value.length > 0 ? fromJS(action.value) : null)
     case 'set_sulfatos':
-        return state.set('sulfatos', fromJS(action.value))
+        return state.set('sulfatos', action.value.length > 0 ? fromJS(action.value) : null)
     case 'set_carbonatos':
-        return state.set('carbonatos', fromJS(action.value))
+        return state.set('carbonatos', action.value.length > 0 ? fromJS(action.value) : null)
     case 'set_densidadAt15':
-        return state.set('densidadAt15', fromJS(action.value))
+        return state.set('densidadAt15', action.value.length > 0 ? fromJS(action.value) : null)
     case 'set_densidadAt20':
-        return state.set('densidadAt20', fromJS(action.value))
+        return state.set('densidadAt20', action.value.length > 0 ? fromJS(action.value) : null)
     case 'set_checked' :
         return state.set('checked', fromJS(action.value))
     case 'set_analisisDelAgua':
         return state = fromJS(action.value)
+    case 'set_forms_checked' :
+        if(action.form == 'analisisDelAgua')
+          return state.set('checked', fromJS(action.value))
+        return state
     default:
       return state
   }

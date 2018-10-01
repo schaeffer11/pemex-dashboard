@@ -226,7 +226,8 @@
         padding: 20px 40px;
         border: solid;
         border-width: 0px 1px 1px 1px;
-        border-color: $primary-green;   
+				border-color: $primary-green;
+				overflow-x: auto;
       }
     }
 
@@ -415,15 +416,15 @@
 		grid-template-rows: 675px auto;
 		grid-template-columns: 50% 50%;
 		grid-column-gap: 10px;
-		grid-template-areas: 	'valores .'
-								'valores graph';
+		grid-template-areas: 	'left .'
+								'left right';
 
-		.valores-form {
-			grid-area: valores;
+		.left {
+			grid-area: left;
 		}
 
-		.graph {
-			grid-area: graph;
+		.right {
+			grid-area: right;
 		}
 	}
 
@@ -638,9 +639,47 @@
 		}
 	}
 
-	.estimacion-costos-apuntalado {
-		.costos-form {
-			width: 50%;
+	.estimated-costs {
+
+
+		.costs-form {
+			grid-area: table;
+		}
+		
+		.values {
+			font-size: 30px;
+		}
+
+
+		.kpis {
+			display: grid;
+			width: 70%;
+			position: relative;
+			left: 15%;
+			grid-template-columns: 33% 33% 33%;
+			grid-template-areas: 'mnx usd sum';
+			margin-top: 40px;
+			padding-top: 15px;
+			border-top: solid 3px;
+		
+			.mnx {
+				grid-area: mnx;
+				text-align: center;
+
+			}
+
+			.usd {
+				grid-area: usd;
+				text-align: center;
+
+			}
+
+			.sum {
+				grid-area: sum;
+				text-align: center;
+
+
+			}
 		}
 	}
 

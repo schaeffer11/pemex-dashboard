@@ -9,9 +9,9 @@ import { setTipoDeFluidoField, setDescubrimientoField, setFechaDeExplotacionFiel
 
 let fluidoOptions = [
     { label: 'Aceite Negro', value: 'Aceite Negro' },
-    { label: 'Acetic Ligero', value: 'Acetic Ligero' },
+    { label: 'Aceite Ligero', value: 'Aceite Ligero' },
     { label: 'Gas y Condensado', value: 'Gas y Condensado' },
-    { label: 'Gas Hemedo', value: 'Gas Hemedo' },
+    { label: 'Gas Humedo', value: 'Gas Humedo' },
     { label: 'Gas Seco', value: 'Gas Seco' },
 ]
  
@@ -36,20 +36,31 @@ let litologiaOptions = [
   }
 
   componentDidUpdate(){
+    this.containsErrors()
+    //this.props.containsErrors(this, this.state.containsErrors)
   }
 
   containsErrors(){
-   let foundErrors = false
-    for (const key of Object.keys(this.state.errors)) {
-      if(this.state.errors[key].checked)
-        foundErrors = true
-    }
+    let foundErrors = false
+    let errors = Object.assign({}, this.state.errors);
+    let {formData} = this.props
+    formData = formData.toJS()
+
+    const checked = formData.checked  || []
+    checked.forEach((checked) => {
+        if(errors[checked]){
+           errors[checked].checked = true
+           foundErrors = true
+        }
+    })
 
     if(foundErrors !== this.state.containsErrors){
       this.setState({
+        errors: errors,
         containsErrors: foundErrors
       })
     }
+
   }
 
   validate(event){
@@ -85,7 +96,7 @@ let litologiaOptions = [
         </div>
         <InputRowUnitless header="Descubrimiento" name='descubrimientoField' value={descubrimientoField} onChange={setDescubrimientoField} onBlur={this.validate} errors={this.state.errors}/>
         <InputDate header="Fecha de explotación" name='fechaDeExplotacionField' value={fechaDeExplotacionField} onChange={setFechaDeExplotacionField} onBlur={this.validate} errors={this.state.errors}/>
-        <InputRowUnitless header="No. de pozo operando" name='numeroDePozoOperandoField' value={numeroDePozosOperandoField} onChange={setNumeroDePozosOperandoField} onBlur={this.validate} errors={this.state.errors}/>
+        <InputRowUnitless header="No. de pozos operando" name='numeroDePozosOperandoField' value={numeroDePozosOperandoField} onChange={setNumeroDePozosOperandoField} onBlur={this.validate} errors={this.state.errors}/>
       </div>
     )
   }
@@ -175,7 +186,7 @@ let litologiaOptions = [
     return (
       <div className='produccion-form' >
         <div className='header'>
-          Produccion @ Formacion
+          Producción @ Formación
         </div>
         <InputRow header="Qo" name='qoField' value={qoField} onChange={setQoField} unit='bpd' onBlur={this.validate} errors={this.state.errors} />
         <InputRow header="Qg" name='qgField' value={qgField} onChange={setQgField} unit='MMpcd' onBlur={this.validate} errors={this.state.errors} />
@@ -226,7 +237,7 @@ const validate = values => {
        errors.fechaDeExplotacionField = {message: "Este campo no puede estar vacio"}
     }
     if(!values.numeroDePozosOperandoField ){
-       errors.numeroDePozoOperandoField = {message: "Este campo no puede estar vacio"}
+       errors.numeroDePozosOperandoField = {message: "Este campo no puede estar vacio"}
     }
     if(!values.pInicialField) {
       errors.pInicialField = {message: "Este campo no puede estar vacio"}
@@ -414,7 +425,7 @@ const mapDispatchToProps = dispatch => ({
   setCo2Field: val => dispatch(setCo2Field(val)),
   setN2Field: val => dispatch(setN2Field(val)),
   setTipoDeFluidoField: val => dispatch(setTipoDeFluidoField(val)),
-  setChecked: val => dispatch(setChecked(val))
+  setChecked: val => dispatch(setChecked(val, 'fichaTecnicaDelCampo'))
 })
 
 export default withValidate(

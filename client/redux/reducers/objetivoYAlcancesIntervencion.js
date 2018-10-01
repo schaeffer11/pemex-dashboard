@@ -15,8 +15,10 @@ const objetivoYAlcancesIntervencion = (state = initialState, action) => {
         return state.set('alcances', fromJS(action.value))
     case 'set_tipoDeIntervenciones':
         return state.set('tipoDeIntervenciones', fromJS(action.value))
-
-   
+    case 'set_forms_checked' :
+        if(action.form == 'objetivoYAlcancesIntervencion')
+           return state.set('checked', fromJS(action.value))
+        return state
     default:
       return state
   }

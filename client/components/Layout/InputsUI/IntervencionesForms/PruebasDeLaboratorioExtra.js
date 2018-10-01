@@ -7,6 +7,8 @@ import { setLabEvidenceImgURL } from '../../../../redux/actions/intervencionesEs
 import { connect } from 'react-redux'
 import ReactTable from 'react-table'
 import Select from 'react-select'
+import {withValidate} from "../../Common/Validate";
+import {setChecked} from "../../../../redux/actions/pozo";
 
 const tipoDeMuestraOptions = [
  { label: 'Núcleo', value: 'nucleo' },
@@ -53,8 +55,10 @@ const grabadoOptions = [
 @autobind class PruebasDeLaboratorioExtra extends Component {
   constructor(props) {
     super(props)
-    this.state = { 
-
+    this.state = {
+        containsErrors: false,
+        errors: [],
+        checked: []
     }
 
     let { setPruebasDeLaboratorioData, pruebasDeLaboratorio } = props
@@ -97,6 +101,37 @@ const grabadoOptions = [
   }
 
   componentDidUpdate(prevProps) {
+
+  }
+
+  containsErrors(){
+      let foundErrors = false
+      for (const key of Object.keys(this.state.errors)) {
+          if(this.state.errors[key].checked)
+              foundErrors = true
+      }
+
+      if(foundErrors !== this.state.containsErrors){
+          this.setState({
+              containsErrors: foundErrors
+          })
+      }
+  }
+
+  validate(event){
+     let {setChecked, formData} = this.props
+     formData = formData.toJS()
+
+     let field = event ? event.target.name : null
+     let {errors, checked} = this.props.validate(field, formData)
+
+     this.setState({
+         errors: errors,
+     })
+
+     if(event && event.target.name){
+         setChecked(checked)
+     }
 
   }
 
@@ -608,10 +643,13 @@ const grabadoOptions = [
     return (
       <div style={{marginBot: '20px'}}>
         <div className='header'>
-          Upload Lab Evidence (spanish)
+          Cargar evidencia del laboratorio
         </div>
         <input type='file' name='imgURL' accept="image/*" onChange={(e) => this.handleFileUpload(e, this.updateValue)} index={index}></input>
         {imgURL ? <img className='img-preview' src={imgURL}></img> : null }
+        { this.state.errors.imgURL && this.state.errors.imgURL.checked &&
+          <div className="error">{this.state.errors.imgURL.message}</div>
+        }
       </div>
     )
   }
@@ -657,16 +695,41 @@ const grabadoOptions = [
   }
 }
 
+const validate = values => {
+    let errors = {}
+
+    if(!values.pruebasDeLaboratorioData){
+        errors.pruebasDeLaboratorioData = {message: "Esta forma no puede estar vacia"}
+    }else {
+        const fields = ['observaciones']
+        values.pruebasDeLaboratorioData.forEach((row, index) => {
+            let hasEmpty = Object.entries(row).find(([key, value]) => {return fields.includes(key) && value && value.toString().trim() == '' })
+            if(hasEmpty !== undefined){
+                errors.pruebasDeLaboratorioData = {message: "Ningun campo puede estar vacio."}
+            }
+        })
+    }
+
+    return errors
+}
+
 
 const mapStateToProps = state => ({
-  // formData: state.get('pruebasDeLaboratorioEstimulacion'),
+  formData: state.get('pruebasDeLaboratorioEstimulacion'),
+  forms: state.get('forms'),
   pruebasDeLaboratorio: state.get('pruebasDeLaboratorio')
 })
 
 const mapDispatchToProps = dispatch => ({
     setLabEvidenceImgURL: val => dispatch(setLabEvidenceImgURL(val)),
-    setPruebasDeLaboratorioData: val => dispatch(setPruebasDeLaboratorioData(val))
+    setPruebasDeLaboratorioData: val => dispatch(setPruebasDeLaboratorioData(val)),
+    setChecked: val => dispatch(setChecked(val, 'pruebasDeLaboratorio'))
 })
 
-export default connect(mapStateToProps, mapDispatchToProps)(PruebasDeLaboratorioExtra)
+
+export default withValidate(
+    validate,
+    connect(mapStateToProps, mapDispatchToProps)(PruebasDeLaboratorioExtra)
+)
+
 

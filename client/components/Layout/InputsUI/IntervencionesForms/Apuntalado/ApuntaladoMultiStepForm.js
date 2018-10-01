@@ -31,9 +31,9 @@ import { setShowForms } from '../../../../../redux/actions/global'
       {'title' : 'Propuesta de Fracturamiento Apuntalado', 'content': <PropuestaDeApuntalado ref={Ref =>this.propuestaDeApuntalado =Ref }/> },  
       {'title' : 'Pruebas de Laboratorio', 'content': <PruebasDeLaboratorio ref={Ref =>this.pruebasDeLaboratorio =Ref }/> },
       {'title' : 'Pruebas de Laboratorio de Fracturamiento Apuntalado', 'content': <PruebasDeLaboratorioExtra ref={Ref =>this.pruebasDeLaboratorioEstimulacionExtra =Ref }/> },
-      {'title' : 'Resultados de la Simulacion de Fracturamiento Apuntalado', 'content': <ResultadosDeLaSimulacionApuntalado ref={Ref =>this.resultadosDeLaSimulacionApuntalado =Ref }/> },
-      {'title' : 'Estimacion del Incremento de Produccion', 'content': <EstimacionIncProduccionApuntalado ref={Ref =>this.estimacionIncProduccionApuntalado =Ref }/> },
-      {'title' : 'Estimacion de Costos de Fracturamiento Apuntalado', 'content': <EstimacionCostos ref={Ref =>this.estimacionCostosEstimulacion =Ref }/> }
+      {'title' : 'Resultados de la Simulación de Fracturamiento Apuntalado', 'content': <ResultadosDeLaSimulacionApuntalado ref={Ref =>this.resultadosDeLaSimulacionApuntalado =Ref }/> },
+      {'title' : 'Estimación del Incremento de Producción', 'content': <EstimacionIncProduccionApuntalado ref={Ref =>this.estimacionIncProduccionApuntalado =Ref }/> },
+      {'title' : 'Estimación de Costos de Fracturamiento Apuntalado', 'content': <EstimacionCostos ref={Ref =>this.estimacionCostosEstimulacion =Ref }/> }
     ];
 
   }
@@ -65,7 +65,7 @@ import { setShowForms } from '../../../../../redux/actions/global'
 
     const forms = [
       this.propuestaDeApuntalado,
-//      this.pruebasDeLaboratorio,
+      this.pruebasDeLaboratorio,
 //      this.pruebasDeLaboratorioEstimulacionExtra,
       this.resultadosDeLaSimulacionApuntalado,
       this.estimacionIncProduccionApuntalado,
@@ -78,10 +78,8 @@ import { setShowForms } from '../../../../../redux/actions/global'
 
       let {errors, checked} = form.selector.props.forceValidation()
       allErrors = Object.assign({}, allErrors, errors);
-      allChecked.push(...checked)
     });
 
-    setChecked(allChecked)
 
     return allErrors.length == 0;
 

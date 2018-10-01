@@ -30,13 +30,21 @@ import { setSistemasArtificialesImgURL, setTipoDeSistemo, setPresionDeCabeza, se
 
   containsErrors(){
     let foundErrors = false
-    for (const key of Object.keys(this.state.errors)) {
-      if(this.state.errors[key].checked)
-        foundErrors = true
-    }
+    let errors = Object.assign({}, this.state.errors);
+    let {formData} = this.props
+    formData = formData.toJS()
+
+    const checked = formData.checked  || []
+    checked.forEach((checked) => {
+        if(errors[checked]){
+           errors[checked].checked = true
+           foundErrors = true
+        }
+    })
 
     if(foundErrors !== this.state.containsErrors){
       this.setState({
+        errors: errors,
         containsErrors: foundErrors
       })
     }
@@ -217,7 +225,7 @@ import { setSistemasArtificialesImgURL, setTipoDeSistemo, setPresionDeCabeza, se
     return (
       <div style={{marginBot: '20px'}}>
         <div className='header'>
-          Upload Sistem of Produccion Image (spanish)
+          Cargar imagen del sistema de producción
         </div>
         <input type='file' accept="image/*" onChange={this.handleFileUpload}></input>
         { this.state.errors.imgURL && this.state.errors.imgURL.checked &&
@@ -235,9 +243,9 @@ import { setSistemasArtificialesImgURL, setTipoDeSistemo, setPresionDeCabeza, se
     let { tipoDeSistemo } = formData
 
     let options = [
-      { label: 'Ninguna', value: 'none' },
+      { label: 'Ninguno', value: 'none' },
       { label: 'Embolo viajero', value: 'emboloViajero' },
-      { label: 'Bombeo neumatico', value: 'bombeoNeumatico' },
+      { label: 'Bombeo neumático', value: 'bombeoNeumatico' },
       { label: 'Bombeo hidráulico', value: 'bombeoHidraulico' },
       { label: 'Bombeo cavidades progresivas', value: 'bombeoCavidadesProgresivas' },
       { label: 'Bombeo electrocentrífugo', value: 'bombeoElectrocentrifugo' },
@@ -273,7 +281,7 @@ import { setSistemasArtificialesImgURL, setTipoDeSistemo, setPresionDeCabeza, se
 const validate = values => {
     const errors = {}
 
-    if(!values.tipoDeSistemo ){
+    if(!values.tipoDeSistemo || values.tipoDeAnalisis == 'none' ){
        errors.tipoDeSistemo = {message: "Este campo no puede estar vacio"}
     }
 
@@ -332,7 +340,7 @@ const mapDispatchToProps = dispatch => ({
   setNivelDinamico: val => dispatch(setNivelDinamico(val)),
   setNivelEstatico  : val => dispatch(setNivelEstatico(val)),
   setSistemasArtificialesImgURL: val => dispatch(setSistemasArtificialesImgURL(val)),
-  setChecked: val => dispatch(setChecked(val))
+  setChecked: val => dispatch(setChecked(val, 'sistemasArtificialesDeProduccion'))
 })
 
 export default withValidate(
