@@ -14,7 +14,7 @@ let config = {
         zoomType: 'xy'
     },
     title: {
-        text: 'Aforos Data'
+        text: ''
     },
     tooltip: {
       formatter:function () {
@@ -29,18 +29,18 @@ let config = {
     xAxis: {
         title: {
             enabled: true,
-            text: 'Date'
+            text: 'Fecha'
         },
         type: 'datetime'
     },
     yAxis: [{
         title: {
-            text: 'Rate (bbl/d)'
+            text: 'Gasto (bbl/d)'
         }
     }, {
         opposite: true,
         title: {
-            text: 'Rate (MMpc/d)'
+            text: 'Gasto (MMpc/d)'
         }
     }],
     plotOptions: {

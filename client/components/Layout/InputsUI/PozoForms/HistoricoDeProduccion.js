@@ -15,7 +15,7 @@ let config = {
         zoomType: 'xy'
     },
     title: {
-        text: 'Aforos Data'
+        text: ''
     },
     tooltip: {
       shared: true,
@@ -33,18 +33,18 @@ let config = {
     xAxis: {
         title: {
             enabled: true,
-            text: 'Date'
+            text: 'Fecha'
         },
         type: 'datetime'
     },
     yAxis: [{
         title: {
-            text: 'Rate (bbl/d)'
+            text: 'Gasto (bbl/d)'
         }
     }, {
         opposite: true,
         title: {
-            text: 'Rate (MMpc/d)'
+            text: 'Gasto (MMpc/d)'
         }
     }],
     plotOptions: {
@@ -90,7 +90,7 @@ let columns = [
     accessor: 'fecha',
     cell: 'renderDate',
   }, { 
-    Header: 'Dias',
+    Header: 'Días de Aforo',
     accessor: 'dias',
     cell: 'renderNumber',
   }, { 
@@ -137,7 +137,7 @@ let columns = [
     Header: <div>RGA<br></br>(m<sup>3</sup>/m<sup>3</sup>)</div>,
     accessor: 'rga',
   }, { 
-    Header: 'Fw Fraction',
+    Header: 'Fw Fracción',
     accessor: 'fw',
     Cell: row => <div>{(row.value * 100)}%</div>
   }

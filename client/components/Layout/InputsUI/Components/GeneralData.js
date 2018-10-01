@@ -166,8 +166,8 @@ import Loading from '../../Common/Loading'
     let { objetivo, alcances, tipoDeIntervenciones } = interventionFormData
 
     let tipoDeIntervencionesOptions = [
-      {label: 'Tratamiento de Estimulacion', value: 'estimulacion'},
-      {label: 'Fracuramiento Acido', value: 'acido'},
+      {label: 'Tratamiento de Estimulación', value: 'estimulacion'},
+      {label: 'Fracturamiento Ácido', value: 'acido'},
       {label: 'Fracturamiento Apuntalado', value: 'apuntalado'},
     ]
 

@@ -42,7 +42,7 @@ let layerColumns = [
     accessor: 'vArc',
     cell: 'renderNumber',
   }, { 
-    Header: <div>Porosity<br></br>(%)</div>,
+    Header: <div>Porosidad<br></br>(%)</div>,
     accessor: 'porosity',
     cell: 'renderNumber',
   }, { 
@@ -311,7 +311,7 @@ let mudLossColumns = [
     return (
       <div className="mud-loss-table" style={{marginBot: '20px'}}> 
         <div className='header'>
-          ZONA DE PERDIDA
+          ZONA DE PÉRDIDA
         </div>
         <div className='table'>
 
