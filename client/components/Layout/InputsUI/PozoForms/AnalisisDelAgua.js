@@ -4,7 +4,16 @@ import { InputRow, InputRowUnitless, InputRowSelectUnitless } from '../../Common
 import {withValidate} from '../../Common/Validate'
 import { connect } from 'react-redux'
 import AnalisisDelAguaGraph from './AnalisisDelAguaGraph'
-import { setPH, setTemperaturaDeConductividad, setResistividad, setSalinidadConConductimetro, setSolidosDisueltosTotales, setDurezaTotalComoCaCO3, setDurezaDeCalcioComoCaCO3, setDurezaDeMagnesioComoCaCO3, setAlcalinidadTotalComoCaCO3, setAlcalinidadALaFenolftaleinaComoCaCO3, setSalinidadComoNaCl, setSodio, setCalcio, setMagnesio, setFierro, setCloruros, setBicarbonatos, setSulfatos, setCarbonatos, setDensidadAt15, setDensidadAt20, setChecked } from '../../../../redux/actions/pozo'
+import { setWaterAnalysisBool, setPH, setTemperaturaDeConductividad, setResistividad, setSalinidadConConductimetro, setSolidosDisueltosTotales, setDurezaTotalComoCaCO3, setDurezaDeCalcioComoCaCO3, setDurezaDeMagnesioComoCaCO3, setAlcalinidadTotalComoCaCO3, setAlcalinidadALaFenolftaleinaComoCaCO3, setSalinidadComoNaCl, setSodio, setCalcio, setMagnesio, setFierro, setCloruros, setBicarbonatos, setSulfatos, setCarbonatos, setDensidadAt15, setDensidadAt20, setChecked } from '../../../../redux/actions/pozo'
+
+
+const yesOrNoOptions = [{
+  label: 'Sí',
+  value: true
+}, {
+  label: 'No',
+  value: false
+}]
 
 @autobind class AnalisisDelAgua extends Component {
   constructor(props) {
@@ -14,7 +23,7 @@ import { setPH, setTemperaturaDeConductividad, setResistividad, setSalinidadConC
       values: {
       },
       errors: [],
-      checked: []
+      checked: [],
     }
   }
 
@@ -103,11 +112,11 @@ import { setPH, setTemperaturaDeConductividad, setResistividad, setSalinidadConC
         <div className='header'>
           Valores
         </div>
-        <InputRow header="pH" name='pH' value={pH} onChange={setPH} unit='Adim.' errors={this.state.errors} onBlur={this.validate}/>
+        <InputRow header="pH" name='pH' value={pH} onChange={setPH} unit='' errors={this.state.errors} onBlur={this.validate}/>
         <InputRow header="Temperatura de conductividad" name='temperaturaDeConductividad' value={temperaturaDeConductividad} onChange={setTemperaturaDeConductividad} unit='°C' errors={this.state.errors} onBlur={this.validate}/>
         <InputRow header="Resistividad" name='resistividad' value={resistividad} onChange={setResistividad} unit='Ohm*m' errors={this.state.errors} onBlur={this.validate}/>
         <InputRow header="Salinidad con conductimetro" name='salinidadConConductimetro' value={salinidadConConductimetro} onChange={setSalinidadConConductimetro} unit='mg/L o PPM' errors={this.state.errors} onBlur={this.validate}/>
-        <InputRow header="Solidos disueltos totales" name='solidosDisueltosTotales' value={solidosDisueltosTotales} onChange={setSolidosDisueltosTotales} unit='mg/L o PPM' errors={this.state.errors} onBlur={this.validate}/>
+        <InputRow header="Solidos disueltos totales" name='sólidosDisueltosTotales' value={solidosDisueltosTotales} onChange={setSolidosDisueltosTotales} unit='mg/L o PPM' errors={this.state.errors} onBlur={this.validate}/>
         <InputRow header={<div>Dureza total como CaCO<sub>3</sub></div>} name='durezaTotalComoCaCO3' value={durezaTotalComoCaCO3} onChange={setDurezaTotalComoCaCO3} unit='mg/L o PPM' errors={this.state.errors} onBlur={this.validate}/>
         <InputRow header={<div>Dureza de calcio como CaCO<sub>3</sub></div>} name='durezaDeCalcioComoCaCO3' value={durezaDeCalcioComoCaCO3} onChange={setDurezaDeCalcioComoCaCO3} unit='mg/L o PPM' errors={this.state.errors} onBlur={this.validate}/>
         <InputRow header={<div>Dureza de magnesio como CaCO<sub>3</sub></div>} name='durezaDeMagnesioComoCaCO3' value={durezaDeMagnesioComoCaCO3} onChange={setDurezaDeMagnesioComoCaCO3} unit='mg/L o PPM' errors={this.state.errors} onBlur={this.validate}/>
@@ -129,11 +138,20 @@ import { setPH, setTemperaturaDeConductividad, setResistividad, setSalinidadConC
   }
 
   render() {
+    let { setWaterAnalysisBool, formData } = this.props
+    formData = formData.toJS()
+    let { waterAnalysisBool } = formData
 
     return (
       <div className="form analisis-del-agua">
-        { this.makeValoresForm() }
-        <AnalisisDelAguaGraph />
+        <div className='left'>
+        <InputRowSelectUnitless header='¿El pozo tiene análisis de agua?' name='waterAnalysisBool' value={waterAnalysisBool} callback={(e) => setWaterAnalysisBool(e.value)} options={yesOrNoOptions} />
+        { waterAnalysisBool === true ? this.makeValoresForm() : null }
+        </div>
+        <div className='right'>
+          <div className="image"/>
+          <AnalisisDelAguaGraph />
+        </div>
       </div>
     )
   }
@@ -141,6 +159,10 @@ import { setPH, setTemperaturaDeConductividad, setResistividad, setSalinidadConC
 
 const validate = values => {
     const errors = {}
+
+    if(values.waterAnalysisBool === false) {
+      return {}
+    }
 
     if(!values.pH ){
        errors.pH = {message: "Este campo no puede estar vacio"}
@@ -235,6 +257,7 @@ const mapStateToProps = state => ({
 })
 
 const mapDispatchToProps = dispatch => ({
+  setWaterAnalysisBool: val => dispatch(setWaterAnalysisBool(val)),
   setSubdireccion: val => dispatch(setSubdireccion(val)), 
   setPH: val => dispatch(setPH(val)),
   setTemperaturaDeConductividad: val => dispatch(setTemperaturaDeConductividad(val)),

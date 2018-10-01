@@ -9,9 +9,9 @@ import { setTipoDeFluidoField, setDescubrimientoField, setFechaDeExplotacionFiel
 
 let fluidoOptions = [
     { label: 'Aceite Negro', value: 'Aceite Negro' },
-    { label: 'Acetic Ligero', value: 'Acetic Ligero' },
+    { label: 'Aceite Ligero', value: 'Aceite Ligero' },
     { label: 'Gas y Condensado', value: 'Gas y Condensado' },
-    { label: 'Gas Hemedo', value: 'Gas Hemedo' },
+    { label: 'Gas Húmedo', value: 'Gas Humedo' },
     { label: 'Gas Seco', value: 'Gas Seco' },
 ]
  
@@ -96,7 +96,7 @@ let litologiaOptions = [
         </div>
         <InputRowUnitless header="Descubrimiento" name='descubrimientoField' value={descubrimientoField} onChange={setDescubrimientoField} onBlur={this.validate} errors={this.state.errors}/>
         <InputDate header="Fecha de explotación" name='fechaDeExplotacionField' value={fechaDeExplotacionField} onChange={setFechaDeExplotacionField} onBlur={this.validate} errors={this.state.errors}/>
-        <InputRowUnitless header="No. de pozo operando" name='numeroDePozosOperandoField' value={numeroDePozosOperandoField} onChange={setNumeroDePozosOperandoField} onBlur={this.validate} errors={this.state.errors}/>
+        <InputRowUnitless header="No. de pozos operando" name='numeroDePozosOperandoField' value={numeroDePozosOperandoField} onChange={setNumeroDePozosOperandoField} onBlur={this.validate} errors={this.state.errors}/>
       </div>
     )
   }
@@ -113,7 +113,7 @@ let litologiaOptions = [
     return (
       <div className='explotacion-form' >
         <div className='header'>
-          Explotacion
+          Explotación
         </div>
         <InputRow header="P. inicial" name='pInicialField' value={pInicialField} onChange={setPInicialField} unit={<div>Kg/cm<sup>2</sup></div>} onBlur={this.validate} errors={this.state.errors} />
         <InputRowUnitless header="P. inicial (año)" name='pInicialAnoField' value={pInicialAnoField} onChange={setPInicialAnoField} onBlur={this.validate} errors={this.state.errors} />
@@ -162,7 +162,7 @@ let litologiaOptions = [
     return (
       <div className='formacion-form' >
         <div className='header'>
-          Formacion
+          Formación
         </div>
         <InputRowSelectUnitless header='Litología' name='litologiaField' value={litologiaField} callback={(e) => setLitologiaField(e.value)} options={litologiaOptions} onBlur={this.validate} errors={this.state.errors}/>
         <InputRow header="Espesor neto" name='espesorNetoField'value={espesorNetoField} onChange={setEspesorNetoField} unit='m' onBlur={this.validate} errors={this.state.errors} />
@@ -186,7 +186,7 @@ let litologiaOptions = [
     return (
       <div className='produccion-form' >
         <div className='header'>
-          Produccion @ Formacion
+          Producción @ Formación
         </div>
         <InputRow header="Qo" name='qoField' value={qoField} onChange={setQoField} unit='bpd' onBlur={this.validate} errors={this.state.errors} />
         <InputRow header="Qg" name='qgField' value={qgField} onChange={setQgField} unit='MMpcd' onBlur={this.validate} errors={this.state.errors} />
@@ -210,6 +210,7 @@ let litologiaOptions = [
 
     return (
       <div className="form tecnica-del-campo">
+        <div className="image"/>
         <div className="left">
           { this.makeGeneralesForm() }
           { this.makeExplotacionForm() }

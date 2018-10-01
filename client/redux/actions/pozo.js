@@ -139,7 +139,7 @@ export const setLayerData = value => ({
     elem.interval = i + 1
     elem.baseMD = parseFloat(elem.baseMD)
     elem.cimaMD = parseFloat(elem.cimaMD)
-    elem.espesor = !isNaN(elem.baseMD) && !isNaN(elem.cimaMD) ? Math.round((elem.baseMD - elem.cimaMD) * 100) / 100 : ''
+    elem.espesorBruto = !isNaN(elem.baseMD) && !isNaN(elem.cimaMD) ? ( Math.round((elem.baseMD - elem.cimaMD) * 100) / 100 ): ''
     return elem
   })
 })
@@ -206,10 +206,8 @@ export const setHistoricoDeAforos = value => ({ type: 'set_historicoDeAforos', v
     
 
 
-
-
-
 //AnalisisDelAgua
+export const setWaterAnalysisBool = value => ({ type: 'set_waterAnalysisBool', value})
 export const setPH = value => ({ type: 'set_pH', value})
 export const setTemperaturaDeConductividad = value => ({ type: 'set_temperaturaDeConductividad', value})
 export const setResistividad = value => ({ type: 'set_resistividad', value})

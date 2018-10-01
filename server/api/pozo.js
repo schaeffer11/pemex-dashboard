@@ -36,24 +36,24 @@ const INSERT_FIELDS_QUERY = {
 const INSERT_WELL_QUERY = {
     save: `INSERT INTO _WellsDataSave (
         WELL_FORMACION_ID, SUBDIRECCION, ACTIVO,
-        FORMACION, ESPESOR_BRUTO,
+        FORMACION,
         CALIZA, DOLOMIA, ARCILLA, POROSIDAD,
         PERMEABILIDAD, SW, CAA, CGA, TIPO_DE_POZO,
         PWS, PWS_FECHA, PWF, PWF_FECHA, DELTA_P_PER_MES, TYAC, PVT,
         APAREJO_DE_PRODUCCION, PROF_EMPACADOR, PROF_SENSOR_PYT, TIPO_DE_SISTEMA, TRANSACTION_ID) VALUES
         (?, ?, ?, ?, ?, ?, ?, ?, ?, ?,
          ?, ?, ?, ?, ?, ?, ?, ?, ?, ?,
-         ?, ?, ?, ?, ?, ?)`,
+         ?, ?, ?, ?, ?)`,
     submit: `INSERT INTO WellsData (
         WELL_FORMACION_ID, SUBDIRECCION, ACTIVO,
-        FORMACION, ESPESOR_BRUTO,
+        FORMACION,
         CALIZA, DOLOMIA, ARCILLA, POROSIDAD,
         PERMEABILIDAD, SW, CAA, CGA, TIPO_DE_POZO,
         PWS, PWS_FECHA, PWF, PWF_FECHA, DELTA_P_PER_MES, TYAC, PVT,
         APAREJO_DE_PRODUCCION, PROF_EMPACADOR, PROF_SENSOR_PYT, TIPO_DE_SISTEMA, TRANSACTION_ID) VALUES
         (?, ?, ?, ?, ?, ?, ?, ?, ?, ?,
          ?, ?, ?, ?, ?, ?, ?, ?, ?, ?,
-         ?, ?, ?, ?, ?, ?)`,
+         ?, ?, ?, ?, ?)`,
     loadSave: `SELECT * FROM _WellsDataSave WHERE TRANSACTION_ID = ?`,
     loadTransaction: `SELECT * FROM WellsData WHERE TRANSACTION_ID = ?`    
 }
@@ -71,11 +71,11 @@ const INSERT_HIST_INTERVENCIONES_QUERY = {
 
 const INSERT_LAYER_QUERY = {
     save: `INSERT INTO _WellLayersSave (
-        INTERVAL_ID, WELL_FORMACION_ID, INTERVALO, CIMA_MD, BASE_MD, ESPESOR,
+        INTERVAL_ID, WELL_FORMACION_ID, INTERVALO, CIMA_MD, BASE_MD, ESPESOR_BRUTO, ESPESOR_NETO,
         V_ARC, POROSITY, SW, DENS, RESIS, PERMEABILIDAD, TRANSACTION_ID) VALUES
         ?`,
     submit: `INSERT INTO WellLayers (
-        INTERVAL_ID, WELL_FORMACION_ID, INTERVALO, CIMA_MD, BASE_MD, ESPESOR,
+        INTERVAL_ID, WELL_FORMACION_ID, INTERVALO, CIMA_MD, BASE_MD, ESPESOR_BRUTO, ESPESOR_NETO,
         V_ARC, POROSITY, SW, DENS, RESIS, PERMEABILIDAD, TRANSACTION_ID) VALUES
         ?`,
     loadSave: `SELECT * FROM _WellLayersSave WHERE TRANSACTION_ID = ?`,
@@ -301,7 +301,7 @@ const INSERT_INTERVENTION_ESIMULACION_QUERY = {
     save: `INSERT INTO _IntervencionesEstimulacionsSave (
         INTERVENTION_ID, WELL_FORMACION_ID,
         VOLUMEN_PRECOLCHON_N2,
-        VOLUMEN_SISTEMA_NO_REACTIVO, VOLUMEN_SISTEM_REACTIVO, VOLUMEN_SISTEMA_DIVERGENTE, VOLUMEN_DISPLAZAMIENTO_LIQUIDO, VOLUMEN_DESPLAZAMIENTO_N2,
+        VOLUMEN_SISTEMA_NO_REACTIVO, VOLUMEN_SISTEMA_REACTIVO, VOLUMEN_SISTEMA_DIVERGENTE, VOLUMEN_DISPLAZAMIENTO_LIQUIDO, VOLUMEN_DESPLAZAMIENTO_N2,
         VOLUMEN_TOTAL_DE_LIQUIDO, TIPO_DE_COLOCACION,
         TIEMPO_DE_CONTACTO, PENETRACION_RADIAL, LONGITUD_DE_AGUJERO_DE_GUSANO,
         EST_INC_ESTRANGULADOR, EST_INC_Ptp, EST_INC_Ttp, EST_INC_Pbaj, EST_INC_Tbaj,
@@ -315,7 +315,7 @@ const INSERT_INTERVENTION_ESIMULACION_QUERY = {
     submit: `INSERT INTO IntervencionesEstimulacions (
         INTERVENTION_ID, WELL_FORMACION_ID,
         VOLUMEN_PRECOLCHON_N2,
-        VOLUMEN_SISTEMA_NO_REACTIVO, VOLUMEN_SISTEM_REACTIVO, VOLUMEN_SISTEMA_DIVERGENTE, VOLUMEN_DISPLAZAMIENTO_LIQUIDO, VOLUMEN_DESPLAZAMIENTO_N2,
+        VOLUMEN_SISTEMA_NO_REACTIVO, VOLUMEN_SISTEMA_REACTIVO, VOLUMEN_SISTEMA_DIVERGENTE, VOLUMEN_DISPLAZAMIENTO_LIQUIDO, VOLUMEN_DESPLAZAMIENTO_N2,
         VOLUMEN_TOTAL_DE_LIQUIDO, TIPO_DE_COLOCACION,
         TIEMPO_DE_CONTACTO, PENETRACION_RADIAL, LONGITUD_DE_AGUJERO_DE_GUSANO,
         EST_INC_ESTRANGULADOR, EST_INC_Ptp, EST_INC_Ttp, EST_INC_Pbaj, EST_INC_Tbaj,
@@ -333,7 +333,9 @@ const INSERT_INTERVENTION_ESIMULACION_QUERY = {
 const INSERT_INTERVENTION_ACIDO_QUERY = {
     save: `INSERT INTO _IntervencionesAcidoSave (
         INTERVENTION_ID, WELL_FORMACION_ID,
-        MODULO_YOUNG_ARENA,
+        VOLUMEN_PRECOLCHON_N2,
+        VOLUMEN_SISTEMA_NO_REACTIVO, VOLUMEN_SISTEMA_REACTIVO, VOLUMEN_SISTEMA_DIVERGENTE, VOLUMEN_DISPLAZAMIENTO_LIQUIDO, VOLUMEN_DESPLAZAMIENTO_N2,
+        VOLUMEN_TOTAL_DE_LIQUIDO, MODULO_YOUNG_ARENA,
         MODULO_YOUNG_LUTITAS, RELAC_POISSON_ARENA, RELAC_POISSON_LUTITAS, GRADIENTE_DE_FRACTURA, DENSIDAD_DE_DISPAROS,
         DIAMETRO_DE_DISPAROS, LONGITUD_TOTAL, LONGITUD_EFECTIVA_GRABADA,
         ALTURA_GRABADA, ANCHO_PROMEDIO, CONCENTRACION_DEL_ACIDO, CONDUCTIVIDAD, FCD, PRESION_NETA,
@@ -344,10 +346,13 @@ const INSERT_INTERVENTION_ACIDO_QUERY = {
         (?, ?, ?, ?, ?, ?, ?, ?, ?, ?,
          ?, ?, ?, ?, ?, ?, ?, ?, ?, ?,
          ?, ?, ?, ?, ?, ?, ?, ?, ?, ?,
-         ?, ?, ?, ?, ?, ?)`,
+         ?, ?, ?, ?, ?, ?, ?, ?, ?, ?,
+         ?, ?, ?)`,
     submit: `INSERT INTO IntervencionesAcido (
         INTERVENTION_ID, WELL_FORMACION_ID,
-        MODULO_YOUNG_ARENA,
+        VOLUMEN_PRECOLCHON_N2,
+        VOLUMEN_SISTEMA_NO_REACTIVO, VOLUMEN_SISTEMA_REACTIVO, VOLUMEN_SISTEMA_DIVERGENTE, VOLUMEN_DISPLAZAMIENTO_LIQUIDO, VOLUMEN_DESPLAZAMIENTO_N2,
+        VOLUMEN_TOTAL_DE_LIQUIDO, MODULO_YOUNG_ARENA,
         MODULO_YOUNG_LUTITAS, RELAC_POISSON_ARENA, RELAC_POISSON_LUTITAS, GRADIENTE_DE_FRACTURA, DENSIDAD_DE_DISPAROS,
         DIAMETRO_DE_DISPAROS, LONGITUD_TOTAL, LONGITUD_EFECTIVA_GRABADA,
         ALTURA_GRABADA, ANCHO_PROMEDIO, CONCENTRACION_DEL_ACIDO, CONDUCTIVIDAD, FCD, PRESION_NETA,
@@ -358,7 +363,8 @@ const INSERT_INTERVENTION_ACIDO_QUERY = {
         (?, ?, ?, ?, ?, ?, ?, ?, ?, ?,
          ?, ?, ?, ?, ?, ?, ?, ?, ?, ?,
          ?, ?, ?, ?, ?, ?, ?, ?, ?, ?,
-         ?, ?, ?, ?, ?, ?)`,     
+         ?, ?, ?, ?, ?, ?, ?, ?, ?, ?,
+         ?, ?, ?)`,     
     loadSave: `SELECT * FROM _IntervencionesAcidoSave WHERE TRANSACTION_ID = ?`,
     loadTransaction: `SELECT * FROM IntervencionesAcido WHERE TRANSACTION_ID = ?`    
 }
@@ -366,7 +372,9 @@ const INSERT_INTERVENTION_ACIDO_QUERY = {
 const INSERT_INTERVENTION_APUNTALADO_QUERY = {
     save: `INSERT INTO _IntervencionesApuntaladoSave (
         INTERVENTION_ID, WELL_FORMACION_ID, 
-        MODULO_YOUNG_ARENA,
+        VOLUMEN_PRECOLCHON_N2,
+        VOLUMEN_SISTEMA_NO_REACTIVO, VOLUMEN_SISTEMA_REACTIVO, VOLUMEN_SISTEMA_DIVERGENTE, VOLUMEN_DISPLAZAMIENTO_LIQUIDO, VOLUMEN_DESPLAZAMIENTO_N2,
+        VOLUMEN_TOTAL_DE_LIQUIDO, MODULO_YOUNG_ARENA,
         MODULO_YOUNG_LUTITAS, RELAC_POISSON_ARENA, RELAC_POISSON_LUTITAS, GRADIENTE_DE_FRACTURA, DENSIDAD_DE_DISPAROS,
         DIAMETRO_DE_DISPAROS, LONGITUD_APUNTALADA, ALTURA_TOTAL_DE_FRACTURA, ANCHO_PROMEDIO,
         CONCENTRACION_AREAL, CONDUCTIVIDAD, FCD, PRESION_NETA, EFICIENCIA_DE_FLUIDO_DE_FRACTURA,
@@ -377,10 +385,13 @@ const INSERT_INTERVENTION_APUNTALADO_QUERY = {
         (?, ?, ?, ?, ?, ?, ?, ?, ?, ?,
          ?, ?, ?, ?, ?, ?, ?, ?, ?, ?,
          ?, ?, ?, ?, ?, ?, ?, ?, ?, ?,
-         ?, ?, ?, ?, ?)`,
+         ?, ?, ?, ?, ?, ?, ?, ?, ?, ?,
+         ?, ?)`,
     submit: `INSERT INTO IntervencionesApuntalado (
         INTERVENTION_ID, WELL_FORMACION_ID, 
-        MODULO_YOUNG_ARENA,
+        VOLUMEN_PRECOLCHON_N2,
+        VOLUMEN_SISTEMA_NO_REACTIVO, VOLUMEN_SISTEMA_REACTIVO, VOLUMEN_SISTEMA_DIVERGENTE, VOLUMEN_DISPLAZAMIENTO_LIQUIDO, VOLUMEN_DESPLAZAMIENTO_N2,
+        VOLUMEN_TOTAL_DE_LIQUIDO, MODULO_YOUNG_ARENA,
         MODULO_YOUNG_LUTITAS, RELAC_POISSON_ARENA, RELAC_POISSON_LUTITAS, GRADIENTE_DE_FRACTURA, DENSIDAD_DE_DISPAROS,
         DIAMETRO_DE_DISPAROS, LONGITUD_APUNTALADA, ALTURA_TOTAL_DE_FRACTURA, ANCHO_PROMEDIO,
         CONCENTRACION_AREAL, CONDUCTIVIDAD, FCD, PRESION_NETA, EFICIENCIA_DE_FLUIDO_DE_FRACTURA,
@@ -391,7 +402,8 @@ const INSERT_INTERVENTION_APUNTALADO_QUERY = {
         (?, ?, ?, ?, ?, ?, ?, ?, ?, ?,
          ?, ?, ?, ?, ?, ?, ?, ?, ?, ?,
          ?, ?, ?, ?, ?, ?, ?, ?, ?, ?,
-         ?, ?, ?, ?, ?)`,     
+         ?, ?, ?, ?, ?, ?, ?, ?, ?, ?,
+         ?, ?)`,     
     loadSave: `SELECT * FROM _IntervencionesApuntaladoSave WHERE TRANSACTION_ID = ?`,
     loadTransaction: `SELECT * FROM IntervencionesApuntalado WHERE TRANSACTION_ID = ?`    
 }
@@ -791,7 +803,7 @@ export const create = async (body, action, cb) => {
     gpField, wpField, rraField, rrgField, rrpceField,
     h2sField, co2Field, n2Field } = finalObj.fichaTecnicaDelCampo
 
-  let { espesorBruto, caliza,
+  let { caliza,
     dolomia, arcilla, porosidad, permeabilidad, sw, caa, cga, tipoDePozo, pws, pwsFecha, pwf, pwfFecha,
     deltaPPerMes, tyac, pvt, aparejoDeProduccion, profEmpacador, profSensorPYT, tipoDeSap, historialIntervencionesData } = finalObj.fichaTecnicaDelPozo
   
@@ -862,7 +874,8 @@ export const create = async (body, action, cb) => {
   }
   else if (tipoDeIntervenciones === 'acido') {
       //Propuesta De Fracturamiento Acido
-      var { moduloYoungArena, moduloYoungLutitas, relacPoissonArena,
+      var { volumenPrecolchonN2, volumenSistemaNoReativo, volumenSistemaReactivo, volumenSistemaDivergente,
+        volumenDesplazamientoLiquido, volumenDesplazamientoN2, volumenTotalDeLiquido, moduloYoungArena, moduloYoungLutitas, relacPoissonArena,
     relacPoissonLutatas, gradienteDeFractura, densidadDeDisparos, diametroDeDisparos } = finalObj.propuestaAcido
 
       //Resultados De La Simulacion
@@ -884,7 +897,8 @@ export const create = async (body, action, cb) => {
 
   else if (tipoDeIntervenciones === 'apuntalado') {
       //Propuesta De Fracturamiento Apuntalado
-      var { moduloYoungArena, moduloYoungLutitas, relacPoissonArena,
+      var { volumenPrecolchonN2, volumenSistemaNoReativo, volumenSistemaReactivo, volumenSistemaDivergente,
+        volumenDesplazamientoLiquido, volumenDesplazamientoN2, volumenTotalDeLiquido, moduloYoungArena, moduloYoungLutitas, relacPoissonArena,
     relacPoissonLutatas, gradienteDeFractura, densidadDeDisparos, diametroDeDisparos } = finalObj.propuestaApuntalado
 
       //Resultados de simulacion Apuntalado
@@ -937,7 +951,7 @@ export const create = async (body, action, cb) => {
       }
       connection.query((action === 'save' ? INSERT_WELL_QUERY.save : INSERT_WELL_QUERY.submit), [
       wellFormacionID, subdireccion, activo,
-      formacion, espesorBruto, caliza,
+      formacion, caliza,
       dolomia, arcilla, porosidad, permeabilidad, sw,
       caa, cga, tipoDePozo, pws, pwsFecha, pwf, pwfFecha,
       deltaPPerMes, tyac, pvt, aparejoDeProduccion, profEmpacador,
@@ -972,7 +986,7 @@ export const create = async (body, action, cb) => {
           layerData.forEach(i => {
             intervalID = Math.floor(Math.random() * 1000000000)
             values.push([intervalID, wellFormacionID, i.interval, i.cimaMD, i.baseMD,
-              i.espesor, i.vArc, i.porosity, i.sw, i.dens, i.resis, i.perm, transactionID])
+              i.espesorBruto, i.espesorNeto, i.vArc, i.porosity, i.sw, i.dens, i.resis, i.perm, transactionID])
           })
 
           connection.query((action === 'save' ? INSERT_LAYER_QUERY.save : INSERT_LAYER_QUERY.submit), [values], (err, results) => {
@@ -1227,7 +1241,9 @@ export const create = async (body, action, cb) => {
 
                                   : tipoDeIntervenciones === 'acido' ? [
                                       interventionID, wellFormacionID, 
-                                      moduloYoungArena, moduloYoungLutitas, relacPoissonArena,
+                                      volumenPrecolchonN2, volumenSistemaNoReativo, volumenSistemaReactivo, volumenSistemaDivergente,
+                                    volumenDesplazamientoLiquido, volumenDesplazamientoN2, volumenTotalDeLiquido, 
+                                    moduloYoungArena, moduloYoungLutitas, relacPoissonArena,
                                       relacPoissonLutatas, gradienteDeFractura, densidadDeDisparos, diametroDeDisparos, 
                                       longitudTotal, longitudEfectivaGrabada, alturaGrabada, anchoPromedio, concentracionDelAcido,
                                       conductividad, fcd, presionNeta, eficienciaDeFluidoDeFractura, estIncEstrangulador, estIncPtp, estIncTtp, estIncPbaj, estIncTbaj,
@@ -1236,7 +1252,9 @@ export const create = async (body, action, cb) => {
                                       estIncGastoCompromisoQg, obervacionesEstIncAcido, transactionID
                                     ] : [
                                       interventionID, wellFormacionID, 
-                                      moduloYoungArena, moduloYoungLutitas, relacPoissonArena,
+                                      volumenPrecolchonN2, volumenSistemaNoReativo, volumenSistemaReactivo, volumenSistemaDivergente,
+                                        volumenDesplazamientoLiquido, volumenDesplazamientoN2, volumenTotalDeLiquido, 
+                                        moduloYoungArena, moduloYoungLutitas, relacPoissonArena,
                                       relacPoissonLutatas, gradienteDeFractura, densidadDeDisparos, diametroDeDisparos,
                                       longitudApuntalada, alturaTotalDeFractura, anchoPromedio, concentractionAreal, conductividad,
                                       fcd, presionNeta, eficienciaDeFluidoDeFractura,
@@ -1272,7 +1290,6 @@ export const create = async (body, action, cb) => {
                                   }
                                   else {
                                     INSERT_LAB_TEST_QUERY.save = `SELECT(1) FROM Users LIMIT 1`
-                                    INSERT_LAB_RESULTS_QUERY.save = `SELECT(1) FROM Users LIMIT 1`
                                   }
 
                                   connection.query((action === 'save' ? INSERT_LAB_TEST_QUERY.save : INSERT_LAB_TEST_QUERY.submit), [values], (err, results) => {

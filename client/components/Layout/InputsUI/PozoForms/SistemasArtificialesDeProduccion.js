@@ -78,7 +78,7 @@ import { setSistemasArtificialesImgURL, setTipoDeSistemo, setPresionDeCabeza, se
     return (
       <div className='sistemas-artificiales-form' >
         <InputRow header="Presión de cabeza" name='' value={presionDeCabeza} onChange={setPresionDeCabeza} unit={<div>Kg/cm<sup>2</sup></div>} errors={errors}/>
-        <InputRow header="Presión de linea o de separador" name='' value={presionDeLineaODeSeparador} onChange={setPresionDeLineaODeSeparador} unit={<div>Kg/cm<sup>2</sup></div>} errors={errors}/>
+        <InputRow header="Presión de línea o de separador" name='' value={presionDeLineaODeSeparador} onChange={setPresionDeLineaODeSeparador} unit={<div>Kg/cm<sup>2</sup></div>} errors={errors}/>
         <InputRowUnitless header="Número de descargas o ciclos" name='' value={numeroDeDescargasOCiclosEV} onChange={setNumeroDeDescargasOCiclosEV} errors={errors}/>
         <InputRowUnitless header="Volumen desplazado por ciclo" name='' value={volumenDesplazadoPorCircloEV} onChange={setVolumenDesplazadoPorCircloEV} errors={errors}/>
       </div>
@@ -145,7 +145,7 @@ import { setSistemasArtificialesImgURL, setTipoDeSistemo, setPresionDeCabeza, se
         <InputRow header="Velocidad" name='' unit='' value={velocidadBCP} onChange={setVelocidadBCP} errors={errors}/>
         <InputRow header="HP" name='' unit='' value={hpBCP} onChange={setHpBCP} errors={errors}/>
         <InputRow header="Arreglo de varillas" name='' unit='' value={arregloDeVarillasBCP} onChange={setArregloDeVarillasBCP} errors={errors}/>
-        <InputRow header="Tipo de elastomero (composición quimica)" name='' unit='' value={tipoDeElastomeroBCP} onChange={setTipoDeElastomeroBCP} errors={errors}/>
+        <InputRow header="Tipo de elastómero (composición quimica)" name='' unit='' value={tipoDeElastomeroBCP} onChange={setTipoDeElastomeroBCP} errors={errors}/>
         <InputRow header="Profundidad del ancla antitorque" name='' unit='' value={profundidadDelAnclaAntitorqueBCP} onChange={setProfundidadDelAnclaAntitorqueBCP} errors={errors}/>
 
       </div>
@@ -194,7 +194,7 @@ import { setSistemasArtificialesImgURL, setTipoDeSistemo, setPresionDeCabeza, se
         <InputRowUnitless header="Tamaño de bomba subsuperficial" name='' value={tamanoDeBombaSubsuperficialBM} onChange={setTamanoDeBombaSubsuperficialBM} errors={errors}/>
         <InputRow header="Profundidad de la bomba" name='' value={profundidadDeLaBombaBM} onChange={setProfundidadDeLaBombaBM} unit='m' errors={errors}/>
         <InputRowUnitless header="Arreglo de varillas" name='' value={arregloDeVarillasBM} onChange={setArregloDeVarillasBM} errors={errors}/>
-        <InputRowUnitless header="Cuenta con ancla mecanica o empacador" name='' value={CuantaConAnclaBM} onChange={setCuantaConAnclaBM} errors={errors}/>
+        <InputRowUnitless header="Cuenta con ancla mecánica o empacador" name='' value={CuantaConAnclaBM} onChange={setCuantaConAnclaBM} errors={errors}/>
         <InputRow header="Nivel dinámico" name='' value={nivelDinamico} onChange={setNivelDinamico} unit='m' errors={errors}/>
         <InputRow header="Nivel estático" name='' value={nivelEstatico} onChange={setNivelEstatico} unit='m' errors={errors}/>
       </div>
@@ -225,7 +225,7 @@ import { setSistemasArtificialesImgURL, setTipoDeSistemo, setPresionDeCabeza, se
     return (
       <div style={{marginBot: '20px'}}>
         <div className='header'>
-          Upload Sistem of Produccion Image (spanish)
+          Cargar imagen del sistema de producción
         </div>
         <input type='file' accept="image/*" onChange={this.handleFileUpload}></input>
         { this.state.errors.imgURL && this.state.errors.imgURL.checked &&
@@ -243,9 +243,9 @@ import { setSistemasArtificialesImgURL, setTipoDeSistemo, setPresionDeCabeza, se
     let { tipoDeSistemo } = formData
 
     let options = [
-      { label: 'Ninguna', value: 'none' },
-      { label: 'Embolo viajero', value: 'emboloViajero' },
-      { label: 'Bombeo neumatico', value: 'bombeoNeumatico' },
+      { label: 'Ninguno', value: 'none' },
+      { label: 'Émbolo viajero', value: 'emboloViajero' },
+      { label: 'Bombeo neumático', value: 'bombeoNeumatico' },
       { label: 'Bombeo hidráulico', value: 'bombeoHidraulico' },
       { label: 'Bombeo cavidades progresivas', value: 'bombeoCavidadesProgresivas' },
       { label: 'Bombeo electrocentrífugo', value: 'bombeoElectrocentrifugo' },
@@ -269,9 +269,10 @@ import { setSistemasArtificialesImgURL, setTipoDeSistemo, setPresionDeCabeza, se
             <InputRowSelectUnitless header='Tipo de sistema' name='tipoDeSistemo' value={tipoDeSistemo} options={options} callback={this.handleSelectSistema} onBlur={this.validate} errors={this.state.errors} />
           </div>
           { forms[tipoDeSistemo]}
+          { this.makeImgInput() }
           </div>
         <div className='right'>
-          { this.makeImgInput() }
+          <div className='image'/>
         </div>
       </div>
     )

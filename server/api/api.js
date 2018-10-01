@@ -18,6 +18,8 @@ import { create as createWell, getFields, getWell,
 
 const connection = db.getConnection(appConfig.users.database)
 const app = express()
+const env = process.env.NODE_ENV || 'dev'
+const isProduction = env === 'production'
 
 const upload = multer({
   limits: { fieldSize: 25 * 1024 * 1024 },
@@ -41,7 +43,7 @@ app.get('/woop', async (req, res) => {
 })
 
 app.get('/getTemplate', (req, res) => {
-  let localPath = path.join(__dirname, '../tempFile.xlsm')
+  let localPath = path.join(__dirname, isProduction ? '../' : '../../', 'tempFile.xlsm')
 
   res.sendFile(localPath)
 })
@@ -283,7 +285,6 @@ app.get('/getWell', async (req, res) => {
     SUBDIRECCION: { parent: 'fichaTecnicaDelPozoHighLevel', child: 'subdireccion'},
     ACTIVO: { parent: 'fichaTecnicaDelPozoHighLevel', child: 'activo'},
     FORMACION: { parent: 'fichaTecnicaDelPozoHighLevel', child: 'formacion'},
-    ESPESOR_BRUTO: { parent: 'fichaTecnicaDelPozo', child: 'espesorBruto'},
     CALIZA: { parent: 'fichaTecnicaDelPozo', child: 'caliza'},
     DOLOMIA: { parent: 'fichaTecnicaDelPozo', child: 'dolomia'},
     ARCILLA: { parent: 'fichaTecnicaDelPozo', child: 'arcilla'},
@@ -388,7 +389,8 @@ app.get('/getLayer', async (req, res) => {
     INTERVALO: { child: 'interval' },
     CIMA_MD: { child: 'cimaMD'},
     BASE_MD: { child: 'baseMD'},
-    ESPESOR: { child: 'espesor'},
+    ESPESOR_BRUTO: { child: 'espesorBruto'},
+    ESPESOR_NETO: { child: 'espesorNeto'},
     V_ARC: { child: 'vArc'},
     POROSITY: { child: 'porosity'},
     SW: { child: 'sw'},
@@ -1090,7 +1092,7 @@ app.get('/getInterventionEstimulacion', async (req, res) => {
   const map = {
     VOLUMEN_PRECOLCHON_N2: { parent: 'propuestaEstimulacion', child: 'volumenPrecolchonN2' },
     VOLUMEN_SISTEMA_NO_REACTIVO: { parent: 'propuestaEstimulacion', child: 'volumenSistemaNoReativo' }, 
-    VOLUMEN_SISTEM_REACTIVO: { parent: 'propuestaEstimulacion', child: 'volumenSistemaReactivo' }, 
+    VOLUMEN_SISTEMA_REACTIVO: { parent: 'propuestaEstimulacion', child: 'volumenSistemaReactivo' }, 
     VOLUMEN_SISTEMA_DIVERGENTE: { parent: 'propuestaEstimulacion', child: 'volumenSistemaDivergente' }, 
     VOLUMEN_DISPLAZAMIENTO_LIQUIDO: { parent: 'propuestaEstimulacion', child: 'volumenDesplazamientoLiquido' }, 
     VOLUMEN_DESPLAZAMIENTO_N2: { parent: 'propuestaEstimulacion', child: 'volumenDesplazamientoN2' },
@@ -1146,6 +1148,13 @@ app.get('/getInterventionAcido', async (req, res) => {
 
 
   const map = {
+    VOLUMEN_PRECOLCHON_N2: { parent: 'propuestaAcido', child: 'volumenPrecolchonN2' },
+    VOLUMEN_SISTEMA_NO_REACTIVO: { parent: 'propuestaAcido', child: 'volumenSistemaNoReativo' }, 
+    VOLUMEN_SISTEMA_REACTIVO: { parent: 'propuestaAcido', child: 'volumenSistemaReactivo' }, 
+    VOLUMEN_SISTEMA_DIVERGENTE: { parent: 'propuestaAcido', child: 'volumenSistemaDivergente' }, 
+    VOLUMEN_DISPLAZAMIENTO_LIQUIDO: { parent: 'propuestaAcido', child: 'volumenDesplazamientoLiquido' }, 
+    VOLUMEN_DESPLAZAMIENTO_N2: { parent: 'propuestaAcido', child: 'volumenDesplazamientoN2' },
+    VOLUMEN_TOTAL_DE_LIQUIDO: { parent: 'propuestaAcido', child: 'volumenTotalDeLiquido' }, 
     MODULO_YOUNG_ARENA: { parent: 'propuestaAcido', child: 'moduloYoungArena' },
     MODULO_YOUNG_LUTITAS: { parent: 'propuestaAcido', child: 'moduloYoungLutitas' }, 
     RELAC_POISSON_ARENA: { parent: 'propuestaAcido', child: 'relacPoissonArena' }, 
@@ -1211,6 +1220,13 @@ app.get('/getInterventionApuntalado', async (req, res) => {
 
 
   const map = {
+    VOLUMEN_PRECOLCHON_N2: { parent: 'propuestaApuntalado', child: 'volumenPrecolchonN2' },
+    VOLUMEN_SISTEMA_NO_REACTIVO: { parent: 'propuestaApuntalado', child: 'volumenSistemaNoReativo' }, 
+    VOLUMEN_SISTEMA_REACTIVO: { parent: 'propuestaApuntalado', child: 'volumenSistemaReactivo' }, 
+    VOLUMEN_SISTEMA_DIVERGENTE: { parent: 'propuestaApuntalado', child: 'volumenSistemaDivergente' }, 
+    VOLUMEN_DISPLAZAMIENTO_LIQUIDO: { parent: 'propuestaApuntalado', child: 'volumenDesplazamientoLiquido' }, 
+    VOLUMEN_DESPLAZAMIENTO_N2: { parent: 'propuestaApuntalado', child: 'volumenDesplazamientoN2' },
+    VOLUMEN_TOTAL_DE_LIQUIDO: { parent: 'propuestaApuntalado', child: 'volumenTotalDeLiquido' }, 
     MODULO_YOUNG_ARENA: { parent: 'propuestaApuntalado', child: 'moduloYoungArena' },
     MODULO_YOUNG_LUTITAS: { parent: 'propuestaApuntalado', child: 'moduloYoungLutitas' }, 
     RELAC_POISSON_ARENA: { parent: 'propuestaApuntalado', child: 'relacPoissonArena' }, 
@@ -1426,6 +1442,11 @@ app.get('/getLabTest', async (req, res) => {
         }
       }
     })
+
+    if (outData.length === 0) {
+      outData = [{}]
+    }
+    
     let finalObj = {
       pruebasDeLaboratorio: {
         pruebasDeLaboratorioData: outData

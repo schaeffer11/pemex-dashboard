@@ -79,7 +79,11 @@ const propuestaAcido = (state = initialState, action) => {
     case 'set_diametroDeDisparos':
         return state.set('diametroDeDisparos', fromJS(action.value))
     case 'set_cedulaData':
-        return state.set('cedulaData', fromJS(action.value))
+        let newState = state.set('cedulaData', fromJS(action.cedula))
+        if (action.volumes !== null) {
+            newState = newState.mergeDeep(action.volumes)
+        }
+        return newState
     case 'set_forms_checked' :
         if(action.form == 'propuestaAcido')
           return state.set('checked', fromJS(action.value))

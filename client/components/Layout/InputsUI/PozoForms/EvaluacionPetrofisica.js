@@ -19,7 +19,7 @@ let layerColumns = [
       }
     }
   }, {
-    Header: 'Interval',
+    Header: 'Intervalo',
     accessor: 'interval',
   }, { 
     Header: <div>Cima<br></br>(md)</div>,
@@ -31,14 +31,18 @@ let layerColumns = [
     cell: 'renderNumber',
   },
   {
-    Header: <div>Espesor<br></br>(md)</div>,
-    accessor: 'espesor',
+    Header: <div>Espesor Bruto<br></br>(md)</div>,
+    accessor: 'espesorBruto',
+  },{
+    Header: <div>Espesor Neto<br></br>(md)</div>,
+    accessor: 'espesorNeto',
+    cell: 'renderNumber',
   }, { 
     Header: <div>V arc.<br></br>(%)</div>,
     accessor: 'vArc',
     cell: 'renderNumber',
   }, { 
-    Header: <div>Porosity<br></br>(%)</div>,
+    Header: <div>Porosidad<br></br>(%)</div>,
     accessor: 'porosity',
     cell: 'renderNumber',
   }, { 
@@ -195,7 +199,7 @@ let mudLossColumns = [
 
     layerData[0].length = 2
 
-    setLayerData([...layerData, {index: layerData.length, interval: '', cimaMD: '', baseMD: '', espesor: '', vArc: '', porosity: '', sw: '', dens: '', resis: '', perm: '', length: layerData.length + 1}])
+    setLayerData([...layerData, {index: layerData.length, interval: '', cimaMD: '', baseMD: '', espesorBruto: '', espesorNeto: '', vArc: '', porosity: '', sw: '', dens: '', resis: '', perm: '', length: layerData.length + 1}])
   }
 
   addNewRowMudLoss() {
@@ -262,7 +266,7 @@ let mudLossColumns = [
     })
 */
     return (
-      <div style={{marginBot: '20px'}}> 
+      <div className='layer-table' style={{marginBot: '20px'}}> 
         <div className='header'>
           PROPIEDADES PROMEDIO
         </div>
@@ -305,9 +309,9 @@ let mudLossColumns = [
 */
 
     return (
-      <div style={{marginBot: '20px'}}> 
+      <div className="mud-loss-table" style={{marginBot: '20px'}}> 
         <div className='header'>
-          ZONA DE PERDIDA
+          ZONA DE PÉRDIDA
         </div>
         <div className='table'>
 
@@ -348,7 +352,7 @@ let mudLossColumns = [
     let { imgURL } = formData
 
     return (
-      <div style={{marginBot: '20px'}}>
+      <div className='img-input' style={{marginBot: '20px'}}>
         <div className='header'>
           Cargar el Archivo de Registro del Pozo
           {/*Upload Well Log File (spanish)*/}
@@ -367,6 +371,7 @@ let mudLossColumns = [
 
     return (
       <div className="form evaluacionPetrofisica">
+        <div className="image"/>
         {this.makeLayerTable()}
         {this.makeMudLossTable()}
         {this.makeImgInput()}
@@ -382,7 +387,7 @@ const validate = values => {
       errors.layerData = {message: "Esta forma no puede estar vacia"}
     }else {
       values.layerData.forEach((row, index) => {
-        let hasEmpty = Object.values(row).find((value) => { return value.toString().trim() == '' })
+        let hasEmpty = Object.values(row).find((value) => { return value === null || value.toString().trim() == '' })
         if(hasEmpty !== undefined){
             errors.layerData = {message: "Ningun campo puede estar vacio."}
         }

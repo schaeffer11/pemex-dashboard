@@ -39,6 +39,38 @@ import DatePicker from 'react-datepicker'
     );
   }
 
+  renderNumberDisable(cellInfo) {
+    let {data, setData} = this.props
+    let disabled = false
+    const { id } = cellInfo.column
+    const { sistema } = cellInfo.row
+    console.log('sistema', sistema)
+    if (sistema === 'desplazamientoN2' || sistema === 'pre-colchon') {
+      disabled = id === 'gastoLiqudo' || id === 'volLiquid' || id === 'relN2Liq'
+    } else {
+      disabled = id === 'gastoN2' || id === 'volN2'
+    }
+
+    const style = {
+      backgroundColor: '#fafafa',
+      border: disabled ? 'none' : null
+    }
+    return (
+      <input
+        type="number"
+        disabled={disabled}
+        style={style}
+        contentEditable
+        suppressContentEditableWarning
+        value={data[cellInfo.index][cellInfo.column.id]}
+        onChange={e => {
+          data[cellInfo.index][cellInfo.column.id] = e.target.value;
+          setData(data)
+        }}
+      />
+    )
+  }
+
   renderNumber(cellInfo){
     let {data, setData} = this.props
 
@@ -123,6 +155,8 @@ import DatePicker from 'react-datepicker'
         column.Cell = this.renderDate
       else if(column.cell === 'renderNumber')
         column.Cell = this.renderNumber
+      else if(column.cell === 'renderNumberDisable')
+        column.Cell = this.renderNumberDisable
       else if(column.cell === 'renderSelect')
         column.Cell = this.renderSelect
       else if(column.cell)

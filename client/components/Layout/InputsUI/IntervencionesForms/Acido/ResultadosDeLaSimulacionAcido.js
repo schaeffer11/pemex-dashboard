@@ -105,7 +105,7 @@ import { connect } from 'react-redux'
     return (
       <div style={{marginBot: '20px'}}>
         <div className='header'>
-          Upload Evidence of Simulation (sim results) (spanish)
+          Cargar evidencia de simulacion
         </div>
         <input type='file' accept="image/*"  onChange={(e) => this.handleFileUpload(e, setEvidenceSimulationAcidoImgURL)} multiple></input>
         {imgURL ? <img className='img-preview' src={imgURL}></img> : null }

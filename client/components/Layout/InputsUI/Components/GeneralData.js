@@ -131,10 +131,10 @@ import Loading from '../../Common/Loading'
       >
       <div className="modalTest" >
         <div className="modal-title">
-          Load Data 
+          Menu de descarga
         </div>
         <div className="modal-info"> 
-          Please select which save you would like to load
+          Seleccione borrador para descargar
         </div>
         <div className="modal-body">
             {saveOptions.map(i => {
@@ -144,7 +144,7 @@ import Loading from '../../Common/Loading'
                 )
             })}
         </div> 
-        <button className="submit submit-load" onClick={this.handleLoad} >Cargar borrdador</button>
+        <button className="submit submit-load" onClick={this.handleLoad}>Descargar borrador</button>
       </div>
       </AriaModal>
     )
@@ -166,15 +166,15 @@ import Loading from '../../Common/Loading'
     let { objetivo, alcances, tipoDeIntervenciones } = interventionFormData
 
     let tipoDeIntervencionesOptions = [
-      {label: 'Tratamiento de Estimulacion', value: 'estimulacion'},
-      {label: 'Fracuramiento Acido', value: 'acido'},
+      {label: 'Tratamiento de Estimulación', value: 'estimulacion'},
+      {label: 'Fracturamiento Ácido', value: 'acido'},
       {label: 'Fracturamiento Apuntalado', value: 'apuntalado'},
     ]
 
         return (
           <div className='intervention-form'>
             <div className='header'>
-              Intervention Data
+              Intervención
             </div>
             <TextAreaUnitless header="Objetivo - Describir el objetivo de la intervención indicando la causa principal, tipo de tratamiento a aplicar y técnica de colocación de los sistemas." name='objetivo' className={'objetivo'} value={objetivo} onChange={setObjetivo} errors={this.state.errors} />
             <TextAreaUnitless header="Alcances - Describir los alcances que se pretenden obtener con la intervención programada a ejecutar." name='alcances' className={'alcances'} value={alcances} onChange={setAlcances} errors={this.state.errors}/>
@@ -304,14 +304,13 @@ import Loading from '../../Common/Loading'
     return (
       <div className='general-form'>
         <div className='header'>
-          General Data
+          Pozo
         </div>
         <InputRowSelectUnitless header='Subdirección' name="subdireccion" value={subdireccion} options={subdireccionOptions} callback={this.handleSelectSubdireccion} onBlur={this.validate} errors={this.state.errors} />
         <InputRowSelectUnitless header='Activo' name="activo" value={activo} options={activoOptions} callback={this.handleSelectActivo} onBlur={this.validate} errors={this.state.errors} />
         <InputRowSelectUnitless header="Campo" name="campo" value={campo} options={fieldOptions} callback={this.handleSelectField} onBlur={this.validate} name='campo' errors={this.state.errors} />
         <InputRowSelectUnitless header="Pozo" name="pozo" value={pozo} options={wellOptions} callback={(e) => setPozo(e.value)} onBlur={this.validate} name='pozo' errors={this.state.errors} />
         <InputRowSelectUnitless header="Formación" value={formacion} options={formacionOptions} callback={(e) => setFormacion(e.value)} onBlur={this.validate} name='formacion' errors={this.state.errors} />
-        <div style={{color: 'red'}}>TODO: agregar logica para subir resultados (add logic for upload results)</div>
       </div>
 
     )
@@ -409,7 +408,7 @@ import Loading from '../../Common/Loading'
       <div className='form general-data'>
         { this.makeGeneralForm() }
         { this.makeGeneralInterventionForm() }
-        <button className="submit submit-load" onClick={this.activateModal}> Cargar borrdador</button>
+        <button className="submit submit-load" onClick={this.activateModal}> Descargar borrador</button>
         <button className='submit submit-continue' disabled={this.checkIncomplete()} onClick={(e) => setShowForms(true)} >Siguiente</button>
         <button className="submit download-template" onClick={this.downloadMasterTemplate}>{'Descarga el Formato General'}</button>
         <Notification />

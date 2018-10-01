@@ -152,6 +152,7 @@ let columns = [
 */
     return (
       <div className='historico-presion-campo' >
+        <div className='image'/>
         <div className='presion-table'>
           <div className='table-select'>
             <InputTable
@@ -173,7 +174,7 @@ let columns = [
           <button className='new-row-button' onClick={this.addNewRow}>Añadir un renglón</button>
         </div>
         <div className='depth'>
-          <InputRow header="Pressure Depth" name='pressureDepthCampo' value={pressureDepthCampo} onChange={setPressureDepthCampo} unit={'md'} onBlur={this.validate} errors={this.state.errors} />
+          <InputRow header="Profundidad" name='pressureDepthCampo' value={pressureDepthCampo} onChange={setPressureDepthCampo} unit={'md'} onBlur={this.validate} errors={this.state.errors} />
         </div>
       </div>
     )

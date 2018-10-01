@@ -28,12 +28,12 @@ import { setShowForms } from '../../../../../redux/actions/global'
     this.estimacionCostos = React.createRef();
 
     this.forms = [
-      {'title' : 'Propuesta de Fracturamiento Acido', 'content': <PropuestaDeAcido ref={Ref =>this.propuestaDeAcido =Ref } /> },  
+      {'title' : 'Propuesta de Fracturamiento Ácido', 'content': <PropuestaDeAcido ref={Ref =>this.propuestaDeAcido =Ref } /> },  
       {'title' : 'Pruebas de Laboratorio', 'content': <PruebasDeLaboratorio ref={Ref =>this.pruebasDeLaboratorio =Ref }/> },
-      {'title' : 'Pruebas de Laboratorio de Fracturamiento Acido', 'content': <PruebasDeLaboratorioExtra ref={Ref =>this.pruebasDeLaboratorioExtra =Ref }/> },
-      {'title' : 'Resultados de la Simulacion de Fracturamiento Acido', 'content': <ResultadosDeLaSimulacionAcido ref={Ref =>this.resultadosDeLaSimulacionAcido =Ref }/> },
-      {'title' : 'Estimacion del Incremento de Produccion', 'content': <EstimacionIncProduccionAcido ref={Ref =>this.estimacionIncProduccionAcido =Ref }/> },
-      {'title' : 'Estimacion de Costos de Fracturamiento Acido', 'content': <EstimacionCostos ref={Ref =>this.estimacionCostos =Ref }/> }
+      {'title' : 'Pruebas de Laboratorio de Fracturamiento Ácido', 'content': <PruebasDeLaboratorioExtra ref={Ref =>this.pruebasDeLaboratorioExtra =Ref }/> },
+      {'title' : 'Resultados de la Simulación de Fracturamiento Ácido', 'content': <ResultadosDeLaSimulacionAcido ref={Ref =>this.resultadosDeLaSimulacionAcido =Ref }/> },
+      {'title' : 'Estimación del Incremento de Producción', 'content': <EstimacionIncProduccionAcido ref={Ref =>this.estimacionIncProduccionAcido =Ref }/> },
+      {'title' : 'Estimación de Costos de Fracturamiento Acido', 'content': <EstimacionCostos ref={Ref =>this.estimacionCostos =Ref }/> }
     ];
 
   }

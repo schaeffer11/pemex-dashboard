@@ -18,16 +18,16 @@ export const itemOptions = [
   { label: 'Costo de divergentes', value: 'Costo de divergentes' },
   { label: <div>Costo de N<sub>2</sub></div>, value: 'Costo de N2' },
   { label: 'Costo de HCl', value: 'Costo de HCl' },
-  { label: 'Costo Unidades de alta presion', value: 'Costo Unidades de alta presion' },
+  { label: 'Costo Unidades de alta presión', value: 'Costo Unidades de alta presión' },
   { label: 'Costo del gel de fractura', value: 'Costo del gel de fractura' },
   { label: 'Costo de sistemas acidos retardados', value: 'Costo de sistemas acidos retardados' },
   { label: 'Costo equipo de fracturamiento de pozos', value: 'Costo equipo de fracturamiento de pozos' },
   { label: 'Costo gel lineal', value: 'Costo gel lineal' },
   { label: 'Costo de trabajos de bombeo diversos', value: 'Costo de trabajos de bombeo diversos' },
-  { label: 'Costos de llenado de pozo y prueba de admision', value: 'Costos de llenado de pozo y prueba de admision' },
+  { label: 'Costos de llenado de pozo y prueba de admisión', value: 'Costos de llenado de pozo y prueba de admisión' },
   { label: 'Costo del Minifrac', value: 'Costo del Minifrac' },
   { label: 'Costo de Bache neutralizador', value: 'Costo de Bache neutralizador' },
-  { label: 'Protector de arbol', value: 'Protector de arbol' },
+  { label: 'Protector de árbol', value: 'Protector de árbol' },
   { label: 'Costo del apuntalante', value: 'Costo del apuntalante' }
 ]
 
@@ -189,6 +189,7 @@ const companyOptions = [
         Cell: row => {
                  return (<div>
                   <Select 
+                  placeholder='Seleccionar...'
                   className='input' 
                   simpleValue={true} 
                   options={itemOptions} 
@@ -217,13 +218,13 @@ const companyOptions = [
         maxWidth: 180,
         resizable: false
       }, { 
-      Header: <div>Conversion<br></br>(MXN to DLS)</div>,
+      Header: <div>Paridad<br></br>(MXN a DLS)</div>,
         accessor: 'MNXtoDLS',
         cell: 'renderNumber',
         maxWidth: 180,
         resizable: false
       }, { 
-        Header: 'Compania',
+        Header: 'Compañia',
         accessor: 'compania',
         width: 300,
         resizable: false,
@@ -231,6 +232,7 @@ const companyOptions = [
         Cell: row => {
                  return (<div>
                   <Select 
+                  placeholder="Seleccionar..."
                   className='input' 
                   simpleValue={true} 
                   options={companyOptions} 
@@ -248,7 +250,7 @@ const companyOptions = [
     return (
       <div className='costs-form' >
         <div className='header'>
-          Cost Table
+          Tabla de Costos
         </div>
         <div className='table-select'>
           <InputTable
@@ -297,9 +299,9 @@ const companyOptions = [
 
 
           <div className='kpis'>
-            <div className='mnx'><div className='values'>${mnxSum}</div><br/>Cost in MXN</div>
-            <div className='usd'><div className='values'>${dlsSum} (${convertedDLSSum} MXN)</div><br/>Cost in USD</div>
-            <div className='sum'><div className='values'>${mnxSum + (convertedDLSSum)} MXN</div><br/>Total Cost</div>
+            <div className='mnx'><div className='values'>${mnxSum}</div><br/>Costo en MXN</div>
+            <div className='usd'><div className='values'>${dlsSum} (${convertedDLSSum} MXN)</div><br/>Costo en USD</div>
+            <div className='sum'><div className='values'>${mnxSum + (convertedDLSSum)} MXN</div><br/>Costo Total</div>
           </div>
       </div>
     )
