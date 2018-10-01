@@ -161,9 +161,6 @@ import { connect } from 'react-redux'
             { this.makeObservacionesForm() }
             { this.makeImageInput() }
           </div>
-          
-          <div style={{color: 'red'}}>TODO: agregar opcion para subir evidencia de aumento de estimado (add evidence of estimation of increase) (csv/image)</div>
-
       </div>
     )
   }
