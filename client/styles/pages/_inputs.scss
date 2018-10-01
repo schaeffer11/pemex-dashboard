@@ -280,8 +280,23 @@
 		display: grid;
 		grid-template-columns: 25% 25% 50%;
 		grid-column-gap: 10px;
-		grid-template-areas: "pozo formacion intervenciones";
+		grid-template-areas: 
+		"image image image"
+		"pozo formacion intervenciones";
 		
+		.image {
+			grid-area: image;
+			z-index: 1;
+			background-image: url('/images/fichaTecnicaDelPozoBanner.png');
+			background-size: cover;
+			min-height: 340px;
+			border-radius: 10px;
+			background-repeat: no-repeat;
+			position: relative;
+			margin-bottom: 20px;
+
+		}
+
 		.formacion-form {
 			grid-area: formacion;
 		}
@@ -294,17 +309,31 @@
 			grid-area: intervenciones;
 		}
 
-		.geomecanica-form {
-			grid-area: geomecanica;
-		}
+
 	}
 
 	.tecnica-del-campo {
 		display: grid;
 		grid-template-columns: 33% 33% 33%;
 		grid-column-gap: 10px;
-		grid-template-areas: 	"left middle right";
+
+		grid-template-areas: 	
+		"image image image"
+		"left middle right";
 		
+		.image {
+			grid-area: image;
+			z-index: 1;
+			background-image: url('/images/fichaTecnicaDelCampoBanner.jpg');
+			background-size: cover;
+			min-height: 340px;
+			border-radius: 10px;
+			background-repeat: no-repeat;
+			position: relative;
+			margin-bottom: 20px;
+
+		}
+
 		.left {
 			grid-area: left;			
 		}
@@ -314,6 +343,8 @@
 		}
 		.right {
 			grid-area: right;
+
+
 		}
 		
 		.generales-form {
@@ -341,9 +372,22 @@
 
 	.sistemas-artificiales-de-produccion {
 		display: grid;
-		grid-template-columns: 33% 33%;
+		grid-template-columns: 33% 66%;
 		grid-column-gap: 10px;
 		grid-template-areas: 'left right';
+
+		.image {
+			grid-area: image;
+			z-index: 1;
+			background-image: url('/images/sistemasBanner.png');
+			background-size: cover;
+			min-height: 800px;
+			border-radius: 10px;
+			background-repeat: no-repeat;
+			position: relative;
+			margin-bottom: 20px;
+
+		}
 
 		.left {
 			grid-area: left;
@@ -355,14 +399,62 @@
 	}
 
 	.evaluacionPetrofisica {
+		display: grid;
+		grid-template-columns: 100%;
+		grid-column-gap: 10px;
+		grid-template-areas: 
+		"image"
+		"layer"
+		"mud-loss"
+		"image-input";
 
+		.image {
+			grid-area: image;
+			z-index: 1;
+			background-image: url('/images/evaluacionPetrofisicaBanner.png');
+			background-size: cover;
+			min-height: 340px;
+			border-radius: 10px;
+			background-repeat: no-repeat;
+			position: relative;
+			margin-bottom: 20px;
 
+		}
+
+		.layer-table {
+			grid-area: layer;
+		}
+
+		.mud-loss-table {
+			grid-area: mud-loss;
+		}
+
+		.img-input {
+			grid-area: image-input;
+		}
 	}
+
+
 	.mecanico-y-aparejo {
 		display: grid;
 		grid-template-columns: 50% 50%;
 		grid-column-gap: 10px;
-		grid-template-areas: 'left right';
+
+		grid-template-areas: 
+		'image image'
+		'left right';
+
+		.image {
+			grid-area: image;
+			z-index: 1;
+			background-image: url('/images/mecanicoBanner.png');
+			background-size: cover;
+			min-height: 340px;
+			border-radius: 10px;
+			background-repeat: no-repeat;
+			position: relative;
+			margin-bottom: 20px;
+		}
 
         .left {
         	grid-area: left;
@@ -380,7 +472,6 @@
 		grid-column-gap: 10px;
 		grid-template-areas: 'prod';
 
-
 		.historico-produccion {
 			grid-area: prod;
 		}
@@ -390,7 +481,20 @@
 		display: grid;
 		grid-template-columns: 50% 50%;
 		grid-column-gap: 10px;
-		grid-template-areas: 'presion depth';
+		grid-template-areas: 	'presion image'
+								'depth image';
+
+		.image {
+			grid-area: image;
+			z-index: 1;
+			background-image: url('/images/pressionBanner.png');
+			background-size: cover;
+			min-height: 800px;
+			border-radius: 10px;
+			background-repeat: no-repeat;
+			position: relative;
+			margin-bottom: 20px;
+		}
 
 		presion-table {
 			grid-area: presion;
@@ -401,7 +505,21 @@
 		display: grid;
 		grid-template-columns: 50% 50%;
 		grid-column-gap: 10px;
-		grid-template-areas: 'presion depth';
+		grid-template-areas: 'presion image' 
+							'depth image';
+
+
+		.image {
+			grid-area: image;
+			z-index: 1;
+			background-image: url('/images/pressionBanner.png');
+			background-size: cover;
+			min-height: 800px;
+			border-radius: 10px;
+			background-repeat: no-repeat;
+			position: relative;
+			margin-bottom: 20px;
+		}
 
 		presion-table {
 			grid-area: presion;
@@ -415,8 +533,21 @@
 		grid-template-rows: 675px auto;
 		grid-template-columns: 50% 50%;
 		grid-column-gap: 10px;
-		grid-template-areas: 	'left .'
+		grid-template-areas: 	'left right'
 								'left right';
+
+		.image {
+			grid-area: image;
+			z-index: 1;
+			background-image: url('/images/aguaBanner.png');
+			background-size: cover;
+			min-height: 800px;
+			border-radius: 10px;
+			background-repeat: no-repeat;
+			position: relative;
+			margin-bottom: 20px;
+
+		}
 
 		.left {
 			grid-area: left;

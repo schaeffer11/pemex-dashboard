@@ -150,7 +150,9 @@ let columns = [
      const objectTemplate = {fecha: null, Pws: '', Pwf: ''}
 
     return (
+
       <div className='historico-presion-pozo' >
+        <div className='image'/>
         <div className='presion-table'>
           <div className='table-select'>
             <InputTable

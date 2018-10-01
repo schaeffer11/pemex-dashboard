@@ -149,6 +149,7 @@ const yesOrNoOptions = [{
         { waterAnalysisBool === true ? this.makeValoresForm() : null }
         </div>
         <div className='right'>
+          <div className="image"/>
           <AnalisisDelAguaGraph />
         </div>
       </div>

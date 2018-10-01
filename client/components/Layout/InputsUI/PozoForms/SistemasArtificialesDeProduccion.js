@@ -269,9 +269,10 @@ import { setSistemasArtificialesImgURL, setTipoDeSistemo, setPresionDeCabeza, se
             <InputRowSelectUnitless header='Tipo de sistema' name='tipoDeSistemo' value={tipoDeSistemo} options={options} callback={this.handleSelectSistema} onBlur={this.validate} errors={this.state.errors} />
           </div>
           { forms[tipoDeSistemo]}
+          { this.makeImgInput() }
           </div>
         <div className='right'>
-          { this.makeImgInput() }
+          <div className='image'/>
         </div>
       </div>
     )

@@ -152,6 +152,7 @@ let columns = [
 */
     return (
       <div className='historico-presion-campo' >
+        <div className='image'/>
         <div className='presion-table'>
           <div className='table-select'>
             <InputTable
@@ -172,6 +173,8 @@ let columns = [
         <div className='depth'>
           <InputRow header="Profundidad" name='pressureDepthCampo' value={pressureDepthCampo} onChange={setPressureDepthCampo} unit={'md'} />
         </div>
+
+
         { this.state.errors.presionDataCampo && this.state.errors.presionDataCampo.checked &&
           <div className="error">{this.state.errors.presionDataCampo.message}</div>
         }

@@ -280,9 +280,10 @@ let columns = [
 
     return (
       <div className="form tecnica-del-pozo">
-        { this.makePozoForm() }
-        { this.makeFormacionForm() }
-        { this.makeHistoricalInterventionsInput() }
+          <div className="image"/>
+          { this.makePozoForm() }
+          { this.makeFormacionForm() }
+          { this.makeHistoricalInterventionsInput() }
       </div>
     )
   }

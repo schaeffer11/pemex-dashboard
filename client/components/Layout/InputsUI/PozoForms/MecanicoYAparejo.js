@@ -210,13 +210,13 @@ let tratamientoPorOptions = [
 
     return (
       <div className="form mecanico-y-aparejo">
+        <div className='image'/>
         <div className='left'>
           { this.makeTerminacionForm() }
         </div>
         <div className='right'>
           { this.makeCapacidadForm() }
           { this.makeBoreDiagramInput() }
-          {/* { this.makeAparejoDeProduccionInput() } */}
         </div>
       </div>
     )

@@ -210,6 +210,7 @@ let litologiaOptions = [
 
     return (
       <div className="form tecnica-del-campo">
+        <div className="image"/>
         <div className="left">
           { this.makeGeneralesForm() }
           { this.makeExplotacionForm() }
