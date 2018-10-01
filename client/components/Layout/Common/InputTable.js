@@ -3,6 +3,7 @@ import ReactTable from 'react-table'
 import autobind from 'autobind-decorator'
 import moment from 'moment'
 import DatePicker from 'react-datepicker'
+import MaskedTextInput from "react-text-mask";
 
 /*
  * Wrapper Component for ReactTable with reusable editable cells.
@@ -102,11 +103,16 @@ import DatePicker from 'react-datepicker'
     const date = data[cellInfo.index][cellInfo.column.id]
     const val = date ? moment(date) : null;
     return (
-      <DatePicker
+      <DatePicker 
+        customInput={
+              <MaskedTextInput
+                  type="text"
+                  mask={[/\d/, /\d/, "/", /\d/, /\d/, "/", /\d/, /\d/, /\d/, /\d/]}
+              />
+        }
         isClearable={true}
         locale="es-mx"
         dateFormat="L"
-        onKeyDown={(e) => {e.preventDefault(); return false; }} //Disable input from user
         onChange={ e => {
           if(e){
             data[cellInfo.index][cellInfo.column.id] = e.format('YYYY-MM-DD');
