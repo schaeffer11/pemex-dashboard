@@ -1,89 +1,48 @@
 .home {
 	height: 100%;
 	width: 100%;
+	min-height: 800px;
 
-	.title {
-		position: absolute;
-		top: 90px;
-		left: 20px;
-		text-align: center;
-		color: white;
-                z-index: 2;
 
-		.head {
-			font-weight: bold;
-			font-size: 25px;
-		}
-
-		.sub-text {
-			font-weight: normal;
-			color: #F0F0F0;
-			font-size: 20px;
-		}
-	}
 	.backdrop {
+
 		height: 100%;
 		width: 100%;
 		display: grid;
-		grid-template-rows: 64% 36% 0%;
+		grid-template-rows: 64fr 36fr 50px;
 		grid-template-areas: 	'background'
 								'text'
 								'footer';
+
+		.head {
+			z-index: 2;
+			color: #F0F0F0;
+			font-weight: bold;
+			font-size: 25px;
+			padding-left: 60px;
+			margin-top: 40px;
+		}
+
+		.sub-text {
+			width: 300px;
+			z-index: 2;
+			font-weight: normal;
+			color: #F0F0F0;
+			font-size: 20px;
+			margin-left: 85px;
+			text-align: center;
+		}
+
+
 		.background-image {
 			grid-area: background;
-			background-image: url('/images/plataforma2.jpg');
+			z-index: 1;
+			background-image: url('/images/homepageBanner.jpg');
 			background-size: cover;
 			min-height: 480px;
 			background-repeat: no-repeat;
 			position: relative;
 
-			.buttons {
-				position: relative;
-				z-index: 2;
-				width: 80%;
-				left: calc(10% - 30px);
-				display: grid;
-				grid-template-columns: 25% 25% 25% 25%;
-				grid-column-gap: 20px;
-				bottom: 0;
-                                position: absolute;
-                                margin-bottom: -80px;
-
-				.link-button {
-                                        margin:auto;
-					display: grid;
-					grid-template-rows: 55% 45%;
-					grid-template-areas: 	'.'
-											'button';
-					height: 200px;
-                                        width: 220px;
-					text-align: center;
-					background: white;
-					box-shadow: 0 8px 11px 0 rgba(0,0,0,0.24), 0 14px 40px 0 rgba(0,0,0,0.19);
-
-					.link {
-						grid-area: button;
-						margin: 13px;
-                                                padding: 9px 20px;
-						border-radius: 5px;
-						font-size: 15px;
-						color: white;
-						background: $primary-green;
-						text-transform: uppercase;
-						z-index: 1;
-
-						&:hover {
-							background: $active-green	
-						}
-					}
-				}
-
-				.img {
-                                        margin: auto;
-                                        padding: 10px;
-					position: relative;
-				}
-			}
 		}
 
 		.text {
@@ -93,9 +52,58 @@
 			font-weight: bold;
 			text-align: center;
 
+
+			.buttons {
+				position: relative;
+				z-index: 2;
+				width: 80%;
+				left: calc(10% - 30px);
+				display: grid;
+				grid-template-columns: 25% 25% 25% 25%;
+				grid-column-gap: 20px;
+				padding-top: 30px;
+
+
+				.link-button {
+                    margin:auto;
+					display: grid;
+					grid-template-rows: 55% 45%;
+					grid-template-areas: 	'.'
+											'button';
+					height: 200px;
+                    width: 220px;
+					text-align: center;
+
+
+					.link {
+						grid-area: button;
+						margin: 13px;
+                       	padding: 9px 20px;
+						font-size: 15px;
+						color: black;
+						text-transform: uppercase;
+						z-index: 1;
+						box-sizing: border-box;
+						border-bottom: solid 2px transparent;
+
+						&:hover {
+							border-bottom: solid 2px $active-green;
+							text-decoration: none;
+						}
+					}
+				}
+
+				.img {
+                   margin: auto;
+                   width: 80px;
+
+
+				}
+			}
+
+
 			.text-inner {
 				position: relative;
-				top: 55%;
 			}
 		}
 
@@ -104,22 +112,18 @@
 			background: $primary-green;
                         font-weight: 100;
                         color: #fff;
-                        padding: 10px;
-    position: absolute;
-    bottom: 0;
-    width: 100%;
+
 
                         .left {
                           float: left;
+                          padding-left: 10px;
+                          line-height: 50px;
                         }
                         .right {
                           float: right;
+                          padding-right: 10px;
                         }
 		}
 	}
 
-	.buttons {
-		position: absolute;
-		z-index: 2;
-	}
 }

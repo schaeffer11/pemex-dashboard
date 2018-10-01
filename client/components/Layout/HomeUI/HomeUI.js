@@ -2,15 +2,22 @@ import React, { Component } from 'react'
 import autobind from 'autobind-decorator'
 import { Link, Redirect } from 'react-router-dom'
 
-const LinkButton = ({ text, disabled , src, to}) => {
+const LinkButton = ({ text, disabled , height, src, to}) => {
   console.log(text)
 
     let className='link'
 
+    let style = height ? {
+      height: height
+    } : {
+      height: '80px'
+    }
+
+
     disabled ? className += ' disabled' : null
     return (
     <div className='link-button'>
-    <img className='img' src={src}></img>
+    <img className='img' style={style} src={src}></img>
     <Link to={to} className={className}>
         {text}
       </Link>
@@ -47,27 +54,25 @@ const LinkButton = ({ text, disabled , src, to}) => {
     return (
       <div className="home">
         <div className='title'>
-          <div className='head'>
-            Pemex Exploracion y Produccion
-          </div>
-          <div className='sub-text'>
-            Subdirección de Especialidad<br></br>
-            Técnica de Explotación
-          </div>
         </div>
         <div className="backdrop">
           <div className="background-image">
-
-
-          <div className="buttons">
-            <LinkButton to="/inputs" text={'inserción de datos'} src={'./images/input.png'}/>
-            <LinkButton to="/" text={'tablero de control'} src={'./images/analysis.png'} disabled={true}/>
-            <LinkButton to="/" text={'diagnóstico de productividad'} src={'./images/diagnostics.png'} disabled={true}/>
-            <LinkButton to="/" text={'seguimiento de compromisos'} src={'./images/checklist.png'} disabled={true}/>
-          </div>
+            <div className='head'>
+              Pemex Exploracion y Produccion
+            </div>
+            <div className='sub-text'>
+              Subdirección de Especialidad<br></br>
+              Técnica de Explotación
+            </div>
 
           </div>
           <div className="text">
+            <div className="buttons">
+              <LinkButton to="/inputs" text={'inserción de datos'} src={'./images/inputNew.png'}/>
+              <LinkButton to="/" text={'tablero de control'} src={'./images/analysisNew.png'} disabled={true}/>
+              <LinkButton to="/" text={'diagnóstico de productividad'} src={'./images/diagnosticsNew.png'} disabled={true}/>
+              <LinkButton to="/" text={'seguimiento de compromisos'} src={'./images/checklistNew.png'} disabled={true}/>
+            </div>
             <div className="text-inner">
               Homologación de Procesos de Estimulación y Fracturamiento
             </div>

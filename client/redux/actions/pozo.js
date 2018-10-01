@@ -206,10 +206,8 @@ export const setHistoricoDeAforos = value => ({ type: 'set_historicoDeAforos', v
     
 
 
-
-
-
 //AnalisisDelAgua
+export const setWaterAnalysisBool = value => ({ type: 'set_waterAnalysisBool', value})
 export const setPH = value => ({ type: 'set_pH', value})
 export const setTemperaturaDeConductividad = value => ({ type: 'set_temperaturaDeConductividad', value})
 export const setResistividad = value => ({ type: 'set_resistividad', value})
