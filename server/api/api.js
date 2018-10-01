@@ -1440,6 +1440,11 @@ app.get('/getLabTest', async (req, res) => {
         }
       }
     })
+
+    if (outData.length === 0) {
+      outData = [{}]
+    }
+    
     let finalObj = {
       pruebasDeLaboratorio: {
         pruebasDeLaboratorioData: outData
