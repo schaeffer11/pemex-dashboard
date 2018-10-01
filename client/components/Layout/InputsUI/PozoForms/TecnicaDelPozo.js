@@ -115,9 +115,8 @@ let columns = [
     return (
       <div className='formacion-form' >
         <div className='header'>
-          Los Datos de Formación
+          Datos de Formación
         </div>
-        <InputRow header="Espesor bruto" name='espesorBruto' value={espesorBruto} onChange={setEspesorBruto} unit='m' onBlur={this.validate} errors={this.state.errors} /> 
         <InputRow header="Caliza" name='caliza' value={caliza} onChange={setCaliza} unit='%' onBlur={this.validate} errors={this.state.errors} />
         <InputRow header="Dolomia" name='dolomia' value={dolomia} onChange={setDolomia} unit='%' onBlur={this.validate} errors={this.state.errors} />
         <InputRow header="Arcilla" name='arcilla' value={arcilla} onChange={setArcilla} unit='%' onBlur={this.validate} errors={this.state.errors} />
@@ -170,7 +169,7 @@ let columns = [
     return (
       <div className='pozo-form' >
         <div className='header'>
-          Los Datos de Pozo
+          Datos de Pozo
         </div>
           <InputRowSelectUnitless header="Tipo de pozo" value={tipoDePozo} callback={(e) => setTipoDePozo(e.value)}  name='tipoDePozo' options={wellOptions} onBlur={this.validate} errors={this.state.errors} />
           <InputRow header="Pws" name='pws' value={pws} onChange={setPws} unit={<div>Kg/cm<sup>2</sup></div>} onBlur={this.validate} errors={this.state.errors} />
@@ -178,7 +177,7 @@ let columns = [
           <InputRow header="Pwf" name='pwf' value={pwf} onChange={setPwf} unit={<div>Kg/cm<sup>2</sup></div>} onBlur={this.validate} errors={this.state.errors} />
           <InputDate header="Pwf (fecha)" name='pwfFecha' value={pwfFecha} onChange={setPwfFecha} onBlur={this.validate} errors={this.state.errors} />
           <InputRow header="Δp/mes" name='deltaPPerMes' value={deltaPPerMes} onChange={setDeltaPPerMes} unit={<div>Kg/cm<sup>2</sup>/mes</div>} onBlur={this.validate} errors={this.state.errors} />
-          <InputRow header="Tyac" name='tyac' value={tyac} onChange={setTyac} unit='°C' onBlur={this.validate} errors={this.state.errors} />
+          <InputRow header={<span>T<sub>yac</sub></span>} name='tyac' value={tyac} onChange={setTyac} unit='°C' onBlur={this.validate} errors={this.state.errors} />
           <InputRowSelectUnitless header="PVT" name='pvt' value={pvt} callback={(e) => setPvt(e.value)} options={pvtOptions} onBlur={this.validate} errors={this.state.errors} />
           <InputRow header="Aparejo de producción" value={aparejoDeProduccion} onChange={setAparejoDeProduccion} name='aparejoDeProduccion' unit='pg' onBlur={this.validate} errors={this.state.errors} />
           <InputRow header="Prof. empacador" name='profEmpacador' value={profEmpacador} onChange={setProfEmpacador} unit='md' onBlur={this.validate} errors={this.state.errors} />

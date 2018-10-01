@@ -643,7 +643,7 @@ const grabadoOptions = [
     return (
       <div style={{marginBot: '20px'}}>
         <div className='header'>
-          Upload Lab Evidence (spanish)
+          Cargar evidencia del laboratorio
         </div>
         <input type='file' name='imgURL' accept="image/*" onChange={(e) => this.handleFileUpload(e, this.updateValue)} index={index}></input>
         {imgURL ? <img className='img-preview' src={imgURL}></img> : null }

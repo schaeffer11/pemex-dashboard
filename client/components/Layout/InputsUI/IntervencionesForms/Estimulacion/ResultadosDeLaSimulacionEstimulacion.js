@@ -115,7 +115,7 @@ containsErrors(){
     return (
       <div style={{marginBot: '20px'}}>
         <div className='header'>
-          Upload Evidence of Simulation (sim results) (spanish)
+          Cargar evidencia del laboratorio
         </div>
         <input type='file' accept="image/*"  onChange={(e) => this.handleFileUpload(e, setEvidenceSimulationImgURL)} multiple></input>
         {imgURL ? <img className='img-preview' src={imgURL}></img> : null }
@@ -138,7 +138,7 @@ containsErrors(){
     return (
       <div className="form resultados-de-simulacion">
         <div className='left'>
-          { tipoDeEstimulacion === 'matricial' ? this.makeMatricialForm() : <div>No simulation results needed, since limpieza</div> }
+          { tipoDeEstimulacion === 'matricial' ? this.makeMatricialForm() : <div>Simulación no es requerida para limpiezas</div> }
         </div>
         <div className='right'>
           { tipoDeEstimulacion === 'matricial' ? this.makeEvidenceSimulationInput() : null}

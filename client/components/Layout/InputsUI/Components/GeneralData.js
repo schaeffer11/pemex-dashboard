@@ -144,7 +144,7 @@ import Loading from '../../Common/Loading'
                 )
             })}
         </div> 
-        <button className="submit submit-load" onClick={this.handleLoad} >Cargar borrdador</button>
+        <button className="submit submit-load" onClick={this.handleLoad}>Descargar borrador</button>
       </div>
       </AriaModal>
     )
@@ -409,7 +409,7 @@ import Loading from '../../Common/Loading'
       <div className='form general-data'>
         { this.makeGeneralForm() }
         { this.makeGeneralInterventionForm() }
-        <button className="submit submit-load" onClick={this.activateModal}> Cargar borrdador</button>
+        <button className="submit submit-load" onClick={this.activateModal}> Descargar borrador</button>
         <button className='submit submit-continue' disabled={this.checkIncomplete()} onClick={(e) => setShowForms(true)} >Siguiente</button>
         <button className="submit download-template" onClick={this.downloadMasterTemplate}>{'Descarga el Formato General'}</button>
         <Notification />

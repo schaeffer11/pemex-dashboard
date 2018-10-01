@@ -19,7 +19,7 @@ let layerColumns = [
       }
     }
   }, {
-    Header: 'Interval',
+    Header: 'Intervalo',
     accessor: 'interval',
   }, { 
     Header: <div>Cima<br></br>(md)</div>,

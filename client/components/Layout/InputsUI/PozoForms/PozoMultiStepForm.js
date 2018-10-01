@@ -665,15 +665,15 @@ import { setFichaTecnicaDelCampo, setFichaTecnicaDelPozo, setEvaluacionPetrofisi
       >
       <div className="modalTest" >
         <div className="modal-title">
-          Load Data from database 
         </div>
-        <div className="modal-info"> 
-          Please select which well you would like to load data from
+        <div className="modal-info">
+          Seleccione un pozo para descargar su información
+          {/* Please select which well you would like to load data from */}
 
 
           <InputRowSelectUnitless header="Campo" name="campo" value={selectedField} options={fieldOptions} callback={this.handleSelectField} name='campo' />
           <InputRowSelectUnitless header="Pozo" name="pozo" value={selectedWell} options={wellOptions} callback={this.handleSelectWell} name='pozo' />
-          <button className="submit submit-load-options" disabled={!selectedField || !selectedWell} onClick={this.fetchLoadFromDatabaseOptions}>Show Options</button>
+          <button className="submit submit-load-options" disabled={!selectedField || !selectedWell} onClick={this.fetchLoadFromDatabaseOptions}>Mostrar opciones</button>
 
         </div>
         <div className="modal-body">
@@ -684,17 +684,13 @@ import { setFichaTecnicaDelCampo, setFichaTecnicaDelPozo, setEvaluacionPetrofisi
               return (
                 <div className={className} onClick={(e) => this.handleSelectTransaction(i.id)}>{i.user} {date}</div>
                 )
-            }): <div> No values in database for selected parameters </div> }
+            }): null  }
         </div> 
-        <button className="submit submit-load" disabled={!selectedTransaction} onClick={this.handleLoad} >Cargar borrdador</button>
+        <button className="submit submit-load" disabled={!selectedTransaction} onClick={this.handleLoad} >Descargar borrdador</button>
       </div>
       </AriaModal>
     )
   }
-
-
-
-
 
   render() {
     let { fieldWellOptions } = this.state
@@ -725,7 +721,7 @@ import { setFichaTecnicaDelCampo, setFichaTecnicaDelPozo, setEvaluacionPetrofisi
             { title }
             <button className="cta next" onClick={this.handleNextSubtab}>Siguiente</button>
             <button className="cta prev" onClick={this.handlePrevSubtab}>Anterior</button> 
-            <button className="cta load" onClick={this.activateModal}>Cargar última intervención</button> 
+            <button className="cta load" onClick={this.activateModal}>Descargar intervención</button> 
           </div>
 
           {this.forms[this.state.currentStep].content}

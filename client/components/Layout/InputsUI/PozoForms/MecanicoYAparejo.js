@@ -183,7 +183,7 @@ let tratamientoPorOptions = [
     return (
       <div style={{marginBot: '20px'}}>
         <div className='header'>
-          Upload Well Bore Diagram (spanish)
+          Cargar diagrama del aparejo de producción
         </div>
         <input type='file' accept="image/*" onChange={(e) => this.handleFileUpload(e, setImgBoreDiagramURL)}></input>
         { this.state.errors.imgBoreDiagramURL && this.state.errors.imgBoreDiagramURL.checked &&
@@ -216,7 +216,7 @@ let tratamientoPorOptions = [
         <div className='right'>
           { this.makeCapacidadForm() }
           { this.makeBoreDiagramInput() }
-          { this.makeAparejoDeProduccionInput() }
+          {/* { this.makeAparejoDeProduccionInput() } */}
         </div>
       </div>
     )
