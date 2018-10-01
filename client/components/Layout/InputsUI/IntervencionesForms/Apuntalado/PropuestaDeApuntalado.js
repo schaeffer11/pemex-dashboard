@@ -486,7 +486,7 @@ const validate = values => {
       errors.cedulaData = {message: "Esta forma no puede estar vacia"}
     }else {
       values.cedulaData.forEach((row, index) => {
-        let hasEmpty = Object.values(row).find((value) => { return value === null || value.toString().trim() == '' })
+        let hasEmpty = Object.values(row).find((value) => { return value == null || value == undefined || value === '' })
         if(hasEmpty !== undefined){
             errors.cedulaData = {message: "Ningun campo puede estar vacio."}
         }
