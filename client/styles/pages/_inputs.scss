@@ -711,6 +711,7 @@
 	}
 
 	.propuesta-de-acido {
+		overflow-x: auto;
 		.top {
 			display: grid;
 			grid-template-columns: 50% 50%;
@@ -820,6 +821,7 @@
 	}
 
 	.propuesta-de-apuntalado {
+		overflow-x: auto;
 		.top {
 			display: grid;
 			grid-template-columns: 50% 50%;
