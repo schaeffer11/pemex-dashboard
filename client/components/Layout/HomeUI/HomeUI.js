@@ -57,7 +57,7 @@ const LinkButton = ({ text, disabled , width, height, src, to}) => {
         <div className="backdrop">
           <div className="background-image">
             <div className='head'>
-              Pemex Exploracion y Produccion
+              Pemex Exploración y Producción
             </div>
             <div className='sub-text'>
               Subdirección de Especialidad<br></br>
@@ -74,11 +74,11 @@ const LinkButton = ({ text, disabled , width, height, src, to}) => {
             <div className="text-inner">
               Homologación de Procesos de Estimulación y Fracturamiento
               <br/>
-              Coordinación de Productividad y Pozos
+              Coordinación de Productividad de Pozos
             </div>
           </div>
           <div className="footer">
-            <span className="left">Optimizar. Estandiarizar. Sustentar. Excelencia.</span>
+            <span className="left">Optimizar. Estandarizar. Sustentar. Excelencia.</span>
             <span className="right">Gerencia de Producción <br/> Productividad de Pozos</span>
           </div>
         </div>

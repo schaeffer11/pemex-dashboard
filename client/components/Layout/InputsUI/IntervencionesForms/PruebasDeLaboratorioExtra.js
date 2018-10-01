@@ -151,14 +151,14 @@ const grabadoOptions = [
           <InputRow header="Determinación del porcentaje de sólidos" name='percentSolidos' value={pruebasDeLaboratorioData[index].percentSolidos} onChange={this.updateValue} index={index} unit='%' />
           <InputRow header="Determinación del porcentaje de asfaltenos" name='percentAsfaltenos' value={pruebasDeLaboratorioData[index].percentAsfaltenos} onChange={this.updateValue} index={index} unit='%' />
           <InputRow header="Determinación del porcentaje de parafinas" name='percentParafinas' value={pruebasDeLaboratorioData[index].percentParafinas} onChange={this.updateValue} index={index} unit='%' />
-          <InputRow header="Determinación del porcentaje de resinas asfalticas" name='percentResinasAsfalticas' value={pruebasDeLaboratorioData[index].percentResinasAsfalticas} onChange={this.updateValue} index={index} unit='%' />
+          <InputRow header="Determinación del porcentaje de resinas asfálticas" name='percentResinasAsfalticas' value={pruebasDeLaboratorioData[index].percentResinasAsfalticas} onChange={this.updateValue} index={index} unit='%' />
           <InputRow header="Determinación del porcentaje de contenido de sólidos" name='percentContenidoDeSolidos' value={pruebasDeLaboratorioData[index].percentContenidoDeSolidos} onChange={this.updateValue} index={index} unit='%' />
           <InputRow header="Densidad del aceite" name='densityAceite' value={pruebasDeLaboratorioData[index].densityAceite} onChange={this.updateValue} index={index} unit={<div>gr/cm<sup>3</sup></div>} />
           <InputRow header="Densidad del agua" name='densityAgua' value={pruebasDeLaboratorioData[index].densityAgua} onChange={this.updateValue} index={index} unit={<div>gr/cm<sup>3</sup></div>} />
           <InputRow header="Densidad de la emulsión" name='densityEmulsion' value={pruebasDeLaboratorioData[index].densityEmulsion} onChange={this.updateValue} index={index} unit={<div>gr/cm<sup>3</sup></div>} />
           <InputRow header="Viscosidad del aceite" name='viscosityAceite' value={pruebasDeLaboratorioData[index].viscosityAceite} onChange={this.updateValue} index={index} unit='cp' />
           <InputRow header="Viscosidad de la emulsión" name='viscosityEmulsion' value={pruebasDeLaboratorioData[index].viscosityEmulsion} onChange={this.updateValue} index={index} unit='cp' />
-          <InputRow header="pH del agua" name='phDelAgua' value={pruebasDeLaboratorioData[index].phDelAgua} onChange={this.updateValue} index={index} unit='adim' />
+          <InputRow header="pH del agua" name='phDelAgua' value={pruebasDeLaboratorioData[index].phDelAgua} onChange={this.updateValue} index={index} unit='' />
           <InputRow header="Salinidad del agua" name='salinidadDelAgua' value={pruebasDeLaboratorioData[index].salinidadDelAgua} onChange={this.updateValue} index={index} unit='ppm' />
           <InputRow header="Salinidad del aceite" name='salinidadDelAceite' value={pruebasDeLaboratorioData[index].salinidadDelAceite} onChange={this.updateValue} index={index} unit='ppm' />
         </div>
