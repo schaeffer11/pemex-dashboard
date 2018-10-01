@@ -2,16 +2,15 @@ import React, { Component } from 'react'
 import autobind from 'autobind-decorator'
 import { Link, Redirect } from 'react-router-dom'
 
-const LinkButton = ({ text, disabled , height, src, to}) => {
+const LinkButton = ({ text, disabled , width, height, src, to}) => {
   console.log(text)
 
     let className='link'
 
-    let style = height ? {
-      height: height
-    } : {
-      height: '80px'
-    }
+    let style = {}
+
+    height ? style.height= height : style.height = '80px'
+    width ? style.width = width : style.width = '80px'
 
 
     disabled ? className += ' disabled' : null
@@ -69,9 +68,9 @@ const LinkButton = ({ text, disabled , height, src, to}) => {
           <div className="text">
             <div className="buttons">
               <LinkButton to="/inputs" text={'inserción de datos'} src={'./images/inputNew.png'}/>
-              <LinkButton to="/" text={'tablero de control'} src={'./images/analysisNew.png'} disabled={true}/>
-              <LinkButton to="/" text={'diagnóstico de productividad'} src={'./images/diagnosticsNew.png'} disabled={true}/>
-              <LinkButton to="/" text={'seguimiento de compromisos'} src={'./images/checklistNew.png'} disabled={true}/>
+              <LinkButton to="/" text={'tablero de control'} width='85px' src={'./images/analysisNew.png'} disabled={true}/>
+              <LinkButton to="/" text={'diagnóstico de productividad'} width='105px' src={'./images/diagnosticsNew.png'} disabled={true}/>
+              <LinkButton to="/" text={'seguimiento de compromisos'} height='90px' src={'./images/checklistNew.png'} disabled={true}/>
             </div>
             <div className="text-inner">
               Homologación de Procesos de Estimulación y Fracturamiento
