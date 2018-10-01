@@ -174,6 +174,7 @@ import { connect } from 'react-redux'
             { this.makeModeladoForm() }
           </div>
           <div className='right'>
+            <div className='image'/>
             { this.makeGastoCompromisoForm() }
             { this.makeObservacionesForm() }
             { this.makeImageInput() }

@@ -269,6 +269,7 @@ const companyOptions = [
 
     return (
       <div className="form pruebas-de-laboratorio-estimulacion">
+          <div className='image'/>
           { this.makeGeneralesForm() }
           <button className='new-row-button' onClick={this.addNewRow}>Añadir un renglón</button>
       </div>
