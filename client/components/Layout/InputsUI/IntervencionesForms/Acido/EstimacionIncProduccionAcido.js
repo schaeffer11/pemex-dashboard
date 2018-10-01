@@ -141,7 +141,7 @@ import { connect } from 'react-redux'
     return (
       <div style={{marginBot: '20px'}}>
         <div className='header'>
-          Upload Est Inc Prod Acido (spanish)
+          Cargar estimación del incremento de producción
         </div>
         <input className="filestyle" data-classButton="btn btn-primary" type='file' accept="image/*" onChange={(e) => this.handleFileUpload(e, setEstIncProdAcidoImgURL)}></input>
         {imgURL ? <img className='img-preview' src={imgURL}></img> : null }

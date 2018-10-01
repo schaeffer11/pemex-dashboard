@@ -140,7 +140,7 @@ import { connect } from 'react-redux'
     return (
       <div style={{marginBot: '20px'}}>
         <div className='header'>
-          Upload Est Inc Prod Apuntalado (spanish)
+          Cargar estimación del incremento de producción
         </div>
         <input type='file' accept="image/*" onChange={(e) => this.handleFileUpload(e, setEstIncProdApuntaladoImgURL)}></input>
         {imgURL ? <img className='img-preview' src={imgURL}></img> : null }
