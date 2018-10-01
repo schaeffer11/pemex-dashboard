@@ -74,6 +74,8 @@ const LinkButton = ({ text, disabled , width, height, src, to}) => {
             </div>
             <div className="text-inner">
               Homologación de Procesos de Estimulación y Fracturamiento
+              <br/>
+              Coordinación de Productividad y Pozos
             </div>
           </div>
           <div className="footer">
