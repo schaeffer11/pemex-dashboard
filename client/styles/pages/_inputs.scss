@@ -226,7 +226,8 @@
         padding: 20px 40px;
         border: solid;
         border-width: 0px 1px 1px 1px;
-        border-color: $primary-green;   
+				border-color: $primary-green;
+				overflow-x: auto;
       }
     }
 
