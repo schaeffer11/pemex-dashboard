@@ -121,6 +121,7 @@ import { connect } from 'react-redux'
 
     return (
       <div className="form resultados-de-simulacion-apuntalado">
+        <div className='image' />
         <div className='left'>
           { this.makeResultForm() }
         </div>

@@ -479,10 +479,10 @@ import { round, calculateVolumes, getSistemaOptions } from '../helpers'
           <div className="left">
             { this.makeGeneralForm() }
             { tipoDeEstimulacion === 'limpieza' ? this.makeLimpiezaForm() : null}
+            { this.makeDetallesForm() }
           </div>
           <div className="right">
- 
-            { this.makeDetallesForm() }
+            <div className='image'/>
           </div>
         </div>
         <div className='bot'>

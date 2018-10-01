@@ -137,6 +137,7 @@ containsErrors(){
 
     return (
       <div className="form resultados-de-simulacion">
+        <div className='image' />
         <div className='left'>
           { tipoDeEstimulacion === 'matricial' ? this.makeMatricialForm() : <div>Simulación no es requerida para limpiezas</div> }
         </div>
