@@ -131,7 +131,7 @@ export const InputRowSelectUnitless = ({ header, name, value, options, callback,
       <div className='label'>
         {header}
       </div>
-      <Select placeholder="..." className='input' simpleValue={true} options={options} value={options.find(i=>i.value === value) || null} onChange={callback} onBlur={handleBlur} name={name} index={index} />
+      <Select placeholder="Seleccionar..." className='input' simpleValue={true} options={options} value={options.find(i=>i.value === value) || null} onChange={callback} onBlur={handleBlur} name={name} index={index} />
       { errorElements }
     </div>
     )

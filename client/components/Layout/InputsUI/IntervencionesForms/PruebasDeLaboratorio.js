@@ -183,6 +183,7 @@ const companyOptions = [
         Cell: row => {
                  return (<div>
                   <Select 
+                  placeholder='Seleccionar...'
                   className='input' 
                   simpleValue={true} 
                   options={options} 
@@ -213,7 +214,7 @@ const companyOptions = [
         Cell: row => {
                  return (<div>
                   <Select 
-                  placeholder='Seleccionar'
+                  placeholder='Seleccionar...'
                   className='input' 
                   simpleValue={true} 
                   options={companyOptions} 
