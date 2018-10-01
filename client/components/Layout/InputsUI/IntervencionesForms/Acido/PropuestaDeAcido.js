@@ -98,9 +98,10 @@ import { setCedulaData, setModuloYoungArena, setModuloYoungLutitas, setRelacPois
         {/* InputRowSelectUnitless header='Tipo de Fluido' name='tipoDeFluidoField' value={tipoDeFluidoField} callback={(e) => setTipoDeFluidoField(e.value)} options={fluidoOptions} onBlur={this.validate} errors={this.state.errors} */}
         <InputRowSelectUnitless
           header="Compañía"
-          name="company"
+          name="propuestaCompany"
           options={companyOptions}
           onBlur={this.validate}
+          errors={this.state.errors}
           value={propuestaCompany}
           callback={e => setPropuestaCompany(e.value)}
         />
@@ -453,6 +454,10 @@ import { setCedulaData, setModuloYoungArena, setModuloYoungLutitas, setRelacPois
 
 const validate = values => {
     const errors = {}
+
+    if(!values.propuestaCompany){
+        errors.propuestaCompany = {message: "Este campo no puede estar vacio"}
+    }
 
     if(!values.moduloYoungArena ){
        errors.moduloYoungArena = {message: "Este campo no puede estar vacio"}

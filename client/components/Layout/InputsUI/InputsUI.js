@@ -103,11 +103,8 @@ import '../../../styles/components/_query_modal.css'
   }
 
   validate(){
-    return true
-    // (
-    //   this.pozoMultiStepFormRef.current.getWrappedInstance().validate() &
-    //   this.intervencionesFormRef.current.getWrappedInstance().validate()
-    // )
+    return this.pozoMultiStepFormRef.current.getWrappedInstance().validate() &
+        this.intervencionesFormRef.current.getWrappedInstance().validate()
   }
 
   buildModal(pozoFormSubmitting) {

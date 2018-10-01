@@ -292,9 +292,9 @@ let columns = [
 const validate = values => {
     const errors = {}
 
-    // if(!values.espesorBruto ){
-    //    errors.espesorBruto = {message: "Este campo no puede estar vacio"}
-    // }
+    if(!values.espesorBruto ){
+        errors.espesorBruto = {message: "Este campo no puede estar vacio"}
+    }
 
     if(!values.caliza ){
        errors.caliza = {message: "Este campo no puede estar vacio"}
@@ -332,8 +332,16 @@ const validate = values => {
        errors.tipoDePozo = {message: "Este campo no puede estar vacio"}
     }
 
+    if(!values.pws ){
+        errors.pws = {message: "Este campo no puede estar vacio"}
+    }
+
     if(!values.pwsFecha ){
        errors.pwsFecha = {message: "Este campo no puede estar vacio"}
+    }
+
+    if(!values.pwf ){
+        errors.pwf = {message: "Este campo no puede estar vacio"}
     }
 
     if(!values.pwfFecha ){
@@ -348,9 +356,11 @@ const validate = values => {
        errors.tyac = {message: "Este campo no puede estar vacio"}
     }
 
+    /*
     if(!values.pvt ){
        errors.pvt = {message: "Este campo no puede estar vacio"}
     }
+    */
 
     if(!values.aparejoDeProduccion ){
        errors.aparejoDeProduccion = {message: "Este campo no puede estar vacio"}

@@ -578,7 +578,7 @@ import { setFichaTecnicaDelCampo, setFichaTecnicaDelPozo, setEvaluacionPetrofisi
     });
 
 
-    return allErrors.length == 0;
+    return Object.keys(allErrors).length == 0;
   }
 
   deactivateModal() {
