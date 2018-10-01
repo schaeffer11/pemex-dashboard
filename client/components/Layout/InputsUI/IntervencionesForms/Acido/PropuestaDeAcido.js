@@ -450,9 +450,10 @@ import { round, calculateVolumes, getSistemaOptions } from '../helpers'
           <div className="left">
             { this.makeGeneralForm() }
             { this.makeDetallesForm() }
+            { this.makeGeomecanicaForm() }
           </div>
           <div className="right">
-            { this.makeGeomecanicaForm() }
+            <div className='image'/>
           </div>
         </div>
         <div className='bot'>

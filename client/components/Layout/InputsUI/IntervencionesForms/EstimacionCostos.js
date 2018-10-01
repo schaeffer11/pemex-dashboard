@@ -295,6 +295,7 @@ const companyOptions = [
 
     return (
       <div className="form estimated-costs">
+          <div className='image'/>
           { this.makeCostsForm() }
 
 

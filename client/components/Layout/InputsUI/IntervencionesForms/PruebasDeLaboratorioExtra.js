@@ -678,15 +678,12 @@ const grabadoOptions = [
     )
   }
   
-
-  render() {
+  makeEverything() {
     let { pruebasDeLaboratorio } = this.props
     pruebasDeLaboratorio = pruebasDeLaboratorio.toJS()
     let { pruebasDeLaboratorioData } = pruebasDeLaboratorio
 
-
-    return pruebasDeLaboratorioData.map((form, i) =>{
-
+     return pruebasDeLaboratorioData.map((form, i) =>{
 
       let formList = {
         caracterizacionFisico: this.makeCaracterizacionFisico(i),
@@ -696,7 +693,6 @@ const grabadoOptions = [
         pruebasGelDeFractura: this.makePruebasFractura(i),
         pruebasDeGrabado: this.makeGrabadoTable(i)
       }
-
 
       return (
       <div className="form pruebas-de-laboratorio-estimulacion-extra" key={`pruebasDeEstimulacionExtra_${i}`}>
@@ -714,8 +710,16 @@ const grabadoOptions = [
           </div>
         </div>
       </div>
-      )}
-    )
+      )})
+
+  }
+
+  render() {
+    return (<div className='pruebas-de-laboratorio-extra '>
+      <div className='image'></div>
+      { this.makeEverything() }
+    </div>)
+
   }
 }
 
