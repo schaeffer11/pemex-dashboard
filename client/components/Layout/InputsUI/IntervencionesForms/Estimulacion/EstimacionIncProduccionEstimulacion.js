@@ -47,40 +47,19 @@ import { connect } from 'react-redux'
   }
 
   validate(event){
-    let {setChecked, formData} = this.props
-    formData = formData.toJS()
+     let {setChecked, formData} = this.props
+     formData = formData.toJS()
 
-    let field = event ? event.target.name : null
-    let {errors, checked} = this.props.validate(field, formData)
+     let field = event ? event.target.name : null
+     let {errors, checked} = this.props.validate(field, formData)
 
-    this.setState({
-      errors: errors,
-    })
+     this.setState({
+        errors: errors,
+     })
 
-    if(event && event.target.name){
-      setChecked(checked)
-
-      this.setState({
-        checked: checked
-      })
-    }
-  }
-
-  setCheck(field){
-    let {setChecked, formData} = this.props
-    formData = formData.toJS()
-    const checked = [ ...formData.checked, field ]
-
-    checked.forEach(field => {
-      if(errors[field])
-        errors[field].checked = true
-    })
-
-    this.setState({
-      checked: checked
-    })
-
-    setChecked(checked)
+     if(event && event.target.name){
+        setChecked(checked)
+     }
   }
 
   makeModeladoForm() {
@@ -161,6 +140,9 @@ import { connect } from 'react-redux'
           Cargar estimación del incremento de producción
         </div>
         <input type='file' accept="image/*" onChange={(e) => this.handleFileUpload(e, setEstIncProdEstimulationImgURL)}></input>
+        { this.state.errors.imgURL && this.state.errors.imgURL.checked &&
+          <div className="error">{this.state.errors.imgURL.message}</div>
+        }
         {imgURL ? <img className='img-preview' src={imgURL}></img> : null }
       </div>
     )
@@ -253,6 +235,10 @@ const validate = values => {
 
     if(!values.obervacionesEstIncEstim ){
        errors.obervacionesEstIncEstim = {message: "Este campo no puede estar vacio"}
+    }
+
+    if(!values.imgURL){
+        errors.imgURL = {message: "Este campo no puede estar vacio"}
     }
 
     return errors

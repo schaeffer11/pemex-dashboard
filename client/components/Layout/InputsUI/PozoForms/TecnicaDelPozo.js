@@ -22,12 +22,12 @@ let columns = [
         return (<div style={{color: 'white', background: 'red', borderRadius: '4px', textAlign: 'center', cursor: 'pointer'}}>X</div>)
       }
     }
-  }, { 
+  }, {
     Header: 'Fecha',
     accessor: 'fecha',
     width: 150,
     cell: 'renderDate'
-  }, { 
+  }, {
     Header: 'Historial de Intervenciones',
     accessor: 'intervenciones',
     cell: 'renderEditable',
@@ -107,7 +107,7 @@ let columns = [
   }
 
   makeFormacionForm() {
-    let { setEspesorBruto, setCaliza, setDolomia, setArcilla, setPorosidad, setPermeabilidad, setSw, setCaa, setCga, formData } = this.props 
+    let { setEspesorBruto, setCaliza, setDolomia, setArcilla, setPorosidad, setPermeabilidad, setSw, setCaa, setCga, formData } = this.props
     formData = formData.toJS()
     let { espesorBruto, caliza, dolomia, arcilla, porosidad, permeabilidad, sw, caa, cga } = formData
     const errors = []
@@ -131,7 +131,7 @@ let columns = [
 
   makePozoForm() {
     let { fieldWellOptions } = this.state
-    let { tipoDeSistemo, setTipoDePozo, setPws, setPwf, setPwsFecha, setPwfFecha, setDeltaPPerMes, setTyac, setPvt, setAparejoDeProduccion, setProfEmpacador, setProfSensorPYT, setTipoDeSistemo, formData, generalData } = this.props 
+    let { tipoDeSistemo, setTipoDePozo, setPws, setPwf, setPwsFecha, setPwfFecha, setDeltaPPerMes, setTyac, setPvt, setAparejoDeProduccion, setProfEmpacador, setProfSensorPYT, setTipoDeSistemo, formData, generalData } = this.props
     formData = formData.toJS()
     generalData = generalData.toJS()
     let { campo } = generalData
@@ -212,7 +212,7 @@ let columns = [
     const date = historialIntervencionesData[cellInfo.index][cellInfo.column.id]
     const val = date ? moment(date) : null;
     return (
-      <DatePicker 
+      <DatePicker
         isClearable={true}
         locale="es-mx"
         dateFormat="L"
@@ -222,7 +222,7 @@ let columns = [
             historialIntervencionesData[cellInfo.index][cellInfo.column.id] = e.format('YYYY-MM-DD');
             setHistorialIntervencionesData(historialIntervencionesData)
           }
-        }} 
+        }}
         selected={val} />
     )
   }
@@ -247,7 +247,7 @@ let columns = [
         column.Cell = this.renderEditable
       else if(column.cell === 'renderDate')
         column.Cell = this.renderDate
-      else 
+      else
         column.Cell = null
     })
 
@@ -292,9 +292,11 @@ let columns = [
 const validate = values => {
     const errors = {}
 
-    // if(!values.espesorBruto ){
-    //    errors.espesorBruto = {message: "Este campo no puede estar vacio"}
-    // }
+    /*
+    if(!values.espesorBruto ){
+        errors.espesorBruto = {message: "Este campo no puede estar vacio"}
+    }
+    */
 
     if(!values.caliza ){
        errors.caliza = {message: "Este campo no puede estar vacio"}
@@ -332,8 +334,16 @@ const validate = values => {
        errors.tipoDePozo = {message: "Este campo no puede estar vacio"}
     }
 
+    if(!values.pws ){
+        errors.pws = {message: "Este campo no puede estar vacio"}
+    }
+
     if(!values.pwsFecha ){
        errors.pwsFecha = {message: "Este campo no puede estar vacio"}
+    }
+
+    if(!values.pwf ){
+        errors.pwf = {message: "Este campo no puede estar vacio"}
     }
 
     if(!values.pwfFecha ){
@@ -348,9 +358,11 @@ const validate = values => {
        errors.tyac = {message: "Este campo no puede estar vacio"}
     }
 
+    /*
     if(!values.pvt ){
        errors.pvt = {message: "Este campo no puede estar vacio"}
     }
+    */
 
     if(!values.aparejoDeProduccion ){
        errors.aparejoDeProduccion = {message: "Este campo no puede estar vacio"}

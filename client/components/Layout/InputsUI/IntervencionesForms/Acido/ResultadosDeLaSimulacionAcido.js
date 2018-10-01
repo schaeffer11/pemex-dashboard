@@ -109,8 +109,8 @@ import { connect } from 'react-redux'
         </div>
         <input type='file' accept="image/*"  onChange={(e) => this.handleFileUpload(e, setEvidenceSimulationAcidoImgURL)} multiple></input>
         {imgURL ? <img className='img-preview' src={imgURL}></img> : null }
-          { this.state.errors.evidenceSimulationAcidoImgURL && this.state.errors.evidenceSimulationAcidoImgURL.checked &&
-          <div className="error">{this.state.errors.e.message}</div>
+          { this.state.errors.imgURL && this.state.errors.imgURL.checked &&
+          <div className="error">{this.state.errors.imgURL.message}</div>
           }
       </div>
     )
@@ -171,6 +171,10 @@ const validate = values => {
 
     if(!values.eficienciaDeFluidoDeFractura ){
        errors.eficienciaDeFluidoDeFractura = {message: "Este campo no puede estar vacio"}
+    }
+
+    if(!values.imgURL ){
+        errors.imgURL = {message: "Este campo no puede estar vacio"}
     }
 
     return errors

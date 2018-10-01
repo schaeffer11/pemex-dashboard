@@ -144,6 +144,9 @@ import { connect } from 'react-redux'
           Cargar estimación del incremento de producción
         </div>
         <input className="filestyle" data-classButton="btn btn-primary" type='file' accept="image/*" onChange={(e) => this.handleFileUpload(e, setEstIncProdAcidoImgURL)}></input>
+        { this.state.errors.imgURL && this.state.errors.imgURL.checked &&
+        <div className="error">{this.state.errors.imgURL.message}</div>
+        }
         {imgURL ? <img className='img-preview' src={imgURL}></img> : null }
       </div>
     )
@@ -232,6 +235,14 @@ const validate = values => {
 
     if(!values.estIncDeltaP){
       errors.estIncDeltaP = {message: "Este campo no puede estar vacio"}
+    }
+
+    if(!values.obervacionesEstIncAcido ){
+        errors.obervacionesEstIncAcido = {message: "Este campo no puede estar vacio"}
+    }
+
+    if(!values.imgURL){
+        errors.imgURL = {message: "Este campo no puede estar vacio"}
     }
 
     return errors

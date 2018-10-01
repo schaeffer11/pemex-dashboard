@@ -27,8 +27,10 @@ const historicoDeAforos = (state = initialState, action) => {
   switch (action.type) {
     case 'set_aforosData':
         return state.set('aforosData', fromJS(action.value))
-    case 'set_checked' :
-        return state.set('checked', fromJS(action.value))
+    case 'set_forms_checked' :
+        if(action.form == 'historicoDeAforos')
+           return state.set('checked', fromJS(action.value))
+        return state
     case 'set_historicoDeAforos':
         return state = fromJS(action.value)
     default:

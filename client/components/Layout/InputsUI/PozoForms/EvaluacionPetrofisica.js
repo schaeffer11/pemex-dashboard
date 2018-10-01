@@ -406,7 +406,7 @@ const validate = values => {
     }
 
     if(!values.imgURL){
-      errors.imgURL = {message: "Ningun campo puede estar vacio."}
+      errors.imgURL = {message: "Este campo no puede estar vacio."}
     }
 
     return errors

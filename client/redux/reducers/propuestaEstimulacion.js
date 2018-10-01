@@ -1,6 +1,7 @@
 import { Map, fromJS } from 'immutable'
 
-const initialState = Map({ 
+const initialState = Map({
+    /*
     intervalo: '',
     longitudDeIntervalo: '',
     volAparejo: '',
@@ -12,6 +13,7 @@ const initialState = Map({
     volumenDesplazamientoLiquido: '',
     volumenDesplazamientoN2: '',
     volumenTotalDeLiquido: '',
+    */
     propuestaCompany: '',
     tipoDeEstimulacion: '',
     tipoDeColocacion: '',

@@ -92,14 +92,15 @@ import { round, calculateVolumes, getSistemaOptions } from '../helpers'
         <div className='header'>
           General
         </div>
-          <InputRowSelectUnitless
-            header="Compañía"
-            name="company"
-            options={companyOptions}
-            onBlur={this.validate}
-            value={propuestaCompany}
-            callback={e => setPropuestaCompany(e.value)}
-          />
+        <InputRowSelectUnitless
+          header="Compañía"
+          name="propuestaCompany"
+          options={companyOptions}
+          onBlur={this.validate}
+          errors={this.state.errors}
+          value={propuestaCompany}
+          callback={e => setPropuestaCompany(e.value)}
+        />
       </div>
     )
   }
@@ -465,6 +466,10 @@ import { round, calculateVolumes, getSistemaOptions } from '../helpers'
 
 const validate = values => {
     const errors = {}
+
+    if(!values.propuestaCompany){
+        errors.propuestaCompany = {message: "Este campo no puede estar vacio"}
+    }
 
     if(!values.moduloYoungArena ){
        errors.moduloYoungArena = {message: "Este campo no puede estar vacio"}

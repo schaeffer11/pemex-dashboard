@@ -66,10 +66,10 @@ import { setShowForms } from '../../../../../redux/actions/global'
     const forms = [
       this.propuestaDeApuntalado,
       this.pruebasDeLaboratorio,
-//      this.pruebasDeLaboratorioEstimulacionExtra,
+      this.pruebasDeLaboratorioEstimulacionExtra,
       this.resultadosDeLaSimulacionApuntalado,
       this.estimacionIncProduccionApuntalado,
-//      this.estimacionCostosEstimulacion
+      this.estimacionCostosEstimulacion
     ];
 
     let allErrors = {}
@@ -81,7 +81,7 @@ import { setShowForms } from '../../../../../redux/actions/global'
     });
 
 
-    return allErrors.length == 0;
+    return Object.keys(allErrors).length == 0;
 
   }
 

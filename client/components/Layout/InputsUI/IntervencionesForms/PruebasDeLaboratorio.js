@@ -27,7 +27,7 @@ const companyOptions = [
   { label: 'Weatherford', value: 'Weatherford' },
 ]
 
-@autobind class PruebasDeLaboratorioEstimulacion extends Component {
+@autobind class PruebasDeLaboratorio extends Component {
   constructor(props) {
     super(props)
     this.state = {
@@ -285,7 +285,7 @@ const validate = values => {
     }else {
       const fields = ['compania', 'fechaMuestreo', 'fechaPrueba', 'superviso', 'type']
       values.pruebasDeLaboratorioData.forEach((row, index) => {
-        let hasEmpty = Object.entries(row).find(([key, value]) => {return fields.includes(key) && value && value.toString().trim() == '' })
+        let hasEmpty = Object.entries(row).find(([key, value]) => {return fields.includes(key) && (!value || value.toString().trim() === "" ) })
         if(hasEmpty !== undefined){
             errors.pruebasDeLaboratorioData = {message: "Ningun campo puede estar vacio."}
         }
@@ -307,5 +307,5 @@ const mapDispatchToProps = dispatch => ({
 
 export default withValidate(
   validate,
-  connect(mapStateToProps, mapDispatchToProps, null, { withRef: true })(PruebasDeLaboratorioEstimulacion)
+  connect(mapStateToProps, mapDispatchToProps, null, { withRef: true })(PruebasDeLaboratorio)
 )

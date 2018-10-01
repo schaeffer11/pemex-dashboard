@@ -54,41 +54,21 @@ import { round, calculateVolumes, getSistemaOptions } from '../helpers'
   }
 
   validate(event){
-    let {setChecked, formData} = this.props
-    formData = formData.toJS()
+     let {setChecked, formData} = this.props
+     formData = formData.toJS()
 
-    let field = event ? event.target.name : null
-    let {errors, checked} = this.props.validate(field, formData)
+     let field = event ? event.target.name : null
+     let {errors, checked} = this.props.validate(field, formData)
 
-    this.setState({
-      errors: errors,
-    })
+     this.setState({
+        errors: errors,
+     })
 
-    if(event && event.target.name){
-      setChecked(checked)
-
-      this.setState({
-        checked: checked
-      })
-    }
+     if(event && event.target.name){
+         setChecked(checked)
+     }
   }
 
-  setCheck(field){
-    let {setChecked, formData} = this.props
-    formData = formData.toJS()
-    const checked = [ ...formData.checked, field ]
-
-    checked.forEach(field => {
-      if(errors[field])
-        errors[field].checked = true
-    })
-
-    this.setState({
-      checked: checked
-    })
-
-    setChecked(checked)
-  }
 
   makeGeneralForm() {
     let { formData, setPropuestaCompany, setTipoDeEstimulacion } = this.props
@@ -122,6 +102,8 @@ import { round, calculateVolumes, getSistemaOptions } from '../helpers'
           onBlur={this.validate}
           value={propuestaCompany}
           callback={e => setPropuestaCompany(e.value)}
+          onBlur={this.validate}
+          errors={this.state.errors}
         />
         <InputRowSelectUnitless
           header="Tipo de estimulación"
@@ -130,6 +112,8 @@ import { round, calculateVolumes, getSistemaOptions } from '../helpers'
           onBlur={this.validate}
           value={tipoDeEstimulacion}
           callback={e => setTipoDeEstimulacion(e.value)}
+          onBlur={this.validate}
+          errors={this.state.errors}
         />
       </div>
     )
@@ -156,7 +140,9 @@ import { round, calculateVolumes, getSistemaOptions } from '../helpers'
           options={colocacionOptions}
           onBlur={this.validate} 
           value={tipoDeColocacion} 
-          callback={(e) => setTipoDeColocacion(e.value)} 
+          callback={(e) => setTipoDeColocacion(e.value)}
+          onBlur={this.validate}
+          errors={this.state.errors}
         />
         <InputRow header="Tiempo de contacto" name='tiempoDeContacto' unit="min" value={tiempoDeContacto} onChange={setTiempoDeContacto} errors={this.state.errors} onBlur={this.validate} />
       </div>
@@ -495,7 +481,7 @@ import { round, calculateVolumes, getSistemaOptions } from '../helpers'
 
 const validate = values => {
     const errors = {}
-
+/*
     if(!values.volumenPrecolchonN2 ){
        errors.volumenPrecolchonN2 = {message: "Este campo no puede estar vacio"}
     }
@@ -522,6 +508,24 @@ const validate = values => {
 
     if(!values.volumenTotalDeLiquido ){
        errors.volumenTotalDeLiquido = {message: "Este campo no puede estar vacio"}
+    }
+*/
+    if(!values.propuestaCompany ){
+        errors.propuestaCompany = {message: "Este campo no puede estar vacio"}
+    }
+
+    if(!values.tipoDeEstimulacion ){
+        errors.tipoDeEstimulacion = {message: "Este campo no puede estar vacio"}
+    }
+
+    if(values.tipoDeEstimulacion == 'limpieza') {
+        if (!values.tipoDeColocacion) {
+            errors.tipoDeColocacion = {message: "Este campo no puede estar vacio"}
+        }
+
+        if (!values.tiempoDeContacto) {
+            errors.tiempoDeContacto = {message: "Este campo no puede estar vacio"}
+        }
     }
 
     if(!values.cedulaData){
@@ -561,7 +565,6 @@ const mapDispatchToProps = dispatch => ({
   setTipoDeEstimulacion: val => dispatch(setTipoDeEstimulacion(val)),
   setTipoDeColocacion: val => dispatch(setTipoDeColocacion(val)), 
   setTiempoDeContacto: val => dispatch(setTiempoDeContacto(val)),
-  setChecked: val => dispatch(setChecked(val))
 })
 
 export default withValidate(

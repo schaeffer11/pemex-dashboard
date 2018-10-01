@@ -120,7 +120,7 @@ import { connect } from 'react-redux'
         <div className='header'>
           Observaciones
         </div>
-        <TextAreaUnitless header="Observaciones" name='obervaciones' className={'obervaciones'} value={obervacionesEstIncApuntalado} onChange={setObervacionesEstIncApuntalado} errors={this.state.errors} onBlur={this.validate}/>
+        <TextAreaUnitless header="Observaciones" name='obervacionesEstIncApuntalado' className={'obervacionesEstIncApuntalado'} value={obervacionesEstIncApuntalado} onChange={setObervacionesEstIncApuntalado} errors={this.state.errors} onBlur={this.validate}/>
       </div>
     )
   }
@@ -143,6 +143,9 @@ import { connect } from 'react-redux'
           Cargar estimación del incremento de producción
         </div>
         <input type='file' accept="image/*" onChange={(e) => this.handleFileUpload(e, setEstIncProdApuntaladoImgURL)}></input>
+          { this.state.errors.imgURL && this.state.errors.imgURL.checked &&
+          <div className="error">{this.state.errors.imgURL.message}</div>
+          }
         {imgURL ? <img className='img-preview' src={imgURL}></img> : null }
       </div>
     )
@@ -234,8 +237,12 @@ const validate = values => {
       errors.estIncGastoCompromisoQg = {message: "Este campo no puede estar vacio"}
     }
 
-    if(!values.obervaciones){
-      errors.obervaciones = {message: "Este campo no puede estar vacio"}
+    if(!values.obervacionesEstIncApuntalado){
+      errors.obervacionesEstIncApuntalado = {message: "Este campo no puede estar vacio"}
+    }
+
+    if(!values.imgURL){
+        errors.imgURL = {message: "Este campo no puede estar vacio"}
     }
 
     return errors

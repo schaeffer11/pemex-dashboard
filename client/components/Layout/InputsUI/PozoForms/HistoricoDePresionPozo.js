@@ -168,14 +168,14 @@ let columns = [
               getTdProps={this.deleteRow}
             />
           </div>
+            { this.state.errors.presionDataPozo && this.state.errors.presionDataPozo.checked &&
+            <div className="error">{this.state.errors.presionDataPozo.message}</div>
+            }
           <button className='new-row-button' onClick={this.addNewRow}>Añadir un renglón</button>
         </div>
         <div className='depth'>
-          <InputRow header="Profundidad" name='pressureDepthPozo' value={pressureDepthPozo} onChange={setPressureDepthPozo} unit={'md'} />
+          <InputRow header="Profundidad" name='pressureDepthPozo' value={pressureDepthPozo} onChange={setPressureDepthPozo} unit={'md'} onBlur={this.validate} errors={this.state.errors}  />
         </div>
-          { this.state.errors.presionDataPozo && this.state.errors.presionDataPozo.checked &&
-            <div className="error">{this.state.errors.presionDataPozo.message}</div>
-          }
       </div>
     )
   }
@@ -193,6 +193,10 @@ const validate = values => {
             errors.presionDataPozo = {message: "Ningun campo puede estar vacio."}
         }
       })
+    }
+
+    if(values.pressureDepthPozo == ''){
+        errors.pressureDepthPozo = {message: "Ningun campo puede estar vacio."}
     }
 
     return errors

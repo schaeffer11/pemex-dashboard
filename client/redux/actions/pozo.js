@@ -139,7 +139,7 @@ export const setLayerData = value => ({
     elem.interval = i + 1
     elem.baseMD = parseFloat(elem.baseMD)
     elem.cimaMD = parseFloat(elem.cimaMD)
-    elem.espesorBruto = Math.round((elem.baseMD - elem.cimaMD) * 100) / 100
+    elem.espesorBruto = !isNaN(elem.baseMD) && !isNaN(elem.cimaMD) ? ( Math.round((elem.baseMD - elem.cimaMD) * 100) / 100 ): ''
     return elem
   })
 })

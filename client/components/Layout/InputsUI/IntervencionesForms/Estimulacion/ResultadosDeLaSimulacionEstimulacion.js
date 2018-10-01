@@ -120,8 +120,8 @@ containsErrors(){
         <input type='file' accept="image/*"  onChange={(e) => this.handleFileUpload(e, setEvidenceSimulationImgURL)} multiple></input>
         {imgURL ? <img className='img-preview' src={imgURL}></img> : null }
 
-          { this.state.errors.evidenceSimulationImgURL && this.state.errors.evidenceSimulationImgURL.checked &&
-          <div className="error">{this.state.errors.imgBoreDiagramURL.message}</div>
+          { this.state.errors.imgURL && this.state.errors.imgURL.checked &&
+          <div className="error">{this.state.errors.imgURL.message}</div>
           }
 
       </div>
@@ -149,19 +149,24 @@ containsErrors(){
   }
 }
 
-const validate = values => {
+const validate = (values, element) => {
+    const propuestaData = element.propuestaData.toJS()
+    const { tipoDeEstimulacion } = propuestaData
     const errors = {}
 
-    if(!values.penetracionRadial ){
-       errors.penetracionRadial = {message: "Este campo no puede estar vacio"}
-    }
+    if (tipoDeEstimulacion == 'matricial') {
 
-    if(!values.longitudDeAgujeroDeGusano ){
-       errors.longitudDeAgujeroDeGusano = {message: "Este campo no puede estar vacio"}
-    }
+        if (!values.penetracionRadial) {
+            errors.penetracionRadial = {message: "Este campo no puede estar vacio"}
+        }
 
-    if(!values.evidenceSimulationImgURL){
-        errors.longitudDeAgujeroDeGusano = {message: "Este campo no puede estar vacio"}
+        if (!values.longitudDeAgujeroDeGusano) {
+            errors.longitudDeAgujeroDeGusano = {message: "Este campo no puede estar vacio"}
+        }
+
+        if (!values.imgURL) {
+            errors.imgURL = {message: "Este campo no puede estar vacio"}
+        }
     }
 
     return errors

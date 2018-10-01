@@ -49,8 +49,8 @@ let tratamientoPorOptions = [
   }
 
   containsErrors(){
-        let foundErrors = false
-        let errors = Object.assign({}, this.state.errors);
+      let foundErrors = false
+      let errors = Object.assign({}, this.state.errors);
       let {formData} = this.props
       formData = formData.toJS()
 
@@ -186,8 +186,8 @@ let tratamientoPorOptions = [
           Cargar diagrama del aparejo de producción
         </div>
         <input type='file' accept="image/*" onChange={(e) => this.handleFileUpload(e, setImgBoreDiagramURL)}></input>
-        { this.state.errors.imgBoreDiagramURL && this.state.errors.imgBoreDiagramURL.checked &&
-          <div className="error">{this.state.errors.imgBoreDiagramURL.message}</div>
+        { this.state.errors.imgURL && this.state.errors.imgURL.checked &&
+          <div className="error">{this.state.errors.imgURL.message}</div>
         }
         {imgURL ? <img className='img-preview' src={imgURL}></img> : null }
       </div>
@@ -255,24 +255,27 @@ const validate = values => {
        errors.diametroDeLiner = {message: "Este campo no puede estar vacio"}
     }
 
-    if(!values.tipoDePistolas ){
-       errors.tipoDePistolas = {message: "Este campo no puede estar vacio"}
-    }
+    if(values.tipoDeTerminacion && values.tipoDeTerminacion != 'Agujero Descubierto (AD)') {
 
-    if(!values.densidadDeDisparosMecanico ){
-       errors.densidadDeDisparosMecanico = {message: "Este campo no puede estar vacio"}
-    }
+        if (!values.tipoDePistolas) {
+            errors.tipoDePistolas = {message: "Este campo no puede estar vacio"}
+        }
 
-    if(!values.fase ){
-       errors.fase = {message: "Este campo no puede estar vacio"}
-    }
+        if (!values.densidadDeDisparosMecanico) {
+            errors.densidadDeDisparosMecanico = {message: "Este campo no puede estar vacio"}
+        }
 
-    if(!values.diametroDeOrificio ){
-       errors.diametroDeOrificio = {message: "Este campo no puede estar vacio"}
-    }
+        if (!values.fase) {
+            errors.fase = {message: "Este campo no puede estar vacio"}
+        }
 
-    if(!values.penetracion ){
-       errors.penetracion = {message: "Este campo no puede estar vacio"}
+        if (!values.diametroDeOrificio) {
+            errors.diametroDeOrificio = {message: "Este campo no puede estar vacio"}
+        }
+
+        if (!values.penetracion) {
+            errors.penetracion = {message: "Este campo no puede estar vacio"}
+        }
     }
 
     if(!values.tratamientoPor ){
@@ -296,7 +299,7 @@ const validate = values => {
     }
 
     if(!values.imgURL){
-      errors.imgURL = {message: "Ningun campo puede estar vacio."}
+      errors.imgURL = {message: "Este campo puede estar vacio."}
     }
 
     return errors
