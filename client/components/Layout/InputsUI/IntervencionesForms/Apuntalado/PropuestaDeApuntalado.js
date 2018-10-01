@@ -115,15 +115,15 @@ import { round, calculateVolumes, getSistemaOptions } from '../helpers'
     return (
       <div className='detalles-form' >
         <div className='header'>
-          Volumenes
+          Volúmenes
         </div>
         <CalculatedValue
-          header={<div>Volumen precolchón N<sub>2</sub></div>}
+          header={<div>Precolchón N<sub>2</sub></div>}
           value={volumenPrecolchonN2}
           unit={<div>m<sup>3</sup></div>} 
         />
         <CalculatedValue
-          header={<div>Volumen sistema no reactivo</div>}
+          header={<div>Sistema no reactivo</div>}
           value={volumenSistemaNoReativo}
           unit={<div>m<sup>3</sup></div>} 
         />
@@ -133,22 +133,22 @@ import { round, calculateVolumes, getSistemaOptions } from '../helpers'
           unit={<div>m<sup>3</sup></div>} 
         />
         <CalculatedValue
-          header={<div>Volumen sistema divergente</div>}
+          header={<div>Sistema divergente</div>}
           value={volumenSistemaDivergente}
           unit={<div>m<sup>3</sup></div>} 
         />
         <CalculatedValue
-          header={<div>Volumen desplazamiento líquido</div>}
+          header={<div>Desplazamiento líquido</div>}
           value={volumenDesplazamientoLiquido}
           unit={<div>m<sup>3</sup></div>} 
         />
         <CalculatedValue
-          header={<div>Volumen desplazamiento N<sub>2</sub></div>}
+          header={<div>Desplazamiento N<sub>2</sub></div>}
           value={volumenDesplazamientoN2}
           unit={<div>m<sup>3</sup></div>} 
         />
         <CalculatedValue
-          header={<div>"Volumen total de líquido</div>}
+          header={<div>Total de líquido</div>}
           value={volumenTotalDeLiquido}
           unit={<div>m<sup>3</sup></div>} 
         />
@@ -164,10 +164,10 @@ import { round, calculateVolumes, getSistemaOptions } from '../helpers'
     return (
       <div className='geomecanica-form' >
         <div className='header'>
-          Informacion de Geomecánica
+          Información de Geomecánica
         </div>
-        <InputRow header="Modulo young arena" name='moduloYoungArena' value={moduloYoungArena} onChange={setModuloYoungArena} unit='psi'  errors={this.state.errors} onBlur={this.validate}/>
-        <InputRow header="Modulo young lutitas" name='moduloYoungLutitas' value={moduloYoungLutitas} onChange={setModuloYoungLutitas} unit='psi'  errors={this.state.errors} onBlur={this.validate}/>
+        <InputRow header="Módulo young arena" name='moduloYoungArena' value={moduloYoungArena} onChange={setModuloYoungArena} unit='psi'  errors={this.state.errors} onBlur={this.validate}/>
+        <InputRow header="Módulo young lutitas" name='moduloYoungLutitas' value={moduloYoungLutitas} onChange={setModuloYoungLutitas} unit='psi'  errors={this.state.errors} onBlur={this.validate}/>
         <InputRow header="Relac. poisson arena" name='relacPoissonArena' value={relacPoissonArena} onChange={setRelacPoissonArena} unit='adim'  errors={this.state.errors} onBlur={this.validate}/>
         <InputRow header="Relac. poisson lutatas" name='relacPoissonLutatas' value={relacPoissonLutatas} onChange={setRelacPoissonLutatas} unit='adim'  errors={this.state.errors} onBlur={this.validate}/>
         <InputRow header="Gradiente de fractura" name='gradienteDeFractura' value={gradienteDeFractura} onChange={setGradienteDeFractura} unit='psi/ft'  errors={this.state.errors} onBlur={this.validate}/>
@@ -349,7 +349,7 @@ import { round, calculateVolumes, getSistemaOptions } from '../helpers'
         accessor: 'tipoDeApuntalante',
         cell: 'renderEditable',
       }, { 
-        Header: <div>Concentracion de Apuntalante<br/>(lbm/gal)</div>,
+        Header: <div>Concentración de Apuntalante<br/>(lbm/gal)</div>,
         accessor: 'concentraciDeApuntalante',
         cell: 'renderNumber',
       },
@@ -359,7 +359,7 @@ import { round, calculateVolumes, getSistemaOptions } from '../helpers'
         cell: 'renderNumberDisable',
       },
       { 
-        Header: <div>Gasto Liquido<br/>(bpm)</div>,
+        Header: <div>Gasto Líquido<br/>(bpm)</div>,
         accessor: 'gastoLiqudo',
         cell: 'renderNumberDisable',
       },
@@ -404,7 +404,7 @@ import { round, calculateVolumes, getSistemaOptions } from '../helpers'
     return (
       <div className='generales-form' >
         <div className='header'>
-          Cedula De Tratamiento
+          Cédula De Tratamiento
         </div>
         <div className='table-select'>
           <InputTable

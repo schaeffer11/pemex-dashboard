@@ -11,7 +11,7 @@ let fluidoOptions = [
     { label: 'Aceite Negro', value: 'Aceite Negro' },
     { label: 'Aceite Ligero', value: 'Aceite Ligero' },
     { label: 'Gas y Condensado', value: 'Gas y Condensado' },
-    { label: 'Gas Humedo', value: 'Gas Humedo' },
+    { label: 'Gas Húmedo', value: 'Gas Humedo' },
     { label: 'Gas Seco', value: 'Gas Seco' },
 ]
  
@@ -113,7 +113,7 @@ let litologiaOptions = [
     return (
       <div className='explotacion-form' >
         <div className='header'>
-          Explotacion
+          Explotación
         </div>
         <InputRow header="P. inicial" name='pInicialField' value={pInicialField} onChange={setPInicialField} unit={<div>Kg/cm<sup>2</sup></div>} onBlur={this.validate} errors={this.state.errors} />
         <InputRowUnitless header="P. inicial (año)" name='pInicialAnoField' value={pInicialAnoField} onChange={setPInicialAnoField} onBlur={this.validate} errors={this.state.errors} />
@@ -162,7 +162,7 @@ let litologiaOptions = [
     return (
       <div className='formacion-form' >
         <div className='header'>
-          Formacion
+          Formación
         </div>
         <InputRowSelectUnitless header='Litología' name='litologiaField' value={litologiaField} callback={(e) => setLitologiaField(e.value)} options={litologiaOptions} onBlur={this.validate} errors={this.state.errors}/>
         <InputRow header="Espesor neto" name='espesorNetoField'value={espesorNetoField} onChange={setEspesorNetoField} unit='m' onBlur={this.validate} errors={this.state.errors} />
@@ -210,6 +210,7 @@ let litologiaOptions = [
 
     return (
       <div className="form tecnica-del-campo">
+        <div className="image"/>
         <div className="left">
           { this.makeGeneralesForm() }
           { this.makeExplotacionForm() }

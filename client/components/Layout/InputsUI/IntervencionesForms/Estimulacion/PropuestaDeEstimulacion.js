@@ -177,7 +177,7 @@ import { round, calculateVolumes, getSistemaOptions } from '../helpers'
     return (
       <div className='detalles-form' >
         <div className='header'>
-          Volumenes
+          Volúmenes
         </div>
         <CalculatedValue
           header={<div>Precolchón N<sub>2</sub></div>}
@@ -397,7 +397,7 @@ import { round, calculateVolumes, getSistemaOptions } from '../helpers'
         cell: 'renderNumberDisable',
       },
       { 
-        Header: <div>Gasto Liquido<br/>(bpm)</div>,
+        Header: <div>Gasto Líquido<br/>(bpm)</div>,
         accessor: 'gastoLiqudo',
         cell: 'renderNumberDisable',
       },
@@ -443,7 +443,7 @@ import { round, calculateVolumes, getSistemaOptions } from '../helpers'
     return (
       <div className='generales-form' >
         <div className='header'>
-          Cedula De Tratamiento
+          Cédula De Tratamiento
         </div>
         <div className='table-select'>
           <InputTable

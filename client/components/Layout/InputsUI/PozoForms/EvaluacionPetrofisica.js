@@ -42,7 +42,7 @@ let layerColumns = [
     accessor: 'vArc',
     cell: 'renderNumber',
   }, { 
-    Header: <div>Porosity<br></br>(%)</div>,
+    Header: <div>Porosidad<br></br>(%)</div>,
     accessor: 'porosity',
     cell: 'renderNumber',
   }, { 
@@ -266,7 +266,7 @@ let mudLossColumns = [
     })
 */
     return (
-      <div style={{marginBot: '20px'}}> 
+      <div className='layer-table' style={{marginBot: '20px'}}> 
         <div className='header'>
           PROPIEDADES PROMEDIO
         </div>
@@ -309,9 +309,9 @@ let mudLossColumns = [
 */
 
     return (
-      <div style={{marginBot: '20px'}}> 
+      <div className="mud-loss-table" style={{marginBot: '20px'}}> 
         <div className='header'>
-          ZONA DE PERDIDA
+          ZONA DE PÉRDIDA
         </div>
         <div className='table'>
 
@@ -352,7 +352,7 @@ let mudLossColumns = [
     let { imgURL } = formData
 
     return (
-      <div style={{marginBot: '20px'}}>
+      <div className='img-input' style={{marginBot: '20px'}}>
         <div className='header'>
           Cargar el Archivo de Registro del Pozo
           {/*Upload Well Log File (spanish)*/}
@@ -371,6 +371,7 @@ let mudLossColumns = [
 
     return (
       <div className="form evaluacionPetrofisica">
+        <div className="image"/>
         {this.makeLayerTable()}
         {this.makeMudLossTable()}
         {this.makeImgInput()}

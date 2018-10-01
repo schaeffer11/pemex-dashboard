@@ -8,7 +8,7 @@ import { setWaterAnalysisBool, setPH, setTemperaturaDeConductividad, setResistiv
 
 
 const yesOrNoOptions = [{
-  label: 'Si',
+  label: 'Sí',
   value: true
 }, {
   label: 'No',
@@ -112,11 +112,11 @@ const yesOrNoOptions = [{
         <div className='header'>
           Valores
         </div>
-        <InputRow header="pH" name='pH' value={pH} onChange={setPH} unit='Adim.' errors={this.state.errors} onBlur={this.validate}/>
+        <InputRow header="pH" name='pH' value={pH} onChange={setPH} unit='' errors={this.state.errors} onBlur={this.validate}/>
         <InputRow header="Temperatura de conductividad" name='temperaturaDeConductividad' value={temperaturaDeConductividad} onChange={setTemperaturaDeConductividad} unit='°C' errors={this.state.errors} onBlur={this.validate}/>
         <InputRow header="Resistividad" name='resistividad' value={resistividad} onChange={setResistividad} unit='Ohm*m' errors={this.state.errors} onBlur={this.validate}/>
         <InputRow header="Salinidad con conductimetro" name='salinidadConConductimetro' value={salinidadConConductimetro} onChange={setSalinidadConConductimetro} unit='mg/L o PPM' errors={this.state.errors} onBlur={this.validate}/>
-        <InputRow header="Solidos disueltos totales" name='solidosDisueltosTotales' value={solidosDisueltosTotales} onChange={setSolidosDisueltosTotales} unit='mg/L o PPM' errors={this.state.errors} onBlur={this.validate}/>
+        <InputRow header="Solidos disueltos totales" name='sólidosDisueltosTotales' value={solidosDisueltosTotales} onChange={setSolidosDisueltosTotales} unit='mg/L o PPM' errors={this.state.errors} onBlur={this.validate}/>
         <InputRow header={<div>Dureza total como CaCO<sub>3</sub></div>} name='durezaTotalComoCaCO3' value={durezaTotalComoCaCO3} onChange={setDurezaTotalComoCaCO3} unit='mg/L o PPM' errors={this.state.errors} onBlur={this.validate}/>
         <InputRow header={<div>Dureza de calcio como CaCO<sub>3</sub></div>} name='durezaDeCalcioComoCaCO3' value={durezaDeCalcioComoCaCO3} onChange={setDurezaDeCalcioComoCaCO3} unit='mg/L o PPM' errors={this.state.errors} onBlur={this.validate}/>
         <InputRow header={<div>Dureza de magnesio como CaCO<sub>3</sub></div>} name='durezaDeMagnesioComoCaCO3' value={durezaDeMagnesioComoCaCO3} onChange={setDurezaDeMagnesioComoCaCO3} unit='mg/L o PPM' errors={this.state.errors} onBlur={this.validate}/>
@@ -149,6 +149,7 @@ const yesOrNoOptions = [{
         { waterAnalysisBool === true ? this.makeValoresForm() : null }
         </div>
         <div className='right'>
+          <div className="image"/>
           <AnalisisDelAguaGraph />
         </div>
       </div>

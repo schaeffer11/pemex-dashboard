@@ -206,7 +206,7 @@ const companyOptions = [
         maxWidth: 180,
         resizable: false
       }, { 
-        Header: 'Compañia',
+        Header: 'Compañía',
         accessor: 'compania',
         width: 200,
         resizable: false,
@@ -225,7 +225,7 @@ const companyOptions = [
                 </div>)
               }
       }, { 
-        Header: 'Personal de Pemex que superviso',
+        Header: 'Personal de Pemex que supervisó',
         accessor: 'superviso',
         cell: 'renderEditable'
       },
