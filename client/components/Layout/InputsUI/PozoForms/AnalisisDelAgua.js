@@ -4,7 +4,16 @@ import { InputRow, InputRowUnitless, InputRowSelectUnitless } from '../../Common
 import {withValidate} from '../../Common/Validate'
 import { connect } from 'react-redux'
 import AnalisisDelAguaGraph from './AnalisisDelAguaGraph'
-import { setPH, setTemperaturaDeConductividad, setResistividad, setSalinidadConConductimetro, setSolidosDisueltosTotales, setDurezaTotalComoCaCO3, setDurezaDeCalcioComoCaCO3, setDurezaDeMagnesioComoCaCO3, setAlcalinidadTotalComoCaCO3, setAlcalinidadALaFenolftaleinaComoCaCO3, setSalinidadComoNaCl, setSodio, setCalcio, setMagnesio, setFierro, setCloruros, setBicarbonatos, setSulfatos, setCarbonatos, setDensidadAt15, setDensidadAt20, setChecked } from '../../../../redux/actions/pozo'
+import { setWaterAnalysisBool, setPH, setTemperaturaDeConductividad, setResistividad, setSalinidadConConductimetro, setSolidosDisueltosTotales, setDurezaTotalComoCaCO3, setDurezaDeCalcioComoCaCO3, setDurezaDeMagnesioComoCaCO3, setAlcalinidadTotalComoCaCO3, setAlcalinidadALaFenolftaleinaComoCaCO3, setSalinidadComoNaCl, setSodio, setCalcio, setMagnesio, setFierro, setCloruros, setBicarbonatos, setSulfatos, setCarbonatos, setDensidadAt15, setDensidadAt20, setChecked } from '../../../../redux/actions/pozo'
+
+
+const yesOrNoOptions = [{
+  label: 'Si',
+  value: true
+}, {
+  label: 'No',
+  value: false
+}]
 
 @autobind class AnalisisDelAgua extends Component {
   constructor(props) {
@@ -14,7 +23,7 @@ import { setPH, setTemperaturaDeConductividad, setResistividad, setSalinidadConC
       values: {
       },
       errors: [],
-      checked: []
+      checked: [],
     }
   }
 
@@ -129,11 +138,19 @@ import { setPH, setTemperaturaDeConductividad, setResistividad, setSalinidadConC
   }
 
   render() {
+    let { setWaterAnalysisBool, formData } = this.props
+    formData = formData.toJS()
+    let { waterAnalysisBool } = formData
 
     return (
       <div className="form analisis-del-agua">
-        { this.makeValoresForm() }
-        <AnalisisDelAguaGraph />
+        <div className='left'>
+        <InputRowSelectUnitless header='¿El pozo tiene análisis de agua?' name='waterAnalysisBool' value={waterAnalysisBool} callback={(e) => setWaterAnalysisBool(e.value)} options={yesOrNoOptions} />
+        { waterAnalysisBool === true ? this.makeValoresForm() : null }
+        </div>
+        <div className='right'>
+          <AnalisisDelAguaGraph />
+        </div>
       </div>
     )
   }
@@ -141,6 +158,10 @@ import { setPH, setTemperaturaDeConductividad, setResistividad, setSalinidadConC
 
 const validate = values => {
     const errors = {}
+
+    if(values.waterAnalysisBool === false) {
+      return {}
+    }
 
     if(!values.pH ){
        errors.pH = {message: "Este campo no puede estar vacio"}
@@ -235,6 +256,7 @@ const mapStateToProps = state => ({
 })
 
 const mapDispatchToProps = dispatch => ({
+  setWaterAnalysisBool: val => dispatch(setWaterAnalysisBool(val)),
   setSubdireccion: val => dispatch(setSubdireccion(val)), 
   setPH: val => dispatch(setPH(val)),
   setTemperaturaDeConductividad: val => dispatch(setTemperaturaDeConductividad(val)),

@@ -415,15 +415,15 @@
 		grid-template-rows: 675px auto;
 		grid-template-columns: 50% 50%;
 		grid-column-gap: 10px;
-		grid-template-areas: 	'valores .'
-								'valores graph';
+		grid-template-areas: 	'left .'
+								'left right';
 
-		.valores-form {
-			grid-area: valores;
+		.left {
+			grid-area: left;
 		}
 
-		.graph {
-			grid-area: graph;
+		.right {
+			grid-area: right;
 		}
 	}
 
