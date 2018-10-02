@@ -3,6 +3,7 @@ import autobind from 'autobind-decorator'
 import { connect } from 'react-redux'
 import { InputRow, InputRowUnitless, InputRowSelectUnitless, InputDate } from '../../Common/InputRow'
 import {withValidate} from '../../Common/Validate'
+import ExcelUpload from '../../Common/ExcelUpload'
 import { setAforosData, setChecked } from '../../../../redux/actions/pozo'
 import InputTable from '../../Common/InputTable'
 import ReactTable from 'react-table'
@@ -171,7 +172,6 @@ let columns = [
     let { formData } = this.props
     formData = formData.toJS()
     let { aforosData } = formData
-
     let qoData = []
     let qwData = []
     let qgData = []
@@ -179,17 +179,16 @@ let columns = [
     aforosData.forEach(i => {
       if (i.fecha) {
         let date = new Date(i.fecha)
+        console.log('da date', typeof i.qo, i.qo, parseFloat(i.qo))
         date = Date.UTC(date.getFullYear(), date.getMonth(), date.getDate())
-        i.qo.length > 0 ? qoData.push([date, parseFloat(i.qo)]) : null
-        i.qw.length > 0 ? qwData.push([date, parseFloat(i.qw)]) : null
-        i.qg.length > 0 ? qgData.push([date, parseFloat(i.qg)]) : null
+        i.qo.length > 0 || typeof i.qo === 'number' ? qoData.push([date, parseFloat(i.qo)]) : null
+        i.qw.length > 0 || typeof i.qw === 'number' ? qwData.push([date, parseFloat(i.qw)]) : null
+        i.qg.length > 0 || typeof i.qg === 'number' ? qgData.push([date, parseFloat(i.qg)]) : null
       }
     })
-
     config.series[0].data = qoData
     config.series[1].data = qgData
     config.series[2].data = qwData
-
     return (        
       <div className="graph">
             <ReactHighCharts className="chart" ref={(ref) => this.chart = ref} config= {config} />
@@ -283,6 +282,27 @@ let columns = [
   render() {
     return (
       <div className="form historico-de-produccion">
+        <ExcelUpload
+            headers={[
+              { name: 'fecha', type: 'date' },
+              { name: 'tiempo', type: 'number' },
+              { name: 'estrangulador', type: 'number' },
+              { name: 'ptp', type: 'number' },
+              { name: 'ttp', type: 'number' },
+              { name: 'pbaj', type: 'number' },
+              { name: 'tbaj', type: 'number' },
+              { name: 'psep', type: 'number' },
+              { name: 'tsep', type: 'number' },
+              { name: 'qo', type: 'number' },
+              { name: 'qw', type: 'number' },
+              { name: 'qg', type: 'number' },
+              { name: 'ql', type: 'number' },
+              { name: 'rga', type: 'number' },
+              { name: 'salinidad', type: 'number' },
+              { name: 'ph', type: 'number' },
+            ]}
+            setData={this.props.setAforosData}
+          />
         { this.makeHistoricoDeAforosInput() }
         { this.makeAforosGraph() }
       </div>

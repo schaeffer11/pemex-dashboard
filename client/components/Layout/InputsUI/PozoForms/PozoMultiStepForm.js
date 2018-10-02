@@ -19,6 +19,7 @@ import { InputRow, InputRowUnitless, InputRowSelectUnitless, InputDate } from '.
 
 import { setFichaTecnicaDelCampo, setFichaTecnicaDelPozo, setEvaluacionPetrofisica, setMecanicoYAparejoDeProduccion, 
   setAnalisisDelAgua, setSistemasArtificialesDeProduccion, setPresionDataCampo, setPresionDataPozo, setHistoricoProduccion, setHistoricoDeAforos, setChecked } from '../../../../redux/actions/pozo'
+import { setPage } from '../../../../redux/actions/global'
 
 @autobind class PozoMultiStepForm extends Component {
 
@@ -494,6 +495,8 @@ import { setFichaTecnicaDelCampo, setFichaTecnicaDelPozo, setEvaluacionPetrofisi
 
 
   handleClick(i){
+    const type = this.forms[i].type
+    this.props.setCurrentPage(type)
     this.setState({
       currentStep: i
     })
@@ -515,15 +518,20 @@ import { setFichaTecnicaDelCampo, setFichaTecnicaDelPozo, setEvaluacionPetrofisi
 
     if(forms.length > this.state.currentStep + 1){
       this.setState({
-        currentStep: this.state.currentStep + 1
+        currentStep: newStep
       })
     }
   }
 
   handlePrevSubtab(){
-    if( this.state.currentStep - 1 >= 0){
+    const { currentStep } = this.state
+    const newStep = currentStep - 1
+    if(newStep >= 0){
+      const { setCurrentPage } = this.props
+      const type = this.forms[newStep].type
+      setCurrentPage(type)
       this.setState({
-        currentStep: this.state.currentStep - 1
+        currentStep: newStep
       })
     }
   }
@@ -607,7 +615,6 @@ import { setFichaTecnicaDelCampo, setFichaTecnicaDelPozo, setEvaluacionPetrofisi
         focusDialog={true}
         dialogClass="queryModalPartialReset"
         dialogStyle={{verticalAlign: '', textAlign: 'center', maxHeight: '80%', marginTop: '2%'}}
-
       >
       <div className="modalTest" >
         <div className="modal-title">

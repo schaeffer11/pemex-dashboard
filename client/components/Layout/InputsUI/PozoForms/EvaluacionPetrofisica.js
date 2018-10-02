@@ -256,6 +256,7 @@ let mudLossColumns = [
         <div className='table'>
 
           <InputTable
+            location="EvaluacionPetrofisica"
             className="-striped"
             data={mudLossData}
             newRow={objectTemplate}

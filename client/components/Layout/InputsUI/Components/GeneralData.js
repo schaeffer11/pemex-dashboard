@@ -134,7 +134,7 @@ import Loading from '../../Common/Loading'
             {saveOptions.map(i => {
               let className = i.id === selectedSave ? 'save-item active-save' : 'save-item'
               return (
-                <div className={className} onClick={(e) => this.handleSelectSave(i.id)}>{i.name}</div>
+                <div key={`saveOption_${i.id}`} className={className} onClick={(e) => this.handleSelectSave(i.id)}>{i.name}</div>
                 )
             })}
         </div> 
@@ -170,9 +170,9 @@ import Loading from '../../Common/Loading'
             <div className='header'>
               Intervención
             </div>
-            <TextAreaUnitless header="Objetivo - Describir el objetivo de la intervención indicando la causa principal, tipo de tratamiento a aplicar y técnica de colocación de los sistemas." name='objetivo' className={'objetivo'} value={objetivo} onChange={setObjetivo} errors={this.state.errors} />
-            <TextAreaUnitless header="Alcances - Describir los alcances que se pretenden obtener con la intervención programada a ejecutar." name='alcances' className={'alcances'} value={alcances} onChange={setAlcances} errors={this.state.errors}/>
-            <InputRowSelectUnitless header='Tipo de intervenciones' name='tipoDeIntervenciones' value={tipoDeIntervenciones} options={tipoDeIntervencionesOptions} callback={(e) => setTipoDeIntervenciones(e.value)} errors={this.state.errors} />
+            <TextAreaUnitless header="Objetivo" name='objetivo' className={'objetivo'} value={objetivo} onChange={setObjetivo} tooltip='Describir el objetivo de la intervención indicando la causa principal, tipo de tratamiento a aplicar y técnica de colocación de los sistemas.' />
+            <TextAreaUnitless header="Alcances" name='alcances' className={'alcances'} value={alcances} onChange={setAlcances} tooltip='Describir los alcances que se pretenden obtener con la intervención programada a ejecutar.' />
+            <InputRowSelectUnitless header='Tipo de intervenciones' name='tipoDeIntervenciones' value={tipoDeIntervenciones} options={tipoDeIntervencionesOptions} callback={(e) => setTipoDeIntervenciones(e.value)} />
           </div>
 
         )

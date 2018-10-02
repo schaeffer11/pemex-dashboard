@@ -1,4 +1,5 @@
 import React, { Component } from 'react'
+import { connect } from 'react-redux'
 import ReactTable from 'react-table'
 import autobind from 'autobind-decorator'
 import moment from 'moment'
@@ -182,4 +183,4 @@ import MaskedTextInput from "react-text-mask";
   
 }
 
-export default InputTable;
+export default InputTable

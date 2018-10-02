@@ -838,7 +838,7 @@ app.get('/getFieldPressure', async (req, res) => {
 
   const map = {
     FECHA: { child: 'fecha' },
-    PR: { child: 'Pr' } 
+    Pws: { child: 'Pws' } 
   }
 
   const mainParent = 'historicoDePresion'
@@ -1646,12 +1646,9 @@ app.get('/getCosts', async (req, res) => {
 
   const map = {
     ITEM: { child: 'item' }, 
-    COMPANY: { child: 'compania' }, 
     COST_MNX: { child: 'cost' }, 
     COST_DLS: { child: 'costDLS' },
-    FECHA: { child: 'fecha' },
     MNXtoDLS: { child: 'MNXtoDLS'}
-
   }
 
   const mainParent = 'estCost'
@@ -1661,7 +1658,6 @@ app.get('/getCosts', async (req, res) => {
     let finalObj = {}
     if (data && data.length > 0) {
       data.forEach((d, index) => {
-         d.FECHA ? d.FECHA = d.FECHA.toJSON().slice(0, 10) : null
         const innerObj = {}
         Object.keys(d).forEach(k => {
           if (map[k]) {
