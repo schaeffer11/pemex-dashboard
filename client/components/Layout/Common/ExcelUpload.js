@@ -97,6 +97,7 @@ const getErrors = (data, headers) => {
       const parsedData = parseJson(jsonData, headers)
       const errors = getErrors(parsedData, headers)
       // Handle resulting data
+      console.log('parsedData',parsedData)
       if (errors.length > 0) {
         return this.setState({ errors, isAccepted: false, modalIsOpen: true })
       }

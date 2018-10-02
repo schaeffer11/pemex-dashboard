@@ -21,6 +21,19 @@ import { setFichaTecnicaDelCampo, setFichaTecnicaDelPozo, setEvaluacionPetrofisi
   setAnalisisDelAgua, setSistemasArtificialesDeProduccion, setPresionDataCampo, setPresionDataPozo, setHistoricoProduccion, setHistoricoDeAforos, setChecked } from '../../../../redux/actions/pozo'
 import { setPage } from '../../../../redux/actions/global'
 
+const forms = [
+  {'title' : 'Ficha Técnica del Campo', content: <TecnicaDelCampo /> },
+  {'title' : 'Ficha Técnica del Pozo' , content:<TecnicaDelPozo /> },
+  {'title' : 'Evaluación Petrofísica', content: <EvaluacionPetrofisica /> },
+  {'title' : 'Edo. Mecánico y Aparejo de Producción', content: <MecanicoYAparejo /> },
+  {'title' : 'Análisis del Agua', content: <AnalisisDelAgua  /> }, 
+  {'title' : 'Información de Sistemas Artificiales de Producción', content: <SistemasArtificialesDeProduccion  /> },
+  {'title' : 'Histórico de Presión - Campo', content: <HistoricoDePresionCampo  /> },
+  {'title' : 'Histórico de Presión - Pozo', content: <HistoricoDePresionPozo  /> },
+  {'title' : 'Histórico de Aforos', content: <HistoricoDeAforos /> },
+  {'title' : 'Histórico de Producción', content: <HistoricoDeProduccion  /> },
+];
+
 @autobind class PozoMultiStepForm extends Component {
 
   constructor(props) {
@@ -495,30 +508,17 @@ import { setPage } from '../../../../redux/actions/global'
 
 
   handleClick(i){
-    const type = this.forms[i].type
-    this.props.setCurrentPage(type)
+    const type = forms[i].type
+    // this.props.setCurrentPage(type)
     this.setState({
       currentStep: i
     })
   }
 
   handleNextSubtab(){
-    const forms = [
-      {'title' : 'Ficha Técnica del Campo' },
-      {'title' : 'Ficha Técnica del Pozo' },
-      {'title' : 'Evaluación Petrofísica' },
-      {'title' : 'Edo. Mecánico y Aparejo de Producción' },
-      {'title' : 'Análisis del Agua'}, 
-      {'title' : 'Información de Sistemas Artificiales de Producción' },
-      {'title' : 'Histórico de Presión - Campo' },
-      {'title' : 'Histórico de Presión - Pozo' },
-      {'title' : 'Histórico de ' },
-      {'title' : 'Histórico de Producción' },
-    ];
-
     if(forms.length > this.state.currentStep + 1){
       this.setState({
-        currentStep: newStep
+        currentStep: this.state.currentStep + 1
       })
     }
   }
@@ -527,9 +527,9 @@ import { setPage } from '../../../../redux/actions/global'
     const { currentStep } = this.state
     const newStep = currentStep - 1
     if(newStep >= 0){
-      const { setCurrentPage } = this.props
-      const type = this.forms[newStep].type
-      setCurrentPage(type)
+      // const { setCurrentPage } = this.props
+      const type = forms[newStep].type
+      // setCurrentPage(type)
       this.setState({
         currentStep: newStep
       })
@@ -648,20 +648,6 @@ import { setPage } from '../../../../redux/actions/global'
     let { fieldWellOptions } = this.state
     let { isOpen } = this.state
     let className = 'subtab'
-
-    const forms = [
-      {'title' : 'Ficha Técnica del Campo', content: <TecnicaDelCampo /> },
-      {'title' : 'Ficha Técnica del Pozo' , content:<TecnicaDelPozo /> },
-      {'title' : 'Evaluación Petrofísica', content: <EvaluacionPetrofisica /> },
-      {'title' : 'Edo. Mecánico y Aparejo de Producción', content: <MecanicoYAparejo /> },
-      {'title' : 'Análisis del Agua', content: <AnalisisDelAgua  /> }, 
-      {'title' : 'Información de Sistemas Artificiales de Producción', content: <SistemasArtificialesDeProduccion  /> },
-      {'title' : 'Histórico de Presión - Campo', content: <HistoricoDePresionCampo  /> },
-      {'title' : 'Histórico de Presión - Pozo', content: <HistoricoDePresionPozo  /> },
-      {'title' : 'Histórico de Aforos', content: <HistoricoDeAforos /> },
-      {'title' : 'Histórico de Producción', content: <HistoricoDeProduccion  /> },
-    ];
-
     let title = forms[this.state.currentStep].title
     
 

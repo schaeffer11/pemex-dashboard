@@ -6,6 +6,7 @@ import ReactTable from 'react-table'
 import {withValidate} from '../../Common/Validate'
 import { setPresionDataCampo, setPressureDepthCampo, setChecked } from '../../../../redux/actions/pozo'
 import InputTable from '../../Common/InputTable'
+import ExcelUpload from '../../Common/ExcelUpload'
 import { InputRow } from '../../Common/InputRow'
 
 let columns = [
@@ -110,6 +111,13 @@ let columns = [
     return (
       <div className='historico-presion-campo' >
         <div className='image'/>
+        <ExcelUpload
+        headers={[
+              { name: 'fecha', type: 'date' },
+              { name: 'Pws', type: 'number' },
+            ]}
+            setData={this.props.setPresionDataCampo}
+        />
         <div className='presion-table'>
           <div className='table-select'>
             <InputTable
