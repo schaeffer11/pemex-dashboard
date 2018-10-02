@@ -229,10 +229,10 @@ const INSERT_BOMBEO_MECANICO_QUERY = {
 
 const INSERT_FIELD_PRESSURE_QUERY = {
     save: `INSERT INTO _FieldHistoricalPressureSave (
-        FIELD_FORMACION_ID, FECHA, PR, PRESSURE_DEPTH, TRANSACTION_ID) VALUES
+        FIELD_FORMACION_ID, FECHA, PWS, PRESSURE_DEPTH, TRANSACTION_ID) VALUES
         ?`,
     submit: `INSERT INTO FieldHistoricalPressure (
-        FIELD_FORMACION_ID, FECHA, PR, PRESSURE_DEPTH, TRANSACTION_ID) VALUES
+        FIELD_FORMACION_ID, FECHA, PWS, PRESSURE_DEPTH, TRANSACTION_ID) VALUES
         ?`,
     loadSave: `SELECT * FROM _FieldHistoricalPressureSave WHERE TRANSACTION_ID = ?`,
     loadTransaction: `SELECT * FROM FieldHistoricalPressure WHERE TRANSACTION_ID = ?`    
@@ -479,9 +479,9 @@ const INSERT_CEDULA_APUNTALADO_QUERY = {
 
 const INSERT_COSTS_QUERY = {
     save: `INSERT INTO _IntervencionesEstimatedCostsSave (
-        COST_ID, INTERVENTION_ID, ITEM, FECHA, COMPANY, COST_MNX, COST_DLS, MNXtoDLS, TRANSACTION_ID) VALUES ?`,
+        COST_ID, INTERVENTION_ID, ITEM, COMPANY, COST_MNX, COST_DLS, MNXtoDLS, TRANSACTION_ID) VALUES ?`,
     submit: `INSERT INTO IntervencionesEstimatedCosts (
-        COST_ID, INTERVENTION_ID, ITEM, FECHA, COMPANY, COST_MNX, COST_DLS, MNXtoDLS, TRANSACTION_ID) VALUES ?`,
+        COST_ID, INTERVENTION_ID, ITEM, COMPANY, COST_MNX, COST_DLS, MNXtoDLS, TRANSACTION_ID) VALUES ?`,
     loadSave: `SELECT * FROM _IntervencionesEstimatedCostsSave WHERE TRANSACTION_ID = ?`,
     loadTransaction: `SELECT * FROM IntervencionesEstimatedCosts WHERE TRANSACTION_ID = ?`    
 }
@@ -1139,7 +1139,7 @@ export const create = async (body, action, cb) => {
                     values = []
 
                     presionDataCampo.forEach(i => {
-                      values.push([fieldFormacionID, i.fecha, i.Pr, pressureDepthCampo, transactionID])
+                      values.push([fieldFormacionID, i.fecha, i.Pws, pressureDepthCampo, transactionID])
                     })
 
                     connection.query((action === 'save' ? INSERT_FIELD_PRESSURE_QUERY.save : INSERT_FIELD_PRESSURE_QUERY.submit), [values], (err, results) => {
@@ -1349,7 +1349,7 @@ export const create = async (body, action, cb) => {
                                           values = []
                                           estimacionCostosData.forEach(i => {
                                             let costID = Math.floor(Math.random() * 1000000000)
-                                            values.push([costID, interventionID, i.item, i.fecha, i.compania, i.cost, i.costDLS, i.MNXtoDLS, transactionID])
+                                            values.push([costID, interventionID, i.item, propuestaCompany, i.cost, i.costDLS, i.MNXtoDLS, transactionID])
                                           })
 
                                           connection.query((action === 'save' ? INSERT_COSTS_QUERY.save : INSERT_COSTS_QUERY.submit), [values], (err, results) => {

@@ -31,6 +31,19 @@
 			font-size: 20px;
 			margin-left: 85px;
 			text-align: center;
+			display: inline-block;
+		}
+
+		.sub-text-right {
+			width: 300px;
+			z-index: 2;
+			font-weight: normal;
+			color: #F0F0F0;
+			font-size: 20px;
+			float: right;
+			margin-left: 85px;
+			text-align: center;
+			display: inline-block;
 		}
 
 

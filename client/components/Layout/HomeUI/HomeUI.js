@@ -63,6 +63,9 @@ const LinkButton = ({ text, disabled , width, height, src, to}) => {
               Subdirección de Especialidad<br></br>
               Técnica de Explotación
             </div>
+            <div className="sub-text-right">
+              Gerencia de Producción
+            </div>
           </div>
           <div className="text">
             <div className="buttons">
@@ -79,7 +82,7 @@ const LinkButton = ({ text, disabled , width, height, src, to}) => {
           </div>
           <div className="footer">
             <span className="left">Optimizar. Estandarizar. Sustentar. Excelencia.</span>
-            <span className="right">Gerencia de Producción <br/> Productividad de Pozos</span>
+
           </div>
         </div>
       </div>

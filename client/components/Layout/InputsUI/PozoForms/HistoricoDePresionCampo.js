@@ -24,8 +24,8 @@ let columns = [
     accessor: 'fecha',
     cell: 'renderDate',
   }, { 
-    Header: <div>Pr<br></br>(Kg/cm<sup>2</sup>)</div>,
-    accessor: 'Pr',
+    Header: <div>P<sub>ws</sub><br></br>(Kg/cm<sup>2</sup>)</div>,
+    accessor: 'Pws',
     cell: 'renderNumber',
   }
 ]
@@ -113,7 +113,7 @@ let columns = [
 
     presionDataCampo[0].length = 2
 
-    setPresionDataCampo([...presionDataCampo, {index: presionDataCampo.length, fecha: null, Pr: '', length: presionDataCampo.length + 1, 'edited': false}])
+    setPresionDataCampo([...presionDataCampo, {index: presionDataCampo.length, fecha: null, Pws: '', length: presionDataCampo.length + 1, 'edited': false}])
   }
 
 
@@ -143,7 +143,7 @@ let columns = [
     formData = formData.toJS()
     let { presionDataCampo, pressureDepthCampo } = formData
 
-    const objectTemplate = {fecha: null, Pr: ''}
+    const objectTemplate = {fecha: null, Pws: ''}
 
 /*
     columns.forEach(column => {
@@ -174,7 +174,7 @@ let columns = [
           <button className='new-row-button' onClick={this.addNewRow}>Añadir un renglón</button>
         </div>
         <div className='depth'>
-          <InputRow header="Profundidad" name='pressureDepthCampo' value={pressureDepthCampo} onChange={setPressureDepthCampo} unit={'md'} onBlur={this.validate} errors={this.state.errors} />
+          <InputRow header="Plano de Referencia" name='pressureDepthCampo' value={pressureDepthCampo} onChange={setPressureDepthCampo} unit={'md'} onBlur={this.validate} errors={this.state.errors} />
         </div>
       </div>
     )

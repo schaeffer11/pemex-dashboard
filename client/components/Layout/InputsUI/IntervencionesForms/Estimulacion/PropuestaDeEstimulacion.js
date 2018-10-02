@@ -96,7 +96,7 @@ import { round, calculateVolumes, getSistemaOptions } from '../helpers'
           General
         </div>
         <InputRowSelectUnitless
-          header="Compañía"
+          header="Compañía Seleccionada para el Tratamiento"
           name="company"
           options={companyOptions}
           onBlur={this.validate}

@@ -206,14 +206,34 @@
                 align-items: center;
 
                 .label {
-                    color:$table-row-font-color;
-                    font-weight: 100;
-                    font-size: .875em;
+                    color: black;
+                    font-weight: 500;
+                    font-size: .9em;
                 }
 
                 &:nth-child(even) {
                    background: $table-row-alt-color;
                 }
+
+                .input-row-tooltip {
+                	position: absolute;
+                	width: 400px;
+                	visibility: hidden;
+                	background: white;
+                	border-radius: 5px;
+                	border: solid 2px #028080;
+                	margin-top: 150px;
+                	margin-left: -110px;
+                	padding: 10px;
+                	z-index: 10;
+                }
+
+
+       			&:hover {
+       				.input-row-tooltip {
+       					visibility: visible;
+       				}
+       			}
             }
 
             .lab-results {
