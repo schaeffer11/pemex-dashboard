@@ -1,0 +1,9 @@
+.excel-upload {
+  margin-bottom: 1em;
+  .load-error {
+    display: inline-block;
+    font-weight: 500;
+    cursor: pointer;
+    color: red;
+  }
+}

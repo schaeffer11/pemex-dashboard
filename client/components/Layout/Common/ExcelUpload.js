@@ -11,20 +11,21 @@ function jsDateFromExcel(excelDate) {
   return localTime
 }
 
-const convertDates = (data, headers) => {
+const parseJson = (data, headers) => {
   return data.map((elem, index) => {
     headers.forEach(header => {
       const { type, name } = header
       if (type === 'date') {
-        console.log('index', index, elem[name], Number.isInteger(elem[name]), typeof elem[name], Number.isSafeInteger(elem[name]))
         if (Number.isInteger(elem[name])) {
-          const jsDate = moment(jsDateFromExcel(elem[name])).format('DD/MM/YYYY')
-          console.log('ici', index, jsDate)
+          const jsDate = moment(jsDateFromExcel(elem[name])).format('YYYY-MM-DD')
           elem[name] = jsDate
-          // elem[name] = moment(jsDate).format('DD/MM/YYYY')
+        } else if(moment(elem[name], 'DD/MM/YYYY').isValid()) {
+          elem[name] = moment(elem[name]).format('YYYY-MM-DD')
         }
       }
     })
+    elem.length = data.length
+    elem.index = index
     return elem
   })
 }
@@ -36,7 +37,7 @@ const getErrors = (data, headers) => {
       const { type, name } = k
       switch (type) {
         case 'date':
-          const isInvalidDate = !moment(elem[name], 'DD/MM/YYYY').isValid()
+          const isInvalidDate = !moment(elem[name], 'YYYY-MM-DD').isValid()
           if (isInvalidDate) {
             errors.push({ column: name, row: index + 1, error: 'fecha incorrecta', value: elem[name] })
           }
@@ -64,40 +65,55 @@ const getErrors = (data, headers) => {
     this.acceptedFileType='application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'
   }
 
-  test(e) {
-    const { headers } = this.props
+  handleFile(e) {
+    const { headers, setData } = this.props
     const file = e.target.files[0]
+    // First we must empty the table
+    const initialValues = {}
+    headers.forEach(elem => {
+      initialValues[elem.name] = ''
+    })
+    setData([initialValues])
+    if (!file) {
+      return this.setState({ isAccepted: true, errors: [] })
+    }
     if (file.type !== this.acceptedFileType) {
       return this.setState({ isAccepted: false })
     }
     const reader = new FileReader()
     reader.onload = (e) => {
-      console.log('e?', e)
+      // Get the data from the Excel file and convert to json
       const data = e.target.result
       const workbook = XLSX.read(data, { type: 'binary' })
       const sheetName = workbook.SheetNames[0]
       const sheet = workbook.Sheets[sheetName]
-      let parsedData = XLSX.utils.sheet_to_json(sheet, { header: headers.map(elem => elem.name) })
-      parsedData.shift()
-      if (headers.findIndex(elem => elem.type === 'date') !== -1) {
-        console.log('converting dates')
-        parsedData = convertDates(parsedData, headers)
-      }
+      let jsonData = XLSX.utils.sheet_to_json(sheet, { header: headers.map(elem => elem.name) })
+      /**
+       * Remove header from file
+       * Parse data to fix dates and add missing data
+       * Collect errors from parsed data
+       */
+      jsonData.shift()
+      const parsedData = parseJson(jsonData, headers)
       const errors = getErrors(parsedData, headers)
-      console.log('data', parsedData)
+      // Handle resulting data
       if (errors.length > 0) {
         return this.setState({ errors, isAccepted: false, modalIsOpen: true })
       }
+      setData(parsedData)
       return this.setState({ isAccepted: true })
     }
+
     reader.onerror = function(err) {
       return this.setState({ isAccepted: false })
     }
+
     reader.readAsBinaryString(file)
   }
 
   deactivateModal() {
-    this.setState({ isModalOpen: false })
+    console.log('deactivating modal')
+    this.setState({ modalIsOpen: false })
   }
 
   buildModal() {
@@ -146,16 +162,14 @@ const getErrors = (data, headers) => {
 
   render() {
     return (
-      <div>
+      <div className="excel-upload">
         <input
           type="file"
           accept={this.acceptedFileType}
-          onChange={this.test}
+          onChange={this.handleFile}
         />
-        {/* <input type='file' accept="image/*" onChange={(e) => this.handleFileUpload(e, setImgBoreDiagramURL)}></input> */}
-        Welcome to the Machine
-        {!this.state.isAccepted && <div>Bad file</div>}
         {this.buildModal()}
+        {!this.state.isAccepted && <div className="load-error" title="Presionar para ver errores" onClick={() => this.setState({ modalIsOpen: true })}>El archivo contiene errores</div>}
       </div>
     )
   }

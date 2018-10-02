@@ -19,6 +19,7 @@ import { InputRow, InputRowUnitless, InputRowSelectUnitless, InputDate } from '.
 
 import { setFichaTecnicaDelCampo, setFichaTecnicaDelPozo, setEvaluacionPetrofisica, setMecanicoYAparejoDeProduccion, 
   setAnalisisDelAgua, setSistemasArtificialesDeProduccion, setPresionDataCampo, setPresionDataPozo, setHistoricoProduccion, setHistoricoDeAforos, setChecked } from '../../../../redux/actions/pozo'
+import { setPage } from '../../../../redux/actions/global'
 
 @autobind class PozoMultiStepForm extends Component {
 
@@ -48,17 +49,17 @@ import { setFichaTecnicaDelCampo, setFichaTecnicaDelPozo, setEvaluacionPetrofisi
 
     // TODO: Refactor the tabs to be children instead
     this.forms = [
-      {'title' : 'Ficha Técnica del Campo', 'type': 'TecnicaDelCampo', 'content': <TecnicaDelCampo ref={Ref =>  this.fichaTecnicaDelCampo=Ref } containsErrors={this.containsErrors} /> },
-      {'title' : 'Ficha Técnica del Pozo' , 'type':'TecnicaDelPozo',  'content':<TecnicaDelPozo ref={Ref =>  this.fichaTecnicaDelPozo=Ref } containsErrors={this.containsErrors} /> },
-      {'title' : 'Evaluación Petrofísica', 'type':'EvaluacionPetrofisica', 'content': <EvaluacionPetrofisica ref={Ref => this.evaluacionPetrofisica=Ref} containsErrors={this.containsErrors}  /> },
-      {'title' : 'Edo. Mecánico y Aparejo de Producción', 'type':'MecanicoYAparejo',  'content': <MecanicoYAparejo ref={Ref => this.mecanicoYAparejo=Ref } containsErrors={this.containsErrors}  /> },
-      {'title' : 'Análisis del Agua', 'type':'AnalisisDelAgua', 'content': <AnalisisDelAgua ref={Ref => this.analisisDelAgua=Ref } containsErrors={this.containsErrors}  /> }, 
-      {'title' : 'Información de Sistemas Artificiales de Producción', 'type':'SistemasArtificialesDeProduccion', 'content': <SistemasArtificialesDeProduccion ref={Ref => this.sistemasArtificialesDeProduccion=Ref } containsErrors={this.containsErrors}  /> },
-      {'title' : 'Histórico de Presión - Campo', 'type':'HistoricoDePresionCampo', 'content': <HistoricoDePresionCampo ref={Ref => this.historicoDePresionCampo=Ref } containsErrors={this.containsErrors}  /> },
-      {'title' : 'Histórico de Presión - Pozo', 'type':'HistoricoDePresionPozo', 'content': <HistoricoDePresionPozo ref={Ref => this.historicoDePresionPozo=Ref } containsErrors={this.containsErrors}  /> },
-      {'title' : 'Histórico de Aforos', 'type':'HistoricoDeAforos', 'content': <HistoricoDeAforos ref={Ref => this.historicoDeAforos=Ref } containsErrors={this.containsErrors} /> },
-      {'title' : 'Histórico de Producción', 'type':'HistoricoDeProduccion', 'content': <HistoricoDeProduccion ref={Ref => this.historicoDeProduccion=Ref } containsErrors={this.containsErrors}  /> },
-    ];
+      {'title' : 'Ficha Técnica del Campo', 'type': 'TecnicaDelCampo', 'content': <TecnicaDelCampo key="form_1" ref={Ref =>  this.fichaTecnicaDelCampo=Ref } containsErrors={this.containsErrors} /> },
+      {'title' : 'Ficha Técnica del Pozo' , 'type':'TecnicaDelPozo',  'content':<TecnicaDelPozo key="form_2" ref={Ref =>  this.fichaTecnicaDelPozo=Ref } containsErrors={this.containsErrors} /> },
+      {'title' : 'Evaluación Petrofísica', 'type':'EvaluacionPetrofisica', 'content': <EvaluacionPetrofisica key="form_3" ref={Ref => this.evaluacionPetrofisica=Ref} containsErrors={this.containsErrors}  /> },
+      {'title' : 'Edo. Mecánico y Aparejo de Producción', 'type':'MecanicoYAparejo',  'content': <MecanicoYAparejo key="form_4" ref={Ref => this.mecanicoYAparejo=Ref } containsErrors={this.containsErrors}  /> },
+      {'title' : 'Análisis del Agua', 'type':'AnalisisDelAgua', 'content': <AnalisisDelAgua key="form_5" ref={Ref => this.analisisDelAgua=Ref } containsErrors={this.containsErrors}  /> }, 
+      {'title' : 'Información de Sistemas Artificiales de Producción', 'type':'SistemasArtificialesDeProduccion', 'content': <SistemasArtificialesDeProduccion key="form_6" ref={Ref => this.sistemasArtificialesDeProduccion=Ref } containsErrors={this.containsErrors}  /> },
+      {'title' : 'Histórico de Presión - Campo', 'type':'HistoricoDePresionCampo', 'content': <HistoricoDePresionCampo key="form_7" ref={Ref => this.historicoDePresionCampo=Ref } containsErrors={this.containsErrors}  /> },
+      {'title' : 'Histórico de Presión - Pozo', 'type':'HistoricoDePresionPozo', 'content': <HistoricoDePresionPozo key="form_8" ref={Ref => this.historicoDePresionPozo=Ref } containsErrors={this.containsErrors}  /> },
+      {'title' : 'Histórico de Aforos', 'type':'HistoricoDeAforos', 'content': <HistoricoDeAforos key="form_9" ref={Ref => this.historicoDeAforos=Ref } containsErrors={this.containsErrors} /> },
+      {'title' : 'Histórico de Producción', 'type':'HistoricoDeProduccion', 'content': <HistoricoDeProduccion key="form_10" ref={Ref => this.historicoDeProduccion=Ref } containsErrors={this.containsErrors}  /> },
+    ]
   }
 
 
@@ -525,6 +526,8 @@ import { setFichaTecnicaDelCampo, setFichaTecnicaDelPozo, setEvaluacionPetrofisi
 
 
   handleClick(i){
+    const type = this.forms[i].type
+    this.props.setCurrentPage(type)
     this.setState({
       currentStep: i
     })
@@ -539,17 +542,27 @@ import { setFichaTecnicaDelCampo, setFichaTecnicaDelPozo, setEvaluacionPetrofisi
   }
 
   handleNextSubtab(){
-    if(this.forms.length > this.state.currentStep + 1){
+    const { currentStep } = this.state
+    const newStep = currentStep + 1
+    if(this.forms.length > newStep){
+      const { setCurrentPage } = this.props
+      const type = this.forms[newStep].type
+      setCurrentPage(type)
       this.setState({
-        currentStep: this.state.currentStep + 1
+        currentStep: newStep
       })
     }
   }
 
   handlePrevSubtab(){
-    if( this.state.currentStep - 1 >= 0){
+    const { currentStep } = this.state
+    const newStep = currentStep - 1
+    if(newStep >= 0){
+      const { setCurrentPage } = this.props
+      const type = this.forms[newStep].type
+      setCurrentPage(type)
       this.setState({
-        currentStep: this.state.currentStep - 1
+        currentStep: newStep
       })
     }
   }
@@ -725,12 +738,7 @@ import { setFichaTecnicaDelCampo, setFichaTecnicaDelPozo, setEvaluacionPetrofisi
           </div>
           {this.forms[this.state.currentStep].content}
         </div>
-        <div style={{display: 'none'}}>
-          {this.forms.map((form, index) => {
-             if(index != this.state.currentStep)
-               return this.forms[index].content}
-          )}
-        </div>
+        
       { isOpen ? this.buildModal() : null }
        </div>
      );
@@ -750,7 +758,8 @@ const mapDispatchToProps = dispatch => ({
   setHistoricoProduccion : values => {dispatch(setHistoricoProduccion(values))},
   setHistoricoDeAforos: values => {dispatch(setHistoricoDeAforos(values))},
   setLoading: obj => {dispatch(setIsLoading(obj))},
-  setChecked: values => {dispatch(setChecked(values))}
+  setChecked: values => {dispatch(setChecked(values))},
+  setCurrentPage: page => {dispatch(setPage(page))}
 })
 
 const mapStateToProps = state => ({

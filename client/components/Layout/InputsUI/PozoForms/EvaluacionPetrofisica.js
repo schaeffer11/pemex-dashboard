@@ -316,6 +316,7 @@ let mudLossColumns = [
         <div className='table'>
 
           <InputTable
+            location="EvaluacionPetrofisica"
             className="-striped"
             data={mudLossData}
             newRow={objectTemplate}
@@ -368,6 +369,7 @@ let mudLossColumns = [
 
 
   render() {
+    console.log('rendering evaluacion petrofisica', this.props, this.state)
 
     return (
       <div className="form evaluacionPetrofisica">
@@ -413,7 +415,6 @@ const validate = values => {
 }
 
 const mapStateToProps = state => ({
-  forms: state.get('forms'),
   formData: state.get('evaluacionPetrofisica'),
 })
 

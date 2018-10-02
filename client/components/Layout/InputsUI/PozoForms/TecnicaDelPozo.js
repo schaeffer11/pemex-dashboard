@@ -277,7 +277,6 @@ let columns = [
   }
 
   render() {
-
     return (
       <div className="form tecnica-del-pozo">
           <div className="image"/>

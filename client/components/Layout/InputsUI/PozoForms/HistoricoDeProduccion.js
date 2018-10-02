@@ -49,6 +49,9 @@ let config = {
         }
     }],
     plotOptions: {
+        series: {
+          animation: false,
+        },
         scatter: {
             marker: {
                 radius: 5,
@@ -313,11 +316,12 @@ let columns = [
           headers={[
             { name: 'fecha', type: 'date' },
             { name: 'dias', type: 'number' },
-            { name: 'qo', type: 'number' },
-            { name: 'qw', type: 'number' },
-            { name: 'qg', type: 'number' },
-            { name: 'qgi', type: 'number' }
+            { name: 'qo_vol', type: 'number' },
+            { name: 'qw_vol', type: 'number' },
+            { name: 'qg_vol', type: 'number' },
+            { name: 'qgi_vol', type: 'number' }
           ]}
+          setData={this.props.setProduccionData}
         />
         { this.makeHistoricoDeProduccionInput() }
         { this.makeProductionGraph() }
@@ -344,7 +348,6 @@ const validate = values => {
 }
 
 const mapStateToProps = state => ({
-  forms: state.get('forms'),
   formData: state.get('historicoDeProduccion'),
 })
 

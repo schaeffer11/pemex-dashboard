@@ -140,7 +140,7 @@ import Loading from '../../Common/Loading'
             {saveOptions.map(i => {
               let className = i.id === selectedSave ? 'save-item active-save' : 'save-item'
               return (
-                <div className={className} onClick={(e) => this.handleSelectSave(i.id)}>{i.name}</div>
+                <div key={`saveOption_${i.id}`} className={className} onClick={(e) => this.handleSelectSave(i.id)}>{i.name}</div>
                 )
             })}
         </div> 
