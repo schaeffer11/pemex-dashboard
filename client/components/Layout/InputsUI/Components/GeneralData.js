@@ -14,7 +14,11 @@ import { InputRow, InputRowUnitless, InputRowSelectUnitless, TextAreaUnitless } 
 import Notification from '../../Common/Notification'
 import Loading from '../../Common/Loading'
 
-
+const sortLabels = (a, b) => {
+    if(a.label < b.label) return -1;
+    if(a.label > b.label) return 1;
+    return 0;
+}
 
 @autobind class GeneralData extends Component {
   constructor(props) {
@@ -212,6 +216,7 @@ import Loading from '../../Common/Loading'
           subdireccionOptions.push({label: item.SUBDIRECCION_NAME, value: item.SUBDIRECCION_ID})
         }
       })
+      subdireccionOptions.sort(sortLabels)
 
       if (subdireccion) {
         activoSubset = fieldWellOptions.filter(i => i.SUBDIRECCION_ID === parseInt(subdireccion))
@@ -223,7 +228,7 @@ import Loading from '../../Common/Loading'
             activos.push(i)
           }
         })
-        activoOptions = activos.map(i => ({label: i.ACTIVO_NAME, value: i.ACTIVO_ID}))
+        activoOptions = activos.map(i => ({label: i.ACTIVO_NAME, value: i.ACTIVO_ID})).sort(sortLabels)
       }
 
       if (activo) {
@@ -237,7 +242,7 @@ import Loading from '../../Common/Loading'
           }
         })
 
-        fieldOptions = fields.map(i => ({label: i.FIELD_NAME, value: i.FIELD_FORMACION_ID}))
+        fieldOptions = fields.map(i => ({label: i.FIELD_NAME, value: i.FIELD_FORMACION_ID})).sort(sortLabels)
       }
 
       if (campo) {
@@ -251,7 +256,7 @@ import Loading from '../../Common/Loading'
           }
         })
 
-        wellOptions = wells.map(i => ({ label: i.WELL_NAME, value: i.WELL_FORMACION_ID}))
+        wellOptions = wells.map(i => ({ label: i.WELL_NAME, value: i.WELL_FORMACION_ID})).sort(sortLabels)
 
       }
     }
