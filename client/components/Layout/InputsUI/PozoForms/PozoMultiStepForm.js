@@ -637,6 +637,7 @@ import { setFichaTecnicaDelCampo, setFichaTecnicaDelPozo, setEvaluacionPetrofisi
   }
 
   render() {
+    let { setShowForms } = this.props
     let { fieldWellOptions } = this.state
     let { isOpen } = this.state
     let className = 'subtab'
@@ -669,7 +670,7 @@ import { setFichaTecnicaDelCampo, setFichaTecnicaDelPozo, setEvaluacionPetrofisi
         </div>
         <div className="content">
           <div className="tab-title">
-            <i className="far fa-caret-square-left" style={{position: 'relative', fontSize: '50px', left: '-20px', top: '7px', color: '#70AC46'}} ></i>
+            <i className="far fa-caret-square-left" style={{position: 'relative', fontSize: '50px', left: '-20px', top: '7px', color: '#70AC46'}} onClick={(e) => setShowForms(false)}></i>
             { title }
             <button className="cta next" onClick={this.handleNextSubtab}>Siguiente</button>
             <button className="cta prev" onClick={this.handlePrevSubtab}>Anterior</button> 

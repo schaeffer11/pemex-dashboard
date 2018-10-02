@@ -116,8 +116,6 @@ import Loading from '../../Common/Loading'
   buildModal() {
     let { saveOptions, selectedSave } = this.state
 
-
-    console.log('im here', saveOptions, selectedSave)
     return (
       <AriaModal
         titleId="save-modal"
@@ -192,42 +190,6 @@ import Loading from '../../Common/Loading'
     
     let { subdireccion, activo, campo, pozo, formacion } = formData
 
-
-    // let subdireccionOptions = [
-    //   {label: 'Subdirección de Especialidad Técnica de Explotación (SETE)', value: 'SETE'},
-    //   {label: 'Subdirección de producción Bloques Aguas Someras AS-01', value: 'AS-01'},
-    //   {label: 'Subdirección de producción Bloques Aguas Someras AS-02', value: 'AS-02'},
-    //   {label: 'Subdirección de producción Bloques Sur', value: 'SUR'},
-    //   {label: 'Subdirección de producción Bloques Norte', value: 'NORTE'},
-    // ]
-
-    // let activoOptionsMap = {
-    //   'SETE': [
-    //     {label: 'Gerencia de Producción (GP)', value: 'GP'}
-    //   ],
-    //   'AS-01': [
-    //     {label: 'Activo Integral Producción Bloque AS01-01', value: 'AS01-01'},
-    //     {label: 'Activo Integral Producción Bloque AS01-02', value: 'AS01-02'},
-    //   ],
-    //   'AS-02': [
-    //     {label: 'Activo Integral Producción Bloque AS01-03', value: 'AS01-03'},
-    //     {label: 'Activo Integral Producción Bloque AS01-04', value: 'AS01-04'},
-    //   ],
-    //   'SUR': [
-    //     {label: 'Activo Integral Producción Bloque S01', value: 'S01'},
-    //     {label: 'Activo Integral Producción Bloque S02', value: 'S02'},
-    //     {label: 'Activo Integral Producción Bloque S03', value: 'S03'},
-    //     {label: 'Activo Integral Producción Bloque S04', value: 'S04'},
-    //   ],
-    //   'NORTE': [
-    //     {label: 'Activo Integral Bloques N01', value: 'N01'},
-    //     {label: 'Activo Integral Bloques N02', value: 'N02'},
-    //     {label: 'Activo Integral Bloques N03', value: 'N03'},
-    //   ]
-    // }
-
-    // let activoOptions = subdireccion ? activoOptionsMap[subdireccion] : []
-
     let formacionOptions = [
       {label: 'JSO', value: 'JSO'},
       {label: 'JSK', value: 'JSK'},
@@ -292,8 +254,6 @@ import Loading from '../../Common/Loading'
             wells.push(i)
           }
         })
-
-        console.log(wells)
 
         wellOptions = wells.map(i => ({ label: i.WELL_NAME, value: i.WELL_FORMACION_ID}))
 
@@ -458,10 +418,5 @@ const mapDispatchToProps = dispatch => ({
   loadFromSave: values => {dispatch(testLoadFromSave(values))},
   setLoading: obj => dispatch(setIsLoading(obj))
 })
-
-// export default withValidate(
-//   validate, 
-//   connect(mapStateToProps, mapDispatchToProps)(GeneralData)
-// )
 
 export default connect(mapStateToProps, mapDispatchToProps)(GeneralData)
