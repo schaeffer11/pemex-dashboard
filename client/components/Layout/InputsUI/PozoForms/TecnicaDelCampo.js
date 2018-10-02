@@ -31,54 +31,14 @@ let litologiaOptions = [
   }
 
   componentDidMount(){
-    // this.validate()
-    // this.containsErrors()
+
   }
 
   componentDidUpdate(){
-    this.containsErrors()
-    //this.props.containsErrors(this, this.state.containsErrors)
-  }
-
-  containsErrors(){
-    // let foundErrors = false
-    // let errors = Object.assign({}, this.state.errors);
-    // let {formData} = this.props
-    // formData = formData.toJS()
-
-    // const checked = formData.checked  || []
-    // checked.forEach((checked) => {
-    //     if(errors[checked]){
-    //        errors[checked].checked = true
-    //        foundErrors = true
-    //     }
-    // })
-
-    // if(foundErrors !== this.state.containsErrors){
-    //   this.setState({
-    //     errors: errors,
-    //     containsErrors: foundErrors
-    //   })
-    // }
 
   }
 
-  validate(event){
-    // let {setChecked, formData} = this.props
-    // formData = formData.toJS()
 
-    // let field = event ? event.target.name : null
-    // let {errors, checked} = this.props.validate(field, formData)
-
-    // this.setState({
-    //   errors: errors,
-    // })
-
-    // if(event && event.target.name){
-    //   setChecked(checked)
-    // }
-
-  }
 
   makeGeneralesForm() {
     let { setDescubrimientoField, setFechaDeExplotacionField, setNumeroDePozosOperandoField, forms, formData } = this.props
@@ -227,165 +187,7 @@ let litologiaOptions = [
   }
 }
 
-const validate = values => {
-    const errors = {}
-
-    if(!values.descubrimientoField ){
-       errors.descubrimientoField = {message: "Este campo no puede estar vacio"}
-    }
-
-    if(!values.fechaDeExplotacionField ){
-       errors.fechaDeExplotacionField = {message: "Este campo no puede estar vacio"}
-    }
-    if(!values.numeroDePozosOperandoField ){
-       errors.numeroDePozosOperandoField = {message: "Este campo no puede estar vacio"}
-    }
-    if(!values.pInicialField) {
-      errors.pInicialField = {message: "Este campo no puede estar vacio"}
-    }
-    if(!values.pActualField) {
-      errors.pActualField = {message: "Este campo no puede estar vacio"}
-    }
-    if(!values.pInicialAnoField ){
-       errors.pInicialAnoField = {message: "Este campo no puede estar vacio"}
-    }
-
-    if(!values.pActualFechaField ){
-       errors.pActualFechaField = {message: "Este campo no puede estar vacio"}
-    }
-
-    if(!values.dpPerAnoField ){
-       errors.dpPerAnoField = {message: "Este campo no puede estar vacio"}
-    }
-
-    if(!values.tyacField ){
-      errors.tyacField = {message: "Este campo no puede estar vacio"}
-    }
-
-    if(!values.prField ){
-      errors.prField = {message: "Este campo no puede estar vacio"}
-    }
-
-    if(!values.dpPerAnoField ){
-       errors.dpPerAnoField = {message: "Este campo no puede estar vacio"}
-    }
-
-    if(!values.tyacField ){
-       errors.tyacField = {message: "Este campo no puede estar vacio"}
-    }
-
-    if(!values.prField ){
-       errors.prField = {message: "Este campo no puede estar vacio"}
-    }
-
-    if(!values.tipoDeFluidoField ){
-       errors.tipoDeFluidoField = {message: "Este campo no puede estar vacio"}
-    }
-
-    if(!values.densidadDelAceiteField ){
-       errors.densidadDelAceiteField = {message: "Este campo no puede estar vacio"}
-    }
-
-    if(!values.pSatField ){
-       errors.pSatField = {message: "Este campo no puede estar vacio"}
-    }
-
-    if(!values.rgaField ){
-       errors.rgaField = {message: "Este campo no puede estar vacio"}
-    }
-
-    if(!values.salinidadField ){
-       errors.salinidadField = {message: "Este campo no puede estar vacio"}
-    }
-
-    if(!values.pvtRepresentativoField ){
-       errors.pvtRepresentativoField = {message: "Este campo no puede estar vacio"}
-    }
-
-    if(!values.litologiaField ){
-       errors.litologiaField = {message: "Este campo no puede estar vacio"}
-    }
-
-    if(!values.espesorNetoField ){
-       errors.espesorNetoField = {message: "Este campo no puede estar vacio"}
-    }
-
-    if(!values.porosidadField ){
-       errors.porosidadField = {message: "Este campo no puede estar vacio"}
-    }
-
-    if(!values.swField ){
-       errors.swField = {message: "Este campo no puede estar vacio"}
-    }
-
-    if(!values.kPromedioField ){
-       errors.kPromedioField = {message: "Este campo no puede estar vacio"}
-    }
-
-    if(!values.caaField ){
-       errors.caaField = {message: "Este campo no puede estar vacio"}
-    }
-
-    if(!values.cgaField ){
-       errors.cgaField = {message: "Este campo no puede estar vacio"}
-    }
-
-    if(!values.qoField ){
-       errors.qoField = {message: "Este campo no puede estar vacio"}
-    }
-
-    if(!values.qgField ){
-       errors.qgField = {message: "Este campo no puede estar vacio"}
-    }
-
-    if(!values.rgaFluidoField ){
-       errors.rgaFluidoField = {message: "Este campo no puede estar vacio"}
-    }
-
-    if(!values.fwField ){
-       errors.fwField = {message: "Este campo no puede estar vacio"}
-    }
-
-    if(!values.npField ){
-       errors.npField = {message: "Este campo no puede estar vacio"}
-    }
-
-    if(!values.gpField ){
-       errors.gpField = {message: "Este campo no puede estar vacio"}
-    }
-
-    if(!values.wpField ){
-       errors.wpField = {message: "Este campo no puede estar vacio"}
-    }
-
-    if(!values.rraField ){
-       errors.rraField = {message: "Este campo no puede estar vacio"}
-    }
-
-    if(!values.rrgField ){
-       errors.rrgField = {message: "Este campo no puede estar vacio"}
-    }
-
-    if(!values.rrpceField ){
-       errors.rrpceField = {message: "Este campo no puede estar vacio"}
-    }
-
-    if(!values.h2sField ){
-       errors.h2sField = {message: "Este campo no puede estar vacio"}
-    }
-
-    if(!values.co2Field ){
-       errors.co2Field = {message: "Este campo no puede estar vacio"}
-    }
-
-    if(!values.n2Field ){
-       errors.n2Field = {message: "Este campo no puede estar vacio"}
-    }
-    return errors
-}
-
 const mapStateToProps = state => ({
-  forms: state.get('forms'),
   formData: state.get('fichaTecnicaDelCampo'),
 })
 

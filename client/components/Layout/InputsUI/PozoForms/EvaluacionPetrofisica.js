@@ -98,62 +98,14 @@ let mudLossColumns = [
   constructor(props) {
     super(props)
     this.state = {
-      containsErrors: false,
-      errors: [],
-      checked: []
     }
 
   }
 
   componentDidMount(){
-    this.validate()
-    // this.containsErrors()
-    // this.props.containsErrors(this, this.state.containsErrors)
-  }
-
-  componentDidUpdate(){
-    // this.containsErrors()
-    // this.props.containsErrors(this, this.state.containsErrors)
-  }
-
-  containsErrors(){
-      //   let foundErrors = false
-      //   let errors = Object.assign({}, this.state.errors);
-      // let {formData} = this.props
-      // formData = formData.toJS()
-
-      // const checked = formData.checked  || []
-      //   checked.forEach((checked) => {
-      //       if(errors[checked]){
-      //           errors[checked].checked = true
-      //           foundErrors = true
-      //       }
-      //   })
-
-      //   if(foundErrors !== this.state.containsErrors){
-      //       this.setState({
-      //           errors: errors,
-      //           containsErrors: foundErrors
-      //       })
-      //   }
-  }
-
-  validate(event){
-    // let {setChecked, formData} = this.props
-    // formData = formData.toJS()
-
-    // let field = event ? event.target.name : null
-    // let {errors, checked} = this.props.validate(field, formData)
-
-    // this.setState({
-    //   errors: errors,
-    // })
-
-    // if(event && event.target.name){
-    //   setChecked(checked)
-    // }
 
   }
+
 
 //Duplicating these 3 functions for the sake of time, rather than making nice
   renderEditable(cellInfo) {
@@ -260,11 +212,7 @@ let mudLossColumns = [
     formData = formData.toJS()
     let { layerData } = formData
     let objectTemplate = {cimaMD: '', baseMD: '', lodoPerdido: '', densidad: ''}
-/*
-    layerColumns.forEach(column => {
-      column.cell === 'renderEditable' ? column.Cell = this.renderEditable : null
-    })
-*/
+
     return (
       <div className='layer-table' style={{marginBot: '20px'}}> 
         <div className='header'>
@@ -302,11 +250,6 @@ let mudLossColumns = [
     let { mudLossData } = formData
 
     let objectTemplate = {cimaMD: '', baseMD: '', lodoPerdido: '', densidad: ''}
-/*
-    mudLossColumns.forEach(column => {
-      column.cell === 'renderEditable' ? column.Cell = this.renderEditableMudLoss : null
-    })
-*/
 
     return (
       <div className="mud-loss-table" style={{marginBot: '20px'}}> 
@@ -380,40 +323,9 @@ let mudLossColumns = [
   }
 }
 
-const validate = values => {
-    let errors = {}
 
-    if(!values.layerData){
-      errors.layerData = {message: "Esta forma no puede estar vacia"}
-    }else {
-      values.layerData.forEach((row, index) => {
-        let hasEmpty = Object.values(row).find((value) => { return value === null || value.toString().trim() == '' })
-        if(hasEmpty !== undefined){
-            errors.layerData = {message: "Ningun campo puede estar vacio."}
-        }
-      })
-    }
-
-    if(!values.mudLossData){
-      errors.mudLossData = {message: "Esta forma no puede estar vacia"}
-    }else {
-      values.mudLossData.forEach((row, index) => {
-        let hasEmpty = Object.values(row).find((value) => { return value.toString().trim() == '' })
-        if(hasEmpty !== undefined){
-            errors.mudLossData = {message: "Ningun campo puede estar vacio."}
-        }
-      })
-    }
-
-    if(!values.imgURL){
-      errors.imgURL = {message: "Este campo no puede estar vacio."}
-    }
-
-    return errors
-}
 
 const mapStateToProps = state => ({
-  forms: state.get('forms'),
   formData: state.get('evaluacionPetrofisica'),
 })
 
@@ -421,7 +333,6 @@ const mapDispatchToProps = dispatch => ({
   setImgURL: val => dispatch(setImgURL(val)),
   setLayerData: val => dispatch(setLayerData(val)),
   setMudLossData: val => dispatch(setMudLossData(val)),
-  setChecked: val => dispatch(setChecked(val, 'evaluacionPetrofisica'))
 })
 
 
