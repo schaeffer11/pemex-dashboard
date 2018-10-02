@@ -161,54 +161,12 @@ let columns = [
   }
 
   componentDidMount(){
-    this.validate()
-    this.containsErrors()
-    this.props.containsErrors(this, this.state.containsErrors)
+
   }
 
   componentDidUpdate(){
-    this.containsErrors()
-    this.props.containsErrors(this, this.state.containsErrors)
+
   }
-
-  containsErrors(){
-    let foundErrors = false
-    let errors = Object.assign({}, this.state.errors);
-    let {formData} = this.props
-    formData = formData.toJS()
-
-    const checked = formData.checked  || []
-    checked.forEach((checked) => {
-       if(errors[checked]){
-           errors[checked].checked = true
-           foundErrors = true
-        }
-    })
-
-    if(foundErrors !== this.state.containsErrors){
-      this.setState({
-          errors: errors,
-          containsErrors: foundErrors
-      })
-    }
-  }
-
-  validate(event){
-    let {setChecked, formData} = this.props
-    formData = formData.toJS()
-
-    let field = event ? event.target.name : null
-    let {errors, checked} = this.props.validate(field, formData)
-
-    this.setState({
-      errors: errors,
-    })
-
-    if(event && event.target.name){
-      setChecked(checked)
-    }
-  }
-
 
   makeAforosGraph() {
     let { formData } = this.props
@@ -238,8 +196,6 @@ let columns = [
       )
 
   }
-
-
 
 
   renderEditable(cellInfo) {
@@ -299,6 +255,8 @@ let columns = [
 
     const objectTemplate = {fecha: null, tiempo: '', estrangulador: '', ptp: '', ttp: '', pbaj: '',tbaj: '',psep: '',tsep: '', ql: '',qo: '', qg: '', qw: '', rga: '', salinidad: '', ph: ''}
 
+    console.log('render aforos')
+
     return (
       <div className='historico-produccion' >
         <div className='table'>
@@ -315,9 +273,7 @@ let columns = [
             getTdProps={this.deleteRow}
           />
         </div>
-        { this.state.errors.aforosData && this.state.errors.aforosData.checked &&
-          <div className="error">{this.state.errors.aforosData.message}</div>
-        }
+
         <button className='new-row-button' onClick={this.addNewRow}>Añadir un renglón</button>
       </div>
     )
@@ -354,22 +310,6 @@ let columns = [
   }
 }
 
-const validate = values => {
-    const errors = {}
-
-    if(!values.aforosData){
-      errors.aforosData = {message: "Esta forma no puede estar vacia"}
-    }else {
-      values.aforosData.forEach((row, index) => {
-        let hasEmpty = Object.values(row).find((value) => { return value === null || value.toString().trim() == '' })
-        if(hasEmpty !== undefined){
-            errors.aforosData = {message: "Ningun campo puede estar vacio."}
-        }
-      })
-    }
-
-    return errors
-}
 
 const mapStateToProps = state => ({
   formData: state.get('historicoDeAforos'),
@@ -380,7 +320,4 @@ const mapDispatchToProps = dispatch => ({
     setChecked: val => dispatch(setChecked(val, 'historicoDeAforos'))
 })
 
-export default withValidate(
-  validate,
-  connect(mapStateToProps, mapDispatchToProps)(HistoricoDeAforos)
-)
+export default connect(mapStateToProps, mapDispatchToProps)(HistoricoDeAforos)

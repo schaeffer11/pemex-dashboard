@@ -12,32 +12,8 @@ import { InputRow, InputRowUnitless, InputRowSelectUnitless, TextAreaUnitless } 
   constructor(props) {
     super(props)
 
-    this.estimulacionMultiStepFormRef = React.createRef();
-    this.acidoMultiStepFormRef = React.createRef();
-    this.apuntaladoMultiStepFormRef = React.createRef();
-
-    this.estimulacionMultiStepForm = React.createElement(EstimulacionMultiStepForm,{ ref: this.estimulacionMultiStepFormRef })
-    this.acidoMultiStepForm = React.createElement(AcidoMultiStepForm,{ ref: this.acidoMultiStepFormRef })
-    this.apuntaladoMultiStepForm = React.createElement(ApuntaladoMultiStepForm,{ ref: this.apuntaladoMultiStepFormRef })
   }
 
-  validate(){
-    let { formData } = this.props
-    formData = formData.toJS()
-
-    let { tipoDeIntervenciones } = formData
-    let valid = false
-
-    if(tipoDeIntervenciones == 'estimulacion'){
-      valid = this.estimulacionMultiStepFormRef.current.getWrappedInstance().validate()
-    }else if(tipoDeIntervenciones == 'acido'){
-      valid = this.acidoMultiStepFormRef.current.getWrappedInstance().validate()
-    }else if(tipoDeIntervenciones == 'apuntalado'){
-      valid = this.apuntaladoMultiStepFormRef.current.getWrappedInstance().validate()
-    }
-
-    return valid
-  }
 
   render() {
     let { formData } = this.props
@@ -48,13 +24,13 @@ import { InputRow, InputRowUnitless, InputRowSelectUnitless, TextAreaUnitless } 
     let form;
     switch(tipoDeIntervenciones){
             case 'estimulacion': 
-              form = this.estimulacionMultiStepForm
+              form = <EstimulacionMultiStepForm />
               break;
             case 'acido':
-              form = this.acidoMultiStepForm
+              form = <AcidoMultiStepForm />
               break;
             case 'apuntalado':
-              form = this.apuntaladoMultiStepForm
+              form = <ApuntaladoMultiStepForm />
               break; 
     }
 

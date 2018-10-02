@@ -164,54 +164,13 @@ let columns = [
   }
 
   componentDidMount(){
-    this.validate()
-    this.containsErrors()
-    this.props.containsErrors(this, this.state.containsErrors)
+
   }
 
   componentDidUpdate(){
-    this.containsErrors()
-    this.props.containsErrors(this, this.state.containsErrors)
-  }
-
-  containsErrors(){
-    let foundErrors = false
-    let errors = Object.assign({}, this.state.errors);
-    let {formData} = this.props
-    formData = formData.toJS()
-
-    const checked = formData.checked  || []
-    checked.forEach((checked) => {
-        if(errors[checked]){
-           errors[checked].checked = true
-           foundErrors = true
-        }
-    })
-
-    if(foundErrors !== this.state.containsErrors){
-      this.setState({
-        errors: errors,
-        containsErrors: foundErrors
-      })
-    }
 
   }
 
-  validate(event){
-    let {setChecked, formData} = this.props
-    formData = formData.toJS()
-
-    let field = event ? event.target.name : null
-    let {errors, checked} = this.props.validate(field, formData)
-
-    this.setState({
-      errors: errors,
-    })
-
-    if(event && event.target.name){
-      setChecked(checked)
-    }
-  }
 
 
   makeProductionGraph() {
@@ -284,6 +243,9 @@ let columns = [
 
     const objectTemplate = {fecha: null, dias: '', qo: '', qw: '', qg: '', qgi: '', qo_vol: '', qw_vol: '', qg_vol: '', qgi_vol: '', np: '', wp: '', gp: '', gi: '', rga: '', fw: ''}
 
+    console.log('render produccion')
+
+
     return (
       <div className='historico-produccion' >
         <div className='table'>
@@ -300,9 +262,7 @@ let columns = [
             getTdProps={this.deleteRow}
           />
         </div>
-        { this.state.errors.produccionData && this.state.errors.produccionData.checked &&
-          <div className="error">{this.state.errors.produccionData.message}</div>
-        }
+
         <button className='new-row-button' onClick={this.addNewRow}>Añadir un renglón</button>
       </div>
     )
@@ -330,23 +290,6 @@ let columns = [
   }
 }
 
-const validate = values => {
-    const errors = {}
-
-    if(!values.produccionData){
-      errors.produccionData = {message: "Esta forma no puede estar vacia"}
-    }else {
-      values.produccionData.forEach((row, index) => {
-        let hasEmpty = Object.values(row).find((value) => { return value === null || value.toString().trim() == '' })
-        if(hasEmpty !== undefined){
-            errors.produccionData = {message: "Ningun campo puede estar vacio."}
-        }
-      })
-    }
-
-    return errors
-}
-
 const mapStateToProps = state => ({
   formData: state.get('historicoDeProduccion'),
 })
@@ -356,7 +299,5 @@ const mapDispatchToProps = dispatch => ({
     setChecked: val => dispatch(setChecked(val, 'historicoDeProduccion'))    
 })
 
-export default withValidate(
-  validate,
-  connect(mapStateToProps, mapDispatchToProps)(HistoricoDeProduccion)
-)
+export default connect(mapStateToProps, mapDispatchToProps)(HistoricoDeProduccion)
+

@@ -15,15 +15,11 @@ import Notification from '../../Common/Notification'
 import Loading from '../../Common/Loading'
 
 
-// import {withValidate} from '../../Common/Validate'
 
 @autobind class GeneralData extends Component {
   constructor(props) {
     super(props)
     this.state = { 
-      // containsErrors: false,
-      // errors: [],
-      // checked: [],
       isOpen: false,
       saveOptions: [],
       selectedSave: null
@@ -255,8 +251,6 @@ import Loading from '../../Common/Loading'
           }
         })
 
-        console.log(wells)
-
         wellOptions = wells.map(i => ({ label: i.WELL_NAME, value: i.WELL_FORMACION_ID}))
 
       }
@@ -381,18 +375,6 @@ import Loading from '../../Common/Loading'
   }
 }
 
-const validate = values => {
-    const errors = {}
-
-    if(!values.campo ){
-       errors.campo = {message: "Este campo no puede estar vacio"}
-    }
-
-    if(!values.pozo ){
-       errors.pozo = {message: "Este campo no puede estar vacio"}
-    }
-    return errors
-}
 
 const mapStateToProps = state => ({
   formData: state.get('fichaTecnicaDelPozoHighLevel'),
@@ -420,10 +402,5 @@ const mapDispatchToProps = dispatch => ({
   loadFromSave: values => {dispatch(testLoadFromSave(values))},
   setLoading: obj => dispatch(setIsLoading(obj))
 })
-
-// export default withValidate(
-//   validate, 
-//   connect(mapStateToProps, mapDispatchToProps)(GeneralData)
-// )
 
 export default connect(mapStateToProps, mapDispatchToProps)(GeneralData)

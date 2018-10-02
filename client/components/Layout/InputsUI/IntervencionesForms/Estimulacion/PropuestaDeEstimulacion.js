@@ -1,10 +1,10 @@
 import React, { Component } from 'react'
 import autobind from 'autobind-decorator'
-import InputTable from '../../../Common/InputTable'
 import ReactTable from 'react-table'
 import Select from 'react-select'
 import { connect } from 'react-redux'
-import {withValidate} from '../../../Common/Validate'
+
+import InputTable from '../../../Common/InputTable'
 import { InputRow, InputRowUnitless, InputRowSelectUnitless, CalculatedValue } from '../../../Common/InputRow'
 import { setCedulaData, setIntervalo, setLongitudDeIntervalo, setVolAparejo, setCapacidadTotalDelPozo, setVolumenPrecolchonN2, setVolumenSistemaNoReativo, setVolumenSistemaReactivo, setVolumenSistemaDivergente, setVolumenDesplazamientoLiquido, setVolumenDesplazamientoN2, setVolumenTotalDeLiquido, setChecked, setPropuestaCompany, setTipoDeEstimulacion, setTipoDeColocacion, setTiempoDeContacto } from '../../../../../redux/actions/intervencionesEstimulacion'
 import { setEspesorBruto } from '../../../../../redux/actions/pozo'
@@ -14,61 +14,17 @@ import { round, calculateVolumes, getSistemaOptions } from '../helpers'
   constructor(props) {
     super(props)
     this.state = { 
-      containsErrors: false,
-      errors: [],
-      checked: []
+
     }
   }
 
   componentDidMount() {
-    this.validate()
-    this.containsErrors()
-    //this.props.containsErrors(this, this.state.containsErrors)
+
   }
 
   componentDidUpdate(prevProps) {
-    this.containsErrors()
-    //this.props.containsErrors(this, this.state.containsErrors)
+
   }
-
-  containsErrors(){
-    let foundErrors = false
-    let errors = Object.assign({}, this.state.errors);
-    let {formData} = this.props
-    formData = formData.toJS()
-
-    const checked = formData.checked  || []
-    checked.forEach((checked) => {
-        if(errors[checked]){
-           errors[checked].checked = true
-           foundErrors = true
-        }
-    })
-
-    if(foundErrors !== this.state.containsErrors){
-      this.setState({
-        errors: errors,
-        containsErrors: foundErrors
-      })
-    }
-  }
-
-  validate(event){
-     let {setChecked, formData} = this.props
-     formData = formData.toJS()
-
-     let field = event ? event.target.name : null
-     let {errors, checked} = this.props.validate(field, formData)
-
-     this.setState({
-        errors: errors,
-     })
-
-     if(event && event.target.name){
-         setChecked(checked)
-     }
-  }
-
 
   makeGeneralForm() {
     let { formData, setPropuestaCompany, setTipoDeEstimulacion } = this.props
@@ -234,10 +190,7 @@ import { round, calculateVolumes, getSistemaOptions } from '../helpers'
   }
 
 
-
-
  
-
   deleteRow(state, rowInfo, column, instance) {
     let { formData, setCedulaData } = this.props
     formData = formData.toJS()
@@ -445,9 +398,6 @@ import { round, calculateVolumes, getSistemaOptions } from '../helpers'
             getTdProps={this.deleteRow}
           />
         </div>
-        { this.state.errors.cedulaData && this.state.errors.cedulaData.checked &&
-          <div className="error">{this.state.errors.cedulaData.message}</div>
-        }
         <button className='new-row-button' onClick={this.addNewRow}>Añadir un renglón</button>
       </div>
     )
@@ -479,68 +429,6 @@ import { round, calculateVolumes, getSistemaOptions } from '../helpers'
   }
 }
 
-const validate = values => {
-    const errors = {}
-/*
-    if(!values.volumenPrecolchonN2 ){
-       errors.volumenPrecolchonN2 = {message: "Este campo no puede estar vacio"}
-    }
-
-    if(!values.volumenSistemaNoReativo ){
-       errors.volumenSistemaNoReativo = {message: "Este campo no puede estar vacio"}
-    }
-
-    if(!values.volumenSistemaReactivo ){
-       errors.volumenSistemaReactivo = {message: "Este campo no puede estar vacio"}
-    }
-
-    if(!values.volumenSistemaDivergente ){
-       errors.volumenSistemaDivergente = {message: "Este campo no puede estar vacio"}
-    }
-
-    if(!values.volumenDesplazamientoLiquido ){
-       errors.volumenDesplazamientoLiquido = {message: "Este campo no puede estar vacio"}
-    }
-
-    if(!values.volumenDesplazamientoN2 ){
-       errors.volumenDesplazamientoN2 = {message: "Este campo no puede estar vacio"}
-    }
-
-    if(!values.volumenTotalDeLiquido ){
-       errors.volumenTotalDeLiquido = {message: "Este campo no puede estar vacio"}
-    }
-*/
-    if(!values.propuestaCompany ){
-        errors.propuestaCompany = {message: "Este campo no puede estar vacio"}
-    }
-
-    if(!values.tipoDeEstimulacion ){
-        errors.tipoDeEstimulacion = {message: "Este campo no puede estar vacio"}
-    }
-
-    if(values.tipoDeEstimulacion == 'limpieza') {
-        if (!values.tipoDeColocacion) {
-            errors.tipoDeColocacion = {message: "Este campo no puede estar vacio"}
-        }
-
-        if (!values.tiempoDeContacto) {
-            errors.tiempoDeContacto = {message: "Este campo no puede estar vacio"}
-        }
-    }
-
-    if(!values.cedulaData){
-      errors.cedulaData = {message: "Esta forma no puede estar vacia"}
-    }else {
-      values.cedulaData.forEach((row, index) => {
-        let hasEmpty = Object.values(row).find((value) => {  return value === null || value.toString().trim() == '' })
-        if(hasEmpty !== undefined){
-            errors.cedulaData = {message: "Ningun campo puede estar vacio."}
-        }
-      })
-    }
-
-    return errors
-}
 
 const mapStateToProps = state => ({
   formData: state.get('propuestaEstimulacion'),
@@ -560,14 +448,10 @@ const mapDispatchToProps = dispatch => ({
   setVolumenDesplazamientoN2: val => dispatch(setVolumenDesplazamientoN2(val)),
   setVolumenTotalDeLiquido: val => dispatch(setVolumenTotalDeLiquido(val)),
   setCedulaData: (cedula, volumes = null) => dispatch(setCedulaData(cedula, volumes)),
-  setChecked: val => dispatch(setChecked(val, 'propuestaEstimulacion')),
   setPropuestaCompany: val => dispatch(setPropuestaCompany(val)),
   setTipoDeEstimulacion: val => dispatch(setTipoDeEstimulacion(val)),
   setTipoDeColocacion: val => dispatch(setTipoDeColocacion(val)), 
   setTiempoDeContacto: val => dispatch(setTiempoDeContacto(val)),
 })
 
-export default withValidate(
-  validate,
-  connect(mapStateToProps, mapDispatchToProps, null, {withRef: true})(PropuestaDeEstimulacion)
-)
+export default connect(mapStateToProps, mapDispatchToProps)(PropuestaDeEstimulacion) 

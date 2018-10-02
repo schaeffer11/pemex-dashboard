@@ -4,7 +4,7 @@ import InputTable from '../../../Common/InputTable'
 import ReactTable from 'react-table'
 import Select from 'react-select'
 import { connect } from 'react-redux'
-import {withValidate} from '../../../Common/Validate'
+
 import { InputRow, CalculatedValue, InputRowUnitless, InputRowSelectUnitless } from '../../../Common/InputRow'
 import { setCedulaData, setModuloYoungArena, setModuloYoungLutitas, setRelacPoissonArena, setRelacPoissonLutatas, setGradienteDeFractura, setDensidadDeDisparos, setDiametroDeDisparos, setIntervalo, setLongitudDeIntervalo, setVolAparejo, setCapacidadTotalDelPozo, setVolumenPrecolchonN2, setVolumenDeApuntalante, setVolumenDeGelDeFractura, setVolumenDesplazamiento, setVolumenTotalDeLiquido, setChecked, setPropuestaCompany } from '../../../../../redux/actions/intervencionesApuntalado'
 import { round, calculateVolumes, getSistemaOptions } from '../helpers'
@@ -13,62 +13,18 @@ import { round, calculateVolumes, getSistemaOptions } from '../helpers'
   constructor(props) {
     super(props)
     this.state = { 
-      containsErrors: false,
-      errors: [],
-      checked: []
+
     }
   }
 
   componentDidMount() {
-    this.validate()
-    this.containsErrors()
+
   }
 
   componentDidUpdate(prevProps) {
-    this.containsErrors()
+
   }
 
-  containsErrors(){
-    let foundErrors = false
-    let errors = Object.assign({}, this.state.errors);
-    let {formData} = this.props
-    formData = formData.toJS()
-
-    const checked = formData.checked  || []
-    checked.forEach((checked) => {
-        if(errors[checked]){
-           errors[checked].checked = true
-           foundErrors = true
-        }
-    })
-
-    if(foundErrors !== this.state.containsErrors){
-      this.setState({
-        errors: errors,
-        containsErrors: foundErrors
-      })
-    }
-  }
-
-  validate(event){
-    let {setChecked, formData} = this.props
-    formData = formData.toJS()
-
-    let field = event ? event.target.name : null
-    let {errors, checked} = this.props.validate(field, formData)
-
-    this.setState({
-      errors: errors,
-    })
-
-    if(event && event.target.name){
-      setChecked( checked)
-
-      this.setState({
-        checked: checked
-      })
-    }
-  }
 
   makeGeneralForm() {
     let { formData, setPropuestaCompany } = this.props
@@ -419,9 +375,6 @@ import { round, calculateVolumes, getSistemaOptions } from '../helpers'
             sortable={false}
             getTdProps={this.deleteRow}
           />
-        { this.state.errors.cedulaData && this.state.errors.cedulaData.checked &&
-          <div className="error">{this.state.errors.cedulaData.message}</div>
-        }
         <button className='new-row-button' onClick={this.addNewRow}>Añadir un renglón</button>
         </div>
       </div>
@@ -452,51 +405,6 @@ import { round, calculateVolumes, getSistemaOptions } from '../helpers'
 }
 
 
-const validate = values => {
-    const errors = {}
-
-    if(!values.moduloYoungArena){
-      errors.moduloYoungArena = {message: "Este campo no puede estar vacio"}
-    }
-
-    if(!values.moduloYoungLutitas){
-      errors.moduloYoungLutitas = {message: "Este campo no puede estar vacio"}
-    }
-
-    if(!values.relacPoissonArena){
-      errors.relacPoissonArena = {message: "Este campo no puede estar vacio"}
-    }
-
-    if(!values.relacPoissonLutatas){
-      errors.relacPoissonLutatas = {message: "Este campo no puede estar vacio"}
-    }
-
-    if(!values.gradienteDeFractura){
-      errors.gradienteDeFractura = {message: "Este campo no puede estar vacio"}
-    }
-
-    if(!values.densidadDeDisparos){
-      errors.densidadDeDisparos = {message: "Este campo no puede estar vacio"}
-    }
-
-    if(!values.diametroDeDisparos){
-      errors.diametroDeDisparos = {message: "Este campo no puede estar vacio"}
-    }
-
-    if(!values.cedulaData){
-      errors.cedulaData = {message: "Esta forma no puede estar vacia"}
-    }else {
-      values.cedulaData.forEach((row, index) => {
-        let hasEmpty = Object.values(row).find((value) => { return value == null || value == undefined || value === '' })
-        if(hasEmpty !== undefined){
-            errors.cedulaData = {message: "Ningun campo puede estar vacio."}
-        }
-      })
-    }
-
-    return errors
-}
-
 const mapStateToProps = state => ({
   formData: state.get('propuestaApuntalado'),
   intervalos: state.getIn(['evaluacionPetrofisica', 'layerData']),
@@ -520,11 +428,7 @@ const mapDispatchToProps = dispatch => ({
   setGradienteDeFractura: val => dispatch(setGradienteDeFractura(val)),
   setDensidadDeDisparos: val => dispatch(setDensidadDeDisparos(val)),
   setDiametroDeDisparos: val => dispatch(setDiametroDeDisparos(val)),
-  setChecked: val => dispatch(setChecked(val, 'propuestaApuntalado')),
   setPropuestaCompany: val => dispatch(setPropuestaCompany(val)),
 })
 
-export default withValidate(
-  validate,
-  connect(mapStateToProps, mapDispatchToProps, null, { withRef: true })(PropuestaDeApuntalado)
-)
+export default connect(mapStateToProps, mapDispatchToProps)(PropuestaDeApuntalado)

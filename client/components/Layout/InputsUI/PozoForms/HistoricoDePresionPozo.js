@@ -38,59 +38,17 @@ let columns = [
   constructor(props) {
     super(props)
     this.state = { 
-      containsErrors: false,
-      errors: []
+
     }
   }
 
   componentDidMount(){
-    this.validate()
-    this.containsErrors()
-    this.props.containsErrors(this, this.state.containsErrors)
+
   }
 
   componentDidUpdate(){
-    this.containsErrors()
-    this.props.containsErrors(this, this.state.containsErrors)
+
   }
-
-  containsErrors(){
-    let foundErrors = false
-    let errors = Object.assign({}, this.state.errors);
-    let {formData} = this.props
-    formData = formData.toJS()
-
-    const checked = formData.checked  || []
-    checked.forEach((checked) => {
-        if(errors[checked]){
-           errors[checked].checked = true
-           foundErrors = true
-        }
-    })
-
-    if(foundErrors !== this.state.containsErrors){
-      this.setState({
-        errors: errors,
-        containsErrors: foundErrors
-      })
-    }
-  }
-
-  validate(event){
-    let {setChecked, formData} = this.props
-    formData = formData.toJS()
-
-    let field = event ? event.target.name : null
-    let {errors, checked} = this.props.validate(field, formData)
-
-    this.setState({
-      errors: errors,
-    })
-
-    if(event && event.target.name){
-      setChecked(checked)
-    }
-  } 
 
   renderEditable(cellInfo) {
     let { setPresionDataPozo, formData } = this.props
@@ -149,6 +107,8 @@ let columns = [
 
      const objectTemplate = {fecha: null, Pws: '', Pwf: ''}
 
+    console.log('render ppzoo')
+
     return (
 
       <div className='historico-presion-pozo' >
@@ -168,9 +128,7 @@ let columns = [
               getTdProps={this.deleteRow}
             />
           </div>
-            { this.state.errors.presionDataPozo && this.state.errors.presionDataPozo.checked &&
-            <div className="error">{this.state.errors.presionDataPozo.message}</div>
-            }
+
           <button className='new-row-button' onClick={this.addNewRow}>Añadir un renglón</button>
         </div>
         <div className='depth'>
@@ -179,27 +137,6 @@ let columns = [
       </div>
     )
   }
-}
-
-const validate = values => {
-    let errors = {}
-
-    if(!values.presionDataPozo){
-      errors.presionDataPozo = {message: "Esta forma no puede estar vacia"}
-    }else {
-      values.presionDataPozo.forEach((row, index) => {
-        let hasEmpty = Object.values(row).find((value) => { return value === null || value.toString().trim() == '' })
-        if(hasEmpty !== undefined){
-            errors.presionDataPozo = {message: "Ningun campo puede estar vacio."}
-        }
-      })
-    }
-
-    if(values.pressureDepthPozo == ''){
-        errors.pressureDepthPozo = {message: "Ningun campo puede estar vacio."}
-    }
-
-    return errors
 }
 
 const mapStateToProps = state => ({
@@ -212,7 +149,4 @@ const mapDispatchToProps = dispatch => ({
     setPressureDepthPozo: val => dispatch(setPressureDepthPozo(val)),
 })
 
-export default withValidate(
-  validate,
-  connect(mapStateToProps, mapDispatchToProps)(HistoricoDePresionPozo)
-)
+export default connect(mapStateToProps, mapDispatchToProps)(HistoricoDePresionPozo)

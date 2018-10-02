@@ -34,34 +34,7 @@ import { setPage } from '../../../../redux/actions/global'
       selectedWell: null,
       fieldWellOptions: [],
     }
-
-    this.fichaTecnicaDelCampo = React.createRef();
-    this.fichaTecnicaDelPozo = React.createRef();
-    this.evaluacionPetrofisica = React.createRef();
-    this.mecanicoYAparejo = React.createRef();
-    this.analisisDelAgua = React.createRef();
-    this.sistemasArtificialesDeProduccion = React.createRef();
-    this.historicoDePresionCampo = React.createRef();
-    this.historicoDePresionPozo = React.createRef();
-    this.historicoDeProduccion = React.createRef();
-    this.historicoDeAforos = React.createRef();
-    
-
-    // TODO: Refactor the tabs to be children instead
-    this.forms = [
-      {'title' : 'Ficha Técnica del Campo', 'type': 'TecnicaDelCampo', 'content': <TecnicaDelCampo key="form_1" ref={Ref =>  this.fichaTecnicaDelCampo=Ref } containsErrors={this.containsErrors} /> },
-      {'title' : 'Ficha Técnica del Pozo' , 'type':'TecnicaDelPozo',  'content':<TecnicaDelPozo key="form_2" ref={Ref =>  this.fichaTecnicaDelPozo=Ref } containsErrors={this.containsErrors} /> },
-      {'title' : 'Evaluación Petrofísica', 'type':'EvaluacionPetrofisica', 'content': <EvaluacionPetrofisica key="form_3" ref={Ref => this.evaluacionPetrofisica=Ref} containsErrors={this.containsErrors}  /> },
-      {'title' : 'Edo. Mecánico y Aparejo de Producción', 'type':'MecanicoYAparejo',  'content': <MecanicoYAparejo key="form_4" ref={Ref => this.mecanicoYAparejo=Ref } containsErrors={this.containsErrors}  /> },
-      {'title' : 'Análisis del Agua', 'type':'AnalisisDelAgua', 'content': <AnalisisDelAgua key="form_5" ref={Ref => this.analisisDelAgua=Ref } containsErrors={this.containsErrors}  /> }, 
-      {'title' : 'Información de Sistemas Artificiales de Producción', 'type':'SistemasArtificialesDeProduccion', 'content': <SistemasArtificialesDeProduccion key="form_6" ref={Ref => this.sistemasArtificialesDeProduccion=Ref } containsErrors={this.containsErrors}  /> },
-      {'title' : 'Histórico de Presión - Campo', 'type':'HistoricoDePresionCampo', 'content': <HistoricoDePresionCampo key="form_7" ref={Ref => this.historicoDePresionCampo=Ref } containsErrors={this.containsErrors}  /> },
-      {'title' : 'Histórico de Presión - Pozo', 'type':'HistoricoDePresionPozo', 'content': <HistoricoDePresionPozo key="form_8" ref={Ref => this.historicoDePresionPozo=Ref } containsErrors={this.containsErrors}  /> },
-      {'title' : 'Histórico de Aforos', 'type':'HistoricoDeAforos', 'content': <HistoricoDeAforos key="form_9" ref={Ref => this.historicoDeAforos=Ref } containsErrors={this.containsErrors} /> },
-      {'title' : 'Histórico de Producción', 'type':'HistoricoDeProduccion', 'content': <HistoricoDeProduccion key="form_10" ref={Ref => this.historicoDeProduccion=Ref } containsErrors={this.containsErrors}  /> },
-    ]
   }
-
 
   componentDidMount() {
     fetch('/api/getSubmittedFieldWellMapping')
@@ -506,7 +479,6 @@ import { setPage } from '../../../../redux/actions/global'
       })
     }
     else { 
-      console.log('no data found')
       setLoading({ 
         isLoading: false,
         showNotification: true,
@@ -522,9 +494,6 @@ import { setPage } from '../../../../redux/actions/global'
 
 
 
-
-
-
   handleClick(i){
     const type = this.forms[i].type
     this.props.setCurrentPage(type)
@@ -533,21 +502,21 @@ import { setPage } from '../../../../redux/actions/global'
     })
   }
 
-  containsErrors(el, errors){
-    if(el === undefined) return false
-
-    var found = this.forms.findIndex((form) => form.type == el._reactInternalFiber.type.name)
-    if(found !== -1)
-      this.forms[found]['error'] = errors
-  }
-
   handleNextSubtab(){
-    const { currentStep } = this.state
-    const newStep = currentStep + 1
-    if(this.forms.length > newStep){
-      const { setCurrentPage } = this.props
-      const type = this.forms[newStep].type
-      setCurrentPage(type)
+    const forms = [
+      {'title' : 'Ficha Técnica del Campo' },
+      {'title' : 'Ficha Técnica del Pozo' },
+      {'title' : 'Evaluación Petrofísica' },
+      {'title' : 'Edo. Mecánico y Aparejo de Producción' },
+      {'title' : 'Análisis del Agua'}, 
+      {'title' : 'Información de Sistemas Artificiales de Producción' },
+      {'title' : 'Histórico de Presión - Campo' },
+      {'title' : 'Histórico de Presión - Pozo' },
+      {'title' : 'Histórico de ' },
+      {'title' : 'Histórico de Producción' },
+    ];
+
+    if(forms.length > this.state.currentStep + 1){
       this.setState({
         currentStep: newStep
       })
@@ -567,37 +536,9 @@ import { setPage } from '../../../../redux/actions/global'
     }
   }
 
-  validate() {
-    let { setChecked } = this.props
-
-    const forms = [
-      this.fichaTecnicaDelCampo,
-      this.fichaTecnicaDelPozo,
-      this.evaluacionPetrofisica,
-      this.mecanicoYAparejo,
-      this.analisisDelAgua,
-      this.sistemasArtificialesDeProduccion,
-      this.historicoDePresionCampo,
-      this.historicoDePresionPozo,
-      this.historicoDeAforos,
-      this.historicoDeProduccion
-    ];
-
-    let allErrors = {}
-    let allChecked = []
-    forms.forEach((form) => {
-      let {errors, checked} = form.selector.props.forceValidation()
-      allErrors = Object.assign({}, allErrors, errors);
-    });
-
-
-    return Object.keys(allErrors).length == 0;
-  }
-
   deactivateModal() {
     this.setState({
       isOpen: false,
-      // transactionName: null
     })
   }
 
@@ -680,8 +621,6 @@ import { setPage } from '../../../../redux/actions/global'
         </div>
         <div className="modal-info">
           Seleccione un pozo para descargar su información
-          {/* Please select which well you would like to load data from */}
-
 
           <InputRowSelectUnitless header="Campo" name="campo" value={selectedField} options={fieldOptions} callback={this.handleSelectField} name='campo' />
           <InputRowSelectUnitless header="Pozo" name="pozo" value={selectedWell} options={wellOptions} callback={this.handleSelectWell} name='pozo' />
@@ -705,25 +644,33 @@ import { setPage } from '../../../../redux/actions/global'
   }
 
   render() {
-    let { fieldWellOptions } = this.state
     let { setShowForms } = this.props
+    let { fieldWellOptions } = this.state
     let { isOpen } = this.state
     let className = 'subtab'
-    let title = this.forms[this.state.currentStep].title
-    
-    let pozoFormSubmitting = this.props.formsState.get('pozoFormSubmitting')
-    const submitting = pozoFormSubmitting ? 'submitting' : ''
 
-    const errors = this.props.formsState.get('pozoFormError')
-    console.log('what is this?', this.state, title)
+    const forms = [
+      {'title' : 'Ficha Técnica del Campo', content: <TecnicaDelCampo /> },
+      {'title' : 'Ficha Técnica del Pozo' , content:<TecnicaDelPozo /> },
+      {'title' : 'Evaluación Petrofísica', content: <EvaluacionPetrofisica /> },
+      {'title' : 'Edo. Mecánico y Aparejo de Producción', content: <MecanicoYAparejo /> },
+      {'title' : 'Análisis del Agua', content: <AnalisisDelAgua  /> }, 
+      {'title' : 'Información de Sistemas Artificiales de Producción', content: <SistemasArtificialesDeProduccion  /> },
+      {'title' : 'Histórico de Presión - Campo', content: <HistoricoDePresionCampo  /> },
+      {'title' : 'Histórico de Presión - Pozo', content: <HistoricoDePresionPozo  /> },
+      {'title' : 'Histórico de Aforos', content: <HistoricoDeAforos /> },
+      {'title' : 'Histórico de Producción', content: <HistoricoDeProduccion  /> },
+    ];
+
+    let title = forms[this.state.currentStep].title
+    
 
 
     return (
-       <div className={`multistep-form ${submitting}`}>
+       <div className={`multistep-form`}>
         <div className="subtabs">
-            {this.forms.map( (tab, index) => {
+            {forms.map( (tab, index) => {
                const active = this.state.currentStep === index ? 'active' : ''; 
-               const tabError = tab.error ? 'error' : ''
                return <div className={`${className} ${active}`} onClick={() => this.handleClick(index)} key={index}><span></span> {tab.title} </div>
                }
             )}
@@ -736,9 +683,10 @@ import { setPage } from '../../../../redux/actions/global'
             <button className="cta prev" onClick={this.handlePrevSubtab}>Anterior</button> 
             <button className="cta load" onClick={this.activateModal}>Descargar intervención</button> 
           </div>
-          {this.forms[this.state.currentStep].content}
+
+          {forms[this.state.currentStep].content}
         </div>
-        
+
       { isOpen ? this.buildModal() : null }
        </div>
      );
@@ -757,9 +705,6 @@ const mapDispatchToProps = dispatch => ({
   setPresionDataCampo : values => {dispatch(setPresionDataCampo(values))},
   setHistoricoProduccion : values => {dispatch(setHistoricoProduccion(values))},
   setHistoricoDeAforos: values => {dispatch(setHistoricoDeAforos(values))},
-  setLoading: obj => {dispatch(setIsLoading(obj))},
-  setChecked: values => {dispatch(setChecked(values))},
-  setCurrentPage: page => {dispatch(setPage(page))}
 })
 
 const mapStateToProps = state => ({
@@ -777,4 +722,4 @@ const mapStateToProps = state => ({
 })
 
 
-export default connect(mapStateToProps, mapDispatchToProps, null, {withRef: true})(PozoMultiStepForm)
+export default connect(mapStateToProps, mapDispatchToProps)(PozoMultiStepForm)

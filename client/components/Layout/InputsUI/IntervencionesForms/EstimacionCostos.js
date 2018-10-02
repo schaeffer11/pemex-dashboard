@@ -5,10 +5,9 @@ import { connect } from 'react-redux'
 import 'react-table/react-table.css'
 import Select from 'react-select'
 import InputTable from '../../Common/InputTable'
-import {withValidate} from '../../Common/Validate'
 
 import { InputRow, InputRowUnitless, InputRowSelectUnitless, TextAreaUnitless } from '../../Common/InputRow'
-import {setChecked, setEstimacionCostosData, setMNXtoDLS} from '../../../../redux/actions/intervencionesEstimulacion'
+import {setEstimacionCostosData, setMNXtoDLS} from '../../../../redux/actions/intervencionesEstimulacion'
 
 export const itemOptions = [
   { label: 'Costo de Servicios', value: 'Costo de Servicios' },
@@ -43,44 +42,13 @@ export const itemOptions = [
 
 
   componentDidMount() {
-      this.validate()
-      this.containsErrors()
+
   }
 
   componentDidUpdate(prevProps) {
-      this.containsErrors()
-  }
-
-  containsErrors(){
-    let foundErrors = false
-    for (const key of Object.keys(this.state.errors)) {
-      if(this.state.errors[key].checked)
-        foundErrors = true
-    }
-
-    if(foundErrors !== this.state.containsErrors){
-      this.setState({
-        containsErrors: foundErrors
-      })
-    }
 
   }
 
-  validate(event){
-    let {setChecked, formData} = this.props
-    formData = formData.toJS()
-
-    let field = event ? event.target.name : null
-    let {errors, checked} = this.props.validate(field, formData)
-
-    this.setState({
-      errors: errors,
-    })
-
-    if(event && event.target.name){
-      setChecked(checked)
-    }
-  }
 
   renderEditable(cellInfo) {
     let { setEstimacionCostosData, formData } = this.props
@@ -232,9 +200,6 @@ export const itemOptions = [
             getTdProps={this.deleteRow}
           />
         </div>
-        { this.state.errors.estimacionCostosData && this.state.errors.estimacionCostosData.checked &&
-          <div className="error">{this.state.errors.estimacionCostosData.message}</div>
-        }
         <button className='new-row-button' onClick={this.addNewRow}>Añadir un renglón</button>
       </div>
     )
@@ -264,7 +229,6 @@ export const itemOptions = [
           <div className='image'/>
           { this.makeCostsForm() }
 
-
           <div className='kpis'>
             <div className='mnx'><div className='values'>${mnxSum}</div><br/>Costo en MXN</div>
             <div className='usd'><div className='values'>${dlsSum} (${convertedDLSSum} MXN)</div><br/>Costo en USD</div>
@@ -275,25 +239,8 @@ export const itemOptions = [
   }
 }
 
-const validate = values => {
-    let errors = {}
-
-    if(!values.estimacionCostosData){
-      errors.estimacionCostosData = {message: "Esta forma no puede estar vacia"}
-    }else {
-      values.estimacionCostosData.forEach((row, index) => {
-        let hasEmpty = Object.entries(row).find(([key, value]) => {return value == null || value == undefined || value.toString() == ""})
-        if(hasEmpty !== undefined){
-            errors.estimacionCostosData = {message: "Ningun campo puede estar vacio."}
-        }
-      })
-    }
-    
-    return errors
-}
 
 const mapStateToProps = state => ({
-  forms: state.get('forms'),
   formData: state.get('estCost'),
 })
 
@@ -303,8 +250,5 @@ const mapDispatchToProps = dispatch => ({
     setChecked: values => {dispatch(setChecked(values, 'estCost'))}
 })
 
-export default withValidate(
-  validate,
-  connect(mapStateToProps, mapDispatchToProps, null, { withRef: true })(EstimacionCostos)
-)
+export default connect(mapStateToProps, mapDispatchToProps)(EstimacionCostos)
 

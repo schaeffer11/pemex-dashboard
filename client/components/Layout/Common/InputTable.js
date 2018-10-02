@@ -46,6 +46,7 @@ import MaskedTextInput from "react-text-mask";
     let disabled = false
     const { id } = cellInfo.column
     const { sistema } = cellInfo.row
+
     if (sistema === 'desplazamientoN2' || sistema === 'pre-colchon') {
       disabled = id === 'gastoLiqudo' || id === 'volLiquid' || id === 'relN2Liq'
     } else {
@@ -152,6 +153,7 @@ import MaskedTextInput from "react-text-mask";
   }
 
   render(){
+
     let {columns, data} = this.props;
 
     columns.forEach(column => {

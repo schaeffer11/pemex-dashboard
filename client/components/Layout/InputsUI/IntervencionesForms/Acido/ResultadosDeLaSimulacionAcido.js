@@ -9,62 +9,10 @@ import { connect } from 'react-redux'
   constructor(props) {
     super(props)
     this.state = { 
-      containsErrors: false,
-      errors: [],
-      checked: []
+
     }
   }
 
-  componentDidMount() {
-    this.validate()
-    this.containsErrors()
-  }
-
-  componentDidUpdate(prevProps) {
-    this.containsErrors()
-  }
-
-  containsErrors(){
-        let foundErrors = false
-        let errors = Object.assign({}, this.state.errors);
-        let {formData} = this.props
-        formData = formData.toJS()
-
-        const checked = formData.checked  || []
-        checked.forEach((checked) => {
-            if(errors[checked]){
-                errors[checked].checked = true
-                foundErrors = true
-            }
-        })
-
-        if(foundErrors !== this.state.containsErrors){
-            this.setState({
-                errors: errors,
-                containsErrors: foundErrors
-            })
-        }
-  }
-
-  validate(event){
-    let {setChecked, formData} = this.props
-    formData = formData.toJS()
-
-    let field = event ? event.target.name : null
-    let {errors, checked} = this.props.validate(field, formData)
-
-    this.setState({
-      errors: errors,
-    })
-
-    if(event && event.target.name){
-      setChecked( checked)
-
-      this.setState({
-        checked: checked
-      })
-    }
-  }
 
   makeResultForm() {
     let { setLongitudTotal, setLongitudEfectivaGrabada, setAlturaGrabada, setAnchoPromedio, setConcentracionDelAcido, setConductividad, setFcd, setPresionNeta, setEficienciaDeFluidoDeFractura, formData } = this.props
@@ -109,9 +57,6 @@ import { connect } from 'react-redux'
         </div>
         <input type='file' accept="image/*"  onChange={(e) => this.handleFileUpload(e, setEvidenceSimulationAcidoImgURL)} multiple></input>
         {imgURL ? <img className='img-preview' src={imgURL}></img> : null }
-          { this.state.errors.imgURL && this.state.errors.imgURL.checked &&
-          <div className="error">{this.state.errors.imgURL.message}</div>
-          }
       </div>
     )
   }
@@ -134,52 +79,6 @@ import { connect } from 'react-redux'
   }
 }
 
-const validate = values => {
-    const errors = {}
-
-    if(!values.longitudTotal ){
-       errors.longitudTotal = {message: "Este campo no puede estar vacio"}
-    }
-
-    if(!values.longitudEfectivaGrabada ){
-       errors.longitudEfectivaGrabada = {message: "Este campo no puede estar vacio"}
-    }
-
-    if(!values.alturaGrabada ){
-       errors.alturaGrabada = {message: "Este campo no puede estar vacio"}
-    }
-
-    if(!values.anchoPromedio ){
-       errors.anchoPromedio = {message: "Este campo no puede estar vacio"}
-    }
-
-    if(!values.concentracionDelAcido ){
-       errors.concentracionDelAcido = {message: "Este campo no puede estar vacio"}
-    }
-
-    if(!values.conductividad ){
-       errors.conductividad = {message: "Este campo no puede estar vacio"}
-    }
-
-    if(!values.fcd ){
-       errors.fcd = {message: "Este campo no puede estar vacio"}
-    }
-
-    if(!values.presionNeta ){
-       errors.presionNeta = {message: "Este campo no puede estar vacio"}
-    }
-
-    if(!values.eficienciaDeFluidoDeFractura ){
-       errors.eficienciaDeFluidoDeFractura = {message: "Este campo no puede estar vacio"}
-    }
-
-    if(!values.imgURL ){
-        errors.imgURL = {message: "Este campo no puede estar vacio"}
-    }
-
-    return errors
-}
-
 const mapStateToProps = state => ({
   forms: state.get('forms'),
   formData: state.get('resultadosSimulacionAcido'),
@@ -196,11 +95,8 @@ const mapDispatchToProps = dispatch => ({
   setPresionNeta: val => dispatch(setPresionNeta(val)),
   setEficienciaDeFluidoDeFractura: val => dispatch(setEficienciaDeFluidoDeFractura(val)),
   setEvidenceSimulationAcidoImgURL: val => dispatch(setEvidenceSimulationAcidoImgURL(val)),
-  setChecked: val => dispatch(setChecked(val, 'resultadosSimulacionAcido'))
 })
 
-export default withValidate(
-  validate,
-  connect(mapStateToProps, mapDispatchToProps, null, { withRef: true })(ResultadosDeLaSimulacionAcido)
-)
+export default connect(mapStateToProps, mapDispatchToProps)(ResultadosDeLaSimulacionAcido)
+
 

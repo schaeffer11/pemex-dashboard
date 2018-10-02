@@ -38,54 +38,11 @@ let tratamientoPorOptions = [
     }
   }
   componentDidMount(){
-    this.validate()
-    this.containsErrors()
-    this.props.containsErrors(this, this.state.containsErrors)
+
   }
 
   componentDidUpdate(){
-    this.containsErrors()
-    this.props.containsErrors(this, this.state.containsErrors)
-  }
 
-  containsErrors(){
-      let foundErrors = false
-      let errors = Object.assign({}, this.state.errors);
-      let {formData} = this.props
-      formData = formData.toJS()
-
-      const checked = formData.checked  || []
-        checked.forEach((checked) => {
-            if(errors[checked]){
-                errors[checked].checked = true
-                foundErrors = true
-            }
-        })
-
-        if(foundErrors !== this.state.containsErrors){
-            this.setState({
-                errors: errors,
-                containsErrors: foundErrors
-            })
-        }
-
-  }
-
-  validate(event){
-    let {setChecked, formData} = this.props
-    formData = formData.toJS()
-
-    let field = event ? event.target.name : null
-    let {errors, checked} = this.props.validate(field, formData)
-
-    this.setState({
-      errors: errors,
-    })
-
-    if(event && event.target.name){
-      setChecked(checked)
-    }
-    return errors
   }
 
   handleSelectTerminacion(val) {
@@ -186,9 +143,7 @@ let tratamientoPorOptions = [
           Cargar diagrama del aparejo de producción
         </div>
         <input type='file' accept="image/*" onChange={(e) => this.handleFileUpload(e, setImgBoreDiagramURL)}></input>
-        { this.state.errors.imgURL && this.state.errors.imgURL.checked &&
-          <div className="error">{this.state.errors.imgURL.message}</div>
-        }
+       
         {imgURL ? <img className='img-preview' src={imgURL}></img> : null }
       </div>
     )
@@ -207,7 +162,7 @@ let tratamientoPorOptions = [
   }
 
   render() {
-
+    console.log('render mecanico')
     return (
       <div className="form mecanico-y-aparejo">
         <div className='image'/>
@@ -224,89 +179,7 @@ let tratamientoPorOptions = [
 }
 
 
-const validate = values => {
-    const errors = {}
-
-    if(!values.tipoDeTerminacion ){
-       errors.tipoDeTerminacion = {message: "Este campo no puede estar vacio"}
-    }
-
-    if(!values.hIntervaloProductor ){
-       errors.hIntervaloProductor = {message: "Este campo no puede estar vacio"}
-    }
-
-    if(!values.empacador ){
-       errors.empacador = {message: "Este campo no puede estar vacio"}
-    }
-
-    if(!values.presionDifEmpacador ){
-       errors.presionDifEmpacador = {message: "Este campo no puede estar vacio"}
-    }
-
-    if(!values.sensorPyt ){
-       errors.sensorPyt = {message: "Este campo no puede estar vacio"}
-    }
-
-    if(!values.tipoDeLiner ){
-       errors.tipoDeLiner = {message: "Este campo no puede estar vacio"}
-    }
-
-    if(!values.diametroDeLiner ){
-       errors.diametroDeLiner = {message: "Este campo no puede estar vacio"}
-    }
-
-    if(values.tipoDeTerminacion && values.tipoDeTerminacion != 'Agujero Descubierto (AD)') {
-
-        if (!values.tipoDePistolas) {
-            errors.tipoDePistolas = {message: "Este campo no puede estar vacio"}
-        }
-
-        if (!values.densidadDeDisparosMecanico) {
-            errors.densidadDeDisparosMecanico = {message: "Este campo no puede estar vacio"}
-        }
-
-        if (!values.fase) {
-            errors.fase = {message: "Este campo no puede estar vacio"}
-        }
-
-        if (!values.diametroDeOrificio) {
-            errors.diametroDeOrificio = {message: "Este campo no puede estar vacio"}
-        }
-
-        if (!values.penetracion) {
-            errors.penetracion = {message: "Este campo no puede estar vacio"}
-        }
-    }
-
-    if(!values.tratamientoPor ){
-       errors.tratamientoPor = {message: "Este campo no puede estar vacio"}
-    }
-
-    if(!values.volumenAparejoDeProduccion ){
-       errors.volumenAparejoDeProduccion = {message: "Este campo no puede estar vacio"}
-    }
-
-    if(!values.volumenCimaDeIntervalo ){
-       errors.volumenCimaDeIntervalo = {message: "Este campo no puede estar vacio"}
-    }
-
-    if(!values.volumenBaseDeIntervalo ){
-       errors.volumenBaseDeIntervalo = {message: "Este campo no puede estar vacio"}
-    }
-
-    if(!values.volumenDeEspacioAnular ){
-       errors.volumenDeEspacioAnular = {message: "Este campo no puede estar vacio"}
-    }
-
-    if(!values.imgURL){
-      errors.imgURL = {message: "Este campo puede estar vacio."}
-    }
-
-    return errors
-}
-
 const mapStateToProps = state => ({
-  forms: state.get('forms'),
   formData: state.get('mecanicoYAparejoDeProduccion'),
 })
 
@@ -335,7 +208,4 @@ const mapDispatchToProps = dispatch => ({
 })
 
 
-export default withValidate(
-  validate,
-  connect(mapStateToProps, mapDispatchToProps)(MecanicoYAparejo)
-)
+export default connect(mapStateToProps, mapDispatchToProps)(MecanicoYAparejo)

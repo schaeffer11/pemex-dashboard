@@ -40,53 +40,13 @@ let columns = [
   }
 
   componentDidMount(){
-    this.validate()
-    this.containsErrors()
-    this.props.containsErrors(this, this.state.containsErrors)
+
   }
 
   componentDidUpdate(){
-    this.containsErrors()
-    this.props.containsErrors(this, this.state.containsErrors)
+
   }
 
-  containsErrors(){
-    let foundErrors = false
-    let errors = Object.assign({}, this.state.errors);
-    let {formData} = this.props
-    formData = formData.toJS()
-
-    const checked = formData.checked  || []
-    checked.forEach((checked) => {
-        if(errors[checked]){
-           errors[checked].checked = true
-           foundErrors = true
-        }
-    })
-
-    if(foundErrors !== this.state.containsErrors){
-      this.setState({
-        errors: errors,
-        containsErrors: foundErrors
-      })
-    }
-  }
-
-  validate(event){
-     let {setChecked, formData} = this.props
-     formData = formData.toJS()
-
-     let field = event ? event.target.name : null
-     let {errors, checked} = this.props.validate(field, formData)
-
-     this.setState({
-       errors: errors,
-     })
-
-     if(event && event.target.name){
-       setChecked(checked)
-     }
-  }
 
   renderEditable(cellInfo) {
     let { setPresionDataCampo, formData } = this.props
@@ -145,11 +105,8 @@ let columns = [
 
     const objectTemplate = {fecha: null, Pws: ''}
 
-/*
-    columns.forEach(column => {
-      column.cell === 'renderEditable' ? column.Cell = this.renderEditable : null
-    })
-*/
+    console.log('render presion campo')
+
     return (
       <div className='historico-presion-campo' >
         <div className='image'/>
@@ -168,9 +125,7 @@ let columns = [
               getTdProps={this.deleteRow}
             />        
           </div>
-          { this.state.errors.presionDataCampo && this.state.errors.presionDataCampo.checked &&
-            <div className="error">{this.state.errors.presionDataCampo.message}</div>
-          }
+
           <button className='new-row-button' onClick={this.addNewRow}>Añadir un renglón</button>
         </div>
         <div className='depth'>
@@ -181,29 +136,7 @@ let columns = [
   }
 }
 
-const validate = values => {
-    let errors = {}
-
-    if(!values.presionDataCampo){
-      errors.presionDataCampo = {message: "Esta forma no puede estar vacia"}
-    }else {
-      values.presionDataCampo.forEach((row, index) => {
-        let hasEmpty = Object.values(row).find((value) => { return value === null || value.toString().trim() == '' })
-        if(hasEmpty !== undefined){
-            errors.presionDataCampo = {message: "Ningun campo puede estar vacio."}
-        }
-      })
-    }
-
-    if(values.pressureDepthCampo == ''){
-       errors.pressureDepthCampo = {message: "Ningun campo puede estar vacio."}
-    }
-
-    return errors
-}
-
 const mapStateToProps = state => ({
-  forms: state.get('forms'),
   formData: state.get('historicoDePresion'),
 })
 
@@ -214,8 +147,5 @@ const mapDispatchToProps = dispatch => ({
 })
 
 
-export default withValidate(
-  validate,
-  connect(mapStateToProps, mapDispatchToProps)(HistoricoDePresionCampo)
-)
+export default connect(mapStateToProps, mapDispatchToProps)(HistoricoDePresionCampo)
 

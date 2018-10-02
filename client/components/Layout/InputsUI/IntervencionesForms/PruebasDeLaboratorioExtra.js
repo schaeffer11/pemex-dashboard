@@ -7,8 +7,7 @@ import { setLabEvidenceImgURL } from '../../../../redux/actions/intervencionesEs
 import { connect } from 'react-redux'
 import ReactTable from 'react-table'
 import Select from 'react-select'
-import {withValidate} from "../../Common/Validate";
-import {setChecked} from "../../../../redux/actions/pozo";
+
 
 const tipoDeMuestraOptions = [
  { label: 'Núcleo', value: 'nucleo' },
@@ -56,9 +55,7 @@ const grabadoOptions = [
   constructor(props) {
     super(props)
     this.state = {
-        containsErrors: false,
-        errors: [],
-        checked: []
+
     }
 
     let { setPruebasDeLaboratorioData, pruebasDeLaboratorio } = props
@@ -96,68 +93,13 @@ const grabadoOptions = [
     })
   }
 
-
   componentDidMount() {
-      this.validate()
-      this.containsErrors()
+
   }
 
   componentDidUpdate(prevProps) {
-      this.containsErrors()
   }
 
-  containsErrors(){
-      let foundErrors = false
-      let errors = Object.assign({}, this.state.errors);
-      let {formData} = this.props
-      formData = formData.toJS()
-
-      const checked = formData.checked  || []
-      checked.forEach((checked) => {
-          Object.entries(errors).forEach( (error, index) => {
-              if (errors[index][checked]) {
-                  errors[index][checked].checked = true
-                  foundErrors = true
-              }
-          })
-      })
-
-      if(foundErrors !== this.state.containsErrors){
-          this.setState({
-              errors: errors,
-              containsErrors: foundErrors
-          })
-      }
-  }
-
-  validate(event){
-     let {setChecked, formData} = this.props
-     formData = formData.toJS()
-
-     let field = event ? event.target.name : null
-     let {errors, checked} = this.props.validate(field, formData)
-
-     if(field ) {
-         const index = event.target.getAttribute('index')
-         errors[index][field].checked = true
-     }
-
-     Object.entries(errors).forEach( (error, index) => {
-         formData.checked.forEach( field => {
-             if(errors[index][field])
-               errors[index][field].checked = true
-         })
-     })
-
-     this.setState({
-         errors: errors,
-     })
-
-     if(event && event.target.name){
-         setChecked(checked)
-     }
-
-  }
 
   makeCaracterizacionFisico(index) {
     let { setPruebasDeLaboratorioData, pruebasDeLaboratorio } = this.props
@@ -166,25 +108,22 @@ const grabadoOptions = [
 
     return (
       <div className='fisico-form' >
-{/*        <div className='header'>
-          Test
-        </div>*/}
-          <InputRow header="Determinación del porcentaje de aceite" name='percentAceite' value={pruebasDeLaboratorioData[index].percentAceite} onChange={this.updateValue} index={index} unit='%' errors={this.state.errors[index]} onBlur={this.validate} />
-          <InputRow header="Determinación del porcentaje de agua" name='percentAgua' value={pruebasDeLaboratorioData[index].percentAgua} onChange={this.updateValue} index={index} unit='%' errors={this.state.errors[index]} onBlur={this.validate} />
-          <InputRow header="Determinación del porcentaje de emulsión" name='percentEmulsion' value={pruebasDeLaboratorioData[index].percentEmulsion} onChange={this.updateValue} index={index} unit='%' errors={this.state.errors[index]} onBlur={this.validate} />
-          <InputRow header="Determinación del porcentaje de sólidos" name='percentSolidos' value={pruebasDeLaboratorioData[index].percentSolidos} onChange={this.updateValue} index={index} unit='%' errors={this.state.errors[index]} onBlur={this.validate} />
-          <InputRow header="Determinación del porcentaje de asfaltenos" name='percentAsfaltenos' value={pruebasDeLaboratorioData[index].percentAsfaltenos} onChange={this.updateValue} index={index} unit='%' errors={this.state.errors[index]} onBlur={this.validate} />
-          <InputRow header="Determinación del porcentaje de parafinas" name='percentParafinas' value={pruebasDeLaboratorioData[index].percentParafinas} onChange={this.updateValue} index={index} unit='%' errors={this.state.errors[index]} onBlur={this.validate} />
-          <InputRow header="Determinación del porcentaje de resinas asfalticas" name='percentResinasAsfalticas' value={pruebasDeLaboratorioData[index].percentResinasAsfalticas} onChange={this.updateValue} index={index} unit='%' errors={this.state.errors[index]} onBlur={this.validate} />
-          <InputRow header="Determinación del porcentaje de contenido de sólidos" name='percentContenidoDeSolidos' value={pruebasDeLaboratorioData[index].percentContenidoDeSolidos} onChange={this.updateValue} index={index} unit='%' errors={this.state.errors[index]} onBlur={this.validate} />
-          <InputRow header="Densidad del aceite" name='densityAceite' value={pruebasDeLaboratorioData[index].densityAceite} onChange={this.updateValue} index={index} unit={<div>gr/cm<sup>3</sup></div>} errors={this.state.errors[index]} onBlur={this.validate} />
-          <InputRow header="Densidad del agua" name='densityAgua' value={pruebasDeLaboratorioData[index].densityAgua} onChange={this.updateValue} index={index} unit={<div>gr/cm<sup>3</sup></div>} errors={this.state.errors[index]} onBlur={this.validate} />
-          <InputRow header="Densidad de la emulsión" name='densityEmulsion' value={pruebasDeLaboratorioData[index].densityEmulsion} onChange={this.updateValue} index={index} unit={<div>gr/cm<sup>3</sup></div>} errors={this.state.errors[index]} onBlur={this.validate} />
-          <InputRow header="Viscosidad del aceite" name='viscosityAceite' value={pruebasDeLaboratorioData[index].viscosityAceite} onChange={this.updateValue} index={index} unit='cp' errors={this.state.errors[index]} onBlur={this.validate} />
-          <InputRow header="Viscosidad de la emulsión" name='viscosityEmulsion' value={pruebasDeLaboratorioData[index].viscosityEmulsion} onChange={this.updateValue} index={index} unit='cp' errors={this.state.errors[index]} onBlur={this.validate} />
-          <InputRow header="pH del agua" name='phDelAgua' value={pruebasDeLaboratorioData[index].phDelAgua} onChange={this.updateValue} index={index} unit='adim' errors={this.state.errors[index]} onBlur={this.validate} />
-          <InputRow header="Salinidad del agua" name='salinidadDelAgua' value={pruebasDeLaboratorioData[index].salinidadDelAgua} onChange={this.updateValue} index={index} unit='ppm' errors={this.state.errors[index]} onBlur={this.validate} />
-          <InputRow header="Salinidad del aceite" name='salinidadDelAceite' value={pruebasDeLaboratorioData[index].salinidadDelAceite} onChange={this.updateValue} index={index} unit='ppm' errors={this.state.errors[index]} onBlur={this.validate} />
+          <InputRow header="Determinación del porcentaje de aceite" name='percentAceite' value={pruebasDeLaboratorioData[index].percentAceite} onChange={this.updateValue} index={index} unit='%' errors={this.state.errors} onBlur={this.validate} />
+          <InputRow header="Determinación del porcentaje de agua" name='percentAgua' value={pruebasDeLaboratorioData[index].percentAgua} onChange={this.updateValue} index={index} unit='%' errors={this.state.errors} onBlur={this.validate} />
+          <InputRow header="Determinación del porcentaje de emulsión" name='percentEmulsion' value={pruebasDeLaboratorioData[index].percentEmulsion} onChange={this.updateValue} index={index} unit='%' errors={this.state.errors} onBlur={this.validate} />
+          <InputRow header="Determinación del porcentaje de sólidos" name='percentSolidos' value={pruebasDeLaboratorioData[index].percentSolidos} onChange={this.updateValue} index={index} unit='%' errors={this.state.errors} onBlur={this.validate} />
+          <InputRow header="Determinación del porcentaje de asfaltenos" name='percentAsfaltenos' value={pruebasDeLaboratorioData[index].percentAsfaltenos} onChange={this.updateValue} index={index} unit='%' errors={this.state.errors} onBlur={this.validate} />
+          <InputRow header="Determinación del porcentaje de parafinas" name='percentParafinas' value={pruebasDeLaboratorioData[index].percentParafinas} onChange={this.updateValue} index={index} unit='%' errors={this.state.errors} onBlur={this.validate} />
+          <InputRow header="Determinación del porcentaje de resinas asfalticas" name='percentResinasAsfalticas' value={pruebasDeLaboratorioData[index].percentResinasAsfalticas} onChange={this.updateValue} index={index} unit='%' errors={this.state.errors} onBlur={this.validate} />
+          <InputRow header="Determinación del porcentaje de contenido de sólidos" name='percentContenidoDeSolidos' value={pruebasDeLaboratorioData[index].percentContenidoDeSolidos} onChange={this.updateValue} index={index} unit='%' errors={this.state.errors} onBlur={this.validate} />
+          <InputRow header="Densidad del aceite" name='densityAceite' value={pruebasDeLaboratorioData[index].densityAceite} onChange={this.updateValue} index={index} unit={<div>gr/cm<sup>3</sup></div>} errors={this.state.errors} onBlur={this.validate} />
+          <InputRow header="Densidad del agua" name='densityAgua' value={pruebasDeLaboratorioData[index].densityAgua} onChange={this.updateValue} index={index} unit={<div>gr/cm<sup>3</sup></div>} errors={this.state.errors} onBlur={this.validate} />
+          <InputRow header="Densidad de la emulsión" name='densityEmulsion' value={pruebasDeLaboratorioData[index].densityEmulsion} onChange={this.updateValue} index={index} unit={<div>gr/cm<sup>3</sup></div>} errors={this.state.errors} onBlur={this.validate} />
+          <InputRow header="Viscosidad del aceite" name='viscosityAceite' value={pruebasDeLaboratorioData[index].viscosityAceite} onChange={this.updateValue} index={index} unit='cp' errors={this.state.errors} onBlur={this.validate} />
+          <InputRow header="Viscosidad de la emulsión" name='viscosityEmulsion' value={pruebasDeLaboratorioData[index].viscosityEmulsion} onChange={this.updateValue} index={index} unit='cp' errors={this.state.errors} onBlur={this.validate} />
+          <InputRow header="pH del agua" name='phDelAgua' value={pruebasDeLaboratorioData[index].phDelAgua} onChange={this.updateValue} index={index} unit='adim' errors={this.state.errors} onBlur={this.validate} />
+          <InputRow header="Salinidad del agua" name='salinidadDelAgua' value={pruebasDeLaboratorioData[index].salinidadDelAgua} onChange={this.updateValue} index={index} unit='ppm' errors={this.state.errors} onBlur={this.validate} />
+          <InputRow header="Salinidad del aceite" name='salinidadDelAceite' value={pruebasDeLaboratorioData[index].salinidadDelAceite} onChange={this.updateValue} index={index} unit='ppm' errors={this.state.errors} onBlur={this.validate} />
         </div>
     )
   }
@@ -196,14 +135,11 @@ const grabadoOptions = [
 
     return (
       <div className='solubilidad-form' >
-{/*        <div className='header'>
-          Test
-        </div>*/}
-          <InputRowSelectUnitless header="Tipo de muestra" name='tipoDeMuestra' value={pruebasDeLaboratorioData[index].tipoDeMuestra} options={tipoDeMuestraOptions} callback={(e) => this.handleSelectNonTable(e.value, 'tipoDeMuestra', index)} index={index} errors={this.state.errors[index]} onBlur={this.validate} / >
-          <InputRow header="Peso de la muestra" name='pesoDeLaMuestra' value={pruebasDeLaboratorioData[index].pesoDeLaMuestra} onChange={this.updateValue} index={index} unit='gr' errors={this.state.errors[index]} onBlur={this.validate}  />
-          <InputRowSelectUnitless header="Tipo de sistema químico empleado" name='tipoDeSistemaEmpleado' value={pruebasDeLaboratorioData[index].tipoDeSistemaEmpleado} options={tipoDeSistemaEmpleadoOptions} callback={(e) => this.handleSelectNonTable(e.value, 'tipoDeSistemaEmpleado', index)} index={index} errors={this.state.errors[index]} onBlur={this.validate} />
-          <InputRow header="Peso final de la muestra" name='pesoDeLaMuestraFinal' value={pruebasDeLaboratorioData[index].pesoDeLaMuestraFinal} onChange={this.updateValue} index={index} unit='gr' errors={this.state.errors[index]} onBlur={this.validate} />
-          <InputRow header="Solubilidad" name='solubilidad' value={pruebasDeLaboratorioData[index].solubilidad} onChange={this.updateValue} index={index} unit='%' errors={this.state.errors[index]} onBlur={this.validate} />
+          <InputRowSelectUnitless header="Tipo de muestra" name='tipoDeMuestra' value={pruebasDeLaboratorioData[index].tipoDeMuestra} options={tipoDeMuestraOptions} callback={(e) => this.handleSelectNonTable(e.value, 'tipoDeMuestra', index)} index={index} errors={this.state.errors} onBlur={this.validate} / >
+          <InputRow header="Peso de la muestra" name='pesoDeLaMuestra' value={pruebasDeLaboratorioData[index].pesoDeLaMuestra} onChange={this.updateValue} index={index} unit='gr' errors={this.state.errors} onBlur={this.validate}  />
+          <InputRowSelectUnitless header="Tipo de sistema químico empleado" name='tipoDeSistemaEmpleado' value={pruebasDeLaboratorioData[index].tipoDeSistemaEmpleado} options={tipoDeSistemaEmpleadoOptions} callback={(e) => this.handleSelectNonTable(e.value, 'tipoDeSistemaEmpleado', index)} index={index} errors={this.state.errors} onBlur={this.validate} />
+          <InputRow header="Peso final de la muestra" name='pesoDeLaMuestraFinal' value={pruebasDeLaboratorioData[index].pesoDeLaMuestraFinal} onChange={this.updateValue} index={index} unit='gr' errors={this.state.errors} onBlur={this.validate} />
+          <InputRow header="Solubilidad" name='solubilidad' value={pruebasDeLaboratorioData[index].solubilidad} onChange={this.updateValue} index={index} unit='%' errors={this.state.errors} onBlur={this.validate} />
           
 
         </div>
@@ -217,15 +153,12 @@ const grabadoOptions = [
 
     return (
       <div className='apuntalante-form' >
-{/*        <div className='header'>
-          Test
-        </div>*/}
-          <InputRow header="Esfericidad" name='esfericidad' value={pruebasDeLaboratorioData[index].esfericidad} onChange={this.updateValue} index={index} unit='adim' errors={this.state.errors[index]} onBlur={this.validate} />
-          <InputRow header="Redondez" name='redondez' value={pruebasDeLaboratorioData[index].redondez} onChange={this.updateValue} index={index} unit='adim' errors={this.state.errors[index]} onBlur={this.validate} />
-          <InputRow header="Resistencia a la compresión" name='resistenciaCompresion' value={pruebasDeLaboratorioData[index].resistenciaCompresion} onChange={this.updateValue} index={index} unit='psi' errors={this.state.errors[index]} onBlur={this.validate} />
-          <InputRowUnitless header="Malla" name='malla' value={pruebasDeLaboratorioData[index].malla} onChange={this.updateValue} index={index} errors={this.state.errors[index]} onBlur={this.validate} />
-          <InputRow header="Aglutinamiento" name='aglutinamiento' value={pruebasDeLaboratorioData[index].aglutinamiento} onChange={this.updateValue} index={index} unit='adim' errors={this.state.errors[index]} onBlur={this.validate} />
-          <InputRow header="Turbidez" name='turbidez' value={pruebasDeLaboratorioData[index].turbidez} onChange={this.updateValue} index={index} unit='adim' errors={this.state.errors[index]} onBlur={this.validate} />
+          <InputRow header="Esfericidad" name='esfericidad' value={pruebasDeLaboratorioData[index].esfericidad} onChange={this.updateValue} index={index} unit='adim' errors={this.state.errors} onBlur={this.validate} />
+          <InputRow header="Redondez" name='redondez' value={pruebasDeLaboratorioData[index].redondez} onChange={this.updateValue} index={index} unit='adim' errors={this.state.errors} onBlur={this.validate} />
+          <InputRow header="Resistencia a la compresión" name='resistenciaCompresion' value={pruebasDeLaboratorioData[index].resistenciaCompresion} onChange={this.updateValue} index={index} unit='psi' errors={this.state.errors} onBlur={this.validate} />
+          <InputRowUnitless header="Malla" name='malla' value={pruebasDeLaboratorioData[index].malla} onChange={this.updateValue} index={index} errors={this.state.errors} onBlur={this.validate} />
+          <InputRow header="Aglutinamiento" name='aglutinamiento' value={pruebasDeLaboratorioData[index].aglutinamiento} onChange={this.updateValue} index={index} unit='adim' errors={this.state.errors} onBlur={this.validate} />
+          <InputRow header="Turbidez" name='turbidez' value={pruebasDeLaboratorioData[index].turbidez} onChange={this.updateValue} index={index} unit='adim' errors={this.state.errors} onBlur={this.validate} />
           <InputRow header="Solubilidad" name='solubilidad' value={pruebasDeLaboratorioData[index].solubilidad} onChange={this.updateValue} index={index} unit='%' />
         </div>
     )
@@ -238,9 +171,6 @@ const grabadoOptions = [
 
     return (
       <div className='apuntalante-form' >
-{/*        <div className='header'>
-          Test
-        </div>*/}
           <InputRowSelectUnitless header="Hidratación del fluido " name='hidratacionDelFluido' value={pruebasDeLaboratorioData[index].hidratacionDelFluido} options={hidratacionDelFluidoOptions} callback={(e) => this.handleSelectNonTable(e.value, 'hidratacionDelFluido', index)} index={index}/>
           <InputRow header="Tiempo de activación del gel" name='tiempoDeActivacion' value={pruebasDeLaboratorioData[index].tiempoDeActivacion} onChange={this.updateValue} index={index} unit='adim' />
           <InputRow header="Determinación de pH" name='determinacionDePh' value={pruebasDeLaboratorioData[index].determinacionDePh} onChange={this.updateValue} index={index} unit='psi' />
@@ -543,9 +473,6 @@ const grabadoOptions = [
 
     return (
       <div className="lab-results" style={{marginBot: '20px'}}> 
-{/*        <div className='header'>
-          Test2
-        </div>*/}
         <div className='table-select'>
           <ReactTable
             className="-striped"
@@ -626,9 +553,6 @@ const grabadoOptions = [
 
     return (
       <div className="lab-results" style={{marginBot: '20px'}}> 
-{/*        <div className='header'>
-          Test2
-        </div>*/}
         <div className='table-select'>
           <ReactTable
             className="-striped"
@@ -645,8 +569,6 @@ const grabadoOptions = [
       </div>
     )
   }
-
-
 
 
   handleFileUpload(e, setURL) {
@@ -671,9 +593,6 @@ const grabadoOptions = [
         </div>
         <input type='file' name='imgURL' accept="image/*" onChange={(e) => this.handleFileUpload(e, this.updateValue)} index={index}></input>
         {imgURL ? <img className='img-preview' src={imgURL}></img> : null }
-        { this.state.errors.imgURL && this.state.errors.imgURL.checked &&
-          <div className="error">{this.state.errors.imgURL.message}</div>
-        }
       </div>
     )
   }
@@ -723,51 +642,19 @@ const grabadoOptions = [
   }
 }
 
-const validate = values => {
-    let errors = []
-
-    if(!values.pruebasDeLaboratorioData){
-        errors.pruebasDeLaboratorioData = {message: "Esta forma no puede estar vacia"}
-    }else {
-        const fields = ['percentAceite','percentAgua','percentEmulsion','percentSolidos','percentAsfaltenos','percentParafinas',
-            'percentResinasAsfalticas','percentContenidoDeSolidos','densityAceite','densityAgua','densityEmulsion','viscosityAceite',
-            'viscosityEmulsion','phDelAgua','salinidadDelAgua','salinidadDelAceite','tipoDeMuestra','pesoDeLaMuestra',
-            'tipoDeSistemaEmpleado','pesoDeLaMuestraFinal','solubilidad','esfericidad','redondez','resistenciaCompresion',
-            'malla','aglutinamiento','turbidez','solubilidad','hidratacionDelFluido','tiempoDeActivacion','determinacionDePh',
-            'tiempoDeRompimiento','dosificacionDeQuebradors','viscosidadDelGelDeFractura','obervaciones'];
-
-        values.pruebasDeLaboratorioData.forEach((row, index) => {
-            const emptyFields = Object.entries(row).filter(([key, value]) => {return fields.includes(key) && (value == null || value == undefined || value == '')  })
-            if(emptyFields.length){
-                let errs = {}
-                emptyFields.forEach((row, index) => {
-                     errs[row[0]] = {message: "Este campo no puede estar vacio."}
-                })
-                errors.push(errs)
-            }
-        })
-    }
-
-    return errors
-}
 
 
 const mapStateToProps = state => ({
   formData: state.get('pruebasDeLaboratorio'),
-  forms: state.get('forms'),
   pruebasDeLaboratorio: state.get('pruebasDeLaboratorio')
 })
 
 const mapDispatchToProps = dispatch => ({
     setLabEvidenceImgURL: val => dispatch(setLabEvidenceImgURL(val)),
     setPruebasDeLaboratorioData: val => dispatch(setPruebasDeLaboratorioData(val)),
-    setChecked: val => dispatch(setChecked(val, 'pruebasDeLaboratorio'))
 })
 
 
-export default withValidate(
-    validate,
-    connect(mapStateToProps, mapDispatchToProps)(PruebasDeLaboratorioExtra)
-)
+export default connect(mapStateToProps, mapDispatchToProps)(PruebasDeLaboratorioExtra)
 
 
