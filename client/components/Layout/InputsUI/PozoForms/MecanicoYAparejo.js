@@ -143,9 +143,7 @@ let tratamientoPorOptions = [
           Cargar diagrama del aparejo de producción
         </div>
         <input type='file' accept="image/*" onChange={(e) => this.handleFileUpload(e, setImgBoreDiagramURL)}></input>
-        { this.state.errors.imgURL && this.state.errors.imgURL.checked &&
-          <div className="error">{this.state.errors.imgURL.message}</div>
-        }
+       
         {imgURL ? <img className='img-preview' src={imgURL}></img> : null }
       </div>
     )

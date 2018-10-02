@@ -225,9 +225,7 @@ let columns = [
             getTdProps={this.deleteRow}
           />
         </div>
-        { this.state.errors.historialIntervencionesData &&
-          <div className="error">{this.state.errors.historialIntervencionesData.message}</div>
-        }
+
         <button className='new-row-button' onClick={this.addNewRow}>Añadir un renglón</button>
       </div>
     )

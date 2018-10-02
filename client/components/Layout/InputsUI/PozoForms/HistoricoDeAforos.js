@@ -274,9 +274,7 @@ let columns = [
             getTdProps={this.deleteRow}
           />
         </div>
-        { this.state.errors.aforosData && this.state.errors.aforosData.checked &&
-          <div className="error">{this.state.errors.aforosData.message}</div>
-        }
+
         <button className='new-row-button' onClick={this.addNewRow}>Añadir un renglón</button>
       </div>
     )

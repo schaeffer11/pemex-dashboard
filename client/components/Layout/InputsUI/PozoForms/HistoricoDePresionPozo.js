@@ -38,20 +38,16 @@ let columns = [
   constructor(props) {
     super(props)
     this.state = { 
-      containsErrors: false,
-      errors: []
+
     }
   }
 
   componentDidMount(){
-    this.validate()
-    // this.containsErrors()
-    // this.props.containsErrors(this, this.state.containsErrors)
+
   }
 
   componentDidUpdate(){
-    // this.containsErrors()
-    // this.props.containsErrors(this, this.state.containsErrors)
+
   }
 
   renderEditable(cellInfo) {
@@ -132,9 +128,7 @@ let columns = [
               getTdProps={this.deleteRow}
             />
           </div>
-            { this.state.errors.presionDataPozo && this.state.errors.presionDataPozo.checked &&
-            <div className="error">{this.state.errors.presionDataPozo.message}</div>
-            }
+
           <button className='new-row-button' onClick={this.addNewRow}>Añadir un renglón</button>
         </div>
         <div className='depth'>

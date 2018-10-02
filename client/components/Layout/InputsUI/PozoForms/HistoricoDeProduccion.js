@@ -258,9 +258,7 @@ let columns = [
             getTdProps={this.deleteRow}
           />
         </div>
-        { this.state.errors.produccionData && this.state.errors.produccionData.checked &&
-          <div className="error">{this.state.errors.produccionData.message}</div>
-        }
+
         <button className='new-row-button' onClick={this.addNewRow}>Añadir un renglón</button>
       </div>
     )
@@ -278,7 +276,6 @@ let columns = [
 }
 
 const mapStateToProps = state => ({
-  forms: state.get('forms'),
   formData: state.get('historicoDeProduccion'),
 })
 

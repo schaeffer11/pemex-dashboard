@@ -234,9 +234,6 @@ let mudLossColumns = [
           />
 
         </div>
-        { this.state.errors.layerData && this.state.errors.layerData.checked &&
-          <div className="error">{this.state.errors.layerData.message}</div>
-        }
         <button className='new-row-button' onClick={this.addNewRow}>Añadir un renglón</button>
       </div>
     )
@@ -272,9 +269,7 @@ let mudLossColumns = [
           />
 
         </div>
-        { this.state.errors.mudLossData && this.state.errors.mudLossData.checked &&
-          <div className="error">{this.state.errors.mudLossData.message}</div>
-        }
+
         <button className='new-row-button' onClick={this.addNewRowMudLoss}>Añadir un renglón</button>
       </div>
     )
@@ -302,9 +297,7 @@ let mudLossColumns = [
         </div>
         <input type='file' accept="image/*" onChange={this.handleFileUpload}></input>
         {imgURL ? <img className='img-preview' src={imgURL}></img> : null }
-        { this.state.errors.imgURL && this.state.errors.imgURL.checked &&
-          <div className="error">{this.state.errors.imgURL.message}</div>
-        }
+
       </div>
     )
   }

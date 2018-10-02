@@ -41,13 +41,11 @@ let litologiaOptions = [
 
 
   makeGeneralesForm() {
-    let { setDescubrimientoField, setFechaDeExplotacionField, setNumeroDePozosOperandoField, forms, formData } = this.props
+    let { setDescubrimientoField, setFechaDeExplotacionField, setNumeroDePozosOperandoField, formData } = this.props
 
-    forms = forms.toJS()
     formData = formData.toJS()
 
     let { descubrimientoField, fechaDeExplotacionField, numeroDePozosOperandoField } = formData
-    const errors = forms.pozoFormError
 
     return (
       <div className='generales-form'>
@@ -62,13 +60,11 @@ let litologiaOptions = [
   }
 
   makeExplotacionForm() {
-    let { setPInicialAnoField, setPActualFechaField, setPInicialField, setPActualField, setDpPerAnoField, setTyacField, setPrField, forms, formData } = this.props
+    let { setPInicialAnoField, setPActualFechaField, setPInicialField, setPActualField, setDpPerAnoField, setTyacField, setPrField, formData } = this.props
 
-    forms = forms.toJS()
     formData = formData.toJS()
 
     let { pInicialField, pActualField, pInicialAnoField, pActualFechaField, dpPerAnoField, tyacField, prField } = formData
-    const errors = forms.pozoFormError
 
     return (
       <div className='explotacion-form' >
@@ -88,13 +84,11 @@ let litologiaOptions = [
   }
 
   makeFluidoForm() {
-    let { setTipoDeFluidoField, setDensidadDelAceiteField, setPSatField, setRgaFluidoField, setSalinidadField, setPvtRepresentativoField, forms, formData } = this.props
+    let { setTipoDeFluidoField, setDensidadDelAceiteField, setPSatField, setRgaFluidoField, setSalinidadField, setPvtRepresentativoField, formData } = this.props
 
-    forms = forms.toJS()
     formData = formData.toJS()
 
     let { tipoDeFluidoField, densidadDelAceiteField, pSatField, rgaFluidoField, salinidadField, pvtRepresentativoField } = formData
-    const errors = forms.pozoFormError
 
     return (
       <div className='fluido-form' >
@@ -112,12 +106,10 @@ let litologiaOptions = [
   }
 
   makeFormacionForm() {
-    let { setLitologiaField, setEspesorNetoField, setPorosidadField, setSwField, setKPromedioField, setCaaField, setCgaField, forms, formData } = this.props
-    forms = forms.toJS()
+    let { setLitologiaField, setEspesorNetoField, setPorosidadField, setSwField, setKPromedioField, setCaaField, setCgaField, formData } = this.props
     formData = formData.toJS()
     let { litologiaField, espesorNetoField, porosidadField, swField, kPromedioField, caaField, cgaField } = formData
 
-    const errors = forms.pozoFormError
 
     return (
       <div className='formacion-form' >
@@ -136,12 +128,10 @@ let litologiaOptions = [
   }
 
   makeProduccionForm() {
-    let { setQoField, setQgField, setRgaField, setFwField, setNpField, setGpField, setWpField, setRraField, setRrgField, setRrpceField, setH2sField, setCo2Field, setN2Field, forms, formData } = this.props
-    forms = forms.toJS()
+    let { setQoField, setQgField, setRgaField, setFwField, setNpField, setGpField, setWpField, setRraField, setRrgField, setRrpceField, setH2sField, setCo2Field, setN2Field, formData } = this.props
     formData = formData.toJS()
     let { qoField, qgField, rgaField, fwField, npField, gpField, wpField, rraField, rrgField, rrpceField, h2sField, co2Field, n2Field } = formData
 
-    const errors = forms.pozoFormError
 
     return (
       <div className='produccion-form' >
