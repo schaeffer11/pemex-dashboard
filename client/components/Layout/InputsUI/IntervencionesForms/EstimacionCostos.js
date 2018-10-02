@@ -31,15 +31,6 @@ export const itemOptions = [
   { label: 'Costo del apuntalante', value: 'Costo del apuntalante' }
 ]
 
-const companyOptions = [
-  { label: 'Halliburton', value: 'Halliburton' },
-  { label: 'Schlumberger', value: 'Schlumberger' },
-  { label: 'PFM', value: 'PFM' },
-  { label: 'Chemiservices', value: 'Chemiservices' },
-  { label: 'BJ', value: 'BJ' },
-  { label: 'Weatherford', value: 'Weatherford' },
-]
-
 @autobind class EstimacionCostos extends Component {
   constructor(props) {
     super(props)
@@ -117,7 +108,7 @@ const companyOptions = [
     let copy = estimacionCostosData
     copy[0].length = 2
 
-    setEstimacionCostosData([...copy, {index: estimacionCostosData.length, item: '', cost: '', compania: '', costDLS: '', fecha: null, MNXtoDLS: '', length: estimacionCostosData.length + 1}])
+    setEstimacionCostosData([...copy, {index: estimacionCostosData.length, item: '', cost: '', costDLS: '', MNXtoDLS: '', length: estimacionCostosData.length + 1}])
   }
 
 
@@ -200,12 +191,6 @@ const companyOptions = [
                 </div>)
               }
       }, { 
-        Header: <div>Fecha</div>,
-        accessor: 'fecha',
-        cell: 'renderDate',
-        maxWidth: 180,
-        resizable: false
-      }, { 
         Header: <div>Costo<br></br>(MXN)</div>,
         accessor: 'cost',
         cell: 'renderNumber',
@@ -223,25 +208,6 @@ const companyOptions = [
         cell: 'renderNumber',
         maxWidth: 180,
         resizable: false
-      }, { 
-        Header: 'Compañia',
-        accessor: 'compania',
-        width: 300,
-        resizable: false,
-        style: {overflow: 'visible'},
-        Cell: row => {
-                 return (<div>
-                  <Select 
-                  placeholder="Seleccionar..."
-                  className='input' 
-                  simpleValue={true} 
-                  options={companyOptions} 
-                  value={companyOptions.find(i=>i.value === row.original.compania) || null}
-                  onChange={(e) => this.handleSelectCompany(row, e.value)} 
-                  name={name} 
-                />
-                </div>)
-              }
       }
     ]
 

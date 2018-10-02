@@ -90,7 +90,7 @@ let columns = [
     accessor: 'fecha',
     cell: 'renderDate',
   }, { 
-    Header: 'Días de Aforo',
+    Header: 'Días',
     accessor: 'dias',
     cell: 'renderNumber',
   }, { 
@@ -137,7 +137,7 @@ let columns = [
     Header: <div>RGA<br></br>(m<sup>3</sup>/m<sup>3</sup>)</div>,
     accessor: 'rga',
   }, { 
-    Header: 'Fw Fracción',
+    Header: <div>w<br></br>(%)</div>,
     accessor: 'fw',
     Cell: row => <div>{(row.value * 100)}%</div>
   }

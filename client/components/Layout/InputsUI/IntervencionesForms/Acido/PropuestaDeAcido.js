@@ -83,8 +83,7 @@ import { round, calculateVolumes, getSistemaOptions } from '../helpers'
       { label: 'PFM', value: 'PFM' },
       { label: 'Chemiservices', value: 'Chemiservices' },
       { label: 'BJ', value: 'BJ' },
-      { label: 'Weatherford',
-      value: 'Weatherford' }
+      { label: 'Weatherford', value: 'Weatherford' }
     ]
 
     return (
@@ -93,7 +92,7 @@ import { round, calculateVolumes, getSistemaOptions } from '../helpers'
           General
         </div>
         <InputRowSelectUnitless
-          header="Compañía"
+          header="Compañía Seleccionada para el Tratamiento"
           name="propuestaCompany"
           options={companyOptions}
           onBlur={this.validate}
