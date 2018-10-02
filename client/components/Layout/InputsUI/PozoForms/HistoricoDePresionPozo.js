@@ -6,6 +6,7 @@ import ReactTable from 'react-table'
 import {withValidate} from '../../Common/Validate'
 import { setPresionDataPozo, setPressureDepthPozo, setChecked } from '../../../../redux/actions/pozo'
 import InputTable from '../../Common/InputTable'
+import ExcelUpload from '../../Common/ExcelUpload'
 import { InputRow } from '../../Common/InputRow'
 
 let columns = [
@@ -113,6 +114,17 @@ let columns = [
 
       <div className='historico-presion-pozo' >
         <div className='image'/>
+        <ExcelUpload
+        headers={[
+              { name: 'fecha', type: 'date' },
+              { name: 'Pws', type: 'number' },
+              { name: 'Pwf', type: 'number' },
+            ]}
+            setData={this.props.setPresionDataPozo}
+        />
+        <div className='depth'>
+          <InputRow header="Plano de Referencia" name='pressureDepthPozo' value={pressureDepthPozo} onChange={setPressureDepthPozo} unit={'md'} onBlur={this.validate} errors={this.state.errors}  />
+        </div>
         <div className='presion-table'>
           <div className='table-select'>
             <InputTable
@@ -128,12 +140,9 @@ let columns = [
               getTdProps={this.deleteRow}
             />
           </div>
-
           <button className='new-row-button' onClick={this.addNewRow}>Añadir un renglón</button>
         </div>
-        <div className='depth'>
-          <InputRow header="Plano de Referencia" name='pressureDepthPozo' value={pressureDepthPozo} onChange={setPressureDepthPozo} unit={'md'} onBlur={this.validate} errors={this.state.errors}  />
-        </div>
+        
       </div>
     )
   }
