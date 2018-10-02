@@ -109,35 +109,42 @@ let columns = [
     console.log('render presion campo')
 
     return (
-      <div className='historico-presion-campo' >
+      <div className='historico-presion' >
         <div className='image'/>
-        <ExcelUpload
-        headers={[
-              { name: 'fecha', type: 'date' },
-              { name: 'Pws', type: 'number' },
-            ]}
-            setData={this.props.setPresionDataCampo}
-        />
-        <div className='presion-table'>
-          <div className='table-select'>
-            <InputTable
-              className="-striped"
-              data={presionDataCampo}
-              newRow={objectTemplate}
-              setData={setPresionDataCampo}
-              columns={columns}
-              showPagination={false}
-              showPageSizeOptions={false}
-              pageSize={presionDataCampo.length}
-              sortable={false}
-              getTdProps={this.deleteRow}
-            />        
+        <div className="inputs">
+          <button
+            className="submit download-template"
+            onClick={() => window.location.replace('/api/get_template/HistoricoPresionCampo')}
+          >
+            Descarga Plantilla de Esta Página
+          </button>
+          <ExcelUpload
+          headers={[
+                { name: 'fecha', type: 'date' },
+                { name: 'Pws', type: 'number' },
+              ]}
+              setData={this.props.setPresionDataCampo}
+          />
+          <div className='depth'>
+            <InputRow header="Plano de Referencia" name='pressureDepthCampo' value={pressureDepthCampo} onChange={setPressureDepthCampo} unit={'md'} onBlur={this.validate} errors={this.state.errors} />
           </div>
-
-          <button className='new-row-button' onClick={this.addNewRow}>Añadir un renglón</button>
-        </div>
-        <div className='depth'>
-          <InputRow header="Plano de Referencia" name='pressureDepthCampo' value={pressureDepthCampo} onChange={setPressureDepthCampo} unit={'md'} onBlur={this.validate} errors={this.state.errors} />
+          <div className='presion-table'>
+            <div className='table-select'>
+              <InputTable
+                className="-striped"
+                data={presionDataCampo}
+                newRow={objectTemplate}
+                setData={setPresionDataCampo}
+                columns={columns}
+                showPagination={false}
+                showPageSizeOptions={false}
+                pageSize={presionDataCampo.length}
+                sortable={false}
+                getTdProps={this.deleteRow}
+              />        
+            </div>
+            <button className='new-row-button' onClick={this.addNewRow}>Añadir un renglón</button>
+          </div>
         </div>
       </div>
     )
@@ -156,4 +163,3 @@ const mapDispatchToProps = dispatch => ({
 
 
 export default connect(mapStateToProps, mapDispatchToProps)(HistoricoDePresionCampo)
-

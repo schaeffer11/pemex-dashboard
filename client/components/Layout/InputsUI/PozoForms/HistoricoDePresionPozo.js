@@ -112,37 +112,38 @@ let columns = [
 
     return (
 
-      <div className='historico-presion-pozo' >
+      <div className='historico-presion' >
         <div className='image'/>
-        <ExcelUpload
-        headers={[
-              { name: 'fecha', type: 'date' },
-              { name: 'Pws', type: 'number' },
-              { name: 'Pwf', type: 'number' },
-            ]}
-            setData={this.props.setPresionDataPozo}
-        />
-        <div className='depth'>
-          <InputRow header="Plano de Referencia" name='pressureDepthPozo' value={pressureDepthPozo} onChange={setPressureDepthPozo} unit={'md'} onBlur={this.validate} errors={this.state.errors}  />
-        </div>
-        <div className='presion-table'>
-          <div className='table-select'>
-            <InputTable
-              className="-striped"
-              data={presionDataPozo}
-              newRow={objectTemplate}
-              setData={setPresionDataPozo}
-              columns={columns}
-              showPagination={false}
-              showPageSizeOptions={false}
-              pageSize={presionDataPozo.length}
-              sortable={false}
-              getTdProps={this.deleteRow}
-            />
+        <div className="inputs">
+          <ExcelUpload
+          headers={[
+                { name: 'fecha', type: 'date' },
+                { name: 'Pws', type: 'number' },
+                { name: 'Pwf', type: 'number' },
+              ]}
+              setData={this.props.setPresionDataPozo}
+          />
+          <div className='depth'>
+            <InputRow header="Plano de Referencia" name='pressureDepthPozo' value={pressureDepthPozo} onChange={setPressureDepthPozo} unit={'md'} onBlur={this.validate} errors={this.state.errors}  />
           </div>
-          <button className='new-row-button' onClick={this.addNewRow}>Añadir un renglón</button>
+          <div className='presion-table'>
+            <div className='table-select'>
+              <InputTable
+                className="-striped"
+                data={presionDataPozo}
+                newRow={objectTemplate}
+                setData={setPresionDataPozo}
+                columns={columns}
+                showPagination={false}
+                showPageSizeOptions={false}
+                pageSize={presionDataPozo.length}
+                sortable={false}
+                getTdProps={this.deleteRow}
+              />
+            </div>
+            <button className='new-row-button' onClick={this.addNewRow}>Añadir un renglón</button>
+          </div>
         </div>
-        
       </div>
     )
   }
