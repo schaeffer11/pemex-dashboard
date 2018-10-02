@@ -287,7 +287,7 @@
 		.image {
 			grid-area: image;
 			z-index: 1;
-			background-image: url('/images/fichaTecnicaDelPozoBanner.png');
+			background-image: url('/images/fichaTecnicaDelPozoBanner2.jpeg');
 			background-size: cover;
 			min-height: 340px;
 			border-radius: 10px;
@@ -324,7 +324,7 @@
 		.image {
 			grid-area: image;
 			z-index: 1;
-			background-image: url('/images/fichaTecnicaDelCampoBanner.jpg');
+			background-image: url('/images/fichaTecnicaDelCampoBanner2.jpeg');
 			background-size: cover;
 			min-height: 340px;
 			border-radius: 10px;
@@ -379,7 +379,6 @@
 		.image {
 			grid-area: image;
 			z-index: 1;
-			background-image: url('/images/sistemasBanner.png');
 			background-size: cover;
 			min-height: 800px;
 			border-radius: 10px;
@@ -388,6 +387,42 @@
 			margin-bottom: 20px;
 
 		}
+
+		.other {
+			background-image: url('/images/sistemasBanner.png');
+		}
+
+		.BC {
+			background-image: url('/images/bombeoCavidades.png');
+		}
+
+		.BE {
+			background-image: url('/images/bombeoElectr.png');
+		}
+
+		.BH {
+			background-image: url('/images/bombeoHidraulico.png');
+		}
+
+		.BM {
+			background-image: url('/images/bombeoMecanico.png');
+		}
+
+		.BN {
+			background-image: url('/images/bombeoNeumatico.png');
+		}
+
+        .left {
+        	grid-area: left;
+        }
+
+        .right {
+        	grid-area: right;
+
+        }
+
+
+
 
 		.left {
 			grid-area: left;
@@ -411,7 +446,7 @@
 		.image {
 			grid-area: image;
 			z-index: 1;
-			background-image: url('/images/evaluacionPetrofisicaBanner.png');
+			background-image: url('/images/evaluacionPetrofisicaBanner2.jpeg');
 			background-size: cover;
 			min-height: 340px;
 			border-radius: 10px;
@@ -447,7 +482,7 @@
 		.image {
 			grid-area: image;
 			z-index: 1;
-			background-image: url('/images/mecanicoBanner.png');
+			background-image: url('/images/mecanicoBanner2.jpeg');
 			background-size: cover;
 			min-height: 340px;
 			border-radius: 10px;
@@ -456,14 +491,6 @@
 			margin-bottom: 20px;
 		}
 
-        .left {
-        	grid-area: left;
-        }
-
-        .right {
-        	grid-area: right;
-
-        }
 	}
 
 	.historico-de-produccion {
@@ -623,7 +650,7 @@
 		.image {
 			grid-area: image;
 			z-index: 1;
-			background-image: url('/images/labTest2Banner.png');
+			background-image: url('/images/labTest2Banner2.jpeg');
 			background-size: cover;
 			min-height: 310px;
 			border-radius: 10px;
@@ -643,7 +670,7 @@
 		.image {
 			grid-area: image;
 			z-index: 1;
-			background-image: url('/images/simulationBanner.png');
+			background-image: url('/images/simulationBanner2.jpeg');
 			background-size: cover;
 			min-height: 310px;
 			border-radius: 10px;
@@ -671,7 +698,7 @@
 		.image {
 			grid-area: image;
 			z-index: 1;
-			background-image: url('/images/estIncBanner.png');
+			background-image: url('/images/estIncBanner2.jpeg');
 			background-size: cover;
 			min-height: 395px;
 			border-radius: 10px;

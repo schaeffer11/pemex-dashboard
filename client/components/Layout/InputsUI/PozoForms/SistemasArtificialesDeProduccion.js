@@ -262,6 +262,32 @@ import { setSistemasArtificialesImgURL, setTipoDeSistemo, setPresionDeCabeza, se
       bombeoMecanico: this.makeBombeoMecanicoForm(),
     }
 
+    let className
+
+    switch(tipoDeSistemo) {
+      case 'none':
+        className = 'image'
+        break
+      case 'emboloViajero':
+        className = 'image'
+        break
+      case 'bombeoNeumatico':
+        className = 'image BN'
+        break
+      case 'bombeoHidraulico':
+        className = 'image BH'
+        break
+      case 'bombeoCavidadesProgresivas':
+        className = 'image BC'
+        break
+      case 'bombeoElectrocentrifugo':
+        className = 'image BE'
+        break
+      case 'bombeoMecanico':
+        className = 'image BM'
+        break
+    }
+
     return (
       <div className="form sistemas-artificiales-de-produccion">
         <div className='left'>
@@ -272,7 +298,7 @@ import { setSistemasArtificialesImgURL, setTipoDeSistemo, setPresionDeCabeza, se
           { this.makeImgInput() }
           </div>
         <div className='right'>
-          <div className='image'/>
+          <div className={className}/>
         </div>
       </div>
     )
