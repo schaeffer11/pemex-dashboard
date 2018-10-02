@@ -15,6 +15,7 @@ import HistoricoDePresionPozo from './HistoricoDePresionPozo'
 import HistoricoDeAforos from './HistoricoDeAforos'
 import HistoricoDeProduccion from './HistoricoDeProduccion'
 import AnalisisDelAgua from './AnalisisDelAgua'
+import HistoricoDeIntervenciones from './HistoricoDeIntervenciones'
 import { InputRow, InputRowUnitless, InputRowSelectUnitless, InputDate } from '../../Common/InputRow'
 
 import { setFichaTecnicaDelCampo, setFichaTecnicaDelPozo, setEvaluacionPetrofisica, setMecanicoYAparejoDeProduccion, 
@@ -23,6 +24,7 @@ import { setPage } from '../../../../redux/actions/global'
 
 const forms = [
   {'title' : 'Ficha Técnica del Campo', content: <TecnicaDelCampo /> },
+  {'title' : 'Historico De Intervenciones', content: <HistoricoDeIntervenciones />},
   {'title' : 'Ficha Técnica del Pozo' , content:<TecnicaDelPozo /> },
   {'title' : 'Evaluación Petrofísica', content: <EvaluacionPetrofisica /> },
   {'title' : 'Edo. Mecánico y Aparejo de Producción', content: <MecanicoYAparejo /> },
@@ -33,6 +35,9 @@ const forms = [
   {'title' : 'Histórico de Aforos', content: <HistoricoDeAforos /> },
   {'title' : 'Histórico de Producción', content: <HistoricoDeProduccion  /> },
 ];
+
+
+
 
 @autobind class PozoMultiStepForm extends Component {
 
