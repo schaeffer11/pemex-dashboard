@@ -31,8 +31,8 @@ let litologiaOptions = [
   }
 
   componentDidMount(){
-    this.validate()
-    this.containsErrors()
+    // this.validate()
+    // this.containsErrors()
   }
 
   componentDidUpdate(){
@@ -41,42 +41,42 @@ let litologiaOptions = [
   }
 
   containsErrors(){
-    let foundErrors = false
-    let errors = Object.assign({}, this.state.errors);
-    let {formData} = this.props
-    formData = formData.toJS()
+    // let foundErrors = false
+    // let errors = Object.assign({}, this.state.errors);
+    // let {formData} = this.props
+    // formData = formData.toJS()
 
-    const checked = formData.checked  || []
-    checked.forEach((checked) => {
-        if(errors[checked]){
-           errors[checked].checked = true
-           foundErrors = true
-        }
-    })
+    // const checked = formData.checked  || []
+    // checked.forEach((checked) => {
+    //     if(errors[checked]){
+    //        errors[checked].checked = true
+    //        foundErrors = true
+    //     }
+    // })
 
-    if(foundErrors !== this.state.containsErrors){
-      this.setState({
-        errors: errors,
-        containsErrors: foundErrors
-      })
-    }
+    // if(foundErrors !== this.state.containsErrors){
+    //   this.setState({
+    //     errors: errors,
+    //     containsErrors: foundErrors
+    //   })
+    // }
 
   }
 
   validate(event){
-    let {setChecked, formData} = this.props
-    formData = formData.toJS()
+    // let {setChecked, formData} = this.props
+    // formData = formData.toJS()
 
-    let field = event ? event.target.name : null
-    let {errors, checked} = this.props.validate(field, formData)
+    // let field = event ? event.target.name : null
+    // let {errors, checked} = this.props.validate(field, formData)
 
-    this.setState({
-      errors: errors,
-    })
+    // this.setState({
+    //   errors: errors,
+    // })
 
-    if(event && event.target.name){
-      setChecked(checked)
-    }
+    // if(event && event.target.name){
+    //   setChecked(checked)
+    // }
 
   }
 
@@ -206,7 +206,7 @@ let litologiaOptions = [
   }
 
   render() {
-
+    console.log('render campo')
 
     return (
       <div className="form tecnica-del-campo">
@@ -429,7 +429,5 @@ const mapDispatchToProps = dispatch => ({
   setChecked: val => dispatch(setChecked(val, 'fichaTecnicaDelCampo'))
 })
 
-export default withValidate(
-  validate,
-  connect(mapStateToProps, mapDispatchToProps)(TecnicaDelCampo)
-)
+export default connect(mapStateToProps, mapDispatchToProps)(TecnicaDelCampo)
+

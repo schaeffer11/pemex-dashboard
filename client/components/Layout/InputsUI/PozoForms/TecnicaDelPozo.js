@@ -46,9 +46,9 @@ let columns = [
   }
 
   componentDidMount(){
-    this.validate()
-    this.containsErrors()
-    this.props.containsErrors(this, this.state.containsErrors)
+    // this.validate()
+    // this.containsErrors()
+    // this.props.containsErrors(this, this.state.containsErrors)
 
      fetch('/api/getFieldWellMapping')
       .then(r => r.json())
@@ -61,48 +61,48 @@ let columns = [
   }
 
   componentDidUpdate(){
-    this.containsErrors()
-    this.props.containsErrors(this, this.state.containsErrors)
+    // this.containsErrors()
+    // this.props.containsErrors(this, this.state.containsErrors)
   }
 
   containsErrors(){
-    let foundErrors = false
-    let errors = Object.assign({}, this.state.errors);
-      let {formData} = this.props
-      formData = formData.toJS()
+    // let foundErrors = false
+    // let errors = Object.assign({}, this.state.errors);
+    //   let {formData} = this.props
+    //   formData = formData.toJS()
 
-      const checked = formData.checked  || []
-    checked.forEach((checked) => {
-        if(errors[checked]){
-           errors[checked].checked = true
-           foundErrors = true
-        }
-    })
+    //   const checked = formData.checked  || []
+    // checked.forEach((checked) => {
+    //     if(errors[checked]){
+    //        errors[checked].checked = true
+    //        foundErrors = true
+    //     }
+    // })
 
-    if(foundErrors !== this.state.containsErrors){
-      this.setState({
-        errors: errors,
-        containsErrors: foundErrors
-      })
-    }
+    // if(foundErrors !== this.state.containsErrors){
+    //   this.setState({
+    //     errors: errors,
+    //     containsErrors: foundErrors
+    //   })
+    // }
 
   }
 
   validate(event){
-    let {setChecked, formData} = this.props
-    formData = formData.toJS()
-      let { intervalos } = formData
+    // let {setChecked, formData} = this.props
+    // formData = formData.toJS()
+    //   let { intervalos } = formData
 
-    let field = event ? event.target.name : null
-    let {errors, checked} = this.props.validate(field, formData)
+    // let field = event ? event.target.name : null
+    // let {errors, checked} = this.props.validate(field, formData)
 
-    this.setState({
-      errors: errors,
-    })
+    // this.setState({
+    //   errors: errors,
+    // })
 
-    if(event && event.target.name){
-      setChecked(checked)
-    }
+    // if(event && event.target.name){
+    //   setChecked(checked)
+    // }
 
   }
 
@@ -251,6 +251,7 @@ let columns = [
         column.Cell = null
     })
 
+    // console.log('rending pozo table')
     return (
       <div className='intervenciones-form' >
         <div className='header'>
@@ -278,6 +279,7 @@ let columns = [
 
   render() {
 
+    console.log('rerenderrr pozooo')
     return (
       <div className="form tecnica-del-pozo">
           <div className="image"/>
@@ -423,7 +425,4 @@ const mapDispatchToProps = dispatch => ({
   setChecked: val => dispatch(setChecked(val, 'fichaTecnicaDelPozo')),
 })
 
-export default withValidate(
-  validate,
-  connect(mapStateToProps, mapDispatchToProps)(TechnicaDelPozo)
-)
+export default connect(mapStateToProps, mapDispatchToProps)(TechnicaDelPozo)

@@ -130,32 +130,36 @@ const grabadoOptions = [
       }
   }
 
+  //TODO:: FIX THIS 
   validate(event){
-     let {setChecked, formData} = this.props
-     formData = formData.toJS()
+     // let {setChecked, formData} = this.props
+     // formData = formData.toJS()
 
-     let field = event ? event.target.name : null
-     let {errors, checked} = this.props.validate(field, formData)
+     // let field = event ? event.target.name : null
+     // let {errors, checked} = this.props.validate(field, formData)
 
-     if(field ) {
-         const index = event.target.getAttribute('index')
-         errors[index][field].checked = true
-     }
+     // if(field ) {
+     //     const index = event.target.getAttribute('index')
+     //     errors[index][field].checked = true
+     // }
+     // console.log('event', event)
+     // console.log('errors', errors)
+     // Object.entries(errors).forEach( (error, index) => {
+     //      console.log('i', error)
+     //      console.log(formData)
+     //     formData.checked.forEach( field => {
+     //         if(errors[index][field])
+     //           errors[index][field].checked = true
+     //     })
+     // })
 
-     Object.entries(errors).forEach( (error, index) => {
-         formData.checked.forEach( field => {
-             if(errors[index][field])
-               errors[index][field].checked = true
-         })
-     })
+     // this.setState({
+     //     errors: errors,
+     // })
 
-     this.setState({
-         errors: errors,
-     })
-
-     if(event && event.target.name){
-         setChecked(checked)
-     }
+     // if(event && event.target.name){
+     //     setChecked(checked)
+     // }
 
   }
 

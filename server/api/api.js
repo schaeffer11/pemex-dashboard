@@ -1449,7 +1449,8 @@ app.get('/getLabTest', async (req, res) => {
     
     let finalObj = {
       pruebasDeLaboratorio: {
-        pruebasDeLaboratorioData: outData
+        pruebasDeLaboratorioData: outData,
+        checked: []
       }
     }
     res.json(finalObj)

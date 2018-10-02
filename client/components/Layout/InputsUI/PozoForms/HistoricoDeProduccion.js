@@ -160,53 +160,53 @@ let columns = [
   }
 
   componentDidMount(){
-    this.validate()
-    this.containsErrors()
-    this.props.containsErrors(this, this.state.containsErrors)
+    // this.validate()
+    // this.containsErrors()
+    // this.props.containsErrors(this, this.state.containsErrors)
   }
 
   componentDidUpdate(){
-    this.containsErrors()
-    this.props.containsErrors(this, this.state.containsErrors)
+    // this.containsErrors()
+    // this.props.containsErrors(this, this.state.containsErrors)
   }
 
   containsErrors(){
-    let foundErrors = false
-    let errors = Object.assign({}, this.state.errors);
-    let {formData} = this.props
-    formData = formData.toJS()
+    // let foundErrors = false
+    // let errors = Object.assign({}, this.state.errors);
+    // let {formData} = this.props
+    // formData = formData.toJS()
 
-    const checked = formData.checked  || []
-    checked.forEach((checked) => {
-        if(errors[checked]){
-           errors[checked].checked = true
-           foundErrors = true
-        }
-    })
+    // const checked = formData.checked  || []
+    // checked.forEach((checked) => {
+    //     if(errors[checked]){
+    //        errors[checked].checked = true
+    //        foundErrors = true
+    //     }
+    // })
 
-    if(foundErrors !== this.state.containsErrors){
-      this.setState({
-        errors: errors,
-        containsErrors: foundErrors
-      })
-    }
+    // if(foundErrors !== this.state.containsErrors){
+    //   this.setState({
+    //     errors: errors,
+    //     containsErrors: foundErrors
+    //   })
+    // }
 
   }
 
   validate(event){
-    let {setChecked, formData} = this.props
-    formData = formData.toJS()
+    // let {setChecked, formData} = this.props
+    // formData = formData.toJS()
 
-    let field = event ? event.target.name : null
-    let {errors, checked} = this.props.validate(field, formData)
+    // let field = event ? event.target.name : null
+    // let {errors, checked} = this.props.validate(field, formData)
 
-    this.setState({
-      errors: errors,
-    })
+    // this.setState({
+    //   errors: errors,
+    // })
 
-    if(event && event.target.name){
-      setChecked(checked)
-    }
+    // if(event && event.target.name){
+    //   setChecked(checked)
+    // }
   }
 
 
@@ -280,6 +280,9 @@ let columns = [
 
     const objectTemplate = {fecha: null, dias: '', qo: '', qw: '', qg: '', qgi: '', qo_vol: '', qw_vol: '', qg_vol: '', qgi_vol: '', np: '', wp: '', gp: '', gi: '', rga: '', fw: ''}
 
+    console.log('render produccion')
+
+
     return (
       <div className='historico-produccion' >
         <div className='table'>
@@ -342,7 +345,5 @@ const mapDispatchToProps = dispatch => ({
     setChecked: val => dispatch(setChecked(val, 'historicoDeProduccion'))    
 })
 
-export default withValidate(
-  validate,
-  connect(mapStateToProps, mapDispatchToProps)(HistoricoDeProduccion)
-)
+export default connect(mapStateToProps, mapDispatchToProps)(HistoricoDeProduccion)
+

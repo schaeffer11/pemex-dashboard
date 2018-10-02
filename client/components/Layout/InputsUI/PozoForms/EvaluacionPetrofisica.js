@@ -107,51 +107,51 @@ let mudLossColumns = [
 
   componentDidMount(){
     this.validate()
-    this.containsErrors()
-    this.props.containsErrors(this, this.state.containsErrors)
+    // this.containsErrors()
+    // this.props.containsErrors(this, this.state.containsErrors)
   }
 
   componentDidUpdate(){
-    this.containsErrors()
-    this.props.containsErrors(this, this.state.containsErrors)
+    // this.containsErrors()
+    // this.props.containsErrors(this, this.state.containsErrors)
   }
 
   containsErrors(){
-        let foundErrors = false
-        let errors = Object.assign({}, this.state.errors);
-      let {formData} = this.props
-      formData = formData.toJS()
+      //   let foundErrors = false
+      //   let errors = Object.assign({}, this.state.errors);
+      // let {formData} = this.props
+      // formData = formData.toJS()
 
-      const checked = formData.checked  || []
-        checked.forEach((checked) => {
-            if(errors[checked]){
-                errors[checked].checked = true
-                foundErrors = true
-            }
-        })
+      // const checked = formData.checked  || []
+      //   checked.forEach((checked) => {
+      //       if(errors[checked]){
+      //           errors[checked].checked = true
+      //           foundErrors = true
+      //       }
+      //   })
 
-        if(foundErrors !== this.state.containsErrors){
-            this.setState({
-                errors: errors,
-                containsErrors: foundErrors
-            })
-        }
+      //   if(foundErrors !== this.state.containsErrors){
+      //       this.setState({
+      //           errors: errors,
+      //           containsErrors: foundErrors
+      //       })
+      //   }
   }
 
   validate(event){
-    let {setChecked, formData} = this.props
-    formData = formData.toJS()
+    // let {setChecked, formData} = this.props
+    // formData = formData.toJS()
 
-    let field = event ? event.target.name : null
-    let {errors, checked} = this.props.validate(field, formData)
+    // let field = event ? event.target.name : null
+    // let {errors, checked} = this.props.validate(field, formData)
 
-    this.setState({
-      errors: errors,
-    })
+    // this.setState({
+    //   errors: errors,
+    // })
 
-    if(event && event.target.name){
-      setChecked(checked)
-    }
+    // if(event && event.target.name){
+    //   setChecked(checked)
+    // }
 
   }
 
@@ -368,7 +368,7 @@ let mudLossColumns = [
 
 
   render() {
-
+    console.log('render petrofisica')
     return (
       <div className="form evaluacionPetrofisica">
         <div className="image"/>
@@ -426,7 +426,4 @@ const mapDispatchToProps = dispatch => ({
 
 
 
-export default withValidate(
-  validate,
-  connect(mapStateToProps, mapDispatchToProps)(EvaluacionPetrofisica)
-)
+export default connect(mapStateToProps, mapDispatchToProps)(EvaluacionPetrofisica)
