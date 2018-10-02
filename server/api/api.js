@@ -42,11 +42,6 @@ app.get('/woop', async (req, res) => {
   res.send('done')
 })
 
-// app.get('/getTemplate', (req, res) => {
-//   let localPath = path.join(__dirname, isProduction ? '../' : '../../', 'tempFile.xlsm')
-
-//   res.sendFile(localPath)
-// })
 app.get('/get_template/:template', (req, res) => {
   const { template } = req.params
   const filePath = path.join(__dirname, isProduction ? '../' : '../../', `templates/${template}.xlsx`)

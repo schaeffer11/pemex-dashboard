@@ -179,7 +179,7 @@ import Loading from '../../Common/Loading'
   }
 
   makeGeneralForm() {
-    let { setActivo, setCampo, setPozo, setFormacion, formData, fieldWellOptions  } = this.props
+    let { setActivo, setCampo, setPozo, setFormacion, formData, fieldWellOptions } = this.props
 
 
     formData = formData.toJS()
@@ -267,6 +267,7 @@ import Loading from '../../Common/Loading'
         <InputRowSelectUnitless header="Campo" name="campo" value={campo} options={fieldOptions} callback={this.handleSelectField} onBlur={this.validate} name='campo' errors={this.state.errors} />
         <InputRowSelectUnitless header="Pozo" name="pozo" value={pozo} options={wellOptions} callback={(e) => setPozo(e.value)} onBlur={this.validate} name='pozo' errors={this.state.errors} />
         <InputRowSelectUnitless header="Formación" value={formacion} options={formacionOptions} callback={(e) => setFormacion(e.value)} onBlur={this.validate} name='formacion' errors={this.state.errors} />
+        {}
       </div>
 
     )
@@ -352,10 +353,6 @@ import Loading from '../../Common/Loading'
       })
   }
 
-  downloadMasterTemplate() {
-    window.location = `/api/getTemplate`
-  }
-
   render() {
     let { isOpen, selectedSave } = this.state
     let { setShowForms } = this.props
@@ -366,7 +363,6 @@ import Loading from '../../Common/Loading'
         { this.makeGeneralInterventionForm() }
         <button className="submit submit-load" onClick={this.activateModal}> Descargar borrador</button>
         <button className='submit submit-continue' disabled={this.checkIncomplete()} onClick={(e) => setShowForms(true)} >Siguiente</button>
-        <button className="submit download-template" onClick={this.downloadMasterTemplate}>{'Descarga el Formato General'}</button>
         <Notification />
         <Loading />
         { isOpen ? this.buildModal() : null }

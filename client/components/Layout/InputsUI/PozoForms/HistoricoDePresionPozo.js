@@ -116,12 +116,13 @@ let columns = [
         <div className='image'/>
         <div className="inputs">
           <ExcelUpload
-          headers={[
-                { name: 'fecha', type: 'date' },
-                { name: 'Pws', type: 'number' },
-                { name: 'Pwf', type: 'number' },
-              ]}
-              setData={this.props.setPresionDataPozo}
+            template="HistoricoPresionPozo"
+            headers={[
+              { name: 'fecha', type: 'date' },
+              { name: 'Pws', type: 'number' },
+              { name: 'Pwf', type: 'number' },
+            ]}
+            setData={this.props.setPresionDataPozo}
           />
           <div className='depth'>
             <InputRow header="Plano de Referencia" name='pressureDepthPozo' value={pressureDepthPozo} onChange={setPressureDepthPozo} unit={'md'} onBlur={this.validate} errors={this.state.errors}  />

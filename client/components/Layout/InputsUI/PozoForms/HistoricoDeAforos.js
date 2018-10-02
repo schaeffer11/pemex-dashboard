@@ -283,25 +283,26 @@ let columns = [
     return (
       <div className="form historico-de-produccion">
         <ExcelUpload
-            headers={[
-              { name: 'fecha', type: 'date' },
-              { name: 'tiempo', type: 'number' },
-              { name: 'estrangulador', type: 'number' },
-              { name: 'ptp', type: 'number' },
-              { name: 'ttp', type: 'number' },
-              { name: 'pbaj', type: 'number' },
-              { name: 'tbaj', type: 'number' },
-              { name: 'psep', type: 'number' },
-              { name: 'tsep', type: 'number' },
-              { name: 'qo', type: 'number' },
-              { name: 'qw', type: 'number' },
-              { name: 'qg', type: 'number' },
-              { name: 'ql', type: 'number' },
-              { name: 'rga', type: 'number' },
-              { name: 'salinidad', type: 'number' },
-              { name: 'ph', type: 'number' },
-            ]}
-            setData={this.props.setAforosData}
+          template="HistoricoAforo"
+          headers={[
+            { name: 'fecha', type: 'date' },
+            { name: 'tiempo', type: 'number' },
+            { name: 'estrangulador', type: 'number' },
+            { name: 'ptp', type: 'number' },
+            { name: 'ttp', type: 'number' },
+            { name: 'pbaj', type: 'number' },
+            { name: 'tbaj', type: 'number' },
+            { name: 'psep', type: 'number' },
+            { name: 'tsep', type: 'number' },
+            { name: 'qo', type: 'number' },
+            { name: 'qw', type: 'number' },
+            { name: 'qg', type: 'number' },
+            { name: 'ql', type: 'number' },
+            { name: 'rga', type: 'number' },
+            { name: 'salinidad', type: 'number' },
+            { name: 'ph', type: 'number' },
+          ]}
+          setData={this.props.setAforosData}
           />
         { this.makeHistoricoDeAforosInput() }
         { this.makeAforosGraph() }

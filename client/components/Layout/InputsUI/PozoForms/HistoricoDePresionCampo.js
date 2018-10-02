@@ -112,19 +112,14 @@ let columns = [
       <div className='historico-presion' >
         <div className='image'/>
         <div className="inputs">
-          <button
-            className="submit download-template"
-            onClick={() => window.location.replace('/api/get_template/HistoricoPresionCampo')}
-          >
-            Descarga Plantilla de Esta Página
-          </button>
           <ExcelUpload
+          template="HistoricoPresionCampo"
           headers={[
                 { name: 'fecha', type: 'date' },
                 { name: 'Pws', type: 'number' },
               ]}
               setData={this.props.setPresionDataCampo}
-          />
+            />
           <div className='depth'>
             <InputRow header="Plano de Referencia" name='pressureDepthCampo' value={pressureDepthCampo} onChange={setPressureDepthCampo} unit={'md'} onBlur={this.validate} errors={this.state.errors} />
           </div>
