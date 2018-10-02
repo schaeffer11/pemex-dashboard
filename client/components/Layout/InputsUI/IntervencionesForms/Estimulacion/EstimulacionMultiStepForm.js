@@ -28,12 +28,12 @@ import { setShowForms } from '../../../../../redux/actions/global'
     this.estimacionCostosEstimulacion = React.createRef();
 
     this.forms = [
-      {'title' : 'Propuesta de Tratamiento de Estimulación', 'content': <PropuestaDeEstimulacion ref={Ref =>this.propuestaDeEstimulacion =Ref }/> },  
-      {'title' : 'Pruebas de Laboratorio', 'content': <PruebasDeLaboratorio ref={Ref => this.pruebasDeLaboratorio=Ref }/> },
-      {'title' : 'Pruebas de Laboratorio de Estimulación', 'content': <PruebasDeLaboratorioExtra ref={Ref =>this.pruebasDeLaboratorioEstimulacionExtra =Ref }/> },
-      {'title' : 'Resultados de la Simulación de Estimulación', 'content': <ResultadosDeLaSimulacionEstimulacion ref={Ref =>this.resultadosDeLaSimulacionEstimulacion =Ref }/> },
-      {'title' : 'Estimación del Incremento de Producción', 'content': <EstimacionIncProduccionEstimulacion ref={Ref =>this.estimacionIncProduccionEstimulacion =Ref } /> },
-      {'title' : 'Estimación de Costos de Estimulación', 'content': <EstimacionCostos ref={Ref =>this.estimacionCostosEstimulacion =Ref }/> }
+      {'title' : 'Propuesta de Tratamiento de Estimulación', 'content': <PropuestaDeEstimulacion key="pEstimulacion_1" ref={Ref =>this.propuestaDeEstimulacion =Ref }/> },  
+      {'title' : 'Pruebas de Laboratorio', 'content': <PruebasDeLaboratorio key="pEstimulacion_2" ref={Ref => this.pruebasDeLaboratorio=Ref }/> },
+      {'title' : 'Pruebas de Laboratorio de Estimulación', 'content': <PruebasDeLaboratorioExtra key="pEstimulacion_3" ref={Ref =>this.pruebasDeLaboratorioEstimulacionExtra =Ref }/> },
+      {'title' : 'Resultados de la Simulación de Estimulación', 'content': <ResultadosDeLaSimulacionEstimulacion key="pEstimulacion_4" ref={Ref =>this.resultadosDeLaSimulacionEstimulacion =Ref }/> },
+      {'title' : 'Estimación del Incremento de Producción', 'content': <EstimacionIncProduccionEstimulacion key="pEstimulacion_5" ref={Ref =>this.estimacionIncProduccionEstimulacion =Ref } /> },
+      {'title' : 'Estimación de Costos de Estimulación', 'content': <EstimacionCostos key="pEstimulacion_6" ref={Ref =>this.estimacionCostosEstimulacion =Ref }/> }
     ];
 
   }

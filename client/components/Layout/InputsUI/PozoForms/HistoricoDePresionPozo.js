@@ -203,7 +203,6 @@ const validate = values => {
 }
 
 const mapStateToProps = state => ({
-  forms: state.get('forms'),
   formData: state.get('historicoDePresion'),
 })
 

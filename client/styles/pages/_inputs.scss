@@ -497,7 +497,11 @@
 		display: grid;
 		grid-template-columns: 100%;
 		grid-column-gap: 10px;
-		grid-template-areas: 'prod';
+		grid-template-areas: 'excel'
+													'prod';
+		.excel-upload {
+			grid-area: excel;
+		}
 
 		.historico-produccion {
 			grid-area: prod;
