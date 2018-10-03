@@ -23,6 +23,7 @@ import estCost from './reducers/estCost'
 import evaluacionPetrofisica from './reducers/evaluacionPetrofisica'
 import historicoDePresion from './reducers/historicoDePresion'
 import historicoDeProduccion from './reducers/historicoDeProduccion'
+import historialDeIntervenciones from './reducers/historialDeIntervenciones'
 import historicoDeAforos from './reducers/historicoDeAforos'
 import forms from './reducers/forms'
 import global from './reducers/global'
@@ -52,6 +53,7 @@ const appReducer = combineReducers({
   evaluacionPetrofisica,
   historicoDePresion,
   historicoDeProduccion,
+  historialDeIntervenciones,
   historicoDeAforos,
   global
 })

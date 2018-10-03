@@ -6,6 +6,7 @@ import ReactTable from 'react-table'
 import {withValidate} from '../../Common/Validate'
 import { setPresionDataPozo, setPressureDepthPozo, setChecked } from '../../../../redux/actions/pozo'
 import InputTable from '../../Common/InputTable'
+import ExcelUpload from '../../Common/ExcelUpload'
 import { InputRow } from '../../Common/InputRow'
 
 let columns = [
@@ -48,24 +49,6 @@ let columns = [
 
   componentDidUpdate(){
 
-  }
-
-  renderEditable(cellInfo) {
-    let { setPresionDataPozo, formData } = this.props
-    formData = formData.toJS()
-    let { presionDataPozo, pressureDepthPozo } = formData
-
-    return (
-      <div
-        style={{ backgroundColor: "#fafafa" }}
-        contentEditable
-        suppressContentEditableWarning
-        onBlur={e => {
-          presionDataPozo[cellInfo.index][cellInfo.column.id] = e.target.innerHTML;
-          setPresionDataPozo(presionDataPozo)
-        }}
-      >{presionDataPozo[cellInfo.index][cellInfo.column.id]}</div>
-    );
   }
 
   addNewRow() {
@@ -111,28 +94,38 @@ let columns = [
 
     return (
 
-      <div className='historico-presion-pozo' >
+      <div className='historico-presion' >
         <div className='image'/>
-        <div className='presion-table'>
-          <div className='table-select'>
-            <InputTable
-              className="-striped"
-              data={presionDataPozo}
-              newRow={objectTemplate}
-              setData={setPresionDataPozo}
-              columns={columns}
-              showPagination={false}
-              showPageSizeOptions={false}
-              pageSize={presionDataPozo.length}
-              sortable={false}
-              getTdProps={this.deleteRow}
-            />
+        <div className="inputs">
+          <ExcelUpload
+            template="HistoricoPresionPozo"
+            headers={[
+              { name: 'fecha', type: 'date' },
+              { name: 'Pws', type: 'number' },
+              { name: 'Pwf', type: 'number' },
+            ]}
+            setData={this.props.setPresionDataPozo}
+          />
+          <div className='depth'>
+            <InputRow header="Plano de Referencia" name='pressureDepthPozo' value={pressureDepthPozo} onChange={setPressureDepthPozo} unit={'md'} onBlur={this.validate} errors={this.state.errors}  />
           </div>
-
-          <button className='new-row-button' onClick={this.addNewRow}>Añadir un renglón</button>
-        </div>
-        <div className='depth'>
-          <InputRow header="Plano de Referencia" name='pressureDepthPozo' value={pressureDepthPozo} onChange={setPressureDepthPozo} unit={'md'} onBlur={this.validate} errors={this.state.errors}  />
+          <div className='presion-table'>
+            <div className='table-select'>
+              <InputTable
+                className="-striped"
+                data={presionDataPozo}
+                newRow={objectTemplate}
+                setData={setPresionDataPozo}
+                columns={columns}
+                showPagination={false}
+                showPageSizeOptions={false}
+                pageSize={presionDataPozo.length}
+                sortable={false}
+                getTdProps={this.deleteRow}
+              />
+            </div>
+            <button className='new-row-button' onClick={this.addNewRow}>Añadir un renglón</button>
+          </div>
         </div>
       </div>
     )

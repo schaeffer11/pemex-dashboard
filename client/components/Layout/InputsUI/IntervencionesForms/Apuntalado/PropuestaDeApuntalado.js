@@ -27,8 +27,9 @@ import { round, calculateVolumes, getSistemaOptions } from '../helpers'
 
 
   makeGeneralForm() {
-    let { formData, setPropuestaCompany } = this.props
+    let { formData, setPropuestaCompany, intervalos } = this.props
     formData = formData.toJS()
+    intervalos = intervalos.toJS()
     let { propuestaCompany } = formData
     const companyOptions = [
       { label: 'Halliburton', value: 'Halliburton' },
@@ -39,6 +40,8 @@ import { round, calculateVolumes, getSistemaOptions } from '../helpers'
       { label: 'Weatherford',
       value: 'Weatherford' }
     ]
+
+    const intervals = intervalos.map(elem => <div key={`intervalo_${elem.cimaMD}-${elem.baseMD}`}>{`${elem.cimaMD}-${elem.baseMD}`}</div>)
 
     return (
       <div className='general-form' >
@@ -52,6 +55,10 @@ import { round, calculateVolumes, getSistemaOptions } from '../helpers'
           onBlur={this.validate}
           value={propuestaCompany}
           callback={e => setPropuestaCompany(e.value)}
+        />
+        <CalculatedValue
+          header={<div>Intervalos</div>}
+          value={intervals}
         />
       </div>
     )
@@ -255,26 +262,26 @@ import { round, calculateVolumes, getSistemaOptions } from '../helpers'
         Header: 'Etapa',
         accessor: 'etapa',
       },
-      {
-        Header: 'Intervalo',
-        accessor: 'intervalo',
-        width: 200,
-        resizable: false,
-        style: {overflow: 'visible'},
-        Cell: row => {
-          return (
-            <div>
-              <Select
-                className='input'
-                simpleValue={true}
-                options={intervaloOptions}
-                value={intervaloOptions.find(i=>i.value === row.original.intervalo) || null}
-                onChange={(e) => this.handleSelect(row, e.value)} 
-              />
-            </div>
-          )
-        }
-      },
+      // {
+      //   Header: 'Intervalo',
+      //   accessor: 'intervalo',
+      //   width: 200,
+      //   resizable: false,
+      //   style: {overflow: 'visible'},
+      //   Cell: row => {
+      //     return (
+      //       <div>
+      //         <Select
+      //           className='input'
+      //           simpleValue={true}
+      //           options={intervaloOptions}
+      //           value={intervaloOptions.find(i=>i.value === row.original.intervalo) || null}
+      //           onChange={(e) => this.handleSelect(row, e.value)} 
+      //         />
+      //       </div>
+      //     )
+      //   }
+      // },
       {
         Header: 'Sistema',
         accessor: 'sistema',

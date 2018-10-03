@@ -6,6 +6,7 @@ import ReactTable from 'react-table'
 import {withValidate} from '../../Common/Validate'
 import { setPresionDataCampo, setPressureDepthCampo, setChecked } from '../../../../redux/actions/pozo'
 import InputTable from '../../Common/InputTable'
+import ExcelUpload from '../../Common/ExcelUpload'
 import { InputRow } from '../../Common/InputRow'
 
 let columns = [
@@ -47,24 +48,6 @@ let columns = [
 
   }
 
-
-  renderEditable(cellInfo) {
-    let { setPresionDataCampo, formData } = this.props
-    formData = formData.toJS()
-    let { presionDataCampo } = formData
-
-    return (
-      <div
-        style={{ backgroundColor: "#fafafa" }}
-        contentEditable
-        suppressContentEditableWarning
-        onBlur={e => {
-          presionDataCampo[cellInfo.index][cellInfo.column.id] = e.target.innerHTML;
-          setPresionDataCampo(presionDataCampo)
-        }}
-      >{presionDataCampo[cellInfo.index][cellInfo.column.id]}</div>
-    );
-  }
 
   addNewRow() {
     let { formData, setPresionDataCampo } = this.props
@@ -108,28 +91,37 @@ let columns = [
     console.log('render presion campo')
 
     return (
-      <div className='historico-presion-campo' >
+      <div className='historico-presion' >
         <div className='image'/>
-        <div className='presion-table'>
-          <div className='table-select'>
-            <InputTable
-              className="-striped"
-              data={presionDataCampo}
-              newRow={objectTemplate}
-              setData={setPresionDataCampo}
-              columns={columns}
-              showPagination={false}
-              showPageSizeOptions={false}
-              pageSize={presionDataCampo.length}
-              sortable={false}
-              getTdProps={this.deleteRow}
-            />        
+        <div className="inputs">
+          <ExcelUpload
+          template="HistoricoPresionCampo"
+          headers={[
+                { name: 'fecha', type: 'date' },
+                { name: 'Pws', type: 'number' },
+              ]}
+              setData={this.props.setPresionDataCampo}
+            />
+          <div className='depth'>
+            <InputRow header="Plano de Referencia" name='pressureDepthCampo' value={pressureDepthCampo} onChange={setPressureDepthCampo} unit={'md'} onBlur={this.validate} errors={this.state.errors} />
           </div>
-
-          <button className='new-row-button' onClick={this.addNewRow}>Añadir un renglón</button>
-        </div>
-        <div className='depth'>
-          <InputRow header="Plano de Referencia" name='pressureDepthCampo' value={pressureDepthCampo} onChange={setPressureDepthCampo} unit={'md'} onBlur={this.validate} errors={this.state.errors} />
+          <div className='presion-table'>
+            <div className='table-select'>
+              <InputTable
+                className="-striped"
+                data={presionDataCampo}
+                newRow={objectTemplate}
+                setData={setPresionDataCampo}
+                columns={columns}
+                showPagination={false}
+                showPageSizeOptions={false}
+                pageSize={presionDataCampo.length}
+                sortable={false}
+                getTdProps={this.deleteRow}
+              />        
+            </div>
+            <button className='new-row-button' onClick={this.addNewRow}>Añadir un renglón</button>
+          </div>
         </div>
       </div>
     )
@@ -148,4 +140,3 @@ const mapDispatchToProps = dispatch => ({
 
 
 export default connect(mapStateToProps, mapDispatchToProps)(HistoricoDePresionCampo)
-

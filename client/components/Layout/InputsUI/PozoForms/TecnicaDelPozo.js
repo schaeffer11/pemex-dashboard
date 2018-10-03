@@ -10,30 +10,6 @@ import InputTable from '../../Common/InputTable'
 import { InputRow, InputRowUnitless, InputRowSelectUnitless, InputDate } from '../../Common/InputRow'
 import { setTipoDeSistemo, setHistorialIntervencionesData, setEspesorBruto, setCaliza, setDolomia, setArcilla, setPorosidad, setPermeabilidad, setSw, setCaa, setCga, setTipoDePozo, setPws, setPwf, setPwsFecha, setPwfFecha, setDeltaPPerMes, setTyac, setPvt, setAparejoDeProduccion, setProfEmpacador, setProfSensorPYT, setTipoDeSap, formData, setChecked } from '../../../../redux/actions/pozo'
 
-
-let columns = [
-  {
-    Header: '',
-    accessor: 'delete',
-    width: 35,
-    resizable: false,
-    Cell: row => {
-      if (row.original.length > 1) {
-        return (<div style={{color: 'white', background: 'red', borderRadius: '4px', textAlign: 'center', cursor: 'pointer'}}>X</div>)
-      }
-    }
-  }, {
-    Header: 'Fecha',
-    accessor: 'fecha',
-    width: 150,
-    cell: 'renderDate'
-  }, {
-    Header: 'Historial de Intervenciones',
-    accessor: 'intervenciones',
-    cell: 'renderEditable',
-  }
-]
-
 @autobind class TechnicaDelPozo extends Component {
   constructor(props) {
     super(props)
@@ -46,8 +22,15 @@ let columns = [
   }
 
   componentDidMount(){
+    const { token } = this.props
+    const headers = {
+      headers: {
+        'Authorization': `Bearer ${token}`,
+        'content-type': 'application/json',
+      },
+    }
 
-     fetch('/api/getFieldWellMapping')
+     fetch('/api/getFieldWellMapping', headers)
       .then(r => r.json())
       .then(r => {
 
@@ -142,47 +125,6 @@ let columns = [
     )
   }
 
-  renderEditable(cellInfo) {
-    let { setHistorialIntervencionesData, formData } = this.props
-    formData = formData.toJS()
-    let { historialIntervencionesData } = formData
-
-    return (
-      <div
-        style={{ backgroundColor: "#fafafa" }}
-        contentEditable
-        suppressContentEditableWarning
-        onBlur={e => {
-          historialIntervencionesData[cellInfo.index][cellInfo.column.id] = e.target.innerHTML;
-          setHistorialIntervencionesData(historialIntervencionesData)
-        }}
-      >{historialIntervencionesData[cellInfo.index][cellInfo.column.id]}</div>
-    );
-  }
-
-  renderDate(cellInfo){
-    let { setHistorialIntervencionesData, formData } = this.props
-    formData = formData.toJS()
-    let { historialIntervencionesData } = formData
-
-    const date = historialIntervencionesData[cellInfo.index][cellInfo.column.id]
-    const val = date ? moment(date) : null;
-    return (
-      <DatePicker
-        isClearable={true}
-        locale="es-mx"
-        dateFormat="L"
-        onKeyDown={(e) => {e.preventDefault(); return false; }} //Disable input from user
-        onChange={ e => {
-          if(e){
-            historialIntervencionesData[cellInfo.index][cellInfo.column.id] = e.format('YYYY-MM-DD');
-            setHistorialIntervencionesData(historialIntervencionesData)
-          }
-        }}
-        selected={val} />
-    )
-  }
-
   addNewRow() {
     let { formData, setHistorialIntervencionesData } = this.props
     formData = formData.toJS()
@@ -198,25 +140,40 @@ let columns = [
     formData = formData.toJS()
     let { historialIntervencionesData } = formData
 
-    columns.forEach(column => {
-      if(column.cell === 'renderEditable')
-        column.Cell = this.renderEditable
-      else if(column.cell === 'renderDate')
-        column.Cell = this.renderDate
-      else
-        column.Cell = null
-    })
+    const columns = [
+      {
+        Header: '',
+        accessor: 'delete',
+        width: 35,
+        resizable: false,
+        Cell: row => {
+          if (row.original.length > 1) {
+            return (<div style={{color: 'white', background: 'red', borderRadius: '4px', textAlign: 'center', cursor: 'pointer'}}>X</div>)
+          }
+        }
+      }, {
+        Header: 'Fecha',
+        accessor: 'fecha',
+        width: 150,
+        cell: 'renderDate'
+      }, {
+        Header: 'Historial de Intervenciones',
+        accessor: 'intervenciones',
+        cell: 'renderEditable',
+      }
+    ]
 
-    // console.log('rending pozo table')
     return (
       <div className='intervenciones-form' >
         <div className='header'>
           Historial De Intervenciones
         </div>
         <div className='table-select'>
-          <ReactTable
-            className="-striped"
+          <InputTable
+          className="-striped"
             data={historialIntervencionesData}
+            newRow={{}}
+            setData={setHistorialIntervencionesData}
             columns={columns}
             showPagination={false}
             showPageSizeOptions={false}
@@ -248,7 +205,8 @@ let columns = [
 const mapStateToProps = state => ({
   formData: state.get('fichaTecnicaDelPozo'),
   generalData: state.get('fichaTecnicaDelPozoHighLevel'),
-  tipoDeSistemo: state.getIn(['sistemasArtificialesDeProduccion', 'tipoDeSistemo'])
+  tipoDeSistemo: state.getIn(['sistemasArtificialesDeProduccion', 'tipoDeSistemo']),
+  token: state.getIn(['user', 'token'])
 })
 
 const mapDispatchToProps = dispatch => ({

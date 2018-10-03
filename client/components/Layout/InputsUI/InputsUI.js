@@ -54,7 +54,14 @@ import '../../../styles/components/_query_modal.css'
   }
 
   componentDidMount() {
-    fetch('/api/getFieldWellMapping')
+    const { token } = this.props
+    const headers = {
+      headers: {
+        'Authorization': `Bearer ${token}`,
+        'content-type': 'application/json',
+      },
+    }
+    fetch('/api/getFieldWellMapping', headers)
       .then(r => r.json())
       .then(r => {
 
@@ -69,12 +76,12 @@ import '../../../styles/components/_query_modal.css'
 
   }
 
-  handleSubmit(action) {
+  handleSubmit(action) {errors
     let { saveName } = this.state
 
     console.log('herehre', saveName)
     if( action === 'save' || this.validate() ){
-      this.props.submitPozoForm(action, saveName)
+      this.props.submitPozoForm(action, this.props.token, saveName)
       this.setState({'error': ''})
       console.log('Validate Succeeded')
     } else {
@@ -107,7 +114,7 @@ import '../../../styles/components/_query_modal.css'
         this.intervencionesFormRef.current.getWrappedInstance().validate()
   }
 
-  buildModal(pozoFormSubmitting) {
+  buildModal() {
     let {saveName} = this.state
 
     return (
@@ -131,7 +138,7 @@ import '../../../styles/components/_query_modal.css'
         <div className="modal-body">
           <input onChange={(e) => this.setState({saveName: e.target.value})}></input>
           <br></br>
-          <button className="submit save-button" disabled={!saveName} onClick={(e) => this.handleSubmit('save')}>{pozoFormSubmitting ? 'Ahorro...' : 'Guardar'}</button>
+          <button className="submit save-button" disabled={!saveName} onClick={(e) => this.handleSubmit('save')}>{'Guardar'}</button>
         </div> 
       </div>
       </AriaModal>
@@ -143,8 +150,6 @@ import '../../../styles/components/_query_modal.css'
   render() {
     let { selectedTab, selectedSubtab, error, isOpen, saveName, fieldWellOptions } = this.state
     let { global } = this.props
-    let pozoFormSubmitting = this.props.formsState.get('pozoFormSubmitting')
-    const errors = this.props.formsState.get('pozoFormError')
 
     global = global.toJS()
 
@@ -180,8 +185,8 @@ import '../../../styles/components/_query_modal.css'
           <div style={{display: 'none'}}>
             { otherForm }
           </div>
-          <button className="submit save-button" disabled={pozoFormSubmitting} onClick={(e) => this.activateModal(pozoFormSubmitting)}>{pozoFormSubmitting ? 'Ahorro...' : 'Guardar'}</button>
-          <button className="submit submit-button" disabled={pozoFormSubmitting} onClick={(e) => this.handleSubmit('submit')}>{pozoFormSubmitting ? 'Enviando...' : 'Enviar'}</button>
+          <button className="submit save-button"  onClick={(e) => this.activateModal()}>Guardar</button>
+          <button className="submit submit-button" onClick={(e) => this.handleSubmit('submit')}>Enviar</button>
           <div className="form-error">{this.state.error}</div> 
           <div style={{height: '10px'}}></div>
           <Notification />
@@ -200,11 +205,11 @@ const mapStateToProps = state => ({
   objetivoYAlcancesIntervencion: state.get('objetivoYAlcancesIntervencion'),
   global: state.get('global'),
   formsState: state.get('forms'),
- 
+  token: state.getIn(['user', 'token'])
 })
 
 const mapDispatchToProps = dispatch => ({
-  submitPozoForm: (action, name) => {dispatch(submitForm(action, name))},
+  submitPozoForm: (action, token, name) => {dispatch(submitForm(action, token, name))},
 })
 
 export default connect(mapStateToProps, mapDispatchToProps)(InputsUI)

@@ -15,11 +15,29 @@ import HistoricoDePresionPozo from './HistoricoDePresionPozo'
 import HistoricoDeAforos from './HistoricoDeAforos'
 import HistoricoDeProduccion from './HistoricoDeProduccion'
 import AnalisisDelAgua from './AnalisisDelAgua'
+import HistoricoDeIntervenciones from './HistoricoDeIntervenciones'
 import { InputRow, InputRowUnitless, InputRowSelectUnitless, InputDate } from '../../Common/InputRow'
 
-import { setFichaTecnicaDelCampo, setFichaTecnicaDelPozo, setEvaluacionPetrofisica, setMecanicoYAparejoDeProduccion, 
+import { setFichaTecnicaDelCampo, setHistorialDeIntervenciones, setFichaTecnicaDelPozo, setEvaluacionPetrofisica, setMecanicoYAparejoDeProduccion, 
   setAnalisisDelAgua, setSistemasArtificialesDeProduccion, setPresionDataCampo, setPresionDataPozo, setHistoricoProduccion, setHistoricoDeAforos, setChecked } from '../../../../redux/actions/pozo'
 import { setPage } from '../../../../redux/actions/global'
+
+const forms = [
+  {'title' : 'Ficha Técnica del Campo', content: <TecnicaDelCampo /> },
+  {'title' : 'Historico De Intervenciones', content: <HistoricoDeIntervenciones />},
+  {'title' : 'Ficha Técnica del Pozo' , content:<TecnicaDelPozo /> },
+  {'title' : 'Evaluación Petrofísica', content: <EvaluacionPetrofisica /> },
+  {'title' : 'Edo. Mecánico y Aparejo de Producción', content: <MecanicoYAparejo /> },
+  {'title' : 'Análisis del Agua', content: <AnalisisDelAgua  /> }, 
+  {'title' : 'Información de Sistemas Artificiales de Producción', content: <SistemasArtificialesDeProduccion  /> },
+  {'title' : 'Histórico de Presión - Campo', content: <HistoricoDePresionCampo  /> },
+  {'title' : 'Histórico de Presión - Pozo', content: <HistoricoDePresionPozo  /> },
+  {'title' : 'Histórico de Aforos', content: <HistoricoDeAforos /> },
+  {'title' : 'Histórico de Producción', content: <HistoricoDeProduccion  /> },
+];
+
+
+
 
 @autobind class PozoMultiStepForm extends Component {
 
@@ -37,7 +55,14 @@ import { setPage } from '../../../../redux/actions/global'
   }
 
   componentDidMount() {
-    fetch('/api/getSubmittedFieldWellMapping')
+    const token = this.props.user.get('token')
+    const headers = {
+      headers: {
+        'Authorization': `Bearer ${token}`,
+        'content-type': 'application/json',
+      },
+    }
+    fetch('/api/getSubmittedFieldWellMapping', headers)
       .then(r => r.json())
       .then(r => {
 
@@ -53,13 +78,20 @@ import { setPage } from '../../../../redux/actions/global'
     let { fichaTecnicaDelPozoHighLevel, setFichaTecnicaDelCampo, setLoading } = this.props
     fichaTecnicaDelPozoHighLevel = fichaTecnicaDelPozoHighLevel.toJS()
     let { campo, pozo } = fichaTecnicaDelPozoHighLevel
+    const token = this.props.user.get('token')
+    const headers = {
+      headers: {
+        'Authorization': `Bearer ${token}`,
+        'content-type': 'application/json',
+      },
+    }
     setLoading({ isLoading: true, loadText: 'Descargando' })
     
     this.setState({
       isOpen: false
     })
 
-    let data = await fetch(`api/getFields?transactionID=${selectedTransaction}`).then(r => r.json())
+    let data = await fetch(`api/getFields?transactionID=${selectedTransaction}`, headers).then(r => r.json())
 
     if (data && !data.err) {
       setFichaTecnicaDelCampo(data.fichaTecnicaDelCampo)
@@ -86,11 +118,64 @@ import { setPage } from '../../../../redux/actions/global'
 
   }
 
+  async loadHistoricoDeIntervenciones() {
+    let { selectedTransaction } = this.state
+    let { fichaTecnicaDelPozoHighLevel, setHistorialDeIntervenciones, setLoading } = this.props
+    fichaTecnicaDelPozoHighLevel = fichaTecnicaDelPozoHighLevel.toJS()
+    let { campo, pozo } = fichaTecnicaDelPozoHighLevel
+    setLoading({ isLoading: true, loadText: 'Descargando' })
+    
+    this.setState({
+      isOpen: false
+    })
+
+    let dataEstimulacion = await fetch(`api/getHistIntervencionesEstimulacionNew?transactionID=${selectedTransaction}`).then(r => r.json())
+    let dataAcido = await fetch(`api/getHistIntervencionesAcidoNew?transactionID=${selectedTransaction}`).then(r => r.json())
+    let dataApuntalado = await fetch(`api/getHistIntervencionesApuntaladoNew?transactionID=${selectedTransaction}`).then(r => r.json())
+
+
+    if (dataEstimulacion && !dataEstimulacion.err && dataAcido && !dataAcido.err && dataApuntalado && !dataApuntalado.err) {
+      let newObj = dataEstimulacion.historialDeIntervenciones
+      newObj.historicoAcidoData = dataAcido.historialDeIntervenciones.historicoAcidoData
+      newObj.historicoApuntaladoData = dataApuntalado.historialDeIntervenciones.historicoApuntaladoData
+
+      setHistorialDeIntervenciones(newObj)
+      setLoading({ 
+        isLoading: false,
+        showNotification: true,
+        notificationType: 'success',
+        notificationText: `Se ha descargado informacion del pozo: ${pozo}`
+      })
+    }
+    else {
+      console.log('no data found')
+      setLoading({ 
+        isLoading: false,
+        showNotification: true,
+        notificationType: 'warning',
+        notificationText: `No se ha encontrado informacion del pozo: ${pozo}`
+      })
+    }
+    this.setState({
+      selectedTransaction: null
+    })
+
+
+  }
+
+
   async loadTecnicaDelPozo() {
     let { selectedTransaction } = this.state
     let { fichaTecnicaDelPozoHighLevel, setFichaTecnicaDelPozo, setLoading } = this.props
     fichaTecnicaDelPozoHighLevel = fichaTecnicaDelPozoHighLevel.toJS()
     let { pozo } = fichaTecnicaDelPozoHighLevel
+    const token = this.props.user.get('token')
+    const headers = {
+      headers: {
+        'Authorization': `Bearer ${token}`,
+        'content-type': 'application/json',
+      },
+    }
     setLoading({ isLoading: true, loadText: 'Descargando' })
 
 
@@ -98,8 +183,8 @@ import { setPage } from '../../../../redux/actions/global'
       isOpen: false
     })
 
-    let data = await fetch(`api/getWell?transactionID=${selectedTransaction}`).then(r => r.json())
-    let interventionData = await fetch(`api/getHistIntervenciones?transactionID=${selectedTransaction}`).then(r => r.json())
+    let data = await fetch(`api/getWell?transactionID=${selectedTransaction}`, headers).then(r => r.json())
+    let interventionData = await fetch(`api/getHistIntervenciones?transactionID=${selectedTransaction}`, headers).then(r => r.json())
 
     if (data && !data.err && !interventionData.err) {
       let newObj = data.fichaTecnicaDelPozo
@@ -133,6 +218,13 @@ import { setPage } from '../../../../redux/actions/global'
     let { fichaTecnicaDelPozoHighLevel, setEvaluacionPetrofisica, setLoading } = this.props
     fichaTecnicaDelPozoHighLevel = fichaTecnicaDelPozoHighLevel.toJS()
     let { pozo } = fichaTecnicaDelPozoHighLevel
+    const token = this.props.user.get('token')
+    const headers = {
+      headers: {
+        'Authorization': `Bearer ${token}`,
+        'content-type': 'application/json',
+      },
+    }
     setLoading({ isLoading: true, loadText: 'Descargando' })
 
 
@@ -140,8 +232,8 @@ import { setPage } from '../../../../redux/actions/global'
       isOpen: false
     })
 
-      let data = await fetch(`api/getMudLoss?transactionID=${selectedTransaction}`).then(r => r.json())
-      let layerData = await fetch(`api/getLayer?transactionID=${selectedTransaction}`).then(r => r.json())
+      let data = await fetch(`api/getMudLoss?transactionID=${selectedTransaction}`, headers).then(r => r.json())
+      let layerData = await fetch(`api/getLayer?transactionID=${selectedTransaction}`, headers).then(r => r.json())
 
       if (data && !data.err && !layerData.err) {
 
@@ -178,13 +270,19 @@ import { setPage } from '../../../../redux/actions/global'
     fichaTecnicaDelPozoHighLevel = fichaTecnicaDelPozoHighLevel.toJS()
     let { pozo } = fichaTecnicaDelPozoHighLevel
     setLoading({ isLoading: true, loadText: 'Descargando' })
-
+    const token = this.props.user.get('token')
+    const headers = {
+      headers: {
+        'Authorization': `Bearer ${token}`,
+        'content-type': 'application/json',
+      },
+    }
 
     this.setState({
       isOpen: false
     })
 
-      let data = await fetch(`api/getMecanico?transactionID=${selectedTransaction}`).then(r => r.json())
+      let data = await fetch(`api/getMecanico?transactionID=${selectedTransaction}`, headers).then(r => r.json())
 
       if (data && !data.err) {
         setMecanicoYAparejoDeProduccion(data.mecanicoYAparejoDeProduccion)
@@ -214,6 +312,13 @@ import { setPage } from '../../../../redux/actions/global'
     let { fichaTecnicaDelPozoHighLevel, setAnalisisDelAgua, setLoading } = this.props
     fichaTecnicaDelPozoHighLevel = fichaTecnicaDelPozoHighLevel.toJS()
     let { pozo } = fichaTecnicaDelPozoHighLevel
+    const token = this.props.user.get('token')
+    const headers = {
+      headers: {
+        'Authorization': `Bearer ${token}`,
+        'content-type': 'application/json',
+      },
+    }
     setLoading({ isLoading: true, loadText: 'Descargando' })
 
 
@@ -221,7 +326,7 @@ import { setPage } from '../../../../redux/actions/global'
       isOpen: false
     })
 
-      let data = await fetch(`api/getAnalisisAgua?transactionID=${selectedTransaction}`).then(r => r.json())
+      let data = await fetch(`api/getAnalisisAgua?transactionID=${selectedTransaction}`, headers).then(r => r.json())
 
       if (data && !data.err) {
         setAnalisisDelAgua(data.analisisDelAgua)
@@ -251,10 +356,17 @@ import { setPage } from '../../../../redux/actions/global'
     let { fichaTecnicaDelPozoHighLevel, setSistemasArtificialesDeProduccion, setLoading } = this.props
     fichaTecnicaDelPozoHighLevel = fichaTecnicaDelPozoHighLevel.toJS()
     let { pozo } = fichaTecnicaDelPozoHighLevel
+    const token = this.props.user.get('token')
+    const headers = {
+      headers: {
+        'Authorization': `Bearer ${token}`,
+        'content-type': 'application/json',
+      },
+    }
     setLoading({ isLoading: true, loadText: 'Descargando' })
 
 
-    let transactionID = await fetch(`/api/getTransactionWell?wellID=${pozo}`)
+    let transactionID = await fetch(`/api/getTransactionWell?wellID=${pozo}`, headers)
     .then(res => res.json())
     .then(res => res.transactionID)
 
@@ -262,7 +374,7 @@ import { setPage } from '../../../../redux/actions/global'
       isOpen: false
     })
 
-      let type = await fetch(`api/getWell?transactionID=${selectedTransaction}`).then(r => r.json())
+      let type = await fetch(`api/getWell?transactionID=${selectedTransaction}`, headers).then(r => r.json())
 
       if (!type.err) {
         type = type.sistemasArtificialesDeProduccion.tipoDeSistemo
@@ -270,22 +382,22 @@ import { setPage } from '../../../../redux/actions/global'
         let data
 
         if (type === 'emboloViajero') {
-          data = await fetch(`api/getEmboloViajero?transactionID=${selectedTransaction}`).then(r => r.json())
+          data = await fetch(`api/getEmboloViajero?transactionID=${selectedTransaction}`, headers).then(r => r.json())
         }
         else if (type === 'bombeoNeumatico') {
-          data = await  fetch(`api/getBombeoNeumatico?transactionID=${selectedTransaction}`).then(r => r.json())
+          data = await  fetch(`api/getBombeoNeumatico?transactionID=${selectedTransaction}`, headers).then(r => r.json())
         }
         else if (type === 'bombeoHidraulico') {
-          data = await fetch(`api/getBombeoHidraulico?transactionID=${selectedTransaction}`).then(r => r.json())
+          data = await fetch(`api/getBombeoHidraulico?transactionID=${selectedTransaction}`, headers).then(r => r.json())
         }
         else if (type === 'bombeoCavidadesProgresivas') {
-          data = await fetch(`api/getBombeoCavidades?transactionID=${selectedTransaction}`).then(r => r.json())
+          data = await fetch(`api/getBombeoCavidades?transactionID=${selectedTransaction}`, headers).then(r => r.json())
         }
         else if (type === 'bombeoElectrocentrifugo') {
-          data = await fetch(`api/getBombeoElectrocentrifugo?transactionID=${selectedTransaction}`).then(r => r.json())
+          data = await fetch(`api/getBombeoElectrocentrifugo?transactionID=${selectedTransaction}`, headers).then(r => r.json())
         }
         else if (type === 'bombeoMecanico') {
-          data = await  fetch(`api/getBombeoMecanico?transactionID=${selectedTransaction}`).then(r => r.json())
+          data = await  fetch(`api/getBombeoMecanico?transactionID=${selectedTransaction}`, headers).then(r => r.json())
         }
 
         if (data && !data.err) {
@@ -324,19 +436,26 @@ import { setPage } from '../../../../redux/actions/global'
     let { fichaTecnicaDelPozoHighLevel, setPresionDataCampo, setLoading } = this.props
     fichaTecnicaDelPozoHighLevel = fichaTecnicaDelPozoHighLevel.toJS()
     let { pozo } = fichaTecnicaDelPozoHighLevel
+    const token = this.props.user.get('token')
+    const headers = {
+      headers: {
+        'Authorization': `Bearer ${token}`,
+        'content-type': 'application/json',
+      },
+    }
     setLoading({ isLoading: true, loadText: 'Descargando' })
 
     this.setState({
       isOpen: false
     })
 
-    let transactionID = await fetch(`/api/getTransactionWell?wellID=${pozo}`)
+    let transactionID = await fetch(`/api/getTransactionWell?wellID=${pozo}`, headers)
       .then(res => res.json())
       .then(res => res.transactionID)
 
 
 
-      let data = await fetch(`api/getFieldPressure?transactionID=${selectedTransaction}`).then(r => r.json())
+      let data = await fetch(`api/getFieldPressure?transactionID=${selectedTransaction}`, headers).then(r => r.json())
 
     if (data && !data.err) {
 
@@ -371,6 +490,13 @@ import { setPage } from '../../../../redux/actions/global'
     let { fichaTecnicaDelPozoHighLevel, setPresionDataPozo, setLoading } = this.props
     fichaTecnicaDelPozoHighLevel = fichaTecnicaDelPozoHighLevel.toJS()
     let { pozo } = fichaTecnicaDelPozoHighLevel
+    const token = this.props.user.get('token')
+    const headers = {
+      headers: {
+        'Authorization': `Bearer ${token}`,
+        'content-type': 'application/json',
+      },
+    }
     setLoading({ isLoading: true, loadText: 'Descargando' })
 
     
@@ -378,7 +504,7 @@ import { setPage } from '../../../../redux/actions/global'
       isOpen: false
     })
 
-      let data = await fetch(`api/getWellPressure?transactionID=${selectedTransaction}`).then(r => r.json())
+      let data = await fetch(`api/getWellPressure?transactionID=${selectedTransaction}`, headers).then(r => r.json())
 
       if (data && !data.err) {
 
@@ -414,13 +540,20 @@ import { setPage } from '../../../../redux/actions/global'
     let { fichaTecnicaDelPozoHighLevel, setHistoricoProduccion, setLoading } = this.props
     fichaTecnicaDelPozoHighLevel = fichaTecnicaDelPozoHighLevel.toJS()
     let { pozo } = fichaTecnicaDelPozoHighLevel
+    const token = this.props.user.get('token')
+    const headers = {
+      headers: {
+        'Authorization': `Bearer ${token}`,
+        'content-type': 'application/json',
+      },
+    }
     setLoading({ isLoading: true, loadText: 'Descargando' })
 
     this.setState({
       isOpen: false
     })
 
-      let produccionData = await fetch(`api/getWellProduccion?transactionID=${selectedTransaction}`).then(r => r.json())
+      let produccionData = await fetch(`api/getWellProduccion?transactionID=${selectedTransaction}`, headers).then(r => r.json())
 
     if (produccionData && !produccionData.err ) {
 
@@ -455,14 +588,20 @@ import { setPage } from '../../../../redux/actions/global'
     let { fichaTecnicaDelPozoHighLevel, setHistoricoDeAforos, setLoading } = this.props
     fichaTecnicaDelPozoHighLevel = fichaTecnicaDelPozoHighLevel.toJS()
     let { pozo } = fichaTecnicaDelPozoHighLevel
-
+    const token = this.props.user.get('token')
+    const headers = {
+      headers: {
+        'Authorization': `Bearer ${token}`,
+        'content-type': 'application/json',
+      },
+    }
     setLoading({ isLoading: true, loadText: 'Descargando' })
 
     this.setState({
       isOpen: false
     })
 
-      let aforosData = await fetch(`api/getWellAforos?transactionID=${selectedTransaction}`).then(r => r.json())
+      let aforosData = await fetch(`api/getWellAforos?transactionID=${selectedTransaction}`, headers).then(r => r.json())
       
 
     if (aforosData && !aforosData.err) {
@@ -495,30 +634,17 @@ import { setPage } from '../../../../redux/actions/global'
 
 
   handleClick(i){
-    const type = this.forms[i].type
-    this.props.setCurrentPage(type)
+    const type = forms[i].type
+    // this.props.setCurrentPage(type)
     this.setState({
       currentStep: i
     })
   }
 
   handleNextSubtab(){
-    const forms = [
-      {'title' : 'Ficha Técnica del Campo' },
-      {'title' : 'Ficha Técnica del Pozo' },
-      {'title' : 'Evaluación Petrofísica' },
-      {'title' : 'Edo. Mecánico y Aparejo de Producción' },
-      {'title' : 'Análisis del Agua'}, 
-      {'title' : 'Información de Sistemas Artificiales de Producción' },
-      {'title' : 'Histórico de Presión - Campo' },
-      {'title' : 'Histórico de Presión - Pozo' },
-      {'title' : 'Histórico de ' },
-      {'title' : 'Histórico de Producción' },
-    ];
-
     if(forms.length > this.state.currentStep + 1){
       this.setState({
-        currentStep: newStep
+        currentStep: this.state.currentStep + 1
       })
     }
   }
@@ -527,9 +653,9 @@ import { setPage } from '../../../../redux/actions/global'
     const { currentStep } = this.state
     const newStep = currentStep - 1
     if(newStep >= 0){
-      const { setCurrentPage } = this.props
-      const type = this.forms[newStep].type
-      setCurrentPage(type)
+      // const { setCurrentPage } = this.props
+      const type = forms[newStep].type
+      // setCurrentPage(type)
       this.setState({
         currentStep: newStep
       })
@@ -569,8 +695,14 @@ import { setPage } from '../../../../redux/actions/global'
 
   fetchLoadFromDatabaseOptions() {
     let { selectedWell } = this.state
-
-    fetch(`/api/getWellTransactions?wellID=${selectedWell}`)
+    const token = this.props.user.get('token')
+    const headers = {
+      headers: {
+        'Authorization': `Bearer ${token}`,
+        'content-type': 'application/json',
+      },
+    }
+    fetch(`/api/getWellTransactions?wellID=${selectedWell}`, headers)
       .then(r => r.json())
       .then(r => {
         this.setState({
@@ -580,8 +712,8 @@ import { setPage } from '../../../../redux/actions/global'
   }
 
   handleLoad() {
-    let loadFunctions = [this.loadTecnicaDelCampo, this.loadTecnicaDelPozo, this.loadEvaluacionPetrofisica, this.loadMecanicoYAparejo, this.loadAnalisisDelAgua, this.loadSistemasArtificialesDeProduccion, this.loadHistoricoDePresionCampo, this.loadHistoricoDePresionPozo, this.loadHistoricoDeAforos, this.loadHistoricoDeProduccion]
-    let loadFunction =loadFunctions[this.state.currentStep]
+    let loadFunctions = [this.loadTecnicaDelCampo, this.loadHistoricoDeIntervenciones, this.loadTecnicaDelPozo, this.loadEvaluacionPetrofisica, this.loadMecanicoYAparejo, this.loadAnalisisDelAgua, this.loadSistemasArtificialesDeProduccion, this.loadHistoricoDePresionCampo, this.loadHistoricoDePresionPozo, this.loadHistoricoDeAforos, this.loadHistoricoDeProduccion]
+    let loadFunction = loadFunctions[this.state.currentStep]
 
     loadFunction()
   }
@@ -648,20 +780,6 @@ import { setPage } from '../../../../redux/actions/global'
     let { fieldWellOptions } = this.state
     let { isOpen } = this.state
     let className = 'subtab'
-
-    const forms = [
-      {'title' : 'Ficha Técnica del Campo', content: <TecnicaDelCampo /> },
-      {'title' : 'Ficha Técnica del Pozo' , content:<TecnicaDelPozo /> },
-      {'title' : 'Evaluación Petrofísica', content: <EvaluacionPetrofisica /> },
-      {'title' : 'Edo. Mecánico y Aparejo de Producción', content: <MecanicoYAparejo /> },
-      {'title' : 'Análisis del Agua', content: <AnalisisDelAgua  /> }, 
-      {'title' : 'Información de Sistemas Artificiales de Producción', content: <SistemasArtificialesDeProduccion  /> },
-      {'title' : 'Histórico de Presión - Campo', content: <HistoricoDePresionCampo  /> },
-      {'title' : 'Histórico de Presión - Pozo', content: <HistoricoDePresionPozo  /> },
-      {'title' : 'Histórico de Aforos', content: <HistoricoDeAforos /> },
-      {'title' : 'Histórico de Producción', content: <HistoricoDeProduccion  /> },
-    ];
-
     let title = forms[this.state.currentStep].title
     
 
@@ -696,6 +814,7 @@ import { setPage } from '../../../../redux/actions/global'
 const mapDispatchToProps = dispatch => ({
   setShowForms : values => { dispatch(setShowForms(values))},
   setFichaTecnicaDelCampo : values => { dispatch(setFichaTecnicaDelCampo(values))},
+  setHistorialDeIntervenciones: values => { dispatch(setHistorialDeIntervenciones(values))},
   setFichaTecnicaDelPozo : values => { dispatch(setFichaTecnicaDelPozo(values))},
   setEvaluacionPetrofisica : values => { dispatch(setEvaluacionPetrofisica(values))},
   setMecanicoYAparejoDeProduccion : values => { dispatch(setMecanicoYAparejoDeProduccion(values))},
@@ -705,6 +824,7 @@ const mapDispatchToProps = dispatch => ({
   setPresionDataCampo : values => {dispatch(setPresionDataCampo(values))},
   setHistoricoProduccion : values => {dispatch(setHistoricoProduccion(values))},
   setHistoricoDeAforos: values => {dispatch(setHistoricoDeAforos(values))},
+  setLoading: values => {dispatch(setIsLoading(values))},
 })
 
 const mapStateToProps = state => ({

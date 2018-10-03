@@ -8,27 +8,15 @@ import InputTable from '../../Common/InputTable'
 
 import { InputRow, InputRowUnitless, InputRowSelectUnitless, TextAreaUnitless } from '../../Common/InputRow'
 import {setEstimacionCostosData, setMNXtoDLS} from '../../../../redux/actions/intervencionesEstimulacion'
+import { costMap } from '../../../../lib/maps'
 
-export const itemOptions = [
-  { label: 'Costo de Servicios', value: 'Costo de Servicios' },
-  { label: 'Costo de renta de barco', value: 'Costo de renta de barco' },
-  { label: 'Costo de sistema reactivo', value: 'Costo de sistema reactivo' },
-  { label: 'Costo de sistema no reactivo', value: 'Costo de sistema no reactivo' },
-  { label: 'Costo de divergentes', value: 'Costo de divergentes' },
-  { label: <div>Costo de N<sub>2</sub></div>, value: 'Costo de N2' },
-  { label: 'Costo de HCl', value: 'Costo de HCl' },
-  { label: 'Costo Unidades de alta presión', value: 'Costo Unidades de alta presión' },
-  { label: 'Costo del gel de fractura', value: 'Costo del gel de fractura' },
-  { label: 'Costo de sistemas acidos retardados', value: 'Costo de sistemas acidos retardados' },
-  { label: 'Costo equipo de fracturamiento de pozos', value: 'Costo equipo de fracturamiento de pozos' },
-  { label: 'Costo gel lineal', value: 'Costo gel lineal' },
-  { label: 'Costo de trabajos de bombeo diversos', value: 'Costo de trabajos de bombeo diversos' },
-  { label: 'Costos de llenado de pozo y prueba de admisión', value: 'Costos de llenado de pozo y prueba de admisión' },
-  { label: 'Costo del Minifrac', value: 'Costo del Minifrac' },
-  { label: 'Costo de Bache neutralizador', value: 'Costo de Bache neutralizador' },
-  { label: 'Protector de árbol', value: 'Protector de árbol' },
-  { label: 'Costo del apuntalante', value: 'Costo del apuntalante' }
-]
+console.log(costMap)
+
+export const itemOptions = costMap.map(i => ({
+  label: i.item, 
+  value: i.item
+}))
+
 
 @autobind class EstimacionCostos extends Component {
   constructor(props) {
@@ -159,6 +147,9 @@ export const itemOptions = [
                 </div>)
               }
       }, { 
+        Header: 'Unit',
+        accessor: 'unit'
+      }, {
         Header: <div>Costo<br></br>(MXN)</div>,
         accessor: 'cost',
         cell: 'renderNumber',
