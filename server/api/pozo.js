@@ -33,6 +33,19 @@ const INSERT_FIELDS_QUERY = {
     loadTransaction: `SELECT * FROM FieldsData WHERE TRANSACTION_ID = ?`
 }
 
+const INSERT_HIST_INTERVENCIONES_NEW_QUERY = {
+    save: `INSERT INTO _WellHistorialIntervencionesSave (
+    ) VALUES ?`,
+    submit: `INSERT INTO WellHistorialIntervenciones (
+    ) VALUES ?`,
+    loadSaveEstimulacion: `SELECT * FROM _WellHistorialIntervencionesSave WHERE TRANSACTION_ID = ? AND TIPO_DE_INTERVENCIONES = 'estimulacion'`,
+    loadSaveAcido: `SELECT * FROM _WellHistorialIntervencionesSave WHERE TRANSACTION_ID = ? AND TIPO_DE_INTERVENCIONES = 'acido'`,
+    loadSaveApuntalado: `SELECT * FROM _WellHistorialIntervencionesSave WHERE TRANSACTION_ID = ? AND TIPO_DE_INTERVENCIONES = 'apuntalado'`,
+    loadTransactionEstimulacion: `SELECT * FROM WellHistorialIntervenciones WHERE TRANSACTION_ID = ? AND TIPO_DE_INTERVENCIONES = 'estimulacion'`,
+    loadTransactionAcido: `SELECT * FROM WellHistorialIntervenciones WHERE TRANSACTION_ID = ? AND TIPO_DE_INTERVENCIONES = 'acido'`,
+    loadTransactionApuntalado: `SELECT * FROM WellHistorialIntervenciones WHERE TRANSACTION_ID = ? AND TIPO_DE_INTERVENCIONES = 'apuntalado'`,
+}
+
 const INSERT_WELL_QUERY = {
     save: `INSERT INTO _WellsDataSave (
         WELL_FORMACION_ID, SUBDIRECCION, ACTIVO,
@@ -596,6 +609,12 @@ export const getWell = async (transID, action, cb) => {
    })
 }
 
+export const getHistIntervencionesNew = async (transID, action, cb) => {
+  connection.query(INSERT_HIST_INTERVENCIONES_NEW_QUERY[action], [transID], (err, results) => {
+    cb(results)
+   })
+}
+
 export const getHistIntervenciones = async (transID, action, cb) => {
   connection.query(INSERT_HIST_INTERVENCIONES_QUERY[action], [transID], (err, results) => {
     cb(results)
@@ -794,6 +813,8 @@ export const create = async (body, action, cb) => {
 
 
   let { subdireccion, activo, campo, pozo, formacion } = finalObj.fichaTecnicaDelPozoHighLevel
+
+  let { historicoEstimulacionData, historicoAcidoData, historicoApuntaladoData } = finalObj.historialDeIntervenciones
 
   let { descubrimientoField, fechaDeExplotacionField, numeroDePozosOperandoField, pInicialField, pInicialAnoField, pActualField, pActualFechaField,
     dpPerAnoField, tyacField, prField, tipoDeFluidoField, densidadDelAceiteField, pSatField,
@@ -1527,18 +1548,49 @@ export const create = async (body, action, cb) => {
 
                                                             connection.query(action === 'save' ? DUMMY_QUERY : `UPDATE FieldWellMapping set HAS_DATA = 1 WHERE WELL_FORMACION_ID = ?`, [wellFormacionID], (err, results) => {
                                                                
-                                                                connection.commit(function(err) {
+
+                                                                values = []
+
+                                                                historicoEstimulacionData.forEach(i => {
+                                                                    values.push([wellFormacionID, 'estimulacion', i.fecha, i.tipoDeTratamiento, i.objetivo, i.compania, i.acidoVol, i.acidoNombre, i.solventeVol, i.solventeNombre, i.divergenteVol, i.divergenteNombre, i.totalN2, i.beneficioProgramado, i.beneficioOficial, -9999, -9999, -9999, -9999, -9999, -9999, -9999, -9999, -9999, -9999, -9999, -9999, -9999, transactionID ])
+                                                                })
+                                                                historicoAcidoData.forEach(i => {
+                                                                    values.push([wellFormacionID, 'acido', i.fecha, i.tipoDeTratamiento, i.objetivo, i.compania, -9999, -9999, -9999, -9999, -9999, -9999, -9999, i.beneficioProgramado, i.beneficioOficial, i.base, i.cima, i.longitudGravada, i.alturaGravada, i.anchoGravado, i.conductividad, i.fcd, i.presionNeta, i.fluidoFractura, -9999, -9999, -9999, -9999, transactionID])
+                                                                })
+                                                                historicoApuntaladoData.forEach(i => {
+                                                                    values.push([wellFormacionID, 'apuntalado', i.fecha, i.tipoDeTratamiento, i.objetivo, i.compania, -9999, -9999, -9999, -9999, -9999, -9999, -9999, i.beneficioProgramado, i.beneficioOficial, i.base, i.cima, -9999, -9999, -9999, i.conductividad, i.fcd, i.presionNeta, i.fluidoFractura, i.longitudApuntalada, i.alturaTotalDeFractura, i.anchoPromedio, i.concentracionAreal, transactionID])
+                                                                })
+
+                                                                values.forEach(i => {
+                                                                    console.log(i.length)
+                                                                })
+
+
+                                                                connection.query(action === 'save' ? INSERT_HIST_INTERVENCIONES_NEW_QUERY.save : INSERT_HIST_INTERVENCIONES_NEW_QUERY.submit, [values], (err, results) => {
+                                                                    console.log('historial interventions', err)
+                                                                    console.log('historial interventions', results)
+
                                                                     if (err) {
-                                                                      cb(err)
                                                                       return connection.rollback(function() {
-                                                                        console.log('something went terrible')
-                                                                        throw err;
-                                                                      });
+                                                                        console.log('rolling back!!! 2')
+                                                                        cb(err)
+                                                                      })
                                                                     }
-                                                                    console.log('success!');
-                                                                    var log = 'Post ' + results + ' added';
-                                                                    console.log(log)
-                                                                    cb(null)
+
+
+                                                                    connection.commit(function(err) {
+                                                                        if (err) {
+                                                                          cb(err)
+                                                                          return connection.rollback(function() {
+                                                                            console.log('something went terrible')
+                                                                            throw err;
+                                                                          });
+                                                                        }
+                                                                        console.log('success!');
+                                                                        var log = 'Post ' + results + ' added';
+                                                                        console.log(log)
+                                                                        cb(null)
+                                                                    })
                                                                 })
 
                                                             })

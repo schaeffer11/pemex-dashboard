@@ -71,12 +71,12 @@
 		.subtab {
                         position: relative;
 			display: inline-block;
-			width: calc(100vw / 11);
+			width: calc(100vw / 12);
                         vertical-align: top;
 			text-align: center;
                         margin: 20px auto 40px;
                         color: $white;
-                        font-size: .925rem;
+                        font-size: .75rem;
                         font-weight: 100;
 
                         &:before {

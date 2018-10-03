@@ -51,24 +51,6 @@ let columns = [
 
   }
 
-  renderEditable(cellInfo) {
-    let { setPresionDataPozo, formData } = this.props
-    formData = formData.toJS()
-    let { presionDataPozo, pressureDepthPozo } = formData
-
-    return (
-      <div
-        style={{ backgroundColor: "#fafafa" }}
-        contentEditable
-        suppressContentEditableWarning
-        onBlur={e => {
-          presionDataPozo[cellInfo.index][cellInfo.column.id] = e.target.innerHTML;
-          setPresionDataPozo(presionDataPozo)
-        }}
-      >{presionDataPozo[cellInfo.index][cellInfo.column.id]}</div>
-    );
-  }
-
   addNewRow() {
     let { formData, setPresionDataPozo } = this.props
     formData = formData.toJS()

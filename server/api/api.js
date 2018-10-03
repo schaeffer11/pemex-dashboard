@@ -7,7 +7,7 @@ import objectPath from 'object-path'
 import multer from 'multer'
 import { addObject, signedURL, deleteObject, getBuckets } from '../aws/index';
 import { create as createWell, getFields, getWell, 
-            getHistIntervenciones, getLayer, getMudLoss, getMecanico, 
+            getHistIntervenciones, getHistIntervencionesNew, getLayer, getMudLoss, getMecanico, 
             getAnalisisAgua, getEmboloViajero, getBombeoNeumatico, getBombeoHidraulico, 
             getBombeoCavidades, getBombeoElectrocentrifugo, getBombeoMecanico, 
             getFieldPressure, getWellPressure, 
