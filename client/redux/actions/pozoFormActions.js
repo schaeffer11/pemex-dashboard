@@ -98,7 +98,6 @@ export function submitForm(action, token, saveName) {
 
     const headers = {
       'Authorization': `Bearer ${token}`,
-      'content-type': 'application/json',
     }
    
 
@@ -147,7 +146,7 @@ export function submitForm(action, token, saveName) {
             notificationText = 'Su información se ha guardado'
           } else {
             notificationType = 'error'
-            notificationText = 'Su información no se guardó'
+            notificationText = 'Su información no se guardó ningún campo puede estar vacio'
           }
           dispatch(setIsLoading({
             notificationType,

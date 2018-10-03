@@ -34,12 +34,12 @@ let columnsEstimulacion = [
       accessor: 'objetivo',
       cell: 'renderEditable',
     }, { 
-      Header: 'Compania',
+      Header: 'Compañía',
       accessor: 'compania',
       cell: 'renderEditable',
     }]
   }, { 
-    Header: 'Acido',
+    Header: 'Ácido',
     columns: [{
       Header: <div>m<sup>3</sup></div>,
       accessor: 'acidoVol',
@@ -116,15 +116,15 @@ let columnsAcido = [
     accessor: 'objetivo',
     cell: 'renderEditable',
   }, {
-    Header: 'Compania',
+    Header: 'Compañía',
     accessor: 'compania',
     cell: 'renderEditable'
   }, {
-    Header: <div>Base<br/>(SOME UNIT)</div>,
+    Header: <div>Base<br/>(md)</div>,
     accessor: 'base',
     cell: 'renderNumber'
   }, {
-    Header: <div>Cima<br/>(SOME UNIT)</div>,
+    Header: <div>Cima<br/>(md)</div>,
     accessor: 'cima',
     cell: 'renderNumber'
   }, {
@@ -148,7 +148,7 @@ let columnsAcido = [
     accessor: 'fcd',
     cell: 'renderNumber'
   }, {
-    Header: <div>Presion Neta<br/>(psi)</div>,
+    Header: <div>Presión Neta<br/>(psi)</div>,
     accessor: 'presionNeta',
     cell: 'renderNumber'
   }, {
@@ -196,15 +196,15 @@ let columnsApuntalado = [
     accessor: 'objetivo',
     cell: 'renderEditable',
   }, {
-    Header: 'Compania',
+    Header: 'Compañía',
     accessor: 'compania',
     cell: 'renderEditable'
   }, {
-    Header: <div>Base<br/>(SOME UNIT)</div>,
+    Header: <div>Base<br/>(md)</div>,
     accessor: 'base',
     cell: 'renderNumber'
   }, {
-    Header: <div>Cima<br/>(SOME UNIT)</div>,
+    Header: <div>Cima<br/>(md)</div>,
     accessor: 'cima',
     cell: 'renderNumber'
   }, {
@@ -220,7 +220,7 @@ let columnsApuntalado = [
     accessor: 'anchoPromedio',
     cell: 'renderNumber'
   }, {
-    Header: <div>Concentracion Areal<br/>(lb/pg<sup>2</sup>)</div>,
+    Header: <div>Concentración Areal<br/>(lb/pg<sup>2</sup>)</div>,
     accessor: 'concentracionAreal',
     cell: 'renderNumber'
   }, {
@@ -232,7 +232,7 @@ let columnsApuntalado = [
     accessor: 'fcd',
     cell: 'renderNumber'
   }, {
-    Header: <div>Presion Neta<br/>(psi)</div>,
+    Header: <div>Presión Neta<br/>(psi)</div>,
     accessor: 'presionNeta',
     cell: 'renderNumber'
   }, {
@@ -339,7 +339,7 @@ let columnsApuntalado = [
     return (
       <div className='presion-table'>
         <div className='header'>
-          HISTORICO DE FRACTURAMIENTOS APUNTALADOS REALIZADOS AL POZO
+          Histórico de fracturamientos apuntalados realizados al pozo
         </div>
         <div className='table'>
           <InputTable
@@ -436,7 +436,7 @@ let columnsApuntalado = [
     return (
       <div className='presion-table'>
         <div className='header'>
-          HISTORICO DE FRACTURAMIENTOS ACIDOS REALIZADOS AL POZO
+          Histórico de fracturamientos ácidos realizados al pozo
         </div>
         <div className='table'>
           <InputTable
@@ -530,7 +530,7 @@ let columnsApuntalado = [
     return (
       <div className='presion-table'>
         <div className='header'>
-          HISTORICO DE TRATAMIENTOS DE ESTIMULACION
+          Histórico de tratamientos de estimulación
         </div>
         <div className='table'>
           <InputTable

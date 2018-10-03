@@ -21,5 +21,6 @@ export const getAuthorization = (req, res, next) => {
   if (req.isAuthorized) {
     return next()
   }
+  req.user = userSession
   return res.status(401).send('no no hahaha')
 }

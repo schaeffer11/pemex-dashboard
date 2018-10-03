@@ -24,8 +24,8 @@ import { setPage } from '../../../../redux/actions/global'
 
 const forms = [
   {'title' : 'Ficha Técnica del Campo', content: <TecnicaDelCampo /> },
-  {'title' : 'Historico De Intervenciones', content: <HistoricoDeIntervenciones />},
   {'title' : 'Ficha Técnica del Pozo' , content:<TecnicaDelPozo /> },
+  {'title' : 'Histórico De Intervenciones', content: <HistoricoDeIntervenciones />},
   {'title' : 'Evaluación Petrofísica', content: <EvaluacionPetrofisica /> },
   {'title' : 'Edo. Mecánico y Aparejo de Producción', content: <MecanicoYAparejo /> },
   {'title' : 'Análisis del Agua', content: <AnalisisDelAgua  /> }, 
@@ -720,7 +720,7 @@ const forms = [
   }
 
   handleLoad() {
-    let loadFunctions = [this.loadTecnicaDelCampo, this.loadHistoricoDeIntervenciones, this.loadTecnicaDelPozo, this.loadEvaluacionPetrofisica, this.loadMecanicoYAparejo, this.loadAnalisisDelAgua, this.loadSistemasArtificialesDeProduccion, this.loadHistoricoDePresionCampo, this.loadHistoricoDePresionPozo, this.loadHistoricoDeAforos, this.loadHistoricoDeProduccion]
+    let loadFunctions = [this.loadTecnicaDelCampo, this.loadTecnicaDelPozo, this.loadHistoricoDeIntervenciones, this.loadEvaluacionPetrofisica, this.loadMecanicoYAparejo, this.loadAnalisisDelAgua, this.loadSistemasArtificialesDeProduccion, this.loadHistoricoDePresionCampo, this.loadHistoricoDePresionPozo, this.loadHistoricoDeAforos, this.loadHistoricoDeProduccion]
     let loadFunction = loadFunctions[this.state.currentStep]
 
     loadFunction()

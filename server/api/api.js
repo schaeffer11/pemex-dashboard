@@ -78,6 +78,26 @@ router.post('/testing', (req, res) => {
   res.json({ yeah: 'boy' })
 })
 
+router.post('/comment', (req, res) => {
+
+  let { comment, page, user } = req.body
+
+
+  connection.query(`INSERT INTO Feedback (USER, COMMENT, PAGE) VALUES (?, ?, ?)`, [user, comment, page], (err, results) => {
+      console.log('comment err', err)
+      console.log('comment results', results)
+      if (err) {
+        res.json({ success: false})
+      }
+      else {
+        res.json({ success: true})
+      }
+    })
+})
+
+
+
+
 
 router.get('/getSubmittedFieldWellMapping', (req, res) => {
     connection.query(`SELECT * FROM FieldWellMapping WHERE HAS_DATA = 1`, (err, results) => {
@@ -302,7 +322,7 @@ router.get('/getHistIntervencionesEstimulacionNew', async (req, res) => {
     const finalObj = {}
     if (data && data.length > 0) {
       data.forEach((d, index) => {
-        d.DATE ? d.DATE = d.DATE.toJSON().slice(0, 10) : null
+        d.FECHA ? d.FECHA = d.FECHA.toJSON().slice(0, 10) : null
         const innerObj = {}
         Object.keys(d).forEach(k => {
           if (map[k]) {
@@ -362,7 +382,7 @@ router.get('/getHistIntervencionesAcidoNew', async (req, res) => {
     const finalObj = {}
     if (data && data.length > 0) {
       data.forEach((d, index) => {
-        d.DATE ? d.DATE = d.DATE.toJSON().slice(0, 10) : null
+        d.FECHA ? d.FECHA = d.FECHA.toJSON().slice(0, 10) : null
         const innerObj = {}
         Object.keys(d).forEach(k => {
           if (map[k]) {
@@ -423,7 +443,7 @@ router.get('/getHistIntervencionesApuntaladoNew', async (req, res) => {
     const finalObj = {}
     if (data && data.length > 0) {
       data.forEach((d, index) => {
-        d.DATE ? d.DATE = d.DATE.toJSON().slice(0, 10) : null
+        d.FECHA ? d.FECHA = d.FECHA.toJSON().slice(0, 10) : null
         const innerObj = {}
         Object.keys(d).forEach(k => {
           if (map[k]) {
