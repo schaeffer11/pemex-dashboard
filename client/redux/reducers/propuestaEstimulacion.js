@@ -21,7 +21,7 @@ const initialState = Map({
     cedulaData: [{
         etapa: 1,
         index: 0,
-        intervalo: '',
+        // intervalo: '',
         nombreComercial: '',
         sistema: '',
         volLiquid: '',

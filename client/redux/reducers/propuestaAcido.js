@@ -22,7 +22,7 @@ const initialState = fromJS({
     cedulaData: [{
         etapa: 1,
         index: 0,
-        intervalo: '',
+        // intervalo: '',
         nombreComercial: '',
         sistema: '',
         tipoDeApuntalante: '',

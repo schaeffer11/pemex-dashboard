@@ -273,6 +273,7 @@ let columns = [
     return (
       <div className="form historico-de-produccion">
         <ExcelUpload
+          template="HistoricoProduccion"
           headers={[
             { name: 'fecha', type: 'date' },
             { name: 'dias', type: 'number' },

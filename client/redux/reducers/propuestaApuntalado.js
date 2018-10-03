@@ -22,7 +22,7 @@ const initialState = Map({
         etapa: 1,
         index: 0,
         sistema: '',
-        intervalo: '',
+        // intervalo: '',
         nombreComercial: '',
         tipoDeApuntalante: '',
         concentraciDeApuntalante: '',

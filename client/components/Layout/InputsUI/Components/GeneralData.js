@@ -14,7 +14,11 @@ import { InputRow, InputRowUnitless, InputRowSelectUnitless, TextAreaUnitless } 
 import Notification from '../../Common/Notification'
 import Loading from '../../Common/Loading'
 
-
+const sortLabels = (a, b) => {
+    if(a.label < b.label) return -1;
+    if(a.label > b.label) return 1;
+    return 0;
+}
 
 @autobind class GeneralData extends Component {
   constructor(props) {
@@ -179,7 +183,7 @@ import Loading from '../../Common/Loading'
   }
 
   makeGeneralForm() {
-    let { setActivo, setCampo, setPozo, setFormacion, formData, fieldWellOptions  } = this.props
+    let { setActivo, setCampo, setPozo, setFormacion, formData, fieldWellOptions } = this.props
 
 
     formData = formData.toJS()
@@ -212,6 +216,7 @@ import Loading from '../../Common/Loading'
           subdireccionOptions.push({label: item.SUBDIRECCION_NAME, value: item.SUBDIRECCION_ID})
         }
       })
+      subdireccionOptions.sort(sortLabels)
 
       if (subdireccion) {
         activoSubset = fieldWellOptions.filter(i => i.SUBDIRECCION_ID === parseInt(subdireccion))
@@ -223,7 +228,7 @@ import Loading from '../../Common/Loading'
             activos.push(i)
           }
         })
-        activoOptions = activos.map(i => ({label: i.ACTIVO_NAME, value: i.ACTIVO_ID}))
+        activoOptions = activos.map(i => ({label: i.ACTIVO_NAME, value: i.ACTIVO_ID})).sort(sortLabels)
       }
 
       if (activo) {
@@ -237,7 +242,7 @@ import Loading from '../../Common/Loading'
           }
         })
 
-        fieldOptions = fields.map(i => ({label: i.FIELD_NAME, value: i.FIELD_FORMACION_ID}))
+        fieldOptions = fields.map(i => ({label: i.FIELD_NAME, value: i.FIELD_FORMACION_ID})).sort(sortLabels)
       }
 
       if (campo) {
@@ -251,7 +256,7 @@ import Loading from '../../Common/Loading'
           }
         })
 
-        wellOptions = wells.map(i => ({ label: i.WELL_NAME, value: i.WELL_FORMACION_ID}))
+        wellOptions = wells.map(i => ({ label: i.WELL_NAME, value: i.WELL_FORMACION_ID})).sort(sortLabels)
 
       }
     }
@@ -267,6 +272,7 @@ import Loading from '../../Common/Loading'
         <InputRowSelectUnitless header="Campo" name="campo" value={campo} options={fieldOptions} callback={this.handleSelectField} onBlur={this.validate} name='campo' errors={this.state.errors} />
         <InputRowSelectUnitless header="Pozo" name="pozo" value={pozo} options={wellOptions} callback={(e) => setPozo(e.value)} onBlur={this.validate} name='pozo' errors={this.state.errors} />
         <InputRowSelectUnitless header="Formación" value={formacion} options={formacionOptions} callback={(e) => setFormacion(e.value)} onBlur={this.validate} name='formacion' errors={this.state.errors} />
+        {}
       </div>
 
     )
@@ -352,10 +358,6 @@ import Loading from '../../Common/Loading'
       })
   }
 
-  downloadMasterTemplate() {
-    window.location = `/api/getTemplate`
-  }
-
   render() {
     let { isOpen, selectedSave } = this.state
     let { setShowForms } = this.props
@@ -366,7 +368,6 @@ import Loading from '../../Common/Loading'
         { this.makeGeneralInterventionForm() }
         <button className="submit submit-load" onClick={this.activateModal}> Descargar borrador</button>
         <button className='submit submit-continue' disabled={this.checkIncomplete()} onClick={(e) => setShowForms(true)} >Siguiente</button>
-        <button className="submit download-template" onClick={this.downloadMasterTemplate}>{'Descarga el Formato General'}</button>
         <Notification />
         <Loading />
         { isOpen ? this.buildModal() : null }

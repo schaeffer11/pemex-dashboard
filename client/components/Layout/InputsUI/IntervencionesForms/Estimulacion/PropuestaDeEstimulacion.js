@@ -27,8 +27,9 @@ import { round, calculateVolumes, getSistemaOptions } from '../helpers'
   }
 
   makeGeneralForm() {
-    let { formData, setPropuestaCompany, setTipoDeEstimulacion } = this.props
+    let { formData, setPropuestaCompany, setTipoDeEstimulacion, intervalos } = this.props
     formData = formData.toJS()
+    intervalos = intervalos.toJS()
     let { propuestaCompany, tipoDeEstimulacion } = formData
     const companyOptions = [
       { label: 'Halliburton', value: 'Halliburton' },
@@ -44,6 +45,8 @@ import { round, calculateVolumes, getSistemaOptions } from '../helpers'
       { label: 'Limpieza', value: 'limpieza'},
       { label: 'Matricial', value: 'matricial'}
     ]
+
+    const intervals = intervalos.map(elem => <div>{`${elem.cimaMD}-${elem.baseMD}`}</div>)
 
 
     return (
@@ -70,6 +73,10 @@ import { round, calculateVolumes, getSistemaOptions } from '../helpers'
           callback={e => setTipoDeEstimulacion(e.value)}
           onBlur={this.validate}
           errors={this.state.errors}
+        />
+        <CalculatedValue
+          header={<div>Intervalos</div>}
+          value={intervals}
         />
       </div>
     )
@@ -283,27 +290,27 @@ import { round, calculateVolumes, getSistemaOptions } from '../helpers'
         Header: 'Etapa',
         accessor: 'etapa',
       }, 
-      {
-        Header: 'Intervalo',
-        accessor: 'intervalo',
-        width: 200,
-        resizable: false,
-        style: {overflow: 'visible'},
-        Cell: row => {
-          return (
-            <div>
-              <Select
-                className='input'
-                placeholder='intervalo'
-                simpleValue={true}
-                options={intervaloOptions}
-                value={intervaloOptions.find(i=>i.value === row.original.intervalo) || null}
-                onChange={(e) => this.handleSelect(row, e.value)} 
-              />
-            </div>
-          )
-        }
-      },
+      // {
+      //   Header: 'Intervalo',
+      //   accessor: 'intervalo',
+      //   width: 200,
+      //   resizable: false,
+      //   style: {overflow: 'visible'},
+      //   Cell: row => {
+      //     return (
+      //       <div>
+      //         <Select
+      //           className='input'
+      //           placeholder='intervalo'
+      //           simpleValue={true}
+      //           options={intervaloOptions}
+      //           value={intervaloOptions.find(i=>i.value === row.original.intervalo) || null}
+      //           onChange={(e) => this.handleSelect(row, e.value)} 
+      //         />
+      //       </div>
+      //     )
+      //   }
+      // },
       {
         Header: 'Sistema',
         accessor: 'sistema',
