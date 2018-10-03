@@ -356,7 +356,7 @@ let columnsApuntalado = [
           />
         </div>
 
-        <button className='new-row-button' onClick={this.addNewRowApuntalado}>Añadir un renglón</button>
+        <button className='new-row-button' style={{ marginBottom: '50px' }}onClick={this.addNewRowApuntalado}>Añadir un renglón</button>
       </div>
       )
   }
@@ -453,7 +453,7 @@ let columnsApuntalado = [
           />
         </div>
 
-        <button className='new-row-button' onClick={this.addNewRowAcido}>Añadir un renglón</button>
+        <button className='new-row-button' style={{ marginBottom: '50px' }}onClick={this.addNewRowAcido}>Añadir un renglón</button>
       </div>
       )
   }
@@ -547,7 +547,7 @@ let columnsApuntalado = [
           />
         </div>
 
-        <button className='new-row-button' onClick={this.addNewRowEstimulacion}>Añadir un renglón</button>
+        <button className='new-row-button' style={{ marginBottom: '50px' }}onClick={this.addNewRowEstimulacion}>Añadir un renglón</button>
       </div>
       )
   }

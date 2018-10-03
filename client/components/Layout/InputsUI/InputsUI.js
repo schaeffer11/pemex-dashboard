@@ -79,16 +79,15 @@ import '../../../styles/components/_query_modal.css'
   handleSubmit(action) {
     let { saveName } = this.state
 
-    console.log('herehre', saveName)
-    if( action === 'save' || this.validate() ){
-      this.props.submitPozoForm(action, this.props.token, saveName)
-      this.setState({'error': ''})
-      console.log('Validate Succeeded')
-    } else {
-      this.setState({'error': 'Esta forma contiene errores. Todos los campos son requeridos.'})
-      this.scrollToBottom()
-      console.log('Validate Failed')
-    }
+
+    this.props.submitPozoForm(action, this.props.token, saveName)
+    this.setState({'error': ''})
+
+    // } else {
+    //   this.setState({'error': 'Esta forma contiene errores. Todos los campos son requeridos.'})
+    //   this.scrollToBottom()
+    //   console.log('Validate Failed')
+    // }
     this.deactivateModal()
   }
 
