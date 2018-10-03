@@ -13,12 +13,7 @@ import { setShowForms, setIsLoading } from '../../../../redux/actions/global'
 import { InputRow, InputRowUnitless, InputRowSelectUnitless, TextAreaUnitless } from '../../Common/InputRow'
 import Notification from '../../Common/Notification'
 import Loading from '../../Common/Loading'
-
-const sortLabels = (a, b) => {
-    if(a.label < b.label) return -1;
-    if(a.label > b.label) return 1;
-    return 0;
-}
+import { sortLabels } from '../../../../lib/formatters'
 
 @autobind class GeneralData extends Component {
   constructor(props) {

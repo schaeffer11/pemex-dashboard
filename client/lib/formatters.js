@@ -15,6 +15,12 @@ const siWithUnit = [
   { value: 1E3, symbol: 'M' },
 ]
 
+export const sortLabels = (a, b) => {
+  if(a.label < b.label) return -1;
+  if(a.label > b.label) return 1;
+  return 0;
+}
+
 
 /////////////////////////
 // Exporting Functions //
