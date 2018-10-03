@@ -151,7 +151,7 @@ import '../../../styles/components/_query_modal.css'
         <div className="modal-body">
           <input onChange={(e) => this.setState({saveName: e.target.value})}></input>
           <br></br>
-          <button className="submit save-button" disabled={!saveName} onClick={(e) => this.handleSubmit('save')}>{'Guardar'}</button>
+          <button className="submit save-button" style={{marginTop: '25px'}} disabled={!saveName} onClick={(e) => this.handleSubmit('save')}>{'Guardar'}</button>
         </div> 
       </div>
       </AriaModal>
