@@ -37,7 +37,7 @@ import { round, calculateVolumes, getSistemaOptions } from '../helpers'
       { label: 'BJ', value: 'BJ' },
       { label: 'Weatherford', value: 'Weatherford' }
     ]
-    const intervals = intervalos.map(elem => <div>{`${elem.cimaMD}-${elem.baseMD}`}</div>)
+    const intervals = intervalos.map(elem => <div key={`intervalo_${elem.cimaMD}-${elem.baseMD}`}>{`${elem.cimaMD}-${elem.baseMD}`}</div>)
 
     return (
       <div className='general-form' >

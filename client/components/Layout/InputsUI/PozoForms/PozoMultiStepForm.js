@@ -50,7 +50,14 @@ const forms = [
   }
 
   componentDidMount() {
-    fetch('/api/getSubmittedFieldWellMapping')
+    const token = this.props.user.get('token')
+    const headers = {
+      headers: {
+        'Authorization': `Bearer ${token}`,
+        'content-type': 'application/json',
+      },
+    }
+    fetch('/api/getSubmittedFieldWellMapping', headers)
       .then(r => r.json())
       .then(r => {
 
@@ -66,13 +73,20 @@ const forms = [
     let { fichaTecnicaDelPozoHighLevel, setFichaTecnicaDelCampo, setLoading } = this.props
     fichaTecnicaDelPozoHighLevel = fichaTecnicaDelPozoHighLevel.toJS()
     let { campo, pozo } = fichaTecnicaDelPozoHighLevel
+    const token = this.props.user.get('token')
+    const headers = {
+      headers: {
+        'Authorization': `Bearer ${token}`,
+        'content-type': 'application/json',
+      },
+    }
     setLoading({ isLoading: true, loadText: 'Descargando' })
     
     this.setState({
       isOpen: false
     })
 
-    let data = await fetch(`api/getFields?transactionID=${selectedTransaction}`).then(r => r.json())
+    let data = await fetch(`api/getFields?transactionID=${selectedTransaction}`, headers).then(r => r.json())
 
     if (data && !data.err) {
       setFichaTecnicaDelCampo(data.fichaTecnicaDelCampo)
@@ -104,6 +118,13 @@ const forms = [
     let { fichaTecnicaDelPozoHighLevel, setFichaTecnicaDelPozo, setLoading } = this.props
     fichaTecnicaDelPozoHighLevel = fichaTecnicaDelPozoHighLevel.toJS()
     let { pozo } = fichaTecnicaDelPozoHighLevel
+    const token = this.props.user.get('token')
+    const headers = {
+      headers: {
+        'Authorization': `Bearer ${token}`,
+        'content-type': 'application/json',
+      },
+    }
     setLoading({ isLoading: true, loadText: 'Descargando' })
 
 
@@ -111,8 +132,8 @@ const forms = [
       isOpen: false
     })
 
-    let data = await fetch(`api/getWell?transactionID=${selectedTransaction}`).then(r => r.json())
-    let interventionData = await fetch(`api/getHistIntervenciones?transactionID=${selectedTransaction}`).then(r => r.json())
+    let data = await fetch(`api/getWell?transactionID=${selectedTransaction}`, headers).then(r => r.json())
+    let interventionData = await fetch(`api/getHistIntervenciones?transactionID=${selectedTransaction}`, headers).then(r => r.json())
 
     if (data && !data.err && !interventionData.err) {
       let newObj = data.fichaTecnicaDelPozo
@@ -146,6 +167,13 @@ const forms = [
     let { fichaTecnicaDelPozoHighLevel, setEvaluacionPetrofisica, setLoading } = this.props
     fichaTecnicaDelPozoHighLevel = fichaTecnicaDelPozoHighLevel.toJS()
     let { pozo } = fichaTecnicaDelPozoHighLevel
+    const token = this.props.user.get('token')
+    const headers = {
+      headers: {
+        'Authorization': `Bearer ${token}`,
+        'content-type': 'application/json',
+      },
+    }
     setLoading({ isLoading: true, loadText: 'Descargando' })
 
 
@@ -153,8 +181,8 @@ const forms = [
       isOpen: false
     })
 
-      let data = await fetch(`api/getMudLoss?transactionID=${selectedTransaction}`).then(r => r.json())
-      let layerData = await fetch(`api/getLayer?transactionID=${selectedTransaction}`).then(r => r.json())
+      let data = await fetch(`api/getMudLoss?transactionID=${selectedTransaction}`, headers).then(r => r.json())
+      let layerData = await fetch(`api/getLayer?transactionID=${selectedTransaction}`, headers).then(r => r.json())
 
       if (data && !data.err && !layerData.err) {
 
@@ -191,13 +219,19 @@ const forms = [
     fichaTecnicaDelPozoHighLevel = fichaTecnicaDelPozoHighLevel.toJS()
     let { pozo } = fichaTecnicaDelPozoHighLevel
     setLoading({ isLoading: true, loadText: 'Descargando' })
-
+    const token = this.props.user.get('token')
+    const headers = {
+      headers: {
+        'Authorization': `Bearer ${token}`,
+        'content-type': 'application/json',
+      },
+    }
 
     this.setState({
       isOpen: false
     })
 
-      let data = await fetch(`api/getMecanico?transactionID=${selectedTransaction}`).then(r => r.json())
+      let data = await fetch(`api/getMecanico?transactionID=${selectedTransaction}`, headers).then(r => r.json())
 
       if (data && !data.err) {
         setMecanicoYAparejoDeProduccion(data.mecanicoYAparejoDeProduccion)
@@ -227,6 +261,13 @@ const forms = [
     let { fichaTecnicaDelPozoHighLevel, setAnalisisDelAgua, setLoading } = this.props
     fichaTecnicaDelPozoHighLevel = fichaTecnicaDelPozoHighLevel.toJS()
     let { pozo } = fichaTecnicaDelPozoHighLevel
+    const token = this.props.user.get('token')
+    const headers = {
+      headers: {
+        'Authorization': `Bearer ${token}`,
+        'content-type': 'application/json',
+      },
+    }
     setLoading({ isLoading: true, loadText: 'Descargando' })
 
 
@@ -234,7 +275,7 @@ const forms = [
       isOpen: false
     })
 
-      let data = await fetch(`api/getAnalisisAgua?transactionID=${selectedTransaction}`).then(r => r.json())
+      let data = await fetch(`api/getAnalisisAgua?transactionID=${selectedTransaction}`, headers).then(r => r.json())
 
       if (data && !data.err) {
         setAnalisisDelAgua(data.analisisDelAgua)
@@ -264,10 +305,17 @@ const forms = [
     let { fichaTecnicaDelPozoHighLevel, setSistemasArtificialesDeProduccion, setLoading } = this.props
     fichaTecnicaDelPozoHighLevel = fichaTecnicaDelPozoHighLevel.toJS()
     let { pozo } = fichaTecnicaDelPozoHighLevel
+    const token = this.props.user.get('token')
+    const headers = {
+      headers: {
+        'Authorization': `Bearer ${token}`,
+        'content-type': 'application/json',
+      },
+    }
     setLoading({ isLoading: true, loadText: 'Descargando' })
 
 
-    let transactionID = await fetch(`/api/getTransactionWell?wellID=${pozo}`)
+    let transactionID = await fetch(`/api/getTransactionWell?wellID=${pozo}`, headers)
     .then(res => res.json())
     .then(res => res.transactionID)
 
@@ -275,7 +323,7 @@ const forms = [
       isOpen: false
     })
 
-      let type = await fetch(`api/getWell?transactionID=${selectedTransaction}`).then(r => r.json())
+      let type = await fetch(`api/getWell?transactionID=${selectedTransaction}`, headers).then(r => r.json())
 
       if (!type.err) {
         type = type.sistemasArtificialesDeProduccion.tipoDeSistemo
@@ -283,22 +331,22 @@ const forms = [
         let data
 
         if (type === 'emboloViajero') {
-          data = await fetch(`api/getEmboloViajero?transactionID=${selectedTransaction}`).then(r => r.json())
+          data = await fetch(`api/getEmboloViajero?transactionID=${selectedTransaction}`, headers).then(r => r.json())
         }
         else if (type === 'bombeoNeumatico') {
-          data = await  fetch(`api/getBombeoNeumatico?transactionID=${selectedTransaction}`).then(r => r.json())
+          data = await  fetch(`api/getBombeoNeumatico?transactionID=${selectedTransaction}`, headers).then(r => r.json())
         }
         else if (type === 'bombeoHidraulico') {
-          data = await fetch(`api/getBombeoHidraulico?transactionID=${selectedTransaction}`).then(r => r.json())
+          data = await fetch(`api/getBombeoHidraulico?transactionID=${selectedTransaction}`, headers).then(r => r.json())
         }
         else if (type === 'bombeoCavidadesProgresivas') {
-          data = await fetch(`api/getBombeoCavidades?transactionID=${selectedTransaction}`).then(r => r.json())
+          data = await fetch(`api/getBombeoCavidades?transactionID=${selectedTransaction}`, headers).then(r => r.json())
         }
         else if (type === 'bombeoElectrocentrifugo') {
-          data = await fetch(`api/getBombeoElectrocentrifugo?transactionID=${selectedTransaction}`).then(r => r.json())
+          data = await fetch(`api/getBombeoElectrocentrifugo?transactionID=${selectedTransaction}`, headers).then(r => r.json())
         }
         else if (type === 'bombeoMecanico') {
-          data = await  fetch(`api/getBombeoMecanico?transactionID=${selectedTransaction}`).then(r => r.json())
+          data = await  fetch(`api/getBombeoMecanico?transactionID=${selectedTransaction}`, headers).then(r => r.json())
         }
 
         if (data && !data.err) {
@@ -337,19 +385,26 @@ const forms = [
     let { fichaTecnicaDelPozoHighLevel, setPresionDataCampo, setLoading } = this.props
     fichaTecnicaDelPozoHighLevel = fichaTecnicaDelPozoHighLevel.toJS()
     let { pozo } = fichaTecnicaDelPozoHighLevel
+    const token = this.props.user.get('token')
+    const headers = {
+      headers: {
+        'Authorization': `Bearer ${token}`,
+        'content-type': 'application/json',
+      },
+    }
     setLoading({ isLoading: true, loadText: 'Descargando' })
 
     this.setState({
       isOpen: false
     })
 
-    let transactionID = await fetch(`/api/getTransactionWell?wellID=${pozo}`)
+    let transactionID = await fetch(`/api/getTransactionWell?wellID=${pozo}`, headers)
       .then(res => res.json())
       .then(res => res.transactionID)
 
 
 
-      let data = await fetch(`api/getFieldPressure?transactionID=${selectedTransaction}`).then(r => r.json())
+      let data = await fetch(`api/getFieldPressure?transactionID=${selectedTransaction}`, headers).then(r => r.json())
 
     if (data && !data.err) {
 
@@ -384,6 +439,13 @@ const forms = [
     let { fichaTecnicaDelPozoHighLevel, setPresionDataPozo, setLoading } = this.props
     fichaTecnicaDelPozoHighLevel = fichaTecnicaDelPozoHighLevel.toJS()
     let { pozo } = fichaTecnicaDelPozoHighLevel
+    const token = this.props.user.get('token')
+    const headers = {
+      headers: {
+        'Authorization': `Bearer ${token}`,
+        'content-type': 'application/json',
+      },
+    }
     setLoading({ isLoading: true, loadText: 'Descargando' })
 
     
@@ -391,7 +453,7 @@ const forms = [
       isOpen: false
     })
 
-      let data = await fetch(`api/getWellPressure?transactionID=${selectedTransaction}`).then(r => r.json())
+      let data = await fetch(`api/getWellPressure?transactionID=${selectedTransaction}`, headers).then(r => r.json())
 
       if (data && !data.err) {
 
@@ -427,13 +489,20 @@ const forms = [
     let { fichaTecnicaDelPozoHighLevel, setHistoricoProduccion, setLoading } = this.props
     fichaTecnicaDelPozoHighLevel = fichaTecnicaDelPozoHighLevel.toJS()
     let { pozo } = fichaTecnicaDelPozoHighLevel
+    const token = this.props.user.get('token')
+    const headers = {
+      headers: {
+        'Authorization': `Bearer ${token}`,
+        'content-type': 'application/json',
+      },
+    }
     setLoading({ isLoading: true, loadText: 'Descargando' })
 
     this.setState({
       isOpen: false
     })
 
-      let produccionData = await fetch(`api/getWellProduccion?transactionID=${selectedTransaction}`).then(r => r.json())
+      let produccionData = await fetch(`api/getWellProduccion?transactionID=${selectedTransaction}`, headers).then(r => r.json())
 
     if (produccionData && !produccionData.err ) {
 
@@ -468,14 +537,20 @@ const forms = [
     let { fichaTecnicaDelPozoHighLevel, setHistoricoDeAforos, setLoading } = this.props
     fichaTecnicaDelPozoHighLevel = fichaTecnicaDelPozoHighLevel.toJS()
     let { pozo } = fichaTecnicaDelPozoHighLevel
-
+    const token = this.props.user.get('token')
+    const headers = {
+      headers: {
+        'Authorization': `Bearer ${token}`,
+        'content-type': 'application/json',
+      },
+    }
     setLoading({ isLoading: true, loadText: 'Descargando' })
 
     this.setState({
       isOpen: false
     })
 
-      let aforosData = await fetch(`api/getWellAforos?transactionID=${selectedTransaction}`).then(r => r.json())
+      let aforosData = await fetch(`api/getWellAforos?transactionID=${selectedTransaction}`, headers).then(r => r.json())
       
 
     if (aforosData && !aforosData.err) {
@@ -569,8 +644,14 @@ const forms = [
 
   fetchLoadFromDatabaseOptions() {
     let { selectedWell } = this.state
-
-    fetch(`/api/getWellTransactions?wellID=${selectedWell}`)
+    const token = this.props.user.get('token')
+    const headers = {
+      headers: {
+        'Authorization': `Bearer ${token}`,
+        'content-type': 'application/json',
+      },
+    }
+    fetch(`/api/getWellTransactions?wellID=${selectedWell}`, headers)
       .then(r => r.json())
       .then(r => {
         this.setState({
@@ -691,6 +772,7 @@ const mapDispatchToProps = dispatch => ({
   setPresionDataCampo : values => {dispatch(setPresionDataCampo(values))},
   setHistoricoProduccion : values => {dispatch(setHistoricoProduccion(values))},
   setHistoricoDeAforos: values => {dispatch(setHistoricoDeAforos(values))},
+  setLoading: values => {dispatch(setIsLoading(values))},
 })
 
 const mapStateToProps = state => ({

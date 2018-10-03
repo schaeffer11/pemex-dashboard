@@ -46,7 +46,7 @@ import { round, calculateVolumes, getSistemaOptions } from '../helpers'
       { label: 'Matricial', value: 'matricial'}
     ]
 
-    const intervals = intervalos.map(elem => <div>{`${elem.cimaMD}-${elem.baseMD}`}</div>)
+    const intervals = intervalos.map(elem => <div key={`intervalo_${elem.cimaMD}-${elem.baseMD}`}>{`${elem.cimaMD}-${elem.baseMD}`}</div>)
 
 
     return (

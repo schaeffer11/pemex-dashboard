@@ -33,9 +33,15 @@ const sortLabels = (a, b) => {
   componentDidMount(){
     let { user } = this.props
     user = user.toJS()
-    const userID = user.id
+    const { token, id } = user
+    const headers = {
+      headers: {
+        'Authorization': `Bearer ${token}`,
+        'content-type': 'application/json',
+      },
+    }
 
-    fetch(`/api/getAllSaves?userID=${userID}`)
+    fetch(`/api/getAllSaves?userID=${id}`, headers)
       .then(r => r.json())
       .then( r => {
         this.setState({
@@ -293,39 +299,47 @@ const sortLabels = (a, b) => {
 
     const wellID = formData.pozo
     const userID = user.id
+    const { token } = user
+    const headers = {
+      headers: {
+        'Authorization': `Bearer ${token}`,
+        'content-type': 'application/json',
+      },
+    }
 
-    let data = await fetch(`/api/getSave?transactionID=${selectedSave}`)
+
+    let data = await fetch(`/api/getSave?transactionID=${selectedSave}`, headers)
       .then(res => res.json())
 
     let { transactionID, tipoDeIntervenciones } = data
 
     Promise.all([
-      fetch(`api/getFields?transactionID=${transactionID}&saved=1`).then(r => r.json()),
-      fetch(`api/getMudLoss?transactionID=${transactionID}&saved=1`).then(r => r.json()),
-      fetch(`api/getLayer?transactionID=${transactionID}&saved=1`).then(r => r.json()),
-      fetch(`api/getWell?transactionID=${transactionID}&saved=1`).then(r => r.json()),
-      fetch(`api/getHistIntervenciones?transactionID=${transactionID}&saved=1`).then(r => r.json()),
-      fetch(`api/getMecanico?transactionID=${transactionID}&saved=1`).then(r => r.json()),
-      fetch(`api/getAnalisisAgua?transactionID=${transactionID}&saved=1`).then(r => r.json()),
-      fetch(`api/getEmboloViajero?transactionID=${transactionID}&saved=1`).then(r => r.json()),
-      fetch(`api/getBombeoNeumatico?transactionID=${transactionID}&saved=1`).then(r => r.json()),
-      fetch(`api/getBombeoHidraulico?transactionID=${transactionID}&saved=1`).then(r => r.json()),
-      fetch(`api/getBombeoCavidades?transactionID=${transactionID}&saved=1`).then(r => r.json()),
-      fetch(`api/getBombeoElectrocentrifugo?transactionID=${transactionID}&saved=1`).then(r => r.json()),
-      fetch(`api/getBombeoMecanico?transactionID=${transactionID}&saved=1`).then(r => r.json()),
-      fetch(`api/getFieldPressure?transactionID=${transactionID}&saved=1`).then(r => r.json()),
-      fetch(`api/getWellPressure?transactionID=${transactionID}&saved=1`).then(r => r.json()),
-      fetch(`api/getWellAforos?transactionID=${transactionID}&saved=1`).then(r => r.json()),
-      fetch(`api/getWellProduccion?transactionID=${transactionID}&saved=1`).then(r => r.json()),
-      fetch(`api/getInterventionBase?transactionID=${transactionID}&saved=1`).then(r => r.json()),
-      fetch(`api/getInterventionEstimulacion?transactionID=${transactionID}&saved=1`).then(r => r.json()),
-      fetch(`api/getInterventionAcido?transactionID=${transactionID}&saved=1`).then(r => r.json()),
-      fetch(`api/getInterventionApuntalado?transactionID=${transactionID}&saved=1`).then(r => r.json()),
-      fetch(`api/getLabTest?transactionID=${transactionID}&saved=1`).then(r => r.json()),
-      fetch(`api/getCedulaEstimulacion?transactionID=${transactionID}&saved=1`).then(r => r.json()),   
-      fetch(`api/getCedulaAcido?transactionID=${transactionID}&saved=1`).then(r => r.json()),   
-      fetch(`api/getCedulaApuntalado?transactionID=${transactionID}&saved=1`).then(r => r.json()),      
-      fetch(`api/getCosts?transactionID=${transactionID}&saved=1`).then(r => r.json()),
+      fetch(`api/getFields?transactionID=${transactionID}&saved=1`, headers).then(r => r.json()),
+      fetch(`api/getMudLoss?transactionID=${transactionID}&saved=1`, headers).then(r => r.json()),
+      fetch(`api/getLayer?transactionID=${transactionID}&saved=1`, headers).then(r => r.json()),
+      fetch(`api/getWell?transactionID=${transactionID}&saved=1`, headers).then(r => r.json()),
+      fetch(`api/getHistIntervenciones?transactionID=${transactionID}&saved=1`, headers).then(r => r.json()),
+      fetch(`api/getMecanico?transactionID=${transactionID}&saved=1`, headers).then(r => r.json()),
+      fetch(`api/getAnalisisAgua?transactionID=${transactionID}&saved=1`, headers).then(r => r.json()),
+      fetch(`api/getEmboloViajero?transactionID=${transactionID}&saved=1`, headers).then(r => r.json()),
+      fetch(`api/getBombeoNeumatico?transactionID=${transactionID}&saved=1`, headers).then(r => r.json()),
+      fetch(`api/getBombeoHidraulico?transactionID=${transactionID}&saved=1`, headers).then(r => r.json()),
+      fetch(`api/getBombeoCavidades?transactionID=${transactionID}&saved=1`, headers).then(r => r.json()),
+      fetch(`api/getBombeoElectrocentrifugo?transactionID=${transactionID}&saved=1`, headers).then(r => r.json()),
+      fetch(`api/getBombeoMecanico?transactionID=${transactionID}&saved=1`, headers).then(r => r.json()),
+      fetch(`api/getFieldPressure?transactionID=${transactionID}&saved=1`, headers).then(r => r.json()),
+      fetch(`api/getWellPressure?transactionID=${transactionID}&saved=1`, headers).then(r => r.json()),
+      fetch(`api/getWellAforos?transactionID=${transactionID}&saved=1`, headers).then(r => r.json()),
+      fetch(`api/getWellProduccion?transactionID=${transactionID}&saved=1`, headers).then(r => r.json()),
+      fetch(`api/getInterventionBase?transactionID=${transactionID}&saved=1`, headers).then(r => r.json()),
+      fetch(`api/getInterventionEstimulacion?transactionID=${transactionID}&saved=1`, headers).then(r => r.json()),
+      fetch(`api/getInterventionAcido?transactionID=${transactionID}&saved=1`, headers).then(r => r.json()),
+      fetch(`api/getInterventionApuntalado?transactionID=${transactionID}&saved=1`, headers).then(r => r.json()),
+      fetch(`api/getLabTest?transactionID=${transactionID}&saved=1`, headers).then(r => r.json()),
+      fetch(`api/getCedulaEstimulacion?transactionID=${transactionID}&saved=1`, headers).then(r => r.json()),   
+      fetch(`api/getCedulaAcido?transactionID=${transactionID}&saved=1`, headers).then(r => r.json()),   
+      fetch(`api/getCedulaApuntalado?transactionID=${transactionID}&saved=1`, headers).then(r => r.json()),      
+      fetch(`api/getCosts?transactionID=${transactionID}&saved=1`, headers).then(r => r.json()),
     ])
       .catch(error => {
         console.log('some error i found', error)
@@ -381,7 +395,7 @@ const mapStateToProps = state => ({
   formData: state.get('fichaTecnicaDelPozoHighLevel'),
   user: state.get('user'),
   interventionFormData: state.get('objetivoYAlcancesIntervencion'),
-  forms: state.get('forms')  
+  forms: state.get('forms'),
 })
 
 const testLoadFromSave = (saved) => {

@@ -30,7 +30,7 @@ function getBase64FromURL(imgURL) {
   })
 }
 
-export function submitForm(action, saveName) {
+export function submitForm(action, token, saveName) {
   return async (dispatch, getState) => {
 
     dispatch(setIsLoading({ isLoading: true, loadText: 'Guardando' }))
@@ -97,6 +97,11 @@ export function submitForm(action, saveName) {
         formData.append(k, JSON.stringify(innerObj))
       }
     }
+
+    const headers = {
+      'Authorization': `Bearer ${token}`,
+      'content-type': 'application/json',
+    }
    
     if(action === 'submit'){
       runValidation(allKeys, filteredKeys)
@@ -107,6 +112,7 @@ export function submitForm(action, saveName) {
       formData.append('saveName', JSON.stringify(saveName))
 
       fetch('/api/wellSave', {
+        headers,
         method: 'POST',
         body: formData,
       })
@@ -133,6 +139,7 @@ export function submitForm(action, saveName) {
     }
     else if (action === 'submit') {
       fetch('/api/well', {
+        headers,
         method: 'POST',
         body: formData,
       })

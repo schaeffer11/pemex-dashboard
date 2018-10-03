@@ -5,6 +5,7 @@ import session from 'express-session'
 import config from '../app-config'
 import bodyParser from 'body-parser'
 import { autoRefreshSession } from './auth/session-store'
+import { sslRedirect } from './middleware'
 import logger from './logger'
 import pkg from '../package.json'
 import compression from 'compression'
@@ -19,6 +20,10 @@ const PORT = process.env.PORT || config.ports.http
 // INITIALIZE APP SERVER
 console.log(`initializing ${pkg.description} server in ${env} mode...`)
 var app = express()
+
+// Redirect to secure
+app.enable('trust proxy')
+app.use(sslRedirect)
 
 // ENABLE CORS
 app.use(cors())
