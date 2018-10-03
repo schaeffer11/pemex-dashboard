@@ -49,8 +49,7 @@ input[type=text], input[type=password], {
 }
 
 .loginModal {
-  min-width: 450px;
-  max-width: 100%;
+  width: 36%;
   margin: auto;
 
   .login-form {
@@ -59,7 +58,7 @@ input[type=text], input[type=password], {
 }
 
 .login-form {
-
+  padding: 0 1em;
   &> div {
     padding: 15px;
   }
