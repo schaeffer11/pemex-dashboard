@@ -164,6 +164,12 @@ const getErrors = (data, headers) => {
   render() {
     return (
       <div className="excel-upload">
+        <button
+          className="submit download-template"
+          onClick={() => window.location.replace(`/api/get_template/${this.props.template}`)}
+        >
+          Descarga Plantilla de Esta Página
+        </button>
         <input
           type="file"
           accept={this.acceptedFileType}
