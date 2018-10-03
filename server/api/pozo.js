@@ -312,7 +312,7 @@ const INSERT_INTERVENTION_BASE_QUERY = {
 
 const INSERT_INTERVENTION_ESIMULACION_QUERY = {
     save: `INSERT INTO _IntervencionesEstimulacionsSave (
-        INTERVENTION_ID, WELL_FORMACION_ID,
+        INTERVENTION_ID, WELL_FORMACION_ID, TIPO_DE_ESTIMULACION,
         VOLUMEN_PRECOLCHON_N2,
         VOLUMEN_SISTEMA_NO_REACTIVO, VOLUMEN_SISTEMA_REACTIVO, VOLUMEN_SISTEMA_DIVERGENTE, VOLUMEN_DISPLAZAMIENTO_LIQUIDO, VOLUMEN_DESPLAZAMIENTO_N2,
         VOLUMEN_TOTAL_DE_LIQUIDO, TIPO_DE_COLOCACION,
@@ -324,9 +324,9 @@ const INSERT_INTERVENTION_ESIMULACION_QUERY = {
         (?, ?, ?, ?, ?, ?, ?, ?, ?, ?,
          ?, ?, ?, ?, ?, ?, ?, ?, ?, ?,
          ?, ?, ?, ?, ?, ?, ?, ?, ?, ?,
-         ?)`,
+         ?, ?)`,
     submit: `INSERT INTO IntervencionesEstimulacions (
-        INTERVENTION_ID, WELL_FORMACION_ID,
+        INTERVENTION_ID, WELL_FORMACION_ID, TIPO_DE_ESTIMULACION,
         VOLUMEN_PRECOLCHON_N2,
         VOLUMEN_SISTEMA_NO_REACTIVO, VOLUMEN_SISTEMA_REACTIVO, VOLUMEN_SISTEMA_DIVERGENTE, VOLUMEN_DISPLAZAMIENTO_LIQUIDO, VOLUMEN_DESPLAZAMIENTO_N2,
         VOLUMEN_TOTAL_DE_LIQUIDO, TIPO_DE_COLOCACION,
@@ -338,7 +338,7 @@ const INSERT_INTERVENTION_ESIMULACION_QUERY = {
         (?, ?, ?, ?, ?, ?, ?, ?, ?, ?,
          ?, ?, ?, ?, ?, ?, ?, ?, ?, ?,
          ?, ?, ?, ?, ?, ?, ?, ?, ?, ?,
-         ?)`,     
+         ?, ?)`,     
     loadSave: `SELECT * FROM _IntervencionesEstimulacionsSave WHERE TRANSACTION_ID = ?`,
     loadTransaction: `SELECT * FROM IntervencionesEstimulacions WHERE TRANSACTION_ID = ?`    
 }
@@ -835,7 +835,7 @@ export const create = async (body, action, cb) => {
     diametroDeOrificio, penetracion, tratamientoPor, volumenAparejoDeProduccion,
     volumenCimaDeIntervalo, volumenBaseDeIntervalo, volumenDeEspacioAnular } = finalObj.mecanicoYAparejoDeProduccion
 
-  let {pH, temperaturaDeConductividad, resistividad, salinidadConConductimetro, solidosDisueltosTotales,
+  let {waterAnalysisBool, pH, temperaturaDeConductividad, resistividad, salinidadConConductimetro, solidosDisueltosTotales,
     durezaTotalComoCaCO3, durezaDeCalcioComoCaCO3, durezaDeMagnesioComoCaCO3, alcalinidadTotalComoCaCO3, alcalinidadALaFenolftaleinaComoCaCO3,
     salinidadComoNaCl, sodio, calcio, magnesio, fierro,
     cloruros, bicarbonatos, sulfatos, carbonatos, densidadAt15,
@@ -875,7 +875,7 @@ export const create = async (body, action, cb) => {
 
   if (tipoDeIntervenciones === 'estimulacion') {
       //Propuesta Estimulaction
-      var { tipoDeColocacion, tiempoDeContacto, volumenPrecolchonN2, volumenSistemaNoReativo, volumenSistemaReactivo, volumenSistemaDivergente,
+      var { tipoDeColocacion, tiempoDeContacto, tipoDeEstimulacion, volumenPrecolchonN2, volumenSistemaNoReativo, volumenSistemaReactivo, volumenSistemaDivergente,
         volumenDesplazamientoLiquido, volumenDesplazamientoN2, volumenTotalDeLiquido } = finalObj.propuestaEstimulacion
 
       //Simulacion Resultados Estimulacion
@@ -1051,7 +1051,8 @@ export const create = async (body, action, cb) => {
                 console.log('mecanico', err)
                 console.log('mecanico', results)
 
-                connection.query((action === 'save' ? INSERT_ANALISIS_AGUA_QUERY.save : INSERT_ANALISIS_AGUA_QUERY.submit), [
+
+                connection.query(waterAnalysisBool === false ? DUMMY_QUERY : (action === 'save' ? INSERT_ANALISIS_AGUA_QUERY.save : INSERT_ANALISIS_AGUA_QUERY.submit), [
                     wellFormacionID, pH, temperaturaDeConductividad, resistividad, salinidadConConductimetro, solidosDisueltosTotales,
                     durezaTotalComoCaCO3, durezaDeCalcioComoCaCO3, durezaDeMagnesioComoCaCO3, alcalinidadTotalComoCaCO3, alcalinidadALaFenolftaleinaComoCaCO3,
                     salinidadComoNaCl, sodio, calcio, magnesio, fierro,
@@ -1251,7 +1252,7 @@ export const create = async (body, action, cb) => {
                                 query = tipoDeIntervenciones === 'estimulacion' ? (action === 'save' ? INSERT_INTERVENTION_ESIMULACION_QUERY.save : INSERT_INTERVENTION_ESIMULACION_QUERY.submit) : tipoDeIntervenciones === 'acido' ? (action === 'save' ? INSERT_INTERVENTION_ACIDO_QUERY.save : INSERT_INTERVENTION_ACIDO_QUERY.submit) : (action === 'save' ? INSERT_INTERVENTION_APUNTALADO_QUERY.save : INSERT_INTERVENTION_APUNTALADO_QUERY.submit)
 
                                 values = tipoDeIntervenciones === 'estimulacion' ? [
-                                    interventionID, wellFormacionID, volumenPrecolchonN2, volumenSistemaNoReativo, volumenSistemaReactivo, volumenSistemaDivergente,
+                                    interventionID, wellFormacionID, tipoDeEstimulacion, volumenPrecolchonN2, volumenSistemaNoReativo, volumenSistemaReactivo, volumenSistemaDivergente,
                                     volumenDesplazamientoLiquido, volumenDesplazamientoN2, volumenTotalDeLiquido,
                                     tipoDeColocacion, tiempoDeContacto, penetracionRadial, longitudDeAgujeroDeGusano,
                                     estIncEstrangulador, estIncPtp, estIncTtp, estIncPbaj, estIncTbaj,

@@ -9,13 +9,14 @@ import InputTable from '../../Common/InputTable'
 import { InputRow, InputRowUnitless, InputRowSelectUnitless, TextAreaUnitless } from '../../Common/InputRow'
 import {setEstimacionCostosData, setMNXtoDLS} from '../../../../redux/actions/intervencionesEstimulacion'
 import { costMap } from '../../../../lib/maps'
+import { sortLabels } from '../../../../lib/formatters'
 
 console.log(costMap)
 
 export const itemOptions = costMap.map(i => ({
-  label: i.item, 
-  value: i.item
-}))
+  label: i.item,
+  value: i.item,
+})).sort(sortLabels)
 
 
 @autobind class EstimacionCostos extends Component {
@@ -147,7 +148,7 @@ export const itemOptions = costMap.map(i => ({
                 </div>)
               }
       }, { 
-        Header: 'Unit',
+        Header: 'Unidad',
         accessor: 'unit'
       }, {
         Header: <div>Costo<br></br>(MXN)</div>,

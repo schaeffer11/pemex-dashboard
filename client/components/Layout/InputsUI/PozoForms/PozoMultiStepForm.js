@@ -19,7 +19,7 @@ import HistoricoDeIntervenciones from './HistoricoDeIntervenciones'
 import { InputRow, InputRowUnitless, InputRowSelectUnitless, InputDate } from '../../Common/InputRow'
 
 import { setFichaTecnicaDelCampo, setHistorialDeIntervenciones, setFichaTecnicaDelPozo, setEvaluacionPetrofisica, setMecanicoYAparejoDeProduccion, 
-  setAnalisisDelAgua, setSistemasArtificialesDeProduccion, setPresionDataCampo, setPresionDataPozo, setHistoricoProduccion, setHistoricoDeAforos, setChecked } from '../../../../redux/actions/pozo'
+  setAnalisisDelAgua, setSistemasArtificialesDeProduccion, setPresionDataCampo, setPressureDepthCampo, setPresionDataPozo, setPressureDepthPozo, setHistoricoProduccion, setHistoricoDeAforos, setChecked } from '../../../../redux/actions/pozo'
 import { setPage } from '../../../../redux/actions/global'
 
 const forms = [
@@ -441,7 +441,7 @@ const forms = [
 
   async loadHistoricoDePresionCampo() {
     let { selectedTransaction } = this.state
-    let { fichaTecnicaDelPozoHighLevel, setPresionDataCampo, setLoading } = this.props
+    let { fichaTecnicaDelPozoHighLevel, setPresionDataCampo, setPressureDepthCampo, setLoading } = this.props
     fichaTecnicaDelPozoHighLevel = fichaTecnicaDelPozoHighLevel.toJS()
     let { pozo } = fichaTecnicaDelPozoHighLevel
     const token = this.props.user.get('token')
@@ -470,6 +470,7 @@ const forms = [
       let newObj = data.historicoDePresion.presionDataCampo
 
       setPresionDataCampo(newObj)
+      setPressureDepthCampo(data.historicoDePresion.pressureDepthCampo)
       setLoading({ 
         isLoading: false,
         showNotification: true,
@@ -495,7 +496,7 @@ const forms = [
 
   async loadHistoricoDePresionPozo() {
     let { selectedTransaction } = this.state
-    let { fichaTecnicaDelPozoHighLevel, setPresionDataPozo, setLoading } = this.props
+    let { fichaTecnicaDelPozoHighLevel, setPresionDataPozo, setPressureDepthPozo, setLoading } = this.props
     fichaTecnicaDelPozoHighLevel = fichaTecnicaDelPozoHighLevel.toJS()
     let { pozo } = fichaTecnicaDelPozoHighLevel
     const token = this.props.user.get('token')
@@ -524,6 +525,7 @@ const forms = [
           notificationText: `Se ha descargado informacion del pozo: ${pozo}`
         })
         setPresionDataPozo(newObj)
+        setPressureDepthPozo(data.historicoDePresion.pressureDepthPozo)
 
       }
       else { 
@@ -833,6 +835,8 @@ const mapDispatchToProps = dispatch => ({
   setHistoricoProduccion : values => {dispatch(setHistoricoProduccion(values))},
   setHistoricoDeAforos: values => {dispatch(setHistoricoDeAforos(values))},
   setLoading: values => {dispatch(setIsLoading(values))},
+  setPressureDepthCampo: values => {dispatch(setPressureDepthCampo(values))},
+  setPressureDepthPozo: values => {dispatch(setPressureDepthPozo(values))},
 })
 
 const mapStateToProps = state => ({

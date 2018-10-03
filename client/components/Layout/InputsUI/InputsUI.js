@@ -151,7 +151,7 @@ import '../../../styles/components/_query_modal.css'
         <div className="modal-body">
           <input onChange={(e) => this.setState({saveName: e.target.value})}></input>
           <br></br>
-          <button className="submit save-button" disabled={!saveName} onClick={(e) => this.handleSubmit('save')}>{'Guardar'}</button>
+          <button className="submit save-button" style={{marginTop: '25px'}} disabled={!saveName} onClick={(e) => this.handleSubmit('save')}>{'Guardar'}</button>
         </div> 
       </div>
       </AriaModal>
@@ -226,10 +226,10 @@ import '../../../styles/components/_query_modal.css'
           Cualquier error o comentario que tenga acerca de la página en turno, hacerlo aquí y enviar.
         </div>
         <div className="modal-body">
-          <textarea style={{}} value={comment} onChange={this.handleCommentInput}> </textarea><br/>
+          <textarea style={{ width: '500px', height: '200px' }} value={comment} onChange={this.handleCommentInput}> </textarea><br/>
           <button disabled={bugResponseSuccess} className="submit save-button"  onClick={(e) => this.handleSubmitBug() }>{'Enviar'}</button>
           {bugResponseError && <div style={{color: 'red', fontWeight: 500}}>Comentarios son limitados a 1000 caracteres</div>}
-          {bugResponseSuccess && <div style={{color: 'green', fontWeight: 500}}>Gracias por su realimentación</div>}
+          {bugResponseSuccess && <div style={{color: 'green', fontWeight: 500}}>Gracias por su retroalimentación</div>}
         </div> 
       </div>
       </AriaModal>

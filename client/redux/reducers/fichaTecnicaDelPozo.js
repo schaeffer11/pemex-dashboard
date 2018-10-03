@@ -19,7 +19,7 @@ const initialState = fromJS({
   pwf: '',
   deltaPPerMes: '',
   tyac: '',
-  pvt: '',
+  pvt: null,
   aparejoDeProduccion: '',
   profEmpacador: '',
   profSensorPYT: '',
@@ -30,15 +30,6 @@ const initialState = fromJS({
     errors: []
   }],
   checked:[],
-  // intervalos: [
-  //   {
-  //     cima: '',
-  //     base: '',
-  //     espesor: '',
-  //     length: 1,
-  //     index: 0,
-  //   }
-  // ]
 })
 
 const fichaTecnicaDelPozo = (state = initialState, action) => {

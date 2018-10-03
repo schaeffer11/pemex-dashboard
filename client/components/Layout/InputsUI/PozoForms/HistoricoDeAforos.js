@@ -27,6 +27,9 @@ let config = {
         return retVal;
       }
     },
+    credits: {
+        enabled: false
+    },
     xAxis: {
         title: {
             enabled: true,

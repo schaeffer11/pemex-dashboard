@@ -19,7 +19,7 @@
 }
 
 .modal-body { 
-  height: 200px;
+  height: 100%;
   border-bottom: solid 1px;
   overflow-y: auto;
   margin-bottom: 10px;

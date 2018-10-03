@@ -26,6 +26,20 @@ import { round, calculateVolumes, getSistemaOptions } from '../helpers'
 
   }
 
+  handleSelectTipoDeEstimulacion(val) {
+    let { setTipoDeEstimulacion, setTipoDeColocacion, setTiempoDeContacto, } = this.props
+
+
+
+    setTipoDeEstimulacion(val)
+    setTipoDeColocacion(null)
+    setTiempoDeContacto(null)
+
+  }
+
+
+
+
   makeGeneralForm() {
     let { formData, setPropuestaCompany, setTipoDeEstimulacion, intervalos } = this.props
     formData = formData.toJS()
@@ -70,7 +84,7 @@ import { round, calculateVolumes, getSistemaOptions } from '../helpers'
           options={estimulacionOptions}
           onBlur={this.validate}
           value={tipoDeEstimulacion}
-          callback={e => setTipoDeEstimulacion(e.value)}
+          callback={e => this.handleSelectTipoDeEstimulacion(e.value)}
           onBlur={this.validate}
           errors={this.state.errors}
         />

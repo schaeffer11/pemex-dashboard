@@ -13,12 +13,7 @@ import { setShowForms, setIsLoading } from '../../../../redux/actions/global'
 import { InputRow, InputRowUnitless, InputRowSelectUnitless, TextAreaUnitless } from '../../Common/InputRow'
 import Notification from '../../Common/Notification'
 import Loading from '../../Common/Loading'
-
-const sortLabels = (a, b) => {
-    if(a.label < b.label) return -1;
-    if(a.label > b.label) return 1;
-    return 0;
-}
+import { sortLabels } from '../../../../lib/formatters'
 
 @autobind class GeneralData extends Component {
   constructor(props) {
@@ -140,7 +135,7 @@ const sortLabels = (a, b) => {
         <div className="modal-info"> 
           Seleccione borrador para descargar
         </div>
-        <div className="modal-body">
+        <div className="modal-body" style={{ height: '200px' }}>
             {saveOptions.map(i => {
               let className = i.id === selectedSave ? 'save-item active-save' : 'save-item'
               return (
@@ -380,14 +375,19 @@ const sortLabels = (a, b) => {
     let { setShowForms } = this.props
 
     return (
-      <div className='form general-data'>
-        { this.makeGeneralForm() }
-        { this.makeGeneralInterventionForm() }
-        <button className="submit submit-load" onClick={this.activateModal}> Descargar borrador</button>
-        <button className='submit submit-continue' disabled={this.checkIncomplete()} onClick={(e) => setShowForms(true)} >Siguiente</button>
-        <Notification />
-        <Loading />
-        { isOpen ? this.buildModal() : null }
+      <div className='general-data-outer'>
+        <div className='image'>
+          <img src={'/images/homepageBannerThin2.jpg'} style={{width: '100%', borderRadius: '20px'}}></img> 
+        </div>
+        <div className='form general-data'>
+          { this.makeGeneralForm() }
+          { this.makeGeneralInterventionForm() }
+          <button className="submit submit-load" onClick={this.activateModal}> Descargar borrador</button>
+          <button className='submit submit-continue' disabled={this.checkIncomplete()} onClick={(e) => setShowForms(true)} >Siguiente</button>
+          <Notification />
+          <Loading />
+          { isOpen ? this.buildModal() : null }
+        </div>
       </div>
     )
   }

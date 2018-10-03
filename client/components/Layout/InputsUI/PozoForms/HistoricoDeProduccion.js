@@ -18,6 +18,9 @@ let config = {
     title: {
         text: ''
     },
+    credits: {
+        enabled: false
+    },
     tooltip: {
       shared: true,
       formatter:function () {

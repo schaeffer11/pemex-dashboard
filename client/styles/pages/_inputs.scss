@@ -42,7 +42,7 @@
 
 	.save-button {
 		width: 120px;
-		left: calc(50% - 120px);
+		left: calc(35% - 120px);
 		position: relative;
 		margin-right: 5px;
 		margin-top: 10px;
@@ -52,7 +52,7 @@
   	
 	.submit-button {
 		width: 120px;
-		left: calc(50% - 120px);
+		left: calc(35% - 120px);
 		position: relative;
 		margin-left: 5px;
 		margin-top: 10px;
@@ -251,19 +251,38 @@
     }
 
 
+    .general-data-outer {
+
+		.image {
+			z-index: 1;
+			margin-top: 10px;
+			margin-bottom: 20px;
+			width: 90%;
+			left: 5%;
+			position: relative;
+		}
+
+    }
+
     .general-data {
+			margin-bottom: 1em;
     	display: grid;
     	grid-column-gap: 10px;
-
-    	margin-left: 15%;
-    	grid-template-columns: calc(40% - 215px) 200px 200px calc(40% - 215px);
-    	grid-template-areas: 	'general general intervention intervention'
+    	position: relative;
+    	width: 80%;
+    	left: 10%;
+    	grid-template-columns: calc(50% - 215px) 200px 200px calc(50% - 215px);
+    	grid-template-areas: 	
+    							'general general intervention intervention'
     							'. load continue .'
     							'. download download .';
     	
     	.general-form {
     		grid-area: general;
     	}
+
+
+
 
     	.intervention-form {
     		grid-area: intervention;
@@ -399,7 +418,7 @@
 		.image {
 			grid-area: image;
 			z-index: 1;
-			background-size: cover;
+			background-size: contain;
 			min-height: 800px;
 			border-radius: 10px;
 			background-repeat: no-repeat;

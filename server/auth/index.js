@@ -16,7 +16,7 @@ const API_HOST = serverConfig.api_host
 
 // MESSAGING CONSTANTS
 const messages = {
-  AUTH_FAILURE:   'The username and password entered did not match our records.  Please try again.',
+  AUTH_FAILURE:   'El usuario y contraseña no coinciden o no están registrados. Favor de verificar.',
   NOT_LOGGED_IN:  'User not logged in.',
   LOGOUT_SUCCESS: 'User logged out successfully.',
   REQUIRES_LOGIN: 'Accessing this data requires user login.',
