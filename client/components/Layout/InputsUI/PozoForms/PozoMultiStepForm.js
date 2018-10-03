@@ -124,14 +124,22 @@ const forms = [
     fichaTecnicaDelPozoHighLevel = fichaTecnicaDelPozoHighLevel.toJS()
     let { campo, pozo } = fichaTecnicaDelPozoHighLevel
     setLoading({ isLoading: true, loadText: 'Descargando' })
+    const token = this.props.user.get('token')
     
+    const headers = {
+      headers: {
+        'Authorization': `Bearer ${token}`,
+        'content-type': 'application/json',
+      },
+    }
+
     this.setState({
       isOpen: false
     })
 
-    let dataEstimulacion = await fetch(`api/getHistIntervencionesEstimulacionNew?transactionID=${selectedTransaction}`).then(r => r.json())
-    let dataAcido = await fetch(`api/getHistIntervencionesAcidoNew?transactionID=${selectedTransaction}`).then(r => r.json())
-    let dataApuntalado = await fetch(`api/getHistIntervencionesApuntaladoNew?transactionID=${selectedTransaction}`).then(r => r.json())
+    let dataEstimulacion = await fetch(`api/getHistIntervencionesEstimulacionNew?transactionID=${selectedTransaction}`, headers).then(r => r.json())
+    let dataAcido = await fetch(`api/getHistIntervencionesAcidoNew?transactionID=${selectedTransaction}`, headers).then(r => r.json())
+    let dataApuntalado = await fetch(`api/getHistIntervencionesApuntaladoNew?transactionID=${selectedTransaction}`, headers).then(r => r.json())
 
 
     if (dataEstimulacion && !dataEstimulacion.err && dataAcido && !dataAcido.err && dataApuntalado && !dataApuntalado.err) {
