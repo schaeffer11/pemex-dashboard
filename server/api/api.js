@@ -7,7 +7,7 @@ import objectPath from 'object-path'
 import multer from 'multer'
 import { addObject, signedURL, deleteObject, getBuckets } from '../aws/index';
 import { create as createWell, getFields, getWell, 
-            getHistIntervenciones, getLayer, getMudLoss, getMecanico, 
+            getHistIntervenciones, getHistIntervencionesNew, getLayer, getMudLoss, getMecanico, 
             getAnalisisAgua, getEmboloViajero, getBombeoNeumatico, getBombeoHidraulico, 
             getBombeoCavidades, getBombeoElectrocentrifugo, getBombeoMecanico, 
             getFieldPressure, getWellPressure, 
@@ -273,6 +273,187 @@ app.get('/getFields', async (req, res) => {
     }
   })
 })
+
+
+app.get('/getHistIntervencionesEstimulacionNew', async (req, res) => {
+  let { transactionID, saved } = req.query
+
+  let action = saved ? 'loadSaveEstimulacion' : 'loadTransactionEstimulacion'
+  
+  const map = {
+    FECHA: { child: 'fecha' },
+    TIPO_DE_TRATAMIENTO: { child: 'tipoDeTratamiento' },
+    OBJETIVO: { child: 'objetivo' },
+    COMPANIA: { child: 'compania' },
+    ACIDO_VOL: { child: 'acidoVol' },
+    ACIDO_NOMBRE: { child: 'acidoNombre' },
+    SOLVENTE_VOL: { child: 'solventeVol' },
+    SOLVENTE_NOMBRE: { child: 'solventeNombre' },
+    DIVERGENTE_VOL: { child: 'divergenteVol' },
+    DIVERGENTE_NOMBRE: { child: 'divergenteNombre' },
+    TOTAL_N2: { child: 'totalN2' },
+    BENEFICIO_PROGRAMADO: { child: 'beneficioProgramado' },
+    BENEFICIO_OFICIAL: { child: 'beneficioOficial' },    
+  }
+
+  const mainParent = 'historialDeIntervenciones'
+  const innerParent = 'historicoEstimulacionData'
+
+  getHistIntervencionesNew(transactionID, action, (data) => {
+    const finalObj = {}
+    if (data && data.length > 0) {
+      data.forEach((d, index) => {
+        d.DATE ? d.DATE = d.DATE.toJSON().slice(0, 10) : null
+        const innerObj = {}
+        Object.keys(d).forEach(k => {
+          if (map[k]) {
+            const { child } = map[k]
+            objectPath.set(innerObj, child, d[k])
+          }
+        })
+        objectPath.set(innerObj, 'length', data.length)
+        objectPath.set(innerObj, 'index', index)
+        objectPath.push(finalObj, `${mainParent}.${innerParent}`, innerObj)
+      })
+
+      res.json(finalObj)
+    }
+    else if (action === 'loadTransaction'){
+      res.json({ err: 'No value found in database'  })
+    }
+    else {
+      res.json({
+        mainParent: {
+          innerParent: [
+          {}
+          ]
+        }
+      })
+    }
+  })
+})
+
+app.get('/getHistIntervencionesAcidoNew', async (req, res) => {
+  let { transactionID, saved } = req.query
+
+  let action = saved ? 'loadSaveAcido' : 'loadTransactionAcido'
+  
+  const map = {
+    FECHA: { child: 'fecha' },
+    TIPO_DE_TRATAMIENTO: { child: 'tipoDeTratamiento' },
+    OBJETIVO: { child: 'objetivo' },
+    COMPANIA: { child: 'compania' },
+    BASE: { child: 'base' },
+    CIMA: { child: 'cima' },
+    LONGITUD_GRAVADA: { child: 'longitudGravada' },
+    ALTURA_GRAVADO: { child: 'alturaGravada' },
+    ANCHO_GRAVADO: { child: 'anchoGravado' },
+    CONDUCTIVIDAD: { child: 'conductividad' },
+    FCD: { child: 'fcd' },
+    PRESION_NETA: { child: 'presionNeta' },
+    FLUIDO_FRACTURA: { child: 'fluidoFractura' },    
+    BENEFICIO_PROGRAMADO: { child: 'beneficioProgramado' },
+    BENEFICIO_OFICIAL: { child: 'beneficioOficial' },    
+  }
+
+  const mainParent = 'historialDeIntervenciones'
+  const innerParent = 'historicoAcidoData'
+
+  getHistIntervencionesNew(transactionID, action, (data) => {
+    const finalObj = {}
+    if (data && data.length > 0) {
+      data.forEach((d, index) => {
+        d.DATE ? d.DATE = d.DATE.toJSON().slice(0, 10) : null
+        const innerObj = {}
+        Object.keys(d).forEach(k => {
+          if (map[k]) {
+            const { child } = map[k]
+            objectPath.set(innerObj, child, d[k])
+          }
+        })
+        objectPath.set(innerObj, 'length', data.length)
+        objectPath.set(innerObj, 'index', index)
+        objectPath.push(finalObj, `${mainParent}.${innerParent}`, innerObj)
+      })
+
+      res.json(finalObj)
+    }
+    else if (action === 'loadTransaction'){
+      res.json({ err: 'No value found in database'  })
+    }
+    else {
+      res.json({
+        mainParent: {
+          innerParent: [
+          {}
+          ]
+        }
+      })
+    }
+  })
+})
+
+app.get('/getHistIntervencionesApuntaladoNew', async (req, res) => {
+  let { transactionID, saved } = req.query
+
+  let action = saved ? 'loadSaveApuntalado' : 'loadTransactionApuntalado'
+  
+  const map = {
+    FECHA: { child: 'fecha' },
+    TIPO_DE_TRATAMIENTO: { child: 'tipoDeTratamiento' },
+    OBJETIVO: { child: 'objetivo' },
+    COMPANIA: { child: 'compania' },
+    BASE: { child: 'base' },
+    CIMA: { child: 'cima' },
+    LONGITUD_APUNTALADA: { child: 'longitudApuntalada' },
+    ALTURA_TOTAL_DE_FRACTURA: { child: 'aluturaTotalDeFractura' },
+    ANCHO_PROMEDIO: { child: 'anchoPromedio' },
+    CONCENTRACION_AREAL: { child: 'concentracionAreal' },
+    CONDUCTIVIDAD: { child: 'conductividad' },
+    FCD: { child: 'fcd' },
+    PRESION_NETA: { child: 'presionNeta' },
+    FLUIDO_FRACTURA: { child: 'fluidoFractura' },    
+    BENEFICIO_PROGRAMADO: { child: 'beneficioProgramado' },
+    BENEFICIO_OFICIAL: { child: 'beneficioOficial' },    
+  }
+
+  const mainParent = 'historialDeIntervenciones'
+  const innerParent = 'historicoApuntaladoData'
+
+  getHistIntervencionesNew(transactionID, action, (data) => {
+    const finalObj = {}
+    if (data && data.length > 0) {
+      data.forEach((d, index) => {
+        d.DATE ? d.DATE = d.DATE.toJSON().slice(0, 10) : null
+        const innerObj = {}
+        Object.keys(d).forEach(k => {
+          if (map[k]) {
+            const { child } = map[k]
+            objectPath.set(innerObj, child, d[k])
+          }
+        })
+        objectPath.set(innerObj, 'length', data.length)
+        objectPath.set(innerObj, 'index', index)
+        objectPath.push(finalObj, `${mainParent}.${innerParent}`, innerObj)
+      })
+
+      res.json(finalObj)
+    }
+    else if (action === 'loadTransaction'){
+      res.json({ err: 'No value found in database'  })
+    }
+    else {
+      res.json({
+        mainParent: {
+          innerParent: [
+          {}
+          ]
+        }
+      })
+    }
+  })
+})
+
 
 app.get('/getWell', async (req, res) => {
   let { transactionID, saved } = req.query

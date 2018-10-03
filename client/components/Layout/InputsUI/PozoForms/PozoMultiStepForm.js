@@ -18,7 +18,7 @@ import AnalisisDelAgua from './AnalisisDelAgua'
 import HistoricoDeIntervenciones from './HistoricoDeIntervenciones'
 import { InputRow, InputRowUnitless, InputRowSelectUnitless, InputDate } from '../../Common/InputRow'
 
-import { setFichaTecnicaDelCampo, setFichaTecnicaDelPozo, setEvaluacionPetrofisica, setMecanicoYAparejoDeProduccion, 
+import { setFichaTecnicaDelCampo, setHistorialDeIntervenciones, setFichaTecnicaDelPozo, setEvaluacionPetrofisica, setMecanicoYAparejoDeProduccion, 
   setAnalisisDelAgua, setSistemasArtificialesDeProduccion, setPresionDataCampo, setPresionDataPozo, setHistoricoProduccion, setHistoricoDeAforos, setChecked } from '../../../../redux/actions/pozo'
 import { setPage } from '../../../../redux/actions/global'
 
@@ -103,6 +103,52 @@ const forms = [
 
 
   }
+
+  async loadHistoricoDeIntervenciones() {
+    let { selectedTransaction } = this.state
+    let { fichaTecnicaDelPozoHighLevel, setHistorialDeIntervenciones, setLoading } = this.props
+    fichaTecnicaDelPozoHighLevel = fichaTecnicaDelPozoHighLevel.toJS()
+    let { campo, pozo } = fichaTecnicaDelPozoHighLevel
+    setLoading({ isLoading: true, loadText: 'Descargando' })
+    
+    this.setState({
+      isOpen: false
+    })
+
+    let dataEstimulacion = await fetch(`api/getHistIntervencionesEstimulacionNew?transactionID=${selectedTransaction}`).then(r => r.json())
+    let dataAcido = await fetch(`api/getHistIntervencionesAcidoNew?transactionID=${selectedTransaction}`).then(r => r.json())
+    let dataApuntalado = await fetch(`api/getHistIntervencionesApuntaladoNew?transactionID=${selectedTransaction}`).then(r => r.json())
+
+
+    if (dataEstimulacion && !dataEstimulacion.err && dataAcido && !dataAcido.err && dataApuntalado && !dataApuntalado.err) {
+      let newObj = dataEstimulacion.historialDeIntervenciones
+      newObj.historicoAcidoData = dataAcido.historialDeIntervenciones.historicoAcidoData
+      newObj.historicoApuntaladoData = dataApuntalado.historialDeIntervenciones.historicoApuntaladoData
+
+      setHistorialDeIntervenciones(newObj)
+      setLoading({ 
+        isLoading: false,
+        showNotification: true,
+        notificationType: 'success',
+        notificationText: `Se ha descargado informacion del pozo: ${pozo}`
+      })
+    }
+    else {
+      console.log('no data found')
+      setLoading({ 
+        isLoading: false,
+        showNotification: true,
+        notificationType: 'warning',
+        notificationText: `No se ha encontrado informacion del pozo: ${pozo}`
+      })
+    }
+    this.setState({
+      selectedTransaction: null
+    })
+
+
+  }
+
 
   async loadTecnicaDelPozo() {
     let { selectedTransaction } = this.state
@@ -585,8 +631,8 @@ const forms = [
   }
 
   handleLoad() {
-    let loadFunctions = [this.loadTecnicaDelCampo, this.loadTecnicaDelPozo, this.loadEvaluacionPetrofisica, this.loadMecanicoYAparejo, this.loadAnalisisDelAgua, this.loadSistemasArtificialesDeProduccion, this.loadHistoricoDePresionCampo, this.loadHistoricoDePresionPozo, this.loadHistoricoDeAforos, this.loadHistoricoDeProduccion]
-    let loadFunction =loadFunctions[this.state.currentStep]
+    let loadFunctions = [this.loadTecnicaDelCampo, this.loadHistoricoDeIntervenciones, this.loadTecnicaDelPozo, this.loadEvaluacionPetrofisica, this.loadMecanicoYAparejo, this.loadAnalisisDelAgua, this.loadSistemasArtificialesDeProduccion, this.loadHistoricoDePresionCampo, this.loadHistoricoDePresionPozo, this.loadHistoricoDeAforos, this.loadHistoricoDeProduccion]
+    let loadFunction = loadFunctions[this.state.currentStep]
 
     loadFunction()
   }
@@ -687,6 +733,7 @@ const forms = [
 const mapDispatchToProps = dispatch => ({
   setShowForms : values => { dispatch(setShowForms(values))},
   setFichaTecnicaDelCampo : values => { dispatch(setFichaTecnicaDelCampo(values))},
+  setHistorialDeIntervenciones: values => { dispatch(setHistorialDeIntervenciones(values))},
   setFichaTecnicaDelPozo : values => { dispatch(setFichaTecnicaDelPozo(values))},
   setEvaluacionPetrofisica : values => { dispatch(setEvaluacionPetrofisica(values))},
   setMecanicoYAparejoDeProduccion : values => { dispatch(setMecanicoYAparejoDeProduccion(values))},
@@ -696,6 +743,7 @@ const mapDispatchToProps = dispatch => ({
   setPresionDataCampo : values => {dispatch(setPresionDataCampo(values))},
   setHistoricoProduccion : values => {dispatch(setHistoricoProduccion(values))},
   setHistoricoDeAforos: values => {dispatch(setHistoricoDeAforos(values))},
+  setLoading: values => {dispatch(setIsLoading(values))}
 })
 
 const mapStateToProps = state => ({

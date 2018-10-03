@@ -169,6 +169,23 @@ import MaskedTextInput from "react-text-mask";
         column.Cell = this.renderSelect
       else if(column.cell)
         column.Cell = null
+
+      if (column.columns) {
+        column.columns.forEach(subColumn => {
+          if(subColumn.cell === 'renderEditable')
+            subColumn.Cell = this.renderEditable
+          else if(subColumn.cell === 'renderDate')
+            subColumn.Cell = this.renderDate
+          else if(subColumn.cell === 'renderNumber')
+            subColumn.Cell = this.renderNumber
+          else if(subColumn.cell === 'renderNumberDisable')
+            subColumn.Cell = this.renderNumberDisable
+          else if(subColumn.cell === 'renderSelect')
+            subColumn.Cell = this.renderSelect
+          else if(subColumn.cell)
+            subColumn.Cell = null
+        })
+      }
     })
 
     return (

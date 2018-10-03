@@ -55,7 +55,7 @@ export const setFichaTecnicaDelCampo = value => ({ type: 'set_fichaTecnicaDelCam
 export const setHistoricoEstimulacionData = value => ({ type: 'set_historicoEstimulacionData', value})
 export const setHistoricoAcidoData = value => ({ type: 'set_historicoAcidoData', value})
 export const setHistoricoApuntaladoData = value => ({ type: 'set_historicoApuntaladoData', value})
-
+export const setHistorialDeIntervenciones = value => ({ type: 'set_historialDeIntervenciones', value})
 
 //FichaTecnicaDelPozo
 export const setIntervaloProductor = value => ({ type: 'set_intervaloProductor', value})
