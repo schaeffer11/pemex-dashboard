@@ -339,7 +339,7 @@ let columnsApuntalado = [
     return (
       <div className='presion-table'>
         <div className='header'>
-          Historico de Fracturamientos Apuntalados realizados al pozo
+          HISTORICO DE FRACTURAMIENTOS APUNTALADOS REALIZADOS AL POZO
         </div>
         <div className='table'>
           <InputTable
@@ -436,7 +436,7 @@ let columnsApuntalado = [
     return (
       <div className='presion-table'>
         <div className='header'>
-          Historico de Fracturamientos Acidos realizados al pozo
+          HISTORICO DE FRACTURAMIENTOS ACIDOS REALIZADOS AL POZO
         </div>
         <div className='table'>
           <InputTable
@@ -530,7 +530,7 @@ let columnsApuntalado = [
     return (
       <div className='presion-table'>
         <div className='header'>
-          Historico de Tratamientos de Estimulacion
+          HISTORICO DE TRATAMIENTOS DE ESTIMULACION
         </div>
         <div className='table'>
           <InputTable
@@ -557,7 +557,7 @@ let columnsApuntalado = [
     console.log('render intervenciones')
 
     return (
-      <div>
+      <div className="form historicoDeIntervenciones">
         { this.makeEstimulacionTable() }
         { this.makeAcidoTable() }
         { this.makeApuntaladoTable() }

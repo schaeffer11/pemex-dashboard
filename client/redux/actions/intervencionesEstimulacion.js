@@ -1,3 +1,6 @@
+import { costMap } from '../../lib/maps'
+
+
 export const setObjetivo = value => ({ type: 'set_objetivo', value})
 export const setAlcances = value => ({ type: 'set_alcances', value})
 export const setTipoDeIntervenciones = value => ({ type: 'set_tipoDeIntervenciones', value})
@@ -27,7 +30,13 @@ export const setCedulaData = (cedula, volumes) => ({
 })
 
 export const setPruebasDeLaboratorioData = value => ({ type: 'set_pruebasDeLaboratorioData', value})
-export const setEstimacionCostosData = value => ({ type: 'set_estimacionCostos', value})
+export const setEstimacionCostosData = value => ({ 
+	type: 'set_estimacionCostos', 
+	value: value.map(i => {
+		i.unit = i.item.length > 0 ? costMap.find(j => j.item === i.item).unit : ''
+		return i
+	})
+})
 
 export const setLabEvidenceImgURL = value => ({ type: 'set_labEvidenceImgURL', value})
 

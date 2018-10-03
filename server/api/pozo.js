@@ -452,11 +452,11 @@ const INSERT_LAB_TEST_QUERY = {
 
 const INSERT_CEDULA_ESTIMULACION_QUERY = {
     save: `INSERT INTO _IntervencionesCedulaEstimulacionSave (
-        CEDULA_ID, INTERVENTION_ID, WELL_FORMACION_ID, ETAPA, INTERVALO, SISTEMA, NOMBRE_COMERCIAL,
+        CEDULA_ID, INTERVENTION_ID, WELL_FORMACION_ID, ETAPA, SISTEMA, NOMBRE_COMERCIAL,
         VOL_LIQUID, GASTO_N2, GASTO_LIQUIDO, GASTO_EN_FONDO, CALIDAD, VOL_N2, VOL_LIQUIDO_ACUM, 
         VOL_N2_ACUM, REL_N2_LIQ, TIEMPO, COMPANIA, TRANSACTION_ID) VALUES ?`,
     submit: `INSERT INTO IntervencionesCedulaEstimulacion (
-        CEDULA_ID, INTERVENTION_ID, WELL_FORMACION_ID, ETAPA, INTERVALO, SISTEMA, NOMBRE_COMERCIAL,
+        CEDULA_ID, INTERVENTION_ID, WELL_FORMACION_ID, ETAPA, SISTEMA, NOMBRE_COMERCIAL,
         VOL_LIQUID, GASTO_N2, GASTO_LIQUIDO, GASTO_EN_FONDO, CALIDAD, VOL_N2, VOL_LIQUIDO_ACUM, 
         VOL_N2_ACUM, REL_N2_LIQ, TIEMPO, COMPANIA, TRANSACTION_ID) VALUES ?`,
     loadSave: `SELECT * FROM _IntervencionesCedulaEstimulacionSave WHERE TRANSACTION_ID = ?`,
@@ -465,11 +465,11 @@ const INSERT_CEDULA_ESTIMULACION_QUERY = {
 
 const INSERT_CEDULA_ACIDO_QUERY = {
     save: `INSERT INTO _IntervencionesCedulaAcidoSave (
-        CEDULA_ID, INTERVENTION_ID, WELL_FORMACION_ID, ETAPA, INTERVALO, SISTEMA, NOMBRE_COMERCIAL, TIPO_DE_APUNTALANTE, CONCENTRACION_DE_APUNTALANTE, 
+        CEDULA_ID, INTERVENTION_ID, WELL_FORMACION_ID, ETAPA, SISTEMA, NOMBRE_COMERCIAL, TIPO_DE_APUNTALANTE, CONCENTRACION_DE_APUNTALANTE, 
         VOL_LIQUID, GASTO_N2, GASTO_LIQUIDO, GASTO_EN_FONDO, CALIDAD, VOL_N2, VOL_LIQUIDO_ACUM, 
         VOL_N2_ACUM, REL_N2_LIQ, TIEMPO, COMPANIA, TRANSACTION_ID) VALUES ?`,
     submit: `INSERT INTO IntervencionesCedulaAcido (
-        CEDULA_ID, INTERVENTION_ID, WELL_FORMACION_ID, ETAPA, INTERVALO, SISTEMA, NOMBRE_COMERCIAL, TIPO_DE_APUNTALANTE, CONCENTRACION_DE_APUNTALANTE, 
+        CEDULA_ID, INTERVENTION_ID, WELL_FORMACION_ID, ETAPA, SISTEMA, NOMBRE_COMERCIAL, TIPO_DE_APUNTALANTE, CONCENTRACION_DE_APUNTALANTE, 
         VOL_LIQUID, GASTO_N2, GASTO_LIQUIDO, GASTO_EN_FONDO, CALIDAD, VOL_N2, VOL_LIQUIDO_ACUM, 
         VOL_N2_ACUM, REL_N2_LIQ, TIEMPO, COMPANIA, TRANSACTION_ID) VALUES ?`,
     loadSave: `SELECT * FROM _IntervencionesCedulaAcidoSave WHERE TRANSACTION_ID = ?`,
@@ -478,11 +478,11 @@ const INSERT_CEDULA_ACIDO_QUERY = {
 
 const INSERT_CEDULA_APUNTALADO_QUERY = {
     save: `INSERT INTO _IntervencionesCedulaApuntaladoSave (
-        CEDULA_ID, INTERVENTION_ID, WELL_FORMACION_ID, ETAPA, INTERVALO, SISTEMA, NOMBRE_COMERCIAL, TIPO_DE_APUNTALANTE, CONCENTRACION_DE_APUNTALANTE, 
+        CEDULA_ID, INTERVENTION_ID, WELL_FORMACION_ID, ETAPA, SISTEMA, NOMBRE_COMERCIAL, TIPO_DE_APUNTALANTE, CONCENTRACION_DE_APUNTALANTE, 
         VOL_LIQUID, GASTO_N2, GASTO_LIQUIDO, GASTO_EN_FONDO, CALIDAD, VOL_N2, VOL_LIQUIDO_ACUM, 
         VOL_N2_ACUM, REL_N2_LIQ, TIEMPO, COMPANIA, TRANSACTION_ID) VALUES ?`   ,
     submit: `INSERT INTO IntervencionesCedulaApuntalado (
-        CEDULA_ID, INTERVENTION_ID, WELL_FORMACION_ID, ETAPA, INTERVALO, SISTEMA, NOMBRE_COMERCIAL, TIPO_DE_APUNTALANTE, CONCENTRACION_DE_APUNTALANTE, 
+        CEDULA_ID, INTERVENTION_ID, WELL_FORMACION_ID, ETAPA, SISTEMA, NOMBRE_COMERCIAL, TIPO_DE_APUNTALANTE, CONCENTRACION_DE_APUNTALANTE, 
         VOL_LIQUID, GASTO_N2, GASTO_LIQUIDO, GASTO_EN_FONDO, CALIDAD, VOL_N2, VOL_LIQUIDO_ACUM, 
         VOL_N2_ACUM, REL_N2_LIQ, TIEMPO, COMPANIA, TRANSACTION_ID) VALUES ?`        ,
     loadSave: `SELECT * FROM _IntervencionesCedulaApuntaladoSave WHERE TRANSACTION_ID = ?`,
@@ -492,9 +492,9 @@ const INSERT_CEDULA_APUNTALADO_QUERY = {
 
 const INSERT_COSTS_QUERY = {
     save: `INSERT INTO _IntervencionesEstimatedCostsSave (
-        COST_ID, INTERVENTION_ID, ITEM, COMPANY, COST_MNX, COST_DLS, MNXtoDLS, TRANSACTION_ID) VALUES ?`,
+        COST_ID, INTERVENTION_ID, ITEM, UNIT, COMPANY, COST_MNX, COST_DLS, MNXtoDLS, TRANSACTION_ID) VALUES ?`,
     submit: `INSERT INTO IntervencionesEstimatedCosts (
-        COST_ID, INTERVENTION_ID, ITEM, COMPANY, COST_MNX, COST_DLS, MNXtoDLS, TRANSACTION_ID) VALUES ?`,
+        COST_ID, INTERVENTION_ID, ITEM, UNIT, COMPANY, COST_MNX, COST_DLS, MNXtoDLS, TRANSACTION_ID) VALUES ?`,
     loadSave: `SELECT * FROM _IntervencionesEstimatedCostsSave WHERE TRANSACTION_ID = ?`,
     loadTransaction: `SELECT * FROM IntervencionesEstimatedCosts WHERE TRANSACTION_ID = ?`    
 }
@@ -1332,7 +1332,7 @@ export const create = async (body, action, cb) => {
                                       if (cedulaData) {
                                         cedulaData.forEach(i => {
                                           let cedulaID = Math.floor(Math.random() * 1000000000)
-                                          values.push([cedulaID, interventionID, wellFormacionID, i.etapa, i.intervalo, i.sistema, i.nombreComercial, i.volLiquid, i.gastoN2, i.gastoLiqudo, i.gastoEnFondo, i.calidad, i.volN2, i.volLiquidoAcum, i.volN2Acum, i.relN2Liq, i.tiempo, propuestaCompany, transactionID])
+                                          values.push([cedulaID, interventionID, wellFormacionID, i.etapa, i.sistema, i.nombreComercial, i.volLiquid, i.gastoN2, i.gastoLiqudo, i.gastoEnFondo, i.calidad, i.volN2, i.volLiquidoAcum, i.volN2Acum, i.relN2Liq, i.tiempo, propuestaCompany, transactionID])
                                         })  
                                       }
                                       else {
@@ -1345,7 +1345,7 @@ export const create = async (body, action, cb) => {
                                       if (cedulaData) {
                                         cedulaData.forEach(i => {
                                           let cedulaID = Math.floor(Math.random() * 1000000000)
-                                          values.push([cedulaID, interventionID, wellFormacionID, i.etapa, i.intervalo, i.sistema, i.nombreComercial, i.tipoDeApuntalante, i.concentraciDeApuntalante, i.volLiquid, i.gastoN2, i.gastoLiqudo, i.gastoEnFondo, i.calidad, i.volN2, i.volLiquidoAcum, i.volN2Acum, i.relN2Liq, i.tiempo, propuestaCompany, transactionID])
+                                          values.push([cedulaID, interventionID, wellFormacionID, i.etapa, i.sistema, i.nombreComercial, i.tipoDeApuntalante, i.concentraciDeApuntalante, i.volLiquid, i.gastoN2, i.gastoLiqudo, i.gastoEnFondo, i.calidad, i.volN2, i.volLiquidoAcum, i.volN2Acum, i.relN2Liq, i.tiempo, propuestaCompany, transactionID])
                                         })   
                                       }
                                       else {
@@ -1370,7 +1370,7 @@ export const create = async (body, action, cb) => {
                                           values = []
                                           estimacionCostosData.forEach(i => {
                                             let costID = Math.floor(Math.random() * 1000000000)
-                                            values.push([costID, interventionID, i.item, propuestaCompany, i.cost, i.costDLS, i.MNXtoDLS, transactionID])
+                                            values.push([costID, interventionID, i.item, i.unit, propuestaCompany, i.cost, i.costDLS, i.MNXtoDLS, transactionID])
                                           })
 
                                           connection.query((action === 'save' ? INSERT_COSTS_QUERY.save : INSERT_COSTS_QUERY.submit), [values], (err, results) => {

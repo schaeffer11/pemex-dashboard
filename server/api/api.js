@@ -1463,7 +1463,6 @@ router.get('/getCedulaEstimulacion', async (req, res) => {
 
   const map = {
     ETAPA: { child: 'etapa' }, 
-    INTERVALO: { child: 'intervalo'},
     SISTEMA: { child: 'sistema' }, 
     NOMBRE_COMERCIAL: { child: 'nombreComercial'},
     TIPO_DE_APUNTALANTE: { child: 'tipoDeApuntalante' }, 
@@ -1523,7 +1522,6 @@ router.get('/getCedulaAcido', async (req, res) => {
 
   const map = {
     ETAPA: { child: 'etapa' }, 
-    INTERVALO: { child: 'intervalo' },
     SISTEMA: { child: 'sistema' }, 
     NOMBRE_COMERCIAL: { child: 'nombreComercial' },
     TIPO_DE_APUNTALANTE: { child: 'tipoDeApuntalante' }, 
@@ -1583,7 +1581,6 @@ router.get('/getCedulaApuntalado', async (req, res) => {
 
   const map = {
     ETAPA: { child: 'etapa' }, 
-    INTERVALO: { child: 'intervalo' },
     SISTEMA: { child: 'sistema' }, 
     NOMBRE_COMERCIAL: { child: 'nombreComercial' },
     TIPO_DE_APUNTALANTE: { child: 'tipoDeApuntalante' }, 
@@ -1644,6 +1641,7 @@ router.get('/getCosts', async (req, res) => {
 
   const map = {
     ITEM: { child: 'item' }, 
+    UNIT: { child: 'unit' },
     COST_MNX: { child: 'cost' }, 
     COST_DLS: { child: 'costDLS' },
     MNXtoDLS: { child: 'MNXtoDLS'}
