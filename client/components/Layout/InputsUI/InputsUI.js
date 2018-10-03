@@ -227,7 +227,7 @@ import '../../../styles/components/_query_modal.css'
         </div>
         <div className="modal-body">
           <textarea style={{}} value={comment} onChange={this.handleCommentInput}> </textarea><br/>
-          <button className="submit save-button"  onClick={(e) => this.handleSubmitBug() }>{'Enviar'}</button>
+          <button disabled={bugResponseSuccess} className="submit save-button"  onClick={(e) => this.handleSubmitBug() }>{'Enviar'}</button>
           {bugResponseError && <div style={{color: 'red', fontWeight: 500}}>Comentarios son limitados a 1000 caracteres</div>}
           {bugResponseSuccess && <div style={{color: 'green', fontWeight: 500}}>Gracias por su realimentación</div>}
         </div> 
