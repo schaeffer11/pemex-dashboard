@@ -76,7 +76,7 @@ import '../../../styles/components/_query_modal.css'
 
   }
 
-  handleSubmit(action) {errors
+  handleSubmit(action) {
     let { saveName } = this.state
 
     console.log('herehre', saveName)
