@@ -4,6 +4,7 @@ import path from 'path'
 import session from 'express-session'
 import config from '../app-config'
 import bodyParser from 'body-parser'
+import helmet from 'helmet'
 import { autoRefreshSession } from './auth/session-store'
 import { sslRedirect } from './middleware'
 import logger from './logger'
@@ -20,6 +21,8 @@ const PORT = process.env.PORT || config.ports.http
 // INITIALIZE APP SERVER
 console.log(`initializing ${pkg.description} server in ${env} mode...`)
 var app = express()
+app.use(helmet())
+
 
 // Redirect to secure
 app.enable('trust proxy')
