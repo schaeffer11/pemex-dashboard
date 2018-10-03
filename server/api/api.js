@@ -512,7 +512,7 @@ router.get('/getWell', async (req, res) => {
     const finalObj = {}
     
     if (data && data.length > 0) {
-      data[0].PVT ? data[0].PVT = parseInt(PVT) : null
+      data[0].PVT ? data[0].PVT = parseInt(data[0].PVT) : null
       data[0].PWS_FECHA ? data[0].PWS_FECHA = data[0].PWS_FECHA.toJSON().slice(0, 10) : null
       data[0].PWF_FECHA ? data[0].PWF_FECHA = data[0].PWF_FECHA.toJSON().slice(0, 10) : null
       Object.keys(data[0]).forEach(key => {
