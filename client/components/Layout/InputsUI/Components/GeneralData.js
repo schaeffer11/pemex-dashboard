@@ -375,14 +375,19 @@ import { sortLabels } from '../../../../lib/formatters'
     let { setShowForms } = this.props
 
     return (
-      <div className='form general-data'>
-        { this.makeGeneralForm() }
-        { this.makeGeneralInterventionForm() }
-        <button className="submit submit-load" onClick={this.activateModal}> Descargar borrador</button>
-        <button className='submit submit-continue' disabled={this.checkIncomplete()} onClick={(e) => setShowForms(true)} >Siguiente</button>
-        <Notification />
-        <Loading />
-        { isOpen ? this.buildModal() : null }
+      <div className='general-data-outer'>
+        <div className='image'>
+          <img src={'/images/homepageBannerThin2.jpg'} style={{width: '100%', borderRadius: '20px'}}></img> 
+        </div>
+        <div className='form general-data'>
+          { this.makeGeneralForm() }
+          { this.makeGeneralInterventionForm() }
+          <button className="submit submit-load" onClick={this.activateModal}> Descargar borrador</button>
+          <button className='submit submit-continue' disabled={this.checkIncomplete()} onClick={(e) => setShowForms(true)} >Siguiente</button>
+          <Notification />
+          <Loading />
+          { isOpen ? this.buildModal() : null }
+        </div>
       </div>
     )
   }
