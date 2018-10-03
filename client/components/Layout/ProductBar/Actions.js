@@ -9,9 +9,11 @@ const ProductbarActions = ({ user, logoutAction }) => {
 
   function logOut() {
     API.logout().then((data) => {
+      console.log('i logged out')
       logoutAction()
     }).catch((err) => {
-      logoutAction()
+      console.log('.... i logged out too')
+      // logoutAction()
     })
   }
 
