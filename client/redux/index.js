@@ -75,6 +75,9 @@ const rootReducer = (state, action) => {
     if (action.type === 'RESET_APP') {
       return state = Map({ user, app })
     }
+    if (action.type === 'LOGOUT') {
+      state = undefined
+    }
   }
   return appReducer(state, action)
 }
