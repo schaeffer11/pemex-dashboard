@@ -51,6 +51,11 @@ export const setCo2Field = value => ({ type: 'set_co2Field', value})
 export const setN2Field = value => ({ type: 'set_n2Field', value})
 export const setFichaTecnicaDelCampo = value => ({ type: 'set_fichaTecnicaDelCampo', value})
 
+//HistorialDeIntervenciones
+export const setHistoricoEstimulacionData = value => ({ type: 'set_historicoEstimulacionData', value})
+export const setHistoricoAcidoData = value => ({ type: 'set_historicoAcidoData', value})
+export const setHistoricoApuntaladoData = value => ({ type: 'set_historicoApuntaladoData', value})
+export const setHistorialDeIntervenciones = value => ({ type: 'set_historialDeIntervenciones', value})
 
 //FichaTecnicaDelPozo
 export const setIntervaloProductor = value => ({ type: 'set_intervaloProductor', value})
@@ -139,7 +144,7 @@ export const setLayerData = value => ({
     elem.interval = i + 1
     elem.baseMD = parseFloat(elem.baseMD)
     elem.cimaMD = parseFloat(elem.cimaMD)
-    elem.espesorBruto = Math.round((elem.baseMD - elem.cimaMD) * 100) / 100
+    elem.espesorBruto = !isNaN(elem.baseMD) && !isNaN(elem.cimaMD) ? ( Math.round((elem.baseMD - elem.cimaMD) * 100) / 100 ): ''
     return elem
   })
 })

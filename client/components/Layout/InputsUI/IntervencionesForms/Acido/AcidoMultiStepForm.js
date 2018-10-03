@@ -1,16 +1,15 @@
 import React, { Component } from 'react'
 import { connect } from 'react-redux'
 import autobind from 'autobind-decorator'
-import axios from 'axios'
 
+
+import { setIsLoading, setShowForms } from '../../../../../redux/actions/global'
 import EstimacionCostos from '../EstimacionCostos'
 import EstimacionIncProduccionAcido from './EstimacionIncProduccionAcido'
 import PropuestaDeAcido from './PropuestaDeAcido'
 import PruebasDeLaboratorio from '../PruebasDeLaboratorio'
 import PruebasDeLaboratorioExtra from '../PruebasDeLaboratorioExtra'
 import ResultadosDeLaSimulacionAcido from './ResultadosDeLaSimulacionAcido'
-import { setChecked } from '../../../../../redux/actions/intervencionesEstimulacion'
-import { setShowForms } from '../../../../../redux/actions/global'
 
 @autobind class AcidoMultiStepForm extends Component {
 
@@ -19,23 +18,6 @@ import { setShowForms } from '../../../../../redux/actions/global'
     this.state = {
       currentStep: 0
     }
-
-    this.propuestaDeAcido = React.createRef();
-    this.pruebasDeLaboratorio = React.createRef();
-    this.pruebasDeLaboratorioExtra = React.createRef();
-    this.resultadosDeLaSimulacionAcido = React.createRef();
-    this.estimacionIncProduccionAcido = React.createRef();
-    this.estimacionCostos = React.createRef();
-
-    this.forms = [
-      {'title' : 'Propuesta de Fracturamiento Ácido', 'content': <PropuestaDeAcido ref={Ref =>this.propuestaDeAcido =Ref } /> },  
-      {'title' : 'Pruebas de Laboratorio', 'content': <PruebasDeLaboratorio ref={Ref =>this.pruebasDeLaboratorio =Ref }/> },
-      {'title' : 'Pruebas de Laboratorio de Fracturamiento Ácido', 'content': <PruebasDeLaboratorioExtra ref={Ref =>this.pruebasDeLaboratorioExtra =Ref }/> },
-      {'title' : 'Resultados de la Simulación de Fracturamiento Ácido', 'content': <ResultadosDeLaSimulacionAcido ref={Ref =>this.resultadosDeLaSimulacionAcido =Ref }/> },
-      {'title' : 'Estimación del Incremento de Producción', 'content': <EstimacionIncProduccionAcido ref={Ref =>this.estimacionIncProduccionAcido =Ref }/> },
-      {'title' : 'Estimación de Costos de Fracturamiento Acido', 'content': <EstimacionCostos ref={Ref =>this.estimacionCostos =Ref }/> }
-    ];
-
   }
 
   handleClick(i){
@@ -60,42 +42,27 @@ import { setShowForms } from '../../../../../redux/actions/global'
     }
   }
 
-  validate(){
-    let { setChecked } = this.props
-
-    const forms = [
-      this.propuestaDeAcido,
-      this.pruebasDeLaboratorio,
-//      this.pruebasDeLaboratorioEstimulacionExtra,
-        this.resultadosDeLaSimulacionAcido,
-        this.estimacionIncProduccionAcido,
-//      this.estimacionCostos
-    ];
-
-    let allErrors = {}
-    let allChecked = []
-    forms.forEach((form) => {
-
-      let {errors, checked} = form.selector.props.forceValidation()
-      allErrors = Object.assign({}, allErrors, errors);
-    });
-
-
-    return allErrors.length == 0;
-
-  }
 
   render() {
-        let { setShowForms } = this.props
+    let { setShowForms } = this.props
      let className = 'subtab'
-     let title = this.forms[this.state.currentStep].title
-     let acidoFormSubmitting = this.props.forms.get('acidoFormSubmitting')
-     let submitting = acidoFormSubmitting ? 'submitting' : ''
+
+     const forms = [
+      {'title' : 'Propuesta de Fracturamiento Ácido', 'content': <PropuestaDeAcido /> },  
+      {'title' : 'Pruebas de Laboratorio', 'content': <PruebasDeLaboratorio /> },
+      {'title' : 'Pruebas de Laboratorio de Fracturamiento Ácido', 'content': <PruebasDeLaboratorioExtra /> },
+      {'title' : 'Resultados de la Simulación de Fracturamiento Ácido', 'content': <ResultadosDeLaSimulacionAcido /> },
+      {'title' : 'Estimación del Incremento de Producción', 'content': <EstimacionIncProduccionAcido /> },
+      {'title' : 'Estimación de Costos de Fracturamiento Acido', 'content': <EstimacionCostos /> }
+    ]
+
+     let title = forms[this.state.currentStep].title
+
 
      return (
-         <div className={`multistep-form ${submitting}`}>
+         <div className={`multistep-form`}>
           <div className="subtabs">
-              {this.forms.map( (tab, index) => {
+              {forms.map( (tab, index) => {
                  let active = this.state.currentStep === index ? 'active' : ''; 
                    return <div className={`${className} ${active}`} onClick={() => this.handleClick(index)} key={index}><span></span> {tab.title} </div>
                  }
@@ -109,13 +76,7 @@ import { setShowForms } from '../../../../../redux/actions/global'
               <button className="cta prev" onClick={this.handlePrevSubtab}>Anterior</button> 
             </div>
 
-            {this.forms[this.state.currentStep].content}
-          </div>
-          <div style={{display: 'none'}}>
-            {this.forms.map((form, index) => {
-               if(index != this.state.currentStep)
-                 return this.forms[index].content}
-            )}
+            {forms[this.state.currentStep].content}
           </div>
          </div>
      );
@@ -124,20 +85,12 @@ import { setShowForms } from '../../../../../redux/actions/global'
 
 
 const mapDispatchToProps = dispatch => ({
-    setShowForms : values => { dispatch(setShowForms(values))},
-    setChecked: val => dispatch(setChecked(val))
+  setShowForms : values => { dispatch(setShowForms(values))},
 })
 
 const mapStateToProps = state => ({
   forms: state.get('forms'),
-  objetivoYAlcancesIntervencion: state.get('objetivoYAlcancesIntervencion'),
-  pruebasDeLaboratorio: state.get('pruebasDeLaboratorio'),
-  propuestaAcido: state.get('propuestaAcido'),
-  pruebasDeLaboratorioAcido: state.get('pruebasDeLaboratorioAcido'),
-  resultadosSimulacionAcido: state.get('resultadosSimulacionAcido'),
-  estIncProduccionAcido: state.get('estIncProduccionAcido'),
-  estCostAcido: state.get('estCostAcido'),
 })
 
 
-export default connect(mapStateToProps, mapDispatchToProps, null, { withRef: true })(AcidoMultiStepForm);
+export default connect(mapStateToProps, mapDispatchToProps)(AcidoMultiStepForm);

@@ -3,6 +3,7 @@ import autobind from 'autobind-decorator'
 import { connect } from 'react-redux'
 import { InputRow, InputRowUnitless, InputRowSelectUnitless, InputDate } from '../../Common/InputRow'
 import {withValidate} from '../../Common/Validate'
+import ExcelUpload from '../../Common/ExcelUpload'
 import { setAforosData, setChecked } from '../../../../redux/actions/pozo'
 import InputTable from '../../Common/InputTable'
 import ReactTable from 'react-table'
@@ -160,52 +161,17 @@ let columns = [
   }
 
   componentDidMount(){
-    this.validate()
-    this.containsErrors()
-    this.props.containsErrors(this, this.state.containsErrors)
+
   }
 
   componentDidUpdate(){
-    this.containsErrors()
-    this.props.containsErrors(this, this.state.containsErrors)
+
   }
-
-  containsErrors(){
-    let foundErrors = false
-    for (const key of Object.keys(this.state.errors)) {
-      if(this.state.errors[key].checked)
-        foundErrors = true
-    }
-
-    if(foundErrors !== this.state.containsErrors){
-      this.setState({
-        containsErrors: foundErrors
-      })
-    }
-  }
-
-  validate(event){
-    let {setChecked, formData} = this.props
-    formData = formData.toJS()
-
-    let field = event ? event.target.name : null
-    let {errors, checked} = this.props.validate(field, formData)
-
-    this.setState({
-      errors: errors,
-    })
-
-    if(event && event.target.name){
-      setChecked(checked)
-    }
-  }
-
 
   makeAforosGraph() {
     let { formData } = this.props
     formData = formData.toJS()
     let { aforosData } = formData
-
     let qoData = []
     let qwData = []
     let qgData = []
@@ -213,17 +179,16 @@ let columns = [
     aforosData.forEach(i => {
       if (i.fecha) {
         let date = new Date(i.fecha)
+        console.log('da date', typeof i.qo, i.qo, parseFloat(i.qo))
         date = Date.UTC(date.getFullYear(), date.getMonth(), date.getDate())
-        i.qo.length > 0 ? qoData.push([date, parseFloat(i.qo)]) : null
-        i.qw.length > 0 ? qwData.push([date, parseFloat(i.qw)]) : null
-        i.qg.length > 0 ? qgData.push([date, parseFloat(i.qg)]) : null
+        i.qo.length > 0 || typeof i.qo === 'number' ? qoData.push([date, parseFloat(i.qo)]) : null
+        i.qw.length > 0 || typeof i.qw === 'number' ? qwData.push([date, parseFloat(i.qw)]) : null
+        i.qg.length > 0 || typeof i.qg === 'number' ? qgData.push([date, parseFloat(i.qg)]) : null
       }
     })
-
     config.series[0].data = qoData
     config.series[1].data = qgData
     config.series[2].data = qwData
-
     return (        
       <div className="graph">
             <ReactHighCharts className="chart" ref={(ref) => this.chart = ref} config= {config} />
@@ -231,8 +196,6 @@ let columns = [
       )
 
   }
-
-
 
 
   renderEditable(cellInfo) {
@@ -292,6 +255,8 @@ let columns = [
 
     const objectTemplate = {fecha: null, tiempo: '', estrangulador: '', ptp: '', ttp: '', pbaj: '',tbaj: '',psep: '',tsep: '', ql: '',qo: '', qg: '', qw: '', rga: '', salinidad: '', ph: ''}
 
+    console.log('render aforos')
+
     return (
       <div className='historico-produccion' >
         <div className='table'>
@@ -308,9 +273,7 @@ let columns = [
             getTdProps={this.deleteRow}
           />
         </div>
-        { this.state.errors.aforosData && this.state.errors.aforosData.checked &&
-          <div className="error">{this.state.errors.aforosData.message}</div>
-        }
+
         <button className='new-row-button' onClick={this.addNewRow}>Añadir un renglón</button>
       </div>
     )
@@ -319,6 +282,28 @@ let columns = [
   render() {
     return (
       <div className="form historico-de-produccion">
+        <ExcelUpload
+          template="HistoricoAforo"
+          headers={[
+            { name: 'fecha', type: 'date' },
+            { name: 'tiempo', type: 'number' },
+            { name: 'estrangulador', type: 'number' },
+            { name: 'ptp', type: 'number' },
+            { name: 'ttp', type: 'number' },
+            { name: 'pbaj', type: 'number' },
+            { name: 'tbaj', type: 'number' },
+            { name: 'psep', type: 'number' },
+            { name: 'tsep', type: 'number' },
+            { name: 'qo', type: 'number' },
+            { name: 'qw', type: 'number' },
+            { name: 'qg', type: 'number' },
+            { name: 'ql', type: 'number' },
+            { name: 'rga', type: 'number' },
+            { name: 'salinidad', type: 'number' },
+            { name: 'ph', type: 'number' },
+          ]}
+          setData={this.props.setAforosData}
+          />
         { this.makeHistoricoDeAforosInput() }
         { this.makeAforosGraph() }
       </div>
@@ -326,34 +311,14 @@ let columns = [
   }
 }
 
-const validate = values => {
-    const errors = {}
-
-    if(!values.aforosData){
-      errors.aforosData = {message: "Esta forma no puede estar vacia"}
-    }else {
-      values.aforosData.forEach((row, index) => {
-        let hasEmpty = Object.values(row).find((value) => { return value === null || value.toString().trim() == '' })
-        if(hasEmpty !== undefined){
-            errors.aforosData = {message: "Ningun campo puede estar vacio."}
-        }
-      })
-    }
-
-    return errors
-}
 
 const mapStateToProps = state => ({
-  forms: state.get('forms'),
   formData: state.get('historicoDeAforos'),
 })
 
 const mapDispatchToProps = dispatch => ({
     setAforosData: val => dispatch(setAforosData(val)),
-    setChecked: val => dispatch(setChecked(val))    
+    setChecked: val => dispatch(setChecked(val, 'historicoDeAforos'))
 })
 
-export default withValidate(
-  validate,
-  connect(mapStateToProps, mapDispatchToProps)(HistoricoDeAforos)
-)
+export default connect(mapStateToProps, mapDispatchToProps)(HistoricoDeAforos)

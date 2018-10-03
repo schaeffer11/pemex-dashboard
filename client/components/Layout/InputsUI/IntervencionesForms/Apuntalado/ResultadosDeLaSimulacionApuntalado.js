@@ -1,69 +1,22 @@
 import React, { Component } from 'react'
 import autobind from 'autobind-decorator'
-import {withValidate} from '../../../Common/Validate'
+import { connect } from 'react-redux'
+
 import { InputRow, InputRowUnitless, InputRowSelectUnitless, TextAreaUnitless } from '../../../Common/InputRow'
 import { setEvidenceSimulationApuntaladoImgURL, setLongitudApuntalada, setAlturaTotalDeFractura, setAnchoPromedio, setConcentractionAreal, setConductividad, setFcd, setPresionNeta, setEficienciaDeFluidoDeFractura, setChecked } from '../../../../../redux/actions/intervencionesApuntalado'
-import { connect } from 'react-redux'
 
 @autobind class ResultadosDeLaSimulacionApuntalado extends Component {
   constructor(props) {
     super(props)
     this.state = { 
-      containsErrors: false,
-      errors: [],
-      checked: []
+
     }
   }
 
   componentDidMount() {
-    this.validate()
-    this.containsErrors()
   }
 
   componentDidUpdate(prevProps) {
-    this.containsErrors()
-  }
-
-  containsErrors(){
-    let foundErrors = false
-    let errors = Object.assign({}, this.state.errors);
-    let {formData} = this.props
-    formData = formData.toJS()
-
-    const checked = formData.checked  || []
-    checked.forEach((checked) => {
-        if(errors[checked]){
-           errors[checked].checked = true
-           foundErrors = true
-        }
-    })
-
-    if(foundErrors !== this.state.containsErrors){
-      this.setState({
-        errors: errors,
-        containsErrors: foundErrors
-      })
-    }
-  }
-
-  validate(event){
-    let {setChecked, formData} = this.props
-    formData = formData.toJS()
-
-    let field = event ? event.target.name : null
-    let {errors, checked} = this.props.validate(field, formData)
-
-    this.setState({
-      errors: errors,
-    })
-
-    if(event && event.target.name){
-      setChecked( checked)
-
-      this.setState({
-        checked: checked
-      })
-    }
   }
 
   makeResultForm() {
@@ -107,15 +60,10 @@ import { connect } from 'react-redux'
           Cargar evidencia de simulacion
         </div>
         <input type='file' accept="image/*"  onChange={(e) => this.handleFileUpload(e, setEvidenceSimulationApuntaladoImgURL)} multiple></input>
-          { this.state.errors.evidenceSimulationApuntaladoImgURL && this.state.errors.evidenceSimulationApuntaladoImgURL.checked &&
-          <div className="error">{this.state.errors.evidenceSimulationApuntaladoImgURL.message}</div>
-          }
         {imgURL ? <img className='img-preview' src={imgURL}></img> : null }
       </div>
     )
   }
-
-  
 
   render() {
 
@@ -133,48 +81,6 @@ import { connect } from 'react-redux'
   }
 }
 
-const validate = values => {
-    const errors = {}
-
-    if(!values.longitudApuntalada){
-      errors.longitudApuntalada = {message: "Este campo no puede estar vacio"}
-    }
-
-    if(!values.alturaTotalDeFractura){
-      errors.alturaTotalDeFractura = {message: "Este campo no puede estar vacio"}
-    }
-
-    if(!values.anchoPromedio){
-      errors.anchoPromedio = {message: "Este campo no puede estar vacio"}
-    }
-
-    if(!values.concentractionAreal){
-      errors.concentractionAreal = {message: "Este campo no puede estar vacio"}
-    }
-
-    if(!values.conductividad){
-      errors.conductividad = {message: "Este campo no puede estar vacio"}
-    }
-
-    if(!values.fcd){
-      errors.fcd = {message: "Este campo no puede estar vacio"}
-    }
-
-    if(!values.presionNeta){
-      errors.presionNeta = {message: "Este campo no puede estar vacio"}
-    }
-
-    if(!values.eficienciaDeFluidoDeFractura){
-      errors.eficienciaDeFluidoDeFractura = {message: "Este campo no puede estar vacio"}
-    }
-
-    if(!values.evidenceSimulationApuntaladoImgURL){
-        errors.evidenceSimulationApuntaladoImgURL = {message: "Este campo no puede estar vacio"}
-    }
-
-    return errors
-}
-
 const mapStateToProps = state => ({
   formData: state.get('resultadosSimulacionApuntalado'),
 })
@@ -189,10 +95,7 @@ const mapDispatchToProps = dispatch => ({
   setPresionNeta: val => dispatch(setPresionNeta(val)),
   setEficienciaDeFluidoDeFractura: val => dispatch(setEficienciaDeFluidoDeFractura(val)),
   setEvidenceSimulationApuntaladoImgURL: val => dispatch(setEvidenceSimulationApuntaladoImgURL(val)),
-  setChecked: val => dispatch(setChecked(val, 'resultadosSimulacionApuntalado'))
+
 })
 
-export default withValidate(
-  validate,
-  connect(mapStateToProps, mapDispatchToProps, null, { withRef: true })(ResultadosDeLaSimulacionApuntalado)
-)
+export default connect(mapStateToProps, mapDispatchToProps)(ResultadosDeLaSimulacionApuntalado)

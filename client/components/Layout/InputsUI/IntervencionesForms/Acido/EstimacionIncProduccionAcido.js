@@ -9,61 +9,15 @@ import { connect } from 'react-redux'
   constructor(props) {
     super(props)
     this.state = { 
-      containsErrors: false,
-      errors: [],
-      checked: []
     }
   }
 
   componentDidMount() {
-    this.validate()
-    this.containsErrors()
+
   }
 
   componentDidUpdate(prevProps) {
-    this.containsErrors()
-  }
 
-  containsErrors(){
-    let foundErrors = false
-    let errors = Object.assign({}, this.state.errors);
-      let {formData} = this.props
-      formData = formData.toJS()
-
-      const checked = formData.checked  || []
-    checked.forEach((checked) => {
-        if(errors[checked]){
-           errors[checked].checked = true
-           foundErrors = true
-        }
-    })
-
-    if(foundErrors !== this.state.containsErrors){
-      this.setState({
-        errors: errors,
-        containsErrors: foundErrors
-      })
-    }
-  }
-
-  validate(event){
-    let {setChecked, formData} = this.props
-    formData = formData.toJS()
-
-    let field = event ? event.target.name : null
-    let {errors, checked} = this.props.validate(field, formData)
-
-    this.setState({
-      errors: errors,
-    })
-
-    if(event && event.target.name){
-      setChecked( checked)
-
-      this.setState({
-        checked: checked
-      })
-    }
   }
 
   makeModeladoForm() {
@@ -167,76 +121,6 @@ import { connect } from 'react-redux'
   }
 }
 
-const validate = values => {
-    const errors = {}
-
-    if(!values.estIncEstrangulador){
-      errors.estIncEstrangulador = {message: "Este campo no puede estar vacio"}
-    }
-
-    if(!values.estIncPtp){
-      errors.estIncPtp = {message: "Este campo no puede estar vacio"}
-    }
-
-    if(!values.estIncTtp){
-      errors.estIncTtp = {message: "Este campo no puede estar vacio"}
-    }
-
-    if(!values.estIncPbaj){
-      errors.estIncPbaj = {message: "Este campo no puede estar vacio"}
-    }
-
-    if(!values.estIncTbaj){
-      errors.estIncTbaj = {message: "Este campo no puede estar vacio"}
-    }
-
-    if(!values.estIncPtr){
-      errors.estIncPtr = {message: "Este campo no puede estar vacio"}
-    }
-
-    if(!values.estIncQl){
-      errors.estIncQl = {message: "Este campo no puede estar vacio"}
-    }
-
-    if(!values.estIncQo){
-      errors.estIncQo = {message: "Este campo no puede estar vacio"}
-    }
-
-    if(!values.estIncQg){
-      errors.estIncQg = {message: "Este campo no puede estar vacio"}
-    }
-
-    if(!values.estIncQw){
-      errors.estIncQw = {message: "Este campo no puede estar vacio"}
-    }
-
-    if(!values.estIncGastoCompromisoQo){
-      errors.estIncGastoCompromisoQo = {message: "Este campo no puede estar vacio"}
-    }
-
-    if(!values.estIncGastoCompromisoQg){
-      errors.estIncGastoCompromisoQg = {message: "Este campo no puede estar vacio"}
-    }
-
-    if(!values.estIncRGA){
-      errors.estIncRGA = {message: "Este campo no puede estar vacio"}
-    }
-
-    if(!values.estIncSalinidad){
-      errors.estIncSalinidad = {message: "Este campo no puede estar vacio"}
-    }
-
-    if(!values.estIncIP){
-      errors.estIncIP = {message: "Este campo no puede estar vacio"}
-    }
-
-    if(!values.estIncDeltaP){
-      errors.estIncDeltaP = {message: "Este campo no puede estar vacio"}
-    }
-
-    return errors
-}
-
 const mapStateToProps = state => ({
   forms: state.get('forms'),
   formData: state.get('estIncProduccionAcido'),
@@ -261,10 +145,7 @@ const mapDispatchToProps = dispatch => ({
   setEstIncGastoCompromisoQg: val => dispatch(setEstIncGastoCompromisoQg(val)),
   setObervacionesEstIncAcido: val => dispatch(setObervacionesEstIncAcido(val)),
   setEstIncProdAcidoImgURL: val => dispatch(setEstIncProdAcidoImgURL(val)),
-  setChecked: val => dispatch(setChecked(val, 'estIncProduccionAcido'))
+
 })
 
-export default withValidate(
-  validate,
-  connect(mapStateToProps, mapDispatchToProps, null, { withRef: true })(EstimacionIncProduccionAcido)
-)
+export default connect(mapStateToProps, mapDispatchToProps)(EstimacionIncProduccionAcido)

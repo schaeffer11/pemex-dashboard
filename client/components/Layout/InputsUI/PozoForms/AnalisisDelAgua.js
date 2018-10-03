@@ -19,93 +19,18 @@ const yesOrNoOptions = [{
   constructor(props) {
     super(props)
     this.state = {
-      containsErrors: false,
-      values: {
-      },
-      errors: [],
-      checked: [],
+
     }
   }
 
   componentDidMount(){
-    this.validate()
-    this.containsErrors()
-    this.props.containsErrors(this, this.state.containsErrors)
-  }
 
-  componentDidUpdate(){
-    this.containsErrors()
-    this.props.containsErrors(this, this.state.containsErrors)
-  }
-
-  containsErrors(){
-        let foundErrors = false
-        let errors = Object.assign({}, this.state.errors);
-      let {formData} = this.props
-      formData = formData.toJS()
-
-      const checked = formData.checked  || []
-        checked.forEach((checked) => {
-            if(errors[checked]){
-                errors[checked].checked = true
-                foundErrors = true
-            }
-        })
-
-        if(foundErrors !== this.state.containsErrors){
-            this.setState({
-                errors: errors,
-                containsErrors: foundErrors
-            })
-        }
-  }
-
-  validate(event){
-    let {setChecked, formData} = this.props
-    formData = formData.toJS()
-
-    let field = event ? event.target.name : null
-    let {errors, checked} = this.props.validate(field, formData)
-
-    this.setState({
-      errors: errors,
-    })
-
-    if(event && event.target.name){
-      setChecked(checked)
-
-      this.setState({
-        checked: checked
-      })
-    }
-
-  }
-
-  setCheck(field){
-    let {setChecked, formData} = this.props
-    formData = formData.toJS()
-    const checked = [ ...formData.checked, field ]
-
-    checked.forEach(field => {
-      if(errors[field])
-        errors[field].checked = true
-    })
-
-    this.setState({
-      checked: checked
-    })
-
-    setChecked(checked)
   }
 
   makeValoresForm() {
-    let { setPH, setTemperaturaDeConductividad, setResistividad, setSalinidadConConductimetro, setSolidosDisueltosTotales, setDurezaTotalComoCaCO3, setDurezaDeCalcioComoCaCO3, setDurezaDeMagnesioComoCaCO3, setAlcalinidadTotalComoCaCO3, setAlcalinidadALaFenolftaleinaComoCaCO3, setSalinidadComoNaCl, setSodio, setCalcio, setMagnesio, setFierro, setCloruros, setBicarbonatos, setSulfatos, setCarbonatos, setDensidadAt15, setDensidadAt20, formData, forms } = this.props
-
+    let { setPH, setTemperaturaDeConductividad, setResistividad, setSalinidadConConductimetro, setSolidosDisueltosTotales, setDurezaTotalComoCaCO3, setDurezaDeCalcioComoCaCO3, setDurezaDeMagnesioComoCaCO3, setAlcalinidadTotalComoCaCO3, setAlcalinidadALaFenolftaleinaComoCaCO3, setSalinidadComoNaCl, setSodio, setCalcio, setMagnesio, setFierro, setCloruros, setBicarbonatos, setSulfatos, setCarbonatos, setDensidadAt15, setDensidadAt20, formData } = this.props
     formData = formData.toJS()
-    forms = forms.toJS()
-
     let { pH, temperaturaDeConductividad, resistividad, salinidadConConductimetro, solidosDisueltosTotales, durezaTotalComoCaCO3, durezaDeCalcioComoCaCO3, durezaDeMagnesioComoCaCO3, alcalinidadTotalComoCaCO3, alcalinidadALaFenolftaleinaComoCaCO3, salinidadComoNaCl, sodio, calcio, magnesio, fierro, cloruros, bicarbonatos, sulfatos, carbonatos, densidadAt15, densidadAt20 } = formData
-    const errors = forms.pozoFormError
     
     return (
       <div className='valores-form' >
@@ -142,6 +67,7 @@ const yesOrNoOptions = [{
     formData = formData.toJS()
     let { waterAnalysisBool } = formData
 
+    console.log('render agua')
     return (
       <div className="form analisis-del-agua">
         <div className='left'>
@@ -157,102 +83,8 @@ const yesOrNoOptions = [{
   }
 }
 
-const validate = values => {
-    const errors = {}
-
-    if(values.waterAnalysisBool === false) {
-      return {}
-    }
-
-    if(!values.pH ){
-       errors.pH = {message: "Este campo no puede estar vacio"}
-    }
-
-    if(!values.temperaturaDeConductividad ){
-       errors.temperaturaDeConductividad = {message: "Este campo no puede estar vacio"}
-    }
-
-    if(!values.resistividad ){
-       errors.resistividad = {message: "Este campo no puede estar vacio"}
-    }
-
-    if(!values.salinidadConConductimetro ){
-       errors.salinidadConConductimetro = {message: "Este campo no puede estar vacio"}
-    }
-
-    if(!values.solidosDisueltosTotales ){
-       errors.solidosDisueltosTotales = {message: "Este campo no puede estar vacio"}
-    }
-
-    if(!values.durezaTotalComoCaCO3 ){
-       errors.durezaTotalComoCaCO3 = {message: "Este campo no puede estar vacio"}
-    }
-
-    if(!values.durezaDeCalcioComoCaCO3 ){
-       errors.durezaDeCalcioComoCaCO3 = {message: "Este campo no puede estar vacio"}
-    }
-
-    if(!values.durezaDeMagnesioComoCaCO3 ){
-       errors.durezaDeMagnesioComoCaCO3 = {message: "Este campo no puede estar vacio"}
-    }
-
-    if(!values.alcalinidadTotalComoCaCO3 ){
-       errors.alcalinidadTotalComoCaCO3 = {message: "Este campo no puede estar vacio"}
-    }
-
-    if(!values.alcalinidadALaFenolftaleinaComoCaCO3){
-       errors.alcalinidadALaFenolftaleinaComoCaCO3= {message: "Este campo no puede estar vacio"}
-    }
-
-    if(!values.salinidadComoNaCl){
-       errors.salinidadComoNaCl= {message: "Este campo no puede estar vacio"}
-    }
-
-    if(!values.sodio){
-       errors.sodio= {message: "Este campo no puede estar vacio"}
-    }
-
-    if(!values.calcio){
-       errors.calcio= {message: "Este campo no puede estar vacio"}
-    }
-
-    if(!values.magnesio){
-       errors.magnesio= {message: "Este campo no puede estar vacio"}
-    }
-
-    if(!values.fierro){
-       errors.fierro= {message: "Este campo no puede estar vacio"}
-    }
-
-    if(!values.cloruros){
-       errors.cloruros= {message: "Este campo no puede estar vacio"}
-    }
-
-    if(!values.bicarbonatos){
-       errors.bicarbonatos= {message: "Este campo no puede estar vacio"}
-    } 
-
-    if(!values.sulfatos){
-       errors.sulfatos= {message: "Este campo no puede estar vacio"}
-    }
-
-    if(!values.carbonatos){
-       errors.carbonatos= {message: "Este campo no puede estar vacio"}
-    }
-
-    if(!values.densidadAt15){
-       errors.densidadAt15= {message: "Este campo no puede estar vacio"}
-    }
-
-    if(!values.densidadAt20){
-       errors.densidadAt20= {message: "Este campo no puede estar vacio"}
-    }
-
-    return errors
-}
 
 const mapStateToProps = state => ({
-  forms: state.get('forms'),
   formData: state.get('analisisDelAgua'),
 })
 
@@ -280,10 +112,6 @@ const mapDispatchToProps = dispatch => ({
   setCarbonatos: val => dispatch(setCarbonatos(val)),
   setDensidadAt15: val => dispatch(setDensidadAt15(val)),
   setDensidadAt20: val => dispatch(setDensidadAt20(val)),
-  setChecked: val => dispatch(setChecked(val, 'analisisDelAgua'))
 })
 
-export default withValidate(
-  validate,
-  connect(mapStateToProps, mapDispatchToProps)(AnalisisDelAgua)
-)
+export default connect(mapStateToProps, mapDispatchToProps)(AnalisisDelAgua)

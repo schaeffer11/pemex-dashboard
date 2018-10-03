@@ -9,8 +9,8 @@ const initialState = Map({
         compania: '',
         superviso: '',
         length: 1,
-        checked: []
     }],
+    checked: []
 })
 
 

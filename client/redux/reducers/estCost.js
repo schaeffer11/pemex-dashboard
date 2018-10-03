@@ -8,7 +8,7 @@ const initialState = Map({
         cost: '',
         costDLS: '',
         MNXtoDLS: '',
-        companiea: '',
+        compania: '',
     }],
     checked: []
 })

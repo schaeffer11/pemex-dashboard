@@ -1,8 +1,10 @@
 import React, { Component } from 'react'
+import { connect } from 'react-redux'
 import ReactTable from 'react-table'
 import autobind from 'autobind-decorator'
 import moment from 'moment'
 import DatePicker from 'react-datepicker'
+import MaskedTextInput from "react-text-mask";
 
 /*
  * Wrapper Component for ReactTable with reusable editable cells.
@@ -44,7 +46,7 @@ import DatePicker from 'react-datepicker'
     let disabled = false
     const { id } = cellInfo.column
     const { sistema } = cellInfo.row
-    console.log('sistema', sistema)
+
     if (sistema === 'desplazamientoN2' || sistema === 'pre-colchon') {
       disabled = id === 'gastoLiqudo' || id === 'volLiquid' || id === 'relN2Liq'
     } else {
@@ -102,11 +104,16 @@ import DatePicker from 'react-datepicker'
     const date = data[cellInfo.index][cellInfo.column.id]
     const val = date ? moment(date) : null;
     return (
-      <DatePicker
+      <DatePicker 
+        customInput={
+              <MaskedTextInput
+                  type="text"
+                  mask={[/\d/, /\d/, "/", /\d/, /\d/, "/", /\d/, /\d/, /\d/, /\d/]}
+              />
+        }
         isClearable={true}
         locale="es-mx"
         dateFormat="L"
-        onKeyDown={(e) => {e.preventDefault(); return false; }} //Disable input from user
         onChange={ e => {
           if(e){
             data[cellInfo.index][cellInfo.column.id] = e.format('YYYY-MM-DD');
@@ -146,6 +153,7 @@ import DatePicker from 'react-datepicker'
   }
 
   render(){
+
     let {columns, data} = this.props;
 
     columns.forEach(column => {
@@ -161,6 +169,23 @@ import DatePicker from 'react-datepicker'
         column.Cell = this.renderSelect
       else if(column.cell)
         column.Cell = null
+
+      if (column.columns) {
+        column.columns.forEach(subColumn => {
+          if(subColumn.cell === 'renderEditable')
+            subColumn.Cell = this.renderEditable
+          else if(subColumn.cell === 'renderDate')
+            subColumn.Cell = this.renderDate
+          else if(subColumn.cell === 'renderNumber')
+            subColumn.Cell = this.renderNumber
+          else if(subColumn.cell === 'renderNumberDisable')
+            subColumn.Cell = this.renderNumberDisable
+          else if(subColumn.cell === 'renderSelect')
+            subColumn.Cell = this.renderSelect
+          else if(subColumn.cell)
+            subColumn.Cell = null
+        })
+      }
     })
 
     return (
@@ -175,4 +200,4 @@ import DatePicker from 'react-datepicker'
   
 }
 
-export default InputTable;
+export default InputTable

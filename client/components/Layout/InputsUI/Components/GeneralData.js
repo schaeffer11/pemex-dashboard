@@ -14,16 +14,16 @@ import { InputRow, InputRowUnitless, InputRowSelectUnitless, TextAreaUnitless } 
 import Notification from '../../Common/Notification'
 import Loading from '../../Common/Loading'
 
-
-// import {withValidate} from '../../Common/Validate'
+const sortLabels = (a, b) => {
+    if(a.label < b.label) return -1;
+    if(a.label > b.label) return 1;
+    return 0;
+}
 
 @autobind class GeneralData extends Component {
   constructor(props) {
     super(props)
     this.state = { 
-      // containsErrors: false,
-      // errors: [],
-      // checked: [],
       isOpen: false,
       saveOptions: [],
       selectedSave: null
@@ -33,9 +33,15 @@ import Loading from '../../Common/Loading'
   componentDidMount(){
     let { user } = this.props
     user = user.toJS()
-    const userID = user.id
+    const { token, id } = user
+    const headers = {
+      headers: {
+        'Authorization': `Bearer ${token}`,
+        'content-type': 'application/json',
+      },
+    }
 
-    fetch(`/api/getAllSaves?userID=${userID}`)
+    fetch(`/api/getAllSaves?userID=${id}`, headers)
       .then(r => r.json())
       .then( r => {
         this.setState({
@@ -116,8 +122,6 @@ import Loading from '../../Common/Loading'
   buildModal() {
     let { saveOptions, selectedSave } = this.state
 
-
-    console.log('im here', saveOptions, selectedSave)
     return (
       <AriaModal
         titleId="save-modal"
@@ -140,7 +144,7 @@ import Loading from '../../Common/Loading'
             {saveOptions.map(i => {
               let className = i.id === selectedSave ? 'save-item active-save' : 'save-item'
               return (
-                <div className={className} onClick={(e) => this.handleSelectSave(i.id)}>{i.name}</div>
+                <div key={`saveOption_${i.id}`} className={className} onClick={(e) => this.handleSelectSave(i.id)}>{i.name}</div>
                 )
             })}
         </div> 
@@ -176,57 +180,21 @@ import Loading from '../../Common/Loading'
             <div className='header'>
               Intervención
             </div>
-            <TextAreaUnitless header="Objetivo - Describir el objetivo de la intervención indicando la causa principal, tipo de tratamiento a aplicar y técnica de colocación de los sistemas." name='objetivo' className={'objetivo'} value={objetivo} onChange={setObjetivo} errors={this.state.errors} />
-            <TextAreaUnitless header="Alcances - Describir los alcances que se pretenden obtener con la intervención programada a ejecutar." name='alcances' className={'alcances'} value={alcances} onChange={setAlcances} errors={this.state.errors}/>
-            <InputRowSelectUnitless header='Tipo de intervenciones' name='tipoDeIntervenciones' value={tipoDeIntervenciones} options={tipoDeIntervencionesOptions} callback={(e) => setTipoDeIntervenciones(e.value)} errors={this.state.errors} />
+            <TextAreaUnitless header="Objetivo" name='objetivo' className={'objetivo'} value={objetivo} onChange={setObjetivo} tooltip='Describir el objetivo de la intervención indicando la causa principal, tipo de tratamiento a aplicar y técnica de colocación de los sistemas.' />
+            <TextAreaUnitless header="Alcances" name='alcances' className={'alcances'} value={alcances} onChange={setAlcances} tooltip='Describir los alcances que se pretenden obtener con la intervención programada a ejecutar.' />
+            <InputRowSelectUnitless header='Tipo de intervenciones' name='tipoDeIntervenciones' value={tipoDeIntervenciones} options={tipoDeIntervencionesOptions} callback={(e) => setTipoDeIntervenciones(e.value)} />
           </div>
 
         )
   }
 
   makeGeneralForm() {
-    let { setActivo, setCampo, setPozo, setFormacion, formData, fieldWellOptions  } = this.props
+    let { setActivo, setCampo, setPozo, setFormacion, formData, fieldWellOptions } = this.props
 
 
     formData = formData.toJS()
     
     let { subdireccion, activo, campo, pozo, formacion } = formData
-
-
-    // let subdireccionOptions = [
-    //   {label: 'Subdirección de Especialidad Técnica de Explotación (SETE)', value: 'SETE'},
-    //   {label: 'Subdirección de producción Bloques Aguas Someras AS-01', value: 'AS-01'},
-    //   {label: 'Subdirección de producción Bloques Aguas Someras AS-02', value: 'AS-02'},
-    //   {label: 'Subdirección de producción Bloques Sur', value: 'SUR'},
-    //   {label: 'Subdirección de producción Bloques Norte', value: 'NORTE'},
-    // ]
-
-    // let activoOptionsMap = {
-    //   'SETE': [
-    //     {label: 'Gerencia de Producción (GP)', value: 'GP'}
-    //   ],
-    //   'AS-01': [
-    //     {label: 'Activo Integral Producción Bloque AS01-01', value: 'AS01-01'},
-    //     {label: 'Activo Integral Producción Bloque AS01-02', value: 'AS01-02'},
-    //   ],
-    //   'AS-02': [
-    //     {label: 'Activo Integral Producción Bloque AS01-03', value: 'AS01-03'},
-    //     {label: 'Activo Integral Producción Bloque AS01-04', value: 'AS01-04'},
-    //   ],
-    //   'SUR': [
-    //     {label: 'Activo Integral Producción Bloque S01', value: 'S01'},
-    //     {label: 'Activo Integral Producción Bloque S02', value: 'S02'},
-    //     {label: 'Activo Integral Producción Bloque S03', value: 'S03'},
-    //     {label: 'Activo Integral Producción Bloque S04', value: 'S04'},
-    //   ],
-    //   'NORTE': [
-    //     {label: 'Activo Integral Bloques N01', value: 'N01'},
-    //     {label: 'Activo Integral Bloques N02', value: 'N02'},
-    //     {label: 'Activo Integral Bloques N03', value: 'N03'},
-    //   ]
-    // }
-
-    // let activoOptions = subdireccion ? activoOptionsMap[subdireccion] : []
 
     let formacionOptions = [
       {label: 'JSO', value: 'JSO'},
@@ -254,6 +222,7 @@ import Loading from '../../Common/Loading'
           subdireccionOptions.push({label: item.SUBDIRECCION_NAME, value: item.SUBDIRECCION_ID})
         }
       })
+      subdireccionOptions.sort(sortLabels)
 
       if (subdireccion) {
         activoSubset = fieldWellOptions.filter(i => i.SUBDIRECCION_ID === parseInt(subdireccion))
@@ -265,7 +234,7 @@ import Loading from '../../Common/Loading'
             activos.push(i)
           }
         })
-        activoOptions = activos.map(i => ({label: i.ACTIVO_NAME, value: i.ACTIVO_ID}))
+        activoOptions = activos.map(i => ({label: i.ACTIVO_NAME, value: i.ACTIVO_ID})).sort(sortLabels)
       }
 
       if (activo) {
@@ -279,7 +248,7 @@ import Loading from '../../Common/Loading'
           }
         })
 
-        fieldOptions = fields.map(i => ({label: i.FIELD_NAME, value: i.FIELD_FORMACION_ID}))
+        fieldOptions = fields.map(i => ({label: i.FIELD_NAME, value: i.FIELD_FORMACION_ID})).sort(sortLabels)
       }
 
       if (campo) {
@@ -293,9 +262,7 @@ import Loading from '../../Common/Loading'
           }
         })
 
-        console.log(wells)
-
-        wellOptions = wells.map(i => ({ label: i.WELL_NAME, value: i.WELL_FORMACION_ID}))
+        wellOptions = wells.map(i => ({ label: i.WELL_NAME, value: i.WELL_FORMACION_ID})).sort(sortLabels)
 
       }
     }
@@ -311,6 +278,7 @@ import Loading from '../../Common/Loading'
         <InputRowSelectUnitless header="Campo" name="campo" value={campo} options={fieldOptions} callback={this.handleSelectField} onBlur={this.validate} name='campo' errors={this.state.errors} />
         <InputRowSelectUnitless header="Pozo" name="pozo" value={pozo} options={wellOptions} callback={(e) => setPozo(e.value)} onBlur={this.validate} name='pozo' errors={this.state.errors} />
         <InputRowSelectUnitless header="Formación" value={formacion} options={formacionOptions} callback={(e) => setFormacion(e.value)} onBlur={this.validate} name='formacion' errors={this.state.errors} />
+        {}
       </div>
 
     )
@@ -331,39 +299,50 @@ import Loading from '../../Common/Loading'
 
     const wellID = formData.pozo
     const userID = user.id
+    const { token } = user
+    const headers = {
+      headers: {
+        'Authorization': `Bearer ${token}`,
+        'content-type': 'application/json',
+      },
+    }
 
-    let data = await fetch(`/api/getSave?transactionID=${selectedSave}`)
+
+    let data = await fetch(`/api/getSave?transactionID=${selectedSave}`, headers)
       .then(res => res.json())
 
     let { transactionID, tipoDeIntervenciones } = data
 
     Promise.all([
-      fetch(`api/getFields?transactionID=${transactionID}&saved=1`).then(r => r.json()),
-      fetch(`api/getMudLoss?transactionID=${transactionID}&saved=1`).then(r => r.json()),
-      fetch(`api/getLayer?transactionID=${transactionID}&saved=1`).then(r => r.json()),
-      fetch(`api/getWell?transactionID=${transactionID}&saved=1`).then(r => r.json()),
-      fetch(`api/getHistIntervenciones?transactionID=${transactionID}&saved=1`).then(r => r.json()),
-      fetch(`api/getMecanico?transactionID=${transactionID}&saved=1`).then(r => r.json()),
-      fetch(`api/getAnalisisAgua?transactionID=${transactionID}&saved=1`).then(r => r.json()),
-      fetch(`api/getEmboloViajero?transactionID=${transactionID}&saved=1`).then(r => r.json()),
-      fetch(`api/getBombeoNeumatico?transactionID=${transactionID}&saved=1`).then(r => r.json()),
-      fetch(`api/getBombeoHidraulico?transactionID=${transactionID}&saved=1`).then(r => r.json()),
-      fetch(`api/getBombeoCavidades?transactionID=${transactionID}&saved=1`).then(r => r.json()),
-      fetch(`api/getBombeoElectrocentrifugo?transactionID=${transactionID}&saved=1`).then(r => r.json()),
-      fetch(`api/getBombeoMecanico?transactionID=${transactionID}&saved=1`).then(r => r.json()),
-      fetch(`api/getFieldPressure?transactionID=${transactionID}&saved=1`).then(r => r.json()),
-      fetch(`api/getWellPressure?transactionID=${transactionID}&saved=1`).then(r => r.json()),
-      fetch(`api/getWellAforos?transactionID=${transactionID}&saved=1`).then(r => r.json()),
-      fetch(`api/getWellProduccion?transactionID=${transactionID}&saved=1`).then(r => r.json()),
-      fetch(`api/getInterventionBase?transactionID=${transactionID}&saved=1`).then(r => r.json()),
-      fetch(`api/getInterventionEstimulacion?transactionID=${transactionID}&saved=1`).then(r => r.json()),
-      fetch(`api/getInterventionAcido?transactionID=${transactionID}&saved=1`).then(r => r.json()),
-      fetch(`api/getInterventionApuntalado?transactionID=${transactionID}&saved=1`).then(r => r.json()),
-      fetch(`api/getLabTest?transactionID=${transactionID}&saved=1`).then(r => r.json()),
-      fetch(`api/getCedulaEstimulacion?transactionID=${transactionID}&saved=1`).then(r => r.json()),   
-      fetch(`api/getCedulaAcido?transactionID=${transactionID}&saved=1`).then(r => r.json()),   
-      fetch(`api/getCedulaApuntalado?transactionID=${transactionID}&saved=1`).then(r => r.json()),      
-      fetch(`api/getCosts?transactionID=${transactionID}&saved=1`).then(r => r.json()),
+      fetch(`api/getFields?transactionID=${transactionID}&saved=1`, headers).then(r => r.json()),
+      fetch(`api/getHistIntervencionesEstimulacionNew?transactionID=${transactionID}&saved=1`, headers).then(r => r.json()),
+      fetch(`api/getHistIntervencionesAcidoNew?transactionID=${transactionID}&saved=1`, headers).then(r => r.json()),
+      fetch(`api/getHistIntervencionesApuntaladoNew?transactionID=${transactionID}&saved=1`, headers).then(r => r.json()),
+      fetch(`api/getMudLoss?transactionID=${transactionID}&saved=1`, headers).then(r => r.json()),
+      fetch(`api/getLayer?transactionID=${transactionID}&saved=1`, headers).then(r => r.json()),
+      fetch(`api/getWell?transactionID=${transactionID}&saved=1`, headers).then(r => r.json()),
+      fetch(`api/getHistIntervenciones?transactionID=${transactionID}&saved=1`, headers).then(r => r.json()),
+      fetch(`api/getMecanico?transactionID=${transactionID}&saved=1`, headers).then(r => r.json()),
+      fetch(`api/getAnalisisAgua?transactionID=${transactionID}&saved=1`, headers).then(r => r.json()),
+      fetch(`api/getEmboloViajero?transactionID=${transactionID}&saved=1`, headers).then(r => r.json()),
+      fetch(`api/getBombeoNeumatico?transactionID=${transactionID}&saved=1`, headers).then(r => r.json()),
+      fetch(`api/getBombeoHidraulico?transactionID=${transactionID}&saved=1`, headers).then(r => r.json()),
+      fetch(`api/getBombeoCavidades?transactionID=${transactionID}&saved=1`, headers).then(r => r.json()),
+      fetch(`api/getBombeoElectrocentrifugo?transactionID=${transactionID}&saved=1`, headers).then(r => r.json()),
+      fetch(`api/getBombeoMecanico?transactionID=${transactionID}&saved=1`, headers).then(r => r.json()),
+      fetch(`api/getFieldPressure?transactionID=${transactionID}&saved=1`, headers).then(r => r.json()),
+      fetch(`api/getWellPressure?transactionID=${transactionID}&saved=1`, headers).then(r => r.json()),
+      fetch(`api/getWellAforos?transactionID=${transactionID}&saved=1`, headers).then(r => r.json()),
+      fetch(`api/getWellProduccion?transactionID=${transactionID}&saved=1`, headers).then(r => r.json()),
+      fetch(`api/getInterventionBase?transactionID=${transactionID}&saved=1`, headers).then(r => r.json()),
+      fetch(`api/getInterventionEstimulacion?transactionID=${transactionID}&saved=1`, headers).then(r => r.json()),
+      fetch(`api/getInterventionAcido?transactionID=${transactionID}&saved=1`, headers).then(r => r.json()),
+      fetch(`api/getInterventionApuntalado?transactionID=${transactionID}&saved=1`, headers).then(r => r.json()),
+      fetch(`api/getLabTest?transactionID=${transactionID}&saved=1`, headers).then(r => r.json()),
+      fetch(`api/getCedulaEstimulacion?transactionID=${transactionID}&saved=1`, headers).then(r => r.json()),   
+      fetch(`api/getCedulaAcido?transactionID=${transactionID}&saved=1`, headers).then(r => r.json()),   
+      fetch(`api/getCedulaApuntalado?transactionID=${transactionID}&saved=1`, headers).then(r => r.json()),      
+      fetch(`api/getCosts?transactionID=${transactionID}&saved=1`, headers).then(r => r.json()),
     ])
       .catch(error => {
         console.log('some error i found', error)
@@ -396,10 +375,6 @@ import Loading from '../../Common/Loading'
       })
   }
 
-  downloadMasterTemplate() {
-    window.location = `/api/getTemplate`
-  }
-
   render() {
     let { isOpen, selectedSave } = this.state
     let { setShowForms } = this.props
@@ -410,7 +385,6 @@ import Loading from '../../Common/Loading'
         { this.makeGeneralInterventionForm() }
         <button className="submit submit-load" onClick={this.activateModal}> Descargar borrador</button>
         <button className='submit submit-continue' disabled={this.checkIncomplete()} onClick={(e) => setShowForms(true)} >Siguiente</button>
-        <button className="submit download-template" onClick={this.downloadMasterTemplate}>{'Descarga el Formato General'}</button>
         <Notification />
         <Loading />
         { isOpen ? this.buildModal() : null }
@@ -419,24 +393,12 @@ import Loading from '../../Common/Loading'
   }
 }
 
-const validate = values => {
-    const errors = {}
-
-    if(!values.campo ){
-       errors.campo = {message: "Este campo no puede estar vacio"}
-    }
-
-    if(!values.pozo ){
-       errors.pozo = {message: "Este campo no puede estar vacio"}
-    }
-    return errors
-}
 
 const mapStateToProps = state => ({
   formData: state.get('fichaTecnicaDelPozoHighLevel'),
   user: state.get('user'),
   interventionFormData: state.get('objetivoYAlcancesIntervencion'),
-  forms: state.get('forms')  
+  forms: state.get('forms'),
 })
 
 const testLoadFromSave = (saved) => {
@@ -458,10 +420,5 @@ const mapDispatchToProps = dispatch => ({
   loadFromSave: values => {dispatch(testLoadFromSave(values))},
   setLoading: obj => dispatch(setIsLoading(obj))
 })
-
-// export default withValidate(
-//   validate, 
-//   connect(mapStateToProps, mapDispatchToProps)(GeneralData)
-// )
 
 export default connect(mapStateToProps, mapDispatchToProps)(GeneralData)

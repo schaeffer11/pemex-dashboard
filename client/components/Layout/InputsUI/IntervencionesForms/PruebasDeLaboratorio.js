@@ -7,7 +7,7 @@ import Select from 'react-select'
 import {withValidate} from '../../Common/Validate'
 import InputTable from '../../Common/InputTable'
 import { InputRow, InputRowUnitless, InputRowSelectUnitless, TextAreaUnitless } from '../../Common/InputRow'
-import { setPruebasDeLaboratorioData, setChecked } from '../../../../redux/actions/intervencionesEstimulacion'
+import { setPruebasDeLaboratorioData } from '../../../../redux/actions/intervencionesEstimulacion'
 
 export const options = [
   { label: 'Caracterización fisico-química de fluidos', value: 'caracterizacionFisico' },
@@ -27,62 +27,21 @@ const companyOptions = [
   { label: 'Weatherford', value: 'Weatherford' },
 ]
 
-@autobind class PruebasDeLaboratorioEstimulacion extends Component {
+@autobind class PruebasDeLaboratorio extends Component {
   constructor(props) {
     super(props)
     this.state = {
-      containsErrors: false,
-      errors: [],
-      checked: []
+
     }
   }
 
 
   componentDidMount() {
-      this.validate()
-      this.containsErrors()
+
   }
 
   componentDidUpdate(prevProps) {
-      this.containsErrors()
-  }
 
-  containsErrors(){
-    let foundErrors = false
-    let errors = Object.assign({}, this.state.errors);
-    let {formData} = this.props
-    formData = formData.toJS()
-
-    const checked = formData.checked  || []
-    checked.forEach((checked) => {
-        if(errors[checked]){
-           errors[checked].checked = true
-           foundErrors = true
-        }
-    })
-
-    if(foundErrors !== this.state.containsErrors){
-      this.setState({
-        errors: errors,
-        containsErrors: foundErrors
-      })
-    }
-  }
-
-  validate(event){
-    let {setChecked, formData} = this.props
-    formData = formData.toJS()
-
-    let field = event ? event.target.name : null
-    let {errors, checked} = this.props.validate(field, formData)
-
-    this.setState({
-      errors: errors,
-    })
-
-    if(event && event.target.name){
-      setChecked(checked)
-    }
   }
 
   renderEditable(cellInfo) {
@@ -233,11 +192,7 @@ const companyOptions = [
 
     const objectTemplate = {type: '', fechaMuestreo: '', fechaPrueba: '', compania: '', superviso: ''}
 
-/*
-    columns.forEach(column => {
-      column.cell === 'renderEditable' ? column.Cell = this.renderEditable : null
-    })
-*/
+
 
     return (
       <div className='generales-form' >
@@ -255,9 +210,6 @@ const companyOptions = [
             getTdProps={this.deleteRow}
           />
         </div>
-        { this.state.errors.pruebasDeLaboratorioData && this.state.errors.pruebasDeLaboratorioData.checked &&
-          <div className="error">{this.state.errors.pruebasDeLaboratorioData.message}</div>
-        }
       </div>
     )
   }
@@ -277,26 +229,8 @@ const companyOptions = [
   }
 }
 
-const validate = values => {
-    let errors = {}
-
-    if(!values.pruebasDeLaboratorioData){
-      errors.pruebasDeLaboratorioData = {message: "Esta forma no puede estar vacia"}
-    }else {
-      const fields = ['compania', 'fechaMuestreo', 'fechaPrueba', 'superviso', 'type']
-      values.pruebasDeLaboratorioData.forEach((row, index) => {
-        let hasEmpty = Object.entries(row).find(([key, value]) => {return fields.includes(key) && value && value.toString().trim() == '' })
-        if(hasEmpty !== undefined){
-            errors.pruebasDeLaboratorioData = {message: "Ningun campo puede estar vacio."}
-        }
-      })
-    }
-
-    return errors
-}
 
 const mapStateToProps = state => ({
-  forms: state.get('forms'),
   formData: state.get('pruebasDeLaboratorio'),
 })
 
@@ -305,7 +239,4 @@ const mapDispatchToProps = dispatch => ({
   setChecked: values => {dispatch(setChecked(values, 'pruebasDeLaboratorio'))}
 })
 
-export default withValidate(
-  validate,
-  connect(mapStateToProps, mapDispatchToProps, null, { withRef: true })(PruebasDeLaboratorioEstimulacion)
-)
+export default connect(mapStateToProps, mapDispatchToProps)(PruebasDeLaboratorio)

@@ -33,6 +33,19 @@ const INSERT_FIELDS_QUERY = {
     loadTransaction: `SELECT * FROM FieldsData WHERE TRANSACTION_ID = ?`
 }
 
+const INSERT_HIST_INTERVENCIONES_NEW_QUERY = {
+    save: `INSERT INTO _WellHistorialIntervencionesSave (
+    ) VALUES ?`,
+    submit: `INSERT INTO WellHistorialIntervenciones (
+    ) VALUES ?`,
+    loadSaveEstimulacion: `SELECT * FROM _WellHistorialIntervencionesSave WHERE TRANSACTION_ID = ? AND TIPO_DE_INTERVENCIONES = 'estimulacion'`,
+    loadSaveAcido: `SELECT * FROM _WellHistorialIntervencionesSave WHERE TRANSACTION_ID = ? AND TIPO_DE_INTERVENCIONES = 'acido'`,
+    loadSaveApuntalado: `SELECT * FROM _WellHistorialIntervencionesSave WHERE TRANSACTION_ID = ? AND TIPO_DE_INTERVENCIONES = 'apuntalado'`,
+    loadTransactionEstimulacion: `SELECT * FROM WellHistorialIntervenciones WHERE TRANSACTION_ID = ? AND TIPO_DE_INTERVENCIONES = 'estimulacion'`,
+    loadTransactionAcido: `SELECT * FROM WellHistorialIntervenciones WHERE TRANSACTION_ID = ? AND TIPO_DE_INTERVENCIONES = 'acido'`,
+    loadTransactionApuntalado: `SELECT * FROM WellHistorialIntervenciones WHERE TRANSACTION_ID = ? AND TIPO_DE_INTERVENCIONES = 'apuntalado'`,
+}
+
 const INSERT_WELL_QUERY = {
     save: `INSERT INTO _WellsDataSave (
         WELL_FORMACION_ID, SUBDIRECCION, ACTIVO,
@@ -229,10 +242,10 @@ const INSERT_BOMBEO_MECANICO_QUERY = {
 
 const INSERT_FIELD_PRESSURE_QUERY = {
     save: `INSERT INTO _FieldHistoricalPressureSave (
-        FIELD_FORMACION_ID, FECHA, PR, PRESSURE_DEPTH, TRANSACTION_ID) VALUES
+        FIELD_FORMACION_ID, FECHA, PWS, PRESSURE_DEPTH, TRANSACTION_ID) VALUES
         ?`,
     submit: `INSERT INTO FieldHistoricalPressure (
-        FIELD_FORMACION_ID, FECHA, PR, PRESSURE_DEPTH, TRANSACTION_ID) VALUES
+        FIELD_FORMACION_ID, FECHA, PWS, PRESSURE_DEPTH, TRANSACTION_ID) VALUES
         ?`,
     loadSave: `SELECT * FROM _FieldHistoricalPressureSave WHERE TRANSACTION_ID = ?`,
     loadTransaction: `SELECT * FROM FieldHistoricalPressure WHERE TRANSACTION_ID = ?`    
@@ -439,11 +452,11 @@ const INSERT_LAB_TEST_QUERY = {
 
 const INSERT_CEDULA_ESTIMULACION_QUERY = {
     save: `INSERT INTO _IntervencionesCedulaEstimulacionSave (
-        CEDULA_ID, INTERVENTION_ID, WELL_FORMACION_ID, ETAPA, INTERVALO, SISTEMA, NOMBRE_COMERCIAL,
+        CEDULA_ID, INTERVENTION_ID, WELL_FORMACION_ID, ETAPA, SISTEMA, NOMBRE_COMERCIAL,
         VOL_LIQUID, GASTO_N2, GASTO_LIQUIDO, GASTO_EN_FONDO, CALIDAD, VOL_N2, VOL_LIQUIDO_ACUM, 
         VOL_N2_ACUM, REL_N2_LIQ, TIEMPO, COMPANIA, TRANSACTION_ID) VALUES ?`,
     submit: `INSERT INTO IntervencionesCedulaEstimulacion (
-        CEDULA_ID, INTERVENTION_ID, WELL_FORMACION_ID, ETAPA, INTERVALO, SISTEMA, NOMBRE_COMERCIAL,
+        CEDULA_ID, INTERVENTION_ID, WELL_FORMACION_ID, ETAPA, SISTEMA, NOMBRE_COMERCIAL,
         VOL_LIQUID, GASTO_N2, GASTO_LIQUIDO, GASTO_EN_FONDO, CALIDAD, VOL_N2, VOL_LIQUIDO_ACUM, 
         VOL_N2_ACUM, REL_N2_LIQ, TIEMPO, COMPANIA, TRANSACTION_ID) VALUES ?`,
     loadSave: `SELECT * FROM _IntervencionesCedulaEstimulacionSave WHERE TRANSACTION_ID = ?`,
@@ -452,11 +465,11 @@ const INSERT_CEDULA_ESTIMULACION_QUERY = {
 
 const INSERT_CEDULA_ACIDO_QUERY = {
     save: `INSERT INTO _IntervencionesCedulaAcidoSave (
-        CEDULA_ID, INTERVENTION_ID, WELL_FORMACION_ID, ETAPA, INTERVALO, SISTEMA, NOMBRE_COMERCIAL, TIPO_DE_APUNTALANTE, CONCENTRACION_DE_APUNTALANTE, 
+        CEDULA_ID, INTERVENTION_ID, WELL_FORMACION_ID, ETAPA, SISTEMA, NOMBRE_COMERCIAL, TIPO_DE_APUNTALANTE, CONCENTRACION_DE_APUNTALANTE, 
         VOL_LIQUID, GASTO_N2, GASTO_LIQUIDO, GASTO_EN_FONDO, CALIDAD, VOL_N2, VOL_LIQUIDO_ACUM, 
         VOL_N2_ACUM, REL_N2_LIQ, TIEMPO, COMPANIA, TRANSACTION_ID) VALUES ?`,
     submit: `INSERT INTO IntervencionesCedulaAcido (
-        CEDULA_ID, INTERVENTION_ID, WELL_FORMACION_ID, ETAPA, INTERVALO, SISTEMA, NOMBRE_COMERCIAL, TIPO_DE_APUNTALANTE, CONCENTRACION_DE_APUNTALANTE, 
+        CEDULA_ID, INTERVENTION_ID, WELL_FORMACION_ID, ETAPA, SISTEMA, NOMBRE_COMERCIAL, TIPO_DE_APUNTALANTE, CONCENTRACION_DE_APUNTALANTE, 
         VOL_LIQUID, GASTO_N2, GASTO_LIQUIDO, GASTO_EN_FONDO, CALIDAD, VOL_N2, VOL_LIQUIDO_ACUM, 
         VOL_N2_ACUM, REL_N2_LIQ, TIEMPO, COMPANIA, TRANSACTION_ID) VALUES ?`,
     loadSave: `SELECT * FROM _IntervencionesCedulaAcidoSave WHERE TRANSACTION_ID = ?`,
@@ -465,11 +478,11 @@ const INSERT_CEDULA_ACIDO_QUERY = {
 
 const INSERT_CEDULA_APUNTALADO_QUERY = {
     save: `INSERT INTO _IntervencionesCedulaApuntaladoSave (
-        CEDULA_ID, INTERVENTION_ID, WELL_FORMACION_ID, ETAPA, INTERVALO, SISTEMA, NOMBRE_COMERCIAL, TIPO_DE_APUNTALANTE, CONCENTRACION_DE_APUNTALANTE, 
+        CEDULA_ID, INTERVENTION_ID, WELL_FORMACION_ID, ETAPA, SISTEMA, NOMBRE_COMERCIAL, TIPO_DE_APUNTALANTE, CONCENTRACION_DE_APUNTALANTE, 
         VOL_LIQUID, GASTO_N2, GASTO_LIQUIDO, GASTO_EN_FONDO, CALIDAD, VOL_N2, VOL_LIQUIDO_ACUM, 
         VOL_N2_ACUM, REL_N2_LIQ, TIEMPO, COMPANIA, TRANSACTION_ID) VALUES ?`   ,
     submit: `INSERT INTO IntervencionesCedulaApuntalado (
-        CEDULA_ID, INTERVENTION_ID, WELL_FORMACION_ID, ETAPA, INTERVALO, SISTEMA, NOMBRE_COMERCIAL, TIPO_DE_APUNTALANTE, CONCENTRACION_DE_APUNTALANTE, 
+        CEDULA_ID, INTERVENTION_ID, WELL_FORMACION_ID, ETAPA, SISTEMA, NOMBRE_COMERCIAL, TIPO_DE_APUNTALANTE, CONCENTRACION_DE_APUNTALANTE, 
         VOL_LIQUID, GASTO_N2, GASTO_LIQUIDO, GASTO_EN_FONDO, CALIDAD, VOL_N2, VOL_LIQUIDO_ACUM, 
         VOL_N2_ACUM, REL_N2_LIQ, TIEMPO, COMPANIA, TRANSACTION_ID) VALUES ?`        ,
     loadSave: `SELECT * FROM _IntervencionesCedulaApuntaladoSave WHERE TRANSACTION_ID = ?`,
@@ -479,9 +492,9 @@ const INSERT_CEDULA_APUNTALADO_QUERY = {
 
 const INSERT_COSTS_QUERY = {
     save: `INSERT INTO _IntervencionesEstimatedCostsSave (
-        COST_ID, INTERVENTION_ID, ITEM, FECHA, COMPANY, COST_MNX, COST_DLS, MNXtoDLS, TRANSACTION_ID) VALUES ?`,
+        COST_ID, INTERVENTION_ID, ITEM, UNIT, COMPANY, COST_MNX, COST_DLS, MNXtoDLS, TRANSACTION_ID) VALUES ?`,
     submit: `INSERT INTO IntervencionesEstimatedCosts (
-        COST_ID, INTERVENTION_ID, ITEM, FECHA, COMPANY, COST_MNX, COST_DLS, MNXtoDLS, TRANSACTION_ID) VALUES ?`,
+        COST_ID, INTERVENTION_ID, ITEM, UNIT, COMPANY, COST_MNX, COST_DLS, MNXtoDLS, TRANSACTION_ID) VALUES ?`,
     loadSave: `SELECT * FROM _IntervencionesEstimatedCostsSave WHERE TRANSACTION_ID = ?`,
     loadTransaction: `SELECT * FROM IntervencionesEstimatedCosts WHERE TRANSACTION_ID = ?`    
 }
@@ -592,6 +605,12 @@ export const getFields = async (transID, action, cb) => {
 
 export const getWell = async (transID, action, cb) => {
   connection.query(INSERT_WELL_QUERY[action], [transID], (err, results) => {
+    cb(results)
+   })
+}
+
+export const getHistIntervencionesNew = async (transID, action, cb) => {
+  connection.query(INSERT_HIST_INTERVENCIONES_NEW_QUERY[action], [transID], (err, results) => {
     cb(results)
    })
 }
@@ -794,6 +813,8 @@ export const create = async (body, action, cb) => {
 
 
   let { subdireccion, activo, campo, pozo, formacion } = finalObj.fichaTecnicaDelPozoHighLevel
+
+  let { historicoEstimulacionData, historicoAcidoData, historicoApuntaladoData } = finalObj.historialDeIntervenciones
 
   let { descubrimientoField, fechaDeExplotacionField, numeroDePozosOperandoField, pInicialField, pInicialAnoField, pActualField, pActualFechaField,
     dpPerAnoField, tyacField, prField, tipoDeFluidoField, densidadDelAceiteField, pSatField,
@@ -1139,7 +1160,7 @@ export const create = async (body, action, cb) => {
                     values = []
 
                     presionDataCampo.forEach(i => {
-                      values.push([fieldFormacionID, i.fecha, i.Pr, pressureDepthCampo, transactionID])
+                      values.push([fieldFormacionID, i.fecha, i.Pws, pressureDepthCampo, transactionID])
                     })
 
                     connection.query((action === 'save' ? INSERT_FIELD_PRESSURE_QUERY.save : INSERT_FIELD_PRESSURE_QUERY.submit), [values], (err, results) => {
@@ -1311,7 +1332,7 @@ export const create = async (body, action, cb) => {
                                       if (cedulaData) {
                                         cedulaData.forEach(i => {
                                           let cedulaID = Math.floor(Math.random() * 1000000000)
-                                          values.push([cedulaID, interventionID, wellFormacionID, i.etapa, i.intervalo, i.sistema, i.nombreComercial, i.volLiquid, i.gastoN2, i.gastoLiqudo, i.gastoEnFondo, i.calidad, i.volN2, i.volLiquidoAcum, i.volN2Acum, i.relN2Liq, i.tiempo, propuestaCompany, transactionID])
+                                          values.push([cedulaID, interventionID, wellFormacionID, i.etapa, i.sistema, i.nombreComercial, i.volLiquid, i.gastoN2, i.gastoLiqudo, i.gastoEnFondo, i.calidad, i.volN2, i.volLiquidoAcum, i.volN2Acum, i.relN2Liq, i.tiempo, propuestaCompany, transactionID])
                                         })  
                                       }
                                       else {
@@ -1324,7 +1345,7 @@ export const create = async (body, action, cb) => {
                                       if (cedulaData) {
                                         cedulaData.forEach(i => {
                                           let cedulaID = Math.floor(Math.random() * 1000000000)
-                                          values.push([cedulaID, interventionID, wellFormacionID, i.etapa, i.intervalo, i.sistema, i.nombreComercial, i.tipoDeApuntalante, i.concentraciDeApuntalante, i.volLiquid, i.gastoN2, i.gastoLiqudo, i.gastoEnFondo, i.calidad, i.volN2, i.volLiquidoAcum, i.volN2Acum, i.relN2Liq, i.tiempo, propuestaCompany, transactionID])
+                                          values.push([cedulaID, interventionID, wellFormacionID, i.etapa, i.sistema, i.nombreComercial, i.tipoDeApuntalante, i.concentraciDeApuntalante, i.volLiquid, i.gastoN2, i.gastoLiqudo, i.gastoEnFondo, i.calidad, i.volN2, i.volLiquidoAcum, i.volN2Acum, i.relN2Liq, i.tiempo, propuestaCompany, transactionID])
                                         })   
                                       }
                                       else {
@@ -1349,7 +1370,7 @@ export const create = async (body, action, cb) => {
                                           values = []
                                           estimacionCostosData.forEach(i => {
                                             let costID = Math.floor(Math.random() * 1000000000)
-                                            values.push([costID, interventionID, i.item, i.fecha, i.compania, i.cost, i.costDLS, i.MNXtoDLS, transactionID])
+                                            values.push([costID, interventionID, i.item, i.unit, propuestaCompany, i.cost, i.costDLS, i.MNXtoDLS, transactionID])
                                           })
 
                                           connection.query((action === 'save' ? INSERT_COSTS_QUERY.save : INSERT_COSTS_QUERY.submit), [values], (err, results) => {
@@ -1527,18 +1548,49 @@ export const create = async (body, action, cb) => {
 
                                                             connection.query(action === 'save' ? DUMMY_QUERY : `UPDATE FieldWellMapping set HAS_DATA = 1 WHERE WELL_FORMACION_ID = ?`, [wellFormacionID], (err, results) => {
                                                                
-                                                                connection.commit(function(err) {
+
+                                                                values = []
+
+                                                                historicoEstimulacionData.forEach(i => {
+                                                                    values.push([wellFormacionID, 'estimulacion', i.fecha, i.tipoDeTratamiento, i.objetivo, i.compania, i.acidoVol, i.acidoNombre, i.solventeVol, i.solventeNombre, i.divergenteVol, i.divergenteNombre, i.totalN2, i.beneficioProgramado, i.beneficioOficial, -9999, -9999, -9999, -9999, -9999, -9999, -9999, -9999, -9999, -9999, -9999, -9999, -9999, transactionID ])
+                                                                })
+                                                                historicoAcidoData.forEach(i => {
+                                                                    values.push([wellFormacionID, 'acido', i.fecha, i.tipoDeTratamiento, i.objetivo, i.compania, -9999, -9999, -9999, -9999, -9999, -9999, -9999, i.beneficioProgramado, i.beneficioOficial, i.base, i.cima, i.longitudGravada, i.alturaGravada, i.anchoGravado, i.conductividad, i.fcd, i.presionNeta, i.fluidoFractura, -9999, -9999, -9999, -9999, transactionID])
+                                                                })
+                                                                historicoApuntaladoData.forEach(i => {
+                                                                    values.push([wellFormacionID, 'apuntalado', i.fecha, i.tipoDeTratamiento, i.objetivo, i.compania, -9999, -9999, -9999, -9999, -9999, -9999, -9999, i.beneficioProgramado, i.beneficioOficial, i.base, i.cima, -9999, -9999, -9999, i.conductividad, i.fcd, i.presionNeta, i.fluidoFractura, i.longitudApuntalada, i.alturaTotalDeFractura, i.anchoPromedio, i.concentracionAreal, transactionID])
+                                                                })
+
+                                                                values.forEach(i => {
+                                                                    console.log(i.length)
+                                                                })
+
+
+                                                                connection.query(action === 'save' ? INSERT_HIST_INTERVENCIONES_NEW_QUERY.save : INSERT_HIST_INTERVENCIONES_NEW_QUERY.submit, [values], (err, results) => {
+                                                                    console.log('historial interventions', err)
+                                                                    console.log('historial interventions', results)
+
                                                                     if (err) {
-                                                                      cb(err)
                                                                       return connection.rollback(function() {
-                                                                        console.log('something went terrible')
-                                                                        throw err;
-                                                                      });
+                                                                        console.log('rolling back!!! 2')
+                                                                        cb(err)
+                                                                      })
                                                                     }
-                                                                    console.log('success!');
-                                                                    var log = 'Post ' + results + ' added';
-                                                                    console.log(log)
-                                                                    cb(null)
+
+
+                                                                    connection.commit(function(err) {
+                                                                        if (err) {
+                                                                          cb(err)
+                                                                          return connection.rollback(function() {
+                                                                            console.log('something went terrible')
+                                                                            throw err;
+                                                                          });
+                                                                        }
+                                                                        console.log('success!');
+                                                                        var log = 'Post ' + results + ' added';
+                                                                        console.log(log)
+                                                                        cb(null)
+                                                                    })
                                                                 })
 
                                                             })

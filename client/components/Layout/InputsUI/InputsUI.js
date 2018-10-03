@@ -23,8 +23,11 @@ import '../../../styles/components/_query_modal.css'
       selectedTab: 'Pozo',
       selectedSubtab: 'tecnicaDelPozo',
       isOpen: false,
+      isOpenBug: false,
       error: '', 
-      fieldWellOptions: []
+      fieldWellOptions: [],
+      bugResponseError: false,
+      bugResponseSuccess: false,
     }
 
     this.pozoMultiStepFormRef = React.createRef();
@@ -43,6 +46,7 @@ import '../../../styles/components/_query_modal.css'
       selectedSubtab: selectedSub,
       error: '',
       saveName: null,
+      comment: '',
     })
   }
 
@@ -54,7 +58,14 @@ import '../../../styles/components/_query_modal.css'
   }
 
   componentDidMount() {
-    fetch('/api/getFieldWellMapping')
+    const { token } = this.props
+    const headers = {
+      headers: {
+        'Authorization': `Bearer ${token}`,
+        'content-type': 'application/json',
+      },
+    }
+    fetch('/api/getFieldWellMapping', headers)
       .then(r => r.json())
       .then(r => {
 
@@ -72,16 +83,10 @@ import '../../../styles/components/_query_modal.css'
   handleSubmit(action) {
     let { saveName } = this.state
 
-    console.log('herehre', saveName)
-    if( action === 'save' || this.validate() ){
-      this.props.submitPozoForm(action, saveName)
-      this.setState({'error': ''})
-      console.log('Validate Succeeded')
-    } else {
-      this.setState({'error': 'Esta forma contiene errores. Todos los campos son requeridos.'})
-      this.scrollToBottom()
-      console.log('Validate Failed')
-    }
+
+    this.props.submitPozoForm(action, this.props.token, saveName)
+    this.setState({'error': ''})
+
     this.deactivateModal()
   }
 
@@ -96,21 +101,33 @@ import '../../../styles/components/_query_modal.css'
     })
   }
 
+
+  deactivateBugModal() {
+    this.setState({
+      bugResponseError: false,
+      bugResponseSuccess: false,
+      isOpenBug: false,
+    })
+  }
+
   activateModal() {
     this.setState({
       isOpen: true,
     })
   }
 
-  validate(){
-    return true
-    // (
-    //   this.pozoMultiStepFormRef.current.getWrappedInstance().validate() &
-    //   this.intervencionesFormRef.current.getWrappedInstance().validate()
-    // )
+  activateBugModal() {
+    this.setState({
+      isOpenBug: true,
+    })
   }
 
-  buildModal(pozoFormSubmitting) {
+  validate(){
+    return this.pozoMultiStepFormRef.current.getWrappedInstance().validate() &
+        this.intervencionesFormRef.current.getWrappedInstance().validate()
+  }
+
+  buildModal() {
     let {saveName} = this.state
 
     return (
@@ -134,7 +151,85 @@ import '../../../styles/components/_query_modal.css'
         <div className="modal-body">
           <input onChange={(e) => this.setState({saveName: e.target.value})}></input>
           <br></br>
-          <button className="submit save-button" disabled={!saveName} onClick={(e) => this.handleSubmit('save')}>{pozoFormSubmitting ? 'Ahorro...' : 'Guardar'}</button>
+          <button className="submit save-button" disabled={!saveName} onClick={(e) => this.handleSubmit('save')}>{'Guardar'}</button>
+        </div> 
+      </div>
+      </AriaModal>
+    )
+  }
+
+  handleCommentInput(e) {
+    this.setState({
+      comment: e.target.value
+    })
+  }
+
+  handleSubmitBug() {
+      let { comment , selectedSubtab} = this.state
+      const { token, user } = this.props
+
+      const headers = {
+        'Authorization': `Bearer ${token}`,
+      }
+
+      const formData = new FormData()
+
+      formData.append('comment', JSON.stringify(comment))
+      formData.append('page', JSON.stringify(selectedSubtab))
+      formData.append('user', JSON.stringify(user))
+
+      fetch('/api/comment', {
+        headers,
+        method: 'POST',
+        body: formData,
+      })
+        .then(r => r.json())
+        .then((res) => {
+          if (res.success) {
+            this.setState({
+              bugResponseError: false,
+              bugResponseSuccess: true,
+            })
+          } else {
+            this.setState({
+              bugResponseError: true,
+              bugResponseSuccess: false,
+            })
+          }
+    })
+
+  }
+
+
+
+
+
+  buildBugModal() {
+    let {comment, bugResponseError, bugResponseSuccess} = this.state
+
+    return (
+      <AriaModal
+        titleId="save-modal"
+        onExit={this.deactivateBugModal}
+        underlayClickExits={true}
+        verticallyCenter={true}
+        focusDialog={true}
+        dialogClass="queryModalPartialReset"
+        dialogStyle={{verticalAlign: '', textAlign: 'center', maxHeight: '80%', marginTop: '2%'}}
+
+      >
+      <div className="modalTest" >
+        <div className="modal-title">
+            Comentarios sobre pagina
+        </div>
+        <div className="modal-info"> 
+          Cualquier error o comentario que tenga acerca de la página en turno, hacerlo aquí y enviar.
+        </div>
+        <div className="modal-body">
+          <textarea style={{}} value={comment} onChange={this.handleCommentInput}> </textarea><br/>
+          <button className="submit save-button"  onClick={(e) => this.handleSubmitBug() }>{'Enviar'}</button>
+          {bugResponseError && <div style={{color: 'red', fontWeight: 500}}>Comentarios son limitados a 1000 caracteres</div>}
+          {bugResponseSuccess && <div style={{color: 'green', fontWeight: 500}}>Gracias por su realimentación</div>}
         </div> 
       </div>
       </AriaModal>
@@ -144,10 +239,8 @@ import '../../../styles/components/_query_modal.css'
 
 
   render() {
-    let { selectedTab, selectedSubtab, error, isOpen, saveName, fieldWellOptions } = this.state
+    let { selectedTab, selectedSubtab, error, isOpen, isOpenBug, saveName, fieldWellOptions } = this.state
     let { global } = this.props
-    let pozoFormSubmitting = this.props.formsState.get('pozoFormSubmitting')
-    const errors = this.props.formsState.get('pozoFormError')
 
     global = global.toJS()
 
@@ -183,13 +276,15 @@ import '../../../styles/components/_query_modal.css'
           <div style={{display: 'none'}}>
             { otherForm }
           </div>
-          <button className="submit save-button" disabled={pozoFormSubmitting} onClick={(e) => this.activateModal(pozoFormSubmitting)}>{pozoFormSubmitting ? 'Ahorro...' : 'Guardar'}</button>
-          <button className="submit submit-button" disabled={pozoFormSubmitting} onClick={(e) => this.handleSubmit('submit')}>{pozoFormSubmitting ? 'Enviando...' : 'Enviar'}</button>
+          <button className="submit save-button"  onClick={(e) => this.activateModal()}>Guardar</button>
+          <button className="submit submit-button" onClick={(e) => this.handleSubmit('submit')}>Enviar</button>
+          <button className="submit bug-button" onClick={(e) => this.activateBugModal()}>Comentarios</button>
           <div className="form-error">{this.state.error}</div> 
           <div style={{height: '10px'}}></div>
           <Notification />
           <Loading />
           { isOpen ? this.buildModal() : null }
+          { isOpenBug ? this.buildBugModal() : null }
           <div style={{ float:"left", clear: "both" }}
             ref={(el) => { this.testScroll = el; }}>
           </div>
@@ -202,12 +297,13 @@ import '../../../styles/components/_query_modal.css'
 const mapStateToProps = state => ({
   objetivoYAlcancesIntervencion: state.get('objetivoYAlcancesIntervencion'),
   global: state.get('global'),
+  user: state.getIn(['user', 'id']),
   formsState: state.get('forms'),
- 
+  token: state.getIn(['user', 'token'])
 })
 
 const mapDispatchToProps = dispatch => ({
-  submitPozoForm: (action, name) => {dispatch(submitForm(action, name))},
+  submitPozoForm: (action, token, name) => {dispatch(submitForm(action, token, name))},
 })
 
 export default connect(mapStateToProps, mapDispatchToProps)(InputsUI)

@@ -6,6 +6,7 @@ import ReactTable from 'react-table'
 import {withValidate} from '../../Common/Validate'
 import { setPresionDataPozo, setPressureDepthPozo, setChecked } from '../../../../redux/actions/pozo'
 import InputTable from '../../Common/InputTable'
+import ExcelUpload from '../../Common/ExcelUpload'
 import { InputRow } from '../../Common/InputRow'
 
 let columns = [
@@ -38,76 +39,16 @@ let columns = [
   constructor(props) {
     super(props)
     this.state = { 
-      containsErrors: false,
-      errors: []
+
     }
   }
 
   componentDidMount(){
-    this.validate()
-    this.containsErrors()
-    this.props.containsErrors(this, this.state.containsErrors)
+
   }
 
   componentDidUpdate(){
-    this.containsErrors()
-    this.props.containsErrors(this, this.state.containsErrors)
-  }
 
-  containsErrors(){
-    let foundErrors = false
-    let errors = Object.assign({}, this.state.errors);
-    let {formData} = this.props
-    formData = formData.toJS()
-
-    const checked = formData.checked  || []
-    checked.forEach((checked) => {
-        if(errors[checked]){
-           errors[checked].checked = true
-           foundErrors = true
-        }
-    })
-
-    if(foundErrors !== this.state.containsErrors){
-      this.setState({
-        errors: errors,
-        containsErrors: foundErrors
-      })
-    }
-  }
-
-  validate(event){
-    let {setChecked, formData} = this.props
-    formData = formData.toJS()
-
-    let field = event ? event.target.name : null
-    let {errors, checked} = this.props.validate(field, formData)
-
-    this.setState({
-      errors: errors,
-    })
-
-    if(event && event.target.name){
-      setChecked(checked)
-    }
-  } 
-
-  renderEditable(cellInfo) {
-    let { setPresionDataPozo, formData } = this.props
-    formData = formData.toJS()
-    let { presionDataPozo, pressureDepthPozo } = formData
-
-    return (
-      <div
-        style={{ backgroundColor: "#fafafa" }}
-        contentEditable
-        suppressContentEditableWarning
-        onBlur={e => {
-          presionDataPozo[cellInfo.index][cellInfo.column.id] = e.target.innerHTML;
-          setPresionDataPozo(presionDataPozo)
-        }}
-      >{presionDataPozo[cellInfo.index][cellInfo.column.id]}</div>
-    );
   }
 
   addNewRow() {
@@ -149,57 +90,49 @@ let columns = [
 
      const objectTemplate = {fecha: null, Pws: '', Pwf: ''}
 
+    console.log('render ppzoo')
+
     return (
 
-      <div className='historico-presion-pozo' >
+      <div className='historico-presion' >
         <div className='image'/>
-        <div className='presion-table'>
-          <div className='table-select'>
-            <InputTable
-              className="-striped"
-              data={presionDataPozo}
-              newRow={objectTemplate}
-              setData={setPresionDataPozo}
-              columns={columns}
-              showPagination={false}
-              showPageSizeOptions={false}
-              pageSize={presionDataPozo.length}
-              sortable={false}
-              getTdProps={this.deleteRow}
-            />
+        <div className="inputs">
+          <ExcelUpload
+            template="HistoricoPresionPozo"
+            headers={[
+              { name: 'fecha', type: 'date' },
+              { name: 'Pws', type: 'number' },
+              { name: 'Pwf', type: 'number' },
+            ]}
+            setData={this.props.setPresionDataPozo}
+          />
+          <div className='depth'>
+            <InputRow header="Plano de Referencia" name='pressureDepthPozo' value={pressureDepthPozo} onChange={setPressureDepthPozo} unit={'md'} onBlur={this.validate} errors={this.state.errors}  />
           </div>
-          <button className='new-row-button' onClick={this.addNewRow}>Añadir un renglón</button>
+          <div className='presion-table'>
+            <div className='table-select'>
+              <InputTable
+                className="-striped"
+                data={presionDataPozo}
+                newRow={objectTemplate}
+                setData={setPresionDataPozo}
+                columns={columns}
+                showPagination={false}
+                showPageSizeOptions={false}
+                pageSize={presionDataPozo.length}
+                sortable={false}
+                getTdProps={this.deleteRow}
+              />
+            </div>
+            <button className='new-row-button' onClick={this.addNewRow}>Añadir un renglón</button>
+          </div>
         </div>
-        <div className='depth'>
-          <InputRow header="Profundidad" name='pressureDepthPozo' value={pressureDepthPozo} onChange={setPressureDepthPozo} unit={'md'} />
-        </div>
-          { this.state.errors.presionDataPozo && this.state.errors.presionDataPozo.checked &&
-            <div className="error">{this.state.errors.presionDataPozo.message}</div>
-          }
       </div>
     )
   }
 }
 
-const validate = values => {
-    let errors = {}
-
-    if(!values.presionDataPozo){
-      errors.presionDataPozo = {message: "Esta forma no puede estar vacia"}
-    }else {
-      values.presionDataPozo.forEach((row, index) => {
-        let hasEmpty = Object.values(row).find((value) => { return value === null || value.toString().trim() == '' })
-        if(hasEmpty !== undefined){
-            errors.presionDataPozo = {message: "Ningun campo puede estar vacio."}
-        }
-      })
-    }
-
-    return errors
-}
-
 const mapStateToProps = state => ({
-  forms: state.get('forms'),
   formData: state.get('historicoDePresion'),
 })
 
@@ -209,7 +142,4 @@ const mapDispatchToProps = dispatch => ({
     setPressureDepthPozo: val => dispatch(setPressureDepthPozo(val)),
 })
 
-export default withValidate(
-  validate,
-  connect(mapStateToProps, mapDispatchToProps)(HistoricoDePresionPozo)
-)
+export default connect(mapStateToProps, mapDispatchToProps)(HistoricoDePresionPozo)

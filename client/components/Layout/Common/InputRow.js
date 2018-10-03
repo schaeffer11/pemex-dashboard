@@ -1,6 +1,7 @@
 import React from 'react'
 import Select from 'react-select'
 import DatePicker from 'react-datepicker'
+import MaskedTextInput from "react-text-mask";
 import moment from 'moment'
 import datepicker from "react-datepicker/dist/react-datepicker.css";
 
@@ -137,7 +138,7 @@ export const InputRowSelectUnitless = ({ header, name, value, options, callback,
     )
 }
 
-export const TextAreaUnitless = ({ header, name, unit, className, subheader, value, onChange, index, onBlur, errors =[] }) => {
+export const TextAreaUnitless = ({ header, name, unit, className, subheader, value, onChange, index, onBlur, tooltip, errors =[] }) => {
   
   let handleChange = (e) => {
     onChange(e.target.value, e)
@@ -147,7 +148,7 @@ export const TextAreaUnitless = ({ header, name, unit, className, subheader, val
 
   return (
     <div className={`input-row input-row-unitless ${className}`}>
-      <div className='label'>
+      <div className='label' title={tooltip}>
         {header}
         {subheader ? <br></br>: null}
         {subheader ? subheader : null}
@@ -207,10 +208,15 @@ export const InputDate = ({ name, onChange, value, header, onBlur, errors }) => 
         {header}
       </div>
       <DatePicker
+        customInput={
+              <MaskedTextInput
+                  type="text"
+                  mask={[/\d/, /\d/, "/", /\d/, /\d/, "/", /\d/, /\d/, /\d/, /\d/]}
+              />
+        }
         isClearable={true}
         dateFormat="L"
-        name={name} 
-        onKeyDown={(e) => {e.preventDefault(); return false; }} //Disable input from user
+        name={name}
         onChange={handleSelect}
         onBlur={onBlur}
         selected={objValue}
