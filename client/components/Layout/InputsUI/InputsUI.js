@@ -169,9 +169,7 @@ import '../../../styles/components/_query_modal.css'
       const { token, user } = this.props
 
       const headers = {
-        headers: {
-          'Authorization': `Bearer ${token}`,
-        },
+        'Authorization': `Bearer ${token}`,
       }
 
       const formData = new FormData()
@@ -187,7 +185,6 @@ import '../../../styles/components/_query_modal.css'
       })
         .then(r => r.json())
         .then((res) => {
-          let bugResponseError = res.success
           if (res.success) {
             this.setState({
               bugResponseError: false,

@@ -82,7 +82,6 @@ router.post('/comment', (req, res) => {
 
   let { comment, page, user } = req.body
 
-
   connection.query(`INSERT INTO Feedback (USER, COMMENT, PAGE) VALUES (?, ?, ?)`, [user, comment, page], (err, results) => {
       console.log('comment err', err)
       console.log('comment results', results)
