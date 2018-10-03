@@ -216,7 +216,7 @@ let mudLossColumns = [
     return (
       <div className='layer-table' style={{marginBot: '20px'}}> 
         <div className='header'>
-          PROPIEDADES PROMEDIO
+          Propiedades promedio
         </div>
         <div className='table'>
 
@@ -251,7 +251,7 @@ let mudLossColumns = [
     return (
       <div className="mud-loss-table" style={{marginBot: '20px'}}> 
         <div className='header'>
-          ZONA DE PÉRDIDA
+          Zona de pérdida
         </div>
         <div className='table'>
 
