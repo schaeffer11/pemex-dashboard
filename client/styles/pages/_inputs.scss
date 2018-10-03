@@ -399,7 +399,7 @@
 		.image {
 			grid-area: image;
 			z-index: 1;
-			background-size: cover;
+			background-size: contain;
 			min-height: 800px;
 			border-radius: 10px;
 			background-repeat: no-repeat;

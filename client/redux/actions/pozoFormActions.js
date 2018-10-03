@@ -67,31 +67,31 @@ export function submitForm(action, token, saveName) {
         const innerObj = convertedFields[k]
         const innerKeys = Object.keys(innerObj)
         // look for immediate images
-        // if (innerObj.hasOwnProperty('imgURL')) {
-        //   if (innerObj.imgURL) {
-        //     const img = await getBase64FromURL(innerObj.imgURL)
-        //     innerObj.img = img
-        //     // innerObj.imgName = [pozo, k, utc].join('.')
-        //   }
-        // }
+        if (innerObj.hasOwnProperty('imgURL')) {
+          if (innerObj.imgURL) {
+            const img = await getBase64FromURL(innerObj.imgURL)
+            innerObj.img = img
+            // innerObj.imgName = [pozo, k, utc].join('.')
+          }
+        }
 
         // Look for images inside arrays and get base64
-        // for(let aKeys of innerKeys) {
-        //   const property = innerObj[aKeys]
-        //   if (Array.isArray(property)) {
-        //     let index = 0
-        //     for (let j of property) {
-        //       if (j.hasOwnProperty('imgURL')) {
-        //         if (j.imgURL) {
-        //           const img = await getBase64FromURL(j.imgURL)
-        //           j.img = img
-        //           j.imgName = [pozo, k, j.type, index, utc].join('.')
-        //           index += 1
-        //         }
-        //       }
-        //     }
-        //   }
-        // }
+        for(let aKeys of innerKeys) {
+          const property = innerObj[aKeys]
+          if (Array.isArray(property)) {
+            let index = 0
+            for (let j of property) {
+              if (j.hasOwnProperty('imgURL')) {
+                if (j.imgURL) {
+                  const img = await getBase64FromURL(j.imgURL)
+                  j.img = img
+                  // j.imgName = [pozo, k, j.type, index, utc].join('.')
+                  index += 1
+                }
+              }
+            }
+          }
+        }
         formData.append(k, JSON.stringify(innerObj))
       }
     }

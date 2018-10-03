@@ -424,7 +424,7 @@ router.get('/getHistIntervencionesApuntaladoNew', async (req, res) => {
     BASE: { child: 'base' },
     CIMA: { child: 'cima' },
     LONGITUD_APUNTALADA: { child: 'longitudApuntalada' },
-    ALTURA_TOTAL_DE_FRACTURA: { child: 'aluturaTotalDeFractura' },
+    ALTURA_TOTAL_DE_FRACTURA: { child: 'alturaTotalDeFractura' },
     ANCHO_PROMEDIO: { child: 'anchoPromedio' },
     CONCENTRACION_AREAL: { child: 'concentracionAreal' },
     CONDUCTIVIDAD: { child: 'conductividad' },
@@ -1039,7 +1039,7 @@ router.get('/getFieldPressure', async (req, res) => {
 
   const map = {
     FECHA: { child: 'fecha' },
-    Pws: { child: 'Pws' } 
+    PWS: { child: 'Pws' } 
   }
 
   const mainParent = 'historicoDePresion'
@@ -1291,6 +1291,7 @@ router.get('/getInterventionEstimulacion', async (req, res) => {
 
 
   const map = {
+    TIPO_DE_ESTIMULACION: { parent: 'propuestaEstimulacion', child: 'tipoDeEstimulacion'},
     VOLUMEN_PRECOLCHON_N2: { parent: 'propuestaEstimulacion', child: 'volumenPrecolchonN2' },
     VOLUMEN_SISTEMA_NO_REACTIVO: { parent: 'propuestaEstimulacion', child: 'volumenSistemaNoReativo' }, 
     VOLUMEN_SISTEMA_REACTIVO: { parent: 'propuestaEstimulacion', child: 'volumenSistemaReactivo' }, 
@@ -1298,8 +1299,8 @@ router.get('/getInterventionEstimulacion', async (req, res) => {
     VOLUMEN_DISPLAZAMIENTO_LIQUIDO: { parent: 'propuestaEstimulacion', child: 'volumenDesplazamientoLiquido' }, 
     VOLUMEN_DESPLAZAMIENTO_N2: { parent: 'propuestaEstimulacion', child: 'volumenDesplazamientoN2' },
     VOLUMEN_TOTAL_DE_LIQUIDO: { parent: 'propuestaEstimulacion', child: 'volumenTotalDeLiquido' }, 
-    TIPO_DE_COLOCACION: { parent: 'resultadosSimulacionEstimulacion', child: 'tipoDeColocacion' },
-    TIEMPO_DE_CONTACTO: { parent: 'resultadosSimulacionEstimulacion', child: 'tiempoDeContacto' }, 
+    TIPO_DE_COLOCACION: { parent: 'propuestaEstimulacion', child: 'tipoDeColocacion' },
+    TIEMPO_DE_CONTACTO: { parent: 'propuestaEstimulacion', child: 'tiempoDeContacto' }, 
     PENETRACION_RADIAL: { parent: 'resultadosSimulacionEstimulacion', child: 'penetracionRadial' }, 
     LONGITUD_DE_AGUJERO_DE_GUSANO: { parent: 'resultadosSimulacionEstimulacion', child: 'longitudDeAgujeroDeGusano' },
     EST_INC_ESTRANGULADOR: { parent: 'estIncProduccionEstimulacion', child: 'estIncEstrangulador' },
