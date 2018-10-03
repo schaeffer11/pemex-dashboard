@@ -1,4 +1,4 @@
-import express from 'express'
+import { Router } from 'express'
 import db from '../lib/db'
 import appConfig from '../../app-config.js'
 import path from 'path'
@@ -15,51 +15,49 @@ import { create as createWell, getFields, getWell,
             getInterventionEsimulacion, getInterventionAcido, getInterventionApuntalado, 
             getLabTest, getCedulaEstimulacion, getCedulaAcido, getCedulaApuntalado, 
             getCosts, getInterventionImage } from './pozo'
+import { getAuthorization } from '../middleware';
 
 const connection = db.getConnection(appConfig.users.database)
-const app = express()
 const env = process.env.NODE_ENV || 'dev'
 const isProduction = env === 'production'
+const router = Router()
 
-const upload = multer({
-  limits: { fieldSize: 25 * 1024 * 1024 },
-})
-
-const handleError = (err) => {
-  console.error(err)
-  return { status: 500, error: true }
-}
-
-app.use(upload.array())
-
-app.get('/ping', (req, res) => {
-	console.log('pong')
-  res.json({ response: 'pong' })
-})
-
-app.get('/woop', async (req, res) => {
-  getBuckets()
-  res.send('done')
-})
-
-app.get('/get_template/:template', (req, res) => {
+// We do not want to check authorization for templates so we put above middleware!
+router.get('/get_template/:template', (req, res) => {
   const { template } = req.params
   const filePath = path.join(__dirname, isProduction ? '../' : '../../', `templates/${template}.xlsx`)
   res.sendFile(filePath)
 })
 
-app.get('/what', (req, res) => {
+router.use(getAuthorization)
+const upload = multer({
+  limits: { fieldSize: 25 * 1024 * 1024 },
+})
+
+router.use(upload.array())
+
+router.get('/ping', (req, res) => {
+	console.log('pong')
+  res.json({ response: 'pong' })
+})
+
+router.get('/woop', async (req, res) => {
+  getBuckets()
+  res.send('done')
+})
+
+router.get('/what', (req, res) => {
   const buf = fs.readFileSync(path.join(__dirname, '../../', 'screenshot_test.png'))
   console.log('buf', buf)
   res.send('done')
 })
 
-app.get('/geturl?', async (req, res) => {
+router.get('/geturl?', async (req, res) => {
   const url = await signedURL(req.query.img).catch(reason => console.log(reason))
   res.send(url)
 })
 
-app.get('/deleteobj', async (req, res) => {
+router.get('/deleteobj', async (req, res) => {
   const imgsToDelete = [
     'dareal.pruebasDeLaboratorio.caracterizacinSolubilidad.1536860807755',
     'dareal.pruebasDeLaboratorio.caracterizacinAgua.1536860807755',
@@ -72,7 +70,7 @@ app.get('/deleteobj', async (req, res) => {
   res.send('done')
 })
 
-app.post('/testing', (req, res) => {
+router.post('/testing', (req, res) => {
   // console.log('this is about to get fucked', req.body)
   const buf = Buffer.from(req.body.file, 'base64')
   addObject(buf)
@@ -81,21 +79,21 @@ app.post('/testing', (req, res) => {
 })
 
 
-app.get('/getSubmittedFieldWellMapping', (req, res) => {
+router.get('/getSubmittedFieldWellMapping', (req, res) => {
     connection.query(`SELECT * FROM FieldWellMapping WHERE HAS_DATA = 1`, (err, results) => {
       res.json(results)
     })
 })
 
 
-app.get('/getFieldWellMapping', (req, res) => {
+router.get('/getFieldWellMapping', (req, res) => {
     connection.query(`SELECT * FROM FieldWellMapping`, (err, results) => {
       res.json(results)
     })
 })
 
 
-app.get('/getAllSaves', (req, res) => {
+router.get('/getAllSaves', (req, res) => {
     let { userID } = req.query
     
     connection.query(`SELECT SAVE_NAME, TRANSACTION_ID FROM SavedInputs WHERE USER_ID = ? ORDER BY INSERT_TIME DESC `, 
@@ -111,7 +109,7 @@ app.get('/getAllSaves', (req, res) => {
 })
 
 
-app.get('/getWellTransactions', (req, res) => {
+router.get('/getWellTransactions', (req, res) => {
   let { wellID } = req.query
 
   connection.query(`SELECT * FROM Transactions t JOIN Users u ON t.USER_ID = u.id WHERE WELL_FORMACION_ID = ? ORDER BY INSERT_TIME DESC`,
@@ -128,7 +126,7 @@ app.get('/getWellTransactions', (req, res) => {
 })
 
 
-app.get('/getSave', (req, res) => {
+router.get('/getSave', (req, res) => {
     let { transactionID } = req.query
     
     connection.query(`SELECT * FROM SavedInputs WHERE TRANSACTION_ID = ?`, 
@@ -146,7 +144,7 @@ app.get('/getSave', (req, res) => {
     })
 })
 
-app.get('/getTransactionField', (req, res) => {
+router.get('/getTransactionField', (req, res) => {
     let { fieldID } = req.query
     
     connection.query(`select * from Transactions WHERE FIELD_FORMACION_ID = ? ORDER BY INSERT_TIME DESC LIMIT 1;`, 
@@ -162,7 +160,7 @@ app.get('/getTransactionField', (req, res) => {
     })
 })
 
-app.get('/getTransactionWell', (req, res) => {
+router.get('/getTransactionWell', (req, res) => {
     let { wellID } = req.query
     
     connection.query(`select * from Transactions WHERE WELL_FORMACION_ID = ? ORDER BY INSERT_TIME DESC LIMIT 1;`, 
@@ -182,7 +180,7 @@ app.get('/getTransactionWell', (req, res) => {
 
 
 
-app.post('/well', async (req, res) => {
+router.post('/well', async (req, res) => {
   createWell(req.body, 'submit', err => {
     if (err) {
       console.log('we got an error saving', err)
@@ -195,7 +193,7 @@ app.post('/well', async (req, res) => {
 })
 
 
-app.post('/wellSave', async (req, res) => {
+router.post('/wellSave', async (req, res) => {
 
   // TODO: Find a way to clean up callbacks from createWell
   createWell(req.body, 'save', err => {
@@ -209,7 +207,7 @@ app.post('/wellSave', async (req, res) => {
   })
 })
 
-app.get('/getFields', async (req, res) => {
+router.get('/getFields', async (req, res) => {
   let { transactionID, saved } = req.query
 
   let action = saved ? 'loadSave' : 'loadTransaction'
@@ -274,188 +272,7 @@ app.get('/getFields', async (req, res) => {
   })
 })
 
-
-app.get('/getHistIntervencionesEstimulacionNew', async (req, res) => {
-  let { transactionID, saved } = req.query
-
-  let action = saved ? 'loadSaveEstimulacion' : 'loadTransactionEstimulacion'
-  
-  const map = {
-    FECHA: { child: 'fecha' },
-    TIPO_DE_TRATAMIENTO: { child: 'tipoDeTratamiento' },
-    OBJETIVO: { child: 'objetivo' },
-    COMPANIA: { child: 'compania' },
-    ACIDO_VOL: { child: 'acidoVol' },
-    ACIDO_NOMBRE: { child: 'acidoNombre' },
-    SOLVENTE_VOL: { child: 'solventeVol' },
-    SOLVENTE_NOMBRE: { child: 'solventeNombre' },
-    DIVERGENTE_VOL: { child: 'divergenteVol' },
-    DIVERGENTE_NOMBRE: { child: 'divergenteNombre' },
-    TOTAL_N2: { child: 'totalN2' },
-    BENEFICIO_PROGRAMADO: { child: 'beneficioProgramado' },
-    BENEFICIO_OFICIAL: { child: 'beneficioOficial' },    
-  }
-
-  const mainParent = 'historialDeIntervenciones'
-  const innerParent = 'historicoEstimulacionData'
-
-  getHistIntervencionesNew(transactionID, action, (data) => {
-    const finalObj = {}
-    if (data && data.length > 0) {
-      data.forEach((d, index) => {
-        d.DATE ? d.DATE = d.DATE.toJSON().slice(0, 10) : null
-        const innerObj = {}
-        Object.keys(d).forEach(k => {
-          if (map[k]) {
-            const { child } = map[k]
-            objectPath.set(innerObj, child, d[k])
-          }
-        })
-        objectPath.set(innerObj, 'length', data.length)
-        objectPath.set(innerObj, 'index', index)
-        objectPath.push(finalObj, `${mainParent}.${innerParent}`, innerObj)
-      })
-
-      res.json(finalObj)
-    }
-    else if (action === 'loadTransaction'){
-      res.json({ err: 'No value found in database'  })
-    }
-    else {
-      res.json({
-        mainParent: {
-          innerParent: [
-          {}
-          ]
-        }
-      })
-    }
-  })
-})
-
-app.get('/getHistIntervencionesAcidoNew', async (req, res) => {
-  let { transactionID, saved } = req.query
-
-  let action = saved ? 'loadSaveAcido' : 'loadTransactionAcido'
-  
-  const map = {
-    FECHA: { child: 'fecha' },
-    TIPO_DE_TRATAMIENTO: { child: 'tipoDeTratamiento' },
-    OBJETIVO: { child: 'objetivo' },
-    COMPANIA: { child: 'compania' },
-    BASE: { child: 'base' },
-    CIMA: { child: 'cima' },
-    LONGITUD_GRAVADA: { child: 'longitudGravada' },
-    ALTURA_GRAVADO: { child: 'alturaGravada' },
-    ANCHO_GRAVADO: { child: 'anchoGravado' },
-    CONDUCTIVIDAD: { child: 'conductividad' },
-    FCD: { child: 'fcd' },
-    PRESION_NETA: { child: 'presionNeta' },
-    FLUIDO_FRACTURA: { child: 'fluidoFractura' },    
-    BENEFICIO_PROGRAMADO: { child: 'beneficioProgramado' },
-    BENEFICIO_OFICIAL: { child: 'beneficioOficial' },    
-  }
-
-  const mainParent = 'historialDeIntervenciones'
-  const innerParent = 'historicoAcidoData'
-
-  getHistIntervencionesNew(transactionID, action, (data) => {
-    const finalObj = {}
-    if (data && data.length > 0) {
-      data.forEach((d, index) => {
-        d.DATE ? d.DATE = d.DATE.toJSON().slice(0, 10) : null
-        const innerObj = {}
-        Object.keys(d).forEach(k => {
-          if (map[k]) {
-            const { child } = map[k]
-            objectPath.set(innerObj, child, d[k])
-          }
-        })
-        objectPath.set(innerObj, 'length', data.length)
-        objectPath.set(innerObj, 'index', index)
-        objectPath.push(finalObj, `${mainParent}.${innerParent}`, innerObj)
-      })
-
-      res.json(finalObj)
-    }
-    else if (action === 'loadTransaction'){
-      res.json({ err: 'No value found in database'  })
-    }
-    else {
-      res.json({
-        mainParent: {
-          innerParent: [
-          {}
-          ]
-        }
-      })
-    }
-  })
-})
-
-app.get('/getHistIntervencionesApuntaladoNew', async (req, res) => {
-  let { transactionID, saved } = req.query
-
-  let action = saved ? 'loadSaveApuntalado' : 'loadTransactionApuntalado'
-  
-  const map = {
-    FECHA: { child: 'fecha' },
-    TIPO_DE_TRATAMIENTO: { child: 'tipoDeTratamiento' },
-    OBJETIVO: { child: 'objetivo' },
-    COMPANIA: { child: 'compania' },
-    BASE: { child: 'base' },
-    CIMA: { child: 'cima' },
-    LONGITUD_APUNTALADA: { child: 'longitudApuntalada' },
-    ALTURA_TOTAL_DE_FRACTURA: { child: 'aluturaTotalDeFractura' },
-    ANCHO_PROMEDIO: { child: 'anchoPromedio' },
-    CONCENTRACION_AREAL: { child: 'concentracionAreal' },
-    CONDUCTIVIDAD: { child: 'conductividad' },
-    FCD: { child: 'fcd' },
-    PRESION_NETA: { child: 'presionNeta' },
-    FLUIDO_FRACTURA: { child: 'fluidoFractura' },    
-    BENEFICIO_PROGRAMADO: { child: 'beneficioProgramado' },
-    BENEFICIO_OFICIAL: { child: 'beneficioOficial' },    
-  }
-
-  const mainParent = 'historialDeIntervenciones'
-  const innerParent = 'historicoApuntaladoData'
-
-  getHistIntervencionesNew(transactionID, action, (data) => {
-    const finalObj = {}
-    if (data && data.length > 0) {
-      data.forEach((d, index) => {
-        d.DATE ? d.DATE = d.DATE.toJSON().slice(0, 10) : null
-        const innerObj = {}
-        Object.keys(d).forEach(k => {
-          if (map[k]) {
-            const { child } = map[k]
-            objectPath.set(innerObj, child, d[k])
-          }
-        })
-        objectPath.set(innerObj, 'length', data.length)
-        objectPath.set(innerObj, 'index', index)
-        objectPath.push(finalObj, `${mainParent}.${innerParent}`, innerObj)
-      })
-
-      res.json(finalObj)
-    }
-    else if (action === 'loadTransaction'){
-      res.json({ err: 'No value found in database'  })
-    }
-    else {
-      res.json({
-        mainParent: {
-          innerParent: [
-          {}
-          ]
-        }
-      })
-    }
-  })
-})
-
-
-app.get('/getWell', async (req, res) => {
+router.get('/getWell', async (req, res) => {
   let { transactionID, saved } = req.query
 
   let action = saved ? 'loadSave' : 'loadTransaction'
@@ -509,7 +326,7 @@ app.get('/getWell', async (req, res) => {
 })
 
 
-app.get('/getHistIntervenciones', async (req, res) => {
+router.get('/getHistIntervenciones', async (req, res) => {
   let { transactionID, saved } = req.query
 
   let action = saved ? 'loadSave' : 'loadTransaction'
@@ -560,7 +377,7 @@ app.get('/getHistIntervenciones', async (req, res) => {
 
 
 
-app.get('/getLayer', async (req, res) => {
+router.get('/getLayer', async (req, res) => {
   let { transactionID, saved } = req.query
 
   let action = saved ? 'loadSave' : 'loadTransaction'
@@ -617,7 +434,7 @@ app.get('/getLayer', async (req, res) => {
 
 
 
-app.get('/getMudLoss', async (req, res) => {
+router.get('/getMudLoss', async (req, res) => {
   let { transactionID, saved } = req.query
 
   let action = saved ? 'loadSave' : 'loadTransaction'
@@ -668,7 +485,7 @@ app.get('/getMudLoss', async (req, res) => {
 })
 
 
-app.get('/getMecanico', async (req, res) => {
+router.get('/getMecanico', async (req, res) => {
   let { transactionID, saved } = req.query
 
   let action = saved ? 'loadSave' : 'loadTransaction'
@@ -711,7 +528,7 @@ app.get('/getMecanico', async (req, res) => {
   })
 })
 
-app.get('/getAnalisisAgua', async (req, res) => {
+router.get('/getAnalisisAgua', async (req, res) => {
   let { transactionID, saved } = req.query
 
   let action = saved ? 'loadSave' : 'loadTransaction'
@@ -758,7 +575,7 @@ app.get('/getAnalisisAgua', async (req, res) => {
   })
 })
 
-app.get('/getEmboloViajero', async (req, res) => {
+router.get('/getEmboloViajero', async (req, res) => {
   let { transactionID, saved } = req.query
 
   let action = saved ? 'loadSave' : 'loadTransaction'
@@ -794,7 +611,7 @@ app.get('/getEmboloViajero', async (req, res) => {
   })
 })
 
-app.get('/getBombeoNeumatico', async (req, res) => {
+router.get('/getBombeoNeumatico', async (req, res) => {
   let { transactionID, saved } = req.query
 
   let action = saved ? 'loadSave' : 'loadTransaction'
@@ -836,7 +653,7 @@ app.get('/getBombeoNeumatico', async (req, res) => {
 })
 
 
-app.get('/getBombeoHidraulico', async (req, res) => {
+router.get('/getBombeoHidraulico', async (req, res) => {
   let { transactionID, saved } = req.query
 
   let action = saved ? 'loadSave' : 'loadTransaction'
@@ -877,7 +694,7 @@ app.get('/getBombeoHidraulico', async (req, res) => {
   })
 })
 
-app.get('/getBombeoCavidades', async (req, res) => {
+router.get('/getBombeoCavidades', async (req, res) => {
   let { transactionID, saved } = req.query
 
   let action = saved ? 'loadSave' : 'loadTransaction'
@@ -921,7 +738,7 @@ app.get('/getBombeoCavidades', async (req, res) => {
   })
 })
 
-app.get('/getBombeoElectrocentrifugo', async (req, res) => {
+router.get('/getBombeoElectrocentrifugo', async (req, res) => {
   let { transactionID, saved } = req.query
 
   let action = saved ? 'loadSave' : 'loadTransaction'
@@ -964,7 +781,7 @@ app.get('/getBombeoElectrocentrifugo', async (req, res) => {
   })
 })
 
-app.get('/getBombeoMecanico', async (req, res) => {
+router.get('/getBombeoMecanico', async (req, res) => {
   let { transactionID, saved } = req.query
 
   let action = saved ? 'loadSave' : 'loadTransaction'
@@ -1012,7 +829,7 @@ app.get('/getBombeoMecanico', async (req, res) => {
 
 
 
-app.get('/getFieldPressure', async (req, res) => {
+router.get('/getFieldPressure', async (req, res) => {
   let { transactionID, saved } = req.query
 
   let action = saved ? 'loadSave' : 'loadTransaction'
@@ -1062,7 +879,7 @@ app.get('/getFieldPressure', async (req, res) => {
 
 
 
-app.get('/getWellPressure', async (req, res) => {
+router.get('/getWellPressure', async (req, res) => {
   let { transactionID, saved } = req.query
 
   let action = saved ? 'loadSave' : 'loadTransaction'
@@ -1114,7 +931,7 @@ app.get('/getWellPressure', async (req, res) => {
 
 
 
-app.get('/getWellAforos', async (req, res) => {
+router.get('/getWellAforos', async (req, res) => {
   let { transactionID, saved } = req.query
 
   let action = saved ? 'loadSave' : 'loadTransaction'
@@ -1167,7 +984,7 @@ app.get('/getWellAforos', async (req, res) => {
 })
 
 
-app.get('/getWellProduccion', async (req, res) => {
+router.get('/getWellProduccion', async (req, res) => {
   let { transactionID, saved } = req.query
 
   let action = saved ? 'loadSave' : 'loadTransaction'
@@ -1220,7 +1037,7 @@ app.get('/getWellProduccion', async (req, res) => {
   })
 })
 
-app.get('/getWellImages', async (req, res) => {
+router.get('/getWellImages', async (req, res) => {
   let { transactionID, saved } = req.query
 
   let action = saved ? 'loadSave' : 'loadTransaction'
@@ -1231,7 +1048,7 @@ app.get('/getWellImages', async (req, res) => {
   })
 })
 
-app.get('/getInterventionBase', async (req, res) => {
+router.get('/getInterventionBase', async (req, res) => {
   let { transactionID, saved } = req.query
 
   let action = saved ? 'loadSave' : 'loadTransaction'
@@ -1264,7 +1081,7 @@ app.get('/getInterventionBase', async (req, res) => {
   })
 })
 
-app.get('/getInterventionEstimulacion', async (req, res) => {
+router.get('/getInterventionEstimulacion', async (req, res) => {
   let { transactionID, saved } = req.query
 
   let action = saved ? 'loadSave' : 'loadTransaction'
@@ -1322,7 +1139,7 @@ app.get('/getInterventionEstimulacion', async (req, res) => {
   })
 })
 
-app.get('/getInterventionAcido', async (req, res) => {
+router.get('/getInterventionAcido', async (req, res) => {
   let { transactionID, saved } = req.query
 
   let action = saved ? 'loadSave' : 'loadTransaction'
@@ -1394,7 +1211,7 @@ app.get('/getInterventionAcido', async (req, res) => {
 })
 
 
-app.get('/getInterventionApuntalado', async (req, res) => {
+router.get('/getInterventionApuntalado', async (req, res) => {
   let { transactionID, saved } = req.query
 
   let action = saved ? 'loadSave' : 'loadTransaction'
@@ -1462,7 +1279,7 @@ app.get('/getInterventionApuntalado', async (req, res) => {
     res.json(finalObj)
   })
 })
-app.get('/getLabTest', async (req, res) => {
+router.get('/getLabTest', async (req, res) => {
   let { transactionID, saved } = req.query
 
   let action = saved ? 'loadSave' : 'loadTransaction'
@@ -1638,7 +1455,7 @@ app.get('/getLabTest', async (req, res) => {
   })
 })
 
-app.get('/getCedulaEstimulacion', async (req, res) => {
+router.get('/getCedulaEstimulacion', async (req, res) => {
   let { transactionID, saved } = req.query
 
   let action = saved ? 'loadSave' : 'loadTransaction'
@@ -1699,7 +1516,7 @@ app.get('/getCedulaEstimulacion', async (req, res) => {
 })
 
 
-app.get('/getCedulaAcido', async (req, res) => {
+router.get('/getCedulaAcido', async (req, res) => {
   let { transactionID, saved } = req.query
 
   let action = saved ? 'loadSave' : 'loadTransaction'
@@ -1759,7 +1576,7 @@ app.get('/getCedulaAcido', async (req, res) => {
 })
 
 
-app.get('/getCedulaApuntalado', async (req, res) => {
+router.get('/getCedulaApuntalado', async (req, res) => {
   let { transactionID, saved } = req.query
 
   let action = saved ? 'loadSave' : 'loadTransaction'
@@ -1819,7 +1636,7 @@ app.get('/getCedulaApuntalado', async (req, res) => {
 })
 
 
-app.get('/getCosts', async (req, res) => {
+router.get('/getCosts', async (req, res) => {
   let { transactionID, saved } = req.query
 
   let action = saved ? 'loadSave' : 'loadTransaction'
@@ -1865,7 +1682,7 @@ app.get('/getCosts', async (req, res) => {
   })
 })
 
-app.get('/getInterventionImage', async (req, res) => {
+router.get('/getInterventionImage', async (req, res) => {
   let { transactionID, saved } = req.query
 
   let action = saved ? 'loadSave' : 'loadTransaction'
@@ -1877,8 +1694,8 @@ app.get('/getInterventionImage', async (req, res) => {
 })
 
 
-app.get('*', (req, res) => {
+router.get('*', (req, res) => {
   res.status(404).send(`No API endpoint found for "${req.url}"`)
 })
 
-export default app
+export default router

@@ -54,7 +54,14 @@ import '../../../styles/components/_query_modal.css'
   }
 
   componentDidMount() {
-    fetch('/api/getFieldWellMapping')
+    const { token } = this.props
+    const headers = {
+      headers: {
+        'Authorization': `Bearer ${token}`,
+        'content-type': 'application/json',
+      },
+    }
+    fetch('/api/getFieldWellMapping', headers)
       .then(r => r.json())
       .then(r => {
 
@@ -69,13 +76,19 @@ import '../../../styles/components/_query_modal.css'
 
   }
 
-  handleSubmit(action) {
+  handleSubmit(action) {errors
     let { saveName } = this.state
 
     console.log('herehre', saveName)
-    this.props.submitPozoForm(action, saveName)
-
-
+    if( action === 'save' || this.validate() ){
+      this.props.submitPozoForm(action, this.props.token, saveName)
+      this.setState({'error': ''})
+      console.log('Validate Succeeded')
+    } else {
+      this.setState({'error': 'Esta forma contiene errores. Todos los campos son requeridos.'})
+      this.scrollToBottom()
+      console.log('Validate Failed')
+    }
     this.deactivateModal()
   }
 
@@ -192,11 +205,11 @@ const mapStateToProps = state => ({
   objetivoYAlcancesIntervencion: state.get('objetivoYAlcancesIntervencion'),
   global: state.get('global'),
   formsState: state.get('forms'),
- 
+  token: state.getIn(['user', 'token'])
 })
 
 const mapDispatchToProps = dispatch => ({
-  submitPozoForm: (action, name) => {dispatch(submitForm(action, name))},
+  submitPozoForm: (action, token, name) => {dispatch(submitForm(action, token, name))},
 })
 
 export default connect(mapStateToProps, mapDispatchToProps)(InputsUI)

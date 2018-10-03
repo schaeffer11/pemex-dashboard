@@ -22,8 +22,15 @@ import { setTipoDeSistemo, setHistorialIntervencionesData, setEspesorBruto, setC
   }
 
   componentDidMount(){
+    const { token } = this.props
+    const headers = {
+      headers: {
+        'Authorization': `Bearer ${token}`,
+        'content-type': 'application/json',
+      },
+    }
 
-     fetch('/api/getFieldWellMapping')
+     fetch('/api/getFieldWellMapping', headers)
       .then(r => r.json())
       .then(r => {
 
@@ -198,7 +205,8 @@ import { setTipoDeSistemo, setHistorialIntervencionesData, setEspesorBruto, setC
 const mapStateToProps = state => ({
   formData: state.get('fichaTecnicaDelPozo'),
   generalData: state.get('fichaTecnicaDelPozoHighLevel'),
-  tipoDeSistemo: state.getIn(['sistemasArtificialesDeProduccion', 'tipoDeSistemo'])
+  tipoDeSistemo: state.getIn(['sistemasArtificialesDeProduccion', 'tipoDeSistemo']),
+  token: state.getIn(['user', 'token'])
 })
 
 const mapDispatchToProps = dispatch => ({
