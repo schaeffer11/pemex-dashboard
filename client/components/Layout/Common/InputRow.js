@@ -195,26 +195,33 @@ export const InputRowCosts = ({ header, name, unit, value, onChange, index, onBl
 }
 
 export const InputDate = ({ name, onChange, value, header, onBlur, errors }) => {
-  // const errorElements = generateErrorElements(name, errors)
+
   let handleSelect = (date, event) => {
-    console.log('what are ', date)
+    console.log('handle select')
     if (date) {
+      console.log('if date')
       onChange(date.format('YYYY-MM-DD'))
     }
   }
-  // function handleSelect2(date) {
-  //   console.log('numero 2', date)
+
+
+
+  // function handleBlur(e) {
+  //   checkDate(e.target.value, name, errors, onBlur)
+   
+  //   // if (error === null) {
+  //   //   onChange(moment(e.target.value).format('YYYY-MM-DD'))
+  //   // } else {
+  //   //   console.log('error')
+  //   // }
   // }
 
-  function handleBlur(e) {
+ let handleBlur = (e) => {
+    checkDate(e.target.value, name, errors, onBlur)
     console.log('blur', e.target.value)
-    const error = checkDate(e.target.value, name, errors, onBlur)
-    if (error === null) {
-      onChange(moment(e.target.value).format('YYYY-MM-DD'))
-    } else {
-      console.log('error')
-    }
-  }
+    onChange(e.target.value)
+ }
+
   const objValue = value ? moment(value) : null 
   return (
      <div className='input-row input-row-unitless'>
@@ -222,6 +229,12 @@ export const InputDate = ({ name, onChange, value, header, onBlur, errors }) => 
         {header}
       </div>
       <DatePicker
+        customInput={
+          <MaskedTextInput
+            type='text'
+            mask={[/\d/, /\d/, "/", /\d/, /\d/, "/",  /\d/, /\d/, /\d/, /\d/]}
+          />
+        }
         isClearable={true}
         dateFormat="L"
         name={name}

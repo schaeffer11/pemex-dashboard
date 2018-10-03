@@ -31,7 +31,7 @@ let litologiaOptions = [
           value: null,
         },
         fechaDeExplotacionField: {
-          type: 'date',
+          type: 'date2',
           value: null,
         },
         numeroDePozosOperandoField: {
