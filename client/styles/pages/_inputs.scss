@@ -42,7 +42,7 @@
 
 	.save-button {
 		width: 120px;
-		left: calc(50% - 120px);
+		left: calc(35% - 120px);
 		position: relative;
 		margin-right: 5px;
 		margin-top: 10px;
@@ -52,7 +52,7 @@
   	
 	.submit-button {
 		width: 120px;
-		left: calc(50% - 120px);
+		left: calc(35% - 120px);
 		position: relative;
 		margin-left: 5px;
 		margin-top: 10px;
@@ -265,6 +265,7 @@
     }
 
     .general-data {
+			margin-bottom: 1em;
     	display: grid;
     	grid-column-gap: 10px;
     	position: relative;

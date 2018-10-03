@@ -33,6 +33,10 @@ button {
     color: white;
     min-width: 100px;
   }
+  &.bug-button{
+    float: left;
+    margin-top: .5em;
+  }
   &:hover:enabled {
     cursor: pointer;
     opacity: .7;

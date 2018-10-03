@@ -135,7 +135,7 @@ import { sortLabels } from '../../../../lib/formatters'
         <div className="modal-info"> 
           Seleccione borrador para descargar
         </div>
-        <div className="modal-body">
+        <div className="modal-body" style={{ height: '200px' }}>
             {saveOptions.map(i => {
               let className = i.id === selectedSave ? 'save-item active-save' : 'save-item'
               return (
