@@ -1,9 +1,10 @@
 import React, { Component } from 'react'
 import autobind from 'autobind-decorator'
 import { connect } from 'react-redux'
-
+import moment from 'moment'
 import { InputRow, InputRowUnitless, InputRowSelectUnitless, InputDate } from '../../Common/InputRow'
 import {withValidate} from '../../Common/Validate'
+import { checkEmpty, checkDate } from '../../../../lib/errorCheckers'
 import { setTipoDeFluidoField, setDescubrimientoField, setFechaDeExplotacionField, setNumeroDePozosOperandoField, setPInicialField, setPActualField, setPInicialAnoField, setPActualFechaField, setDpPerAnoField, setTyacField, setPrField, setDensidadDelAceiteField, setPSatField, setRgaFluidoField, setSalinidadField, setPvtRepresentativoField, setLitologiaField, setEspesorNetoField, setPorosidadField, setSwField, setKPromedioField, setCaaField, setCgaField, setQoField, setQgField, setRgaField, setFwField, setNpField, setGpField, setWpField, setRraField, setRrgField, setRrpceField, setH2sField, setCo2Field, setN2Field, setChecked } from '../../../../redux/actions/pozo'
 
 let fluidoOptions = [
@@ -18,25 +19,55 @@ let litologiaOptions = [
     { label: 'Arenas', value: 'Arenas' },
     { label: 'Carbonatos', value: 'Carbonatos'}
 ]
+
 @autobind class TecnicaDelCampo extends Component {
   constructor(props) {
     super(props)
 
     this.state = {
-      containsErrors: false,
-      errors: [],
-      checked: []
+      errors: {
+        descubrimientoField: {
+          type: 'text',
+          value: null,
+        },
+        fechaDeExplotacionField: {
+          type: 'date2',
+          value: null,
+        },
+        numeroDePozosOperandoField: {
+          type: 'text',
+          value: null,
+        },
+      },
     }
   }
 
-  componentDidMount(){
+  componentDidMount() {
+    this.checkAllInputs()
+  }
 
+  checkAllInputs() {
+    let { formData } = this.props
+    formData = formData.toJS()
+    const { errors } = this.state
+    Object.keys(errors).forEach(elem => {
+      const errObj = errors[elem]
+      if (errObj.type === 'text') {
+        checkEmpty(formData[elem], elem, errors, this.updateErrors)
+      } else if (errObj.type === 'date') {
+        checkDate(moment(formData[elem]).format('DD/MM/YYYY'), elem, errors, this.updateErrors)
+      }
+    })
   }
 
   componentDidUpdate(){
 
   }
 
+  updateErrors(errors) {
+    this.setState({ errors })
+    // this.setState({ error: })
+  }
 
 
   makeGeneralesForm() {
@@ -51,9 +82,9 @@ let litologiaOptions = [
         <div className='header'>
           Generales
         </div>
-        <InputRowUnitless header="Descubrimiento" name='descubrimientoField' value={descubrimientoField} onChange={setDescubrimientoField} onBlur={this.validate} errors={this.state.errors}/>
-        <InputDate header="Fecha de explotación" name='fechaDeExplotacionField' value={fechaDeExplotacionField} onChange={setFechaDeExplotacionField} onBlur={this.validate} errors={this.state.errors}/>
-        <InputRowUnitless header="No. de pozos operando" name='numeroDePozosOperandoField' value={numeroDePozosOperandoField} onChange={setNumeroDePozosOperandoField} onBlur={this.validate} errors={this.state.errors}/>
+        <InputRowUnitless header="Descubrimiento" name='descubrimientoField' value={descubrimientoField} onChange={setDescubrimientoField} onBlur={this.updateErrors} errors={this.state.errors}/>
+        <InputDate header="Fecha de explotación" name='fechaDeExplotacionField' value={fechaDeExplotacionField} onChange={setFechaDeExplotacionField} onBlur={this.updateErrors} errors={this.state.errors}/>
+        <InputRowUnitless header="No. de pozos operando" name='numeroDePozosOperandoField' value={numeroDePozosOperandoField} onChange={setNumeroDePozosOperandoField} onBlur={this.updateErrors} errors={this.state.errors}/>
       </div>
     )
   }
