@@ -2,6 +2,7 @@ import React from 'react'
 import Select from 'react-select'
 import DatePicker from 'react-datepicker'
 import MaskedTextInput from "react-text-mask";
+import Cleave from 'cleave.js/react'
 import moment from 'moment'
 import { checkEmpty, checkDate } from '../../../lib/errorCheckers'
 import datepicker from "react-datepicker/dist/react-datepicker.css";
@@ -18,7 +19,7 @@ const generateErrorElements = ( name = '', errors = [] ) => {
 
 export const InputRow = ({ header, type='number', name, unit, value, onChange, onBlur, index, errors = {}, style = {} }) => {
   let handleChange = (e) => {
-    onChange(e.target.value, e)
+    onChange(e.target.rawValue, e)
   }
 
   // const errorElements = generateErrorElements(name, errors)
@@ -28,12 +29,24 @@ export const InputRow = ({ header, type='number', name, unit, value, onChange, o
       <div className='label'>
         {header}
       </div>
-      <input className='input' type={type} value={value} onChange={handleChange} onBlur={(e) => checkEmpty(e, name, errors, onBlur)} name={name} index={index} required>
-      </input>
+      <Cleave
+        className="input"
+        options={{
+          numeral: true,
+          numeralThousandsGroupStyle: 'thousand'
+        }}
+        value={value}
+        onChange={handleChange}
+        onBlur={(e) => checkEmpty(e.target.rawValue, name, errors, onBlur)}
+        index={index}
+        name={name}
+      />
+      {/* <input className='input' type={type} value={value} onChange={handleChange} onBlur={(e) => checkEmpty(e, name, errors, onBlur)} name={name} index={index} required>
+      </input> */}
       <div className='unit'>
         {unit}
       </div>
-      {errors[name] !== null && <div className="error">{errors[name]}</div>}
+      {errors[name] !== undefined && errors[name] !== null && <div className="error">{errors[name].value}</div>}
     </div>
     )
 }
@@ -89,7 +102,7 @@ export const InputRowSelectMulti = ({ header, name, value, options, callback, on
   {/* value={options.find(i=>i.value === value) || null}
         onChange={callback}
         onBlur={handleBlur} */}
-
+  console.log('i should display', errors[name])
   return (
     <div className='input-row input-row-unitless'>
       <div className='label'>
@@ -105,6 +118,7 @@ export const InputRowSelectMulti = ({ header, name, value, options, callback, on
         index={index}
         onBlur={handleBlur}
       />
+      {errors[name] !== null && <div className="error">{errors[name].value}</div>}
       {/* { errorElements } */}
     </div>
     )
@@ -126,14 +140,26 @@ export const InputRowSelectUnitless = ({ header, name, value, options, callback,
   }
   
   const errorElements = generateErrorElements(name, errors)
-
+  const realValue = options.find(i=>i.value === value) || null
   return (
     <div className='input-row input-row-unitless'>
       <div className='label'>
         {header}
       </div>
-      <Select placeholder="Seleccionar..." className='input' simpleValue={true} options={options} value={options.find(i=>i.value === value) || null} onChange={callback} onBlur={handleBlur} name={name} index={index} />
-      { errorElements }
+      <Select
+        placeholder="Seleccionar..."
+        className='input'
+        simpleValue={true}
+        options={options}
+        value={realValue}
+        onChange={callback}
+        onBlur={(e) => checkEmpty(realValue, name, errors, onBlur)}
+        name={name}
+        index={index} 
+      />
+      {/* { errorElements } */}
+      {errors[name] !== undefined && errors[name] !== null && <div className="error">{errors[name].value}</div>}
+
     </div>
     )
 }
@@ -195,33 +221,21 @@ export const InputRowCosts = ({ header, name, unit, value, onChange, index, onBl
 }
 
 export const InputDate = ({ name, onChange, value, header, onBlur, errors }) => {
-
-  let handleSelect = (date, event) => {
-    console.log('handle select')
-    if (date) {
-      console.log('if date')
+  // const errorElements = generateErrorElements(name, errors)
+  let handleSelect = (date) => {
+    if (date.isValid()) {
+      checkDate(date, name, errors, onBlur)
       onChange(date.format('YYYY-MM-DD'))
     }
   }
 
-
-
-  // function handleBlur(e) {
-  //   checkDate(e.target.value, name, errors, onBlur)
-   
-  //   // if (error === null) {
-  //   //   onChange(moment(e.target.value).format('YYYY-MM-DD'))
-  //   // } else {
-  //   //   console.log('error')
-  //   // }
-  // }
-
- let handleBlur = (e) => {
-    checkDate(e.target.value, name, errors, onBlur)
-    console.log('blur', e.target.value)
-    onChange(e.target.value)
- }
-
+  function handleBlur(e) {
+    const date = moment(e.target.value, 'DD/MM/YYYY')
+    if (!date.isValid()) {
+      checkDate(e.target.value, name, errors, onBlur)
+      onChange(null)
+    }
+  }
   const objValue = value ? moment(value) : null 
   return (
      <div className='input-row input-row-unitless'>
@@ -231,8 +245,8 @@ export const InputDate = ({ name, onChange, value, header, onBlur, errors }) => 
       <DatePicker
         customInput={
           <MaskedTextInput
-            type='text'
-            mask={[/\d/, /\d/, "/", /\d/, /\d/, "/",  /\d/, /\d/, /\d/, /\d/]}
+            type="text"
+            mask={[/\d/, /\d/, "/", /\d/, /\d/, "/", /\d/, /\d/, /\d/, /\d/]}
           />
         }
         isClearable={true}

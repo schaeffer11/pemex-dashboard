@@ -31,10 +31,14 @@ let litologiaOptions = [
           value: null,
         },
         fechaDeExplotacionField: {
-          type: 'date2',
+          type: 'date',
           value: null,
         },
         numeroDePozosOperandoField: {
+          type: 'text',
+          value: null,
+        },
+        tipoDeFluidoField: {
           type: 'text',
           value: null,
         },
@@ -125,7 +129,7 @@ let litologiaOptions = [
         <div className='header'>
           Fluido
         </div>
-        <InputRowSelectUnitless header='Tipo de Fluido' name='tipoDeFluidoField' value={tipoDeFluidoField} callback={(e) => setTipoDeFluidoField(e.value)} options={fluidoOptions} onBlur={this.validate} errors={this.state.errors}/>
+        <InputRowSelectUnitless header='Tipo de Fluido' name='tipoDeFluidoField' value={tipoDeFluidoField} callback={(e) => setTipoDeFluidoField(e.value)} options={fluidoOptions} onBlur={this.updateErrors} errors={this.state.errors}/>
         <InputRow header="Densidad del aceite" name='densidadDelAceiteField' value={densidadDelAceiteField} onChange={setDensidadDelAceiteField} unit='°API' onBlur={this.validate} errors={this.state.errors} />
         <InputRow header="P sat" name='pSatField' value={pSatField} onChange={setPSatField} unit={<div>Kg/cm<sup>2</sup></div>} onBlur={this.validate} errors={this.state.errors} />
         <InputRow header="RGA" name='rgaFluidoField' value={rgaFluidoField} onChange={setRgaFluidoField} unit={<div>m<sup>3</sup>/m<sup>3</sup></div>} onBlur={this.validate} errors={this.state.errors} />
@@ -186,8 +190,6 @@ let litologiaOptions = [
   }
 
   render() {
-    console.log('render campo')
-
     return (
       <div className="form tecnica-del-campo">
         <div className="image"/>
