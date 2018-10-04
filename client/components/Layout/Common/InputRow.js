@@ -21,9 +21,10 @@ export const InputRow = ({ header, type='number', name, unit, value, onChange, o
   let handleChange = (e) => {
     onChange(e.target.rawValue, e)
   }
-
-  // const errorElements = generateErrorElements(name, errors)
-
+  if (name === 'pH') {
+    console.log('input row', name, value, unit)
+  }
+  value = value === null ? '' : value
   return (
     <div className='input-row' style={style}>
       <div className='label'>
@@ -41,8 +42,6 @@ export const InputRow = ({ header, type='number', name, unit, value, onChange, o
         index={index}
         name={name}
       />
-      {/* <input className='input' type={type} value={value} onChange={handleChange} onBlur={(e) => checkEmpty(e, name, errors, onBlur)} name={name} index={index} required>
-      </input> */}
       <div className='unit'>
         {unit}
       </div>
@@ -231,12 +230,13 @@ export const InputDate = ({ name, onChange, value, header, onBlur, errors }) => 
 
   function handleBlur(e) {
     const date = moment(e.target.value, 'DD/MM/YYYY')
-    if (!date.isValid()) {
+
+    if (!date.isValid() || e.target.value.includes('_')) {
       checkDate(e.target.value, name, errors, onBlur)
       onChange(null)
     }
   }
-  const objValue = value ? moment(value) : null 
+  const objValue = value ? moment(value) : null
   return (
      <div className='input-row input-row-unitless'>
       <div className='label'>

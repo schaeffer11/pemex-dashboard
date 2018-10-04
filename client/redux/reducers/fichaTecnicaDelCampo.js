@@ -4,7 +4,7 @@ const initialState = Map({
 	descubrimientoField: '',
     fechaDeExplotacionField: null,
     numeroDePozosOperandoField: '',
-    pInicialAnoField: null,
+    pInicialAnoField: '',
     pActualFechaField: null,
     pInicialField: '',
     pActualField: '',
