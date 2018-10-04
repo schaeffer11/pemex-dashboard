@@ -251,7 +251,6 @@ let litologiaOptions = [
     formData = formData.toJS()
 
     let { tipoDeFluidoField, densidadDelAceiteField, pSatField, rgaFluidoField, salinidadField, pvtRepresentativoField } = formData
-
     return (
       <div className='fluido-form' >
         <div className='header'>
