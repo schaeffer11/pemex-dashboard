@@ -8,7 +8,7 @@ import { setPresionDataCampo, setPressureDepthCampo, setChecked } from '../../..
 import InputTable from '../../Common/InputTable'
 import ExcelUpload from '../../Common/ExcelUpload'
 import { InputRow } from '../../Common/InputRow'
-
+import { checkEmpty, checkDate } from '../../../../lib/errorCheckers'
 let columns = [
   {
     Header: '',
@@ -36,16 +36,35 @@ let columns = [
     super(props)
     this.state = { 
       containsErrors: false,
-      errors: []
+      errors: {
+        pressureDepthCampo: {
+          type: 'number',
+          value: null,
+        }
+      }
     }
   }
 
-  componentDidMount(){
-
+  componentDidMount() {
+    this.checkAllInputs()
   }
 
-  componentDidUpdate(){
+  checkAllInputs() {
+    let { formData } = this.props
+    formData = formData.toJS()
+    const { errors } = this.state
+    Object.keys(errors).forEach(elem => {
+      const errObj = errors[elem]
+      if (errObj.type === 'text' || errObj.type === 'number') {
+        checkEmpty(formData[elem], elem, errors, this.updateErrors)
+      } else if (errObj.type === 'date') {
+        checkDate(moment(formData[elem]).format('DD/MM/YYYY'), elem, errors, this.updateErrors)
+      }
+    })
+  }
 
+  updateErrors(errors) {
+    this.setState({ errors })
   }
 
 
@@ -103,7 +122,7 @@ let columns = [
               setData={this.props.setPresionDataCampo}
             />
           <div className='depth'>
-            <InputRow header="Plano de Referencia" name='pressureDepthCampo' value={pressureDepthCampo} onChange={setPressureDepthCampo} unit={'md'} onBlur={this.validate} errors={this.state.errors} />
+            <InputRow header="Plano de Referencia" name='pressureDepthCampo' value={pressureDepthCampo} onChange={setPressureDepthCampo} unit={'md'} onBlur={this.updateErrors} errors={this.state.errors} />
           </div>
           <div className='presion-table'>
             <div className='table-select'>

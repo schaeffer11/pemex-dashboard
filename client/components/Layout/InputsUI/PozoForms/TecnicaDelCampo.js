@@ -192,15 +192,9 @@ let litologiaOptions = [
     })
   }
 
-  componentDidUpdate(){
-
-  }
-
   updateErrors(errors) {
     this.setState({ errors })
-    // this.setState({ error: })
   }
-
 
   makeGeneralesForm() {
     let { setDescubrimientoField, setFechaDeExplotacionField, setNumeroDePozosOperandoField, formData } = this.props

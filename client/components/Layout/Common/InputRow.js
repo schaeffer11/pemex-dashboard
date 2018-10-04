@@ -19,18 +19,11 @@ const generateErrorElements = ( name = '', errors = [] ) => {
 
 export const InputRow = ({ header, type='number', name, unit, value, onChange, onBlur, index, errors = {}, style = {} }) => {
   let handleChange = (e) => {
-    if (name === 'pH') {
-      console.log('handling change', name, e.target.rawValue)
-    }
-    // console.log('something', e)
     onChange(e.target.rawValue, e)
-    // console.log('else', e)
   }
   if (name === 'pH') {
     console.log('input row', name, value, unit)
   }
-
-  // const errorElements = generateErrorElements(name, errors)
   value = value === null ? '' : value
   return (
     <div className='input-row' style={style}>
@@ -49,8 +42,6 @@ export const InputRow = ({ header, type='number', name, unit, value, onChange, o
         index={index}
         name={name}
       />
-      {/* <input className='input' type={type} value={value} onChange={handleChange} onBlur={(e) => checkEmpty(e, name, errors, onBlur)} name={name} index={index} required>
-      </input> */}
       <div className='unit'>
         {unit}
       </div>
