@@ -5,7 +5,7 @@ import ReactTable from 'react-table'
 import moment from 'moment'
 import DatePicker from 'react-datepicker'
 
-import {withValidate} from '../../Common/Validate'
+import { checkEmpty, checkDate } from '../../../../lib/errorCheckers'
 import InputTable from '../../Common/InputTable'
 import { InputRow, InputRowUnitless, InputRowSelectUnitless, InputDate } from '../../Common/InputRow'
 import { setTipoDeSistemo, setHistorialIntervencionesData, setEspesorBruto, setCaliza, setDolomia, setArcilla, setPorosidad, setPermeabilidad, setSw, setCaa, setCga, setTipoDePozo, setPws, setPwf, setPwsFecha, setPwfFecha, setDeltaPPerMes, setTyac, setPvt, setAparejoDeProduccion, setProfEmpacador, setProfSensorPYT, setTipoDeSap, formData, setChecked } from '../../../../redux/actions/pozo'
@@ -14,10 +14,85 @@ import { setTipoDeSistemo, setHistorialIntervencionesData, setEspesorBruto, setC
   constructor(props) {
     super(props)
     this.state = {
-      containsErrors: false,
-      errors: [],
-      checked: [],
-      fieldWellOptions: []
+      fieldWellOptions: [],
+      errors: {
+        caliza: {
+          type: 'number',
+          value: null,
+        },
+        dolomia: {
+          type: 'number',
+          value: null,
+        },
+        arcilla: {
+          type: 'number',
+          value: null,
+        },
+        porosidad: {
+          type: 'number',
+          value: null,
+        },
+        permeabilidad: {
+          type: 'number',
+          value: null,
+        },
+        sw: {
+          type: 'number',
+          value: null,
+        },
+        caa: {
+          type: 'number',
+          value: null,
+        },
+        cga: {
+          type: 'number',
+          value: null,
+        },
+        tipoDePozo: {
+          type: 'text',
+          value: null,
+        },
+        pws: {
+          type: 'number',
+          value: null,
+        },
+        pwsFecha: {
+          type: 'date',
+          value: null,
+        },
+        pwf: {
+          type: 'number',
+          value: null,
+        },
+        pwfFecha: {
+          type: 'date',
+          value: null,
+        },
+        deltaPPerMes: {
+          type: 'number',
+          value: null,
+        },
+        tyac: {
+          type: 'number',
+          value: null,
+        },
+        pvt: {
+          type: 'text',
+          value: null,
+        },
+        aparejoDeProduccion: {
+          type: 'number',
+          value: null,
+        },
+        profEmpacador: {
+          type: 'number',
+          value: null,
+        },
+        profSensorPYT: {
+          type: 'number',
+          value: null,
+        },
+      },
     }
   }
 
@@ -30,6 +105,7 @@ import { setTipoDeSistemo, setHistorialIntervencionesData, setEspesorBruto, setC
       },
     }
 
+    this.checkAllInputs()
      fetch('/api/getFieldWellMapping', headers)
       .then(r => r.json())
       .then(r => {
@@ -40,8 +116,22 @@ import { setTipoDeSistemo, setHistorialIntervencionesData, setEspesorBruto, setC
     })
   }
 
-  componentDidUpdate(){
+  checkAllInputs() {
+    let { formData } = this.props
+    formData = formData.toJS()
+    const { errors } = this.state
+    Object.keys(errors).forEach(elem => {
+      const errObj = errors[elem]
+      if (errObj.type === 'text' || errObj.type === 'number') {
+        checkEmpty(formData[elem], elem, errors, this.updateErrors)
+      } else if (errObj.type === 'date') {
+        checkDate(moment(formData[elem]).format('DD/MM/YYYY'), elem, errors, this.updateErrors)
+      }
+    })
+  }
 
+  updateErrors(errors) {
+    this.setState({ errors })
   }
 
 
@@ -56,14 +146,14 @@ import { setTipoDeSistemo, setHistorialIntervencionesData, setEspesorBruto, setC
         <div className='header'>
           Datos de Formación
         </div>
-        <InputRow header="Caliza" name='caliza' value={caliza} onChange={setCaliza} unit='%' onBlur={this.validate} errors={this.state.errors} />
-        <InputRow header="Dolomia" name='dolomia' value={dolomia} onChange={setDolomia} unit='%' onBlur={this.validate} errors={this.state.errors} />
-        <InputRow header="Arcilla" name='arcilla' value={arcilla} onChange={setArcilla} unit='%' onBlur={this.validate} errors={this.state.errors} />
-        <InputRow header="Porosidad" name='porosidad' value={porosidad} onChange={setPorosidad} unit='%' onBlur={this.validate} errors={this.state.errors} />
-        <InputRow header="Permeabilidad" name='permeabilidad' value={permeabilidad} onChange={setPermeabilidad} unit='mD' onBlur={this.validate} errors={this.state.errors} />
-        <InputRow header="Sw" name='sw' value={sw} onChange={setSw} unit='%' onBlur={this.validate} errors={this.state.errors} />
-        <InputRow header="CAA" title="Contacto agua-aceite" name='caa' value={caa} onChange={setCaa} unit='mvbnm' onBlur={this.validate} errors={this.state.errors} />
-        <InputRow header="CGA" title="Contacto gas-aceite" name='cga' value={cga} onChange={setCga} unit='mvbnm' onBlur={this.validate} errors={this.state.errors} />
+        <InputRow header="Caliza" name='caliza' value={caliza} onChange={setCaliza} unit='%' onBlur={this.updateErrors} errors={this.state.errors} />
+        <InputRow header="Dolomia" name='dolomia' value={dolomia} onChange={setDolomia} unit='%' onBlur={this.updateErrors} errors={this.state.errors} />
+        <InputRow header="Arcilla" name='arcilla' value={arcilla} onChange={setArcilla} unit='%' onBlur={this.updateErrors} errors={this.state.errors} />
+        <InputRow header="Porosidad" name='porosidad' value={porosidad} onChange={setPorosidad} unit='%' onBlur={this.updateErrors} errors={this.state.errors} />
+        <InputRow header="Permeabilidad" name='permeabilidad' value={permeabilidad} onChange={setPermeabilidad} unit='mD' onBlur={this.updateErrors} errors={this.state.errors} />
+        <InputRow header="Sw" name='sw' value={sw} onChange={setSw} unit='%' onBlur={this.updateErrors} errors={this.state.errors} />
+        <InputRow header="CAA" title="Contacto agua-aceite" name='caa' value={caa} onChange={setCaa} unit='mvbnm' onBlur={this.updateErrors} errors={this.state.errors} />
+        <InputRow header="CGA" title="Contacto gas-aceite" name='cga' value={cga} onChange={setCga} unit='mvbnm' onBlur={this.updateErrors} errors={this.state.errors} />
       </div>
     )
   }
@@ -110,17 +200,17 @@ import { setTipoDeSistemo, setHistorialIntervencionesData, setEspesorBruto, setC
         <div className='header'>
           Datos de Pozo
         </div>
-          <InputRowSelectUnitless header="Tipo de pozo" value={tipoDePozo} callback={(e) => setTipoDePozo(e.value)}  name='tipoDePozo' options={wellOptions} onBlur={this.validate} errors={this.state.errors} />
-          <InputRow header="Pws" name='pws' value={pws} onChange={setPws} unit={<div>Kg/cm<sup>2</sup></div>} onBlur={this.validate} errors={this.state.errors} />
-          <InputDate header="Pws (fecha)" name='pwsFecha' value={pwsFecha} onChange={setPwsFecha} onBlur={this.validate} errors={this.state.errors} />
-          <InputRow header="Pwf" name='pwf' value={pwf} onChange={setPwf} unit={<div>Kg/cm<sup>2</sup></div>} onBlur={this.validate} errors={this.state.errors} />
-          <InputDate header="Pwf (fecha)" name='pwfFecha' value={pwfFecha} onChange={setPwfFecha} onBlur={this.validate} errors={this.state.errors} />
-          <InputRow header="Δp/mes" name='deltaPPerMes' value={deltaPPerMes} onChange={setDeltaPPerMes} unit={<div>Kg/cm<sup>2</sup>/mes</div>} onBlur={this.validate} errors={this.state.errors} />
-          <InputRow header={<span>T<sub>yac</sub></span>} name='tyac' value={tyac} onChange={setTyac} unit='°C' onBlur={this.validate} errors={this.state.errors} />
-          <InputRowSelectUnitless header="PVT" name='pvt' value={pvt} callback={(e) => setPvt(e.value)} options={pvtOptions} onBlur={this.validate} errors={this.state.errors} />
-          <InputRow header="Aparejo de producción" value={aparejoDeProduccion} onChange={setAparejoDeProduccion} name='aparejoDeProduccion' unit='pg' onBlur={this.validate} errors={this.state.errors} />
-          <InputRow header="Prof. empacador" name='profEmpacador' value={profEmpacador} onChange={setProfEmpacador} unit='md' onBlur={this.validate} errors={this.state.errors} />
-          <InputRow header="Prof. sensor P y T" name='profSensorPYT' value={profSensorPYT} onChange={setProfSensorPYT} unit='md' onBlur={this.validate} errors={this.state.errors} />
+          <InputRowSelectUnitless header="Tipo de pozo" value={tipoDePozo} callback={(e) => setTipoDePozo(e.value)}  name='tipoDePozo' options={wellOptions} onBlur={this.updateErrors} errors={this.state.errors} />
+          <InputRow header="Pws" name='pws' value={pws} onChange={setPws} unit={<div>Kg/cm<sup>2</sup></div>} onBlur={this.updateErrors} errors={this.state.errors} />
+          <InputDate header="Pws (fecha)" name='pwsFecha' value={pwsFecha} onChange={setPwsFecha} onBlur={this.updateErrors} errors={this.state.errors} />
+          <InputRow header="Pwf" name='pwf' value={pwf} onChange={setPwf} unit={<div>Kg/cm<sup>2</sup></div>} onBlur={this.updateErrors} errors={this.state.errors} />
+          <InputDate header="Pwf (fecha)" name='pwfFecha' value={pwfFecha} onChange={setPwfFecha} onBlur={this.updateErrors} errors={this.state.errors} />
+          <InputRow header="Δp/mes" name='deltaPPerMes' value={deltaPPerMes} onChange={setDeltaPPerMes} unit={<div>Kg/cm<sup>2</sup>/mes</div>} onBlur={this.updateErrors} errors={this.state.errors} />
+          <InputRow header={<span>T<sub>yac</sub></span>} name='tyac' value={tyac} onChange={setTyac} unit='°C' onBlur={this.updateErrors} errors={this.state.errors} />
+          <InputRowSelectUnitless header="PVT" name='pvt' value={pvt} callback={(e) => setPvt(e.value)} options={pvtOptions} onBlur={this.updateErrors} errors={this.state.errors} />
+          <InputRow header="Aparejo de producción" value={aparejoDeProduccion} onChange={setAparejoDeProduccion} name='aparejoDeProduccion' unit='pg' onBlur={this.updateErrors} errors={this.state.errors} />
+          <InputRow header="Prof. empacador" name='profEmpacador' value={profEmpacador} onChange={setProfEmpacador} unit='md' onBlur={this.updateErrors} errors={this.state.errors} />
+          <InputRow header="Prof. sensor P y T" name='profSensorPYT' value={profSensorPYT} onChange={setProfSensorPYT} unit='md' onBlur={this.updateErrors} errors={this.state.errors} />
       </div>
     )
   }
@@ -189,8 +279,6 @@ import { setTipoDeSistemo, setHistorialIntervencionesData, setEspesorBruto, setC
   }
 
   render() {
-
-    console.log('rerenderrr pozooo')
     return (
       <div className="form tecnica-del-pozo">
           <div className="image"/>

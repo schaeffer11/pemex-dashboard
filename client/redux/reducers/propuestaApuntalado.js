@@ -10,7 +10,9 @@ const initialState = Map({
     volumenDeGelDeFractura: '',
     volumenDesplazamiento: '',
     volumenTotalDeLiquido: '',
-        moduloYoungArena: '',
+    
+
+    moduloYoungArena: '',
     moduloYoungLutitas: '',
     relacPoissonArena: '',
     relacPoissonLutatas: '',
@@ -22,7 +24,6 @@ const initialState = Map({
         etapa: 1,
         index: 0,
         sistema: '',
-        // intervalo: '',
         nombreComercial: '',
         tipoDeApuntalante: '',
         concentraciDeApuntalante: '',
@@ -42,7 +43,6 @@ const initialState = Map({
 
 const propuestaApuntalado = (state = initialState, action) => {
   switch (action.type) {
-
     case 'set_intervalo':
         return state.set('intervalo', fromJS(action.value))
     case 'set_longitudDeIntervalo':

@@ -1,24 +1,108 @@
 import React, { Component } from 'react'
 import autobind from 'autobind-decorator'
-import {withValidate} from '../../../Common/Validate'
+
 import { InputRow, InputRowUnitless, InputRowSelectUnitless, TextAreaUnitless } from '../../../Common/InputRow'
 import { setEstIncProdEstimulationImgURL, setEstIncEstrangulador, setEstIncPtp, setEstIncTtp, setEstIncPbaj, setEstIncTbaj, setEstIncPtr, setEstIncQl, setEstIncQo, setEstIncQg, setEstIncQw, setEstIncRGA, setEstIncSalinidad, setEstIncIP, setEstIncDeltaP, setEstIncGastoCompromisoQo, setEstIncGastoCompromisoQg, setObervacionesEstIncEstim } from '../../../../../redux/actions/intervencionesEstimulacion'
 import { connect } from 'react-redux'
+import { checkEmpty, checkDate } from '../../../../../lib/errorCheckers'
 
 @autobind class EstimacionIncProduccionEstimulacion extends Component {
   constructor(props) {
     super(props)
     this.state = { 
-
+      errors: {
+          estIncEstrangulador: {
+            type: 'number',
+            values: null,
+          },
+          estIncPtp: {
+            type: 'number',
+            values: null,
+          },
+          estIncTtp: {
+            type: 'number',
+            values: null,
+          },
+          estIncPbaj: {
+            type: 'number',
+            values: null,
+          },
+          estIncTbaj: {
+            type: 'number',
+            values: null,
+          },
+          estIncPtr: {
+            type: 'number',
+            values: null,
+          },
+          estIncQl: {
+            type: 'number',
+            values: null,
+          },
+          estIncQo: {
+            type: 'number',
+            values: null,
+          },
+          estIncQg: {
+            type: 'number',
+            values: null,
+          },
+          estIncQw: {
+            type: 'number',
+            values: null,
+          },
+          estIncRGA: {
+            type: 'number',
+            values: null,
+          },
+          estIncSalinidad: {
+            type: 'number',
+            values: null,
+          },
+          estIncIP: {
+            type: 'number',
+            values: null,
+          },
+          estIncDeltaP: {
+            type: 'number',
+            values: null,
+          },
+          estIncGastoCompromisoQo: {
+            type: 'number',
+            values: null,
+          },
+          estIncGastoCompromisoQg: {
+            type: 'number',
+            values: null,
+          },
+          obervacionesEstIncEstim: {
+            type: 'text',
+            values: null,
+          },
+        }
     }
   }
 
-  componentDidMount() {
-
+  componentDidMount(){
+    this.checkAllInputs()
   }
 
-  componentDidUpdate(prevProps) {
+  checkAllInputs() {
+    let { formData } = this.props
+    formData = formData.toJS()
+    const { errors } = this.state
+    Object.keys(errors).forEach(elem => {
+      const errObj = errors[elem]
+      if (errObj.type === 'text' || errObj.type === 'number') {
+        checkEmpty(formData[elem], elem, errors, this.updateErrors)
+      } else if (errObj.type === 'date') {
+        checkDate(moment(formData[elem]).format('DD/MM/YYYY'), elem, errors, this.updateErrors)
+      }
+    })
+  }
 
+  updateErrors(errors) {
+    this.setState({ errors })
   }
 
 
@@ -32,20 +116,20 @@ import { connect } from 'react-redux'
         <div className='header'>
           Modelado (análisis nodal)
         </div>
-        <InputRow header="Estrangulador" name='estIncEstrangulador' unit="pg" value={estIncEstrangulador} onChange={setEstIncEstrangulador} errors={this.state.errors} onBlur={this.validate}/>
-        <InputRow header={<div>P<sub>TP</sub></div>} name='estIncPtp' unit={<div>Kg/cm<sup>2</sup></div>} value={estIncPtp} onChange={setEstIncPtp} errors={this.state.errors} onBlur={this.validate}/>
-        <InputRow header={<div>T<sub>TP</sub></div>} name='estIncTtp' unit="°C" value={estIncTtp} onChange={setEstIncTtp} errors={this.state.errors} onBlur={this.validate}/>
-        <InputRow header={<div>P<sub>baj</sub></div>} name='estIncPbaj' unit={<div>Kg/cm<sup>2</sup></div>} value={estIncPbaj} onChange={setEstIncPbaj} errors={this.state.errors} onBlur={this.validate}/>
-        <InputRow header={<div>T<sub>baj</sub></div>} name='estIncTbaj' unit="°C" value={estIncTbaj} onChange={setEstIncTbaj} errors={this.state.errors} onBlur={this.validate}/>
-        <InputRow header={<div>P<sub>TR</sub></div>} name='estIncPtr' unit={<div>Kg/cm<sup>2</sup></div>} value={estIncPtr} onChange={setEstIncPtr} errors={this.state.errors} onBlur={this.validate}/>
-        <InputRow header={<div>Q<sub>l</sub></div>} name='estIncQl' unit="bpd" value={estIncQl} onChange={setEstIncQl} errors={this.state.errors} onBlur={this.validate}/>
-        <InputRow header={<div>Q<sub>o</sub></div>} name='estIncQo' unit="bpd" value={estIncQo} onChange={setEstIncQo} errors={this.state.errors} onBlur={this.validate}/>
-        <InputRow header={<div>Q<sub>g</sub></div>} name='estIncQg' unit="MMpcd" value={estIncQg} onChange={setEstIncQg} errors={this.state.errors} onBlur={this.validate}/> 
-        <InputRow header={<div>Q<sub>w</sub></div>} name='estIncQw' unit="bpd" value={estIncQw} onChange={setEstIncQw} errors={this.state.errors} onBlur={this.validate}/>
-        <InputRow header="RGA" name='estIncRGA' unit={<div>m<sup>3</sup>/m<sup>3</sup></div>} value={estIncRGA} onChange={setEstIncRGA} errors={this.state.errors} onBlur={this.validate}/>
-        <InputRow header="Salinidad" name='estIncSalinidad' unit="ppm" value={estIncSalinidad} onChange={setEstIncSalinidad} errors={this.state.errors} onBlur={this.validate}/>
-        <InputRow header="IP estimado" name='estIncIP' unit="bpd/psi" value={estIncIP} onChange={setEstIncIP} errors={this.state.errors} onBlur={this.validate}/>
-        <InputRow header="ΔP" name='estIncDeltaP' unit={<div>Kg/cm<sup>2</sup></div>} value={estIncDeltaP} onChange={setEstIncDeltaP} errors={this.state.errors} onBlur={this.validate}/>
+        <InputRow header="Estrangulador" name='estIncEstrangulador' unit="pg" value={estIncEstrangulador} onChange={setEstIncEstrangulador} errors={this.state.errors} onBlur={this.updateErrors}/>
+        <InputRow header={<div>P<sub>TP</sub></div>} name='estIncPtp' unit={<div>Kg/cm<sup>2</sup></div>} value={estIncPtp} onChange={setEstIncPtp} errors={this.state.errors} onBlur={this.updateErrors}/>
+        <InputRow header={<div>T<sub>TP</sub></div>} name='estIncTtp' unit="°C" value={estIncTtp} onChange={setEstIncTtp} errors={this.state.errors} onBlur={this.updateErrors}/>
+        <InputRow header={<div>P<sub>baj</sub></div>} name='estIncPbaj' unit={<div>Kg/cm<sup>2</sup></div>} value={estIncPbaj} onChange={setEstIncPbaj} errors={this.state.errors} onBlur={this.updateErrors}/>
+        <InputRow header={<div>T<sub>baj</sub></div>} name='estIncTbaj' unit="°C" value={estIncTbaj} onChange={setEstIncTbaj} errors={this.state.errors} onBlur={this.updateErrors}/>
+        <InputRow header={<div>P<sub>TR</sub></div>} name='estIncPtr' unit={<div>Kg/cm<sup>2</sup></div>} value={estIncPtr} onChange={setEstIncPtr} errors={this.state.errors} onBlur={this.updateErrors}/>
+        <InputRow header={<div>Q<sub>l</sub></div>} name='estIncQl' unit="bpd" value={estIncQl} onChange={setEstIncQl} errors={this.state.errors} onBlur={this.updateErrors}/>
+        <InputRow header={<div>Q<sub>o</sub></div>} name='estIncQo' unit="bpd" value={estIncQo} onChange={setEstIncQo} errors={this.state.errors} onBlur={this.updateErrors}/>
+        <InputRow header={<div>Q<sub>g</sub></div>} name='estIncQg' unit="MMpcd" value={estIncQg} onChange={setEstIncQg} errors={this.state.errors} onBlur={this.updateErrors}/> 
+        <InputRow header={<div>Q<sub>w</sub></div>} name='estIncQw' unit="bpd" value={estIncQw} onChange={setEstIncQw} errors={this.state.errors} onBlur={this.updateErrors}/>
+        <InputRow header="RGA" name='estIncRGA' unit={<div>m<sup>3</sup>/m<sup>3</sup></div>} value={estIncRGA} onChange={setEstIncRGA} errors={this.state.errors} onBlur={this.updateErrors}/>
+        <InputRow header="Salinidad" name='estIncSalinidad' unit="ppm" value={estIncSalinidad} onChange={setEstIncSalinidad} errors={this.state.errors} onBlur={this.updateErrors}/>
+        <InputRow header="IP estimado" name='estIncIP' unit="bpd/psi" value={estIncIP} onChange={setEstIncIP} errors={this.state.errors} onBlur={this.updateErrors}/>
+        <InputRow header="ΔP" name='estIncDeltaP' unit={<div>Kg/cm<sup>2</sup></div>} value={estIncDeltaP} onChange={setEstIncDeltaP} errors={this.state.errors} onBlur={this.updateErrors}/>
 
       </div>
     )
@@ -61,8 +145,8 @@ import { connect } from 'react-redux'
         <div className='header'>
           Gasto Compromiso
         </div>
-        <InputRow header={<div>Q<sub>o</sub></div>} name='estIncGastoCompromisoQo' unit="bpd" value={estIncGastoCompromisoQo} onChange={setEstIncGastoCompromisoQo} errors={this.state.errors} onBlur={this.validate}/>
-        <InputRow header={<div>Q<sub>g</sub></div>} name='estIncGastoCompromisoQg' unit="MMpcd" value={estIncGastoCompromisoQg} onChange={setEstIncGastoCompromisoQg} errors={this.state.errors} onBlur={this.validate}/>
+        <InputRow header={<div>Q<sub>o</sub></div>} name='estIncGastoCompromisoQo' unit="bpd" value={estIncGastoCompromisoQo} onChange={setEstIncGastoCompromisoQo} errors={this.state.errors} onBlur={this.updateErrors}/>
+        <InputRow header={<div>Q<sub>g</sub></div>} name='estIncGastoCompromisoQg' unit="MMpcd" value={estIncGastoCompromisoQg} onChange={setEstIncGastoCompromisoQg} errors={this.state.errors} onBlur={this.updateErrors}/>
       </div>
     )
   }
@@ -77,7 +161,7 @@ import { connect } from 'react-redux'
         <div className='header'>
           Observaciones
         </div>
-        <TextAreaUnitless header="Observaciones" name='obervacionesEstIncEstim' className={'obervaciones'} value={obervacionesEstIncEstim} onChange={setObervacionesEstIncEstim} errors={this.state.errors} onBlur={this.validate}/>
+        <TextAreaUnitless header="Observaciones" name='obervacionesEstIncEstim' className={'obervaciones'} value={obervacionesEstIncEstim} onChange={setObervacionesEstIncEstim} errors={this.state.errors} onBlur={this.updateErrors}/>
       </div>
     )
   }

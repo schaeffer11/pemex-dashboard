@@ -8,23 +8,70 @@ import { connect } from 'react-redux'
 import { InputRow, CalculatedValue, InputRowUnitless, InputRowSelectUnitless } from '../../../Common/InputRow'
 import { setCedulaData, setModuloYoungArena, setModuloYoungLutitas, setRelacPoissonArena, setRelacPoissonLutatas, setGradienteDeFractura, setDensidadDeDisparos, setDiametroDeDisparos, setIntervalo, setLongitudDeIntervalo, setVolAparejo, setCapacidadTotalDelPozo, setVolumenPrecolchonN2, setVolumenDeApuntalante, setVolumenDeGelDeFractura, setVolumenDesplazamiento, setVolumenTotalDeLiquido, setChecked, setPropuestaCompany } from '../../../../../redux/actions/intervencionesApuntalado'
 import { round, calculateVolumes, getSistemaOptions } from '../helpers'
+import { checkEmpty, checkDate } from '../../../../../lib/errorCheckers'
 
 @autobind class PropuestaDeApuntalado extends Component {
   constructor(props) {
     super(props)
     this.state = { 
-
+      errors: {
+          propuestaCompany: {
+            type: 'text',
+            values: null,
+          },
+          moduloYoungArena: {
+            type: 'number',
+            values: null,
+          },
+          moduloYoungLutitas: {
+            type: 'number',
+            values: null,
+          },
+          relacPoissonArena: {
+            type: 'number',
+            values: null,
+          },
+          relacPoissonLutatas: {
+            type: 'number',
+            values: null,
+          },
+          gradienteDeFractura: {
+            type: 'number',
+            values: null,
+          },
+          densidadDeDisparos: {
+            type: 'number',
+            values: null,
+          },
+          diametroDeDisparos: {
+            type: 'number',
+            values: null,
+          },
+      }
     }
   }
 
-  componentDidMount() {
-
+  componentDidMount(){
+    this.checkAllInputs()
   }
 
-  componentDidUpdate(prevProps) {
-
+  checkAllInputs() {
+    let { formData } = this.props
+    formData = formData.toJS()
+    const { errors } = this.state
+    Object.keys(errors).forEach(elem => {
+      const errObj = errors[elem]
+      if (errObj.type === 'text' || errObj.type === 'number') {
+        checkEmpty(formData[elem], elem, errors, this.updateErrors)
+      } else if (errObj.type === 'date') {
+        checkDate(moment(formData[elem]).format('DD/MM/YYYY'), elem, errors, this.updateErrors)
+      }
+    })
   }
 
+  updateErrors(errors) {
+    this.setState({ errors })
+  }
 
   makeGeneralForm() {
     let { formData, setPropuestaCompany, intervalos } = this.props
@@ -50,9 +97,10 @@ import { round, calculateVolumes, getSistemaOptions } from '../helpers'
         </div>
         <InputRowSelectUnitless
           header="Compañía Seleccionada para el Tratamiento"
-          name="company"
+          name="propuestaCompany"
           options={companyOptions}
-          onBlur={this.validate}
+          onBlur={this.updateErrors}
+          errors={this.state.errors}
           value={propuestaCompany}
           callback={e => setPropuestaCompany(e.value)}
         />
@@ -129,13 +177,13 @@ import { round, calculateVolumes, getSistemaOptions } from '../helpers'
         <div className='header'>
           Información de Geomecánica
         </div>
-        <InputRow header="Módulo young arena" name='moduloYoungArena' value={moduloYoungArena} onChange={setModuloYoungArena} unit='psi'  errors={this.state.errors} onBlur={this.validate}/>
-        <InputRow header="Módulo young lutitas" name='moduloYoungLutitas' value={moduloYoungLutitas} onChange={setModuloYoungLutitas} unit='psi'  errors={this.state.errors} onBlur={this.validate}/>
-        <InputRow header="Relac. poisson arena" name='relacPoissonArena' value={relacPoissonArena} onChange={setRelacPoissonArena} unit='adim'  errors={this.state.errors} onBlur={this.validate}/>
-        <InputRow header="Relac. poisson lutatas" name='relacPoissonLutatas' value={relacPoissonLutatas} onChange={setRelacPoissonLutatas} unit='adim'  errors={this.state.errors} onBlur={this.validate}/>
-        <InputRow header="Gradiente de fractura" name='gradienteDeFractura' value={gradienteDeFractura} onChange={setGradienteDeFractura} unit='psi/ft'  errors={this.state.errors} onBlur={this.validate}/>
-        <InputRow header="Densidad de disparos" name='densidadDeDisparos' value={densidadDeDisparos} onChange={setDensidadDeDisparos} unit='c/m'  errors={this.state.errors} onBlur={this.validate}/>
-        <InputRow header="Diámetro de disparos" name='diametroDeDisparos' value={diametroDeDisparos} onChange={setDiametroDeDisparos} unit='pg'  errors={this.state.errors} onBlur={this.validate}/>
+        <InputRow header="Módulo young arena" name='moduloYoungArena' value={moduloYoungArena} onChange={setModuloYoungArena} unit='psi'  errors={this.state.errors} onBlur={this.updateErrors}/>
+        <InputRow header="Módulo young lutitas" name='moduloYoungLutitas' value={moduloYoungLutitas} onChange={setModuloYoungLutitas} unit='psi'  errors={this.state.errors} onBlur={this.updateErrors}/>
+        <InputRow header="Relac. poisson arena" name='relacPoissonArena' value={relacPoissonArena} onChange={setRelacPoissonArena} unit='adim'  errors={this.state.errors} onBlur={this.updateErrors}/>
+        <InputRow header="Relac. poisson lutatas" name='relacPoissonLutatas' value={relacPoissonLutatas} onChange={setRelacPoissonLutatas} unit='adim'  errors={this.state.errors} onBlur={this.updateErrors}/>
+        <InputRow header="Gradiente de fractura" name='gradienteDeFractura' value={gradienteDeFractura} onChange={setGradienteDeFractura} unit='psi/ft'  errors={this.state.errors} onBlur={this.updateErrors}/>
+        <InputRow header="Densidad de disparos" name='densidadDeDisparos' value={densidadDeDisparos} onChange={setDensidadDeDisparos} unit='c/m'  errors={this.state.errors} onBlur={this.updateErrors}/>
+        <InputRow header="Diámetro de disparos" name='diametroDeDisparos' value={diametroDeDisparos} onChange={setDiametroDeDisparos} unit='pg'  errors={this.state.errors} onBlur={this.updateErrors}/>
       </div>
     )
   }

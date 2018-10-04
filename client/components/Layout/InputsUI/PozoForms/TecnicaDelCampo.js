@@ -311,6 +311,10 @@ let litologiaOptions = [
   }
 
   render() {
+    let { errors } = this.state
+
+    console.log(errors.fechaDeExplotacionField)
+
     return (
       <div className="form tecnica-del-campo">
         <div className="image"/>

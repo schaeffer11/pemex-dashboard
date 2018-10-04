@@ -21,9 +21,8 @@ export const InputRow = ({ header, type='number', name, unit, value, onChange, o
   let handleChange = (e) => {
     onChange(e.target.rawValue, e)
   }
-  if (name === 'pH') {
-    console.log('input row', name, value, unit)
-  }
+
+  // const errorElements = generateErrorElements(name, errors)
   value = value === null ? '' : value
   return (
     <div className='input-row' style={style}>
@@ -163,13 +162,11 @@ export const InputRowSelectUnitless = ({ header, name, value, options, callback,
     )
 }
 
-export const TextAreaUnitless = ({ header, name, unit, className, subheader, value, onChange, index, onBlur, tooltip, errors =[] }) => {
+export const TextAreaUnitless = ({ header, name, unit, className, subheader, value, onChange, index, onBlur, tooltip, errors = {} }) => {
   
   let handleChange = (e) => {
     onChange(e.target.value, e)
   }
-
-  const errorElements = generateErrorElements(name, errors)
 
   return (
     <div className={`input-row input-row-unitless ${className}`}>
@@ -178,9 +175,16 @@ export const TextAreaUnitless = ({ header, name, unit, className, subheader, val
         {subheader ? <br></br>: null}
         {subheader ? subheader : null}
       </div>
-      <textarea type='text' style={{height: '130px'}} value={value} onChange={handleChange} onBlur={onBlur} name={name} index={index}>
+      <textarea 
+        type='text' 
+        style={{height: '130px'}} 
+        value={value} 
+        onChange={handleChange} 
+        onBlur={(e) => checkEmpty(e.target.value, name, errors, onBlur)}
+        name={name} 
+        index={index}>
       </textarea>
-      { errorElements }
+      {errors[name] && errors[name].value !== null && <div className="error">{errors[name].value}</div>}
     </div>
     )
 }
@@ -236,7 +240,8 @@ export const InputDate = ({ name, onChange, value, header, onBlur, errors }) => 
       onChange(null)
     }
   }
-  const objValue = value ? moment(value) : null
+  
+  const objValue = value ? moment(value) : null 
   return (
      <div className='input-row input-row-unitless'>
       <div className='label'>
