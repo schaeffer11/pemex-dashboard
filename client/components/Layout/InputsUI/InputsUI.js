@@ -15,6 +15,8 @@ import Notification from '../Common/Notification'
 import Loading from '../Common/Loading'
 import AriaModal from 'react-aria-modal'
 import '../../../styles/components/_query_modal.css'
+import { setHasErrorsFichaTecnicaDelPozo } from '../../../redux/actions/pozo'
+import { setHasSubmitted } from '../../../redux/actions/global'
 
 @autobind class InputsUI extends Component {
   constructor(props) {
@@ -82,13 +84,43 @@ import '../../../styles/components/_query_modal.css'
 
   handleSubmit(action) {
     let { saveName } = this.state
+    let { hasErrorsFichaTecnicaDelPozo, setHasErrorsFichaTecnicaDelPozo, setHasSubmitted } = this.props
+
+    console.log('did i do this right', hasErrorsFichaTecnicaDelPozo)
+
+    if (action === 'submit') {
+      let hasErrors = false
+      setHasSubmitted(true)
+      
+      if (hasErrorsFichaTecnicaDelPozo === null || hasErrorsFichaTecnicaDelPozo === true) {
+        console.log('in here bitch', hasErrorsFichaTecnicaDelPozo, hasErrorsFichaTecnicaDelPozo === null)
+        hasErrorsFichaTecnicaDelPozo === null ? setHasErrorsFichaTecnicaDelPozo(true) : null
+        hasErrors = true
+      }
 
 
-    this.props.submitPozoForm(action, this.props.token, saveName)
-    this.setState({'error': ''})
-
-    this.deactivateModal()
+      if (!hasErrors) {
+          console.log('no errors, im submitting')
+         this.props.submitPozoForm(action, this.props.token, saveName)
+          this.setState({'error': ''})
+      }
+      else {
+        console.log('there was an errror, im out')
+        // this.setState({'error': 'something'})
+      }
+    }
+    else {
+      this.props.submitPozoForm(action, this.props.token, saveName)
+      this.setState({'error': ''})
+      this.deactivateModal()
+    }
   }
+
+
+
+
+
+
 
   scrollToBottom() {
     this.testScroll.scrollIntoView({ behaviour: 'smooth'})
@@ -299,11 +331,14 @@ const mapStateToProps = state => ({
   global: state.get('global'),
   user: state.getIn(['user', 'id']),
   formsState: state.get('forms'),
-  token: state.getIn(['user', 'token'])
+  token: state.getIn(['user', 'token']),
+  hasErrorsFichaTecnicaDelPozo: state.getIn(['fichaTecnicaDelPozo', 'hasErrors']),
 })
 
 const mapDispatchToProps = dispatch => ({
   submitPozoForm: (action, token, name) => {dispatch(submitForm(action, token, name))},
+  setHasErrorsFichaTecnicaDelPozo: val => dispatch(setHasErrorsFichaTecnicaDelPozo(val)),
+  setHasSubmitted: val => dispatch(setHasSubmitted(val)),
 })
 
 export default connect(mapStateToProps, mapDispatchToProps)(InputsUI)

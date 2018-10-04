@@ -5,12 +5,6 @@ export const setActivo = value => ({ type: 'set_activo', value})
 export const setCampo = value => ({ type: 'set_campo', value})
 export const setPozo = value => ({ type: 'set_pozo', value})
 export const setFormacion = value => ({ type: 'set_formacion', value})
-//export const setChecked = value => ({ type: 'set_checked', value})
-export const setChecked = (value, form)  => ({
-   type: 'set_forms_checked', 
-   form: form,
-   value: value
-}) 
 
 //FichaTecnicaDelCampo
 export const setDescubrimientoField = value => ({ type: 'set_descubrimientoField', value})
@@ -50,6 +44,7 @@ export const setH2sField = value => ({ type: 'set_h2sField', value})
 export const setCo2Field = value => ({ type: 'set_co2Field', value})
 export const setN2Field = value => ({ type: 'set_n2Field', value})
 export const setFichaTecnicaDelCampo = value => ({ type: 'set_fichaTecnicaDelCampo', value})
+export const setHasErrorsFichaTecnicaDelCampo = value => ({ type: 'set_hasErrorsFichaTecnicaDelCampo', value})
 
 //HistorialDeIntervenciones
 export const setHistoricoEstimulacionData = value => ({ type: 'set_historicoEstimulacionData', value})
@@ -90,6 +85,7 @@ export const setIntervalos = value => ({
   })
 })
 export const setFichaTecnicaDelPozo = value => ({ type: 'set_fichaTecnicaDelPozo', value})
+export const setHasErrorsFichaTecnicaDelPozo = value => ({ type: 'set_hasErrorsFichaTecnicaDelPozo', value})
 
 //InformacionDeSistemasArtificialsDeProduccion
 export const setTipoDeSistemo = value => ({ type: 'set_tipoDeSistemo', value})

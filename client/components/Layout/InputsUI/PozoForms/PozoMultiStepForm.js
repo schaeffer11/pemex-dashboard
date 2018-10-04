@@ -24,7 +24,7 @@ import { setPage } from '../../../../redux/actions/global'
 
 const forms = [
   {'title' : 'Ficha Técnica del Campo', content: <TecnicaDelCampo /> },
-  {'title' : 'Ficha Técnica del Pozo' , content:<TecnicaDelPozo /> },
+  {'title' : 'Ficha Técnica del Pozo' , errors: [], content:<TecnicaDelPozo /> },
   {'title' : 'Histórico De Intervenciones', content: <HistoricoDeIntervenciones />},
   {'title' : 'Evaluación Petrofísica', content: <EvaluacionPetrofisica /> },
   {'title' : 'Edo. Mecánico y Aparejo de Producción', content: <MecanicoYAparejo /> },
@@ -786,20 +786,24 @@ const forms = [
   }
 
   render() {
-    let { setShowForms } = this.props
+    let { setShowForms, hasSubmitted, fichaTecnicaDelPozoHasErrors } = this.props
     let { fieldWellOptions } = this.state
     let { isOpen } = this.state
     let className = 'subtab'
     let title = forms[this.state.currentStep].title
     
-
+    let errors = [false, fichaTecnicaDelPozoHasErrors, false, false, false, false, false, false, false, false, false]
 
     return (
        <div className={`multistep-form`}>
         <div className="subtabs">
             {forms.map( (tab, index) => {
                const active = this.state.currentStep === index ? 'active' : ''; 
-               return <div className={`${className} ${active}`} onClick={() => this.handleClick(index)} key={index}><span></span> {tab.title} </div>
+               let error = errors[index]
+
+               const errorClass = (error && hasSubmitted) ? 'error' : '';
+
+               return <div className={`${className} ${active} ${errorClass}`} onClick={() => this.handleClick(index)} key={index}><span></span> {tab.title} </div>
                }
             )}
         </div>
@@ -842,8 +846,10 @@ const mapDispatchToProps = dispatch => ({
 const mapStateToProps = state => ({
   everything: state,
   formsState: state.get('forms'),
+  hasSubmitted: state.getIn(['global', 'hasSubmitted']),
   fichaTecnicaDelPozoHighLevel: state.get('fichaTecnicaDelPozoHighLevel'),
   fichaTecnicaDelPozo: state.get('fichaTecnicaDelPozo'),
+  fichaTecnicaDelPozoHasErrors: state.getIn(['fichaTecnicaDelPozo', 'hasErrors']),
   fichaTecnicaDelCampo: state.get('fichaTecnicaDelCampo'),
   objetivoYAlcancesIntervencion: state.get('objetivoYAlcancesIntervencion'),
   sistemasArtificialesDeProduccion: state.get('sistemasArtificialesDeProduccion'),
@@ -851,6 +857,7 @@ const mapStateToProps = state => ({
   analisisDelAgua: state.get('analisisDelAgua'),
   historicoDeAforos: state.get('historicoDeAforos'),
   user: state.get('user')
+
 })
 
 
