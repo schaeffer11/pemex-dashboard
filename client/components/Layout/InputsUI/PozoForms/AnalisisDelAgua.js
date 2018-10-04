@@ -109,8 +109,8 @@ const yesOrNoOptions = [{
     }
   }
 
-  componentDidMount(){
-
+  componentDidMount() {
+    this.checkAllInputs()
   }
 
   checkAllInputs() {
@@ -126,6 +126,7 @@ const yesOrNoOptions = [{
       }
     })
   }
+
 
   updateErrors(errors) {
     this.setState({ errors })

@@ -4,18 +4,45 @@ import { connect } from 'react-redux'
 
 import { InputRow, InputRowUnitless, InputRowSelectUnitless, TextAreaUnitless } from '../../../Common/InputRow'
 import { setPenetracionRadial, setLongitudDeAgujeroDeGusano, setEvidenceSimulationImgURL } from '../../../../../redux/actions/intervencionesEstimulacion'
-
+import { checkEmpty, checkDate } from '../../../../../lib/errorCheckers';
 
 @autobind class ResultadosDeLaSimulacionEstimulacion extends Component {
   constructor(props) {
     super(props)
-    this.state = { 
-
+    this.state = {
+      errors: {
+        penetracionRadial: {
+          type: 'number',
+          value: null
+        },
+        longitudDeAgujeroDeGusano: {
+          type: 'number',
+          value: null
+        },
+      }
     }
   }
 
   componentDidMount() {
+    this.checkAllInputs()
+  }
 
+  checkAllInputs() {
+    let { formData } = this.props
+    formData = formData.toJS()
+    const { errors } = this.state
+    Object.keys(errors).forEach(elem => {
+      const errObj = errors[elem]
+      if (errObj.type === 'text' || errObj.type === 'number') {
+        checkEmpty(formData[elem], elem, errors, this.updateErrors)
+      } else if (errObj.type === 'date') {
+        checkDate(moment(formData[elem]).format('DD/MM/YYYY'), elem, errors, this.updateErrors)
+      }
+    })
+  }
+
+  updateErrors(errors) {
+    this.setState({ errors })
   }
 
   makeMatricialForm() {
@@ -27,8 +54,8 @@ import { setPenetracionRadial, setLongitudDeAgujeroDeGusano, setEvidenceSimulati
         <div className='header'>
           Matricial
         </div>
-        <InputRow header="Penetración radial" name='penetracionRadial' unit="pg" value={penetracionRadial} onChange={setPenetracionRadial} errors={this.state.errors} onBlur={this.validate} />
-        <InputRow header="Longitud de agujero de gusano" name='longitudDeAgujeroDeGusano' unit="pg" value={longitudDeAgujeroDeGusano} onChange={setLongitudDeAgujeroDeGusano} errors={this.state.errors} onBlur={this.validate} />
+        <InputRow header="Penetración radial" name='penetracionRadial' unit="pg" value={penetracionRadial} onChange={setPenetracionRadial} errors={this.state.errors} onBlur={this.updateErrors} />
+        <InputRow header="Longitud de agujero de gusano" name='longitudDeAgujeroDeGusano' unit="pg" value={longitudDeAgujeroDeGusano} onChange={setLongitudDeAgujeroDeGusano} errors={this.state.errors} onBlur={this.updateErrors} />
       </div>
     )
   }
