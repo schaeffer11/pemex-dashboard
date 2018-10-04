@@ -35,11 +35,139 @@ let litologiaOptions = [
           value: null,
         },
         numeroDePozosOperandoField: {
-          type: 'text',
+          type: 'number',
+          value: null,
+        },
+        pInicialAnoField: {
+          type: 'number',
+          value: null,
+        },
+        pActualFechaField: {
+          type: 'date',
+          value: null,
+        },
+        pInicialField: {
+          type: 'number',
+          value: null,
+        },
+        pActualField: {
+          type: 'number',
+          value: null,
+        },
+        dpPerAnoField: {
+          type: 'number',
+          value: null,
+        },
+        tyacField: {
+          type: 'number',
+          value: null,
+        },
+        prField: {
+          type: 'number',
           value: null,
         },
         tipoDeFluidoField: {
           type: 'text',
+          value: null,
+        },
+        densidadDelAceiteField: {
+          type: 'number',
+          value: null,
+        },
+        pSatField: {
+          type: 'number',
+          value: null,
+        },
+        rgaFluidoField: {
+          type: 'number',
+          value: null,
+        },
+        salinidadField: {
+          type: 'number',
+          value: null,
+        },
+        pvtRepresentativoField: {
+          type: 'text',
+          value: null,
+        },
+        litologiaField: {
+          type: 'text',
+          value: null,
+        },
+        espesorNetoField: {
+          type: 'number',
+          value: null,
+        },
+        porosidadField: {
+          type: 'number',
+          value: null,
+        },
+        swField: {
+          type: 'number',
+          value: null,
+        },
+        kPromedioField: {
+          type: 'number',
+          value: null,
+        },
+        caaField: {
+          type: 'number',
+          value: null,
+        },
+        cgaField: {
+          type: 'number',
+          value: null,
+        },
+        qoField: {
+          type: 'number',
+          value: null,
+        },
+        qgField: {
+          type: 'number',
+          value: null,
+        },
+        rgaField: {
+          type: 'number',
+          value: null,
+        },
+        fwField: {
+          type: 'number',
+          value: null,
+        },
+        npField: {
+          type: 'number',
+          value: null,
+        },
+        gpField: {
+          type: 'number',
+          value: null,
+        },
+        wpField: {
+          type: 'number',
+          value: null,
+        },
+        rraField: {
+          type: 'number',
+          value: null,
+        },
+        rrgField: {
+          type: 'number',
+          value: null,
+        },
+        rrpceField: {
+          type: 'number',
+          value: null,
+        },
+        h2sField: {
+          type: 'number',
+          value: null,
+        },
+        co2Field: {
+          type: 'number',
+          value: null,
+        },
+        n2Field: {
+          type: 'number',
           value: null,
         },
       },
@@ -56,7 +184,7 @@ let litologiaOptions = [
     const { errors } = this.state
     Object.keys(errors).forEach(elem => {
       const errObj = errors[elem]
-      if (errObj.type === 'text') {
+      if (errObj.type === 'text' || errObj.type === 'number') {
         checkEmpty(formData[elem], elem, errors, this.updateErrors)
       } else if (errObj.type === 'date') {
         checkDate(moment(formData[elem]).format('DD/MM/YYYY'), elem, errors, this.updateErrors)
@@ -105,13 +233,13 @@ let litologiaOptions = [
         <div className='header'>
           Explotación
         </div>
-        <InputRow header="P. inicial" name='pInicialField' value={pInicialField} onChange={setPInicialField} unit={<div>Kg/cm<sup>2</sup></div>} onBlur={this.validate} errors={this.state.errors} />
-        <InputRowUnitless header="P. inicial (año)" name='pInicialAnoField' value={pInicialAnoField} onChange={setPInicialAnoField} onBlur={this.validate} errors={this.state.errors} />
-        <InputRow header="P. actual" name='pActualField' value={pActualField} onChange={setPActualField} unit={<div>Kg/cm<sup>2</sup></div>} onBlur={this.validate} errors={this.state.errors} />
-        <InputDate header="P. actual (fecha)" name='pActualFechaField' value={pActualFechaField} onChange={setPActualFechaField} unit='' onBlur={this.validate} errors={this.state.errors} />
-        <InputRow header="DP/año" name='dpPerAnoField' value={dpPerAnoField} onChange={setDpPerAnoField} unit={<div>Kg/cm<sup>2</sup>/año</div>} onBlur={this.validate} errors={this.state.errors} />
-        <InputRow header="T yac" name='tyacField' value={tyacField} onChange={setTyacField} unit='°C' onBlur={this.validate} errors={this.state.errors} />
-        <InputRow header="P.R." name='prField' value={prField} onChange={setPrField} unit='mvbnm' onBlur={this.validate} errors={this.state.errors} />
+        <InputRow header="P. inicial" name='pInicialField' value={pInicialField} onChange={setPInicialField} unit={<div>Kg/cm<sup>2</sup></div>} onBlur={this.updateErrors} errors={this.state.errors} />
+        <InputRowUnitless header="P. inicial (año)" name='pInicialAnoField' value={pInicialAnoField} onChange={setPInicialAnoField} onBlur={this.updateErrors} errors={this.state.errors} />
+        <InputRow header="P. actual" name='pActualField' value={pActualField} onChange={setPActualField} unit={<div>Kg/cm<sup>2</sup></div>} onBlur={this.updateErrors} errors={this.state.errors} />
+        <InputDate header="P. actual (fecha)" name='pActualFechaField' value={pActualFechaField} onChange={setPActualFechaField} unit='' onBlur={this.updateErrors} errors={this.state.errors} />
+        <InputRow header="DP/año" name='dpPerAnoField' value={dpPerAnoField} onChange={setDpPerAnoField} unit={<div>Kg/cm<sup>2</sup>/año</div>} onBlur={this.updateErrors} errors={this.state.errors} />
+        <InputRow header="T yac" name='tyacField' value={tyacField} onChange={setTyacField} unit='°C' onBlur={this.updateErrors} errors={this.state.errors} />
+        <InputRow header="P.R." name='prField' value={prField} onChange={setPrField} unit='mvbnm' onBlur={this.updateErrors} errors={this.state.errors} />
 
       </div>
     )
@@ -130,11 +258,11 @@ let litologiaOptions = [
           Fluido
         </div>
         <InputRowSelectUnitless header='Tipo de Fluido' name='tipoDeFluidoField' value={tipoDeFluidoField} callback={(e) => setTipoDeFluidoField(e.value)} options={fluidoOptions} onBlur={this.updateErrors} errors={this.state.errors}/>
-        <InputRow header="Densidad del aceite" name='densidadDelAceiteField' value={densidadDelAceiteField} onChange={setDensidadDelAceiteField} unit='°API' onBlur={this.validate} errors={this.state.errors} />
-        <InputRow header="P sat" name='pSatField' value={pSatField} onChange={setPSatField} unit={<div>Kg/cm<sup>2</sup></div>} onBlur={this.validate} errors={this.state.errors} />
-        <InputRow header="RGA" name='rgaFluidoField' value={rgaFluidoField} onChange={setRgaFluidoField} unit={<div>m<sup>3</sup>/m<sup>3</sup></div>} onBlur={this.validate} errors={this.state.errors} />
-        <InputRow header="Salinidad" name='salinidadField' value={salinidadField} onChange={setSalinidadField} unit='ppm' onBlur={this.validate} errors={this.state.errors} />
-        <InputRowUnitless header="PVT representativo" name='pvtRepresentativoField' value={pvtRepresentativoField} onChange={setPvtRepresentativoField} onBlur={this.validate} errors={this.state.errors} />
+        <InputRow header="Densidad del aceite" name='densidadDelAceiteField' value={densidadDelAceiteField} onChange={setDensidadDelAceiteField} unit='°API' onBlur={this.updateErrors} errors={this.state.errors} />
+        <InputRow header="P sat" name='pSatField' value={pSatField} onChange={setPSatField} unit={<div>Kg/cm<sup>2</sup></div>} onBlur={this.updateErrors} errors={this.state.errors} />
+        <InputRow header="RGA" name='rgaFluidoField' value={rgaFluidoField} onChange={setRgaFluidoField} unit={<div>m<sup>3</sup>/m<sup>3</sup></div>} onBlur={this.updateErrors} errors={this.state.errors} />
+        <InputRow header="Salinidad" name='salinidadField' value={salinidadField} onChange={setSalinidadField} unit='ppm' onBlur={this.updateErrors} errors={this.state.errors} />
+        <InputRowUnitless header="PVT representativo" name='pvtRepresentativoField' value={pvtRepresentativoField} onChange={setPvtRepresentativoField} onBlur={this.updateErrors} errors={this.state.errors} />
       </div>
     )
   }
@@ -150,13 +278,13 @@ let litologiaOptions = [
         <div className='header'>
           Formación
         </div>
-        <InputRowSelectUnitless header='Litología' name='litologiaField' value={litologiaField} callback={(e) => setLitologiaField(e.value)} options={litologiaOptions} onBlur={this.validate} errors={this.state.errors}/>
-        <InputRow header="Espesor neto" name='espesorNetoField'value={espesorNetoField} onChange={setEspesorNetoField} unit='m' onBlur={this.validate} errors={this.state.errors} />
-        <InputRow header="Porosidad" name='porosidadField' value={porosidadField} onChange={setPorosidadField} unit='%' onBlur={this.validate} errors={this.state.errors} />
-        <InputRow header="Sw" name='swField' value={swField} onChange={setSwField} unit='%' onBlur={this.validate} errors={this.state.errors} />
-        <InputRow header="K promedio" name='kPromedioField' value={kPromedioField} onChange={setKPromedioField} unit='mD' onBlur={this.validate} errors={this.state.errors} />
-        <InputRow header="CAA" name='caaField' value={caaField} onChange={setCaaField} unit='m' onBlur={this.validate} errors={this.state.errors} />
-        <InputRow header="CGA" name='cgaField' value={cgaField} onChange={setCgaField} unit='m' onBlur={this.validate} errors={this.state.errors} />
+        <InputRowSelectUnitless header='Litología' name='litologiaField' value={litologiaField} callback={(e) => setLitologiaField(e.value)} options={litologiaOptions} onBlur={this.updateErrors} errors={this.state.errors}/>
+        <InputRow header="Espesor neto" name='espesorNetoField'value={espesorNetoField} onChange={setEspesorNetoField} unit='m' onBlur={this.updateErrors} errors={this.state.errors} />
+        <InputRow header="Porosidad" name='porosidadField' value={porosidadField} onChange={setPorosidadField} unit='%' onBlur={this.updateErrors} errors={this.state.errors} />
+        <InputRow header="Sw" name='swField' value={swField} onChange={setSwField} unit='%' onBlur={this.updateErrors} errors={this.state.errors} />
+        <InputRow header="K promedio" name='kPromedioField' value={kPromedioField} onChange={setKPromedioField} unit='mD' onBlur={this.updateErrors} errors={this.state.errors} />
+        <InputRow header="CAA" name='caaField' value={caaField} onChange={setCaaField} unit='m' onBlur={this.updateErrors} errors={this.state.errors} />
+        <InputRow header="CGA" name='cgaField' value={cgaField} onChange={setCgaField} unit='m' onBlur={this.updateErrors} errors={this.state.errors} />
       </div>
     )
   }
@@ -172,19 +300,19 @@ let litologiaOptions = [
         <div className='header'>
           Producción @ Formación
         </div>
-        <InputRow header="Qo" name='qoField' value={qoField} onChange={setQoField} unit='bpd' onBlur={this.validate} errors={this.state.errors} />
-        <InputRow header="Qg" name='qgField' value={qgField} onChange={setQgField} unit='MMpcd' onBlur={this.validate} errors={this.state.errors} />
-        <InputRow header="RGA" name='rgaField' value={rgaField} onChange={setRgaField} unit={<div>m<sup>3</sup>/m<sup>3</sup></div>} onBlur={this.validate} errors={this.state.errors} />
-        <InputRow header="Fw" name='fwField' value={fwField} onChange={setFwField} unit='%' onBlur={this.validate} errors={this.state.errors} />
-        <InputRow header="Np" name='npField' value={npField} onChange={setNpField} unit='MMb' onBlur={this.validate} errors={this.state.errors} />
-        <InputRow header="Gp" name='gpField' value={gpField} onChange={setGpField} unit='MMMpc' onBlur={this.validate} errors={this.state.errors} />
-        <InputRow header="Wp" name='wpField' value={wpField} onChange={setWpField} unit='MMb' onBlur={this.validate} errors={this.state.errors} />
-        <InputRow header="RRA" name='rraField' value={rraField} onChange={setRraField} unit='MMb' onBlur={this.validate} errors={this.state.errors} />
-        <InputRow header="RRG" name='rrgField' value={rrgField} onChange={setRrgField} unit='MMMpc' onBlur={this.validate} errors={this.state.errors} />
-        <InputRow header="RRPCE" name='rrpceField' value={rrpceField} onChange={setRrpceField} unit='MMb' onBlur={this.validate} errors={this.state.errors} />
-        <InputRow header={<div>H<sub>2</sub>S</div>} name='h2sField' value={h2sField} onChange={setH2sField} unit='%' onBlur={this.validate} errors={this.state.errors} />
-        <InputRow header={<div>CO<sub>2</sub></div>} name='co2Field' value={co2Field} onChange={setCo2Field} unit='%' onBlur={this.validate} errors={this.state.errors} />
-        <InputRow header={<div>N<sub>2</sub></div>} name='n2Field' value={n2Field} onChange={setN2Field} unit='%' onBlur={this.validate} errors={this.state.errors} />
+        <InputRow header="Qo" name='qoField' value={qoField} onChange={setQoField} unit='bpd' onBlur={this.updateErrors} errors={this.state.errors} />
+        <InputRow header="Qg" name='qgField' value={qgField} onChange={setQgField} unit='MMpcd' onBlur={this.updateErrors} errors={this.state.errors} />
+        <InputRow header="RGA" name='rgaField' value={rgaField} onChange={setRgaField} unit={<div>m<sup>3</sup>/m<sup>3</sup></div>} onBlur={this.updateErrors} errors={this.state.errors} />
+        <InputRow header="Fw" name='fwField' value={fwField} onChange={setFwField} unit='%' onBlur={this.updateErrors} errors={this.state.errors} />
+        <InputRow header="Np" name='npField' value={npField} onChange={setNpField} unit='MMb' onBlur={this.updateErrors} errors={this.state.errors} />
+        <InputRow header="Gp" name='gpField' value={gpField} onChange={setGpField} unit='MMMpc' onBlur={this.updateErrors} errors={this.state.errors} />
+        <InputRow header="Wp" name='wpField' value={wpField} onChange={setWpField} unit='MMb' onBlur={this.updateErrors} errors={this.state.errors} />
+        <InputRow header="RRA" name='rraField' value={rraField} onChange={setRraField} unit='MMb' onBlur={this.updateErrors} errors={this.state.errors} />
+        <InputRow header="RRG" name='rrgField' value={rrgField} onChange={setRrgField} unit='MMMpc' onBlur={this.updateErrors} errors={this.state.errors} />
+        <InputRow header="RRPCE" name='rrpceField' value={rrpceField} onChange={setRrpceField} unit='MMb' onBlur={this.updateErrors} errors={this.state.errors} />
+        <InputRow header={<div>H<sub>2</sub>S</div>} name='h2sField' value={h2sField} onChange={setH2sField} unit='%' onBlur={this.updateErrors} errors={this.state.errors} />
+        <InputRow header={<div>CO<sub>2</sub></div>} name='co2Field' value={co2Field} onChange={setCo2Field} unit='%' onBlur={this.updateErrors} errors={this.state.errors} />
+        <InputRow header={<div>N<sub>2</sub></div>} name='n2Field' value={n2Field} onChange={setN2Field} unit='%' onBlur={this.updateErrors} errors={this.state.errors} />
       </div>
     )
   }

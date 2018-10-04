@@ -23,7 +23,7 @@ export const InputRow = ({ header, type='number', name, unit, value, onChange, o
   }
 
   // const errorElements = generateErrorElements(name, errors)
-
+  
   return (
     <div className='input-row' style={style}>
       <div className='label'>
@@ -231,12 +231,13 @@ export const InputDate = ({ name, onChange, value, header, onBlur, errors }) => 
 
   function handleBlur(e) {
     const date = moment(e.target.value, 'DD/MM/YYYY')
-    if (!date.isValid()) {
+
+    if (!date.isValid() || e.target.value.includes('_')) {
       checkDate(e.target.value, name, errors, onBlur)
       onChange(null)
     }
   }
-  const objValue = value ? moment(value) : null 
+  const objValue = value ? moment(value) : null
   return (
      <div className='input-row input-row-unitless'>
       <div className='label'>
