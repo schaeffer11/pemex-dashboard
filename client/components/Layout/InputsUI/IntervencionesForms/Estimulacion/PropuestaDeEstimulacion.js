@@ -9,35 +9,63 @@ import { InputRow, InputRowUnitless, InputRowSelectUnitless, CalculatedValue } f
 import { setCedulaData, setIntervalo, setLongitudDeIntervalo, setVolAparejo, setCapacidadTotalDelPozo, setVolumenPrecolchonN2, setVolumenSistemaNoReativo, setVolumenSistemaReactivo, setVolumenSistemaDivergente, setVolumenDesplazamientoLiquido, setVolumenDesplazamientoN2, setVolumenTotalDeLiquido, setChecked, setPropuestaCompany, setTipoDeEstimulacion, setTipoDeColocacion, setTiempoDeContacto } from '../../../../../redux/actions/intervencionesEstimulacion'
 import { setEspesorBruto } from '../../../../../redux/actions/pozo'
 import { round, calculateVolumes, getSistemaOptions } from '../helpers'
+import { checkEmpty, checkDate } from '../../../../../lib/errorCheckers'
 
 @autobind class PropuestaDeEstimulacion extends Component {
   constructor(props) {
     super(props)
     this.state = { 
-
+      errors: {
+        propuestaCompany: {
+          type: 'text',
+          values: null,
+        },
+        tipoDeEstimulacion: {
+          type: 'text',
+          values: null,
+        },
+        tipoDeColocacion: {
+          type: 'text',
+          values: null,
+        },
+        tiempoDeContacto: {
+          type: 'number',
+          values: null,
+        },
+      }
     }
   }
 
-  componentDidMount() {
-
+  componentDidMount(){
+    this.checkAllInputs()
   }
 
-  componentDidUpdate(prevProps) {
+  checkAllInputs() {
+    let { formData } = this.props
+    formData = formData.toJS()
+    const { errors } = this.state
+    Object.keys(errors).forEach(elem => {
+      const errObj = errors[elem]
+      if (errObj.type === 'text' || errObj.type === 'number') {
+        checkEmpty(formData[elem], elem, errors, this.updateErrors)
+      } else if (errObj.type === 'date') {
+        checkDate(moment(formData[elem]).format('DD/MM/YYYY'), elem, errors, this.updateErrors)
+      }
+    })
+  }
 
+  updateErrors(errors) {
+    this.setState({ errors })
   }
 
   handleSelectTipoDeEstimulacion(val) {
     let { setTipoDeEstimulacion, setTipoDeColocacion, setTiempoDeContacto, } = this.props
-
-
 
     setTipoDeEstimulacion(val)
     setTipoDeColocacion(null)
     setTiempoDeContacto(null)
 
   }
-
-
 
 
   makeGeneralForm() {
@@ -70,22 +98,20 @@ import { round, calculateVolumes, getSistemaOptions } from '../helpers'
         </div>
         <InputRowSelectUnitless
           header="Compañía Seleccionada para el Tratamiento"
-          name="company"
+          name="propuestaCompany"
           options={companyOptions}
-          onBlur={this.validate}
+          onBlur={this.updateErrors}
           value={propuestaCompany}
           callback={e => setPropuestaCompany(e.value)}
-          onBlur={this.validate}
           errors={this.state.errors}
         />
         <InputRowSelectUnitless
           header="Tipo de estimulación"
           name="tipoDeEstimulacion"
           options={estimulacionOptions}
-          onBlur={this.validate}
+          onBlur={this.updateErrors}
           value={tipoDeEstimulacion}
           callback={e => this.handleSelectTipoDeEstimulacion(e.value)}
-          onBlur={this.validate}
           errors={this.state.errors}
         />
         <CalculatedValue
@@ -115,13 +141,12 @@ import { round, calculateVolumes, getSistemaOptions } from '../helpers'
           header="Tipo de colocación" 
           name='tipoDeColocacion' 
           options={colocacionOptions}
-          onBlur={this.validate} 
+          onBlur={this.updateErrors} 
           value={tipoDeColocacion} 
           callback={(e) => setTipoDeColocacion(e.value)}
-          onBlur={this.validate}
           errors={this.state.errors}
         />
-        <InputRow header="Tiempo de contacto" name='tiempoDeContacto' unit="min" value={tiempoDeContacto} onChange={setTiempoDeContacto} errors={this.state.errors} onBlur={this.validate} />
+        <InputRow header="Tiempo de contacto" name='tiempoDeContacto' unit="min" value={tiempoDeContacto} onChange={setTiempoDeContacto} errors={this.state.errors} onBlur={this.updateErrors} />
       </div>
     )
   }
@@ -304,27 +329,6 @@ import { round, calculateVolumes, getSistemaOptions } from '../helpers'
         Header: 'Etapa',
         accessor: 'etapa',
       }, 
-      // {
-      //   Header: 'Intervalo',
-      //   accessor: 'intervalo',
-      //   width: 200,
-      //   resizable: false,
-      //   style: {overflow: 'visible'},
-      //   Cell: row => {
-      //     return (
-      //       <div>
-      //         <Select
-      //           className='input'
-      //           placeholder='intervalo'
-      //           simpleValue={true}
-      //           options={intervaloOptions}
-      //           value={intervaloOptions.find(i=>i.value === row.original.intervalo) || null}
-      //           onChange={(e) => this.handleSelect(row, e.value)} 
-      //         />
-      //       </div>
-      //     )
-      //   }
-      // },
       {
         Header: 'Sistema',
         accessor: 'sistema',

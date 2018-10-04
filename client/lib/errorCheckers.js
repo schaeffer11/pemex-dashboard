@@ -4,17 +4,17 @@ export function checkEmpty(value, name, errors, onBlur) {
   if (!value || value.length < 1) {
     error = 'Este campo no puede estar vacio'
   } 
-  console.log('errors', name, errors, errors[name])
+
   errors[name].value = error
   onBlur(errors)
 }
 
 export function checkDate(value, name, errors, onBlur) {
   let error = null
-  console.log('checking dates', typeof value, value, !value, value.length)
+
   if (!value || value.length < 1 || value === 'Invalid date') {
     error = 'Este campo no puede estar vacio'
-  } else if (!moment(value, 'YYYY-MM-DD').isValid()) {
+  } else if (!moment(value, 'YYYY-MM-DD').isValid() || (typeof value === 'string' && value.includes('_'))) {
     error = 'La fecha no esta en el formato correcto'
   }
   errors[name].value = error
