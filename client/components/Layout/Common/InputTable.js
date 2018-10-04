@@ -187,12 +187,15 @@ import MaskedTextInput from "react-text-mask";
         })
       }
     })
+    let pageSize = !data ? 1 : (data.length < 50 ? data.length : 50)
+    let showPagination = data.length > 50
 
     return (
       <ReactTable { ...this.props } 
         columns={columns}
         getTdProps={this.deleteRow} 
-        pageSize={!data ? 1 : data.length}
+        pageSize={pageSize}
+        showPagination={showPagination}
       />
 
     )

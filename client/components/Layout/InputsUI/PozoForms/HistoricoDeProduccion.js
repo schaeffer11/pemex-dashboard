@@ -246,9 +246,6 @@ let columns = [
 
     const objectTemplate = {fecha: null, dias: '', qo: '', qw: '', qg: '', qgi: '', qo_vol: '', qw_vol: '', qg_vol: '', qgi_vol: '', np: '', wp: '', gp: '', gi: '', rga: '', fw: ''}
 
-    console.log('render produccion')
-
-
     return (
       <div className='historico-produccion' >
         <div className='table'>
@@ -260,7 +257,6 @@ let columns = [
             columns={columns}
             showPagination={false}
             showPageSizeOptions={false}
-            pageSize={produccionData.length}
             sortable={false}
             getTdProps={this.deleteRow}
           />
