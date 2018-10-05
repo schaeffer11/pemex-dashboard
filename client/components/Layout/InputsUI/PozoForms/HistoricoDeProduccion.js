@@ -154,9 +154,6 @@ let columns = [
 
 
 
-
-
-
 @autobind class HistoricoDeProduccion extends Component {
   constructor(props) {
     super(props)
@@ -175,17 +172,6 @@ let columns = [
       checked: []
     }
   }
-
-  componentDidMount() {
-    // let { formData } = this.props
-    // formData = formData.toJS()
-
-  }
-
-  componentDidUpdate(){
-
-  }
-
 
 
   makeProductionGraph() {
@@ -219,46 +205,6 @@ let columns = [
 
   }
 
-  addNewRow() {
-    let { formData, setProduccionData } = this.props
-    const { errors } = this.state
-    formData = formData.toJS()
-    let { produccionData } = formData
-    // const newErrorRow = {}
-    // Object.keys(errors)[0].forEach(key => {
-    //   newError[key] = { value: null, type: errors[0][key].type }
-    // })
-
-    produccionData[0].length = 2
-    // this.setState({ errors: [...errors, newErrorRow]})
-    setProduccionData([...produccionData, {index: produccionData.length, fecha: null, dias: '', qo: '', qw: '', qg: '', qgi: '', qo_vol: '', qw_vol: '', qg_vol: '', qgi_vol: '', np: '', wp: '', gp: '', gi: '', rga: '', fw: '', length: produccionData.length + 1, 'edited': false}])
-  }
-
-
-  deleteRow(state, rowInfo, column, instance) {
-    let { formData, setProduccionData } = this.props
-    formData = formData.toJS()
-    let { produccionData } = formData
-
-    return {
-      onClick: e => {
-        if (column.id === 'delete' && produccionData.length > 1) {
-          produccionData.splice(rowInfo.original.index, 1)
-
-          produccionData.forEach((i, index) => {
-            i.index = index
-            i.length = produccionData.length
-          }) 
-
-          setProduccionData(produccionData)
-        }
-      }
-    }
-  }
-
-  setStuff(index, ) {
-
-  }
 
   checkForErrors(value) {
     const errorsCopy = {...this.state.errors}
@@ -270,8 +216,8 @@ let columns = [
     let { formData , setProduccionData, setHistoricoProduccionLocal } = this.props
     formData = formData.toJS()
     let { produccionData } = formData
-
     const rowObj = { fecha: null, dias: '', qo: '', qw: '', qg: '', qgi: '', qo_vol: '', qw_vol: '', qg_vol: '', qgi_vol: '', np: '', wp: '', gp: '', gi: '', rga: '', fw: '', hasErros: true }
+
     const errors = [
       { name: 'fecha', type: 'date' },
       { name: 'dias', type: 'number' },
@@ -294,23 +240,26 @@ let columns = [
             showPagination={false}
             showPageSizeOptions={false}
             sortable={false}
-            getTdProps={this.deleteRow}
             errorArray={errors}
             rowObj={rowObj}
             checkForErrors={this.checkForErrors}
           />
         </div>
 
-        {/* <button className='new-row-button' onClick={this.addNewRow}>Añadir un renglón</button> */}
       </div>
     )
   }
 
   render() {
     let { formData } = this.props
-    formData = formData.toJS()
+    let { errors } = this.state
 
-    console.log('errors', this.state.errors)
+
+    console.log(errors)
+
+
+
+    formData = formData.toJS()
 
     return (
       <div className="form historico-de-produccion">

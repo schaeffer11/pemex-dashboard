@@ -78,7 +78,6 @@ import { checkDate, checkEmpty } from '../../../lib/errorCheckers'
       backgroundColor: '#fafafa',
       border: disabled ? 'none' : null
     }
-
     
     return (
       <input
@@ -97,56 +96,76 @@ import { checkDate, checkEmpty } from '../../../lib/errorCheckers'
     )
   }
 
-  loopAway(errors, isInitial=false) {
-    const { data, checkForErrors, setData } = this.props
-    let hasError = false
-    const updateErrors = (e, name, i) => {
-      errors[i][name] = e
-      console.log('updating initial errors', errors, name, i)
-      this.setState({ errors })
-    }
+  // loopAway(errors, isInitial=false) {
+  //   const { data, checkForErrors, setData } = this.props
+  //   let hasError = false
+  //   const updateErrors = (e, name, i) => {
+  //     errors[i][name] = e
 
-    data.forEach((elem, i) => {
-      console.log('elem', elem.error, elem)
-      if (elem.error) {
+  //     this.setState({ errors })
+  //   }
+
+  //   data.forEach((elem, i) => {
+  //     if (elem.error) {
+  //       hasError = true
+  //       if (isInitial) {
+  //         const errorRow = errors[i]
+  //         Object.keys(elem).forEach(key => {
+  //           if (errorRow[key]) {
+  //             const { type } = errorRow[key]
+  //             if (type === 'number') {
+  //               checkEmpty(elem[key], key, errorRow, (e) => updateErrors(e, key, i))
+  //             } 
+  //             else if (type === 'date') {
+  //               checkDate(elem[key], key, errorRow, (e) => updateErrors(e, key, i))
+  //             }
+  //           }
+  //         })
+  //       }
+  //     }
+  //   })
+
+  //   if (typeof checkForErrors === 'function') {
+  //     checkForErrors(hasError)
+  //   }
+  // }
+
+  setOuterStateError() {
+    let { data, checkForErrors } = this.props
+    let hasError = false 
+
+    data.forEach(row => {
+      if (row.error === true) {
         hasError = true
-        if (isInitial) {
-          const errorRow = errors[i]
-          Object.keys(elem).forEach(key => {
-            if (errorRow[key]) {
-              const { type } = errorRow[key]
-              if (type === 'number') {
-                checkEmpty(elem[key], key, errorRow, (e) => updateErrors(e, key, i))
-              } 
-              else if (type === 'date') {
-                checkDate(elem[key], key, errorRow, (e) => updateErrors(e, key, i))
-              }
-            }
-          })
-        }
       }
     })
-
-    console.log('no errors')
+    
     if (typeof checkForErrors === 'function') {
       checkForErrors(hasError)
     }
   }
 
   updateErrors(e, i, errors) {
-    let { data } = this.props
+    let { data, setData } = this.props
+    
     errors[i] = e
+
+
+
     const hasErrors = Object.keys(e).filter(elem => {
       if (e[elem].value !== null) {
         return true
       }
       return false
     })
+
     const newErrorValue = hasErrors.length > 0
     const oldErrorValue = data[i].error
+
     if (oldErrorValue !== newErrorValue) {
       data[i].error = hasErrors.length > 0
-      this.loopAway(errors)
+      this.setOuterStateError()
+
       setData(data)
     }
     this.setState({ errors })
@@ -158,12 +177,12 @@ import { checkDate, checkEmpty } from '../../../lib/errorCheckers'
     if (this.state.errors) {
       errors = JSON.parse(JSON.stringify(this.state.errors))
     }
+
     const name = cellInfo.column.id
     const value = data[cellInfo.index][cellInfo.column.id]
     const rowError = errors.length > 0 ? errors[cellInfo.index] : null
     const style = { backgroundColor: "#fafafa", borderColor: 'blue' }
     if(rowError !== null && rowError[name] !== undefined && rowError[name].value !== null) {
-      console.log('call', rowError[name], rowError, name)
       style.borderColor = 'red'
     }
 
@@ -249,7 +268,7 @@ import { checkDate, checkEmpty } from '../../../lib/errorCheckers'
     data[0].length = 2
     rowObj.index = data.length
     rowObj.length = data.length + 1
-    rowObj.edited = false
+
     this.setState({ errors: [...errors, newErrorRow]})
     setData([...data, rowObj])
   }
