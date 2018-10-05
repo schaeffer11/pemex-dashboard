@@ -3,7 +3,10 @@ import autobind from 'autobind-decorator'
 import { connect } from 'react-redux'
 
 import { InputRow, InputRowUnitless, InputRowSelectUnitless, TextAreaUnitless } from '../../../Common/InputRow'
-import { setEstIncProdAcidoImgURL, setEstIncEstrangulador, setEstIncPtp, setEstIncTtp, setEstIncPbaj, setEstIncTbaj, setEstIncPtr, setEstIncQl, setEstIncQo, setEstIncQg, setEstIncQw, setEstIncRGA, setEstIncSalinidad, setEstIncIP, setEstIncDeltaP, setEstIncGastoCompromisoQo, setEstIncGastoCompromisoQg, setObervacionesEstIncAcido, setChecked } from '../../../../../redux/actions/intervencionesAcido'
+import { setHasErrorsEstIncProduccionAcido, setEstIncProdAcidoImgURL, setEstIncEstrangulador, 
+  setEstIncPtp, setEstIncTtp, setEstIncPbaj, setEstIncTbaj, setEstIncPtr, setEstIncQl, setEstIncQo, 
+  setEstIncQg, setEstIncQw, setEstIncRGA, setEstIncSalinidad, setEstIncIP, setEstIncDeltaP, 
+  setEstIncGastoCompromisoQo, setEstIncGastoCompromisoQg, setObervacionesEstIncAcido, setChecked } from '../../../../../redux/actions/intervencionesAcido'
 import { checkEmpty, checkDate } from '../../../../../lib/errorCheckers'
 
 @autobind class EstimacionIncProduccionAcido extends Component {
@@ -13,97 +16,139 @@ import { checkEmpty, checkDate } from '../../../../../lib/errorCheckers'
       errors: {
           estIncEstrangulador: {
             type: 'number',
-            values: null,
+            values: '',
           },
           estIncPtp: {
             type: 'number',
-            values: null,
+            values: '',
           },
           estIncTtp: {
             type: 'number',
-            values: null,
+            values: '',
           },
           estIncPbaj: {
             type: 'number',
-            values: null,
+            values: '',
           },
           estIncTbaj: {
             type: 'number',
-            values: null,
+            values: '',
           },
           estIncPtr: {
             type: 'number',
-            values: null,
+            values: '',
           },
           estIncQl: {
             type: 'number',
-            values: null,
+            values: '',
           },
           estIncQo: {
             type: 'number',
-            values: null,
+            values: '',
           },
           estIncQg: {
             type: 'number',
-            values: null,
+            values: '',
           },
           estIncQw: {
             type: 'number',
-            values: null,
+            values: '',
           },
           estIncRGA: {
             type: 'number',
-            values: null,
+            values: '',
           },
           estIncSalinidad: {
             type: 'number',
-            values: null,
+            values: '',
           },
           estIncIP: {
             type: 'number',
-            values: null,
+            values: '',
           },
           estIncDeltaP: {
             type: 'number',
-            values: null,
+            values: '',
           },
           estIncGastoCompromisoQo: {
             type: 'number',
-            values: null,
+            values: '',
           },
           estIncGastoCompromisoQg: {
             type: 'number',
-            values: null,
+            values: '',
           },
           obervacionesEstIncAcido: {
             type: 'text',
-            values: null,
+            values: '',
           },
         }
     }
   }
 
   componentDidMount(){
-    this.checkAllInputs()
+    let { setHasErrorsEstIncProduccionAcido, hasErrors, hasSubmitted } = this.props
+
+    if (hasSubmitted) {
+      let hasErrors = this.checkAllInputs()
+      setHasErrorsEstIncProduccionAcido(hasErrors)
+    }
+  }
+
+  componentDidUpdate(prevProps) {
+    let { hasSubmitted } = this.props
+
+    if (hasSubmitted !== prevProps.hasSubmitted) {
+      this.checkAllInputs()
+    }
   }
 
   checkAllInputs() {
     let { formData } = this.props
     formData = formData.toJS()
     const { errors } = this.state
+    let hasErrors = false
+    let error 
+
     Object.keys(errors).forEach(elem => {
       const errObj = errors[elem]
+
       if (errObj.type === 'text' || errObj.type === 'number') {
-        checkEmpty(formData[elem], elem, errors, this.updateErrors)
-      } else if (errObj.type === 'date') {
-        checkDate(moment(formData[elem]).format('DD/MM/YYYY'), elem, errors, this.updateErrors)
+        error = checkEmpty(formData[elem], elem, errors, this.setErrors)
+        
+      } 
+      else if (errObj.type === 'date') {
+        error = checkDate(moment(formData[elem]).format('DD/MM/YYYY'), elem, errors, this.setErrors)
       }
+
+      error === true ? hasErrors = true : null
     })
+
+    return hasErrors
+  }
+
+  setErrors(errors) {
+    this.setState({ errors })
   }
 
   updateErrors(errors) {
+    let { hasErrors, setHasErrorsEstIncProduccionAcido } = this.props
+
+    let hasErrorNew = false
+
+    Object.keys(errors).forEach(key => {
+      if (errors[key].value !== null){
+        hasErrorNew = true
+      } 
+    })
+
+    if (hasErrorNew != hasErrors) {
+      setHasErrorsEstIncProduccionAcido(hasErrorNew)
+    }
+
     this.setState({ errors })
   }
+
 
   makeModeladoForm() {
     let { setEstIncEstrangulador, setEstIncPtp, setEstIncTtp, setEstIncPbaj, setEstIncTbaj, setEstIncPtr, setEstIncQl, setEstIncQo, setEstIncQg, setEstIncQw, setEstIncRGA, setEstIncSalinidad, setEstIncIP, setEstIncDeltaP, formData } = this.props
@@ -207,8 +252,9 @@ import { checkEmpty, checkDate } from '../../../../../lib/errorCheckers'
 }
 
 const mapStateToProps = state => ({
-  forms: state.get('forms'),
   formData: state.get('estIncProduccionAcido'),
+  hasErrors: state.getIn(['estIncProduccionAcido', 'hasErrors']),
+  hasSubmitted: state.getIn(['global', 'hasSubmitted']),
 })
 
 const mapDispatchToProps = dispatch => ({
@@ -230,6 +276,7 @@ const mapDispatchToProps = dispatch => ({
   setEstIncGastoCompromisoQg: val => dispatch(setEstIncGastoCompromisoQg(val)),
   setObervacionesEstIncAcido: val => dispatch(setObervacionesEstIncAcido(val)),
   setEstIncProdAcidoImgURL: val => dispatch(setEstIncProdAcidoImgURL(val)),
+  setHasErrorsEstIncProduccionAcido: val => dispatch(setHasErrorsEstIncProduccionAcido(val)),
 
 })
 

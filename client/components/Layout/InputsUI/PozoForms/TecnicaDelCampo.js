@@ -5,7 +5,14 @@ import moment from 'moment'
 import { InputRow, InputRowUnitless, InputRowSelectUnitless, InputDate } from '../../Common/InputRow'
 import {withValidate} from '../../Common/Validate'
 import { checkEmpty, checkDate } from '../../../../lib/errorCheckers'
-import { setTipoDeFluidoField, setDescubrimientoField, setFechaDeExplotacionField, setNumeroDePozosOperandoField, setPInicialField, setPActualField, setPInicialAnoField, setPActualFechaField, setDpPerAnoField, setTyacField, setPrField, setDensidadDelAceiteField, setPSatField, setRgaFluidoField, setSalinidadField, setPvtRepresentativoField, setLitologiaField, setEspesorNetoField, setPorosidadField, setSwField, setKPromedioField, setCaaField, setCgaField, setQoField, setQgField, setRgaField, setFwField, setNpField, setGpField, setWpField, setRraField, setRrgField, setRrpceField, setH2sField, setCo2Field, setN2Field, setChecked } from '../../../../redux/actions/pozo'
+import { setHasErrorsFichaTecnicaDelCampo, setTipoDeFluidoField, setDescubrimientoField, 
+  setFechaDeExplotacionField, setNumeroDePozosOperandoField, setPInicialField, setPActualField, 
+  setPInicialAnoField, setPActualFechaField, setDpPerAnoField, setTyacField, setPrField, 
+  setDensidadDelAceiteField, setPSatField, setRgaFluidoField, setSalinidadField, setPvtRepresentativoField, 
+  setLitologiaField, setEspesorNetoField, setPorosidadField, setSwField, setKPromedioField, 
+  setCaaField, setCgaField, setQoField, setQgField, setRgaField, setFwField, setNpField, 
+  setGpField, setWpField, setRraField, setRrgField, setRrpceField, setH2sField, setCo2Field, 
+  setN2Field, setChecked } from '../../../../redux/actions/pozo'
 
 let fluidoOptions = [
     { label: 'Aceite Negro', value: 'Aceite Negro' },
@@ -28,171 +35,212 @@ let litologiaOptions = [
       errors: {
         descubrimientoField: {
           type: 'text',
-          value: null,
+          value: '',
         },
         fechaDeExplotacionField: {
           type: 'date',
-          value: null,
+          value: '',
         },
         numeroDePozosOperandoField: {
           type: 'number',
-          value: null,
+          value: '',
         },
         pInicialAnoField: {
           type: 'number',
-          value: null,
+          value: '',
         },
         pActualFechaField: {
           type: 'date',
-          value: null,
+          value: '',
         },
         pInicialField: {
           type: 'number',
-          value: null,
+          value: '',
         },
         pActualField: {
           type: 'number',
-          value: null,
+          value: '',
         },
         dpPerAnoField: {
           type: 'number',
-          value: null,
+          value: '',
         },
         tyacField: {
           type: 'number',
-          value: null,
+          value: '',
         },
         prField: {
           type: 'number',
-          value: null,
+          value: '',
         },
         tipoDeFluidoField: {
           type: 'text',
-          value: null,
+          value: '',
         },
         densidadDelAceiteField: {
           type: 'number',
-          value: null,
+          value: '',
         },
         pSatField: {
           type: 'number',
-          value: null,
+          value: '',
         },
         rgaFluidoField: {
           type: 'number',
-          value: null,
+          value: '',
         },
         salinidadField: {
           type: 'number',
-          value: null,
+          value: '',
         },
         pvtRepresentativoField: {
           type: 'text',
-          value: null,
+          value: '',
         },
         litologiaField: {
           type: 'text',
-          value: null,
+          value: '',
         },
         espesorNetoField: {
           type: 'number',
-          value: null,
+          value: '',
         },
         porosidadField: {
           type: 'number',
-          value: null,
+          value: '',
         },
         swField: {
           type: 'number',
-          value: null,
+          value: '',
         },
         kPromedioField: {
           type: 'number',
-          value: null,
+          value: '',
         },
         caaField: {
           type: 'number',
-          value: null,
+          value: '',
         },
         cgaField: {
           type: 'number',
-          value: null,
+          value: '',
         },
         qoField: {
           type: 'number',
-          value: null,
+          value: '',
         },
         qgField: {
           type: 'number',
-          value: null,
+          value: '',
         },
         rgaField: {
           type: 'number',
-          value: null,
+          value: '',
         },
         fwField: {
           type: 'number',
-          value: null,
+          value: '',
         },
         npField: {
           type: 'number',
-          value: null,
+          value: '',
         },
         gpField: {
           type: 'number',
-          value: null,
+          value: '',
         },
         wpField: {
           type: 'number',
-          value: null,
+          value: '',
         },
         rraField: {
           type: 'number',
-          value: null,
+          value: '',
         },
         rrgField: {
           type: 'number',
-          value: null,
+          value: '',
         },
         rrpceField: {
           type: 'number',
-          value: null,
+          value: '',
         },
         h2sField: {
           type: 'number',
-          value: null,
+          value: '',
         },
         co2Field: {
           type: 'number',
-          value: null,
+          value: '',
         },
         n2Field: {
           type: 'number',
-          value: null,
+          value: '',
         },
       },
     }
   }
 
-  componentDidMount() {
-    this.checkAllInputs()
+  componentDidMount(){
+    let { setHasErrorsFichaTecnicaDelCampo, hasErrors, hasSubmitted } = this.props
+
+    if (hasSubmitted) {
+      let hasErrors = this.checkAllInputs()
+      setHasErrorsFichaTecnicaDelCampo(hasErrors)
+    }
+  }
+
+  componentWillReceiveProps(nextProps) {
+    let { hasSubmitted } = this.props
+
+    if (hasSubmitted !== nextProps.hasSubmitted) {
+      this.checkAllInputs()
+    }
   }
 
   checkAllInputs() {
     let { formData } = this.props
     formData = formData.toJS()
     const { errors } = this.state
+    let hasErrors = false
+    let error 
+
     Object.keys(errors).forEach(elem => {
       const errObj = errors[elem]
+
       if (errObj.type === 'text' || errObj.type === 'number') {
-        checkEmpty(formData[elem], elem, errors, this.updateErrors)
-      } else if (errObj.type === 'date') {
-        checkDate(moment(formData[elem]).format('DD/MM/YYYY'), elem, errors, this.updateErrors)
+        error = checkEmpty(formData[elem], elem, errors, this.setErrors)
+        
+      } 
+      else if (errObj.type === 'date') {
+        error = checkDate(moment(formData[elem]).format('DD/MM/YYYY'), elem, errors, this.setErrors)
       }
+
+      error === true ? hasErrors = true : null
     })
+
+    return hasErrors
+  }
+
+  setErrors(errors) {
+    this.setState({ errors })
   }
 
   updateErrors(errors) {
+    let { hasErrors, setHasErrorsFichaTecnicaDelCampo } = this.props
+
+    let hasErrorNew = false
+
+    Object.keys(errors).forEach(key => {
+      if (errors[key].value !== null){
+        hasErrorNew = true
+      } 
+    })
+
+    if (hasErrorNew != hasErrors) {
+      setHasErrorsFichaTecnicaDelCampo(hasErrorNew)
+    }
+
     this.setState({ errors })
   }
 
@@ -336,6 +384,8 @@ let litologiaOptions = [
 
 const mapStateToProps = state => ({
   formData: state.get('fichaTecnicaDelCampo'),
+  hasErrors: state.getIn(['fichaTecnicaDelCampo', 'hasErrors']),
+  hasSubmitted: state.getIn(['global', 'hasSubmitted']),
 })
 
 const mapDispatchToProps = dispatch => ({
@@ -375,7 +425,7 @@ const mapDispatchToProps = dispatch => ({
   setCo2Field: val => dispatch(setCo2Field(val)),
   setN2Field: val => dispatch(setN2Field(val)),
   setTipoDeFluidoField: val => dispatch(setTipoDeFluidoField(val)),
-  setChecked: val => dispatch(setChecked(val, 'fichaTecnicaDelCampo'))
+  setHasErrorsFichaTecnicaDelCampo: val => dispatch(setHasErrorsFichaTecnicaDelCampo(val)),
 })
 
 export default connect(mapStateToProps, mapDispatchToProps)(TecnicaDelCampo)

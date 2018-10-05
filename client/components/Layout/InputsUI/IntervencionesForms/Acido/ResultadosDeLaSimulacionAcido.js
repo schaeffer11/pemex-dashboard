@@ -2,7 +2,9 @@ import React, { Component } from 'react'
 import autobind from 'autobind-decorator'
 import {withValidate} from '../../../Common/Validate'
 import { InputRow, InputRowUnitless, InputRowSelectUnitless, TextAreaUnitless } from '../../../Common/InputRow'
-import { setEvidenceSimulationAcidoImgURL, setLongitudTotal, setLongitudEfectivaGrabada, setAlturaGrabada, setAnchoPromedio, setConcentracionDelAcido, setConductividad, setFcd, setPresionNeta, setEficienciaDeFluidoDeFractura, setChecked } from '../../../../../redux/actions/intervencionesAcido'
+import { setHasErrorsResultadosSimulacionAcido, setEvidenceSimulationAcidoImgURL, setLongitudTotal, 
+  setLongitudEfectivaGrabada, setAlturaGrabada, setAnchoPromedio, setConcentracionDelAcido, setConductividad, 
+  setFcd, setPresionNeta, setEficienciaDeFluidoDeFractura, setChecked } from '../../../../../redux/actions/intervencionesAcido'
 import { connect } from 'react-redux'
 import { checkEmpty, checkDate } from '../../../../../lib/errorCheckers'
 @autobind class ResultadosDeLaSimulacionAcido extends Component {
@@ -12,63 +14,104 @@ import { checkEmpty, checkDate } from '../../../../../lib/errorCheckers'
       errors: {
         longitudTotal: {
           type: 'number',
-          value: null,
+          value: '',
         },
         longitudEfectivaGrabada: {
           type: 'number',
-          value: null,
+          value: '',
         },
         alturaGrabada: {
           type: 'number',
-          value: null,
+          value: '',
         },
         anchoPromedio: {
           type: 'number',
-          value: null,
+          value: '',
         },
         concentracionDelAcido: {
           type: 'number',
-          value: null,
+          value: '',
         },
         conductividad: {
           type: 'number',
-          value: null,
+          value: '',
         },
         fcd: {
           type: 'number',
-          value: null,
+          value: '',
         },
         presionNeta: {
           type: 'number',
-          value: null,
+          value: '',
         },
         eficienciaDeFluidoDeFractura: {
           type: 'number',
-          value: null,
+          value: '',
         },
       }
     }
   }
 
-  componentDidMount() {
-    this.checkAllInputs()
+  componentDidMount(){
+    let { setHasErrorsResultadosSimulacionAcido, hasErrors, hasSubmitted } = this.props
+
+    if (hasSubmitted) {
+      let hasErrors = this.checkAllInputs()
+      setHasErrorsResultadosSimulacionAcido(hasErrors)
+    }
+  }
+
+  componentDidUpdate(prevProps) {
+    let { hasSubmitted } = this.props
+
+    if (hasSubmitted !== prevProps.hasSubmitted) {
+      this.checkAllInputs()
+    }
   }
 
   checkAllInputs() {
     let { formData } = this.props
     formData = formData.toJS()
     const { errors } = this.state
+    let hasErrors = false
+    let error 
+
     Object.keys(errors).forEach(elem => {
       const errObj = errors[elem]
+
       if (errObj.type === 'text' || errObj.type === 'number') {
-        checkEmpty(formData[elem], elem, errors, this.updateErrors)
-      } else if (errObj.type === 'date') {
-        checkDate(moment(formData[elem]).format('DD/MM/YYYY'), elem, errors, this.updateErrors)
+        error = checkEmpty(formData[elem], elem, errors, this.setErrors)
+        
+      } 
+      else if (errObj.type === 'date') {
+        error = checkDate(moment(formData[elem]).format('DD/MM/YYYY'), elem, errors, this.setErrors)
       }
+
+      error === true ? hasErrors = true : null
     })
+
+    return hasErrors
+  }
+
+  setErrors(errors) {
+    this.setState({ errors })
   }
 
   updateErrors(errors) {
+    let { hasErrors, setHasErrorsResultadosSimulacionAcido } = this.props
+
+    let hasErrorNew = false
+
+    Object.keys(errors).forEach(key => {
+      if (errors[key].value !== null){
+        hasErrorNew = true
+      } 
+    })
+
+    if (hasErrorNew != hasErrors) {
+      setHasErrorsResultadosSimulacionAcido(hasErrorNew)
+    }
+
     this.setState({ errors })
   }
 
@@ -138,8 +181,9 @@ import { checkEmpty, checkDate } from '../../../../../lib/errorCheckers'
 }
 
 const mapStateToProps = state => ({
-  forms: state.get('forms'),
   formData: state.get('resultadosSimulacionAcido'),
+  hasErrors: state.getIn(['resultadosSimulacionAcido', 'hasErrors']),
+  hasSubmitted: state.getIn(['global', 'hasSubmitted']),
 })
 
 const mapDispatchToProps = dispatch => ({
@@ -153,6 +197,7 @@ const mapDispatchToProps = dispatch => ({
   setPresionNeta: val => dispatch(setPresionNeta(val)),
   setEficienciaDeFluidoDeFractura: val => dispatch(setEficienciaDeFluidoDeFractura(val)),
   setEvidenceSimulationAcidoImgURL: val => dispatch(setEvidenceSimulationAcidoImgURL(val)),
+  setHasErrorsResultadosSimulacionAcido: val => dispatch(setHasErrorsResultadosSimulacionAcido(val)),
 })
 
 export default connect(mapStateToProps, mapDispatchToProps)(ResultadosDeLaSimulacionAcido)

@@ -6,7 +6,11 @@ import Select from 'react-select'
 import { connect } from 'react-redux'
 
 import { InputRow, CalculatedValue, InputRowUnitless, InputRowSelectUnitless } from '../../../Common/InputRow'
-import { setCedulaData, setModuloYoungArena, setModuloYoungLutitas, setRelacPoissonArena, setRelacPoissonLutatas, setGradienteDeFractura, setDensidadDeDisparos, setDiametroDeDisparos, setIntervalo, setLongitudDeIntervalo, setVolAparejo, setCapacidadTotalDelPozo, setVolumenPrecolchonN2, setVolumenDeApuntalante, setVolumenDeGelDeFractura, setVolumenDesplazamiento, setVolumenTotalDeLiquido, setChecked, setPropuestaCompany } from '../../../../../redux/actions/intervencionesApuntalado'
+import { setHasErrorsPropuestaApuntalado, setCedulaData, setModuloYoungArena, setModuloYoungLutitas, 
+  setRelacPoissonArena, setRelacPoissonLutatas, setGradienteDeFractura, setDensidadDeDisparos, setDiametroDeDisparos, 
+  setIntervalo, setLongitudDeIntervalo, setVolAparejo, setCapacidadTotalDelPozo, setVolumenPrecolchonN2, 
+  setVolumenDeApuntalante, setVolumenDeGelDeFractura, setVolumenDesplazamiento, setVolumenTotalDeLiquido, 
+  setPropuestaCompany } from '../../../../../redux/actions/intervencionesApuntalado'
 import { round, calculateVolumes, getSistemaOptions } from '../helpers'
 import { checkEmpty, checkDate } from '../../../../../lib/errorCheckers'
 
@@ -17,61 +21,106 @@ import { checkEmpty, checkDate } from '../../../../../lib/errorCheckers'
       errors: {
           propuestaCompany: {
             type: 'text',
-            values: null,
+            values: '',
           },
           moduloYoungArena: {
             type: 'number',
-            values: null,
+            values: '',
           },
           moduloYoungLutitas: {
             type: 'number',
-            values: null,
+            values: '',
           },
           relacPoissonArena: {
             type: 'number',
-            values: null,
+            values: '',
           },
           relacPoissonLutatas: {
             type: 'number',
-            values: null,
+            values: '',
           },
           gradienteDeFractura: {
             type: 'number',
-            values: null,
+            values: '',
           },
           densidadDeDisparos: {
             type: 'number',
-            values: null,
+            values: '',
           },
           diametroDeDisparos: {
             type: 'number',
-            values: null,
+            values: '',
           },
       }
     }
   }
 
+
+
   componentDidMount(){
-    this.checkAllInputs()
+    let { setHasErrorsPropuestaApuntalado, hasErrors, hasSubmitted } = this.props
+
+    if (hasSubmitted) {
+      let hasErrors = this.checkAllInputs()
+      setHasErrorsPropuestaApuntalado(hasErrors)
+    }
+  }
+
+  componentDidUpdate(prevProps) {
+    let { hasSubmitted } = this.props
+
+    if (hasSubmitted !== prevProps.hasSubmitted) {
+      this.checkAllInputs()
+    }
   }
 
   checkAllInputs() {
+    console.log('checiking all' )
     let { formData } = this.props
     formData = formData.toJS()
     const { errors } = this.state
+    let hasErrors = false
+    let error 
+
     Object.keys(errors).forEach(elem => {
       const errObj = errors[elem]
+
       if (errObj.type === 'text' || errObj.type === 'number') {
-        checkEmpty(formData[elem], elem, errors, this.updateErrors)
-      } else if (errObj.type === 'date') {
-        checkDate(moment(formData[elem]).format('DD/MM/YYYY'), elem, errors, this.updateErrors)
+        error = checkEmpty(formData[elem], elem, errors, this.setErrors)
+        
+      } 
+      else if (errObj.type === 'date') {
+        error = checkDate(moment(formData[elem]).format('DD/MM/YYYY'), elem, errors, this.setErrors)
       }
+
+      error === true ? hasErrors = true : null
     })
+
+    return hasErrors
+  }
+
+  setErrors(errors) {
+    this.setState({ errors })
   }
 
   updateErrors(errors) {
+    let { hasErrors, setHasErrorsPropuestaApuntalado } = this.props
+
+    let hasErrorNew = false
+
+    Object.keys(errors).forEach(key => {
+      if (errors[key].value !== null){
+        hasErrorNew = true
+      } 
+    })
+
+    if (hasErrorNew != hasErrors) {
+      setHasErrorsPropuestaApuntalado(hasErrorNew)
+    }
+
     this.setState({ errors })
   }
+
 
   makeGeneralForm() {
     let { formData, setPropuestaCompany, intervalos } = this.props
@@ -463,6 +512,8 @@ import { checkEmpty, checkDate } from '../../../../../lib/errorCheckers'
 const mapStateToProps = state => ({
   formData: state.get('propuestaApuntalado'),
   intervalos: state.getIn(['evaluacionPetrofisica', 'layerData']),
+  hasErrors: state.getIn(['propuestaApuntalado', 'hasErrors']),
+  hasSubmitted: state.getIn(['global', 'hasSubmitted']),
 })
 
 const mapDispatchToProps = dispatch => ({
@@ -484,6 +535,7 @@ const mapDispatchToProps = dispatch => ({
   setDensidadDeDisparos: val => dispatch(setDensidadDeDisparos(val)),
   setDiametroDeDisparos: val => dispatch(setDiametroDeDisparos(val)),
   setPropuestaCompany: val => dispatch(setPropuestaCompany(val)),
+  setHasErrorsPropuestaApuntalado: val => dispatch(setHasErrorsPropuestaApuntalado(val)),
 })
 
 export default connect(mapStateToProps, mapDispatchToProps)(PropuestaDeApuntalado)

@@ -10,6 +10,8 @@ const initialState = Map({
         Pws: '',
         Pwf: '',
     }],
+    hasErrorsCampo: true,
+    hasErrorsPozo: true,
     pressureDepthPozo: '',
     pressureDepthCampo: '',
     checked: []
@@ -18,6 +20,10 @@ const initialState = Map({
 
 const historicoDePresion = (state = initialState, action) => {
   switch (action.type) {
+    case 'set_hasErrorsHistoricoDePresionCampo':
+      return state.set('hasErrorsCampo', fromJS(action.value))
+    case 'set_hasErrorsHistoricoDePresionPozo':
+      return state.set('hasErrorsPozo', fromJS(action.value))
     case 'set_presionDataCampo':
         return state.set('presionDataCampo', fromJS(action.value))
     case 'set_presionDataPozo':

@@ -28,7 +28,7 @@ const initialState = fromJS({
     fecha: null,
     intervenciones: '',
   }],
-  hasErrors: null
+  hasErrors: true,
 })
 
 const fichaTecnicaDelPozo = (state = initialState, action) => {

@@ -786,13 +786,15 @@ const forms = [
   }
 
   render() {
-    let { setShowForms, hasSubmitted, fichaTecnicaDelPozoHasErrors } = this.props
+    let { setShowForms, hasSubmitted, fichaTecnicaDelPozoHasErrors, fichaTecnicaDelCampoHasErrors, 
+      historialDeIntervencionesHasErrors, evaluacionPetrofisicaHasErrors, mecanicoYAparejoDeProduccionHasErrors,
+      analisisDelAguaHasErrors, historicoDePresionCampoHasErrors, historicoDePresionPozoHasErrors } = this.props
     let { fieldWellOptions } = this.state
     let { isOpen } = this.state
     let className = 'subtab'
     let title = forms[this.state.currentStep].title
     
-    let errors = [false, fichaTecnicaDelPozoHasErrors, false, false, false, false, false, false, false, false, false]
+    let errors = [fichaTecnicaDelCampoHasErrors, fichaTecnicaDelPozoHasErrors, historialDeIntervencionesHasErrors, evaluacionPetrofisicaHasErrors, mecanicoYAparejoDeProduccionHasErrors, analisisDelAguaHasErrors, false, historicoDePresionCampoHasErrors, historicoDePresionPozoHasErrors, false, false]
 
     return (
        <div className={`multistep-form`}>
@@ -800,7 +802,6 @@ const forms = [
             {forms.map( (tab, index) => {
                const active = this.state.currentStep === index ? 'active' : ''; 
                let error = errors[index]
-
                const errorClass = (error && hasSubmitted) ? 'error' : '';
 
                return <div className={`${className} ${active} ${errorClass}`} onClick={() => this.handleClick(index)} key={index}><span></span> {tab.title} </div>
@@ -849,13 +850,20 @@ const mapStateToProps = state => ({
   hasSubmitted: state.getIn(['global', 'hasSubmitted']),
   fichaTecnicaDelPozoHighLevel: state.get('fichaTecnicaDelPozoHighLevel'),
   fichaTecnicaDelPozo: state.get('fichaTecnicaDelPozo'),
-  fichaTecnicaDelPozoHasErrors: state.getIn(['fichaTecnicaDelPozo', 'hasErrors']),
   fichaTecnicaDelCampo: state.get('fichaTecnicaDelCampo'),
   objetivoYAlcancesIntervencion: state.get('objetivoYAlcancesIntervencion'),
   sistemasArtificialesDeProduccion: state.get('sistemasArtificialesDeProduccion'),
   mecanicoYAparejoDeProduccion: state.get('mecanicoYAparejoDeProduccion'),
   analisisDelAgua: state.get('analisisDelAgua'),
   historicoDeAforos: state.get('historicoDeAforos'),
+  fichaTecnicaDelPozoHasErrors: state.getIn(['fichaTecnicaDelPozo', 'hasErrors']),
+  fichaTecnicaDelCampoHasErrors: state.getIn(['fichaTecnicaDelCampo', 'hasErrors']),
+  historialDeIntervencionesHasErrors: state.getIn(['historialDeIntervenciones', 'hasErrors']),
+  evaluacionPetrofisicaHasErrors: state.getIn(['evaluacionPetrofisica', 'hasErrors']),
+  mecanicoYAparejoDeProduccionHasErrors: state.getIn(['mecanicoYAparejoDeProduccion', 'hasErrors']),
+  analisisDelAguaHasErrors: state.getIn(['analisisDelAgua', 'hasErrors']),
+  historicoDePresionCampoHasErrors: state.getIn(['historicoDePresion', 'hasErrorsCampo']),
+  historicoDePresionPozoHasErrors: state.getIn(['historicoDePresion', 'hasErrorsPozo']),
   user: state.get('user')
 
 })

@@ -1,6 +1,5 @@
 import moment from 'moment'
 export function checkEmpty(value, name, errors, onBlur) {
-  console.log('error checking', name)
   let error = null
   if (!value || value.length < 1) {
     error = 'Este campo no puede estar vacio'

@@ -51,6 +51,7 @@ export const setHistoricoEstimulacionData = value => ({ type: 'set_historicoEsti
 export const setHistoricoAcidoData = value => ({ type: 'set_historicoAcidoData', value})
 export const setHistoricoApuntaladoData = value => ({ type: 'set_historicoApuntaladoData', value})
 export const setHistorialDeIntervenciones = value => ({ type: 'set_historialDeIntervenciones', value})
+export const setHasErrorsHistorialDeIntervenciones = value => ({ type: 'set_hasErrorsHistorialDeIntervenciones', value})
 
 //FichaTecnicaDelPozo
 export const setIntervaloProductor = value => ({ type: 'set_intervaloProductor', value})
@@ -86,6 +87,73 @@ export const setIntervalos = value => ({
 })
 export const setFichaTecnicaDelPozo = value => ({ type: 'set_fichaTecnicaDelPozo', value})
 export const setHasErrorsFichaTecnicaDelPozo = value => ({ type: 'set_hasErrorsFichaTecnicaDelPozo', value})
+
+//EvaluacionPetrofisica
+export const setLayerData = value => ({
+  type: 'set_layerData',
+  value: value.map((elem, i) => {
+    elem.interval = i + 1
+    elem.baseMD = parseFloat(elem.baseMD)
+    elem.cimaMD = parseFloat(elem.cimaMD)
+    elem.espesorBruto = !isNaN(elem.baseMD) && !isNaN(elem.cimaMD) ? ( Math.round((elem.baseMD - elem.cimaMD) * 100) / 100 ): ''
+    return elem
+  })
+})
+export const setMudLossData = value => ({ type: 'set_mudLossData', value})
+export const setImgURL = value => ({ type: 'set_imgURL', value})
+export const setEvaluacionPetrofisica = value => ({ type: 'set_evaluacionPetrofisica', value})
+export const setHasErrorsEvaluacionPetrofisica = value => ({ type: 'set_hasErrorsEvaluacionPetrofisica', value})
+
+//EdoMecanicoYAparejoDeProduccion
+export const setTipoDeTerminacion = value => ({ type: 'set_tipoDeTerminacion', value})
+export const setHIntervaloProductor = value => ({ type: 'set_hIntervaloProductor', value})
+export const setEmpacador = value => ({ type: 'set_empacador', value})
+export const setPresionDifEmpacador = value => ({ type: 'set_presionDifEmpacador', value})
+export const setSensorPyt = value => ({ type: 'set_sensorPyt', value})
+export const setTipoDeLiner = value => ({ type: 'set_tipoDeLiner', value})
+export const setDiametroDeLiner = value => ({ type: 'set_diametroDeLiner', value})
+export const setTipoDePistolas = value => ({ type: 'set_tipoDePistolas', value})
+export const setDensidadDeDisparosMecanico = value => ({ type: 'set_densidadDeDisparosMecanico', value})
+export const setFase = value => ({ type: 'set_fase', value})
+export const setDiametroDeOrificio = value => ({ type: 'set_diametroDeOrificio', value})
+export const setPenetracion = value => ({ type: 'set_penetracion', value})
+export const setTipoDeSAP = value => ({ type: 'set_tipoDeSAP', value})
+export const setTratamientoPor = value => ({ type: 'set_tratamientoPor', value})
+export const setVolumenAparejoDeProduccion = value => ({ type: 'set_volumenAparejoDeProduccion', value})
+export const setVolumenCimaDeIntervalo = value => ({ type: 'set_volumenCimaDeIntervalo', value})
+export const setVolumenBaseDeIntervalo = value => ({ type: 'set_volumenBaseDeIntervalo', value})
+export const setVolumenDeEspacioAnular = value => ({ type: 'set_volumenDeEspacioAnular', value})
+export const setImgBoreDiagramURL = value => ({ type: 'set_imgBoreDiagramURL', value})
+export const setImgAparejoDeProduccionURL = value => ({ type: 'set_imgAparejoDeProduccionURL', value})
+export const setMecanicoYAparejoDeProduccion = value => ({ type: 'set_mecanicoYAparejoDeProduccion', value})
+export const setHasErrorsMecanicoYAparejoDeProduccion = value => ({ type: 'set_hasErrorsMecanicoYAparejoDeProduccion', value})
+
+
+//AnalisisDelAgua
+export const setWaterAnalysisBool = value => ({ type: 'set_waterAnalysisBool', value})
+export const setPH = value => ({ type: 'set_pH', value})
+export const setTemperaturaDeConductividad = value => ({ type: 'set_temperaturaDeConductividad', value})
+export const setResistividad = value => ({ type: 'set_resistividad', value})
+export const setSalinidadConConductimetro = value => ({ type: 'set_salinidadConConductimetro', value})
+export const setSolidosDisueltosTotales = value => ({ type: 'set_solidosDisueltosTotales', value})
+export const setDurezaTotalComoCaCO3 = value => ({ type: 'set_durezaTotalComoCaCO3', value})
+export const setDurezaDeCalcioComoCaCO3 = value => ({ type: 'set_durezaDeCalcioComoCaCO3', value})
+export const setDurezaDeMagnesioComoCaCO3 = value => ({ type: 'set_durezaDeMagnesioComoCaCO3', value})
+export const setAlcalinidadTotalComoCaCO3 = value => ({ type: 'set_alcalinidadTotalComoCaCO3', value})
+export const setAlcalinidadALaFenolftaleinaComoCaCO3 = value => ({ type: 'set_alcalinidadALaFenolftaleinaComoCaCO3', value})
+export const setSalinidadComoNaCl = value => ({ type: 'set_salinidadComoNaCl', value})
+export const setSodio = value => ({ type: 'set_sodio', value})
+export const setCalcio = value => ({ type: 'set_calcio', value})
+export const setMagnesio = value => ({ type: 'set_magnesio', value})
+export const setFierro = value => ({ type: 'set_fierro', value})
+export const setCloruros = value => ({ type: 'set_cloruros', value})
+export const setBicarbonatos = value => ({ type: 'set_bicarbonatos', value})
+export const setSulfatos = value => ({ type: 'set_sulfatos', value})
+export const setCarbonatos = value => ({ type: 'set_carbonatos', value})
+export const setDensidadAt15 = value => ({ type: 'set_densidadAt15', value})
+export const setDensidadAt20 = value => ({ type: 'set_densidadAt20', value})
+export const setAnalisisDelAgua = value => ({ type: 'set_analisisDelAgua', value})
+export const setHasErrorsAnalisisDelAgua = value => ({ type: 'set_hasErrorsAnalisisDelAgua', value})
 
 //InformacionDeSistemasArtificialsDeProduccion
 export const setTipoDeSistemo = value => ({ type: 'set_tipoDeSistemo', value})
@@ -133,49 +201,18 @@ export const setNivelEstatico = value => ({type: 'set_nivelEstatico', value})
 export const setSistemasArtificialesImgURL = value => ({ type: 'set_sistemasArtificialesImgURL', value})
 export const setSistemasArtificialesDeProduccion = value => ({ type: 'set_sistemasArtificialesDeProduccion', value})
 
-//EvaluacionPetrofisica
-export const setLayerData = value => ({
-  type: 'set_layerData',
-  value: value.map((elem, i) => {
-    elem.interval = i + 1
-    elem.baseMD = parseFloat(elem.baseMD)
-    elem.cimaMD = parseFloat(elem.cimaMD)
-    elem.espesorBruto = !isNaN(elem.baseMD) && !isNaN(elem.cimaMD) ? ( Math.round((elem.baseMD - elem.cimaMD) * 100) / 100 ): ''
-    return elem
-  })
-})
-export const setMudLossData = value => ({ type: 'set_mudLossData', value})
-export const setImgURL = value => ({ type: 'set_imgURL', value})
-export const setEvaluacionPetrofisica = value => ({ type: 'set_evaluacionPetrofisica', value})
-
-//EdoMecanicoYAparejoDeProduccion
-export const setTipoDeTerminacion = value => ({ type: 'set_tipoDeTerminacion', value})
-export const setHIntervaloProductor = value => ({ type: 'set_hIntervaloProductor', value})
-export const setEmpacador = value => ({ type: 'set_empacador', value})
-export const setPresionDifEmpacador = value => ({ type: 'set_presionDifEmpacador', value})
-export const setSensorPyt = value => ({ type: 'set_sensorPyt', value})
-export const setTipoDeLiner = value => ({ type: 'set_tipoDeLiner', value})
-export const setDiametroDeLiner = value => ({ type: 'set_diametroDeLiner', value})
-export const setTipoDePistolas = value => ({ type: 'set_tipoDePistolas', value})
-export const setDensidadDeDisparosMecanico = value => ({ type: 'set_densidadDeDisparosMecanico', value})
-export const setFase = value => ({ type: 'set_fase', value})
-export const setDiametroDeOrificio = value => ({ type: 'set_diametroDeOrificio', value})
-export const setPenetracion = value => ({ type: 'set_penetracion', value})
-export const setTipoDeSAP = value => ({ type: 'set_tipoDeSAP', value})
-export const setTratamientoPor = value => ({ type: 'set_tratamientoPor', value})
-export const setVolumenAparejoDeProduccion = value => ({ type: 'set_volumenAparejoDeProduccion', value})
-export const setVolumenCimaDeIntervalo = value => ({ type: 'set_volumenCimaDeIntervalo', value})
-export const setVolumenBaseDeIntervalo = value => ({ type: 'set_volumenBaseDeIntervalo', value})
-export const setVolumenDeEspacioAnular = value => ({ type: 'set_volumenDeEspacioAnular', value})
-export const setImgBoreDiagramURL = value => ({ type: 'set_imgBoreDiagramURL', value})
-export const setImgAparejoDeProduccionURL = value => ({ type: 'set_imgAparejoDeProduccionURL', value})
-export const setMecanicoYAparejoDeProduccion = value => ({ type: 'set_mecanicoYAparejoDeProduccion', value})
-
 //HistoricoDePresion
 export const setPresionDataCampo = value => ({ type: 'set_presionDataCampo', value})
 export const setPresionDataPozo = value => ({ type: 'set_presionDataPozo', value})
 export const setPressureDepthPozo = value => ({ type: 'set_pressureDepthPozo', value})
 export const setPressureDepthCampo = value => ({ type: 'set_pressureDepthCampo', value})
+export const setHasErrorsHistoricoDePressionCampo = value => ({ type: 'set_hasErrorsHistoricoDePresionCampo', value})
+export const setHasErrorsHistoricoDePressionPozo = value => ({ type: 'set_hasErrorsHistoricoDePresionPozo', value})
+
+//HistoricoDeAforos
+export const setAforosData = value => ({ type: 'set_aforosData', value})
+export const setHistoricoDeAforos = value => ({ type: 'set_historicoDeAforos', value})
+export const setHasErrorsHistoricoDeAforos = value => ({ type: 'set_hasErrorsHistoricoDeAforos', value})
 
 //HistoricoDeProduccion
 export const setProduccionData = value => ({ 
@@ -200,34 +237,8 @@ export const setProduccionData = value => ({
   	})
 
 export const setHistoricoProduccion = value => ({ type: 'set_historicoProduccion', value})
-
-//HistoricoDeAforos
-export const setAforosData = value => ({ type: 'set_aforosData', value})
-export const setHistoricoDeAforos = value => ({ type: 'set_historicoDeAforos', value})
-    
+export const setHasErrorsHistoricoDeProduccion = value => ({ type: 'set_hasErrorsHistoricoDeProduccion', value})
 
 
-//AnalisisDelAgua
-export const setWaterAnalysisBool = value => ({ type: 'set_waterAnalysisBool', value})
-export const setPH = value => ({ type: 'set_pH', value})
-export const setTemperaturaDeConductividad = value => ({ type: 'set_temperaturaDeConductividad', value})
-export const setResistividad = value => ({ type: 'set_resistividad', value})
-export const setSalinidadConConductimetro = value => ({ type: 'set_salinidadConConductimetro', value})
-export const setSolidosDisueltosTotales = value => ({ type: 'set_solidosDisueltosTotales', value})
-export const setDurezaTotalComoCaCO3 = value => ({ type: 'set_durezaTotalComoCaCO3', value})
-export const setDurezaDeCalcioComoCaCO3 = value => ({ type: 'set_durezaDeCalcioComoCaCO3', value})
-export const setDurezaDeMagnesioComoCaCO3 = value => ({ type: 'set_durezaDeMagnesioComoCaCO3', value})
-export const setAlcalinidadTotalComoCaCO3 = value => ({ type: 'set_alcalinidadTotalComoCaCO3', value})
-export const setAlcalinidadALaFenolftaleinaComoCaCO3 = value => ({ type: 'set_alcalinidadALaFenolftaleinaComoCaCO3', value})
-export const setSalinidadComoNaCl = value => ({ type: 'set_salinidadComoNaCl', value})
-export const setSodio = value => ({ type: 'set_sodio', value})
-export const setCalcio = value => ({ type: 'set_calcio', value})
-export const setMagnesio = value => ({ type: 'set_magnesio', value})
-export const setFierro = value => ({ type: 'set_fierro', value})
-export const setCloruros = value => ({ type: 'set_cloruros', value})
-export const setBicarbonatos = value => ({ type: 'set_bicarbonatos', value})
-export const setSulfatos = value => ({ type: 'set_sulfatos', value})
-export const setCarbonatos = value => ({ type: 'set_carbonatos', value})
-export const setDensidadAt15 = value => ({ type: 'set_densidadAt15', value})
-export const setDensidadAt20 = value => ({ type: 'set_densidadAt20', value})
-export const setAnalisisDelAgua = value => ({ type: 'set_analisisDelAgua', value})
+
+

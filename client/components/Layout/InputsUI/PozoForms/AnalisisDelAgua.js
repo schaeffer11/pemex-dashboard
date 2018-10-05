@@ -4,7 +4,11 @@ import { InputRow, InputRowUnitless, InputRowSelectUnitless } from '../../Common
 import {withValidate} from '../../Common/Validate'
 import { connect } from 'react-redux'
 import AnalisisDelAguaGraph from './AnalisisDelAguaGraph'
-import { setWaterAnalysisBool, setPH, setTemperaturaDeConductividad, setResistividad, setSalinidadConConductimetro, setSolidosDisueltosTotales, setDurezaTotalComoCaCO3, setDurezaDeCalcioComoCaCO3, setDurezaDeMagnesioComoCaCO3, setAlcalinidadTotalComoCaCO3, setAlcalinidadALaFenolftaleinaComoCaCO3, setSalinidadComoNaCl, setSodio, setCalcio, setMagnesio, setFierro, setCloruros, setBicarbonatos, setSulfatos, setCarbonatos, setDensidadAt15, setDensidadAt20, setChecked } from '../../../../redux/actions/pozo'
+import { setHasErrorsAnalisisDelAgua, setWaterAnalysisBool, setPH, setTemperaturaDeConductividad, setResistividad, 
+  setSalinidadConConductimetro, setSolidosDisueltosTotales, setDurezaTotalComoCaCO3, setDurezaDeCalcioComoCaCO3, 
+  setDurezaDeMagnesioComoCaCO3, setAlcalinidadTotalComoCaCO3, setAlcalinidadALaFenolftaleinaComoCaCO3, setSalinidadComoNaCl,
+   setSodio, setCalcio, setMagnesio, setFierro, setCloruros, setBicarbonatos, setSulfatos, setCarbonatos, setDensidadAt15, 
+   setDensidadAt20, setChecked } from '../../../../redux/actions/pozo'
 import { checkEmpty, checkDate } from '../../../../lib/errorCheckers';
 
 
@@ -22,113 +26,154 @@ const yesOrNoOptions = [{
     this.state = {
       errors: {
         pH: {
-          type: 'numbernumber',
-          value: null,
+          type: 'number',
+          value: '',
         },
         temperaturaDeConductividad: {
           type: 'number',
-          value: null,
+          value: '',
         },
         resistividad: {
           type: 'number',
-          value: null,
+          value: '',
         },
         salinidadConConductimetro: {
           type: 'number',
-          value: null,
+          value: '',
         },
         solidosDisueltosTotales: {
           type: 'number',
-          value: null,
+          value: '',
         },
         durezaTotalComoCaCO3: {
           type: 'number',
-          value: null,
+          value: '',
         },
         durezaDeCalcioComoCaCO3: {
           type: 'number',
-          value: null,
+          value: '',
         },
         durezaDeMagnesioComoCaCO3: {
           type: 'number',
-          value: null,
+          value: '',
         },
         alcalinidadTotalComoCaCO3: {
           type: 'number',
-          value: null,
+          value: '',
         },
         alcalinidadALaFenolftaleinaComoCaCO3: {
           type: 'number',
-          value: null,
+          value: '',
         },
         salinidadComoNaCl: {
           type: 'number',
-          value: null,
+          value: '',
         },
         sodio: {
           type: 'number',
-          value: null,
+          value: '',
         },
         calcio: {
           type: 'number',
-          value: null,
+          value: '',
         },
         magnesio: {
           type: 'number',
-          value: null,
+          value: '',
         },
         fierro: {
           type: 'number',
-          value: null,
+          value: '',
         },
         cloruros: {
           type: 'number',
-          value: null,
+          value: '',
         },
         bicarbonatos: {
           type: 'number',
-          value: null,
+          value: '',
         },
         sulfatos: {
           type: 'number',
-          value: null,
+          value: '',
         },
         carbonatos: {
           type: 'number',
-          value: null,
+          value: '',
         },
         densidadAt15: {
           type: 'number',
-          value: null,
+          value: '',
         },
         densidadAt20: {
           type: 'number',
-          value: null,
+          value: '',
         },
       }
     }
   }
 
-  componentDidMount() {
-    this.checkAllInputs()
+
+  componentDidMount(){
+    let { setHasErrorsAnalisisDelAgua, hasErrors, hasSubmitted } = this.props
+
+    if (hasSubmitted) {
+      let hasErrors = this.checkAllInputs()
+      setHasErrorsAnalisisDelAgua(hasErrors)
+    }
+  }
+
+  componentDidUpdate(prevProps) {
+    let { hasSubmitted } = this.props
+
+    if (hasSubmitted !== prevProps.hasSubmitted) {
+      this.checkAllInputs()
+    }
   }
 
   checkAllInputs() {
     let { formData } = this.props
     formData = formData.toJS()
     const { errors } = this.state
+    let hasErrors = false
+    let error 
+
     Object.keys(errors).forEach(elem => {
       const errObj = errors[elem]
+
       if (errObj.type === 'text' || errObj.type === 'number') {
-        checkEmpty(formData[elem], elem, errors, this.updateErrors)
-      } else if (errObj.type === 'date') {
-        checkDate(moment(formData[elem]).format('DD/MM/YYYY'), elem, errors, this.updateErrors)
+        error = checkEmpty(formData[elem], elem, errors, this.setErrors)
+        
+      } 
+      else if (errObj.type === 'date') {
+        error = checkDate(moment(formData[elem]).format('DD/MM/YYYY'), elem, errors, this.setErrors)
       }
+
+      error === true ? hasErrors = true : null
     })
+
+    return hasErrors
   }
 
+  setErrors(errors) {
+    this.setState({ errors })
+  }
 
   updateErrors(errors) {
+    let { hasErrors, setHasErrorsAnalisisDelAgua } = this.props
+
+    let hasErrorNew = false
+
+    Object.keys(errors).forEach(key => {
+      if (errors[key].value !== null){
+        hasErrorNew = true
+      } 
+    })
+
+    if (hasErrorNew != hasErrors) {
+      setHasErrorsAnalisisDelAgua(hasErrorNew)
+    }
+
     this.setState({ errors })
   }
 
@@ -192,6 +237,8 @@ const yesOrNoOptions = [{
 
 const mapStateToProps = state => ({
   formData: state.get('analisisDelAgua'),
+  hasErrors: state.getIn(['analisisDelAgua', 'hasErrors']),
+  hasSubmitted: state.getIn(['global', 'hasSubmitted']),
 })
 
 const mapDispatchToProps = dispatch => ({
@@ -218,6 +265,7 @@ const mapDispatchToProps = dispatch => ({
   setCarbonatos: val => dispatch(setCarbonatos(val)),
   setDensidadAt15: val => dispatch(setDensidadAt15(val)),
   setDensidadAt20: val => dispatch(setDensidadAt20(val)),
+  setHasErrorsAnalisisDelAgua: val => dispatch(setHasErrorsAnalisisDelAgua(val)),
 })
 
 export default connect(mapStateToProps, mapDispatchToProps)(AnalisisDelAgua)

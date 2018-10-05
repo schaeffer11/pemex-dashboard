@@ -4,7 +4,11 @@ import { List, Map, is } from 'immutable'
 import { connect } from 'react-redux'
 
 import { InputRow, InputRowUnitless, InputRowSelectUnitless } from '../../Common/InputRow'
-import { setTipoDeTerminacion, setHIntervaloProductor, setEmpacador, setPresionDifEmpacador, setSensorPyt, setTipoDeLiner, setDiametroDeLiner, setTipoDePistolas, setDensidadDeDisparosMecanico, setFase, setDiametroDeOrificio, setPenetracion, setTipoDeSAP, setTratamientoPor, setVolumenAparejoDeProduccion, setVolumenCimaDeIntervalo, setVolumenBaseDeIntervalo, setVolumenDeEspacioAnular, setImgBoreDiagramURL, setImgAparejoDeProduccionURL, setChecked} from '../../../../redux/actions/pozo'
+import { setHasErrorsMecanicoYAparejoDeProduccion, setTipoDeTerminacion, setHIntervaloProductor, setEmpacador, 
+  setPresionDifEmpacador, setSensorPyt, setTipoDeLiner, setDiametroDeLiner, setTipoDePistolas, setDensidadDeDisparosMecanico, 
+  setFase, setDiametroDeOrificio, setPenetracion, setTipoDeSAP, setTratamientoPor, setVolumenAparejoDeProduccion, 
+  setVolumenCimaDeIntervalo, setVolumenBaseDeIntervalo, setVolumenDeEspacioAnular, setImgBoreDiagramURL, 
+  setImgAparejoDeProduccionURL, setChecked} from '../../../../redux/actions/pozo'
 import { checkEmpty, checkDate } from '../../../../lib/errorCheckers'
 
 
@@ -37,96 +41,140 @@ let tratamientoPorOptions = [
       errors: {
         tipoDeTerminacion: {
           type: 'text',
-          values: null,
+          values: '',
         },
         hIntervaloProductor: {
           type: 'number',
-          values: null,
+          values: '',
         },
         empacador: {
           type: 'number',
-          values: null,
+          values: '',
         },
         presionDifEmpacador: {
           type: 'number',
-          values: null,
+          values: '',
         },
         sensorPyt: {
           type: 'number',
-          values: null,
+          values: '',
         },
         tipoDeLiner: {
           type: 'text',
-          values: null,
+          values: '',
         },
         diametroDeLiner: {
           type: 'number',
-          values: null,
+          values: '',
         },
         tipoDePistolas: {
           type: 'text',
-          values: null,
+          values: '',
         },
         densidadDeDisparosMecanico: {
           type: 'number',
-          values: null,
+          values: '',
         },
         fase: {
           type: 'number',
-          values: null,
+          values: '',
         },
         diametroDeOrificio: {
           type: 'number',
-          values: null,
+          values: '',
         },
         penetracion: {
           type: 'number',
-          values: null,
+          values: '',
         },
         tratamientoPor: {
           type: 'text',
-          values: null,
+          values: '',
         },
         volumenAparejoDeProduccion: {
           type: 'number',
-          values: null,
+          values: '',
         },
         volumenCimaDeIntervalo: {
           type: 'number',
-          values: null,
+          values: '',
         },
         volumenBaseDeIntervalo: {
           type: 'number',
-          values: null,
+          values: '',
         },
         volumenDeEspacioAnular: {
           type: 'number',
-          values: null,
+          values: '',
         },
       }
 
     }
   }
 
+  
   componentDidMount(){
-    this.checkAllInputs()
+    let { setHasErrorsMecanicoYAparejoDeProduccion, hasErrors, hasSubmitted } = this.props
+
+    console.log(hasSubmitted)
+    if (hasSubmitted) {
+      let hasErrors = this.checkAllInputs()
+      setHasErrorsMecanicoYAparejoDeProduccion(hasErrors)
+    }
+  }
+
+  componentWillReceiveProps(nextProps) {
+    let { hasSubmitted } = this.props
+
+    console.log(hasSubmitted)
+    if (hasSubmitted !== nextProps.hasSubmitted) {
+      this.checkAllInputs()
+    }
   }
 
   checkAllInputs() {
     let { formData } = this.props
     formData = formData.toJS()
     const { errors } = this.state
+    let hasErrors = false
+    let error 
+
     Object.keys(errors).forEach(elem => {
       const errObj = errors[elem]
+
       if (errObj.type === 'text' || errObj.type === 'number') {
-        checkEmpty(formData[elem], elem, errors, this.updateErrors)
-      } else if (errObj.type === 'date') {
-        checkDate(moment(formData[elem]).format('DD/MM/YYYY'), elem, errors, this.updateErrors)
+        error = checkEmpty(formData[elem], elem, errors, this.setErrors)
+        
+      } 
+      else if (errObj.type === 'date') {
+        error = checkDate(moment(formData[elem]).format('DD/MM/YYYY'), elem, errors, this.setErrors)
       }
+
+      error === true ? hasErrors = true : null
     })
+
+    return hasErrors
+  }
+
+  setErrors(errors) {
+    this.setState({ errors })
   }
 
   updateErrors(errors) {
+    let { hasErrors, setHasErrorsMecanicoYAparejoDeProduccion } = this.props
+
+    let hasErrorNew = false
+
+    Object.keys(errors).forEach(key => {
+      if (errors[key].value !== null){
+        hasErrorNew = true
+      } 
+    })
+
+    if (hasErrorNew != hasErrors) {
+      setHasErrorsMecanicoYAparejoDeProduccion(hasErrorNew)
+    }
+
     this.setState({ errors })
   }
 
@@ -264,6 +312,8 @@ let tratamientoPorOptions = [
 
 const mapStateToProps = state => ({
   formData: state.get('mecanicoYAparejoDeProduccion'),
+  hasErrors: state.getIn(['analisisDelAgua', 'hasErrors']),
+  hasSubmitted: state.getIn(['global', 'hasSubmitted']),
 })
 
 const mapDispatchToProps = dispatch => ({
@@ -287,7 +337,7 @@ const mapDispatchToProps = dispatch => ({
   setVolumenDeEspacioAnular: val => dispatch(setVolumenDeEspacioAnular(val)),
   setImgBoreDiagramURL: val => dispatch(setImgBoreDiagramURL(val)),
   setImgAparejoDeProduccionURL: val => dispatch(setImgAparejoDeProduccionURL(val)),
-  setChecked: val => dispatch(setChecked(val, 'mecanicoYAparejoDeProduccion'))
+  setHasErrorsMecanicoYAparejoDeProduccion: val => dispatch(setHasErrorsMecanicoYAparejoDeProduccion(val)),
 })
 
 

@@ -37,7 +37,7 @@ const initialState = Map({
     h2sField: '',
     co2Field: '',
     n2Field: '',
-    hasErrors: null
+    hasErrors: true,
 })
 
 

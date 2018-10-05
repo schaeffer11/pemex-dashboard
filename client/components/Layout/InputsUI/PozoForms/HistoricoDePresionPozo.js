@@ -3,8 +3,7 @@ import { connect } from 'react-redux'
 import autobind from 'autobind-decorator'
 import ReactTable from 'react-table'
 
-import {withValidate} from '../../Common/Validate'
-import { setPresionDataPozo, setPressureDepthPozo, setChecked } from '../../../../redux/actions/pozo'
+import { setHasErrorsHistoricoDePressionPozo, setPresionDataPozo, setPressureDepthPozo, setChecked } from '../../../../redux/actions/pozo'
 import InputTable from '../../Common/InputTable'
 import ExcelUpload from '../../Common/ExcelUpload'
 import { InputRow } from '../../Common/InputRow'
@@ -43,33 +42,75 @@ let columns = [
       errors: {
         pressureDepthPozo: {
           type: 'number',
-          value: null,
+          value: '',
         }
       }
     }
   }
 
-  componentDidMount() {
-    this.checkAllInputs()
+
+  componentDidMount(){
+    let { setHasErrorsHistoricoDePressionPozo, hasErrors, hasSubmitted } = this.props
+
+    if (hasSubmitted) {
+      let hasErrors = this.checkAllInputs()
+      setHasErrorsHistoricoDePressionPozo(hasErrors)
+    }
+  }
+
+  componentDidUpdate(prevProps) {
+    let { hasSubmitted } = this.props
+
+    if (hasSubmitted !== prevProps.hasSubmitted) {
+      this.checkAllInputs()
+    }
   }
 
   checkAllInputs() {
     let { formData } = this.props
     formData = formData.toJS()
     const { errors } = this.state
+    let hasErrors = false
+    let error 
+
     Object.keys(errors).forEach(elem => {
       const errObj = errors[elem]
+
       if (errObj.type === 'text' || errObj.type === 'number') {
-        checkEmpty(formData[elem], elem, errors, this.updateErrors)
-      } else if (errObj.type === 'date') {
-        checkDate(moment(formData[elem]).format('DD/MM/YYYY'), elem, errors, this.updateErrors)
+        error = checkEmpty(formData[elem], elem, errors, this.setErrors)
+        
+      } 
+      else if (errObj.type === 'date') {
+        error = checkDate(moment(formData[elem]).format('DD/MM/YYYY'), elem, errors, this.setErrors)
       }
+
+      error === true ? hasErrors = true : null
     })
+
+    return hasErrors
+  }
+
+  setErrors(errors) {
+    this.setState({ errors })
   }
 
   updateErrors(errors) {
+    let { hasErrors, setHasErrorsHistoricoDePressionPozo } = this.props
+    let hasErrorNew = false
+
+    Object.keys(errors).forEach(key => {
+      if (errors[key].value !== null){
+        hasErrorNew = true
+      } 
+    })
+
+    if (hasErrorNew != hasErrors) {
+      setHasErrorsHistoricoDePressionPozo(hasErrorNew)
+    }
+
     this.setState({ errors })
   }
+  
 
   addNewRow() {
     let { formData, setPresionDataPozo } = this.props
@@ -108,9 +149,7 @@ let columns = [
     formData = formData.toJS()
     let { presionDataPozo, pressureDepthPozo } = formData
 
-     const objectTemplate = {fecha: null, Pws: '', Pwf: ''}
-
-    console.log('render ppzoo')
+    const objectTemplate = {fecha: null, Pws: '', Pwf: ''}
 
     return (
 
@@ -154,12 +193,15 @@ let columns = [
 
 const mapStateToProps = state => ({
   formData: state.get('historicoDePresion'),
+  hasErrors: state.getIn(['historicoDePresion', 'hasErrorsPozo']),
+  hasSubmitted: state.getIn(['global', 'hasSubmitted']),
 })
 
 const mapDispatchToProps = dispatch => ({
     setPresionDataPozo: val => dispatch(setPresionDataPozo(val)),
     setChecked: val => dispatch(setChecked(val, 'historicoDePresion')),
     setPressureDepthPozo: val => dispatch(setPressureDepthPozo(val)),
+    setHasErrorsHistoricoDePressionPozo: val => dispatch(setHasErrorsHistoricoDePressionPozo(val)),
 })
 
 export default connect(mapStateToProps, mapDispatchToProps)(HistoricoDePresionPozo)

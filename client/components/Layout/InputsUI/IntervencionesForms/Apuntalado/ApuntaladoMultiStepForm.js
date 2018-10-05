@@ -57,8 +57,8 @@ import EstimacionCostos from '../EstimacionCostos'
 
 
   render() {
-    let { setShowForms } = this.props
-     let className = 'subtab'
+    let { setShowForms, hasSubmitted, propuestaHasErrors, resultadosSimulacionHasErrors, estIncProduccionHasErrors, estCostsHasErrors } = this.props
+    let className = 'subtab'
 
 
     const forms = [
@@ -70,14 +70,18 @@ import EstimacionCostos from '../EstimacionCostos'
       {'title' : 'Estimación de Costos de Fracturamiento Apuntalado', 'content': <EstimacionCostos /> }
     ];
 
-     let title = forms[this.state.currentStep].title
+    let errors = [propuestaHasErrors, false, false, resultadosSimulacionHasErrors, estIncProduccionHasErrors, estCostsHasErrors]
+    let title = forms[this.state.currentStep].title
 
      return (
          <div className={`multistep-form`}>
           <div className="subtabs">
               {forms.map( (tab, index) => {
-                 let active = this.state.currentStep === index ? 'active' : ''; 
-                   return <div className={`${className} ${active}`} onClick={() => this.handleClick(index)} key={index}><span></span> {tab.title} </div>
+                let active = this.state.currentStep === index ? 'active' : ''; 
+                let error = errors[index]
+                const errorClass = (error && hasSubmitted) ? 'error' : '';
+
+                   return <div className={`${className} ${active} ${errorClass}`} onClick={() => this.handleClick(index)} key={index}><span></span> {tab.title} </div>
                  }
               )}
           </div>
@@ -102,7 +106,11 @@ const mapDispatchToProps = dispatch => ({
 })
 
 const mapStateToProps = state => ({
-
+  hasSubmitted: state.getIn(['global', 'hasSubmitted']),
+  propuestaHasErrors: state.getIn(['propuestaApuntalado', 'hasErrors']),
+  resultadosSimulacionHasErrors: state.getIn(['resultadosSimulacionApuntalado', 'hasErrors']),
+  estIncProduccionHasErrors: state.getIn(['estIncProduccionApuntalado', 'hasErrors']),
+  estCostsHasErrors: state.getIn(['estCost', 'hasErrors']),
 })
 
 
