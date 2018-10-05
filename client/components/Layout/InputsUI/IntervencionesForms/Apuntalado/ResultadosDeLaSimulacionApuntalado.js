@@ -3,7 +3,9 @@ import autobind from 'autobind-decorator'
 import { connect } from 'react-redux'
 
 import { InputRow, InputRowUnitless, InputRowSelectUnitless, TextAreaUnitless } from '../../../Common/InputRow'
-import { setEvidenceSimulationApuntaladoImgURL, setLongitudApuntalada, setAlturaTotalDeFractura, setAnchoPromedio, setConcentractionAreal, setConductividad, setFcd, setPresionNeta, setEficienciaDeFluidoDeFractura, setChecked } from '../../../../../redux/actions/intervencionesApuntalado'
+import { setHasErrorsResultadosSimulacionApuntalado, setEvidenceSimulationApuntaladoImgURL, setLongitudApuntalada,
+ setAlturaTotalDeFractura, setAnchoPromedio, setConcentractionAreal, setConductividad, setFcd, setPresionNeta,
+  setEficienciaDeFluidoDeFractura, setChecked } from '../../../../../redux/actions/intervencionesApuntalado'
 import { checkEmpty, checkDate } from '../../../../../lib/errorCheckers'
 
 @autobind class ResultadosDeLaSimulacionApuntalado extends Component {
@@ -13,61 +15,103 @@ import { checkEmpty, checkDate } from '../../../../../lib/errorCheckers'
       errors: {
         longitudApuntalada: {
           type: 'number',
-          value: null,
+          value: '',
         },
         alturaTotalDeFractura: {
           type: 'number',
-          value: null,
+          value: '',
         },
         anchoPromedio: {
           type: 'number',
-          value: null,
+          value: '',
         },
         concentractionAreal: {
           type: 'number',
-          value: null,
+          value: '',
         },
         conductividad: {
           type: 'number',
-          value: null,
+          value: '',
         },
         fcd: {
           type: 'number',
-          value: null,
+          value: '',
         },
         presionNeta: {
           type: 'number',
-          value: null,
+          value: '',
         },
         eficienciaDeFluidoDeFractura: {
           type: 'number',
-          value: null,
+          value: '',
         },
       }
     }
   }
 
-  componentDidMount() {
-    this.checkAllInputs()
+  componentDidMount(){
+    let { setHasErrorsResultadosSimulacionApuntalado, hasErrors, hasSubmitted } = this.props
+
+    if (hasSubmitted) {
+      let hasErrors = this.checkAllInputs()
+      setHasErrorsResultadosSimulacionApuntalado(hasErrors)
+    }
+  }
+
+  componentDidUpdate(prevProps) {
+    let { hasSubmitted } = this.props
+
+    if (hasSubmitted !== prevProps.hasSubmitted) {
+      this.checkAllInputs()
+    }
   }
 
   checkAllInputs() {
     let { formData } = this.props
     formData = formData.toJS()
     const { errors } = this.state
+    let hasErrors = false
+    let error 
+
     Object.keys(errors).forEach(elem => {
       const errObj = errors[elem]
+
       if (errObj.type === 'text' || errObj.type === 'number') {
-        checkEmpty(formData[elem], elem, errors, this.updateErrors)
-      } else if (errObj.type === 'date') {
-        checkDate(moment(formData[elem]).format('DD/MM/YYYY'), elem, errors, this.updateErrors)
+        error = checkEmpty(formData[elem], elem, errors, this.setErrors)
+        
+      } 
+      else if (errObj.type === 'date') {
+        error = checkDate(moment(formData[elem]).format('DD/MM/YYYY'), elem, errors, this.setErrors)
       }
+
+      error === true ? hasErrors = true : null
     })
+
+    return hasErrors
+  }
+
+  setErrors(errors) {
+    this.setState({ errors })
   }
 
   updateErrors(errors) {
+    let { hasErrors, setHasErrorsResultadosSimulacionApuntalado } = this.props
+
+    let hasErrorNew = false
+
+    Object.keys(errors).forEach(key => {
+      if (errors[key].value !== null){
+        hasErrorNew = true
+      } 
+    })
+
+    if (hasErrorNew != hasErrors) {
+      setHasErrorsResultadosSimulacionApuntalado(hasErrorNew)
+    }
+
     this.setState({ errors })
   }
+
 
   makeResultForm() {
     let { setLongitudApuntalada, setAlturaTotalDeFractura, setAnchoPromedio, setConcentractionAreal, setConductividad, setFcd, setPresionNeta, setEficienciaDeFluidoDeFractura, formData } = this.props
@@ -133,6 +177,8 @@ import { checkEmpty, checkDate } from '../../../../../lib/errorCheckers'
 
 const mapStateToProps = state => ({
   formData: state.get('resultadosSimulacionApuntalado'),
+  hasErrors: state.getIn(['resultadosSimulacionApuntalado', 'hasErrors']),
+  hasSubmitted: state.getIn(['global', 'hasSubmitted']),
 })
 
 const mapDispatchToProps = dispatch => ({
@@ -145,6 +191,7 @@ const mapDispatchToProps = dispatch => ({
   setPresionNeta: val => dispatch(setPresionNeta(val)),
   setEficienciaDeFluidoDeFractura: val => dispatch(setEficienciaDeFluidoDeFractura(val)),
   setEvidenceSimulationApuntaladoImgURL: val => dispatch(setEvidenceSimulationApuntaladoImgURL(val)),
+  setHasErrorsResultadosSimulacionApuntalado: val => dispatch(setHasErrorsResultadosSimulacionApuntalado(val)),
 
 })
 

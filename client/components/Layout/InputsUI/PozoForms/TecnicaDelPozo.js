@@ -8,7 +8,10 @@ import DatePicker from 'react-datepicker'
 import { checkEmpty, checkDate } from '../../../../lib/errorCheckers'
 import InputTable from '../../Common/InputTable'
 import { InputRow, InputRowUnitless, InputRowSelectUnitless, InputDate } from '../../Common/InputRow'
-import { setTipoDeSistemo, setHistorialIntervencionesData, setEspesorBruto, setCaliza, setDolomia, setArcilla, setPorosidad, setPermeabilidad, setSw, setCaa, setCga, setTipoDePozo, setPws, setPwf, setPwsFecha, setPwfFecha, setDeltaPPerMes, setTyac, setPvt, setAparejoDeProduccion, setProfEmpacador, setProfSensorPYT, setTipoDeSap, formData, setChecked } from '../../../../redux/actions/pozo'
+import { setHasErrorsFichaTecnicaDelPozo, setTipoDeSistemo, setHistorialIntervencionesData, setEspesorBruto, 
+  setCaliza, setDolomia, setArcilla, setPorosidad, setPermeabilidad, setSw, setCaa, setCga, setTipoDePozo, 
+  setPws, setPwf, setPwsFecha, setPwfFecha, setDeltaPPerMes, setTyac, setPvt, setAparejoDeProduccion, 
+  setProfEmpacador, setProfSensorPYT, setTipoDeSap, formData, setChecked } from '../../../../redux/actions/pozo'
 
 @autobind class TechnicaDelPozo extends Component {
   constructor(props) {
@@ -18,85 +21,87 @@ import { setTipoDeSistemo, setHistorialIntervencionesData, setEspesorBruto, setC
       errors: {
         caliza: {
           type: 'number',
-          value: null,
+          value: '',
         },
         dolomia: {
           type: 'number',
-          value: null,
+          value: '',
         },
         arcilla: {
           type: 'number',
-          value: null,
+          value: '',
         },
         porosidad: {
           type: 'number',
-          value: null,
+          value: '',
         },
         permeabilidad: {
           type: 'number',
-          value: null,
+          value: '',
         },
         sw: {
           type: 'number',
-          value: null,
+          value: '',
         },
         caa: {
           type: 'number',
-          value: null,
+          value: '',
         },
         cga: {
           type: 'number',
-          value: null,
+          value: '',
         },
         tipoDePozo: {
           type: 'text',
-          value: null,
+          value: '',
         },
         pws: {
           type: 'number',
-          value: null,
+          value: '',
         },
         pwsFecha: {
           type: 'date',
-          value: null,
+          value: '',
         },
         pwf: {
           type: 'number',
-          value: null,
+          value: '',
         },
         pwfFecha: {
           type: 'date',
-          value: null,
+          value: '',
         },
         deltaPPerMes: {
           type: 'number',
-          value: null,
+          value: '',
         },
         tyac: {
           type: 'number',
-          value: null,
+          value: '',
         },
         pvt: {
           type: 'text',
-          value: null,
+          value: '',
         },
         aparejoDeProduccion: {
           type: 'number',
-          value: null,
+          value: '',
         },
         profEmpacador: {
           type: 'number',
-          value: null,
+          value: '',
         },
         profSensorPYT: {
           type: 'number',
-          value: null,
+          value: '',
         },
       },
     }
   }
 
   componentDidMount(){
+    let { setHasErrorsFichaTecnicaDelPozo, hasErrors, hasSubmitted } = this.props
+
     const { token } = this.props
     const headers = {
       headers: {
@@ -105,7 +110,11 @@ import { setTipoDeSistemo, setHistorialIntervencionesData, setEspesorBruto, setC
       },
     }
 
-    this.checkAllInputs()
+    if (hasSubmitted) {
+      let hasErrors = this.checkAllInputs()
+      setHasErrorsFichaTecnicaDelPozo(hasErrors)
+    }
+
      fetch('/api/getFieldWellMapping', headers)
       .then(r => r.json())
       .then(r => {
@@ -116,23 +125,61 @@ import { setTipoDeSistemo, setHistorialIntervencionesData, setEspesorBruto, setC
     })
   }
 
+  componentWillReceiveProps(nextProps) {
+    let { hasSubmitted } = this.props
+
+    if (hasSubmitted !== nextProps.hasSubmitted) {
+      this.checkAllInputs()
+    }
+  }
+
+
   checkAllInputs() {
     let { formData } = this.props
     formData = formData.toJS()
     const { errors } = this.state
+    let hasErrors = false
+    let error 
+
     Object.keys(errors).forEach(elem => {
       const errObj = errors[elem]
+
       if (errObj.type === 'text' || errObj.type === 'number') {
-        checkEmpty(formData[elem], elem, errors, this.updateErrors)
-      } else if (errObj.type === 'date') {
-        checkDate(moment(formData[elem]).format('DD/MM/YYYY'), elem, errors, this.updateErrors)
+        error = checkEmpty(formData[elem], elem, errors, this.setErrors)
+        
+      } 
+      else if (errObj.type === 'date') {
+        error = checkDate(moment(formData[elem]).format('DD/MM/YYYY'), elem, errors, this.setErrors)
       }
+
+      error === true ? hasErrors = true : null
     })
+
+    return hasErrors
+  }
+
+  setErrors(errors) {
+    this.setState({ errors })
   }
 
   updateErrors(errors) {
+    let { hasErrors, setHasErrorsFichaTecnicaDelPozo } = this.props
+
+    let hasErrorNew = false
+
+    Object.keys(errors).forEach(key => {
+      if (errors[key].value !== null){
+        hasErrorNew = true
+      } 
+    })
+
+    if (hasErrorNew != hasErrors) {
+      setHasErrorsFichaTecnicaDelPozo(hasErrorNew)
+    }
+
     this.setState({ errors })
   }
+
 
 
   makeFormacionForm() {
@@ -292,6 +339,8 @@ import { setTipoDeSistemo, setHistorialIntervencionesData, setEspesorBruto, setC
 
 const mapStateToProps = state => ({
   formData: state.get('fichaTecnicaDelPozo'),
+  hasErrors: state.getIn(['fichaTecnicaDelPozo', 'hasErrors']),
+  hasSubmitted: state.getIn(['global', 'hasSubmitted']),
   generalData: state.get('fichaTecnicaDelPozoHighLevel'),
   tipoDeSistemo: state.getIn(['sistemasArtificialesDeProduccion', 'tipoDeSistemo']),
   token: state.getIn(['user', 'token'])
@@ -320,7 +369,7 @@ const mapDispatchToProps = dispatch => ({
   setProfSensorPYT: val => dispatch(setProfSensorPYT(val)),
   setTipoDeSistemo: val => dispatch(setTipoDeSistemo(val)),
   setHistorialIntervencionesData: val => dispatch(setHistorialIntervencionesData(val)),
-  setChecked: val => dispatch(setChecked(val, 'fichaTecnicaDelPozo')),
+  setHasErrorsFichaTecnicaDelPozo: val => dispatch(setHasErrorsFichaTecnicaDelPozo(val)),
 })
 
 export default connect(mapStateToProps, mapDispatchToProps)(TechnicaDelPozo)

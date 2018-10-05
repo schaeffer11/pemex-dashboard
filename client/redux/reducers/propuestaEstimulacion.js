@@ -14,6 +14,7 @@ const initialState = Map({
     volumenDesplazamientoN2: '',
     volumenTotalDeLiquido: '',
     */
+    hasErrors: true,
     propuestaCompany: '',
     tipoDeEstimulacion: '',
     tipoDeColocacion: '',
@@ -40,6 +41,8 @@ const initialState = Map({
 
 const propuestaEstimulacion = (state = initialState, action) => {
   switch (action.type) {
+      case 'set_hasErrorsPropuestaEstimulacion':
+      return state.set('hasErrors', fromJS(action.value))
     case 'set_intervalo':
         return state.set('intervalo', fromJS(action.value))
     case 'set_longitudDeIntervalo':

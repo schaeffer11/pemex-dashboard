@@ -6,6 +6,7 @@ export function checkEmpty(value, name, errors, onBlur) {
   } 
   errors[name].value = error
   onBlur(errors)
+  return error !== null
 }
 
 export function checkDate(value, name, errors, onBlur) {
@@ -18,5 +19,5 @@ export function checkDate(value, name, errors, onBlur) {
   }
   errors[name].value = error
   onBlur(errors)
-  return error
+  return error !== null
  }

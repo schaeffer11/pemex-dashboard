@@ -11,7 +11,7 @@ const initialState = Map({
     volumenDesplazamiento: '',
     volumenTotalDeLiquido: '',
     
-
+    hasErrors: true,
     moduloYoungArena: '',
     moduloYoungLutitas: '',
     relacPoissonArena: '',
@@ -43,6 +43,8 @@ const initialState = Map({
 
 const propuestaApuntalado = (state = initialState, action) => {
   switch (action.type) {
+    case 'set_hasErrorsPropuestaApuntalado':
+      return state.set('hasErrors', fromJS(action.value))
     case 'set_intervalo':
         return state.set('intervalo', fromJS(action.value))
     case 'set_longitudDeIntervalo':

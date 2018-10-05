@@ -1,6 +1,7 @@
 import { Map, fromJS } from 'immutable'
 
 const initialState = Map({ 
+    hasErrors: true,
     longitudTotal: '',
     longitudEfectivaGrabada: '',
     alturaGrabada: '',
@@ -17,6 +18,8 @@ const initialState = Map({
 
 const resultadosSimulacionAcido = (state = initialState, action) => {
   switch (action.type) {
+    case 'set_hasErrorsResultadosSimulacionAcido':
+      return state.set('hasErrors', fromJS(action.value))
     case 'set_longitudTotal':
         return state.set('longitudTotal', fromJS(action.value))
     case 'set_longitudEfectivaGrabada':
