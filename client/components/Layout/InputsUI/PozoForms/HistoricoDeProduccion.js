@@ -162,79 +162,23 @@ let columns = [
     super(props)
     this.state = {
       containsErrors: false,
-      errors: [
-        {
-          fecha: {
-            type: 'date',
-            value: null,
-          },
-          dias: {
-            type: 'number',
-            value: null,
-          },
-          qo: {
-            type: 'number',
-            value: null,
-          },
-          qw: {
-            type: 'number',
-            value: null,
-          },
-          qg: {
-            type: 'number',
-            value: null,
-          },
-          qgi: {
-            type: 'number',
-            value: null,
-          },
-          qo_vol: {
-            type: 'number',
-            value: null,
-          },
-          qw_vol: {
-            type: 'number',
-            value: null,
-          },
-          qg_vol: {
-            type: 'number',
-            value: null,
-          },
-          qgi_vol: {
-            type: 'number',
-            value: null,
-          },
-          np: {
-            type: 'number',
-            value: null,
-          },
-          wp: {
-            type: 'number',
-            value: null,
-          },
-          gp: {
-            type: 'number',
-            value: null,
-          },
-          gi: {
-            type: 'number',
-            value: null,
-          },
-          rga: {
-            type: 'number',
-            value: null,
-          },
-          fw: {
-            type: 'number',
-            value: null,
-          },
+      errors: {
+        table: {
+          value: '',
+          type: 'table',
+        },
+        something: {
+          value: 'test',
+          type: 'text',
         }
-      ],
+      },
       checked: []
     }
   }
 
-  componentDidMount(){
+  componentDidMount() {
+    // let { formData } = this.props
+    // formData = formData.toJS()
 
   }
 
@@ -316,12 +260,18 @@ let columns = [
 
   }
 
+  checkForErrors(value) {
+    const errorsCopy = {...this.state.errors}
+    errorsCopy.table.value = value
+    this.setState({ errors: errorsCopy })
+  }
+
   makeHistoricoDeProduccionInput() {
     let { formData , setProduccionData, setHistoricoProduccionLocal } = this.props
     formData = formData.toJS()
     let { produccionData } = formData
 
-    const rowObj = { fecha: null, dias: '', qo: '', qw: '', qg: '', qgi: '', qo_vol: '', qw_vol: '', qg_vol: '', qgi_vol: '', np: '', wp: '', gp: '', gi: '', rga: '', fw: '' }
+    const rowObj = { fecha: null, dias: '', qo: '', qw: '', qg: '', qgi: '', qo_vol: '', qw_vol: '', qg_vol: '', qgi_vol: '', np: '', wp: '', gp: '', gi: '', rga: '', fw: '', hasErros: true }
     const errors = [
       { name: 'fecha', type: 'date' },
       { name: 'dias', type: 'number' },
@@ -347,6 +297,7 @@ let columns = [
             getTdProps={this.deleteRow}
             errorArray={errors}
             rowObj={rowObj}
+            checkForErrors={this.checkForErrors}
           />
         </div>
 
@@ -356,6 +307,10 @@ let columns = [
   }
 
   render() {
+    let { formData } = this.props
+    formData = formData.toJS()
+
+    console.log('errors', this.state.errors)
 
     return (
       <div className="form historico-de-produccion">
