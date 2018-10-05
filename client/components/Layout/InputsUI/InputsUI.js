@@ -86,7 +86,8 @@ import { setHasSubmitted } from '../../../redux/actions/global'
       hasErrorsMecanicoYAparejoDeProduccion, hasErrorsAnalisisDelAgua, hasErrorsHistoricoDePresionCampo, hasErrorsHistoricoDePresionPozo,
       hasErrorsPropuestaEstimulacion, hasErrorsPropuestaApuntalado, hasErrorsPropuestaAcido, hasErrorsResultadosSimulacionAcido, 
       hasErrorsResultadosSimulacionEstimulacion, hasErrorsResultadosSimulacionApuntalado, hasErrorsEstIncProduccionAcido,
-      hasErrorsEstIncProduccionEstimulacion, hasErrorsEstIncProduccionApuntalado, hasErrorsEstCosts, setHasSubmitted } = this.props
+      hasErrorsEstIncProduccionEstimulacion, hasErrorsEstIncProduccionApuntalado, hasErrorsEstCosts, hasErrorsHistoricoDeProduccion,
+      setHasSubmitted } = this.props
 
 
     if (action === 'submit') {
@@ -94,7 +95,8 @@ import { setHasSubmitted } from '../../../redux/actions/global'
       setHasSubmitted(true)
       
       if (hasErrorsFichaTecnicaDelPozo  || hasErrorsFichaTecnicaDelCampo || hasErrorsHistorialDeIntervenciones || hasErrorsEvaluacionPetrofisica
-        || hasErrorsMecanicoYAparejoDeProduccion || hasErrorsAnalisisDelAgua || hasErrorsHistoricoDePresionPozo || hasErrorsHistoricoDePresionCampo) {
+        || hasErrorsMecanicoYAparejoDeProduccion || hasErrorsAnalisisDelAgua || hasErrorsHistoricoDePresionPozo || hasErrorsHistoricoDePresionCampo
+        || hasErrorsHistoricoDeProduccion) {
         hasErrors = true
       }
       if (tipoDeIntervenciones === 'estimulacion' && (hasErrorsPropuestaEstimulacion || hasErrorsResultadosSimulacionEstimulacion || hasErrorsEstIncProduccionEstimulacion)) {
@@ -337,6 +339,7 @@ const mapStateToProps = state => ({
   hasErrorsAnalisisDelAgua: state.getIn(['analisisDelAgua', 'hasErrors']),
   hasErrorsHistoricoDePresionCampo: state.getIn(['historicoDePresionCampo', 'hasErrors']),
   hasErrorsHistoricoDePresionPozo: state.getIn(['historicoDePresionPozo', 'hasErrors']),
+  hasErrorsHistoricoDeProduccion: state.getIn(['historicoDeProduccion', 'hasErrors']),
   hasErrorsPropuestaEstimulacion: state.getIn(['propuestaEstimulacion', 'hasErrors']),
   hasErrorsPropuestaApuntalado: state.getIn(['propuestaApuntalado', 'hasErrors']),
   hasErrorsPropuestaAcido: state.getIn(['propuestaAcido', 'hasErrors']),

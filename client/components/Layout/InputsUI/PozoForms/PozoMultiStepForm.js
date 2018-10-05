@@ -788,13 +788,13 @@ const forms = [
   render() {
     let { setShowForms, hasSubmitted, fichaTecnicaDelPozoHasErrors, fichaTecnicaDelCampoHasErrors, 
       historialDeIntervencionesHasErrors, evaluacionPetrofisicaHasErrors, mecanicoYAparejoDeProduccionHasErrors,
-      analisisDelAguaHasErrors, historicoDePresionCampoHasErrors, historicoDePresionPozoHasErrors } = this.props
+      analisisDelAguaHasErrors, historicoDePresionCampoHasErrors, historicoDePresionPozoHasErrors, historicoDeProduccionHasErrors } = this.props
     let { fieldWellOptions } = this.state
     let { isOpen } = this.state
     let className = 'subtab'
     let title = forms[this.state.currentStep].title
     
-    let errors = [fichaTecnicaDelCampoHasErrors, fichaTecnicaDelPozoHasErrors, historialDeIntervencionesHasErrors, evaluacionPetrofisicaHasErrors, mecanicoYAparejoDeProduccionHasErrors, analisisDelAguaHasErrors, false, historicoDePresionCampoHasErrors, historicoDePresionPozoHasErrors, false, false]
+    let errors = [fichaTecnicaDelCampoHasErrors, fichaTecnicaDelPozoHasErrors, historialDeIntervencionesHasErrors, evaluacionPetrofisicaHasErrors, mecanicoYAparejoDeProduccionHasErrors, analisisDelAguaHasErrors, false, historicoDePresionCampoHasErrors, historicoDePresionPozoHasErrors, false, historicoDeProduccionHasErrors]
 
     return (
        <div className={`multistep-form`}>
@@ -864,6 +864,7 @@ const mapStateToProps = state => ({
   analisisDelAguaHasErrors: state.getIn(['analisisDelAgua', 'hasErrors']),
   historicoDePresionCampoHasErrors: state.getIn(['historicoDePresion', 'hasErrorsCampo']),
   historicoDePresionPozoHasErrors: state.getIn(['historicoDePresion', 'hasErrorsPozo']),
+  historicoDeProduccionHasErrors: state.getIn(['historicoDeProduccion', 'hasErrors']),
   user: state.get('user')
 
 })

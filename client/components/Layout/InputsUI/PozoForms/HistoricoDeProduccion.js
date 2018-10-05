@@ -6,7 +6,7 @@ import ReactTable from 'react-table'
 import { InputRow, InputRowUnitless, InputRowSelectUnitless, InputDate } from '../../Common/InputRow'
 import {withValidate} from '../../Common/Validate'
 import ExcelUpload from '../../Common/ExcelUpload'
-import { setProduccionData, setChecked, setHistoricoProduccionLocal } from '../../../../redux/actions/pozo'
+import { setHasErrorsHistoricoDeProduccion, setProduccionData, setChecked, setHistoricoProduccionLocal } from '../../../../redux/actions/pozo'
 import InputTable from '../../Common/InputTable'
 import InputTable2 from '../../Common/InputTable2'
 import ReactHighCharts from 'react-highcharts'
@@ -158,20 +158,86 @@ let columns = [
   constructor(props) {
     super(props)
     this.state = {
-      containsErrors: false,
       errors: {
         table: {
           value: '',
           type: 'table',
         },
-        something: {
-          value: 'test',
-          type: 'text',
-        }
       },
-      checked: []
     }
   }
+
+
+  componentDidMount(){
+    let { setHasErrorsHistoricoDeProduccion, hasSubmitted } = this.props
+
+    if (hasSubmitted) {
+      let hasErrors = this.checkAllInputs()
+      setHasErrorsHistoricoDeProduccion(hasErrors)
+    }
+  }
+
+  componentDidUpdate(prevProps) {
+    let { hasSubmitted } = this.props
+
+    if (hasSubmitted !== prevProps.hasSubmitted) {
+      this.checkAllInputs()
+    }
+  }
+
+  checkAllInputs() {
+    let { formData } = this.props
+    formData = formData.toJS()
+    const { errors } = this.state
+    let hasErrors = false
+    let error 
+
+    Object.keys(errors).forEach(elem => {
+      const errObj = errors[elem]
+
+      if (errObj.type === 'text' || errObj.type === 'number') {
+        error = checkEmpty(formData[elem], elem, errors, this.setErrors)
+        
+      } 
+      else if (errObj.type === 'date') {
+        error = checkDate(moment(formData[elem]).format('DD/MM/YYYY'), elem, errors, this.setErrors)
+      }
+      else if (errObj.type === 'table') {
+        error = errObj.value === '' ? true : errObj.value
+      }
+
+      error === true ? hasErrors = true : null
+    })
+
+    return hasErrors
+  }
+
+  setErrors(errors) {
+    this.setState({ errors })
+  }
+
+  // updateErrors(errors) {
+  //   let { hasErrors, setHasErrorsHistoricoDeProduccion } = this.props
+
+  //   let hasErrorNew = false
+
+  //   Object.keys(errors).forEach(key => {
+  //     console.log('other', key, errors[key])
+  //     if (errors[key].value !== null){
+  //       hasErrorNew = true
+  //     } 
+  //   })
+
+  //   console.log('updating', hasErrorNew)
+
+  //   if (hasErrorNew != hasErrors) {
+  //     setHasErrorsHistoricoDeProduccion(hasErrorNew)
+  //   }
+
+  //   this.setState({ errors })
+  // }
+
+
 
 
   makeProductionGraph() {
@@ -207,16 +273,24 @@ let columns = [
 
 
   checkForErrors(value) {
+    let { hasErrors, setHasErrorsHistoricoDeProduccion } = this.props
     const errorsCopy = {...this.state.errors}
     errorsCopy.table.value = value
+
+
+    if (value !== hasErrors) {
+      setHasErrorsHistoricoDeProduccion(value)
+    }
+
+
     this.setState({ errors: errorsCopy })
   }
 
   makeHistoricoDeProduccionInput() {
-    let { formData , setProduccionData, setHistoricoProduccionLocal } = this.props
+    let { formData , setProduccionData, setHistoricoProduccionLocal, hasSubmitted } = this.props
     formData = formData.toJS()
     let { produccionData } = formData
-    const rowObj = { fecha: null, dias: '', qo: '', qw: '', qg: '', qgi: '', qo_vol: '', qw_vol: '', qg_vol: '', qgi_vol: '', np: '', wp: '', gp: '', gi: '', rga: '', fw: '', hasErros: true }
+    const rowObj = { fecha: null, dias: '', qo: '', qw: '', qg: '', qgi: '', qo_vol: '', qw_vol: '', qg_vol: '', qgi_vol: '', np: '', wp: '', gp: '', gi: '', rga: '', fw: '', error: true }
 
     const errors = [
       { name: 'fecha', type: 'date' },
@@ -243,6 +317,7 @@ let columns = [
             errorArray={errors}
             rowObj={rowObj}
             checkForErrors={this.checkForErrors}
+            hasSubmitted={hasSubmitted}
           />
         </div>
 
@@ -284,9 +359,12 @@ let columns = [
 
 const mapStateToProps = state => ({
   formData: state.get('historicoDeProduccion'),
+  hasErrors: state.getIn(['historicoDeProduccion', 'hasErrors']),
+  hasSubmitted: state.getIn(['global', 'hasSubmitted']),
 })
 
 const mapDispatchToProps = dispatch => ({
+    setHasErrorsHistoricoDeProduccion: val => dispatch(setHasErrorsHistoricoDeProduccion(val)),
     setProduccionData: val => dispatch(setProduccionData(val)),
     setChecked: val => dispatch(setChecked(val, 'historicoDeProduccion')),
     setHistoricoProduccionLocal: (location, value) => dispatch(setHistoricoProduccionLocal(location, value)),

@@ -7,7 +7,7 @@ import DatePicker from 'react-datepicker'
 import MaskedTextInput from "react-text-mask"
 import Cleave from 'cleave.js/react'
 import { InputRow } from './InputRow'
-import { checkDate, checkEmpty } from '../../../lib/errorCheckers'
+import { checkDate, checkEmpty, checkEmptySingular, checkDateSingular } from '../../../lib/errorCheckers'
 
 /*
  * Wrapper Component for ReactTable with reusable editable cells.
@@ -30,20 +30,42 @@ import { checkDate, checkEmpty } from '../../../lib/errorCheckers'
   }
 
   componentDidMount() {
-    const { errorArray, data } = this.props
-    let errorState = {}
+    const { errorArray, data, hasSubmitted } = this.props
+    let errors = []
+    let properRow = {}
+
     if (errorArray) {
       errorArray.forEach(({ name, type }) => {
-        errorState[name] = { value: '', type }
+        properRow[name] = { value: null, type }
+      })
+
+      data.forEach(row => {
+        if (row.error === false || !hasSubmitted) {
+          errors.push(properRow)
+        }
+        else {
+          let newRow = JSON.parse(JSON.stringify(properRow))
+          errorArray.forEach(({ name, type }) => {
+            let err
+
+            if (type === 'number') {
+              err = checkEmptySingular(row[name])
+            }
+            else if (type === 'date') {
+              err = checkDateSingular(row[name])
+            }
+
+            newRow[name] = { value: err, type }
+          })
+
+          errors.push(newRow)
+        }
       })
     }
-    let errors = [errorState]
-    if (data.length > 1) {
-      errors = data.map(elem => errorState)
-    }
-    if(data.length > 0) {
-      // this.loopAway(errors, true)
-    }
+
+    console.log(data)
+    console.log(errors)
+
     this.setState({ errors })
   }
 
@@ -96,40 +118,6 @@ import { checkDate, checkEmpty } from '../../../lib/errorCheckers'
     )
   }
 
-  // loopAway(errors, isInitial=false) {
-  //   const { data, checkForErrors, setData } = this.props
-  //   let hasError = false
-  //   const updateErrors = (e, name, i) => {
-  //     errors[i][name] = e
-
-  //     this.setState({ errors })
-  //   }
-
-  //   data.forEach((elem, i) => {
-  //     if (elem.error) {
-  //       hasError = true
-  //       if (isInitial) {
-  //         const errorRow = errors[i]
-  //         Object.keys(elem).forEach(key => {
-  //           if (errorRow[key]) {
-  //             const { type } = errorRow[key]
-  //             if (type === 'number') {
-  //               checkEmpty(elem[key], key, errorRow, (e) => updateErrors(e, key, i))
-  //             } 
-  //             else if (type === 'date') {
-  //               checkDate(elem[key], key, errorRow, (e) => updateErrors(e, key, i))
-  //             }
-  //           }
-  //         })
-  //       }
-  //     }
-  //   })
-
-  //   if (typeof checkForErrors === 'function') {
-  //     checkForErrors(hasError)
-  //   }
-  // }
-
   setOuterStateError() {
     let { data, checkForErrors } = this.props
     let hasError = false 
@@ -144,6 +132,7 @@ import { checkDate, checkEmpty } from '../../../lib/errorCheckers'
       checkForErrors(hasError)
     }
   }
+
 
   updateErrors(e, i, errors) {
     let { data, setData } = this.props
@@ -181,24 +170,27 @@ import { checkDate, checkEmpty } from '../../../lib/errorCheckers'
     const name = cellInfo.column.id
     const value = data[cellInfo.index][cellInfo.column.id]
     const rowError = errors.length > 0 ? errors[cellInfo.index] : null
-    const style = { backgroundColor: "#fafafa", borderColor: 'blue' }
+
+    let style = { }
     if(rowError !== null && rowError[name] !== undefined && rowError[name].value !== null) {
-      style.borderColor = 'red'
+      style.border = 'solid 2px red'
     }
 
+
     return (
-      <input
-        type="number"
-        style={style}
-        contentEditable
-        suppressContentEditableWarning
-        value={value}
-        onChange={e => {
-          data[cellInfo.index][cellInfo.column.id] = e.target.value;
-          setData(data)
-        }}
-        onBlur={(e) => checkEmpty(e.target.value, name, rowError, (e) => this.updateErrors(e, cellInfo.index, errors))}
-      />
+      <div style={style}>
+        <input
+          type="number"
+          contentEditable
+          suppressContentEditableWarning
+          value={value}
+          onChange={e => {
+            data[cellInfo.index][cellInfo.column.id] = e.target.value;
+            setData(data)
+          }}
+          onBlur={(e) => checkEmpty(e.target.value, name, rowError, (e) => this.updateErrors(e, cellInfo.index, errors))}
+        />
+      </div>
     ); 
   }
 
@@ -217,6 +209,7 @@ import { checkDate, checkEmpty } from '../../../lib/errorCheckers'
     }
     const rowError = errors.length > 0 ? errors[cellInfo.index] : null
     const name = cellInfo.column.id
+   
 
     let handleSelect = (date) => {
       if (date.isValid()) {
@@ -226,7 +219,7 @@ import { checkDate, checkEmpty } from '../../../lib/errorCheckers'
       }
     }
   
-    function handleBlur(e) {
+    let handleBlur = (e) => {
       const date = moment(e.target.value, 'DD/MM/YYYY')
       if (!date.isValid() || e.target.value.includes('_')) {
         checkDate(e.target.value, name, rowError, (e) => this.updateErrors(e, cellInfo.index, errors))
@@ -235,25 +228,31 @@ import { checkDate, checkEmpty } from '../../../lib/errorCheckers'
       }
     }
     
+    let style = { }
+    if(rowError !== null && rowError[name] !== undefined && rowError[name].value !== null) {
+      style.border = 'solid 2px red'
+    }
 
     const date = data[cellInfo.index][cellInfo.column.id]
     const objValue = date ? moment(date) : null 
     return (
-      <DatePicker
-        customInput={
-          <MaskedTextInput
-            type="text"
-            mask={[/\d/, /\d/, "/", /\d/, /\d/, "/", /\d/, /\d/, /\d/, /\d/]}
-          />
-        }
-        isClearable={true}
-        dateFormat="L"
-        name={name}
-        onChange={handleSelect}
-        onBlur={handleBlur}
-        selected={objValue}
-        locale="es-mx"
-      />
+      <div className='test' style={style}>
+        <DatePicker
+          customInput={
+            <MaskedTextInput
+              type="text"
+              mask={[/\d/, /\d/, "/", /\d/, /\d/, "/", /\d/, /\d/, /\d/, /\d/]}
+            />
+          }
+          isClearable={false}
+          dateFormat="L"
+          name={name}
+          onChange={handleSelect}
+          onBlur={handleBlur}
+          selected={objValue}
+          locale="es-mx"
+        />
+      </div>
     )
   }
 

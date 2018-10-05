@@ -115,7 +115,7 @@ const yesOrNoOptions = [{
 
 
   componentDidMount(){
-    let { setHasErrorsAnalisisDelAgua, hasErrors, hasSubmitted } = this.props
+    let { setHasErrorsAnalisisDelAgua, hasSubmitted } = this.props
 
     if (hasSubmitted) {
       let hasErrors = this.checkAllInputs()
