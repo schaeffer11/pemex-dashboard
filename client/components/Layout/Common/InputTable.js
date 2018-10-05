@@ -133,6 +133,25 @@ import { checkDate, checkEmpty } from '../../../lib/errorCheckers'
     }
   }
 
+  updateErrors(e, i, errors) {
+    let { data } = this.props
+    errors[i] = e
+    const hasErrors = Object.keys(e).filter(elem => {
+      if (e[elem].value !== null) {
+        return true
+      }
+      return false
+    })
+    const newErrorValue = hasErrors.length > 0
+    const oldErrorValue = data[i].error
+    if (oldErrorValue !== newErrorValue) {
+      data[i].error = hasErrors.length > 0
+      this.loopAway(errors)
+      setData(data)
+    }
+    this.setState({ errors })
+  }
+
   renderNumber(cellInfo){
     let {data, setData } = this.props
     let errors = []
@@ -142,24 +161,6 @@ import { checkDate, checkEmpty } from '../../../lib/errorCheckers'
     const name = cellInfo.column.id
     const value = data[cellInfo.index][cellInfo.column.id]
     const rowError = errors.length > 0 ? errors[cellInfo.index] : null
-
-    const updateErrors = (e) => {
-      errors[cellInfo.index] = e
-      const hasErrors = Object.keys(e).filter(elem => {
-        if (e[elem].value !== null) {
-          return true
-        }
-        return false
-      })
-      const newErrorValue = hasErrors.length > 0
-      const oldErrorValue = data[cellInfo.index].error
-      if (oldErrorValue !== newErrorValue) {
-        data[cellInfo.index].error = hasErrors.length > 0
-        this.loopAway(errors)
-        setData(data)
-      }
-      this.setState({ errors })
-    }
     const style = { backgroundColor: "#fafafa", borderColor: 'blue' }
     if(rowError !== null && rowError[name] !== undefined && rowError[name].value !== null) {
       console.log('call', rowError[name], rowError, name)
@@ -177,7 +178,7 @@ import { checkDate, checkEmpty } from '../../../lib/errorCheckers'
           data[cellInfo.index][cellInfo.column.id] = e.target.value;
           setData(data)
         }}
-        onBlur={(e) => checkEmpty(e.target.value, name, rowError, updateErrors)}
+        onBlur={(e) => checkEmpty(e.target.value, name, rowError, (e) => this.updateErrors(e, cellInfo.index, errors))}
       />
     ); 
   }
@@ -198,28 +199,9 @@ import { checkDate, checkEmpty } from '../../../lib/errorCheckers'
     const rowError = errors.length > 0 ? errors[cellInfo.index] : null
     const name = cellInfo.column.id
 
-    const updateErrors = (e) => {
-      errors[cellInfo.index] = e
-      const hasErrors = Object.keys(e).filter(elem => {
-        if (e[elem].value !== null) {
-          return true
-        }
-        return false
-      })
-      const newErrorValue = hasErrors.length > 0
-      const oldErrorValue = data[cellInfo.index].error
-      console.log('old v new', oldErrorValue, newErrorValue, hasErrors)
-      if (oldErrorValue !== newErrorValue) {
-        data[cellInfo.index].error = hasErrors.length > 0
-        this.loopAway(errors)
-        setData(data)
-      }
-      this.setState({ errors })
-    }
-
     let handleSelect = (date) => {
       if (date.isValid()) {
-        checkDate(date, name, rowError, updateErrors)
+        checkDate(date, name, rowError, (e) => this.updateErrors(e, cellInfo.index, errors))
         data[cellInfo.index][cellInfo.column.id] = date.format('YYYY-MM-DD')
         setData(data)
       }
@@ -228,7 +210,7 @@ import { checkDate, checkEmpty } from '../../../lib/errorCheckers'
     function handleBlur(e) {
       const date = moment(e.target.value, 'DD/MM/YYYY')
       if (!date.isValid() || e.target.value.includes('_')) {
-        checkDate(e.target.value, name, rowError, updateErrors)
+        checkDate(e.target.value, name, rowError, (e) => this.updateErrors(e, cellInfo.index, errors))
         data[cellInfo.index][cellInfo.column.id] = null
         setData(data)
       }
