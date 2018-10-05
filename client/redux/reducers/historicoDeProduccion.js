@@ -1,6 +1,7 @@
 import { Map, fromJS } from 'immutable'
 
-const initialState = Map({
+
+const initialState = fromJS({
     hasErrors: true,
     produccionData: [{
         fecha: null,
@@ -31,6 +32,11 @@ const historicoDeProduccion = (state = initialState, action) => {
         return state.set('produccionData', fromJS(action.value))
     case 'set_historicoProduccion':
         return state = fromJS(action.value)
+    case 'set_historicoProduccionLocal':
+        // console.log('in here', action.location, action.value)
+        console.log('satte', state.getIn([0, 'fecha']))
+        console.log('what the', state)
+        return state.setIn(action.location, action.value)
     default:
       return state
   }

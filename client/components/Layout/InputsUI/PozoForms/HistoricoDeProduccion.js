@@ -6,8 +6,9 @@ import ReactTable from 'react-table'
 import { InputRow, InputRowUnitless, InputRowSelectUnitless, InputDate } from '../../Common/InputRow'
 import {withValidate} from '../../Common/Validate'
 import ExcelUpload from '../../Common/ExcelUpload'
-import { setProduccionData, setChecked } from '../../../../redux/actions/pozo'
+import { setProduccionData, setChecked, setHistoricoProduccionLocal } from '../../../../redux/actions/pozo'
 import InputTable from '../../Common/InputTable'
+import InputTable2 from '../../Common/InputTable2'
 import ReactHighCharts from 'react-highcharts'
 
 let config = {
@@ -161,12 +162,23 @@ let columns = [
     super(props)
     this.state = {
       containsErrors: false,
-      errors: [],
+      errors: {
+        table: {
+          value: '',
+          type: 'table',
+        },
+        something: {
+          value: 'test',
+          type: 'text',
+        }
+      },
       checked: []
     }
   }
 
-  componentDidMount(){
+  componentDidMount() {
+    // let { formData } = this.props
+    // formData = formData.toJS()
 
   }
 
@@ -209,11 +221,16 @@ let columns = [
 
   addNewRow() {
     let { formData, setProduccionData } = this.props
+    const { errors } = this.state
     formData = formData.toJS()
     let { produccionData } = formData
+    // const newErrorRow = {}
+    // Object.keys(errors)[0].forEach(key => {
+    //   newError[key] = { value: null, type: errors[0][key].type }
+    // })
 
     produccionData[0].length = 2
-
+    // this.setState({ errors: [...errors, newErrorRow]})
     setProduccionData([...produccionData, {index: produccionData.length, fecha: null, dias: '', qo: '', qw: '', qg: '', qgi: '', qo_vol: '', qw_vol: '', qg_vol: '', qgi_vol: '', np: '', wp: '', gp: '', gi: '', rga: '', fw: '', length: produccionData.length + 1, 'edited': false}])
   }
 
@@ -239,35 +256,61 @@ let columns = [
     }
   }
 
+  setStuff(index, ) {
+
+  }
+
+  checkForErrors(value) {
+    const errorsCopy = {...this.state.errors}
+    errorsCopy.table.value = value
+    this.setState({ errors: errorsCopy })
+  }
+
   makeHistoricoDeProduccionInput() {
-    let { formData ,setProduccionData } = this.props
+    let { formData , setProduccionData, setHistoricoProduccionLocal } = this.props
     formData = formData.toJS()
     let { produccionData } = formData
 
-    const objectTemplate = {fecha: null, dias: '', qo: '', qw: '', qg: '', qgi: '', qo_vol: '', qw_vol: '', qg_vol: '', qgi_vol: '', np: '', wp: '', gp: '', gi: '', rga: '', fw: ''}
-
+    const rowObj = { fecha: null, dias: '', qo: '', qw: '', qg: '', qgi: '', qo_vol: '', qw_vol: '', qg_vol: '', qgi_vol: '', np: '', wp: '', gp: '', gi: '', rga: '', fw: '', hasErros: true }
+    const errors = [
+      { name: 'fecha', type: 'date' },
+      { name: 'dias', type: 'number' },
+      { name: 'qo_vol', type: 'number' },
+      { name: 'qw_vol', type: 'number' },
+      { name: 'qg_vol', type: 'number' },
+      { name: 'qgi_vol', type: 'number' },
+    ]
+    function onBlur() {
+      this.setState()
+    }
     return (
       <div className='historico-produccion' >
         <div className='table'>
           <InputTable
             className="-striped"
             data={produccionData}
-            newRow={objectTemplate}
             setData={setProduccionData}
             columns={columns}
             showPagination={false}
             showPageSizeOptions={false}
             sortable={false}
             getTdProps={this.deleteRow}
+            errorArray={errors}
+            rowObj={rowObj}
+            checkForErrors={this.checkForErrors}
           />
         </div>
 
-        <button className='new-row-button' onClick={this.addNewRow}>Añadir un renglón</button>
+        {/* <button className='new-row-button' onClick={this.addNewRow}>Añadir un renglón</button> */}
       </div>
     )
   }
 
   render() {
+    let { formData } = this.props
+    formData = formData.toJS()
+
+    console.log('errors', this.state.errors)
 
     return (
       <div className="form historico-de-produccion">
@@ -296,7 +339,8 @@ const mapStateToProps = state => ({
 
 const mapDispatchToProps = dispatch => ({
     setProduccionData: val => dispatch(setProduccionData(val)),
-    setChecked: val => dispatch(setChecked(val, 'historicoDeProduccion'))    
+    setChecked: val => dispatch(setChecked(val, 'historicoDeProduccion')),
+    setHistoricoProduccionLocal: (location, value) => dispatch(setHistoricoProduccionLocal(location, value)),
 })
 
 export default connect(mapStateToProps, mapDispatchToProps)(HistoricoDeProduccion)
