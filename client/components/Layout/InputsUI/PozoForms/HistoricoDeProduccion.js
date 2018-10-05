@@ -322,6 +322,14 @@ let columns = [
     let { produccionData } = formData
 
     const rowObj = { fecha: null, dias: '', qo: '', qw: '', qg: '', qgi: '', qo_vol: '', qw_vol: '', qg_vol: '', qgi_vol: '', np: '', wp: '', gp: '', gi: '', rga: '', fw: '' }
+    const errors = [
+      { name: 'fecha', type: 'date' },
+      { name: 'dias', type: 'number' },
+      { name: 'qo_vol', type: 'number' },
+      { name: 'qw_vol', type: 'number' },
+      { name: 'qg_vol', type: 'number' },
+      { name: 'qgi_vol', type: 'number' },
+    ]
     function onBlur() {
       this.setState()
     }
@@ -337,12 +345,12 @@ let columns = [
             showPageSizeOptions={false}
             sortable={false}
             getTdProps={this.deleteRow}
-            errors={this.state.errors}
+            errorArray={errors}
             rowObj={rowObj}
           />
         </div>
 
-        <button className='new-row-button' onClick={this.addNewRow}>Añadir un renglón</button>
+        {/* <button className='new-row-button' onClick={this.addNewRow}>Añadir un renglón</button> */}
       </div>
     )
   }

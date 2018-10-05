@@ -26,17 +26,32 @@ import { checkDate, checkEmpty } from '../../../lib/errorCheckers'
 @autobind class InputTable extends React.Component {
   constructor(props) {
    super(props)
+   this.state={}
+  }
+
+  componentDidMount() {
+    const { errorArray, data } = this.props
+    let errorState = {}
+    if (errorArray) {
+      errorArray.forEach(({ name, type }) => {
+        errorState[name] = { value: '', type }
+      })
+    }
+    let errors = [errorState]
+    if (data.length > 1) {
+      errors = data.map(elem => errorState)
+    }
+    this.setState({ errors })
   }
 
   renderEditable(cellInfo) {
     let {data, setData} = this.props
-
     return (
       <div
         style={{ backgroundColor: "#fafafa" }}
         contentEditable
         suppressContentEditableWarning
-        onBlur={e => {
+         ={e => {
           data[cellInfo.index][cellInfo.column.id] = e.target.innerHTML;
           setData(data)
         }}
@@ -60,6 +75,8 @@ import { checkDate, checkEmpty } from '../../../lib/errorCheckers'
       backgroundColor: '#fafafa',
       border: disabled ? 'none' : null
     }
+
+    
     return (
       <input
         type="number"
@@ -73,48 +90,53 @@ import { checkDate, checkEmpty } from '../../../lib/errorCheckers'
           console.log('about to set', data.length)
           setData(data)
         }}
+        onBlur={(e) => checkEmpty(e.target.value, name, errors, onBlur)}
       />
     )
   }
 
+  // updateErrors(e) {
+  //   console.log('about to update', e, this.state.errors)
+  // }
+
   renderNumber(cellInfo){
-    let {data, setData, errors} = this.props
+    let {data, setData } = this.props
+    let errors = []
+    if (this.state.errors) {
+      errors = JSON.parse(JSON.stringify(this.state.errors))
+    }
     const name = cellInfo.column.id
     const value = data[cellInfo.index][cellInfo.column.id]
-    const rowError = errors ? errors[cellInfo.index] : null
-    // const key = Math.random()
-    console.log('data', data.length)
-    const key = `${cellInfo.column.id}_${cellInfo.index}`
-    // console.log('key', key)
+    const rowError = errors.length > 0 ? errors[cellInfo.index] : null
+
+    const updateErrors = (e) => {
+      console.log('e', e)
+      errors[cellInfo.index] = e
+      const hasErrors = Object.keys(e).filter(e => {
+        if (e !== null) {
+          return true
+        }
+        return false
+      })
+      data[cellInfo.index].error = hasErrors.length > 0
+      setData(data)
+      this.setState({ errors })
+    }
     return (
-      <Cleave
-        key={key}
-        style={{ backgroundColor: "#fafafa", fontSize: 12, width: 'inherit' }}
-        options={{
-          numeral: true,
-          numeralThousandsGroupStyle: 'thousand'
-        }}
-        value={data[cellInfo.index][cellInfo.column.id]}
+      <input
+        type="number"
+        style={{ backgroundColor: "#fafafa" }}
+        contentEditable
+        suppressContentEditableWarning
+        value={value}
         onChange={e => {
-          data[cellInfo.index][cellInfo.column.id] = e.target.value
-          console.log('copy of that', [...data])
+          data[cellInfo.index][cellInfo.column.id] = e.target.value;
+          console.log('about to set', data, this.state.errors)
           setData(data)
         }}
+        onBlur={(e) => checkEmpty(e.target.value, name, rowError, updateErrors)}
       />
-    )
-    // return (
-    //   <input
-    //     type="number"
-    //     style={{ backgroundColor: "#fafafa" }}
-    //     contentEditable
-    //     suppressContentEditableWarning
-    //     value={data[cellInfo.index][cellInfo.column.id]}
-    //     onChange={e => {
-    //       data[cellInfo.index][cellInfo.column.id] = e.target.value;
-    //       setData(data)
-    //     }}
-    //   />
-    // ); 
+    ); 
   }
 
   renderSelect() {
@@ -126,58 +148,85 @@ import { checkDate, checkEmpty } from '../../../lib/errorCheckers'
 
   renderDate(cellInfo){
     let {data, setData} = this.props
+    let errors = []
+    if (this.state.errors) {
+      errors = JSON.parse(JSON.stringify(this.state.errors))
+    }
+    const rowError = errors.length > 0 ? errors[cellInfo.index] : null
+    const name = cellInfo.column.id
+
+    const updateErrors = (e) => {
+      console.log('e', e)
+      errors[cellInfo.index] = e
+      const hasErrors = Object.keys(e).filter(e => {
+        if (e !== null) {
+          return true
+        }
+        return false
+      })
+      data[cellInfo.index].error = hasErrors.length > 0
+      setData(data)
+      this.setState({ errors })
+    }
+
+    let handleSelect = (date) => {
+      if (date.isValid()) {
+        console.log('selected something', name, rowError)
+        checkDate(date, name, rowError, updateErrors)
+        // onChange(date.format('YYYY-MM-DD'))
+        data[cellInfo.index][cellInfo.column.id] = date.format('YYYY-MM-DD')
+        setData(data)
+      }
+    }
+  
+    function handleBlur(e) {
+      const date = moment(e.target.value, 'DD/MM/YYYY')
+      
+
+  
+      if (!date.isValid() || e.target.value.includes('_')) {
+        checkDate(e.target.value, name, rowError, updateErrors)
+        // onChange(null)
+      }
+    }
+    
 
     const date = data[cellInfo.index][cellInfo.column.id]
-    const val = date ? moment(date) : null;
+    const objValue = date ? moment(date) : null 
     return (
-      <DatePicker 
+      <DatePicker
         customInput={
-              <MaskedTextInput
-                  type="text"
-                  mask={[/\d/, /\d/, "/", /\d/, /\d/, "/", /\d/, /\d/, /\d/, /\d/]}
-              />
+          <MaskedTextInput
+            type="text"
+            mask={[/\d/, /\d/, "/", /\d/, /\d/, "/", /\d/, /\d/, /\d/, /\d/]}
+          />
         }
         isClearable={true}
-        locale="es-mx"
         dateFormat="L"
-        onChange={ e => {
-          if(e){
-            data[cellInfo.index][cellInfo.column.id] = e.format('YYYY-MM-DD');
-            setData(data)
-          }
-        }}
-        selected={val} />
+        name={name}
+        onChange={handleSelect}
+        onBlur={handleBlur}
+        selected={objValue}
+        locale="es-mx"
+      />
     )
   }
 
-  // addNewRow() {
-  //   let {data, setData, newRow} = this.props
-
-  //   data[0].length = 2
-
-  //   let newRowObj = Object.assign({}, newRow , { index: data.length, length: data.length + 1 , 'edited': false });
-  //   setData([...data, newRowObj])
-  // }
-
   addNewRow() {
-    let { rowObj, setData, data } = this.props
-    // const { errors } = this.state
-    // formData = formData.toJS()
-    // let { produccionData } = formData
-    // const newErrorRow = {}
-    // Object.keys(errors)[0].forEach(key => {
-    //   newError[key] = { value: null, type: errors[0][key].type }
-    // })
+    let { rowObj, setData, data, errorArray } = this.props
+    const { errors } = this.state
+    const newErrorRow = {}
+    errorArray.forEach(({ name, type }) => {
+      newErrorRow[name] = { value: '', type }
+    })
 
     data[0].length = 2
     rowObj.index = data.length
     rowObj.length = data.length + 1
     rowObj.edited = false
     console.log('adding new row', data, rowObj)
-    // this.setState({ errors: [...errors, newErrorRow]})
+    this.setState({ errors: [...errors, newErrorRow]})
     setData([...data, rowObj])
-
-    // setProduccionData([...produccionData, {index: produccionData.length, fecha: null, dias: '', qo: '', qw: '', qg: '', qgi: '', qo_vol: '', qw_vol: '', qg_vol: '', qgi_vol: '', np: '', wp: '', gp: '', gi: '', rga: '', fw: '', length: produccionData.length + 1, 'edited': false}])
   }
 
 
@@ -188,7 +237,6 @@ import { checkDate, checkEmpty } from '../../../lib/errorCheckers'
       onClick: e => {
         if (column.id === 'delete' && data.length > 1) {
           data.splice(rowInfo.original.index, 1)
-
           data.forEach((i, index) => {
             i.index = index
             i.length = data.length
@@ -200,9 +248,7 @@ import { checkDate, checkEmpty } from '../../../lib/errorCheckers'
   }
 
   render(){
-
     let {columns, data} = this.props;
-
     columns.forEach(column => {
       if(column.cell === 'renderEditable')
         column.Cell = this.renderEditable
@@ -245,7 +291,7 @@ import { checkDate, checkEmpty } from '../../../lib/errorCheckers'
           pageSize={pageSize}
           showPagination={showPagination}
         />
-        {/* <button className='new-row-button' onClick={this.addNewRow}>Añadir un renglón</button> */}
+        <button className='new-row-button' onClick={this.addNewRow}>Añadir un renglón</button>
       </div>
     )
   }
