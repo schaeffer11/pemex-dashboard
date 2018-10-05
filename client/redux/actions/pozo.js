@@ -201,7 +201,11 @@ export const setProduccionData = value => ({
 
         return row
       })
-  	})
+    })
+export const setHistoricoProduccionLocal = (location, value) => {
+  console.log('i hope i am setting something', location, value)
+  return { type: 'set_historicoProduccionLocal', location, value }
+}
 
 export const setHistoricoProduccion = value => ({ type: 'set_historicoProduccion', value})
 

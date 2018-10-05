@@ -81,40 +81,43 @@ import { checkDate, checkEmpty } from '../../../lib/errorCheckers'
     let {data, setData, errors} = this.props
     const name = cellInfo.column.id
     const value = data[cellInfo.index][cellInfo.column.id]
+    // errors = errors[cellInfo.index]
+    // console.log('errorororor', errors, cellInfo.index)
     const rowError = errors ? errors[cellInfo.index] : null
-    // const key = Math.random()
-    console.log('data', data.length)
-    const key = `${cellInfo.column.id}_${cellInfo.index}`
-    // console.log('key', key)
+    // function onBlur() {
+    //   console.log('i checked this', name)
+    // }
+    console.log('about to set', data.length)
+
     return (
       <Cleave
-        key={key}
         style={{ backgroundColor: "#fafafa", fontSize: 12, width: 'inherit' }}
         options={{
           numeral: true,
           numeralThousandsGroupStyle: 'thousand'
         }}
+        value={value}
+        onChange={e => {
+          data[cellInfo.index][cellInfo.column.id] = e.target.value;
+          setData([cellInfo.index, cellInfo.column.id], e.target.value)
+        }}
+        onBlur={(e) => checkEmpty(value, name, rowError, onBlur)}
+        name={name}
+      />
+    )
+    {/* return (
+      <input
+        type="number"
+        style={{ backgroundColor: "#fafafa" }}
+        contentEditable
+        suppressContentEditableWarning
         value={data[cellInfo.index][cellInfo.column.id]}
         onChange={e => {
-          data[cellInfo.index][cellInfo.column.id] = e.target.value
-          console.log('copy of that', [...data])
+          data[cellInfo.index][cellInfo.column.id] = e.target.value;
           setData(data)
         }}
       />
-    )
-    // return (
-    //   <input
-    //     type="number"
-    //     style={{ backgroundColor: "#fafafa" }}
-    //     contentEditable
-    //     suppressContentEditableWarning
-    //     value={data[cellInfo.index][cellInfo.column.id]}
-    //     onChange={e => {
-    //       data[cellInfo.index][cellInfo.column.id] = e.target.value;
-    //       setData(data)
-    //     }}
-    //   />
-    // ); 
+    ); */}
   }
 
   renderSelect() {
@@ -173,7 +176,6 @@ import { checkDate, checkEmpty } from '../../../lib/errorCheckers'
     rowObj.index = data.length
     rowObj.length = data.length + 1
     rowObj.edited = false
-    console.log('adding new row', data, rowObj)
     // this.setState({ errors: [...errors, newErrorRow]})
     setData([...data, rowObj])
 
