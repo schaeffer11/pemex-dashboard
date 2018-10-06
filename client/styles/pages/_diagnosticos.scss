@@ -39,6 +39,12 @@
     font-weight: bold;
   }
 
+  .error {
+    text-align: center;
+    color: red;
+    width: 100%;
+  }
+
   form {
     padding: 20px 40px;
 
@@ -64,6 +70,7 @@
         padding: 5px;
         display: inline-block;
         vertical-align: top;
+        font-weight: 100;
 
         &.indented {
           padding: 5px 20px 5px;
