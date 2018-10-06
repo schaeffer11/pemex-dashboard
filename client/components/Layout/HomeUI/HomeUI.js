@@ -71,7 +71,7 @@ const LinkButton = ({ text, disabled , width, height, src, to}) => {
             <div className="buttons">
               <LinkButton to="/inputs" text={'inserción de datos'} src={'./images/inputNew.png'}/>
               <LinkButton to="/" text={'tablero de control'} height='90px' src={'./images/checklistNew.png'} disabled={true}/>
-              <LinkButton to="/" text={'diagnóstico de productividad'} width='85px' src={'./images/analysisNew.png'} disabled={true}/>
+              <LinkButton to="/diagnosticos" text={'diagnóstico de productividad'} width='85px' src={'./images/analysisNew.png'}/>
               <LinkButton to="/" text={'seguimiento de compromisos'} width='105px' src={'./images/diagnosticsNew.png'} disabled={true}/>
             </div>
             <div className="text-inner">

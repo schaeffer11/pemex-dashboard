@@ -15,6 +15,7 @@ import { create as createWell, getFields, getWell,
             getInterventionEsimulacion, getInterventionAcido, getInterventionApuntalado, 
             getLabTest, getCedulaEstimulacion, getCedulaAcido, getCedulaApuntalado, 
             getCosts, getInterventionImage } from './pozo'
+import { create as createDiagnostico } from './diagnosticos';
 import { getAuthorization } from '../middleware';
 
 const connection = db.getConnection(appConfig.users.database)
@@ -95,7 +96,9 @@ router.post('/comment', (req, res) => {
 })
 
 
-
+router.post('/diagnostico', (req, res) => {
+    createDiagnostico(req, res)
+})
 
 
 router.get('/getSubmittedFieldWellMapping', (req, res) => {
