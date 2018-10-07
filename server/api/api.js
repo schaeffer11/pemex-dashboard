@@ -118,15 +118,18 @@ router.get('/getFieldWellMapping', (req, res) => {
 router.get('/getAllSaves', (req, res) => {
     let { userID } = req.query
     
-    connection.query(`SELECT SAVE_NAME, TRANSACTION_ID FROM SavedInputs WHERE USER_ID = ? ORDER BY INSERT_TIME DESC `, 
+    connection.query(`SELECT SAVE_NAME, TRANSACTION_ID FROM SavedInputs WHERE USER_ID = ? ORDER BY INSERT_TIME DESC `,
       [userID], (err, data) => {
+        if (err) {
+          res.json([])
+        } else {
+          data = data.map(i => ({
+            name: i.SAVE_NAME,
+            id: i.TRANSACTION_ID
+          }))
+          res.json(data)
+        }
 
-        data = data.map(i => ({
-          name: i.SAVE_NAME,
-          id: i.TRANSACTION_ID
-        }))
-
-        res.json(data)
     })
 })
 

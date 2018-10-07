@@ -87,16 +87,15 @@ import { setHasSubmitted } from '../../../redux/actions/global'
       hasErrorsPropuestaEstimulacion, hasErrorsPropuestaApuntalado, hasErrorsPropuestaAcido, hasErrorsResultadosSimulacionAcido, 
       hasErrorsResultadosSimulacionEstimulacion, hasErrorsResultadosSimulacionApuntalado, hasErrorsEstIncProduccionAcido,
       hasErrorsEstIncProduccionEstimulacion, hasErrorsEstIncProduccionApuntalado, hasErrorsEstCosts, hasErrorsHistoricoDeProduccion,
-      setHasSubmitted } = this.props
+      setHasSubmitted, hasErrorsHistoricoDeAforos } = this.props
 
 
     if (action === 'submit') {
       let hasErrors = false
       setHasSubmitted(true)
-      
       if (hasErrorsFichaTecnicaDelPozo  || hasErrorsFichaTecnicaDelCampo || hasErrorsHistorialDeIntervenciones || hasErrorsEvaluacionPetrofisica
         || hasErrorsMecanicoYAparejoDeProduccion || hasErrorsAnalisisDelAgua || hasErrorsHistoricoDePresionPozo || hasErrorsHistoricoDePresionCampo
-        || hasErrorsHistoricoDeProduccion) {
+        || hasErrorsHistoricoDeProduccion || hasErrorsHistoricoDeAforos) {
         hasErrors = true
       }
       if (tipoDeIntervenciones === 'estimulacion' && (hasErrorsPropuestaEstimulacion || hasErrorsResultadosSimulacionEstimulacion || hasErrorsEstIncProduccionEstimulacion)) {
@@ -340,6 +339,7 @@ const mapStateToProps = state => ({
   hasErrorsHistoricoDePresionCampo: state.getIn(['historicoDePresionCampo', 'hasErrors']),
   hasErrorsHistoricoDePresionPozo: state.getIn(['historicoDePresionPozo', 'hasErrors']),
   hasErrorsHistoricoDeProduccion: state.getIn(['historicoDeProduccion', 'hasErrors']),
+  hasErrorsHistoricoDeAforos: state.getIn(['historicoDeAforos', 'hasErrors']),
   hasErrorsPropuestaEstimulacion: state.getIn(['propuestaEstimulacion', 'hasErrors']),
   hasErrorsPropuestaApuntalado: state.getIn(['propuestaApuntalado', 'hasErrors']),
   hasErrorsPropuestaAcido: state.getIn(['propuestaAcido', 'hasErrors']),
@@ -350,7 +350,7 @@ const mapStateToProps = state => ({
   hasErrorsEstIncProduccionEstimulacion: state.getIn(['estIncProduccionEstimulacion', 'hasErrors']),
   hasErrorsEstIncProduccionApuntalado: state.getIn(['estIncProduccionApuntalado', 'hasErrors']),
   hasErrorsEstCosts: state.getIn(['estCost', 'hasErrors']),
-  tipoDeIntervenciones: state.getIn(['objetivoYAlcancesIntervencion', 'tipoDeIntervenciones'])
+  tipoDeIntervenciones: state.getIn(['objetivoYAlcancesIntervencion', 'tipoDeIntervenciones']),
 })
 
 const mapDispatchToProps = dispatch => ({

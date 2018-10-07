@@ -1,12 +1,9 @@
 import React, { Component } from 'react'
 import autobind from 'autobind-decorator'
 import { connect } from 'react-redux'
-import { InputRow, InputRowUnitless, InputRowSelectUnitless, InputDate } from '../../Common/InputRow'
-import {withValidate} from '../../Common/Validate'
 import ExcelUpload from '../../Common/ExcelUpload'
-import { setAforosData, setChecked } from '../../../../redux/actions/pozo'
+import { setAforosData, setChecked, setHasErrorsHistoricoDeAforos } from '../../../../redux/actions/pozo'
 import InputTable from '../../Common/InputTable'
-import ReactTable from 'react-table'
 import ReactHighCharts from 'react-highcharts'
 
 let config = {
@@ -157,18 +154,65 @@ let columns = [
   constructor(props) {
     super(props)
     this.state = {
-      containsErrors: false,
-      errors: [],
+      errors: {
+        table: {
+          value: '',
+          type: 'table',
+        },
+      },
       checked: []
     }
   }
 
   componentDidMount(){
+    const { setHasErrorsHistoricoDeAforos, hasSubmitted } = this.props
 
+    if (hasSubmitted) {
+      const hasErrors = this.checkAllInputs()
+      setHasErrorsHistoricoDeAforos(hasErrors)
+    }
   }
 
-  componentDidUpdate(){
+  componentDidUpdate(prevProps) {
+    let { hasSubmitted } = this.props
 
+    if (hasSubmitted !== prevProps.hasSubmitted) {
+      this.checkAllInputs()
+    }
+  }
+
+  checkAllInputs() {
+    let { formData } = this.props
+    formData = formData.toJS()
+    const { errors } = this.state
+    let hasErrors = false
+    let error
+    Object.keys(errors).forEach(elem => {
+      const errObj = errors[elem]
+      if (errObj.type === 'text' || errObj.type === 'number') {
+        error = checkEmpty(formData[elem], elem, errors, this.setErrors)
+      } else if (errObj.type === 'date') {
+        error = checkDate(moment(formData[elem]).format('DD/MM/YYYY'), elem, errors, this.setErrors)
+      } else if (errObj.type === 'table') {
+        error = errObj.value === '' ? true : errObj.value
+      }
+      error === true ? hasErrors = true : null
+    })
+    return hasErrors
+  }
+
+  setErrors(errors) {
+    this.setState({ errors })
+  }
+
+  checkForErrors(value) {
+    let { hasErrors, setHasErrorsHistoricoDeAforos } = this.props
+    const errorsCopy = {...this.state.errors}
+    errorsCopy.table.value = value
+    if (value !== hasErrors) {
+      setHasErrorsHistoricoDeAforos(value)
+    }
+    this.setState({ errors: errorsCopy })
   }
 
   makeAforosGraph() {
@@ -200,84 +244,66 @@ let columns = [
 
   }
 
-
-  renderEditable(cellInfo) {
-    let { setAforosData, formData } = this.props
-    formData = formData.toJS()
-    let { aforosData } = formData
-
-    return (
-      <div
-        style={{ backgroundColor: "#fafafa" }}
-        contentEditable
-        suppressContentEditableWarning
-        onBlur={e => {
-          aforosData[cellInfo.index][cellInfo.column.id] = e.target.innerHTML;
-          setAforosData(aforosData)
-        }}
-      >{aforosData[cellInfo.index][cellInfo.column.id]}</div>
-    );
-  }
-
-  addNewRow() {
-    let { formData, setAforosData } = this.props
-    formData = formData.toJS()
-    let { aforosData } = formData
-
-    aforosData[0].length = 2
-
-    setAforosData([...aforosData, {index: aforosData.length, fecha: null, tiempo: '', estrangulador: '', ptp: '', ttp: '', pbaj: '',tbaj: '',psep: '',tsep: '', ql: '',qo: '', qg: '', qw: '', rga: '', salinidad: '', ph: '', length: aforosData.length + 1, 'edited': false}])
-  }
-
-
-  deleteRow(state, rowInfo, column, instance) {
-    let { formData, setAforosData } = this.props
-    formData = formData.toJS()
-    let { aforosData } = formData
-
-    return {
-      onClick: e => {
-        if (column.id === 'delete' && aforosData.length > 1) {
-          aforosData.splice(rowInfo.original.index, 1)
-
-          aforosData.forEach((i, index) => {
-            i.index = index
-            i.length = aforosData.length
-          }) 
-
-          setAforosData(aforosData)
-        }
-      }
-    }
-  }
-
   makeHistoricoDeAforosInput() {
-    let { formData ,setAforosData } = this.props
+    let { formData, setAforosData, hasSubmitted } = this.props
     formData = formData.toJS()
     let { aforosData } = formData
-
-    const objectTemplate = {fecha: null, tiempo: '', estrangulador: '', ptp: '', ttp: '', pbaj: '',tbaj: '',psep: '',tsep: '', ql: '',qo: '', qg: '', qw: '', rga: '', salinidad: '', ph: ''}
-
-    console.log('render aforos')
-
+    const rowObj = {
+      error: true,
+      fecha: null,
+      tiempo: '',
+      estrangulador: '',
+      ptp: '',
+      ttp: '',
+      pbaj: '',
+      tbaj: '',
+      psep: '',
+      tsep: '',
+      ql: '',
+      qo: '',
+      qg: '',
+      qw: '',
+      rga: '',
+      salinidad: '',
+      ph: '',
+    }
+    const errors = [
+      { name: 'fecha', type: 'date' },
+      { name: 'tiempo', type: 'number' },
+      { name: 'estrangulador', type: 'number' },
+      { name: 'ptp', type: 'number' },
+      { name: 'ttp', type: 'number' },
+      { name: 'pbaj', type: 'number' },
+      { name: 'tbaj', type: 'number' },
+      { name: 'psep', type: 'number' },
+      { name: 'tsep', type: 'number' },
+      { name: 'ql', type: 'number' },
+      { name: 'qo', type: 'number' },
+      { name: 'qg', type: 'number' },
+      { name: 'qw', type: 'number' },
+      { name: 'rga', type: 'number' },
+      { name: 'salinidad', type: 'number' },
+      { name: 'ph', type: 'number' },
+    ]
     return (
       <div className='historico-produccion' >
         <div className='table'>
           <InputTable
             className="-striped"
             data={aforosData}
-            newRow={objectTemplate}
             setData={setAforosData}
             columns={columns}
             showPagination={false}
             showPageSizeOptions={false}
-            pageSize={aforosData.length}
             sortable={false}
-            getTdProps={this.deleteRow}
+            rowObj={rowObj}
+            errorArray={errors}
+            checkForErrors={this.checkForErrors}
+            hasSubmitted={hasSubmitted}
           />
         </div>
 
-        <button className='new-row-button' onClick={this.addNewRow}>Añadir un renglón</button>
+        {/* <button className='new-row-button' onClick={this.addNewRow}>Añadir un renglón</button> */}
       </div>
     )
   }
@@ -317,11 +343,14 @@ let columns = [
 
 const mapStateToProps = state => ({
   formData: state.get('historicoDeAforos'),
+  hasErrors: state.getIn(['historicoDeAforos', 'hasErrors']),
+  hasSubmitted: state.getIn(['global', 'hasSubmitted']),
 })
 
 const mapDispatchToProps = dispatch => ({
     setAforosData: val => dispatch(setAforosData(val)),
-    setChecked: val => dispatch(setChecked(val, 'historicoDeAforos'))
+    setChecked: val => dispatch(setChecked(val, 'historicoDeAforos')),
+    setHasErrorsHistoricoDeAforos: val => dispatch(setHasErrorsHistoricoDeAforos(val)),
 })
 
 export default connect(mapStateToProps, mapDispatchToProps)(HistoricoDeAforos)

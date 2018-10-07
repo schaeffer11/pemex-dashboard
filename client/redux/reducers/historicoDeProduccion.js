@@ -27,7 +27,6 @@ const initialState = fromJS({
 const historicoDeProduccion = (state = initialState, action) => {
   switch (action.type) {
     case 'set_hasErrorsHistoricoDeProduccion':
-        console.log('im here')
       return state.set('hasErrors', fromJS(action.value))
     case 'set_produccionData':
         return state.set('produccionData', fromJS(action.value))

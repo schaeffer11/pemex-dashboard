@@ -144,15 +144,46 @@ let columns = [
     }
   }
 
+  makeHistoricoDePresionTable() {
+    let { formData, setPresionDataPozo } = this.props
+    let { presionDataPozo } = formData
+    const rowObj = {
+      fecha: null,
+      Pws: '',
+      Pwf: '',
+      error: true,
+    }
+    const errors = [
+      { name: 'fecha', type: 'date' },
+      { name: 'Pws', type: 'number' },
+      { name: 'Pwf', type: 'number' },
+    ]
+    return(
+     <div className='presion-table'>
+        <div className='table-select'>
+          <InputTable
+            className="-striped"
+            data={presionDataPozo}
+            setData={setPresionDataPozo}
+            columns={columns}
+            showPagination={false}
+            showPageSizeOptions={false}
+            pageSize={presionDataPozo.length}
+            sortable={false}
+            rowObj={rowObj}
+            errorArray={errors}
+          />
+        </div>
+        {/* <button className='new-row-button' onClick={this.addNewRow}>Añadir un renglón</button> */}
+      </div>
+    )
+  }
+
   render() {
-    let { formData, setPresionDataPozo, setPressureDepthPozo } = this.props
+    let { formData, setPressureDepthPozo } = this.props
     formData = formData.toJS()
-    let { presionDataPozo, pressureDepthPozo } = formData
-
-    const objectTemplate = {fecha: null, Pws: '', Pwf: ''}
-
+    let { pressureDepthPozo } = formData
     return (
-
       <div className='historico-presion' >
         <div className='image'/>
         <div className="inputs">
@@ -168,23 +199,7 @@ let columns = [
           <div className='depth'>
             <InputRow header="Plano de Referencia" name='pressureDepthPozo' value={pressureDepthPozo} onChange={setPressureDepthPozo} unit={'md'} onBlur={this.updateErrors} errors={this.state.errors}  />
           </div>
-          <div className='presion-table'>
-            <div className='table-select'>
-              <InputTable
-                className="-striped"
-                data={presionDataPozo}
-                newRow={objectTemplate}
-                setData={setPresionDataPozo}
-                columns={columns}
-                showPagination={false}
-                showPageSizeOptions={false}
-                pageSize={presionDataPozo.length}
-                sortable={false}
-                getTdProps={this.deleteRow}
-              />
-            </div>
-            <button className='new-row-button' onClick={this.addNewRow}>Añadir un renglón</button>
-          </div>
+          {this.makeHistoricoDePresionTable()}
         </div>
       </div>
     )

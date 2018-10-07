@@ -62,10 +62,6 @@ import { checkDate, checkEmpty, checkEmptySingular, checkDateSingular } from '..
         }
       })
     }
-
-    console.log(data)
-    console.log(errors)
-
     this.setState({ errors })
   }
 
