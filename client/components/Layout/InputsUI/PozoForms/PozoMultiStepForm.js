@@ -24,7 +24,7 @@ import { setPage } from '../../../../redux/actions/global'
 
 const forms = [
   {'title' : 'Ficha Técnica del Campo', content: <TecnicaDelCampo /> },
-  {'title' : 'Ficha Técnica del Pozo' , content:<TecnicaDelPozo /> },
+  {'title' : 'Ficha Técnica del Pozo' , errors: [], content:<TecnicaDelPozo /> },
   {'title' : 'Histórico De Intervenciones', content: <HistoricoDeIntervenciones />},
   {'title' : 'Evaluación Petrofísica', content: <EvaluacionPetrofisica /> },
   {'title' : 'Edo. Mecánico y Aparejo de Producción', content: <MecanicoYAparejo /> },
@@ -786,20 +786,25 @@ const forms = [
   }
 
   render() {
-    let { setShowForms } = this.props
+    let { setShowForms, hasSubmitted, fichaTecnicaDelPozoHasErrors, fichaTecnicaDelCampoHasErrors, 
+      historialDeIntervencionesHasErrors, evaluacionPetrofisicaHasErrors, mecanicoYAparejoDeProduccionHasErrors,
+      analisisDelAguaHasErrors, historicoDePresionCampoHasErrors, historicoDePresionPozoHasErrors, historicoDeProduccionHasErrors } = this.props
     let { fieldWellOptions } = this.state
     let { isOpen } = this.state
     let className = 'subtab'
     let title = forms[this.state.currentStep].title
     
-
+    let errors = [fichaTecnicaDelCampoHasErrors, fichaTecnicaDelPozoHasErrors, historialDeIntervencionesHasErrors, evaluacionPetrofisicaHasErrors, mecanicoYAparejoDeProduccionHasErrors, analisisDelAguaHasErrors, false, historicoDePresionCampoHasErrors, historicoDePresionPozoHasErrors, false, historicoDeProduccionHasErrors]
 
     return (
        <div className={`multistep-form`}>
         <div className="subtabs">
             {forms.map( (tab, index) => {
                const active = this.state.currentStep === index ? 'active' : ''; 
-               return <div className={`${className} ${active}`} onClick={() => this.handleClick(index)} key={index}><span></span> {tab.title} </div>
+               let error = errors[index]
+               const errorClass = (error && hasSubmitted) ? 'error' : '';
+
+               return <div className={`${className} ${active} ${errorClass}`} onClick={() => this.handleClick(index)} key={index}><span></span> {tab.title} </div>
                }
             )}
         </div>
@@ -842,6 +847,7 @@ const mapDispatchToProps = dispatch => ({
 const mapStateToProps = state => ({
   everything: state,
   formsState: state.get('forms'),
+  hasSubmitted: state.getIn(['global', 'hasSubmitted']),
   fichaTecnicaDelPozoHighLevel: state.get('fichaTecnicaDelPozoHighLevel'),
   fichaTecnicaDelPozo: state.get('fichaTecnicaDelPozo'),
   fichaTecnicaDelCampo: state.get('fichaTecnicaDelCampo'),
@@ -850,7 +856,17 @@ const mapStateToProps = state => ({
   mecanicoYAparejoDeProduccion: state.get('mecanicoYAparejoDeProduccion'),
   analisisDelAgua: state.get('analisisDelAgua'),
   historicoDeAforos: state.get('historicoDeAforos'),
+  fichaTecnicaDelPozoHasErrors: state.getIn(['fichaTecnicaDelPozo', 'hasErrors']),
+  fichaTecnicaDelCampoHasErrors: state.getIn(['fichaTecnicaDelCampo', 'hasErrors']),
+  historialDeIntervencionesHasErrors: state.getIn(['historialDeIntervenciones', 'hasErrors']),
+  evaluacionPetrofisicaHasErrors: state.getIn(['evaluacionPetrofisica', 'hasErrors']),
+  mecanicoYAparejoDeProduccionHasErrors: state.getIn(['mecanicoYAparejoDeProduccion', 'hasErrors']),
+  analisisDelAguaHasErrors: state.getIn(['analisisDelAgua', 'hasErrors']),
+  historicoDePresionCampoHasErrors: state.getIn(['historicoDePresion', 'hasErrorsCampo']),
+  historicoDePresionPozoHasErrors: state.getIn(['historicoDePresion', 'hasErrorsPozo']),
+  historicoDeProduccionHasErrors: state.getIn(['historicoDeProduccion', 'hasErrors']),
   user: state.get('user')
+
 })
 
 

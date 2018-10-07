@@ -4,7 +4,10 @@ import ReactTable from 'react-table'
 import autobind from 'autobind-decorator'
 import moment from 'moment'
 import DatePicker from 'react-datepicker'
-import MaskedTextInput from "react-text-mask";
+import MaskedTextInput from "react-text-mask"
+import Cleave from 'cleave.js/react'
+import { InputRow } from './InputRow'
+import { checkDate, checkEmpty, checkEmptySingular, checkDateSingular } from '../../../lib/errorCheckers'
 
 /*
  * Wrapper Component for ReactTable with reusable editable cells.
@@ -23,17 +26,57 @@ import MaskedTextInput from "react-text-mask";
 @autobind class InputTable extends React.Component {
   constructor(props) {
    super(props)
+   this.state={}
+  }
+
+  componentDidMount() {
+    const { errorArray, data, hasSubmitted } = this.props
+    let errors = []
+    let properRow = {}
+
+    if (errorArray) {
+      errorArray.forEach(({ name, type }) => {
+        properRow[name] = { value: null, type }
+      })
+
+      data.forEach(row => {
+        if (row.error === false || !hasSubmitted) {
+          errors.push(properRow)
+        }
+        else {
+          let newRow = JSON.parse(JSON.stringify(properRow))
+          errorArray.forEach(({ name, type }) => {
+            let err
+
+            if (type === 'number') {
+              err = checkEmptySingular(row[name])
+            }
+            else if (type === 'date') {
+              err = checkDateSingular(row[name])
+            }
+
+            newRow[name] = { value: err, type }
+          })
+
+          errors.push(newRow)
+        }
+      })
+    }
+
+    console.log(data)
+    console.log(errors)
+
+    this.setState({ errors })
   }
 
   renderEditable(cellInfo) {
     let {data, setData} = this.props
-
     return (
       <div
         style={{ backgroundColor: "#fafafa" }}
         contentEditable
         suppressContentEditableWarning
-        onBlur={e => {
+         ={e => {
           data[cellInfo.index][cellInfo.column.id] = e.target.innerHTML;
           setData(data)
         }}
@@ -57,6 +100,7 @@ import MaskedTextInput from "react-text-mask";
       backgroundColor: '#fafafa',
       border: disabled ? 'none' : null
     }
+    
     return (
       <input
         type="number"
@@ -69,26 +113,85 @@ import MaskedTextInput from "react-text-mask";
           data[cellInfo.index][cellInfo.column.id] = e.target.value;
           setData(data)
         }}
+        onBlur={(e) => checkEmpty(e.target.value, name, errors, onBlur)}
       />
     )
   }
 
+  setOuterStateError() {
+    let { data, checkForErrors } = this.props
+    let hasError = false 
+
+    data.forEach(row => {
+      if (row.error === true) {
+        hasError = true
+      }
+    })
+    
+    if (typeof checkForErrors === 'function') {
+      checkForErrors(hasError)
+    }
+  }
+
+
+  updateErrors(e, i, errors) {
+    let { data, setData } = this.props
+    
+    errors[i] = e
+
+
+
+    const hasErrors = Object.keys(e).filter(elem => {
+      if (e[elem].value !== null) {
+        return true
+      }
+      return false
+    })
+
+    const newErrorValue = hasErrors.length > 0
+    const oldErrorValue = data[i].error
+
+    if (oldErrorValue !== newErrorValue) {
+      data[i].error = hasErrors.length > 0
+      this.setOuterStateError()
+
+      setData(data)
+    }
+    this.setState({ errors })
+  }
+
   renderNumber(cellInfo){
-    let {data, setData} = this.props
+    let {data, setData } = this.props
+    let errors = []
+    if (this.state.errors) {
+      errors = JSON.parse(JSON.stringify(this.state.errors))
+    }
+
+    const name = cellInfo.column.id
+    const value = data[cellInfo.index][cellInfo.column.id]
+    const rowError = errors.length > 0 ? errors[cellInfo.index] : null
+
+    let style = { }
+    if(rowError !== null && rowError[name] !== undefined && rowError[name].value !== null) {
+      style.border = 'solid 2px red'
+    }
+
 
     return (
-      <input
-        type="number"
-        style={{ backgroundColor: "#fafafa" }}
-        contentEditable
-        suppressContentEditableWarning
-        value={data[cellInfo.index][cellInfo.column.id]}
-        onChange={e => {
-          data[cellInfo.index][cellInfo.column.id] = e.target.value;
-          setData(data)
-        }}
-      />
-    );
+      <div style={style}>
+        <input
+          type="number"
+          contentEditable
+          suppressContentEditableWarning
+          value={value}
+          onChange={e => {
+            data[cellInfo.index][cellInfo.column.id] = e.target.value;
+            setData(data)
+          }}
+          onBlur={(e) => checkEmpty(e.target.value, name, rowError, (e) => this.updateErrors(e, cellInfo.index, errors))}
+        />
+      </div>
+    ); 
   }
 
   renderSelect() {
@@ -100,37 +203,73 @@ import MaskedTextInput from "react-text-mask";
 
   renderDate(cellInfo){
     let {data, setData} = this.props
+    let errors = []
+    if (this.state.errors) {
+      errors = JSON.parse(JSON.stringify(this.state.errors))
+    }
+    const rowError = errors.length > 0 ? errors[cellInfo.index] : null
+    const name = cellInfo.column.id
+   
+
+    let handleSelect = (date) => {
+      if (date.isValid()) {
+        checkDate(date, name, rowError, (e) => this.updateErrors(e, cellInfo.index, errors))
+        data[cellInfo.index][cellInfo.column.id] = date.format('YYYY-MM-DD')
+        setData(data)
+      }
+    }
+  
+    let handleBlur = (e) => {
+      const date = moment(e.target.value, 'DD/MM/YYYY')
+      if (!date.isValid() || e.target.value.includes('_')) {
+        checkDate(e.target.value, name, rowError, (e) => this.updateErrors(e, cellInfo.index, errors))
+        data[cellInfo.index][cellInfo.column.id] = null
+        setData(data)
+      }
+    }
+    
+    let style = { }
+    if(rowError !== null && rowError[name] !== undefined && rowError[name].value !== null) {
+      style.border = 'solid 2px red'
+    }
 
     const date = data[cellInfo.index][cellInfo.column.id]
-    const val = date ? moment(date) : null;
+    const objValue = date ? moment(date) : null 
     return (
-      <DatePicker 
-        customInput={
-              <MaskedTextInput
-                  type="text"
-                  mask={[/\d/, /\d/, "/", /\d/, /\d/, "/", /\d/, /\d/, /\d/, /\d/]}
-              />
-        }
-        isClearable={true}
-        locale="es-mx"
-        dateFormat="L"
-        onChange={ e => {
-          if(e){
-            data[cellInfo.index][cellInfo.column.id] = e.format('YYYY-MM-DD');
-            setData(data)
+      <div className='test' style={style}>
+        <DatePicker
+          customInput={
+            <MaskedTextInput
+              type="text"
+              mask={[/\d/, /\d/, "/", /\d/, /\d/, "/", /\d/, /\d/, /\d/, /\d/]}
+            />
           }
-        }}
-        selected={val} />
+          isClearable={false}
+          dateFormat="L"
+          name={name}
+          onChange={handleSelect}
+          onBlur={handleBlur}
+          selected={objValue}
+          locale="es-mx"
+        />
+      </div>
     )
   }
 
   addNewRow() {
-    let {data, setData, newRow} = this.props
+    let { rowObj, setData, data, errorArray } = this.props
+    const { errors } = this.state
+    const newErrorRow = {}
+    errorArray.forEach(({ name, type }) => {
+      newErrorRow[name] = { value: '', type }
+    })
 
     data[0].length = 2
+    rowObj.index = data.length
+    rowObj.length = data.length + 1
 
-    let newRowObj = Object.assign({}, newRow , { index: data.length, length: data.length + 1 , 'edited': false });
-    setData([...data, newRowObj])
+    this.setState({ errors: [...errors, newErrorRow]})
+    setData([...data, rowObj])
   }
 
 
@@ -141,7 +280,6 @@ import MaskedTextInput from "react-text-mask";
       onClick: e => {
         if (column.id === 'delete' && data.length > 1) {
           data.splice(rowInfo.original.index, 1)
-
           data.forEach((i, index) => {
             i.index = index
             i.length = data.length
@@ -153,9 +291,7 @@ import MaskedTextInput from "react-text-mask";
   }
 
   render(){
-
     let {columns, data} = this.props;
-
     columns.forEach(column => {
       if(column.cell === 'renderEditable')
         column.Cell = this.renderEditable
@@ -187,14 +323,19 @@ import MaskedTextInput from "react-text-mask";
         })
       }
     })
+    let pageSize = !data ? 1 : (data.length < 20 ? data.length : 20)
+    let showPagination = data.length > 20
 
     return (
-      <ReactTable { ...this.props } 
-        columns={columns}
-        getTdProps={this.deleteRow} 
-        pageSize={!data ? 1 : data.length}
-      />
-
+      <div>
+        <ReactTable { ...this.props } 
+          columns={columns}
+          getTdProps={this.deleteRow} 
+          pageSize={pageSize}
+          showPagination={showPagination}
+        />
+        <button className='new-row-button' onClick={this.addNewRow}>Añadir un renglón</button>
+      </div>
     )
   }
   

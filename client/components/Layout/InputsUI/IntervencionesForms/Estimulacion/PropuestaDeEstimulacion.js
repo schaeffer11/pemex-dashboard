@@ -6,38 +6,112 @@ import { connect } from 'react-redux'
 
 import InputTable from '../../../Common/InputTable'
 import { InputRow, InputRowUnitless, InputRowSelectUnitless, CalculatedValue } from '../../../Common/InputRow'
-import { setCedulaData, setIntervalo, setLongitudDeIntervalo, setVolAparejo, setCapacidadTotalDelPozo, setVolumenPrecolchonN2, setVolumenSistemaNoReativo, setVolumenSistemaReactivo, setVolumenSistemaDivergente, setVolumenDesplazamientoLiquido, setVolumenDesplazamientoN2, setVolumenTotalDeLiquido, setChecked, setPropuestaCompany, setTipoDeEstimulacion, setTipoDeColocacion, setTiempoDeContacto } from '../../../../../redux/actions/intervencionesEstimulacion'
+import { setHasErrorsPropuestaEstimulacion, setCedulaData, setIntervalo, setLongitudDeIntervalo, setVolAparejo, 
+  setCapacidadTotalDelPozo, setVolumenPrecolchonN2, setVolumenSistemaNoReativo, setVolumenSistemaReactivo, 
+  setVolumenSistemaDivergente, setVolumenDesplazamientoLiquido, setVolumenDesplazamientoN2, setVolumenTotalDeLiquido, 
+  setPropuestaCompany, setTipoDeEstimulacion, setTipoDeColocacion, setTiempoDeContacto } from '../../../../../redux/actions/intervencionesEstimulacion'
 import { setEspesorBruto } from '../../../../../redux/actions/pozo'
 import { round, calculateVolumes, getSistemaOptions } from '../helpers'
+import { checkEmpty, checkDate } from '../../../../../lib/errorCheckers'
 
 @autobind class PropuestaDeEstimulacion extends Component {
   constructor(props) {
     super(props)
     this.state = { 
-
+      errors: {
+        propuestaCompany: {
+          type: 'text',
+          values: '',
+        },
+        tipoDeEstimulacion: {
+          type: 'text',
+          values: '',
+        },
+        tipoDeColocacion: {
+          type: 'text',
+          values: '',
+        },
+        tiempoDeContacto: {
+          type: 'number',
+          values: '',
+        },
+      }
     }
   }
 
-  componentDidMount() {
 
+
+  componentDidMount(){
+    let { setHasErrorsPropuestaEstimulacion, hasErrors, hasSubmitted } = this.props
+
+    if (hasSubmitted) {
+      let hasErrors = this.checkAllInputs()
+      setHasErrorsPropuestaEstimulacion(hasErrors)
+    }
   }
 
   componentDidUpdate(prevProps) {
+    let { hasSubmitted } = this.props
 
+    if (hasSubmitted !== prevProps.hasSubmitted) {
+      this.checkAllInputs()
+    }
+  }
+
+  checkAllInputs() {
+    let { formData } = this.props
+    formData = formData.toJS()
+    const { errors } = this.state
+    let hasErrors = false
+    let error 
+
+    Object.keys(errors).forEach(elem => {
+      const errObj = errors[elem]
+
+      if (errObj.type === 'text' || errObj.type === 'number') {
+        error = checkEmpty(formData[elem], elem, errors, this.setErrors)
+        
+      } 
+      else if (errObj.type === 'date') {
+        error = checkDate(moment(formData[elem]).format('DD/MM/YYYY'), elem, errors, this.setErrors)
+      }
+
+      error === true ? hasErrors = true : null
+    })
+
+    return hasErrors
+  }
+
+  setErrors(errors) {
+    this.setState({ errors })
+  }
+
+  updateErrors(errors) {
+    let { hasErrors, setHasErrorsPropuestaEstimulacion } = this.props
+
+    let hasErrorNew = false
+
+    Object.keys(errors).forEach(key => {
+      if (errors[key].value !== null){
+        hasErrorNew = true
+      } 
+    })
+
+    if (hasErrorNew != hasErrors) {
+      setHasErrorsPropuestaEstimulacion(hasErrorNew)
+    }
+
+    this.setState({ errors })
   }
 
   handleSelectTipoDeEstimulacion(val) {
     let { setTipoDeEstimulacion, setTipoDeColocacion, setTiempoDeContacto, } = this.props
-
-
 
     setTipoDeEstimulacion(val)
     setTipoDeColocacion(null)
     setTiempoDeContacto(null)
 
   }
-
-
 
 
   makeGeneralForm() {
@@ -70,22 +144,20 @@ import { round, calculateVolumes, getSistemaOptions } from '../helpers'
         </div>
         <InputRowSelectUnitless
           header="Compañía Seleccionada para el Tratamiento"
-          name="company"
+          name="propuestaCompany"
           options={companyOptions}
-          onBlur={this.validate}
+          onBlur={this.updateErrors}
           value={propuestaCompany}
           callback={e => setPropuestaCompany(e.value)}
-          onBlur={this.validate}
           errors={this.state.errors}
         />
         <InputRowSelectUnitless
           header="Tipo de estimulación"
           name="tipoDeEstimulacion"
           options={estimulacionOptions}
-          onBlur={this.validate}
+          onBlur={this.updateErrors}
           value={tipoDeEstimulacion}
           callback={e => this.handleSelectTipoDeEstimulacion(e.value)}
-          onBlur={this.validate}
           errors={this.state.errors}
         />
         <CalculatedValue
@@ -115,13 +187,12 @@ import { round, calculateVolumes, getSistemaOptions } from '../helpers'
           header="Tipo de colocación" 
           name='tipoDeColocacion' 
           options={colocacionOptions}
-          onBlur={this.validate} 
+          onBlur={this.updateErrors} 
           value={tipoDeColocacion} 
           callback={(e) => setTipoDeColocacion(e.value)}
-          onBlur={this.validate}
           errors={this.state.errors}
         />
-        <InputRow header="Tiempo de contacto" name='tiempoDeContacto' unit="min" value={tiempoDeContacto} onChange={setTiempoDeContacto} errors={this.state.errors} onBlur={this.validate} />
+        <InputRow header="Tiempo de contacto" name='tiempoDeContacto' unit="min" value={tiempoDeContacto} onChange={setTiempoDeContacto} errors={this.state.errors} onBlur={this.updateErrors} />
       </div>
     )
   }
@@ -304,27 +375,6 @@ import { round, calculateVolumes, getSistemaOptions } from '../helpers'
         Header: 'Etapa',
         accessor: 'etapa',
       }, 
-      // {
-      //   Header: 'Intervalo',
-      //   accessor: 'intervalo',
-      //   width: 200,
-      //   resizable: false,
-      //   style: {overflow: 'visible'},
-      //   Cell: row => {
-      //     return (
-      //       <div>
-      //         <Select
-      //           className='input'
-      //           placeholder='intervalo'
-      //           simpleValue={true}
-      //           options={intervaloOptions}
-      //           value={intervaloOptions.find(i=>i.value === row.original.intervalo) || null}
-      //           onChange={(e) => this.handleSelect(row, e.value)} 
-      //         />
-      //       </div>
-      //     )
-      //   }
-      // },
       {
         Header: 'Sistema',
         accessor: 'sistema',
@@ -454,6 +504,8 @@ import { round, calculateVolumes, getSistemaOptions } from '../helpers'
 const mapStateToProps = state => ({
   formData: state.get('propuestaEstimulacion'),
   intervalos: state.getIn(['evaluacionPetrofisica', 'layerData']),
+  hasErrors: state.getIn(['propuestaEstimulacion', 'hasErrors']),
+  hasSubmitted: state.getIn(['global', 'hasSubmitted']),
 })
 
 const mapDispatchToProps = dispatch => ({
@@ -473,6 +525,7 @@ const mapDispatchToProps = dispatch => ({
   setTipoDeEstimulacion: val => dispatch(setTipoDeEstimulacion(val)),
   setTipoDeColocacion: val => dispatch(setTipoDeColocacion(val)), 
   setTiempoDeContacto: val => dispatch(setTiempoDeContacto(val)),
+  setHasErrorsPropuestaEstimulacion: val => dispatch(setHasErrorsPropuestaEstimulacion(val)),
 })
 
 export default connect(mapStateToProps, mapDispatchToProps)(PropuestaDeEstimulacion) 

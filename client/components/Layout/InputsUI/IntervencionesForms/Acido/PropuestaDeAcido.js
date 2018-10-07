@@ -1,26 +1,123 @@
 import React, { Component } from 'react'
 import autobind from 'autobind-decorator'
 import { connect } from 'react-redux'
+import Select from 'react-select'
+
 import InputTable from '../../../Common/InputTable'
 import ReactTable from 'react-table'
-import {withValidate} from '../../../Common/Validate'
-import Select from 'react-select'
 import { InputRowUnitless, CalculatedValue, InputRow, InputRowSelectUnitless, InputRowSelectMulti } from '../../../Common/InputRow'
-import { setCedulaData, setModuloYoungArena, setModuloYoungLutitas, setRelacPoissonArena, setRelacPoissonLutatas, setGradienteDeFractura, setDensidadDeDisparos, setDiametroDeDisparos, setIntervalo, setLongitudDeIntervalo, setVolAparejo, setCapacidadTotalDelPozo, setVolumenPrecolchonN2, setVolumenSistemaNoReativo, setVolumenSistemaReactivo, setVolumenSistemaDivergente, setVolumenDesplazamientoLiquido, setVolumenDesplazamientoGelLineal, setChecked, setPropuestaCompany } from '../../../../../redux/actions/intervencionesAcido'
-
+import { setHasErrorsPropuestaAcido, setCedulaData, setModuloYoungArena, setModuloYoungLutitas, setRelacPoissonArena, 
+  setRelacPoissonLutatas, setGradienteDeFractura, setDensidadDeDisparos, setDiametroDeDisparos, setIntervalo,
+   setLongitudDeIntervalo, setVolAparejo, setCapacidadTotalDelPozo, setVolumenPrecolchonN2,
+    setVolumenSistemaNoReativo, setVolumenSistemaReactivo, setVolumenSistemaDivergente, 
+    setVolumenDesplazamientoLiquido, setVolumenDesplazamientoGelLineal, setPropuestaCompany } from '../../../../../redux/actions/intervencionesAcido'
 import { round, calculateVolumes, getSistemaOptions } from '../helpers'
-
+import { checkEmpty, checkDate } from '../../../../../lib/errorCheckers'
 
 @autobind class PropuestaDeAcido extends Component {
   constructor(props) {
     super(props)
     this.state = { 
-
+      errors: {
+          propuestaCompany: {
+            type: 'text',
+            values: '',
+          },
+          moduloYoungArena: {
+            type: 'number',
+            values: '',
+          },
+          moduloYoungLutitas: {
+            type: 'number',
+            values: '',
+          },
+          relacPoissonArena: {
+            type: 'number',
+            values: '',
+          },
+          relacPoissonLutatas: {
+            type: 'number',
+            values: '',
+          },
+          gradienteDeFractura: {
+            type: 'number',
+            values: '',
+          },
+          densidadDeDisparos: {
+            type: 'number',
+            values: '',
+          },
+          diametroDeDisparos: {
+            type: 'number',
+            values: '',
+          },
+      }
     }
   }
 
-  componentDidMount() {
 
+
+  componentDidMount(){
+    let { setHasErrorsPropuestaAcido, hasErrors, hasSubmitted } = this.props
+
+    if (hasSubmitted) {
+      let hasErrors = this.checkAllInputs()
+      setHasErrorsPropuestaAcido(hasErrors)
+    }
+  }
+
+  componentDidUpdate(prevProps) {
+    let { hasSubmitted } = this.props
+
+    if (hasSubmitted !== prevProps.hasSubmitted) {
+      this.checkAllInputs()
+    }
+  }
+
+  checkAllInputs() {
+    let { formData } = this.props
+    formData = formData.toJS()
+    const { errors } = this.state
+    let hasErrors = false
+    let error 
+
+    Object.keys(errors).forEach(elem => {
+      const errObj = errors[elem]
+
+      if (errObj.type === 'text' || errObj.type === 'number') {
+        error = checkEmpty(formData[elem], elem, errors, this.setErrors)
+        
+      } 
+      else if (errObj.type === 'date') {
+        error = checkDate(moment(formData[elem]).format('DD/MM/YYYY'), elem, errors, this.setErrors)
+      }
+
+      error === true ? hasErrors = true : null
+    })
+
+    return hasErrors
+  }
+
+  setErrors(errors) {
+    this.setState({ errors })
+  }
+
+  updateErrors(errors) {
+    let { hasErrors, setHasErrorsPropuestaAcido } = this.props
+
+    let hasErrorNew = false
+
+    Object.keys(errors).forEach(key => {
+      if (errors[key].value !== null){
+        hasErrorNew = true
+      } 
+    })
+
+    if (hasErrorNew != hasErrors) {
+      setHasErrorsPropuestaAcido(hasErrorNew)
+    }
+
+    this.setState({ errors })
   }
 
 
@@ -48,7 +145,7 @@ import { round, calculateVolumes, getSistemaOptions } from '../helpers'
           header="Compañía Seleccionada para el Tratamiento"
           name="propuestaCompany"
           options={companyOptions}
-          onBlur={this.validate}
+          onBlur={this.updateErrors}
           errors={this.state.errors}
           value={propuestaCompany}
           callback={e => setPropuestaCompany(e.value)}
@@ -126,13 +223,13 @@ import { round, calculateVolumes, getSistemaOptions } from '../helpers'
         <div className='header'>
           Información de Geomecánica
         </div>
-        <InputRow header="Módulo young arena" name='moduloYoungArena' value={moduloYoungArena} onChange={setModuloYoungArena} unit='psi'  errors={this.state.errors} onBlur={this.validate}/>
-        <InputRow header="Módulo young lutitas" name='moduloYoungLutitas' value={moduloYoungLutitas} onChange={setModuloYoungLutitas} unit='psi'  errors={this.state.errors} onBlur={this.validate}/>
-        <InputRow header="Relac. poisson arena" name='relacPoissonArena' value={relacPoissonArena} onChange={setRelacPoissonArena} unit='adim'  errors={this.state.errors} onBlur={this.validate}/>
-        <InputRow header="Relac. poisson lutatas" name='relacPoissonLutatas' value={relacPoissonLutatas} onChange={setRelacPoissonLutatas} unit='adim'  errors={this.state.errors} onBlur={this.validate}/>
-        <InputRow header="Gradiente de fractura" name='gradienteDeFractura' value={gradienteDeFractura} onChange={setGradienteDeFractura} unit='psi/ft'  errors={this.state.errors} onBlur={this.validate}/>
-        <InputRow header="Densidad de disparos" name='densidadDeDisparos' value={densidadDeDisparos} onChange={setDensidadDeDisparos} unit='c/m'  errors={this.state.errors} onBlur={this.validate}/>
-        <InputRow header="Diámetro de disparos" name='diametroDeDisparos' value={diametroDeDisparos} onChange={setDiametroDeDisparos} unit='pg'  errors={this.state.errors} onBlur={this.validate}/>
+        <InputRow header="Módulo young arena" name='moduloYoungArena' value={moduloYoungArena} onChange={setModuloYoungArena} unit='psi'  errors={this.state.errors} onBlur={this.updateErrors}/>
+        <InputRow header="Módulo young lutitas" name='moduloYoungLutitas' value={moduloYoungLutitas} onChange={setModuloYoungLutitas} unit='psi'  errors={this.state.errors} onBlur={this.updateErrors}/>
+        <InputRow header="Relac. poisson arena" name='relacPoissonArena' value={relacPoissonArena} onChange={setRelacPoissonArena} unit='adim'  errors={this.state.errors} onBlur={this.updateErrors}/>
+        <InputRow header="Relac. poisson lutatas" name='relacPoissonLutatas' value={relacPoissonLutatas} onChange={setRelacPoissonLutatas} unit='adim'  errors={this.state.errors} onBlur={this.updateErrors}/>
+        <InputRow header="Gradiente de fractura" name='gradienteDeFractura' value={gradienteDeFractura} onChange={setGradienteDeFractura} unit='psi/ft'  errors={this.state.errors} onBlur={this.updateErrors}/>
+        <InputRow header="Densidad de disparos" name='densidadDeDisparos' value={densidadDeDisparos} onChange={setDensidadDeDisparos} unit='c/m'  errors={this.state.errors} onBlur={this.updateErrors}/>
+        <InputRow header="Diámetro de disparos" name='diametroDeDisparos' value={diametroDeDisparos} onChange={setDiametroDeDisparos} unit='pg'  errors={this.state.errors} onBlur={this.updateErrors}/>
       </div>
     )
   }
@@ -418,9 +515,10 @@ import { round, calculateVolumes, getSistemaOptions } from '../helpers'
 }
 
 const mapStateToProps = state => ({
-  forms: state.get('forms'),
   formData: state.get('propuestaAcido'),
   intervalos: state.getIn(['evaluacionPetrofisica', 'layerData']),
+  hasErrors: state.getIn(['propuestaAcido', 'hasErrors']),
+  hasSubmitted: state.getIn(['global', 'hasSubmitted']),
 })
 
 const mapDispatchToProps = dispatch => ({
@@ -443,6 +541,7 @@ const mapDispatchToProps = dispatch => ({
   setDensidadDeDisparos: val => dispatch(setDensidadDeDisparos(val)),
   setDiametroDeDisparos: val => dispatch(setDiametroDeDisparos(val)),
   setPropuestaCompany: val => dispatch(setPropuestaCompany(val)),
+  setHasErrorsPropuestaAcido: val => dispatch(setHasErrorsPropuestaAcido(val)),
 })
 
 export default connect(mapStateToProps, mapDispatchToProps)(PropuestaDeAcido)

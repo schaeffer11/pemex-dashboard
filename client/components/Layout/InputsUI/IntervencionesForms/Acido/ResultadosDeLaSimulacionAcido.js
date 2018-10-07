@@ -2,17 +2,118 @@ import React, { Component } from 'react'
 import autobind from 'autobind-decorator'
 import {withValidate} from '../../../Common/Validate'
 import { InputRow, InputRowUnitless, InputRowSelectUnitless, TextAreaUnitless } from '../../../Common/InputRow'
-import { setEvidenceSimulationAcidoImgURL, setLongitudTotal, setLongitudEfectivaGrabada, setAlturaGrabada, setAnchoPromedio, setConcentracionDelAcido, setConductividad, setFcd, setPresionNeta, setEficienciaDeFluidoDeFractura, setChecked } from '../../../../../redux/actions/intervencionesAcido'
+import { setHasErrorsResultadosSimulacionAcido, setEvidenceSimulationAcidoImgURL, setLongitudTotal, 
+  setLongitudEfectivaGrabada, setAlturaGrabada, setAnchoPromedio, setConcentracionDelAcido, setConductividad, 
+  setFcd, setPresionNeta, setEficienciaDeFluidoDeFractura, setChecked } from '../../../../../redux/actions/intervencionesAcido'
 import { connect } from 'react-redux'
-
+import { checkEmpty, checkDate } from '../../../../../lib/errorCheckers'
 @autobind class ResultadosDeLaSimulacionAcido extends Component {
   constructor(props) {
     super(props)
-    this.state = { 
-
+    this.state = {
+      errors: {
+        longitudTotal: {
+          type: 'number',
+          value: '',
+        },
+        longitudEfectivaGrabada: {
+          type: 'number',
+          value: '',
+        },
+        alturaGrabada: {
+          type: 'number',
+          value: '',
+        },
+        anchoPromedio: {
+          type: 'number',
+          value: '',
+        },
+        concentracionDelAcido: {
+          type: 'number',
+          value: '',
+        },
+        conductividad: {
+          type: 'number',
+          value: '',
+        },
+        fcd: {
+          type: 'number',
+          value: '',
+        },
+        presionNeta: {
+          type: 'number',
+          value: '',
+        },
+        eficienciaDeFluidoDeFractura: {
+          type: 'number',
+          value: '',
+        },
+      }
     }
   }
 
+  componentDidMount(){
+    let { setHasErrorsResultadosSimulacionAcido, hasErrors, hasSubmitted } = this.props
+
+    if (hasSubmitted) {
+      let hasErrors = this.checkAllInputs()
+      setHasErrorsResultadosSimulacionAcido(hasErrors)
+    }
+  }
+
+  componentDidUpdate(prevProps) {
+    let { hasSubmitted } = this.props
+
+    if (hasSubmitted !== prevProps.hasSubmitted) {
+      this.checkAllInputs()
+    }
+  }
+
+  checkAllInputs() {
+    let { formData } = this.props
+    formData = formData.toJS()
+    const { errors } = this.state
+    let hasErrors = false
+    let error 
+
+    Object.keys(errors).forEach(elem => {
+      const errObj = errors[elem]
+
+      if (errObj.type === 'text' || errObj.type === 'number') {
+        error = checkEmpty(formData[elem], elem, errors, this.setErrors)
+        
+      } 
+      else if (errObj.type === 'date') {
+        error = checkDate(moment(formData[elem]).format('DD/MM/YYYY'), elem, errors, this.setErrors)
+      }
+
+      error === true ? hasErrors = true : null
+    })
+
+    return hasErrors
+  }
+
+  setErrors(errors) {
+    this.setState({ errors })
+  }
+
+  updateErrors(errors) {
+    let { hasErrors, setHasErrorsResultadosSimulacionAcido } = this.props
+
+    let hasErrorNew = false
+
+    Object.keys(errors).forEach(key => {
+      if (errors[key].value !== null){
+        hasErrorNew = true
+      } 
+    })
+
+    if (hasErrorNew != hasErrors) {
+      setHasErrorsResultadosSimulacionAcido(hasErrorNew)
+    }
+
+    this.setState({ errors })
+  }
 
   makeResultForm() {
     let { setLongitudTotal, setLongitudEfectivaGrabada, setAlturaGrabada, setAnchoPromedio, setConcentracionDelAcido, setConductividad, setFcd, setPresionNeta, setEficienciaDeFluidoDeFractura, formData } = this.props
@@ -23,15 +124,15 @@ import { connect } from 'react-redux'
       <div className='result-form' >
         <div className='header'>
         </div>
-        <InputRow header="Longitud total" name='longitudTotal' unit="m" value={longitudTotal} onChange={setLongitudTotal} errors={this.state.errors} onBlur={this.validate}/>
-        <InputRow header="Longitud efectiva grabada" name='longitudEfectivaGrabada' unit="m" value={longitudEfectivaGrabada} onChange={setLongitudEfectivaGrabada} errors={this.state.errors} onBlur={this.validate}/>
-        <InputRow header="Altura grabada" name='alturaGrabada' unit="m" value={alturaGrabada} onChange={setAlturaGrabada} errors={this.state.errors} onBlur={this.validate}/>
-        <InputRow header="Ancho promedio" name='anchoPromedio' unit="pg." value={anchoPromedio} onChange={setAnchoPromedio} errors={this.state.errors} onBlur={this.validate}/>
-        <InputRow header="Concentración del ácido" name='concentracionDelAcido' unit={<div>lb/pg<sup>2</sup></div>} value={concentracionDelAcido} onChange={setConcentracionDelAcido} errors={this.state.errors} onBlur={this.validate}/>
-        <InputRow header="Conductividad" name='conductividad' unit="mD*ft" value={conductividad} onChange={setConductividad} errors={this.state.errors} onBlur={this.validate}/>
-        <InputRow header="FCD" name='fcd' unit="adim." value={fcd} onChange={setFcd} errors={this.state.errors} onBlur={this.validate}/>
-        <InputRow header="Presión neta" name='presionNeta' unit="psi" value={presionNeta} onChange={setPresionNeta} errors={this.state.errors} onBlur={this.validate}/>
-        <InputRow header="Eficiencia de fluido de fractura" name='eficienciaDeFluidoDeFractura' unit="%" value={eficienciaDeFluidoDeFractura} onChange={setEficienciaDeFluidoDeFractura} errors={this.state.errors} onBlur={this.validate}/>
+        <InputRow header="Longitud total" name='longitudTotal' unit="m" value={longitudTotal} onChange={setLongitudTotal} errors={this.state.errors} onBlur={this.updateErrors}/>
+        <InputRow header="Longitud efectiva grabada" name='longitudEfectivaGrabada' unit="m" value={longitudEfectivaGrabada} onChange={setLongitudEfectivaGrabada} errors={this.state.errors} onBlur={this.updateErrors}/>
+        <InputRow header="Altura grabada" name='alturaGrabada' unit="m" value={alturaGrabada} onChange={setAlturaGrabada} errors={this.state.errors} onBlur={this.updateErrors}/>
+        <InputRow header="Ancho promedio" name='anchoPromedio' unit="pg." value={anchoPromedio} onChange={setAnchoPromedio} errors={this.state.errors} onBlur={this.updateErrors}/>
+        <InputRow header="Concentración del ácido" name='concentracionDelAcido' unit={<div>lb/pg<sup>2</sup></div>} value={concentracionDelAcido} onChange={setConcentracionDelAcido} errors={this.state.errors} onBlur={this.updateErrors}/>
+        <InputRow header="Conductividad" name='conductividad' unit="mD*ft" value={conductividad} onChange={setConductividad} errors={this.state.errors} onBlur={this.updateErrors}/>
+        <InputRow header="FCD" name='fcd' unit="adim." value={fcd} onChange={setFcd} errors={this.state.errors} onBlur={this.updateErrors}/>
+        <InputRow header="Presión neta" name='presionNeta' unit="psi" value={presionNeta} onChange={setPresionNeta} errors={this.state.errors} onBlur={this.updateErrors}/>
+        <InputRow header="Eficiencia de fluido de fractura" name='eficienciaDeFluidoDeFractura' unit="%" value={eficienciaDeFluidoDeFractura} onChange={setEficienciaDeFluidoDeFractura} errors={this.state.errors} onBlur={this.updateErrors}/>
       </div>
     )
   }
@@ -80,8 +181,9 @@ import { connect } from 'react-redux'
 }
 
 const mapStateToProps = state => ({
-  forms: state.get('forms'),
   formData: state.get('resultadosSimulacionAcido'),
+  hasErrors: state.getIn(['resultadosSimulacionAcido', 'hasErrors']),
+  hasSubmitted: state.getIn(['global', 'hasSubmitted']),
 })
 
 const mapDispatchToProps = dispatch => ({
@@ -95,6 +197,7 @@ const mapDispatchToProps = dispatch => ({
   setPresionNeta: val => dispatch(setPresionNeta(val)),
   setEficienciaDeFluidoDeFractura: val => dispatch(setEficienciaDeFluidoDeFractura(val)),
   setEvidenceSimulationAcidoImgURL: val => dispatch(setEvidenceSimulationAcidoImgURL(val)),
+  setHasErrorsResultadosSimulacionAcido: val => dispatch(setHasErrorsResultadosSimulacionAcido(val)),
 })
 
 export default connect(mapStateToProps, mapDispatchToProps)(ResultadosDeLaSimulacionAcido)

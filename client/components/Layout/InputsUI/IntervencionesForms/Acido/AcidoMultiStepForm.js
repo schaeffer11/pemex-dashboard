@@ -44,8 +44,8 @@ import ResultadosDeLaSimulacionAcido from './ResultadosDeLaSimulacionAcido'
 
 
   render() {
-    let { setShowForms } = this.props
-     let className = 'subtab'
+    let { setShowForms, hasSubmitted, propuestaHasErrors, resultadosSimulacionHasErrors, estIncProduccionHasErrors, estCostsHasErrors } = this.props
+    let className = 'subtab'
 
      const forms = [
       {'title' : 'Propuesta de Fracturamiento Ácido', 'content': <PropuestaDeAcido /> },  
@@ -55,16 +55,20 @@ import ResultadosDeLaSimulacionAcido from './ResultadosDeLaSimulacionAcido'
       {'title' : 'Estimación del Incremento de Producción', 'content': <EstimacionIncProduccionAcido /> },
       {'title' : 'Estimación de Costos de Fracturamiento Acido', 'content': <EstimacionCostos /> }
     ]
-
-     let title = forms[this.state.currentStep].title
+    
+    let errors = [propuestaHasErrors, false, false, resultadosSimulacionHasErrors, estIncProduccionHasErrors, estCostsHasErrors]
+    let title = forms[this.state.currentStep].title
 
 
      return (
          <div className={`multistep-form`}>
           <div className="subtabs">
               {forms.map( (tab, index) => {
-                 let active = this.state.currentStep === index ? 'active' : ''; 
-                   return <div className={`${className} ${active}`} onClick={() => this.handleClick(index)} key={index}><span></span> {tab.title} </div>
+                 let active = this.state.currentStep === index ? 'active' : '';
+                 let error = errors[index]
+                  const errorClass = (error && hasSubmitted) ? 'error' : '';
+
+                   return <div className={`${className} ${active} ${errorClass}`} onClick={() => this.handleClick(index)} key={index}><span></span> {tab.title} </div>
                  }
               )}
           </div>
@@ -89,7 +93,11 @@ const mapDispatchToProps = dispatch => ({
 })
 
 const mapStateToProps = state => ({
-  forms: state.get('forms'),
+  hasSubmitted: state.getIn(['global', 'hasSubmitted']),
+  propuestaHasErrors: state.getIn(['propuestaAcido', 'hasErrors']),
+  resultadosSimulacionHasErrors: state.getIn(['resultadosSimulacionAcido', 'hasErrors']),
+  estIncProduccionHasErrors: state.getIn(['estIncProduccionAcido', 'hasErrors']),
+  estCostsHasErrors: state.getIn(['estCost', 'hasErrors']),
 })
 
 

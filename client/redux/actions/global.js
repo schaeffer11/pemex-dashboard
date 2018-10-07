@@ -3,4 +3,4 @@ export const setSaved = value => ({ type: 'set_saved', value })
 export const setIsLoading = obj => ({ type: 'set_isLoading', obj })
 export const resetNotification = () => ({ type: 'reset_notification' })
 export const setPage = value => ({ type: 'set_currentPage', value })
-
+export const setHasSubmitted = value => ({ type: 'set_hasSubmitted', value})

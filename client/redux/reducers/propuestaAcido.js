@@ -1,7 +1,7 @@
 import { Map, fromJS } from 'immutable'
 
-const initialState = fromJS({ 
-    intervalos: [],
+const initialState = Map({ 
+    intervalo: '',
     longitudDeIntervalo: '',
     volAparejo: '',
     capacidadTotalDelPozo: '',
@@ -11,7 +11,9 @@ const initialState = fromJS({
     volumenSistemaDivergente: '',
     volumenDesplazamientoLiquido: '',
     volumenDesplazamientoGelLineal: '',  
-        moduloYoungArena: '',
+    
+    hasErrors: true,
+    moduloYoungArena: '',
     moduloYoungLutitas: '',
     relacPoissonArena: '',
     relacPoissonLutatas: '',
@@ -22,9 +24,8 @@ const initialState = fromJS({
     cedulaData: [{
         etapa: 1,
         index: 0,
-        // intervalo: '',
-        nombreComercial: '',
         sistema: '',
+        nombreComercial: '',
         tipoDeApuntalante: '',
         concentraciDeApuntalante: '',
         volLiquid: '',
@@ -41,11 +42,12 @@ const initialState = fromJS({
     checked: []
 })
 
-
 const propuestaAcido = (state = initialState, action) => {
   switch (action.type) {
+    case 'set_hasErrorsPropuestaAcido':
+      return state.set('hasErrors', fromJS(action.value))
     case 'set_intervalo':
-        return state.set('intervalos', fromJS(action.value))
+        return state.set('intervalo', fromJS(action.value))
     case 'set_longitudDeIntervalo':
         return state.set('longitudDeIntervalo', fromJS(action.value))
     case 'set_volAparejo':
