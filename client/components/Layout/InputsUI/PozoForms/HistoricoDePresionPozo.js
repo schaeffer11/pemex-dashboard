@@ -119,13 +119,14 @@ let columns = [
   }
 
   checkForErrors(value) {
-    let { hasErrors, setHasErrorsHistoricoDePressionPozo } = this.props
     const errorsCopy = {...this.state.errors}
     errorsCopy.table.value = value
-    if (value !== hasErrors) {
-      setHasErrorsHistoricoDePressionPozo(value)
-    }
-    this.setState({ errors: errorsCopy })
+    this.setState({ errors: errorsCopy }, () => {
+      const { setHasErrorsHistoricoDePressionPozo } = this.props
+      const hasErrors = this.checkAllInputs()
+      console.log('has errors', hasErrors)
+      setHasErrorsHistoricoDePressionPozo(hasErrors)
+    })
   }
   
 
@@ -162,7 +163,7 @@ let columns = [
   }
 
   makeHistoricoDePresionTable() {
-    let { formData, setPresionDataPozo } = this.props
+    let { formData, setPresionDataPozo, hasSubmitted } = this.props
     formData = formData.toJS()
     let { presionDataPozo } = formData
     console.log('hola', presionDataPozo)
@@ -191,6 +192,7 @@ let columns = [
             rowObj={rowObj}
             errorArray={errors}
             checkForErrors={this.checkForErrors}
+            hasSubmitted={hasSubmitted}
           />
         </div>
       </div>

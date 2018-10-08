@@ -4,11 +4,13 @@ const initialState = Map({
     presionDataCampo: [{
         fecha: null,
         Pws: '',
+        error: true,
     }],
     presionDataPozo: [{
         fecha: null,
         Pws: '',
         Pwf: '',
+        error: true,
     }],
     hasErrorsCampo: true,
     hasErrorsPozo: true,

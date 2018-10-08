@@ -85,13 +85,11 @@ import { checkDate, checkEmpty, checkEmptySingular, checkDateSingular } from '..
     let disabled = false
     const { id } = cellInfo.column
     const { sistema } = cellInfo.row
-
     if (sistema === 'desplazamientoN2' || sistema === 'pre-colchon') {
       disabled = id === 'gastoLiqudo' || id === 'volLiquid' || id === 'relN2Liq'
     } else {
       disabled = id === 'gastoN2' || id === 'volN2'
     }
-
     const style = {
       backgroundColor: '#fafafa',
       border: disabled ? 'none' : null
@@ -123,7 +121,7 @@ import { checkDate, checkEmpty, checkEmptySingular, checkDateSingular } from '..
         hasError = true
       }
     })
-    
+    console.log('checkforerrors', hasError, typeof checkForErrors)
     if (typeof checkForErrors === 'function') {
       checkForErrors(hasError)
     }
@@ -132,25 +130,18 @@ import { checkDate, checkEmpty, checkEmptySingular, checkDateSingular } from '..
 
   updateErrors(e, i, errors) {
     let { data, setData } = this.props
-    
     errors[i] = e
-
-
-
     const hasErrors = Object.keys(e).filter(elem => {
       if (e[elem].value !== null) {
         return true
       }
       return false
     })
-
     const newErrorValue = hasErrors.length > 0
     const oldErrorValue = data[i].error
-
     if (oldErrorValue !== newErrorValue) {
       data[i].error = hasErrors.length > 0
       this.setOuterStateError()
-
       setData(data)
     }
     this.setState({ errors })
@@ -162,17 +153,13 @@ import { checkDate, checkEmpty, checkEmptySingular, checkDateSingular } from '..
     if (this.state.errors) {
       errors = JSON.parse(JSON.stringify(this.state.errors))
     }
-
     const name = cellInfo.column.id
     const value = data[cellInfo.index][cellInfo.column.id]
     const rowError = errors.length > 0 ? errors[cellInfo.index] : null
-
     let style = { }
     if(rowError !== null && rowError[name] !== undefined && rowError[name].value !== null) {
       style.border = 'solid 2px red'
     }
-
-
     return (
       <div style={style}>
         <input
@@ -321,7 +308,7 @@ import { checkDate, checkEmpty, checkEmptySingular, checkDateSingular } from '..
     })
     let pageSize = !data ? 1 : (data.length < 20 ? data.length : 20)
     let showPagination = data.length > 20
-
+    // console.log('errors', this.state.errors)
     return (
       <div>
         <ReactTable { ...this.props } 
