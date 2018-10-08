@@ -193,7 +193,6 @@ let columns = [
             checkForErrors={this.checkForErrors}
           />
         </div>
-        {/* <button className='new-row-button' onClick={this.addNewRow}>Añadir un renglón</button> */}
       </div>
     )
   }

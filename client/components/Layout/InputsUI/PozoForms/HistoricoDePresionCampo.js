@@ -40,7 +40,11 @@ let columns = [
         pressureDepthCampo: {
           type: 'number',
           value: '',
-        }
+        },
+        table: {
+          value: '',
+          type: 'table',
+        },
       }
     }
   }
@@ -79,6 +83,9 @@ let columns = [
       else if (errObj.type === 'date') {
         error = checkDate(moment(formData[elem]).format('DD/MM/YYYY'), elem, errors, this.setErrors)
       }
+      else if (errObj.type === 'table') {
+        error = errObj.value === '' ? true : errObj.value
+      }
 
       error === true ? hasErrors = true : null
     })
@@ -88,6 +95,16 @@ let columns = [
 
   setErrors(errors) {
     this.setState({ errors })
+  }
+
+  checkForErrors(value) {
+    let { hasErrors, setHasErrorsHistoricoDePressionCampo } = this.props
+    const errorsCopy = {...this.state.errors}
+    errorsCopy.table.value = value
+    if (value !== hasErrors) {
+      setHasErrorsHistoricoDePressionCampo(value)
+    }
+    this.setState({ errors: errorsCopy })
   }
 
   updateErrors(errors) {
@@ -107,37 +124,38 @@ let columns = [
     this.setState({ errors })
   }
 
-
-  addNewRow() {
+  makeHistoricoDePresionTable() {
     let { formData, setPresionDataCampo } = this.props
     formData = formData.toJS()
     let { presionDataCampo } = formData
-
-    presionDataCampo[0].length = 2
-
-    setPresionDataCampo([...presionDataCampo, {index: presionDataCampo.length, fecha: null, Pws: '', length: presionDataCampo.length + 1, 'edited': false}])
-  }
-
-
-  deleteRow(state, rowInfo, column, instance) {
-    let { formData, setPresionDataCampo } = this.props
-    formData = formData.toJS()
-    let { presionDataCampo } = formData
-
-    return {
-      onClick: e => {
-        if (column.id === 'delete' && presionDataCampo.length > 1) {
-          presionDataCampo.splice(rowInfo.original.index, 1)
-
-          presionDataCampo.forEach((i, index) => {
-            i.index = index
-            i.length = presionDataCampo.length
-          }) 
-
-          setPresionDataCampo(presionDataCampo)
-        }
-      }
+    const rowObj = {
+      fecha: null,
+      Pws: '',
+      error: true,
     }
+    const errors = [
+      { name: 'fecha', type: 'date' },
+      { name: 'Pws', type: 'number' },
+    ]
+
+    return(
+     <div className='presion-table'>
+        <div className='table-select'>
+          <InputTable
+            className="-striped"
+            data={presionDataCampo}
+            setData={setPresionDataCampo}
+            columns={columns}
+            showPagination={false}
+            showPageSizeOptions={false}
+            sortable={false}
+            rowObj={rowObj}
+            errorArray={errors}
+            checkForErrors={this.checkForErrors}
+          />
+        </div>
+      </div>
+    )
   }
 
   render() {
@@ -164,23 +182,7 @@ let columns = [
           <div className='depth'>
             <InputRow header="Plano de Referencia" name='pressureDepthCampo' value={pressureDepthCampo} onChange={setPressureDepthCampo} unit={'md'} onBlur={this.updateErrors} errors={this.state.errors} />
           </div>
-          <div className='presion-table'>
-            <div className='table-select'>
-              <InputTable
-                className="-striped"
-                data={presionDataCampo}
-                newRow={objectTemplate}
-                setData={setPresionDataCampo}
-                columns={columns}
-                showPagination={false}
-                showPageSizeOptions={false}
-                pageSize={presionDataCampo.length}
-                sortable={false}
-                getTdProps={this.deleteRow}
-              />        
-            </div>
-            <button className='new-row-button' onClick={this.addNewRow}>Añadir un renglón</button>
-          </div>
+          {this.makeHistoricoDePresionTable()}
         </div>
       </div>
     )
