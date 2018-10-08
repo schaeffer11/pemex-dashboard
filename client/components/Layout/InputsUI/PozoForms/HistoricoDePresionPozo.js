@@ -43,6 +43,10 @@ let columns = [
         pressureDepthPozo: {
           type: 'number',
           value: '',
+        },
+        table: {
+          value: '',
+          type: 'table',
         }
       }
     }
@@ -83,6 +87,9 @@ let columns = [
       else if (errObj.type === 'date') {
         error = checkDate(moment(formData[elem]).format('DD/MM/YYYY'), elem, errors, this.setErrors)
       }
+      else if (errObj.type === 'table') {
+        error = errObj.value === '' ? true : errObj.value
+      }
 
       error === true ? hasErrors = true : null
     })
@@ -109,6 +116,16 @@ let columns = [
     }
 
     this.setState({ errors })
+  }
+
+  checkForErrors(value) {
+    let { hasErrors, setHasErrorsHistoricoDePressionPozo } = this.props
+    const errorsCopy = {...this.state.errors}
+    errorsCopy.table.value = value
+    if (value !== hasErrors) {
+      setHasErrorsHistoricoDePressionPozo(value)
+    }
+    this.setState({ errors: errorsCopy })
   }
   
 
@@ -146,7 +163,9 @@ let columns = [
 
   makeHistoricoDePresionTable() {
     let { formData, setPresionDataPozo } = this.props
+    formData = formData.toJS()
     let { presionDataPozo } = formData
+    console.log('hola', presionDataPozo)
     const rowObj = {
       fecha: null,
       Pws: '',
@@ -168,10 +187,10 @@ let columns = [
             columns={columns}
             showPagination={false}
             showPageSizeOptions={false}
-            pageSize={presionDataPozo.length}
             sortable={false}
             rowObj={rowObj}
             errorArray={errors}
+            checkForErrors={this.checkForErrors}
           />
         </div>
         {/* <button className='new-row-button' onClick={this.addNewRow}>Añadir un renglón</button> */}
