@@ -27,6 +27,7 @@ const initialState = fromJS({
   historialIntervencionesData: [{
     fecha: null,
     intervenciones: '',
+    error: true,
   }],
   hasErrors: true,
 })

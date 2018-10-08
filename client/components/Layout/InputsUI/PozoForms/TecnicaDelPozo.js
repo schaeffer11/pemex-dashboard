@@ -95,6 +95,10 @@ import { setHasErrorsFichaTecnicaDelPozo, setTipoDeSistemo, setHistorialInterven
           type: 'number',
           value: '',
         },
+        historialDeIntervenciones: {
+          type: 'number',
+          value: '',
+        },
       },
     }
   }
@@ -140,26 +144,31 @@ import { setHasErrorsFichaTecnicaDelPozo, setTipoDeSistemo, setHistorialInterven
     const { errors } = this.state
     let hasErrors = false
     let error 
-
     Object.keys(errors).forEach(elem => {
       const errObj = errors[elem]
-
       if (errObj.type === 'text' || errObj.type === 'number') {
         error = checkEmpty(formData[elem], elem, errors, this.setErrors)
-        
       } 
       else if (errObj.type === 'date') {
         error = checkDate(moment(formData[elem]).format('DD/MM/YYYY'), elem, errors, this.setErrors)
       }
-
       error === true ? hasErrors = true : null
     })
-
     return hasErrors
   }
 
   setErrors(errors) {
     this.setState({ errors })
+  }
+
+  checkForErrors(value) {
+    let { hasErrors, setHasErrorsFichaTecnicaDelPozo } = this.props
+    const errorsCopy = {...this.state.errors}
+    errorsCopy.table.value = value
+    if (value !== hasErrors) {
+      setHasErrorsFichaTecnicaDelPozo(value)
+    }
+    this.setState({ errors: errorsCopy })
   }
 
   updateErrors(errors) {
@@ -262,18 +271,8 @@ import { setHasErrorsFichaTecnicaDelPozo, setTipoDeSistemo, setHistorialInterven
     )
   }
 
-  addNewRow() {
-    let { formData, setHistorialIntervencionesData } = this.props
-    formData = formData.toJS()
-    let { historialIntervencionesData } = formData
-
-    historialIntervencionesData[0].length = 2
-
-    setHistorialIntervencionesData([...historialIntervencionesData, {index: historialIntervencionesData.length, fecha: '', intervenciones: '', length: historialIntervencionesData.length + 1, 'edited': false}])
-  }
-
   makeHistoricalInterventionsInput() {
-    let { setHistorialIntervencionesData, formData } = this.props
+    let { setHistorialIntervencionesData, formData, hasSubmitted } = this.props
     formData = formData.toJS()
     let { historialIntervencionesData } = formData
 
@@ -299,6 +298,15 @@ import { setHasErrorsFichaTecnicaDelPozo, setTipoDeSistemo, setHistorialInterven
         cell: 'renderEditable',
       }
     ]
+    const rowObj = {
+      fecha: null,
+      intervenciones: '',
+      error: true,
+    }
+    const errors = [
+      { name: 'fecha', type: 'date' },
+      { name: 'intervenciones', type: 'number' },
+    ]
 
     return (
       <div className='intervenciones-form' >
@@ -307,20 +315,19 @@ import { setHasErrorsFichaTecnicaDelPozo, setTipoDeSistemo, setHistorialInterven
         </div>
         <div className='table-select'>
           <InputTable
-          className="-striped"
+            className="-striped"
             data={historialIntervencionesData}
-            newRow={{}}
             setData={setHistorialIntervencionesData}
             columns={columns}
             showPagination={false}
             showPageSizeOptions={false}
-            pageSize={historialIntervencionesData.length}
             sortable={false}
-            getTdProps={this.deleteRow}
+            rowObj={rowObj}
+            errorArray={errors}
+            checkForErrors={val => this.checkForErrors(val, 'historialDeIntervenciones')}
+            hasSubmitted={hasSubmitted}
           />
         </div>
-
-        <button className='new-row-button' onClick={this.addNewRow}>Añadir un renglón</button>
       </div>
     )
   }

@@ -1,11 +1,8 @@
 import React, { Component } from 'react'
 import autobind from 'autobind-decorator'
 import { connect } from 'react-redux'
-import {withValidate} from '../../Common/Validate'
-import { setImgURL, setLayerData, setMudLossData, setChecked, setHasErrorsEvaluacionPetrofisica } from '../../../../redux/actions/pozo'
+import { setImgURL, setLayerData, setMudLossData, setHasErrorsEvaluacionPetrofisica } from '../../../../redux/actions/pozo'
 import InputTable from '../../Common/InputTable'
-import ReactTable from 'react-table'
-import { freemem } from 'os';
 
 let layerColumns = [
   {

@@ -1,12 +1,8 @@
 import React, { Component } from 'react'
 import { connect } from 'react-redux'
 import autobind from 'autobind-decorator'
-import ReactTable from 'react-table'
-
-import {withValidate} from '../../Common/Validate'
 import { setHistoricoEstimulacionData, setHistoricoAcidoData, setHistoricoApuntaladoData, setHasErrorsHistorialDeIntervenciones } from '../../../../redux/actions/pozo'
 import InputTable from '../../Common/InputTable'
-import { InputRow } from '../../Common/InputRow'
 import { checkDate, checkEmpty } from '../../../../lib/errorCheckers'
 
 let columnsEstimulacion = [
