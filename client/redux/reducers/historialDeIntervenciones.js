@@ -1,7 +1,7 @@
 import { Map, fromJS } from 'immutable'
 
-const initialState = Map({ 
-    hasErrors: false,
+const initialState = fromJS({ 
+    hasErrors: true,
     historicoEstimulacionData: [{
         fecha: null,
         tipoDeTratamiento: '',
@@ -16,6 +16,7 @@ const initialState = Map({
         totalN2: '',
         beneficioProgramado: '',
         beneficioOficial: '',
+        error: true,
     }],
     historicoAcidoData: [{
         fecha: null,
@@ -32,7 +33,8 @@ const initialState = Map({
         presionNeta: '',
         fluidoFractura: '',
         beneficioProgramado: '',
-        beneficioOficial: ''
+        beneficioOficial: '',
+        error: true,
     }],
     historicoApuntaladoData: [{
         fecha: null,
@@ -50,14 +52,15 @@ const initialState = Map({
         presionNeta: '',
         fluidoFractura: '',
         beneficioProgramado: '',
-        beneficioOficial: ''
+        beneficioOficial: '',
+        error: true,
     }]
 })
 
 
 const historialDeIntervenciones = (state = initialState, action) => {
   switch (action.type) {
-    case 'set_hasErrorsHistrorialDeIntervenciones':
+    case 'set_hasErrorsHistorialDeIntervenciones':
       return state.set('hasErrors', fromJS(action.value))
     case 'set_historicoEstimulacionData':
         return state.set('historicoEstimulacionData', fromJS(action.value))

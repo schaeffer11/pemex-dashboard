@@ -157,7 +157,6 @@ let mudLossColumns = [
     this.setState({ errors })
   }
 
-  
   checkForErrors(value, table) {
     const errorsCopy = {...this.state.errors}
     errorsCopy[table].value = value
