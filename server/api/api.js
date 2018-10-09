@@ -1381,7 +1381,7 @@ router.get('/getInterventionAcido', async (req, res) => {
     MODULO_YOUNG_ARENA: { parent: 'propuestaAcido', child: 'moduloYoungArena' },
     MODULO_YOUNG_LUTITAS: { parent: 'propuestaAcido', child: 'moduloYoungLutitas' }, 
     RELAC_POISSON_ARENA: { parent: 'propuestaAcido', child: 'relacPoissonArena' }, 
-    RELAC_POISSON_LUTITAS: { parent: 'propuestaAcido', child: 'relacPoissonLutitas' }, 
+    RELAC_POISSON_LUTITAS: { parent: 'propuestaAcido', child: 'relacPoissonLutatas' }, 
     GRADIENTE_DE_FRACTURA: { parent: 'propuestaAcido', child: 'gradienteDeFractura' }, 
     DENSIDAD_DE_DISPAROS: { parent: 'propuestaAcido', child: 'densidadDeDisparos' },
     DIAMETRO_DE_DISPAROS: { parent: 'propuestaAcido', child: 'diametroDeDisparos' }, 
@@ -1424,6 +1424,10 @@ router.get('/getInterventionAcido', async (req, res) => {
           objectPath.set(finalObj, `${parent}.${child}`, data[0][key])
         }
       })   
+      finalObj.resultadosSimulacionAcido.hasErrors = data[0].HAS_ERRORS_RESULTS === 0 ? false : true
+      finalObj.resultadosSimulacionAcido.fromSave = true
+      finalObj.propuestaAcido.hasErrors = data[0].HAS_ERRORS_PROPUESTA === 0 ? false : true
+      finalObj.propuestaAcido.fromSave = true
       finalObj.estIncProduccionAcido.hasErrors = data[0].HAS_ERRORS_EST_INC === 0 ? false : true
       finalObj.estIncProduccionAcido.fromSave = true
     }
@@ -1456,7 +1460,7 @@ router.get('/getInterventionApuntalado', async (req, res) => {
     MODULO_YOUNG_ARENA: { parent: 'propuestaApuntalado', child: 'moduloYoungArena' },
     MODULO_YOUNG_LUTITAS: { parent: 'propuestaApuntalado', child: 'moduloYoungLutitas' }, 
     RELAC_POISSON_ARENA: { parent: 'propuestaApuntalado', child: 'relacPoissonArena' }, 
-    RELAC_POISSON_LUTITAS: { parent: 'propuestaApuntalado', child: 'relacPoissonLutitas' }, 
+    RELAC_POISSON_LUTITAS: { parent: 'propuestaApuntalado', child: 'relacPoissonLutatas' }, 
     GRADIENTE_DE_FRACTURA: { parent: 'propuestaApuntalado', child: 'gradienteDeFractura' }, 
     DENSIDAD_DE_DISPAROS: { parent: 'propuestaApuntalado', child: 'densidadDeDisparos' },
     DIAMETRO_DE_DISPAROS: { parent: 'propuestaApuntalado', child: 'diametroDeDisparos' }, 
@@ -1497,6 +1501,10 @@ router.get('/getInterventionApuntalado', async (req, res) => {
           objectPath.set(finalObj, `${parent}.${child}`, data[0][key])
         }
       })   
+      finalObj.resultadosSimulacionApuntalado.hasErrors = data[0].HAS_ERRORS_RESULTS === 0 ? false : true
+      finalObj.resultadosSimulacionApuntalado.fromSave = true
+      finalObj.propuestaApuntalado.hasErrors = data[0].HAS_ERRORS_PROPUESTA === 0 ? false : true
+      finalObj.propuestaApuntalado.fromSave = true
       finalObj.estIncProduccionApuntalado.hasErrors = data[0].HAS_ERRORS_EST_INC === 0 ? false : true
       finalObj.estIncProduccionApuntalado.fromSave = true
     }

@@ -4,7 +4,7 @@ import { List, Map, is } from 'immutable'
 import { connect } from 'react-redux'
 
 import { InputRow, InputRowUnitless, InputRowSelectUnitless } from '../../Common/InputRow'
-import { setHasErrorsMecanicoYAparejoDeProduccion, setFromSaveMecanicoYAparejoDeProduccion, setTipoDeTerminacion, setHIntervaloProductor, setEmpacador, 
+import { setHasErrorsMecanicoYAparejoDeProduccion, setTipoDeTerminacion, setHIntervaloProductor, setEmpacador, 
   setPresionDifEmpacador, setSensorPyt, setTipoDeLiner, setDiametroDeLiner, setTipoDePistolas, setDensidadDeDisparosMecanico, 
   setFase, setDiametroDeOrificio, setPenetracion, setTipoDeSAP, setTratamientoPor, setVolumenAparejoDeProduccion, 
   setVolumenCimaDeIntervalo, setVolumenBaseDeIntervalo, setVolumenDeEspacioAnular, setImgBoreDiagramURL, 
@@ -114,25 +114,22 @@ let tratamientoPorOptions = [
 
   
   componentDidMount(){
-    let { setHasErrorsMecanicoYAparejoDeProduccion, hasErrors, hasSubmitted, fromSave, setFromSaveMecanicoYAparejoDeProduccion } = this.props
+    let { setHasErrorsMecanicoYAparejoDeProduccion, hasSubmitted } = this.props
 
-    if (hasSubmitted || fromSave) {
-      let hasErrors = this.checkAllInputs()
-      setHasErrorsMecanicoYAparejoDeProduccion(hasErrors)
-      fromSave ? setFromSaveMecanicoYAparejoDeProduccion(false) : null
-    }
+    let hasErrors = this.checkAllInputs(hasSubmitted)
+    setHasErrorsMecanicoYAparejoDeProduccion(hasErrors)
   }
 
   componentWillReceiveProps(nextProps) {
     let { hasSubmitted } = this.props
 
     if (hasSubmitted !== nextProps.hasSubmitted) {
-      this.checkAllInputs()
+      this.checkAllInputs(true)
     }
   }
 
-  checkAllInputs() {
-    let { formData, fromSave } = this.props
+  checkAllInputs(showErrors) {
+    let { formData } = this.props
     formData = formData.toJS()
     const { errors } = this.state
     let hasErrors = false
@@ -142,11 +139,11 @@ let tratamientoPorOptions = [
       const errObj = errors[elem]
 
       if (errObj.type === 'text' || errObj.type === 'number') {
-        error = checkEmpty(formData[elem], elem, errors, this.setErrors, fromSave)
+        error = checkEmpty(formData[elem], elem, errors, this.setErrors, showErrors)
         
       } 
       else if (errObj.type === 'date') {
-        error = checkDate(moment(formData[elem]).format('DD/MM/YYYY'), elem, errors, this.setErrors, fromSave)
+        error = checkDate(moment(formData[elem]).format('DD/MM/YYYY'), elem, errors, this.setErrors, showErrors)
       }
 
       error === true ? hasErrors = true : null
@@ -313,7 +310,6 @@ let tratamientoPorOptions = [
 const mapStateToProps = state => ({
   formData: state.get('mecanicoYAparejoDeProduccion'),
   hasErrors: state.getIn(['mecanicoYAparejoDeProduccion', 'hasErrors']),
-  fromSave: state.getIn(['mecanicoYAparejoDeProduccion', 'fromSave']),
   hasSubmitted: state.getIn(['global', 'hasSubmitted']),
 })
 
@@ -339,7 +335,6 @@ const mapDispatchToProps = dispatch => ({
   setImgBoreDiagramURL: val => dispatch(setImgBoreDiagramURL(val)),
   setImgAparejoDeProduccionURL: val => dispatch(setImgAparejoDeProduccionURL(val)),
   setHasErrorsMecanicoYAparejoDeProduccion: val => dispatch(setHasErrorsMecanicoYAparejoDeProduccion(val)),
-  setFromSaveMecanicoYAparejoDeProduccion: val => dispatch(setFromSaveMecanicoYAparejoDeProduccion(val)),
 })
 
 

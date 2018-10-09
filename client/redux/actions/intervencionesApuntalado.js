@@ -1,7 +1,6 @@
 export const setHasErrorsPropuestaApuntalado = value => ({ type: 'set_hasErrorsPropuestaApuntalado', value})
 export const setHasErrorsResultadosSimulacionApuntalado = value => ({ type: 'set_hasErrorsResultadosSimulacionApuntalado', value})
 export const setHasErrorsEstIncProduccionApuntalado = value => ({ type: 'set_hasErrorsEstIncProduccionApuntalado', value})
-export const setFromSaveEstIncProduccionApuntalado = value => ({ type: 'set_fromSaveEstIncProduccionApuntalado', value})
 
 export const setIntervalo = value => ({ type: 'set_intervalo', value})
 export const setLongitudDeIntervalo = value => ({ type: 'set_longitudDeIntervalo', value})

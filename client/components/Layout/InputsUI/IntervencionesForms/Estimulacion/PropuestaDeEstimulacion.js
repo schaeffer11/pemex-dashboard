@@ -42,12 +42,10 @@ import { checkEmpty, checkDate } from '../../../../../lib/errorCheckers'
 
 
   componentDidMount(){
-    let { setHasErrorsPropuestaEstimulacion, hasErrors, hasSubmitted } = this.props
+    let { setHasErrorsPropuestaEstimulacion, hasSubmitted } = this.props
 
-    if (hasSubmitted) {
-      let hasErrors = this.checkAllInputs()
-      setHasErrorsPropuestaEstimulacion(hasErrors)
-    }
+    let hasErrors = this.checkAllInputs(hasSubmitted)
+    setHasErrorsPropuestaEstimulacion(hasErrors)
   }
 
   componentDidUpdate(prevProps) {
@@ -58,7 +56,7 @@ import { checkEmpty, checkDate } from '../../../../../lib/errorCheckers'
     }
   }
 
-  checkAllInputs() {
+  checkAllInputs(hasSubmitted) {
     let { formData } = this.props
     formData = formData.toJS()
     const { errors } = this.state
@@ -69,11 +67,11 @@ import { checkEmpty, checkDate } from '../../../../../lib/errorCheckers'
       const errObj = errors[elem]
 
       if (errObj.type === 'text' || errObj.type === 'number') {
-        error = checkEmpty(formData[elem], elem, errors, this.setErrors)
+        error = checkEmpty(formData[elem], elem, errors, this.setErrors, hasSubmitted)
         
       } 
       else if (errObj.type === 'date') {
-        error = checkDate(moment(formData[elem]).format('DD/MM/YYYY'), elem, errors, this.setErrors)
+        error = checkDate(moment(formData[elem]).format('DD/MM/YYYY'), elem, errors, this.setErrors, hasSubmitted)
       }
 
       error === true ? hasErrors = true : null

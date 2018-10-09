@@ -355,12 +355,12 @@ const INSERT_INTERVENTION_ACIDO_QUERY = {
         EFICIENCIA_DE_FLUIDO_DE_FRACTURA, EST_INC_ESTRANGULADOR, EST_INC_Ptp, EST_INC_Ttp, EST_INC_Pbaj,
         EST_INC_Tbaj, EST_INC_Ptr, EST_INC_Qi, EST_INC_Qo, EST_INC_Qq,
         EST_INC_Qw, EST_INC_RGA, EST_INC_SALINIDAD, EST_INC_IP, EST_INC_DELTA_P,
-        EST_INC_GASTO_COMPROMISO_Qo, EST_INC_GASTO_COMPROMISO_Qg, EST_INC_OBSERVACIONES, TRANSACTION_ID, HAS_ERRORS_EST_INC) VALUES
+        EST_INC_GASTO_COMPROMISO_Qo, EST_INC_GASTO_COMPROMISO_Qg, EST_INC_OBSERVACIONES, TRANSACTION_ID, HAS_ERRORS_PROPUESTA, HAS_ERRORS_RESULTS, HAS_ERRORS_EST_INC) VALUES
         (?, ?, ?, ?, ?, ?, ?, ?, ?, ?,
          ?, ?, ?, ?, ?, ?, ?, ?, ?, ?,
          ?, ?, ?, ?, ?, ?, ?, ?, ?, ?,
          ?, ?, ?, ?, ?, ?, ?, ?, ?, ?,
-         ?, ?, ?, ?)`,
+         ?, ?, ?, ?, ?, ?)`,
     submit: `INSERT INTO IntervencionesAcido (
         INTERVENTION_ID, WELL_FORMACION_ID,
         VOLUMEN_PRECOLCHON_N2,
@@ -394,12 +394,12 @@ const INSERT_INTERVENTION_APUNTALADO_QUERY = {
         EST_INC_ESTRANGULADOR, EST_INC_Ptp, EST_INC_Ttp, EST_INC_Pbaj,
         EST_INC_Tbaj, EST_INC_Ptr, EST_INC_Qi, EST_INC_Qo, EST_INC_Qq,
         EST_INC_Qw, EST_INC_RGA, EST_INC_SALINIDAD, EST_INC_IP, EST_INC_DELTA_P,
-        EST_INC_GASTO_COMPROMISO_Qo, EST_INC_GASTO_COMPROMISO_Qg, EST_INC_OBSERVACIONES, TRANSACTION_ID, HAS_ERRORS_EST_INC) VALUES
+        EST_INC_GASTO_COMPROMISO_Qo, EST_INC_GASTO_COMPROMISO_Qg, EST_INC_OBSERVACIONES, TRANSACTION_ID, HAS_ERRORS_PROPUESTA, HAS_ERRORS_RESULTS, HAS_ERRORS_EST_INC) VALUES
         (?, ?, ?, ?, ?, ?, ?, ?, ?, ?,
          ?, ?, ?, ?, ?, ?, ?, ?, ?, ?,
          ?, ?, ?, ?, ?, ?, ?, ?, ?, ?,
          ?, ?, ?, ?, ?, ?, ?, ?, ?, ?,
-         ?, ?, ?)`,
+         ?, ?, ?, ?, ?)`,
     submit: `INSERT INTO IntervencionesApuntalado (
         INTERVENTION_ID, WELL_FORMACION_ID, 
         VOLUMEN_PRECOLCHON_N2,
@@ -1312,6 +1312,8 @@ export const create = async (body, action, cb) => {
                                   ]
 
                                   if (action === 'save') {
+                                    values.push(finalObj.propuestaAcido.hasErrors === true ? 1 : 0)
+                                    values.push(finalObj.resultadosSimulacionAcido.hasErrors === true ? 1 : 0)
                                     values.push(finalObj.estIncProduccionAcido.hasErrors === true ? 1 : 0)
                                   }
                                 }
@@ -1331,10 +1333,14 @@ export const create = async (body, action, cb) => {
                                     ]
                                   
                                   if (action === 'save') {
+                                    values.push(finalObj.propuestaApuntalado.hasErrors === true ? 1 : 0)
+                                    values.push(finalObj.resultadosSimulacionApuntalado.hasErrors === true ? 1 : 0)
                                     values.push(finalObj.estIncProduccionApuntalado.hasErrors === true ? 1 : 0)
                                   }    
                                 } 
 
+                                console.log(query)
+                                console.log(values)
                                 connection.query(query, values, (err, results) => {
                                   console.log('intervention', err)
                                   console.log('intervention', results)

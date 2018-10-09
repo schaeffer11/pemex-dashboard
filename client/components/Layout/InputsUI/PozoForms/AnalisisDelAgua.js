@@ -4,7 +4,7 @@ import { InputRow, InputRowUnitless, InputRowSelectUnitless } from '../../Common
 import {withValidate} from '../../Common/Validate'
 import { connect } from 'react-redux'
 import AnalisisDelAguaGraph from './AnalisisDelAguaGraph'
-import { setHasErrorsAnalisisDelAgua, setFromSaveAnalisisDelAgua, setWaterAnalysisBool, setPH, setTemperaturaDeConductividad, setResistividad, 
+import { setHasErrorsAnalisisDelAgua, setWaterAnalysisBool, setPH, setTemperaturaDeConductividad, setResistividad, 
   setSalinidadConConductimetro, setSolidosDisueltosTotales, setDurezaTotalComoCaCO3, setDurezaDeCalcioComoCaCO3, 
   setDurezaDeMagnesioComoCaCO3, setAlcalinidadTotalComoCaCO3, setAlcalinidadALaFenolftaleinaComoCaCO3, setSalinidadComoNaCl,
    setSodio, setCalcio, setMagnesio, setFierro, setCloruros, setBicarbonatos, setSulfatos, setCarbonatos, setDensidadAt15, 
@@ -116,25 +116,22 @@ const yesOrNoOptions = [{
 
 
   componentDidMount(){
-    let { setHasErrorsAnalisisDelAgua, hasSubmitted, fromSave, setFromSaveAnalisisDelAgua } = this.props
+    let { setHasErrorsAnalisisDelAgua, hasSubmitted } = this.props
 
-    if (hasSubmitted || fromSave) {
-      let hasErrors = this.checkAllInputs()
-      setHasErrorsAnalisisDelAgua(hasErrors)
-      fromSave ? setFromSaveAnalisisDelAgua(false) : null
-    }
+    let hasErrors = this.checkAllInputs(hasSubmitted)
+    setHasErrorsAnalisisDelAgua(hasErrors)
   }
 
   componentDidUpdate(prevProps) {
     let { hasSubmitted } = this.props
 
     if (hasSubmitted !== prevProps.hasSubmitted) {
-      this.checkAllInputs()
+      this.checkAllInputs(true)
     }
   }
 
-  checkAllInputs() {
-    let { formData, fromSave } = this.props
+  checkAllInputs(showErrors) {
+    let { formData } = this.props
     formData = formData.toJS()
     let { waterAnalysisBool } = formData
 
@@ -151,11 +148,11 @@ const yesOrNoOptions = [{
       const errObj = errors[elem]
 
       if (errObj.type === 'text' || errObj.type === 'number') {
-        error = checkEmpty(formData[elem], elem, errors, this.setErrors, fromSave)
+        error = checkEmpty(formData[elem], elem, errors, this.setErrors, showErrors)
         
       } 
       else if (errObj.type === 'date') {
-        error = checkDate(moment(formData[elem]).format('DD/MM/YYYY'), elem, errors, this.setErrors, fromSave)
+        error = checkDate(moment(formData[elem]).format('DD/MM/YYYY'), elem, errors, this.setErrors, showErrors)
       }
 
       error === true ? hasErrors = true : null
@@ -259,7 +256,6 @@ const yesOrNoOptions = [{
 const mapStateToProps = state => ({
   formData: state.get('analisisDelAgua'),
   hasErrors: state.getIn(['analisisDelAgua', 'hasErrors']),
-  fromSave: state.getIn(['analisisDelAgua', 'fromSave']),
   hasSubmitted: state.getIn(['global', 'hasSubmitted']),
 })
 
@@ -288,7 +284,6 @@ const mapDispatchToProps = dispatch => ({
   setDensidadAt15: val => dispatch(setDensidadAt15(val)),
   setDensidadAt20: val => dispatch(setDensidadAt20(val)),
   setHasErrorsAnalisisDelAgua: val => dispatch(setHasErrorsAnalisisDelAgua(val)),
-  setFromSaveAnalisisDelAgua: val => dispatch(setFromSaveAnalisisDelAgua(val)),
 })
 
 export default connect(mapStateToProps, mapDispatchToProps)(AnalisisDelAgua)

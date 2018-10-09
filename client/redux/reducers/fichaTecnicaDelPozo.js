@@ -29,15 +29,12 @@ const initialState = fromJS({
     intervenciones: '',
   }],
   hasErrors: true,
-  fromSave: false
 })
 
 const fichaTecnicaDelPozo = (state = initialState, action) => {
   switch (action.type) {
     case 'set_hasErrorsFichaTecnicaDelPozo':
       return state.set('hasErrors', fromJS(action.value))
-    case 'set_fromSaveFichaTecnicaDelPozo':
-      return state.set('fromSave', fromJS(action.value))
     case 'set_intervaloProductor':
       return state.set('intervaloProductor', fromJS(action.value))
     case 'set_espesorBruto':

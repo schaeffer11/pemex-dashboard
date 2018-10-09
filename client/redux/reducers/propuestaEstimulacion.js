@@ -35,7 +35,6 @@ const initialState = Map({
         relN2Liq: '',
         tiempo: '',
     }],
-    checked: []
 })
 
 
@@ -71,10 +70,6 @@ const propuestaEstimulacion = (state = initialState, action) => {
             newState = newState.mergeDeep(action.volumes)
         }
         return newState
-    case 'set_forms_checked' :
-        if(action.form == 'propuestaEstimulacion')
-            return state.set('checked', fromJS(action.value))
-        return state
     case 'set_propuestaCompany':
         return state.set('propuestaCompany', fromJS(action.value))
     case 'set_tipoDeEstimulacion':

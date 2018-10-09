@@ -282,12 +282,9 @@ import { setHasSubmitted } from '../../../redux/actions/global'
 
     if (selectedTab === 'Pozo' && pagesPozo[selectedSubtab]) {
       form = this.pozoMultiStepForm
-      otherForm = this.intervencionesForm
-
     }
     else if (selectedTab === 'Intervenciones') {
       form = this.intervencionesForm
-      otherForm = this.pozoMultiStepForm
     }
 
     if (!showForms) {
@@ -303,9 +300,6 @@ import { setHasSubmitted } from '../../../redux/actions/global'
           <Tabs handleSelectTab={this.handleSelectTab} selectedTab={selectedTab} />
           <div className="tab-content">
             { form }
-          </div>
-          <div style={{display: 'none'}}>
-            { otherForm }
           </div>
           <button className="submit save-button"  onClick={(e) => this.activateModal()}>Guardar</button>
           <button className="submit submit-button" onClick={(e) => this.handleSubmit('submit')}>Enviar</button>

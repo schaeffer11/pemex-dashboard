@@ -5,7 +5,7 @@ import moment from 'moment'
 import { InputRow, InputRowUnitless, InputRowSelectUnitless, InputDate } from '../../Common/InputRow'
 import {withValidate} from '../../Common/Validate'
 import { checkEmpty, checkDate } from '../../../../lib/errorCheckers'
-import { setHasErrorsFichaTecnicaDelCampo, setFromSaveFichaTecnicaDelCampo, setTipoDeFluidoField, setDescubrimientoField, 
+import { setHasErrorsFichaTecnicaDelCampo, setTipoDeFluidoField, setDescubrimientoField, 
   setFechaDeExplotacionField, setNumeroDePozosOperandoField, setPInicialField, setPActualField, 
   setPInicialAnoField, setPActualFechaField, setDpPerAnoField, setTyacField, setPrField, 
   setDensidadDelAceiteField, setPSatField, setRgaFluidoField, setSalinidadField, setPvtRepresentativoField, 
@@ -182,39 +182,40 @@ let litologiaOptions = [
   }
 
   componentDidMount(){
-    let { setHasErrorsFichaTecnicaDelCampo, hasErrors, hasSubmitted, fromSave, setFromSaveFichaTecnicaDelCampo } = this.props
+    let { setHasErrorsFichaTecnicaDelCampo, hasSubmitted } = this.props
 
-    if (hasSubmitted || fromSave) {
-      let hasErrors = this.checkAllInputs()
-      setHasErrorsFichaTecnicaDelCampo(hasErrors)
-      fromSave ? setFromSaveFichaTecnicaDelCampo(false) : null
-    }
+    let hasErrors = this.checkAllInputs(hasSubmitted)
+    setHasErrorsFichaTecnicaDelCampo(hasErrors)
+
   }
 
   componentWillReceiveProps(nextProps) {
     let { hasSubmitted } = this.props
 
+
     if (hasSubmitted !== nextProps.hasSubmitted) {
-      this.checkAllInputs()
+      this.checkAllInputs(true)
     }
   }
 
-  checkAllInputs() {
-    let { formData, fromSave } = this.props
+  checkAllInputs(showErrors) {
+    let { formData } = this.props
     formData = formData.toJS()
     const { errors } = this.state
     let hasErrors = false
     let error 
 
+    console.log('checking all', showErrors)
+
     Object.keys(errors).forEach(elem => {
       const errObj = errors[elem]
 
       if (errObj.type === 'text' || errObj.type === 'number') {
-        error = checkEmpty(formData[elem], elem, errors, this.setErrors, fromSave)
+        error = checkEmpty(formData[elem], elem, errors, this.setErrors, showErrors)
         
       } 
       else if (errObj.type === 'date') {
-        error = checkDate(moment(formData[elem]).format('DD/MM/YYYY'), elem, errors, this.setErrors, fromSave)
+        error = checkDate(moment(formData[elem]).format('DD/MM/YYYY'), elem, errors, this.setErrors, showErrors)
       }
 
       error === true ? hasErrors = true : null
@@ -386,7 +387,6 @@ let litologiaOptions = [
 const mapStateToProps = state => ({
   formData: state.get('fichaTecnicaDelCampo'),
   hasErrors: state.getIn(['fichaTecnicaDelCampo', 'hasErrors']),
-  fromSave: state.getIn(['fichaTecnicaDelCampo', 'fromSave']),
   hasSubmitted: state.getIn(['global', 'hasSubmitted']),
 })
 
@@ -428,7 +428,6 @@ const mapDispatchToProps = dispatch => ({
   setN2Field: val => dispatch(setN2Field(val)),
   setTipoDeFluidoField: val => dispatch(setTipoDeFluidoField(val)),
   setHasErrorsFichaTecnicaDelCampo: val => dispatch(setHasErrorsFichaTecnicaDelCampo(val)),
-  setFromSaveFichaTecnicaDelCampo: val => dispatch(setFromSaveFichaTecnicaDelCampo(val)),
 })
 
 export default connect(mapStateToProps, mapDispatchToProps)(TecnicaDelCampo)

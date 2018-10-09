@@ -3,7 +3,7 @@ import { connect } from 'react-redux'
 import autobind from 'autobind-decorator'
 import ReactTable from 'react-table'
 
-import { setHasErrorsHistoricoDePressionCampo, setFromSaveHistoricoDePressionCampo, setPresionDataCampo, setPressureDepthCampo, setChecked } from '../../../../redux/actions/pozo'
+import { setHasErrorsHistoricoDePressionCampo, setPresionDataCampo, setPressureDepthCampo, setChecked } from '../../../../redux/actions/pozo'
 import InputTable from '../../Common/InputTable'
 import ExcelUpload from '../../Common/ExcelUpload'
 import { InputRow } from '../../Common/InputRow'
@@ -46,13 +46,10 @@ let columns = [
   }
 
   componentDidMount(){
-    let { setHasErrorsHistoricoDePressionCampo, hasErrors, hasSubmitted, fromSave, setFromSaveHistoricoDePressionCampo } = this.props
+    let { setHasErrorsHistoricoDePressionCampo, hasSubmitted } = this.props
 
-    if (hasSubmitted || fromSave) {
-      let hasErrors = this.checkAllInputs()
-      setHasErrorsHistoricoDePressionCampo(hasErrors)
-      fromSave ? setFromSaveHistoricoDePressionCampo(false) : null
-    }
+    let hasErrors = this.checkAllInputs(hasSubmitted)
+    setHasErrorsHistoricoDePressionCampo(hasErrors)
   }
 
   componentDidUpdate(prevProps) {
@@ -63,8 +60,8 @@ let columns = [
     }
   }
 
-  checkAllInputs() {
-    let { formData, fromSave } = this.props
+  checkAllInputs(showErrors) {
+    let { formData } = this.props
     formData = formData.toJS()
     const { errors } = this.state
     let hasErrors = false
@@ -74,11 +71,11 @@ let columns = [
       const errObj = errors[elem]
 
       if (errObj.type === 'text' || errObj.type === 'number') {
-        error = checkEmpty(formData[elem], elem, errors, this.setErrors, fromSave)
+        error = checkEmpty(formData[elem], elem, errors, this.setErrors, showErrors)
         
       } 
       else if (errObj.type === 'date') {
-        error = checkDate(moment(formData[elem]).format('DD/MM/YYYY'), elem, errors, this.setErrors, fromSave)
+        error = checkDate(moment(formData[elem]).format('DD/MM/YYYY'), elem, errors, this.setErrors, showErrors)
       }
 
       error === true ? hasErrors = true : null
@@ -191,7 +188,6 @@ let columns = [
 const mapStateToProps = state => ({
   formData: state.get('historicoDePresion'),
   hasErrors: state.getIn(['historicoDePresion', 'hasErrorsCampo']),
-  fromSave: state.getIn(['historicoDePresion', 'fromSaveCampo']),
   hasSubmitted: state.getIn(['global', 'hasSubmitted']),
 })
 
@@ -200,7 +196,6 @@ const mapDispatchToProps = dispatch => ({
     setChecked: val => dispatch(setChecked(val, 'historicoDePresion')),
     setPressureDepthCampo: val => dispatch(setPressureDepthCampo(val)),
     setHasErrorsHistoricoDePressionCampo: val => dispatch(setHasErrorsHistoricoDePressionCampo(val)),
-    setFromSaveHistoricoDePressionCampo: val => dispatch(setFromSaveHistoricoDePressionCampo(val)),
 })
 
 
