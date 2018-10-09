@@ -535,6 +535,7 @@ import { setHasErrorsSistemas, setSistemasArtificialesImgURL, setTipoDeSistemo, 
 const mapStateToProps = state => ({
   forms: state.get('forms'),
   formData: state.get('sistemasArtificialesDeProduccion'),
+  hasSubmitted: state.getIn(['global', 'hasSubmitted']),
 })
 
 const mapDispatchToProps = dispatch => ({
