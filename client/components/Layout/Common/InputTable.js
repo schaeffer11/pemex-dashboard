@@ -5,8 +5,7 @@ import autobind from 'autobind-decorator'
 import moment from 'moment'
 import DatePicker from 'react-datepicker'
 import MaskedTextInput from "react-text-mask"
-import Cleave from 'cleave.js/react'
-import { InputRow } from './InputRow'
+import Select from 'react-select'
 import { checkDate, checkEmpty, checkEmptySingular, checkDateSingular } from '../../../lib/errorCheckers'
 
 /*
@@ -138,7 +137,6 @@ import { checkDate, checkEmpty, checkEmptySingular, checkDateSingular } from '..
   setOuterStateError() {
     let { data, checkForErrors } = this.props
     let hasError = false 
-
     data.forEach(row => {
       if (row.error === true) {
         hasError = true
@@ -205,6 +203,7 @@ import { checkDate, checkEmpty, checkEmptySingular, checkDateSingular } from '..
   renderDate(cellInfo){
     let {data, setData} = this.props
     const name = cellInfo.column.id
+    const { errors, rowError } = this.getErrors(cellInfo.index)
     let handleSelect = (date) => {
       if (date.isValid()) {
         checkDate(date, name, rowError, (e) => this.updateErrors(e, cellInfo.index, errors))
@@ -261,15 +260,23 @@ import { checkDate, checkEmpty, checkEmptySingular, checkDateSingular } from '..
     data[0].length = 2
     rowObj.index = data.length
     rowObj.length = data.length + 1
-
-    this.setState({ errors: [...errors, newErrorRow]})
+    
+    
+    this.setState({ errors: [...errors, newErrorRow]}, () => {
+      this.setOuterStateError()
+    })
     setData([...data, rowObj])
   }
 
+  setDataPromise(data) {
+    const { setData } = this.props
+    return new Promise((resolve) => {
+      resolve(setData(data))
+    })
+  }
 
   deleteRow(state, rowInfo, column, instance) {
     let {data, setData} = this.props
-
     return {
       onClick: e => {
         if (column.id === 'delete' && data.length > 1) {
@@ -278,7 +285,7 @@ import { checkDate, checkEmpty, checkEmptySingular, checkDateSingular } from '..
             i.index = index
             i.length = data.length
           })
-          setData(data)
+          this.setDataPromise(data).then(e => this.setOuterStateError())
         }
       }
     }

@@ -96,7 +96,7 @@ import { setHasErrorsFichaTecnicaDelPozo, setTipoDeSistemo, setHistorialInterven
           value: '',
         },
         historialDeIntervenciones: {
-          type: 'number',
+          type: 'table',
           value: '',
         },
       },
@@ -160,14 +160,25 @@ import { setHasErrorsFichaTecnicaDelPozo, setTipoDeSistemo, setHistorialInterven
     this.setState({ errors })
   }
 
-  checkForErrors(value) {
-    let { hasErrors, setHasErrorsFichaTecnicaDelPozo } = this.props
+  // checkForErrors(value) {
+  //   let { hasErrors, setHasErrorsFichaTecnicaDelPozo } = this.props
+  //   const errorsCopy = {...this.state.errors}
+  //   errorsCopy.table.value = value
+  //   if (value !== hasErrors) {
+  //     setHasErrorsFichaTecnicaDelPozo(value)
+  //   }
+  //   this.setState({ errors: errorsCopy })
+  // }
+
+  checkForErrors(value, table) {
     const errorsCopy = {...this.state.errors}
-    errorsCopy.table.value = value
-    if (value !== hasErrors) {
-      setHasErrorsFichaTecnicaDelPozo(value)
-    }
-    this.setState({ errors: errorsCopy })
+    errorsCopy[table].value = value
+    this.setState({ errors: errorsCopy }, () => {
+      const { setHasErrorsFichaTecnicaDelPozo } = this.props
+      const hasErrors = this.checkAllInputs()
+      console.log('has errors', hasErrors)
+      setHasErrorsFichaTecnicaDelPozo(hasErrors)
+    })
   }
 
   updateErrors(errors) {
