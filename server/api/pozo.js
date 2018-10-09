@@ -320,11 +320,11 @@ const INSERT_INTERVENTION_ESIMULACION_QUERY = {
         EST_INC_ESTRANGULADOR, EST_INC_Ptp, EST_INC_Ttp, EST_INC_Pbaj, EST_INC_Tbaj,
         EST_INC_Ptr, EST_INC_Qi, EST_INC_Qo, EST_INC_Qq, EST_INC_Qw,
         EST_INC_RGA, EST_INC_SALINIDAD, EST_INC_IP, EST_INC_DELTA_P, EST_INC_GASTO_COMPROMISO_Qo,
-        EST_INC_GASTO_COMPROMISO_Qg, EST_INC_OBSERVACIONES, TRANSACTION_ID, HAS_ERRORS_EST_INC) VALUES
+        EST_INC_GASTO_COMPROMISO_Qg, EST_INC_OBSERVACIONES, TRANSACTION_ID, HAS_ERRORS_PROPUESTA, HAS_ERRORS_RESULTS, HAS_ERRORS_EST_INC) VALUES
         (?, ?, ?, ?, ?, ?, ?, ?, ?, ?,
          ?, ?, ?, ?, ?, ?, ?, ?, ?, ?,
          ?, ?, ?, ?, ?, ?, ?, ?, ?, ?,
-         ?, ?, ?)`,
+         ?, ?, ?, ?, ?)`,
     submit: `INSERT INTO IntervencionesEstimulacions (
         INTERVENTION_ID, WELL_FORMACION_ID, TIPO_DE_ESTIMULACION,
         VOLUMEN_PRECOLCHON_N2,
@@ -1293,6 +1293,8 @@ export const create = async (body, action, cb) => {
                                   ]
 
                                   if (action === 'save') {
+                                    values.push(finalObj.propuestaEstimulacion.hasErrors === true ? 1 : 0)
+                                    values.push(finalObj.resultadosSimulacionEstimulacion.hasErrors === true ? 1 : 0)
                                     values.push(finalObj.estIncProduccionEstimulacion.hasErrors === true ? 1 : 0)
                                   }
 

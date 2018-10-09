@@ -61,7 +61,7 @@ let columns = [
     let { hasSubmitted } = this.props
 
     if (hasSubmitted !== prevProps.hasSubmitted) {
-      this.checkAllInputs()
+      this.checkAllInputs(true)
     }
   }
 

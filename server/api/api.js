@@ -289,7 +289,6 @@ router.get('/getFields', async (req, res) => {
       console.log('hehehhehe', data[0].HAS_ERRORS)
 
       finalObj.fichaTecnicaDelCampo.hasErrors = data[0].HAS_ERRORS === 0 ? false : true
-      finalObj.fichaTecnicaDelCampo.fromSave = true
       res.json(finalObj)
     }
     else {
@@ -529,7 +528,6 @@ router.get('/getWell', async (req, res) => {
         }
       })
       finalObj.fichaTecnicaDelPozo.hasErrors = data[0].HAS_ERRORS === 0 ? false : true
-      finalObj.fichaTecnicaDelPozo.fromSave = true
       res.json(finalObj)
     }
     else {
@@ -734,7 +732,6 @@ router.get('/getMecanico', async (req, res) => {
         }
       })
       finalObj.mecanicoYAparejoDeProduccion.hasErrors = data[0].HAS_ERRORS === 0 ? false : true
-      finalObj.mecanicoYAparejoDeProduccion.fromSave = true
       res.json(finalObj)
     }
     else {
@@ -784,7 +781,6 @@ router.get('/getAnalisisAgua', async (req, res) => {
       })
       finalObj.analisisDelAgua.hasErrors = data[0].HAS_ERRORS === 0 ? false : true
       finalObj.analisisDelAgua.waterAnalysisBool = data[0].WATER_ANALYSIS_BOOL === 0 ? false : true
-      finalObj.analisisDelAgua.fromSave = true
       res.json(finalObj)
     }
     else {
@@ -1078,7 +1074,6 @@ router.get('/getFieldPressure', async (req, res) => {
       })
       finalObj['historicoDePresion'].pressureDepthCampo = data[0].PRESSURE_DEPTH
       finalObj.historicoDePresion.hasErrorsCampo = data[0].HAS_ERRORS === 0 ? false : true
-      finalObj.historicoDePresion.fromSaveCampo = true
       res.json(finalObj)
     }
     else if (action === 'loadTransaction'){
@@ -1132,7 +1127,6 @@ router.get('/getWellPressure', async (req, res) => {
       })
       finalObj['historicoDePresion'].pressureDepthPozo = data[0].PRESSURE_DEPTH
       finalObj.historicoDePresion.hasErrorsPozo = data[0].HAS_ERRORS === 0 ? false : true
-      finalObj.historicoDePresion.fromSavePozo = true
       res.json(finalObj)
     }
     else if (action === 'loadTransaction'){
@@ -1351,8 +1345,9 @@ router.get('/getInterventionEstimulacion', async (req, res) => {
           objectPath.set(finalObj, `${parent}.${child}`, data[0][key])
         }
       }) 
+      finalObj.propuestaEstimulacion.hasErrors = data[0].HAS_ERRORS_PROPUESTA === 0 ? false : true
+      finalObj.resultadosSimulacionEstimulacion.hasErrors = data[0].HAS_ERRORS_RESULTS === 0 ? false : true
       finalObj.estIncProduccionEstimulacion.hasErrors = data[0].HAS_ERRORS_EST_INC === 0 ? false : true
-      finalObj.estIncProduccionEstimulacion.fromSave = true  
     }
     else {
       Object.keys(map).forEach(key => {
@@ -1425,11 +1420,8 @@ router.get('/getInterventionAcido', async (req, res) => {
         }
       })   
       finalObj.resultadosSimulacionAcido.hasErrors = data[0].HAS_ERRORS_RESULTS === 0 ? false : true
-      finalObj.resultadosSimulacionAcido.fromSave = true
       finalObj.propuestaAcido.hasErrors = data[0].HAS_ERRORS_PROPUESTA === 0 ? false : true
-      finalObj.propuestaAcido.fromSave = true
       finalObj.estIncProduccionAcido.hasErrors = data[0].HAS_ERRORS_EST_INC === 0 ? false : true
-      finalObj.estIncProduccionAcido.fromSave = true
     }
     else {
       Object.keys(map).forEach(key => {
@@ -1502,11 +1494,8 @@ router.get('/getInterventionApuntalado', async (req, res) => {
         }
       })   
       finalObj.resultadosSimulacionApuntalado.hasErrors = data[0].HAS_ERRORS_RESULTS === 0 ? false : true
-      finalObj.resultadosSimulacionApuntalado.fromSave = true
       finalObj.propuestaApuntalado.hasErrors = data[0].HAS_ERRORS_PROPUESTA === 0 ? false : true
-      finalObj.propuestaApuntalado.fromSave = true
       finalObj.estIncProduccionApuntalado.hasErrors = data[0].HAS_ERRORS_EST_INC === 0 ? false : true
-      finalObj.estIncProduccionApuntalado.fromSave = true
     }
     else {
       Object.keys(map).forEach(key => {

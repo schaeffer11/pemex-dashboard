@@ -1,11 +1,11 @@
 import moment from 'moment'
-export function checkEmpty(value, name, errors, onBlur, hasSubmitted = false) {
+export function checkEmpty(value, name, errors, onBlur, showErrors = true) {
   let error = null
   if (!value || value.length < 1) {
     error = 'Este campo no puede estar vacio'
   } 
 
-  if (error && !hasSubmitted) {
+  if (error && !showErrors) {
     error = 'Blank Error'
   }
 
@@ -24,7 +24,7 @@ export function checkEmptySingular(value) {
 
 
 
-export function checkDate(value, name, errors, onBlur, hasSubmitted = false) {
+export function checkDate(value, name, errors, onBlur, showErrors = true) {
   let error = null
 
   if (!value || value.length < 1 || value === 'Invalid date') {
@@ -32,7 +32,7 @@ export function checkDate(value, name, errors, onBlur, hasSubmitted = false) {
   } else if (!moment(value, 'YYYY-MM-DD').isValid() || (typeof value === 'string' && value.includes('_'))) {
     error = 'La fecha no esta en el formato correcto'
   }
-  if (error && !hasSubmitted) {
+  if (error && !showErrors) {
     error = 'Blank Error'
   }
   errors[name].value = error

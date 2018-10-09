@@ -52,7 +52,7 @@ import { checkEmpty, checkDate } from '../../../../../lib/errorCheckers'
     let { hasSubmitted } = this.props
 
     if (hasSubmitted !== prevProps.hasSubmitted) {
-      this.checkAllInputs()
+      this.checkAllInputs(true)
     }
   }
 
