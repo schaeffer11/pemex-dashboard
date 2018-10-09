@@ -292,7 +292,7 @@ import { checkDate, checkEmpty, checkEmptySingular, checkDateSingular } from '..
     data[0].length = 2
     rowObj.index = data.length
     rowObj.length = data.length + 1
-    
+    console.log('adding new row', [...data, rowObj])
     
     this.setState({ errors: [...errors, newErrorRow]}, () => {
       this.setOuterStateError()
