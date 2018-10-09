@@ -38,7 +38,7 @@ import { checkDate, checkEmpty, checkEmptySingular, checkDateSingular } from '..
       })
 
       data.forEach(row => {
-        if (row.error === false || !hasSubmitted) {
+        if (row.error === false) {
           errors.push(properRow)
         }
         else {

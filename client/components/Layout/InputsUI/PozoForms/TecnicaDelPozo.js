@@ -174,9 +174,8 @@ import { setHasErrorsFichaTecnicaDelPozo, setTipoDeSistemo, setHistorialInterven
     const errorsCopy = {...this.state.errors}
     errorsCopy[table].value = value
     this.setState({ errors: errorsCopy }, () => {
-      const { setHasErrorsFichaTecnicaDelPozo } = this.props
-      const hasErrors = this.checkAllInputs()
-      console.log('has errors', hasErrors)
+      const { setHasErrorsFichaTecnicaDelPozo, hasSubmitted } = this.props
+      const hasErrors = this.checkAllInputs(hasSubmitted)
       setHasErrorsFichaTecnicaDelPozo(hasErrors)
     })
   }
