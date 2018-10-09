@@ -109,6 +109,8 @@ let columns = [
     let { hasErrors, setHasErrorsHistoricoDePressionCampo } = this.props
     let hasErrorNew = false
 
+    console.log(errors)
+    
     Object.keys(errors).forEach(key => {
       if (errors[key].value !== null){
         hasErrorNew = true

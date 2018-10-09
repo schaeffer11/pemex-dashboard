@@ -3,7 +3,6 @@ import autobind from 'autobind-decorator'
 import { connect } from 'react-redux'
 import moment from 'moment'
 import { InputRow, InputRowUnitless, InputRowSelectUnitless, InputDate } from '../../Common/InputRow'
-import {withValidate} from '../../Common/Validate'
 import { checkEmpty, checkDate } from '../../../../lib/errorCheckers'
 import { setHasErrorsFichaTecnicaDelCampo, setTipoDeFluidoField, setDescubrimientoField, 
   setFechaDeExplotacionField, setNumeroDePozosOperandoField, setPInicialField, setPActualField, 
@@ -205,8 +204,6 @@ let litologiaOptions = [
     let hasErrors = false
     let error 
 
-    console.log('checking all', showErrors)
-
     Object.keys(errors).forEach(elem => {
       const errObj = errors[elem]
 
@@ -362,8 +359,6 @@ let litologiaOptions = [
 
   render() {
     let { errors } = this.state
-
-    console.log(errors.fechaDeExplotacionField)
 
     return (
       <div className="form tecnica-del-campo">

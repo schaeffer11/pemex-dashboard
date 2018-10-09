@@ -271,10 +271,8 @@ let columnsApuntalado = [
   componentDidMount(){
     let { setHasErrorsHistorialDeIntervencionesDispatch, hasSubmitted } = this.props
 
-    if (hasSubmitted) {
-      let hasErrors = this.checkAllInputs()
-      setHasErrorsHistorialDeIntervencionesDispatch(hasErrors)
-    }
+    let hasErrors = this.checkAllInputs()
+    setHasErrorsHistorialDeIntervencionesDispatch(hasErrors)
   }
 
   componentDidUpdate(prevProps) {

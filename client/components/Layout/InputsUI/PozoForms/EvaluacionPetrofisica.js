@@ -112,10 +112,8 @@ let mudLossColumns = [
   componentDidMount(){
     let { setHasErrorsEvaluacionPetrofisica, hasSubmitted } = this.props
 
-    if (hasSubmitted) {
-      let hasErrors = this.checkAllInputs()
-      setHasErrorsEvaluacionPetrofisica(hasErrors)
-    }
+    let hasErrors = this.checkAllInputs()
+    setHasErrorsEvaluacionPetrofisica(hasErrors)
   }
 
   componentDidUpdate(prevProps) {

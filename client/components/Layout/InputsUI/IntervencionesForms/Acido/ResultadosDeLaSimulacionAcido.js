@@ -1,6 +1,5 @@
 import React, { Component } from 'react'
 import autobind from 'autobind-decorator'
-import {withValidate} from '../../../Common/Validate'
 import { InputRow, InputRowUnitless, InputRowSelectUnitless, TextAreaUnitless } from '../../../Common/InputRow'
 import { setHasErrorsResultadosSimulacionAcido, setEvidenceSimulationAcidoImgURL, setLongitudTotal, 
   setLongitudEfectivaGrabada, setAlturaGrabada, setAnchoPromedio, setConcentracionDelAcido, setConductividad, 

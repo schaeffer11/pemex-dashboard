@@ -131,11 +131,17 @@ let tratamientoPorOptions = [
   checkAllInputs(showErrors) {
     let { formData } = this.props
     formData = formData.toJS()
+    let { tipoDeTerminacion } = formData
     const { errors } = this.state
     let hasErrors = false
     let error 
+    let items = Object.keys(errors)
 
-    Object.keys(errors).forEach(elem => {
+    if (tipoDeTerminacion === 'Agujero Descubierto (AD)') {
+      items = items.filter(i => i !== 'tipoDePistolas' && i !== 'densidadDeDisparosMecanico' && i !== 'fase' && i !== 'diametroDeOrificio' && i !== 'penetracion')
+    }
+
+    items.forEach(elem => {
       const errObj = errors[elem]
 
       if (errObj.type === 'text' || errObj.type === 'number') {
@@ -157,17 +163,22 @@ let tratamientoPorOptions = [
   }
 
   updateErrors(errors) {
-    let { hasErrors, setHasErrorsMecanicoYAparejoDeProduccion } = this.props
-
+    let { hasErrors, setHasErrorsMecanicoYAparejoDeProduccion, formData } = this.props
+    formData = formData.toJS()
+    let { tipoDeTerminacion } = formData
     let hasErrorNew = false
+    let items = Object.keys(errors)
 
-    Object.keys(errors).forEach(key => {
+    if (tipoDeTerminacion === 'Agujero Descubierto (AD)') {
+      items = items.filter(i => i !== 'tipoDePistolas' && i !== 'densidadDeDisparosMecanico' && i !== 'fase' && i !== 'diametroDeOrificio' && i !== 'penetracion')
+    }
+
+    items.forEach(key => {
       if (errors[key].value !== null){
         hasErrorNew = true
       } 
     })
 
-    console.log('herherer', hasErrorNew, hasErrors)
     if (hasErrorNew != hasErrors) {
       setHasErrorsMecanicoYAparejoDeProduccion(hasErrorNew)
     }

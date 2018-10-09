@@ -1,7 +1,6 @@
 import React, { Component } from 'react'
 import autobind from 'autobind-decorator'
 import { InputRow, InputRowUnitless, InputRowSelectUnitless } from '../../Common/InputRow'
-import {withValidate} from '../../Common/Validate'
 import { connect } from 'react-redux'
 import AnalisisDelAguaGraph from './AnalisisDelAguaGraph'
 import { setHasErrorsAnalisisDelAgua, setWaterAnalysisBool, setPH, setTemperaturaDeConductividad, setResistividad, 

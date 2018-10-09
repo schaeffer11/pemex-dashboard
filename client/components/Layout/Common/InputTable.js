@@ -56,7 +56,9 @@ import { checkDate, checkEmpty, checkEmptySingular, checkDateSingular } from '..
         }
       })
     }
-    this.setState({ errors })
+    this.setState({ errors }, () => {
+      this.setOuterStateError()
+    })
   }
 
   getErrors(index) {
@@ -150,7 +152,7 @@ import { checkDate, checkEmpty, checkEmptySingular, checkDateSingular } from '..
 
   setOuterStateError() {
     let { data, checkForErrors } = this.props
-    let hasError = false 
+    let hasError = null 
     data.forEach(row => {
       if (row.error === true) {
         hasError = true

@@ -199,6 +199,7 @@ export const setNivelDinamico = value => ({type: 'set_nivelDinamico', value})
 export const setNivelEstatico = value => ({type: 'set_nivelEstatico', value})
 export const setSistemasArtificialesImgURL = value => ({ type: 'set_sistemasArtificialesImgURL', value})
 export const setSistemasArtificialesDeProduccion = value => ({ type: 'set_sistemasArtificialesDeProduccion', value})
+export const setHasErrorsSistemas = value => ({ type: 'set_hasErrorsSistemas', value})
 
 //HistoricoDePresion
 export const setPresionDataCampo = value => ({ type: 'set_presionDataCampo', value})

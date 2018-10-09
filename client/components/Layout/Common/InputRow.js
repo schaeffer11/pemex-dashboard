@@ -22,7 +22,6 @@ export const InputRow = ({ header, type='number', name, unit, value, onChange, o
     onChange(e.target.rawValue, e)
   }
 
-  // const errorElements = generateErrorElements(name, errors)
   value = value === null ? '' : value
   return (
     <div className='input-row' style={style}>

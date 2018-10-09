@@ -793,8 +793,6 @@ const forms = [
     let { isOpen } = this.state
     let className = 'subtab'
     let title = forms[this.state.currentStep].title
-
-    // console.log('evaluacion petrofisica has errors', evaluacionPetrofisicaHasErrors)
     
     let errors = [fichaTecnicaDelCampoHasErrors, fichaTecnicaDelPozoHasErrors, historialDeIntervencionesHasErrors, evaluacionPetrofisicaHasErrors, mecanicoYAparejoDeProduccionHasErrors, analisisDelAguaHasErrors, false, historicoDePresionCampoHasErrors, historicoDePresionPozoHasErrors, historicoDeAforosHasErrors, historicoDeProduccionHasErrors]
 
