@@ -7,9 +7,10 @@ import Select from 'react-select'
 import InputTable from '../../Common/InputTable'
 
 import { InputRow, InputRowUnitless, InputRowSelectUnitless, TextAreaUnitless } from '../../Common/InputRow'
-import {setEstimacionCostosData, setMNXtoDLS} from '../../../../redux/actions/intervencionesEstimulacion'
+import {setEstimacionCostosData, setMNXtoDLS, setHasErrorsEstCosts } from '../../../../redux/actions/intervencionesEstimulacion'
 import { costMap } from '../../../../lib/maps'
 import { sortLabels } from '../../../../lib/formatters'
+import { checkEmpty, checkDate } from '../../../../lib/errorCheckers';
 
 console.log(costMap)
 
@@ -18,24 +19,93 @@ export const itemOptions = costMap.map(i => ({
   value: i.item,
 })).sort(sortLabels)
 
-
 @autobind class EstimacionCostos extends Component {
   constructor(props) {
     super(props)
     this.state = {
       containsErrors: false,
-      errors: [],
-      checked: []
+      errors: {
+        costs: {
+          type: 'table',
+          value: '',
+        },
+      },
     }
   }
 
 
-  componentDidMount() {
+  componentDidMount(){
+    let { setHasErrorsEstCosts, hasSubmitted } = this.props
+
+    let hasErrors = this.checkAllInputs(hasSubmitted)
+    setHasErrorsEstCosts(hasErrors)
 
   }
 
   componentDidUpdate(prevProps) {
+    let { hasSubmitted } = this.props
 
+    if (hasSubmitted !== prevProps.hasSubmitted) {
+      this.checkAllInputs(true)
+    }
+  }
+
+  checkAllInputs(showErrors) {
+    let { formData } = this.props
+    formData = formData.toJS()
+    const { errors } = this.state
+    let hasErrors = false
+    let error 
+
+    Object.keys(errors).forEach(elem => {
+      const errObj = errors[elem]
+
+      if (errObj.type === 'text' || errObj.type === 'number') {
+        error = checkEmpty(formData[elem], elem, errors, this.setErrors, showErrors)
+        
+      } 
+      else if (errObj.type === 'date') {
+        error = checkDate(moment(formData[elem]).format('DD/MM/YYYY'), elem, errors, this.setErrors, showErrors)
+      }
+      else if (errObj.type === 'table') {
+        error = errObj.value === '' ? true : errObj.value
+      }
+
+      error === true ? hasErrors = true : null
+    })
+
+    return hasErrors
+  }
+
+  setErrors(errors) {
+    this.setState({ errors })
+  }
+
+  updateErrors(errors) {
+    let { hasErrors, setHasErrorsEstCosts } = this.props
+    let hasErrorNew = false
+
+    Object.keys(errors).forEach(key => {
+      if (errors[key].value !== null){
+        hasErrorNew = true
+      } 
+    })
+
+    if (hasErrorNew != hasErrors) {
+      setHasErrorsEstCosts(hasErrorNew)
+    }
+
+    this.setState({ errors })
+  }
+
+  checkForErrors(value, table) {
+    const errorsCopy = {...this.state.errors}
+    errorsCopy[table].value = value
+    this.setState({ errors: errorsCopy }, () => {
+      const { setHasErrorsEstCosts } = this.props
+      const hasErrors = this.checkAllInputs()
+      setHasErrorsEstCosts(hasErrors)
+    })
   }
 
 
@@ -57,50 +127,6 @@ export const itemOptions = costMap.map(i => ({
     );
   }
 
-  addNewRow() {
-    let { formData, setEstimacionCostosData } = this.props
-    formData = formData.toJS()
-    let { estimacionCostosData } = formData
-
-    let copy = estimacionCostosData
-    copy[0].length = 2
-
-    setEstimacionCostosData([...copy, {index: estimacionCostosData.length, item: '', cost: '', costDLS: '', MNXtoDLS: '', length: estimacionCostosData.length + 1}])
-  }
-
-
-  deleteRow(state, rowInfo, column, instance) {
-    let { formData, setEstimacionCostosData } = this.props
-    formData = formData.toJS()
-    let { estimacionCostosData } = formData
-
-    return {
-      onClick: e => {
-        if (column.id === 'delete' && estimacionCostosData.length > 1) {
-          let copy = estimacionCostosData
-          copy.splice(rowInfo.original.index, 1)
-
-          copy.forEach((i, index) => {
-            i.index = index
-            i.length = estimacionCostosData.length
-          }) 
-
-          setEstimacionCostosData(copy)
-        }
-      }
-    }
-  }
-
-  handleSelectItem(row, e) {
-    let { formData, setEstimacionCostosData } = this.props
-    formData = formData.toJS()
-    let { estimacionCostosData } = formData
-
-    estimacionCostosData[row.index].item = e
-
-    setEstimacionCostosData(estimacionCostosData)
-  }
-
   handleSelectCompany(row, e) {
     let { formData, setEstimacionCostosData } = this.props
     formData = formData.toJS()
@@ -111,13 +137,25 @@ export const itemOptions = costMap.map(i => ({
     setEstimacionCostosData(estimacionCostosData)
   }
 
-
-
   makeCostsForm() {
     let { setEstimacionCostosData, setMNXtoDLS, formData } = this.props
     formData = formData.toJS()
     let { estimacionCostosData, MNXtoDLS } = formData
+    const rowObj = {
+      fecha: null,
+      cost: '',
+      costDLS: '',
+      MNXtoDLS: '',
+      compania: '',
+      error: true,
+    }
 
+    const errors = [
+      { name: 'item', type: 'text' },
+      { name: 'cost', type: 'number' },
+      { name: 'costDLS', type: 'number' },
+      { name: 'MNXtoDLS', type: 'number' },
+    ]
     let columns = [{
       Header: '',
       accessor: 'delete',
@@ -128,26 +166,14 @@ export const itemOptions = costMap.map(i => ({
                 return (<div style={{color: 'white', background: 'red', borderRadius: '4px', textAlign: 'center', cursor: 'pointer'}}>X</div>)
               }
             }
-      }, {
+      }, 
+      {
         Header: 'Concepto',
         accessor: 'item',
-        width: 500,
-        resizable: false,
+        cell: 'renderSelect',
         style: {overflow: 'visible'},
-        Cell: row => {
-                 return (<div>
-                  <Select 
-                  placeholder='Seleccionar...'
-                  className='input' 
-                  simpleValue={true} 
-                  options={itemOptions} 
-                  value={itemOptions.find(i=>i.value === row.original.item) || null}
-                  onChange={(e) => this.handleSelectItem(row, e.value)} 
-                  name={name} 
-                />
-                </div>)
-              }
-      }, { 
+      },
+      { 
         Header: 'Unidad',
         accessor: 'unit'
       }, {
@@ -171,8 +197,6 @@ export const itemOptions = costMap.map(i => ({
       }
     ]
 
-    const objectTemplate = {}
-
     return (
       <div className='costs-form' >
         <div className='header'>
@@ -182,17 +206,17 @@ export const itemOptions = costMap.map(i => ({
           <InputTable
             className="-striped"
             data={estimacionCostosData}
-            newRow={objectTemplate}
             setData={setEstimacionCostosData}
             columns={columns}
             showPagination={false}
             showPageSizeOptions={false}
-            pageSize={estimacionCostosData.length}
             sortable={false}
-            getTdProps={this.deleteRow}
+            selectOptions={itemOptions}
+            rowObj={rowObj}
+            errorArray={errors}
+            checkForErrors={val => this.checkForErrors(val, 'costs')}
           />
         </div>
-        <button className='new-row-button' onClick={this.addNewRow}>Añadir un renglón</button>
       </div>
     )
   }
@@ -239,7 +263,8 @@ const mapStateToProps = state => ({
 const mapDispatchToProps = dispatch => ({
   setEstimacionCostosData: val => dispatch(setEstimacionCostosData(val)),
   setMNXtoDLS: val => dispatch(setMNXtoDLS(val)),
-    setChecked: values => {dispatch(setChecked(values, 'estCost'))}
+  setChecked: values => {dispatch(setChecked(values, 'estCost'))},
+  setHasErrorsEstCosts: val => dispatch(setHasErrorsEstCosts(val))
 })
 
 export default connect(mapStateToProps, mapDispatchToProps)(EstimacionCostos)

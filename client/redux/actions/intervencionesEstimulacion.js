@@ -65,7 +65,7 @@ export const setPruebasDeLaboratorioData = value => ({ type: 'set_pruebasDeLabor
 export const setEstimacionCostosData = value => ({ 
   type: 'set_estimacionCostos', 
   value: value.map(i => {
-    i.unit = i.item.length > 0 && costMap.find(j => j.item === i.item) ? costMap.find(j => j.item === i.item).unit : ''
+    i.unit = i.length > 0 && costMap.find(j => j.item === i.item) ? costMap.find(j => j.item === i.item).unit : ''
     return i
   })
 })
