@@ -2,6 +2,7 @@ import { Map, fromJS } from 'immutable'
 
 const initialState = Map({ 
     hasErrors: true,
+    fromSave: false,
     waterAnalysisBool: true,
     pH: '',
     temperaturaDeConductividad: '',
@@ -23,15 +24,15 @@ const initialState = Map({
     sulfatos: '',
     carbonatos: '',
     densidadAt15: '',
-    densidadAt20: '',
-    checked: []
+    densidadAt20: ''
 })
-
 
 const analisisDelAgua = (state = initialState, action) => {
   switch (action.type) {
     case 'set_hasErrorsAnalisisDelAgua':
       return state.set('hasErrors', fromJS(action.value))
+    case 'set_fromSaveAnalisisDelAgua':
+      return state.set('fromSave', fromJS(action.value))
     case 'set_waterAnalysisBool':
         return state.set('waterAnalysisBool', fromJS(action.value))
     case 'set_pH':

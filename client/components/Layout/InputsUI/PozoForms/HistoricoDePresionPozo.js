@@ -3,7 +3,7 @@ import { connect } from 'react-redux'
 import autobind from 'autobind-decorator'
 import ReactTable from 'react-table'
 
-import { setHasErrorsHistoricoDePressionPozo, setPresionDataPozo, setPressureDepthPozo, setChecked } from '../../../../redux/actions/pozo'
+import { setHasErrorsHistoricoDePressionPozo, setFromSaveHistoricoDePressionPozo, setPresionDataPozo, setPressureDepthPozo, setChecked } from '../../../../redux/actions/pozo'
 import InputTable from '../../Common/InputTable'
 import ExcelUpload from '../../Common/ExcelUpload'
 import { InputRow } from '../../Common/InputRow'
@@ -50,11 +50,12 @@ let columns = [
 
 
   componentDidMount(){
-    let { setHasErrorsHistoricoDePressionPozo, hasErrors, hasSubmitted } = this.props
+    let { setHasErrorsHistoricoDePressionPozo, hasErrors, hasSubmitted, fromSave, setFromSaveHistoricoDePressionPozo } = this.props
 
-    if (hasSubmitted) {
+    if (hasSubmitted || fromSave) {
       let hasErrors = this.checkAllInputs()
       setHasErrorsHistoricoDePressionPozo(hasErrors)
+      fromSave ? setFromSaveHistoricoDePressionPozo(false) : null
     }
   }
 
@@ -67,7 +68,7 @@ let columns = [
   }
 
   checkAllInputs() {
-    let { formData } = this.props
+    let { formData, fromSave } = this.props
     formData = formData.toJS()
     const { errors } = this.state
     let hasErrors = false
@@ -77,11 +78,11 @@ let columns = [
       const errObj = errors[elem]
 
       if (errObj.type === 'text' || errObj.type === 'number') {
-        error = checkEmpty(formData[elem], elem, errors, this.setErrors)
+        error = checkEmpty(formData[elem], elem, errors, this.setErrors, fromSave)
         
       } 
       else if (errObj.type === 'date') {
-        error = checkDate(moment(formData[elem]).format('DD/MM/YYYY'), elem, errors, this.setErrors)
+        error = checkDate(moment(formData[elem]).format('DD/MM/YYYY'), elem, errors, this.setErrors, fromSave)
       }
 
       error === true ? hasErrors = true : null
@@ -194,6 +195,7 @@ let columns = [
 const mapStateToProps = state => ({
   formData: state.get('historicoDePresion'),
   hasErrors: state.getIn(['historicoDePresion', 'hasErrorsPozo']),
+  fromSave: state.getIn(['historicoDePresion', 'fromSavePozo']),
   hasSubmitted: state.getIn(['global', 'hasSubmitted']),
 })
 
@@ -202,6 +204,7 @@ const mapDispatchToProps = dispatch => ({
     setChecked: val => dispatch(setChecked(val, 'historicoDePresion')),
     setPressureDepthPozo: val => dispatch(setPressureDepthPozo(val)),
     setHasErrorsHistoricoDePressionPozo: val => dispatch(setHasErrorsHistoricoDePressionPozo(val)),
+    setFromSaveHistoricoDePressionPozo: val => dispatch(setFromSaveHistoricoDePressionPozo(val)),
 })
 
 export default connect(mapStateToProps, mapDispatchToProps)(HistoricoDePresionPozo)

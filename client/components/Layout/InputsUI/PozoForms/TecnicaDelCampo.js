@@ -5,14 +5,14 @@ import moment from 'moment'
 import { InputRow, InputRowUnitless, InputRowSelectUnitless, InputDate } from '../../Common/InputRow'
 import {withValidate} from '../../Common/Validate'
 import { checkEmpty, checkDate } from '../../../../lib/errorCheckers'
-import { setHasErrorsFichaTecnicaDelCampo, setTipoDeFluidoField, setDescubrimientoField, 
+import { setHasErrorsFichaTecnicaDelCampo, setFromSaveFichaTecnicaDelCampo, setTipoDeFluidoField, setDescubrimientoField, 
   setFechaDeExplotacionField, setNumeroDePozosOperandoField, setPInicialField, setPActualField, 
   setPInicialAnoField, setPActualFechaField, setDpPerAnoField, setTyacField, setPrField, 
   setDensidadDelAceiteField, setPSatField, setRgaFluidoField, setSalinidadField, setPvtRepresentativoField, 
   setLitologiaField, setEspesorNetoField, setPorosidadField, setSwField, setKPromedioField, 
   setCaaField, setCgaField, setQoField, setQgField, setRgaField, setFwField, setNpField, 
   setGpField, setWpField, setRraField, setRrgField, setRrpceField, setH2sField, setCo2Field, 
-  setN2Field, setChecked } from '../../../../redux/actions/pozo'
+  setN2Field } from '../../../../redux/actions/pozo'
 
 let fluidoOptions = [
     { label: 'Aceite Negro', value: 'Aceite Negro' },
@@ -182,11 +182,12 @@ let litologiaOptions = [
   }
 
   componentDidMount(){
-    let { setHasErrorsFichaTecnicaDelCampo, hasErrors, hasSubmitted } = this.props
+    let { setHasErrorsFichaTecnicaDelCampo, hasErrors, hasSubmitted, fromSave, setFromSaveFichaTecnicaDelCampo } = this.props
 
-    if (hasSubmitted) {
+    if (hasSubmitted || fromSave) {
       let hasErrors = this.checkAllInputs()
       setHasErrorsFichaTecnicaDelCampo(hasErrors)
+      fromSave ? setFromSaveFichaTecnicaDelCampo(false) : null
     }
   }
 
@@ -199,7 +200,7 @@ let litologiaOptions = [
   }
 
   checkAllInputs() {
-    let { formData } = this.props
+    let { formData, fromSave } = this.props
     formData = formData.toJS()
     const { errors } = this.state
     let hasErrors = false
@@ -209,11 +210,11 @@ let litologiaOptions = [
       const errObj = errors[elem]
 
       if (errObj.type === 'text' || errObj.type === 'number') {
-        error = checkEmpty(formData[elem], elem, errors, this.setErrors)
+        error = checkEmpty(formData[elem], elem, errors, this.setErrors, fromSave)
         
       } 
       else if (errObj.type === 'date') {
-        error = checkDate(moment(formData[elem]).format('DD/MM/YYYY'), elem, errors, this.setErrors)
+        error = checkDate(moment(formData[elem]).format('DD/MM/YYYY'), elem, errors, this.setErrors, fromSave)
       }
 
       error === true ? hasErrors = true : null
@@ -385,6 +386,7 @@ let litologiaOptions = [
 const mapStateToProps = state => ({
   formData: state.get('fichaTecnicaDelCampo'),
   hasErrors: state.getIn(['fichaTecnicaDelCampo', 'hasErrors']),
+  fromSave: state.getIn(['fichaTecnicaDelCampo', 'fromSave']),
   hasSubmitted: state.getIn(['global', 'hasSubmitted']),
 })
 
@@ -426,6 +428,7 @@ const mapDispatchToProps = dispatch => ({
   setN2Field: val => dispatch(setN2Field(val)),
   setTipoDeFluidoField: val => dispatch(setTipoDeFluidoField(val)),
   setHasErrorsFichaTecnicaDelCampo: val => dispatch(setHasErrorsFichaTecnicaDelCampo(val)),
+  setFromSaveFichaTecnicaDelCampo: val => dispatch(setFromSaveFichaTecnicaDelCampo(val)),
 })
 
 export default connect(mapStateToProps, mapDispatchToProps)(TecnicaDelCampo)

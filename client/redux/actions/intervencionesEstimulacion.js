@@ -3,6 +3,7 @@ import { costMap } from '../../lib/maps'
 export const setHasErrorsPropuestaEstimulacion = value => ({ type: 'set_hasErrorsPropuestaEstimulacion', value})
 export const setHasErrorsResultadosSimulacionEstimulacion = value => ({ type: 'set_hasErrorsResultadosSimulacionEstimulacion', value})
 export const setHasErrorsEstIncProduccionEstimulacion = value => ({ type: 'set_hasErrorsEstIncProduccionEstimulacion', value})
+export const setFromSaveEstIncProduccionEstimulacion = value => ({ type: 'set_fromSaveEstIncProduccionEstimulacion', value})
 
 export const setObjetivo = value => ({ type: 'set_objetivo', value})
 export const setAlcances = value => ({ type: 'set_alcances', value})

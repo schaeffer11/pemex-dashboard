@@ -8,10 +8,10 @@ import DatePicker from 'react-datepicker'
 import { checkEmpty, checkDate } from '../../../../lib/errorCheckers'
 import InputTable from '../../Common/InputTable'
 import { InputRow, InputRowUnitless, InputRowSelectUnitless, InputDate } from '../../Common/InputRow'
-import { setHasErrorsFichaTecnicaDelPozo, setTipoDeSistemo, setHistorialIntervencionesData, setEspesorBruto, 
+import { setHasErrorsFichaTecnicaDelPozo, setFromSaveFichaTecnicaDelPozo, setTipoDeSistemo, setHistorialIntervencionesData, setEspesorBruto, 
   setCaliza, setDolomia, setArcilla, setPorosidad, setPermeabilidad, setSw, setCaa, setCga, setTipoDePozo, 
   setPws, setPwf, setPwsFecha, setPwfFecha, setDeltaPPerMes, setTyac, setPvt, setAparejoDeProduccion, 
-  setProfEmpacador, setProfSensorPYT, setTipoDeSap, formData, setChecked } from '../../../../redux/actions/pozo'
+  setProfEmpacador, setProfSensorPYT, setTipoDeSap, formData } from '../../../../redux/actions/pozo'
 
 @autobind class TechnicaDelPozo extends Component {
   constructor(props) {
@@ -100,7 +100,7 @@ import { setHasErrorsFichaTecnicaDelPozo, setTipoDeSistemo, setHistorialInterven
   }
 
   componentDidMount(){
-    let { setHasErrorsFichaTecnicaDelPozo, hasErrors, hasSubmitted } = this.props
+    let { setHasErrorsFichaTecnicaDelPozo, hasErrors, hasSubmitted, fromSave, setFromSaveFichaTecnicaDelPozo } = this.props
 
     const { token } = this.props
     const headers = {
@@ -110,9 +110,10 @@ import { setHasErrorsFichaTecnicaDelPozo, setTipoDeSistemo, setHistorialInterven
       },
     }
 
-    if (hasSubmitted) {
+    if (hasSubmitted || fromSave) {
       let hasErrors = this.checkAllInputs()
       setHasErrorsFichaTecnicaDelPozo(hasErrors)
+      fromSave ? setFromSaveFichaTecnicaDelPozo(false) : null
     }
 
      fetch('/api/getFieldWellMapping', headers)
@@ -135,7 +136,7 @@ import { setHasErrorsFichaTecnicaDelPozo, setTipoDeSistemo, setHistorialInterven
 
 
   checkAllInputs() {
-    let { formData } = this.props
+    let { formData, fromSave } = this.props
     formData = formData.toJS()
     const { errors } = this.state
     let hasErrors = false
@@ -145,11 +146,11 @@ import { setHasErrorsFichaTecnicaDelPozo, setTipoDeSistemo, setHistorialInterven
       const errObj = errors[elem]
 
       if (errObj.type === 'text' || errObj.type === 'number') {
-        error = checkEmpty(formData[elem], elem, errors, this.setErrors)
+        error = checkEmpty(formData[elem], elem, errors, this.setErrors, fromSave)
         
       } 
       else if (errObj.type === 'date') {
-        error = checkDate(moment(formData[elem]).format('DD/MM/YYYY'), elem, errors, this.setErrors)
+        error = checkDate(moment(formData[elem]).format('DD/MM/YYYY'), elem, errors, this.setErrors, fromSave)
       }
 
       error === true ? hasErrors = true : null
@@ -340,6 +341,7 @@ import { setHasErrorsFichaTecnicaDelPozo, setTipoDeSistemo, setHistorialInterven
 const mapStateToProps = state => ({
   formData: state.get('fichaTecnicaDelPozo'),
   hasErrors: state.getIn(['fichaTecnicaDelPozo', 'hasErrors']),
+  fromSave: state.getIn(['fichaTecnicaDelPozo', 'fromSave']),
   hasSubmitted: state.getIn(['global', 'hasSubmitted']),
   generalData: state.get('fichaTecnicaDelPozoHighLevel'),
   tipoDeSistemo: state.getIn(['sistemasArtificialesDeProduccion', 'tipoDeSistemo']),
@@ -370,6 +372,7 @@ const mapDispatchToProps = dispatch => ({
   setTipoDeSistemo: val => dispatch(setTipoDeSistemo(val)),
   setHistorialIntervencionesData: val => dispatch(setHistorialIntervencionesData(val)),
   setHasErrorsFichaTecnicaDelPozo: val => dispatch(setHasErrorsFichaTecnicaDelPozo(val)),
+  setFromSaveFichaTecnicaDelPozo: val => dispatch(setFromSaveFichaTecnicaDelPozo(val)),
 })
 
 export default connect(mapStateToProps, mapDispatchToProps)(TechnicaDelPozo)

@@ -1,6 +1,7 @@
 export const setHasErrorsPropuestaAcido = value => ({ type: 'set_hasErrorsPropuestaAcido', value})
 export const setHasErrorsResultadosSimulacionAcido = value => ({ type: 'set_hasErrorsResultadosSimulacionAcido', value})
 export const setHasErrorsEstIncProduccionAcido = value => ({ type: 'set_hasErrorsEstIncProduccionAcido', value})
+export const setFromSaveEstIncProduccionAcido = value => ({ type: 'set_fromSaveEstIncProduccionAcido', value})
 
 export const setIntervalo = value => ({ type: 'set_intervalo', value})
 export const setLongitudDeIntervalo = value => ({ type: 'set_longitudDeIntervalo', value})

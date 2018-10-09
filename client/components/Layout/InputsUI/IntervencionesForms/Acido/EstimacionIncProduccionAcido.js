@@ -3,10 +3,10 @@ import autobind from 'autobind-decorator'
 import { connect } from 'react-redux'
 
 import { InputRow, InputRowUnitless, InputRowSelectUnitless, TextAreaUnitless } from '../../../Common/InputRow'
-import { setHasErrorsEstIncProduccionAcido, setEstIncProdAcidoImgURL, setEstIncEstrangulador, 
+import { setHasErrorsEstIncProduccionAcido, setFromSaveEstIncProduccionAcido, setEstIncProdAcidoImgURL, setEstIncEstrangulador, 
   setEstIncPtp, setEstIncTtp, setEstIncPbaj, setEstIncTbaj, setEstIncPtr, setEstIncQl, setEstIncQo, 
   setEstIncQg, setEstIncQw, setEstIncRGA, setEstIncSalinidad, setEstIncIP, setEstIncDeltaP, 
-  setEstIncGastoCompromisoQo, setEstIncGastoCompromisoQg, setObervacionesEstIncAcido, setChecked } from '../../../../../redux/actions/intervencionesAcido'
+  setEstIncGastoCompromisoQo, setEstIncGastoCompromisoQg, setObervacionesEstIncAcido } from '../../../../../redux/actions/intervencionesAcido'
 import { checkEmpty, checkDate } from '../../../../../lib/errorCheckers'
 
 @autobind class EstimacionIncProduccionAcido extends Component {
@@ -87,11 +87,12 @@ import { checkEmpty, checkDate } from '../../../../../lib/errorCheckers'
   }
 
   componentDidMount(){
-    let { setHasErrorsEstIncProduccionAcido, hasErrors, hasSubmitted } = this.props
+    let { setHasErrorsEstIncProduccionAcido, hasErrors, hasSubmitted, fromSave, setFromSaveEstIncProduccionAcido } = this.props
 
-    if (hasSubmitted) {
+    if (hasSubmitted || fromSave) {
       let hasErrors = this.checkAllInputs()
       setHasErrorsEstIncProduccionAcido(hasErrors)
+      fromSave ? setFromSaveEstIncProduccionAcido(false) : null
     }
   }
 
@@ -104,7 +105,7 @@ import { checkEmpty, checkDate } from '../../../../../lib/errorCheckers'
   }
 
   checkAllInputs() {
-    let { formData } = this.props
+    let { formData, fromSave } = this.props
     formData = formData.toJS()
     const { errors } = this.state
     let hasErrors = false
@@ -114,11 +115,11 @@ import { checkEmpty, checkDate } from '../../../../../lib/errorCheckers'
       const errObj = errors[elem]
 
       if (errObj.type === 'text' || errObj.type === 'number') {
-        error = checkEmpty(formData[elem], elem, errors, this.setErrors)
+        error = checkEmpty(formData[elem], elem, errors, this.setErrors, fromSave)
         
       } 
       else if (errObj.type === 'date') {
-        error = checkDate(moment(formData[elem]).format('DD/MM/YYYY'), elem, errors, this.setErrors)
+        error = checkDate(moment(formData[elem]).format('DD/MM/YYYY'), elem, errors, this.setErrors, fromSave)
       }
 
       error === true ? hasErrors = true : null
@@ -254,6 +255,7 @@ import { checkEmpty, checkDate } from '../../../../../lib/errorCheckers'
 const mapStateToProps = state => ({
   formData: state.get('estIncProduccionAcido'),
   hasErrors: state.getIn(['estIncProduccionAcido', 'hasErrors']),
+  fromSave: state.getIn(['estIncProduccionAcido', 'fromSave']),
   hasSubmitted: state.getIn(['global', 'hasSubmitted']),
 })
 
@@ -277,7 +279,7 @@ const mapDispatchToProps = dispatch => ({
   setObervacionesEstIncAcido: val => dispatch(setObervacionesEstIncAcido(val)),
   setEstIncProdAcidoImgURL: val => dispatch(setEstIncProdAcidoImgURL(val)),
   setHasErrorsEstIncProduccionAcido: val => dispatch(setHasErrorsEstIncProduccionAcido(val)),
-
+  setFromSaveEstIncProduccionAcido: val => dispatch(setFromSaveEstIncProduccionAcido(val)),
 })
 
 export default connect(mapStateToProps, mapDispatchToProps)(EstimacionIncProduccionAcido)

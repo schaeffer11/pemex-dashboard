@@ -45,6 +45,7 @@ export const setCo2Field = value => ({ type: 'set_co2Field', value})
 export const setN2Field = value => ({ type: 'set_n2Field', value})
 export const setFichaTecnicaDelCampo = value => ({ type: 'set_fichaTecnicaDelCampo', value})
 export const setHasErrorsFichaTecnicaDelCampo = value => ({ type: 'set_hasErrorsFichaTecnicaDelCampo', value})
+export const setFromSaveFichaTecnicaDelCampo = value => ({ type: 'set_fromSaveFichaTecnicaDelCampo', value})
 
 //HistorialDeIntervenciones
 export const setHistoricoEstimulacionData = value => ({ type: 'set_historicoEstimulacionData', value})
@@ -87,6 +88,7 @@ export const setIntervalos = value => ({
 })
 export const setFichaTecnicaDelPozo = value => ({ type: 'set_fichaTecnicaDelPozo', value})
 export const setHasErrorsFichaTecnicaDelPozo = value => ({ type: 'set_hasErrorsFichaTecnicaDelPozo', value})
+export const setFromSaveFichaTecnicaDelPozo = value => ({ type: 'set_fromSaveFichaTecnicaDelPozo', value})
 
 //EvaluacionPetrofisica
 export const setLayerData = value => ({
@@ -127,6 +129,7 @@ export const setImgBoreDiagramURL = value => ({ type: 'set_imgBoreDiagramURL', v
 export const setImgAparejoDeProduccionURL = value => ({ type: 'set_imgAparejoDeProduccionURL', value})
 export const setMecanicoYAparejoDeProduccion = value => ({ type: 'set_mecanicoYAparejoDeProduccion', value})
 export const setHasErrorsMecanicoYAparejoDeProduccion = value => ({ type: 'set_hasErrorsMecanicoYAparejoDeProduccion', value})
+export const setFromSaveMecanicoYAparejoDeProduccion = value => ({ type: 'set_fromSaveMecanicoYAparejoDeProduccion', value})
 
 
 //AnalisisDelAgua
@@ -154,6 +157,7 @@ export const setDensidadAt15 = value => ({ type: 'set_densidadAt15', value})
 export const setDensidadAt20 = value => ({ type: 'set_densidadAt20', value})
 export const setAnalisisDelAgua = value => ({ type: 'set_analisisDelAgua', value})
 export const setHasErrorsAnalisisDelAgua = value => ({ type: 'set_hasErrorsAnalisisDelAgua', value})
+export const setFromSaveAnalisisDelAgua = value => ({ type: 'set_fromSaveAnalisisDelAgua', value})
 
 //InformacionDeSistemasArtificialsDeProduccion
 export const setTipoDeSistemo = value => ({ type: 'set_tipoDeSistemo', value})
@@ -208,6 +212,8 @@ export const setPressureDepthPozo = value => ({ type: 'set_pressureDepthPozo', v
 export const setPressureDepthCampo = value => ({ type: 'set_pressureDepthCampo', value})
 export const setHasErrorsHistoricoDePressionCampo = value => ({ type: 'set_hasErrorsHistoricoDePresionCampo', value})
 export const setHasErrorsHistoricoDePressionPozo = value => ({ type: 'set_hasErrorsHistoricoDePresionPozo', value})
+export const setFromSaveHistoricoDePressionCampo = value => ({ type: 'set_fromSaveHistoricoDePresionCampo', value})
+export const setFromSaveHistoricoDePressionPozo = value => ({ type: 'set_fromSaveHistoricoDePresionPozo', value})
 
 //HistoricoDeAforos
 export const setAforosData = value => ({ type: 'set_aforosData', value})

@@ -3,7 +3,7 @@ import autobind from 'autobind-decorator'
 import { connect } from 'react-redux'
 
 import { InputRow, InputRowUnitless, InputRowSelectUnitless, TextAreaUnitless } from '../../../Common/InputRow'
-import { setHasErrorsEstIncProduccionApuntalado, setEstIncProdApuntaladoImgURL, setEstIncEstrangulador, setEstIncPtp, 
+import { setHasErrorsEstIncProduccionApuntalado, setFromSaveEstIncProduccionApuntalado, setEstIncProdApuntaladoImgURL, setEstIncEstrangulador, setEstIncPtp, 
   setEstIncTtp, setEstIncPbaj, setEstIncTbaj, setEstIncPtr, setEstIncQl, setEstIncQo, setEstIncQg, setEstIncQw, 
   setEstIncRGA, setEstIncSalinidad, setEstIncIP, setEstIncDeltaP, setEstIncGastoCompromisoQo, setEstIncGastoCompromisoQg, 
   setObervacionesEstIncApuntalado } from '../../../../../redux/actions/intervencionesApuntalado'
@@ -87,11 +87,12 @@ import { checkEmpty, checkDate } from '../../../../../lib/errorCheckers'
   }
 
  componentDidMount(){
-    let { setHasErrorsEstIncProduccionApuntalado, hasErrors, hasSubmitted } = this.props
+    let { setHasErrorsEstIncProduccionApuntalado, hasErrors, hasSubmitted, fromSave, setFromSaveEstIncProduccionApuntalado } = this.props
 
-    if (hasSubmitted) {
+    if (hasSubmitted || fromSave) {
       let hasErrors = this.checkAllInputs()
       setHasErrorsEstIncProduccionApuntalado(hasErrors)
+      fromSave ? setFromSaveEstIncProduccionApuntalado(false) : null
     }
   }
 
@@ -104,7 +105,7 @@ import { checkEmpty, checkDate } from '../../../../../lib/errorCheckers'
   }
 
   checkAllInputs() {
-    let { formData } = this.props
+    let { formData, fromSave } = this.props
     formData = formData.toJS()
     const { errors } = this.state
     let hasErrors = false
@@ -114,11 +115,11 @@ import { checkEmpty, checkDate } from '../../../../../lib/errorCheckers'
       const errObj = errors[elem]
 
       if (errObj.type === 'text' || errObj.type === 'number') {
-        error = checkEmpty(formData[elem], elem, errors, this.setErrors)
+        error = checkEmpty(formData[elem], elem, errors, this.setErrors, fromSave)
         
       } 
       else if (errObj.type === 'date') {
-        error = checkDate(moment(formData[elem]).format('DD/MM/YYYY'), elem, errors, this.setErrors)
+        error = checkDate(moment(formData[elem]).format('DD/MM/YYYY'), elem, errors, this.setErrors, fromSave)
       }
 
       error === true ? hasErrors = true : null
@@ -253,6 +254,7 @@ import { checkEmpty, checkDate } from '../../../../../lib/errorCheckers'
 const mapStateToProps = state => ({
   formData: state.get('estIncProduccionApuntalado'),
   hasErrors: state.getIn(['estIncProduccionApuntalado', 'hasErrors']),
+  fromSave: state.getIn(['estIncProduccionApuntalado', 'fromSave']),
   hasSubmitted: state.getIn(['global', 'hasSubmitted']),
 })
 
@@ -276,6 +278,7 @@ const mapDispatchToProps = dispatch => ({
   setObervacionesEstIncApuntalado: val => dispatch(setObervacionesEstIncApuntalado(val)),
   setEstIncProdApuntaladoImgURL: val => dispatch(setEstIncProdApuntaladoImgURL(val)),
   setHasErrorsEstIncProduccionApuntalado: val => dispatch(setHasErrorsEstIncProduccionApuntalado(val)),
+  setFromSaveEstIncProduccionApuntalado: val => dispatch(setFromSaveEstIncProduccionApuntalado(val)),
 })
 
 export default connect(mapStateToProps, mapDispatchToProps)(EstimacionIncProduccionApuntalado)
