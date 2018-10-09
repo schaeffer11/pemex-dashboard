@@ -151,6 +151,9 @@ import { setHasErrorsFichaTecnicaDelPozo, setTipoDeSistemo, setHistorialInterven
       else if (errObj.type === 'date') {
         error = checkDate(moment(formData[elem]).format('DD/MM/YYYY'), elem, errors, this.setErrors, showErrors)
       }
+      else if (errObj.type === 'table') {
+        error = errObj.value === '' ? true : errObj.value
+      }
       error === true ? hasErrors = true : null
     })
     return hasErrors
@@ -159,16 +162,6 @@ import { setHasErrorsFichaTecnicaDelPozo, setTipoDeSistemo, setHistorialInterven
   setErrors(errors) {
     this.setState({ errors })
   }
-
-  // checkForErrors(value) {
-  //   let { hasErrors, setHasErrorsFichaTecnicaDelPozo } = this.props
-  //   const errorsCopy = {...this.state.errors}
-  //   errorsCopy.table.value = value
-  //   if (value !== hasErrors) {
-  //     setHasErrorsFichaTecnicaDelPozo(value)
-  //   }
-  //   this.setState({ errors: errorsCopy })
-  // }
 
   checkForErrors(value, table) {
     const errorsCopy = {...this.state.errors}
