@@ -20,6 +20,7 @@ const initialState = fromJS({
         gi: '',
         rga: '',
         fw: '',
+        error: true,
     }],
 })
 

@@ -43,6 +43,10 @@ let columns = [
         pressureDepthPozo: {
           type: 'number',
           value: '',
+        },
+        table: {
+          value: '',
+          type: 'table',
         }
       }
     }
@@ -82,6 +86,9 @@ let columns = [
       else if (errObj.type === 'date') {
         error = checkDate(moment(formData[elem]).format('DD/MM/YYYY'), elem, errors, this.setErrors, showErrors)
       }
+      else if (errObj.type === 'table') {
+        error = errObj.value === '' ? true : errObj.value
+      }
 
       error === true ? hasErrors = true : null
     })
@@ -108,6 +115,17 @@ let columns = [
     }
 
     this.setState({ errors })
+  }
+
+  checkForErrors(value) {
+    const errorsCopy = {...this.state.errors}
+    errorsCopy.table.value = value
+    this.setState({ errors: errorsCopy }, () => {
+      const { setHasErrorsHistoricoDePressionPozo } = this.props
+      const hasErrors = this.checkAllInputs()
+      console.log('has errors', hasErrors)
+      setHasErrorsHistoricoDePressionPozo(hasErrors)
+    })
   }
   
 
@@ -143,15 +161,48 @@ let columns = [
     }
   }
 
-  render() {
-    let { formData, setPresionDataPozo, setPressureDepthPozo } = this.props
+  makeHistoricoDePresionTable() {
+    let { formData, setPresionDataPozo, hasSubmitted } = this.props
     formData = formData.toJS()
-    let { presionDataPozo, pressureDepthPozo } = formData
+    let { presionDataPozo } = formData
+    console.log('hola', presionDataPozo)
+    const rowObj = {
+      fecha: null,
+      Pws: '',
+      Pwf: '',
+      error: true,
+    }
+    const errors = [
+      { name: 'fecha', type: 'date' },
+      { name: 'Pws', type: 'number' },
+      { name: 'Pwf', type: 'number' },
+    ]
+    return(
+     <div className='presion-table'>
+        <div className='table-select'>
+          <InputTable
+            className="-striped"
+            data={presionDataPozo}
+            setData={setPresionDataPozo}
+            columns={columns}
+            showPagination={false}
+            showPageSizeOptions={false}
+            sortable={false}
+            rowObj={rowObj}
+            errorArray={errors}
+            checkForErrors={this.checkForErrors}
+            hasSubmitted={hasSubmitted}
+          />
+        </div>
+      </div>
+    )
+  }
 
-    const objectTemplate = {fecha: null, Pws: '', Pwf: ''}
-
+  render() {
+    let { formData, setPressureDepthPozo } = this.props
+    formData = formData.toJS()
+    let { pressureDepthPozo } = formData
     return (
-
       <div className='historico-presion' >
         <div className='image'/>
         <div className="inputs">
@@ -167,23 +218,7 @@ let columns = [
           <div className='depth'>
             <InputRow header="Plano de Referencia" name='pressureDepthPozo' value={pressureDepthPozo} onChange={setPressureDepthPozo} unit={'md'} onBlur={this.updateErrors} errors={this.state.errors}  />
           </div>
-          <div className='presion-table'>
-            <div className='table-select'>
-              <InputTable
-                className="-striped"
-                data={presionDataPozo}
-                newRow={objectTemplate}
-                setData={setPresionDataPozo}
-                columns={columns}
-                showPagination={false}
-                showPageSizeOptions={false}
-                pageSize={presionDataPozo.length}
-                sortable={false}
-                getTdProps={this.deleteRow}
-              />
-            </div>
-            <button className='new-row-button' onClick={this.addNewRow}>Añadir un renglón</button>
-          </div>
+          {this.makeHistoricoDePresionTable()}
         </div>
       </div>
     )

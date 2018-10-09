@@ -8,7 +8,6 @@ import {withValidate} from '../../Common/Validate'
 import ExcelUpload from '../../Common/ExcelUpload'
 import { setHasErrorsHistoricoDeProduccion, setProduccionData, setChecked, setHistoricoProduccionLocal } from '../../../../redux/actions/pozo'
 import InputTable from '../../Common/InputTable'
-import InputTable2 from '../../Common/InputTable2'
 import ReactHighCharts from 'react-highcharts'
 
 let config = {
@@ -276,13 +275,9 @@ let columns = [
     let { hasErrors, setHasErrorsHistoricoDeProduccion } = this.props
     const errorsCopy = {...this.state.errors}
     errorsCopy.table.value = value
-
-
     if (value !== hasErrors) {
       setHasErrorsHistoricoDeProduccion(value)
     }
-
-
     this.setState({ errors: errorsCopy })
   }
 
@@ -328,14 +323,8 @@ let columns = [
   render() {
     let { formData } = this.props
     let { errors } = this.state
-
-
     console.log(errors)
-
-
-
     formData = formData.toJS()
-
     return (
       <div className="form historico-de-produccion">
         <ExcelUpload

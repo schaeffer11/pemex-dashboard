@@ -1,12 +1,9 @@
 import React, { Component } from 'react'
 import { connect } from 'react-redux'
 import autobind from 'autobind-decorator'
-import ReactTable from 'react-table'
-
-import {withValidate} from '../../Common/Validate'
-import { setHistoricoEstimulacionData, setHistoricoAcidoData, setHistoricoApuntaladoData } from '../../../../redux/actions/pozo'
+import { setHistoricoEstimulacionData, setHistoricoAcidoData, setHistoricoApuntaladoData, setHasErrorsHistorialDeIntervenciones } from '../../../../redux/actions/pozo'
 import InputTable from '../../Common/InputTable'
-import { InputRow } from '../../Common/InputRow'
+import { checkDate, checkEmpty } from '../../../../lib/errorCheckers'
 
 let columnsEstimulacion = [
   {
@@ -169,9 +166,6 @@ let columnsAcido = [
   }
 ]
 
-
-
-
 let columnsApuntalado = [
   {
     Header: '',
@@ -257,69 +251,88 @@ let columnsApuntalado = [
   constructor(props) {
     super(props)
     this.state = { 
-
+      errors: {
+        apuntaladoTable: {
+          value: '',
+          type: 'table',
+        },
+        acidoTable: {
+          value: '',
+          type: 'table',
+        },
+        estimulacionTable: {
+          value: '',
+          type: 'table',
+        },
+      },
     }
   }
 
   componentDidMount(){
+    let { setHasErrorsHistorialDeIntervencionesDispatch, hasSubmitted } = this.props
 
-  }
-
-
-
- addNewRowApuntalado() {
-    let { formData, setHistoricoApuntaladoData } = this.props
-    formData = formData.toJS()
-    let { historicoApuntaladoData } = formData
-
-    historicoApuntaladoData[0].length = 2
-
-    setHistoricoApuntaladoData([...historicoApuntaladoData, {index: historicoApuntaladoData.length,  fecha: null,
-        tipoDeTratamiento: '',
-        objetivo: '',
-        compania: '',
-        cima: '',
-        base: '',
-        longitudApuntalada: '',
-        alturaTotalDeFractura: '',
-        anchoPromedio: '',
-        concentracionAreal: '',
-        conductividad: '',
-        fcd: '',
-        presionNeta: '',
-        fluidoFractura: '',
-        beneficioProgramado: '',
-        beneficioOficial: '', length: historicoApuntaladoData.length + 1, 'edited': false}])
-  }
-
-
-  deleteRowApuntalado(state, rowInfo, column, instance) {
-    let { formData, setHistoricoApuntaladoData } = this.props
-    formData = formData.toJS()
-    let { historicoApuntaladoData } = formData
-
-    return {
-      onClick: e => {
-        if (column.id === 'delete' && historicoApuntaladoData.length > 1) {
-          historicoApuntaladoData.splice(rowInfo.original.index, 1)
-
-          historicoApuntaladoData.forEach((i, index) => {
-            i.index = index
-            i.length = historicoApuntaladoData.length
-          }) 
-
-          setHistoricoApuntaladoData(historicoApuntaladoData)
-        }
-      }
+    if (hasSubmitted) {
+      let hasErrors = this.checkAllInputs()
+      setHasErrorsHistorialDeIntervencionesDispatch(hasErrors)
     }
   }
 
+  componentDidUpdate(prevProps) {
+    let { hasSubmitted } = this.props
+
+    if (hasSubmitted !== prevProps.hasSubmitted) {
+      this.checkAllInputs()
+    }
+  }
+
+  checkAllInputs() {
+    let { formData } = this.props
+    formData = formData.toJS()
+    const { errors } = this.state
+    let hasErrors = false
+    let error 
+
+    Object.keys(errors).forEach(elem => {
+      const errObj = errors[elem]
+      if (errObj.type === 'text' || errObj.type === 'number') {
+        error = checkEmpty(formData[elem], elem, errors, this.setErrors)
+      } 
+      else if (errObj.type === 'date') {
+        error = checkDate(moment(formData[elem]).format('DD/MM/YYYY'), elem, errors, this.setErrors)
+      }
+      else if (errObj.type === 'table') {
+        error = errObj.value === '' ? true : errObj.value
+      }
+
+      error === true ? hasErrors = true : null
+    })
+    return hasErrors
+  }
+
+  setErrors(errors) {
+    this.setState({ errors })
+  }
+
+  
+  checkForErrors(value, table) {
+    const errorsCopy = {...this.state.errors}
+    errorsCopy[table].value = value
+    // const has
+    this.setState({ errors: errorsCopy }, () => {
+      const { setHasErrorsHistorialDeIntervencionesDispatch } = this.props
+      const hasErrors = this.checkAllInputs()
+      console.log('do i have errors?', hasErrors)
+      setHasErrorsHistorialDeIntervencionesDispatch(hasErrors)
+    })
+  }
+
   makeApuntaladoTable() {
-    let { formData, setHistoricoApuntaladoData } = this.props
+    let { formData, setHistoricoApuntaladoData, hasSubmitted } = this.props
     formData = formData.toJS()
     let { historicoApuntaladoData } = formData
 
-    const objectTemplate = { fecha: null,
+    const rowObj = {
+        fecha: null,
         tipoDeTratamiento: '',
         objetivo: '',
         compania: '',
@@ -334,7 +347,28 @@ let columnsApuntalado = [
         presionNeta: '',
         fluidoFractura: '',
         beneficioProgramado: '',
-        beneficioOficial: ''}
+        beneficioOficial: '',
+        error: true,
+      }
+
+      const errors = [
+        { name: 'fecha', type: 'date' },
+        { name: 'tipoDeTratamiento', type: 'number' },
+        { name: 'objetivo', type: 'number' },
+        { name: 'compania', type: 'number' },
+        { name: 'cima', type: 'number' },
+        { name: 'base', type: 'number' },
+        { name: 'longitudApuntalada', type: 'number' },
+        { name: 'alturaTotalDeFractura', type: 'number' },
+        { name: 'anchoPromedio', type: 'number' },
+        { name: 'concentracionAreal', type: 'number' },
+        { name: 'conductividad', type: 'number' },
+        { name: 'fcd', type: 'number' },
+        { name: 'presionNeta', type: 'number' },
+        { name: 'fluidoFractura', type: 'number' },
+        { name: 'beneficioProgramado', type: 'number' },
+        { name: 'beneficioOficial', type: 'number' },
+      ]
 
     return (
       <div className='presion-table'>
@@ -345,93 +379,60 @@ let columnsApuntalado = [
           <InputTable
             className="-striped"
             data={historicoApuntaladoData}
-            newRow={objectTemplate}
             setData={setHistoricoApuntaladoData}
             columns={columnsApuntalado}
             showPagination={false}
             showPageSizeOptions={false}
-            pageSize={historicoApuntaladoData.length}
             sortable={false}
-            getTdProps={this.deleteRowApuntalado}
+            rowObj={rowObj}
+            errorArray={errors}
+            checkForErrors={val => this.checkForErrors(val, 'apuntaladoTable')}
+            hasSubmitted={hasSubmitted}
           />
         </div>
-
-        <button className='new-row-button' style={{ marginBottom: '50px' }}onClick={this.addNewRowApuntalado}>Añadir un renglón</button>
       </div>
       )
   }
 
-
-
-
-
-
- addNewRowAcido() {
-    let { formData, setHistoricoAcidoData } = this.props
-    formData = formData.toJS()
-    let { historicoAcidoData } = formData
-
-    historicoAcidoData[0].length = 2
-
-    setHistoricoAcidoData([...historicoAcidoData, {index: historicoAcidoData.length, fecha: null,
-        tipoDeTratamiento: '',
-        objetivo: '',
-        compania: '',
-        base: '',
-        cima: '',
-        longitudGravada: '',
-        alturaGravada: '',
-        anchoGravado: '',
-        conductividad: '',
-        fcd: '',
-        presionNeta: '',
-        fluidoFractura: '',
-        beneficioProgramado: '',
-        beneficioOficial: '', length: historicoAcidoData.length + 1, 'edited': false}])
-  }
-
-
-  deleteRowAcido(state, rowInfo, column, instance) {
-    let { formData, setHistoricoAcidoData } = this.props
-    formData = formData.toJS()
-    let { historicoAcidoData } = formData
-
-    return {
-      onClick: e => {
-        if (column.id === 'delete' && historicoAcidoData.length > 1) {
-          historicoAcidoData.splice(rowInfo.original.index, 1)
-
-          historicoAcidoData.forEach((i, index) => {
-            i.index = index
-            i.length = historicoAcidoData.length
-          }) 
-
-          setHistoricoAcidoData(historicoAcidoData)
-        }
-      }
-    }
-  }
-
   makeAcidoTable() {
-    let { formData, setHistoricoAcidoData } = this.props
+    let { formData, setHistoricoAcidoData, hasSubmitted } = this.props
     formData = formData.toJS()
     let { historicoAcidoData } = formData
-
-    const objectTemplate = {fecha: null, fecha: null,
-        tipoDeTratamiento: '',
-        objetivo: '',
-        compania: '',
-        base: '',
-        cima: '',
-        longitudGravada: '',
-        alturaGravada: '',
-        anchoGravado: '',
-        conductividad: '',
-        fcd: '',
-        presionNeta: '',
-        fluidoFractura: '',
-        beneficioProgramado: '',
-        beneficioOficial: ''}
+    const rowObj = {
+      fecha: null,
+      tipoDeTratamiento: '',
+      objetivo: '',
+      compania: '',
+      base: '',
+      cima: '',
+      longitudGravada: '',
+      alturaGravada: '',
+      anchoGravado: '',
+      conductividad: '',
+      fcd: '',
+      presionNeta: '',
+      fluidoFractura: '',
+      beneficioProgramado: '',
+      beneficioOficial: '',
+      error: true,
+    }
+    const errors = [
+      { name: 'fecha', type: 'date' },
+      { name: 'tipoDeTratamiento', type: 'number' },
+      { name: 'objetivo', type: 'number' },
+      { name: 'compania', type: 'number' },
+      { name: 'base', type: 'number' },
+      { name: 'cima', type: 'number' },
+      { name: 'longitudGravada', type: 'number' },
+      { name: 'alturaGravada', type: 'number' },
+      { name: 'anchoGravado', type: 'number' },
+      { name: 'conductividad', type: 'number' },
+      { name: 'fcd', type: 'number' },
+      { name: 'presionNeta', type: 'number' },
+      { name: 'fluidoFractura', type: 'number' },
+      { name: 'beneficioProgramado', type: 'number' },
+      { name: 'beneficioOficial', type: 'number' },
+    ]
 
     return (
       <div className='presion-table'>
@@ -442,91 +443,56 @@ let columnsApuntalado = [
           <InputTable
             className="-striped"
             data={historicoAcidoData}
-            newRow={objectTemplate}
             setData={setHistoricoAcidoData}
             columns={columnsAcido}
             showPagination={false}
             showPageSizeOptions={false}
-            pageSize={historicoAcidoData.length}
             sortable={false}
-            getTdProps={this.deleteRowAcido}
+            errorArray={errors}
+            rowObj={rowObj}
+            checkForErrors={val => this.checkForErrors(val, 'acidoTable')}
+            hasSubmitted={hasSubmitted}
           />
         </div>
-
-        <button className='new-row-button' style={{ marginBottom: '50px' }}onClick={this.addNewRowAcido}>Añadir un renglón</button>
       </div>
       )
   }
 
-
-
-
-
-
-
-  addNewRowEstimulacion() {
-    let { formData, setHistoricoEstimulacionData } = this.props
-    formData = formData.toJS()
-    let { historicoEstimulacionData } = formData
-
-    historicoEstimulacionData[0].length = 2
-
-    setHistoricoEstimulacionData([...historicoEstimulacionData, {index: historicoEstimulacionData.length, fecha: null,
-        tipoDeTratamiento: '',
-        objetivo: '',
-        compania: '',
-        acidoVol: '',
-        acidoNombre: '',
-        solventeVol: '',
-        solventeNombre: '',
-        divergenteVol: '',
-        divergenteNombre: '',
-        totalN2: '',
-        beneficioProgramado: '',
-        beneficioOficial: '', length: historicoEstimulacionData.length + 1, 'edited': false}])
-  }
-
-
-  deleteRowEstimulacion(state, rowInfo, column, instance) {
-    let { formData, setHistoricoEstimulacionData } = this.props
-    formData = formData.toJS()
-    let { historicoEstimulacionData } = formData
-
-    return {
-      onClick: e => {
-        if (column.id === 'delete' && historicoEstimulacionData.length > 1) {
-          historicoEstimulacionData.splice(rowInfo.original.index, 1)
-
-          historicoEstimulacionData.forEach((i, index) => {
-            i.index = index
-            i.length = historicoEstimulacionData.length
-          }) 
-
-          setHistoricoEstimulacionData(historicoEstimulacionData)
-        }
-      }
-    }
-  }
-
   makeEstimulacionTable() {
-    let { formData, setHistoricoEstimulacionData } = this.props
+    let { formData, setHistoricoEstimulacionData, hasSubmitted } = this.props
     formData = formData.toJS()
     let { historicoEstimulacionData } = formData
-
-    const objectTemplate = {fecha: null,  fecha: null,
-        tipoDeTratamiento: '',
-        objetivo: '',
-        compania: '',
-        acidoVol: '',
-        acidoNombre: '',
-        solventeVol: '',
-        solventeNombre: '',
-        divergenteVol: '',
-        divergenteNombre: '',
-        totalN2: '',
-        beneficioProgramado: '',
-        beneficioOficial: ''}
-
+    const rowObj = {
+      fecha: null,
+      tipoDeTratamiento: '',
+      objetivo: '',
+      compania: '',
+      acidoVol: '',
+      acidoNombre: '',
+      solventeVol: '',
+      solventeNombre: '',
+      divergenteVol: '',
+      divergenteNombre: '',
+      totalN2: '',
+      beneficioProgramado: '',
+      beneficioOficial: '',
+      error: true,
+    }
+    const errors = [
+      { name: 'fecha', type: 'date' },
+      { name: 'tipoDeTratamiento', type: 'number' },
+      { name: 'objetivo', type: 'number' },
+      { name: 'compania', type: 'number' },
+      { name: 'acidoVol', type: 'number' },
+      { name: 'acidoNombre', type: 'number' },
+      { name: 'solventeVol', type: 'number' },
+      { name: 'solventeNombre', type: 'number' },
+      { name: 'divergenteVol', type: 'number' },
+      { name: 'divergenteNombre', type: 'number' },
+      { name: 'totalN2', type: 'number' },
+      { name: 'beneficioProgramado', type: 'number' },
+      { name: 'beneficioOficial', type: 'number' },
+    ]
     return (
       <div className='presion-table'>
         <div className='header'>
@@ -536,26 +502,23 @@ let columnsApuntalado = [
           <InputTable
             className="-striped"
             data={historicoEstimulacionData}
-            newRow={objectTemplate}
             setData={setHistoricoEstimulacionData}
             columns={columnsEstimulacion}
             showPagination={false}
             showPageSizeOptions={false}
-            pageSize={historicoEstimulacionData.length}
             sortable={false}
-            getTdProps={this.deleteRowEstimulacion}
+            errorArray={errors}
+            rowObj={rowObj}
+            checkForErrors={val => this.checkForErrors(val, 'estimulacionTable')}
+            hasSubmitted={hasSubmitted}
           />
         </div>
-
-        <button className='new-row-button' style={{ marginBottom: '50px' }}onClick={this.addNewRowEstimulacion}>Añadir un renglón</button>
       </div>
       )
   }
 
 
   render() {
-    console.log('render intervenciones')
-
     return (
       <div className="form historicoDeIntervenciones">
         { this.makeEstimulacionTable() }
@@ -568,11 +531,13 @@ let columnsApuntalado = [
 
 const mapStateToProps = state => ({
   formData: state.get('historialDeIntervenciones'),
+  hasSubmitted: state.getIn(['global', 'hasSubmitted']),
 })
 
 const mapDispatchToProps = dispatch => ({
     setHistoricoEstimulacionData: val => dispatch(setHistoricoEstimulacionData(val)),
     setHistoricoAcidoData: val => dispatch(setHistoricoAcidoData(val)),
+    setHasErrorsHistorialDeIntervencionesDispatch: val => dispatch(setHasErrorsHistorialDeIntervenciones(val)),
     setHistoricoApuntaladoData: val => dispatch(setHistoricoApuntaladoData(val)),
 })
 

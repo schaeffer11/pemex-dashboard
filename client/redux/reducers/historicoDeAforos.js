@@ -19,6 +19,7 @@ const initialState = fromJS({
         rga: '',
         salinidad: '',
         ph: '',
+        error: true,
     }],
 })
 

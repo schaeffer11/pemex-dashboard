@@ -26,7 +26,6 @@ export function checkEmptySingular(value) {
 
 export function checkDate(value, name, errors, onBlur, showErrors = true) {
   let error = null
-
   if (!value || value.length < 1 || value === 'Invalid date') {
     error = 'Este campo no puede estar vacio'
   } else if (!moment(value, 'YYYY-MM-DD').isValid() || (typeof value === 'string' && value.includes('_'))) {

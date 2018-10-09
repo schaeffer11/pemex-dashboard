@@ -33,7 +33,6 @@ import { checkDate, checkEmpty, checkEmptySingular, checkDateSingular } from '..
     const { errorArray, data, hasSubmitted } = this.props
     let errors = []
     let properRow = {}
-
     if (errorArray) {
       errorArray.forEach(({ name, type }) => {
         properRow[name] = { value: null, type }
@@ -47,74 +46,92 @@ import { checkDate, checkEmpty, checkEmptySingular, checkDateSingular } from '..
           let newRow = JSON.parse(JSON.stringify(properRow))
           errorArray.forEach(({ name, type }) => {
             let err
-
             if (type === 'number') {
               err = checkEmptySingular(row[name])
-            }
-            else if (type === 'date') {
+            } else if (type === 'date') {
               err = checkDateSingular(row[name])
             }
-
             newRow[name] = { value: err, type }
           })
-
           errors.push(newRow)
         }
       })
     }
-
-    console.log(data)
-    console.log(errors)
-
     this.setState({ errors })
   }
 
+  getErrors(index) {
+    let errors = []
+    if (this.state.errors) {
+      errors = JSON.parse(JSON.stringify(this.state.errors))
+    }
+    const rowError = errors.length > 0 ? errors[index] : null
+    return { errors, rowError }
+  }
+
   renderEditable(cellInfo) {
-    let {data, setData} = this.props
+    let {data, setData } = this.props
+    const { errors, rowError } = this.getErrors(cellInfo.index)
+    const name = cellInfo.column.id
+    const value = data[cellInfo.index][cellInfo.column.id]
+    let style = { }
+    if(rowError !== null && rowError[name] !== undefined && rowError[name].value !== null) {
+      style.border = 'solid 2px red'
+    }
     return (
-      <div
-        style={{ backgroundColor: "#fafafa" }}
-        contentEditable
-        suppressContentEditableWarning
-         ={e => {
-          data[cellInfo.index][cellInfo.column.id] = e.target.innerHTML;
-          setData(data)
-        }}
-      >{data[cellInfo.index][cellInfo.column.id]}</div>
-    );
+      <div style={style}>
+        <input
+          contentEditable
+          suppressContentEditableWarning
+          value={value}
+          onChange={e => {
+            data[cellInfo.index][cellInfo.column.id] = e.target.value;
+            setData(data)
+          }}
+          onBlur={(e) => checkEmpty(e.target.value, name, rowError, (e) => this.updateErrors(e, cellInfo.index, errors))}
+        />
+      </div>
+    )
   }
 
   renderNumberDisable(cellInfo) {
     let {data, setData} = this.props
-    let disabled = false
+    let isDisabled = false
     const { id } = cellInfo.column
     const { sistema } = cellInfo.row
-
     if (sistema === 'desplazamientoN2' || sistema === 'pre-colchon') {
-      disabled = id === 'gastoLiqudo' || id === 'volLiquid' || id === 'relN2Liq'
+      isDisabled = id === 'gastoLiqudo' || id === 'volLiquid' || id === 'relN2Liq'
     } else {
-      disabled = id === 'gastoN2' || id === 'volN2'
+      isDisabled = id === 'gastoN2' || id === 'volN2'
+    }
+    const name = cellInfo.column.id
+    console.log('disabled', name)
+    const { errors, rowError } = this.getErrors(cellInfo.index)
+    // const style = {
+    //   backgroundColor: '#fafafa',
+    //   border: isDisabled ? 'none' : null
+    // }
+    let style = {}
+    console.log('rowerror', rowError)
+    if (rowError !== null && rowError[name] !== undefined && rowError[name].value !== null) {
+      style.border = 'solid 2px red'
     }
 
-    const style = {
-      backgroundColor: '#fafafa',
-      border: disabled ? 'none' : null
-    }
-    
     return (
-      <input
-        type="number"
-        disabled={disabled}
-        style={style}
-        contentEditable
-        suppressContentEditableWarning
-        value={data[cellInfo.index][cellInfo.column.id]}
-        onChange={e => {
-          data[cellInfo.index][cellInfo.column.id] = e.target.value;
-          setData(data)
-        }}
-        onBlur={(e) => checkEmpty(e.target.value, name, errors, onBlur)}
-      />
+      <div style={style}>
+        <input
+          type="number"
+          disabled={isDisabled}
+          contentEditable
+          suppressContentEditableWarning
+          value={data[cellInfo.index][cellInfo.column.id]}
+          onChange={e => {
+            data[cellInfo.index][cellInfo.column.id] = e.target.value;
+            setData(data)
+          }}
+          onBlur={(e) => checkEmpty(e.target.value, name, rowError, (e) => this.updateErrors(e, cellInfo.index, errors))}
+        />
+      </div>
     )
   }
 
@@ -127,7 +144,6 @@ import { checkDate, checkEmpty, checkEmptySingular, checkDateSingular } from '..
         hasError = true
       }
     })
-    
     if (typeof checkForErrors === 'function') {
       checkForErrors(hasError)
     }
@@ -136,47 +152,32 @@ import { checkDate, checkEmpty, checkEmptySingular, checkDateSingular } from '..
 
   updateErrors(e, i, errors) {
     let { data, setData } = this.props
-    
     errors[i] = e
-
-
-
     const hasErrors = Object.keys(e).filter(elem => {
       if (e[elem].value !== null) {
         return true
       }
       return false
     })
-
     const newErrorValue = hasErrors.length > 0
     const oldErrorValue = data[i].error
-
     if (oldErrorValue !== newErrorValue) {
       data[i].error = hasErrors.length > 0
       this.setOuterStateError()
-
       setData(data)
     }
     this.setState({ errors })
   }
 
-  renderNumber(cellInfo){
+  renderNumber(cellInfo) {
     let {data, setData } = this.props
-    let errors = []
-    if (this.state.errors) {
-      errors = JSON.parse(JSON.stringify(this.state.errors))
-    }
-
+    const { errors, rowError } = this.getErrors(cellInfo.index)
     const name = cellInfo.column.id
     const value = data[cellInfo.index][cellInfo.column.id]
-    const rowError = errors.length > 0 ? errors[cellInfo.index] : null
-
     let style = { }
     if(rowError !== null && rowError[name] !== undefined && rowError[name].value !== null) {
       style.border = 'solid 2px red'
     }
-
-
     return (
       <div style={style}>
         <input
@@ -191,7 +192,7 @@ import { checkDate, checkEmpty, checkEmptySingular, checkDateSingular } from '..
           onBlur={(e) => checkEmpty(e.target.value, name, rowError, (e) => this.updateErrors(e, cellInfo.index, errors))}
         />
       </div>
-    ); 
+    )
   }
 
   renderSelect() {
@@ -203,14 +204,7 @@ import { checkDate, checkEmpty, checkEmptySingular, checkDateSingular } from '..
 
   renderDate(cellInfo){
     let {data, setData} = this.props
-    let errors = []
-    if (this.state.errors) {
-      errors = JSON.parse(JSON.stringify(this.state.errors))
-    }
-    const rowError = errors.length > 0 ? errors[cellInfo.index] : null
     const name = cellInfo.column.id
-   
-
     let handleSelect = (date) => {
       if (date.isValid()) {
         checkDate(date, name, rowError, (e) => this.updateErrors(e, cellInfo.index, errors))
@@ -325,7 +319,6 @@ import { checkDate, checkEmpty, checkEmptySingular, checkDateSingular } from '..
     })
     let pageSize = !data ? 1 : (data.length < 20 ? data.length : 20)
     let showPagination = data.length > 20
-
     return (
       <div>
         <ReactTable { ...this.props } 

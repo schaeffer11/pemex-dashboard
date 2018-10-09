@@ -1,29 +1,29 @@
 import { Map, fromJS } from 'immutable'
 
 const initialState = fromJS({
-    hasErrors: false,
+    hasErrors: true,
     layerData: [{
         index: 0,
         interval: 1,
         cimaMD: '',
         baseMD: '',
         espesorBruto: 0,
-        espesorNeto: 0,
-        // cimaMV: '',
-        // baseMV: '',
+        espesorNeto: '',
         vArc: '',
         porosity: '',
         sw: '',
         dens: '',
         resis: '',
         perm: '',
-        length: 1
+        length: 1,
+        error: true,
     }],
     mudLossData: [{
         cimaMD: '',
         baseMD: '',
         lodoPerdido: '',
         densidad: '',
+        error: true,
         length: 1
     }],
     imgURL: null,

@@ -35,6 +35,10 @@ import { checkEmpty, checkDate } from '../../../../../lib/errorCheckers'
           type: 'number',
           values: '',
         },
+        cedulaTable: {
+          type: 'table',
+          values: '',
+        },
       }
     }
   }
@@ -73,10 +77,11 @@ import { checkEmpty, checkDate } from '../../../../../lib/errorCheckers'
       else if (errObj.type === 'date') {
         error = checkDate(moment(formData[elem]).format('DD/MM/YYYY'), elem, errors, this.setErrors, hasSubmitted)
       }
-
+      else if (errObj.type === 'table') {
+        error = errObj.value === '' ? true : errObj.value
+      }
       error === true ? hasErrors = true : null
     })
-
     return hasErrors
   }
 
@@ -100,6 +105,16 @@ import { checkEmpty, checkDate } from '../../../../../lib/errorCheckers'
     }
 
     this.setState({ errors })
+  }
+
+  checkForErrors(value, table) {
+    const errorsCopy = {...this.state.errors}
+    errorsCopy[table].value = value
+    this.setState({ errors: errorsCopy }, () => {
+      const { setHasErrorsPropuestaEstimulacion } = this.props
+      const hasErrors = this.checkAllInputs()
+      setHasErrorsPropuestaEstimulacion(hasErrors)
+    })
   }
 
   handleSelectTipoDeEstimulacion(val) {
@@ -268,39 +283,6 @@ import { checkEmpty, checkDate } from '../../../../../lib/errorCheckers'
     );
   }
 
-  addNewRow() {
-    console.log('adding new Row')
-    let { formData, setCedulaData } = this.props
-    formData = formData.toJS()
-    let { cedulaData } = formData
-
-    cedulaData[0].length = 2
-
-    setCedulaData([...cedulaData, {index: cedulaData.length, etapa: '', intervalo: '', nombreComercial: '', sistema: '', volLiquid: '', gastoN2: '', gastoLiqudo: '', gastoEnFondo: '', calidad: '', volN2: '', volLiquidoAcum: '', volN2Acum: '', relN2Liq: '', tiempo: '', length: cedulaData.length + 1, 'edited': false}])
-  }
-
-
- 
-  deleteRow(state, rowInfo, column, instance) {
-    let { formData, setCedulaData } = this.props
-    formData = formData.toJS()
-    let { cedulaData } = formData
-
-    return {
-      onClick: e => {
-        if (column.id === 'delete' && cedulaData.length > 1) {
-          cedulaData.splice(rowInfo.original.index, 1)
-
-          cedulaData.forEach((i, index) => {
-            i.index = index
-            i.length = cedulaData.length
-          })
-          setCedulaData(cedulaData)
-        }
-      }
-    }
-  }
-
   handleSelect(row, e) {
     let { formData, setCedulaData } = this.props
     formData = formData.toJS()
@@ -356,8 +338,32 @@ import { checkEmpty, checkDate } from '../../../../../lib/errorCheckers'
     }))
 
     const sistemaOptions = getSistemaOptions()
-
-    const objectTemplate = {etapa: '', intervalo: '', sistema: '', volLiquid: '', gastoN2: '', gastoLiqudo: '', gastoEnFondo: '', calidad: '', volN2: '', volLiquidoAcum: '', volN2Acum: '', relN2Liq: '', tiempo: '' }
+    const rowObj = {
+      error: true,
+      nombreComercial: '',
+      sistema: '',
+      volLiquid: '',
+      gastoN2: '',
+      gastoLiqudo: '',
+      gastoEnFondo: '',
+      calidad: '',
+      volN2: '',
+      volLiquidoAcum: '',
+      volN2Acum: '',
+      relN2Liq: '',
+      tiempo: '',
+    }
+    const errors = [
+      { name: 'nombreComercial', type: 'text' },
+      { name: 'sistema', type: 'text' },
+      { name: 'volLiquid', type: 'number' },
+      { name: 'gastoN2', type: 'number' },
+      { name: 'gastoLiqudo', type: 'number' },
+      { name: 'gastoEnFondo', type: 'number' },
+      { name: 'calidad', type: 'number' },
+      { name: 'volN2', type: 'number' },
+      { name: 'relN2Liq', type: 'number' },
+    ]
     const columns = [
       {
         Header: '',
@@ -457,17 +463,16 @@ import { checkEmpty, checkDate } from '../../../../../lib/errorCheckers'
           <InputTable
             className="-striped"
             data={cedulaData}
-            newRow={objectTemplate}
             setData={this.setAllData}
             columns={columns}
             showPagination={false}
             showPageSizeOptions={false}
-            pageSize={cedulaData.length}
             sortable={false}
-            getTdProps={this.deleteRow}
+            rowObj={rowObj}
+            errorArray={errors}
+            checkForErrors={val => this.checkForErrors(val, 'cedulaTable')}
           />
         </div>
-        <button className='new-row-button' onClick={this.addNewRow}>Añadir un renglón</button>
       </div>
     )
   }
@@ -491,7 +496,7 @@ import { checkEmpty, checkDate } from '../../../../../lib/errorCheckers'
           </div>
         </div>
         <div className='bot'>
-          { this.makeCedulaTable() }       
+          { this.makeCedulaTable() }
         </div>
       </div>
     )
