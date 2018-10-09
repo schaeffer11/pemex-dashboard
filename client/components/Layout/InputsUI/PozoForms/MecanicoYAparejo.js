@@ -8,7 +8,7 @@ import { setHasErrorsMecanicoYAparejoDeProduccion, setTipoDeTerminacion, setHInt
   setPresionDifEmpacador, setSensorPyt, setTipoDeLiner, setDiametroDeLiner, setTipoDePistolas, setDensidadDeDisparosMecanico, 
   setFase, setDiametroDeOrificio, setPenetracion, setTipoDeSAP, setTratamientoPor, setVolumenAparejoDeProduccion, 
   setVolumenCimaDeIntervalo, setVolumenBaseDeIntervalo, setVolumenDeEspacioAnular, setImgBoreDiagramURL, 
-  setImgAparejoDeProduccionURL, setChecked} from '../../../../redux/actions/pozo'
+  setImgAparejoDeProduccionURL } from '../../../../redux/actions/pozo'
 import { checkEmpty, checkDate } from '../../../../lib/errorCheckers'
 
 
@@ -114,25 +114,21 @@ let tratamientoPorOptions = [
 
   
   componentDidMount(){
-    let { setHasErrorsMecanicoYAparejoDeProduccion, hasErrors, hasSubmitted } = this.props
+    let { setHasErrorsMecanicoYAparejoDeProduccion, hasSubmitted } = this.props
 
-    console.log(hasSubmitted)
-    if (hasSubmitted) {
-      let hasErrors = this.checkAllInputs()
-      setHasErrorsMecanicoYAparejoDeProduccion(hasErrors)
-    }
+    let hasErrors = this.checkAllInputs(hasSubmitted)
+    setHasErrorsMecanicoYAparejoDeProduccion(hasErrors)
   }
 
   componentWillReceiveProps(nextProps) {
     let { hasSubmitted } = this.props
 
-    console.log(hasSubmitted)
     if (hasSubmitted !== nextProps.hasSubmitted) {
-      this.checkAllInputs()
+      this.checkAllInputs(true)
     }
   }
 
-  checkAllInputs() {
+  checkAllInputs(showErrors) {
     let { formData } = this.props
     formData = formData.toJS()
     const { errors } = this.state
@@ -143,11 +139,11 @@ let tratamientoPorOptions = [
       const errObj = errors[elem]
 
       if (errObj.type === 'text' || errObj.type === 'number') {
-        error = checkEmpty(formData[elem], elem, errors, this.setErrors)
+        error = checkEmpty(formData[elem], elem, errors, this.setErrors, showErrors)
         
       } 
       else if (errObj.type === 'date') {
-        error = checkDate(moment(formData[elem]).format('DD/MM/YYYY'), elem, errors, this.setErrors)
+        error = checkDate(moment(formData[elem]).format('DD/MM/YYYY'), elem, errors, this.setErrors, showErrors)
       }
 
       error === true ? hasErrors = true : null
@@ -171,6 +167,7 @@ let tratamientoPorOptions = [
       } 
     })
 
+    console.log('herherer', hasErrorNew, hasErrors)
     if (hasErrorNew != hasErrors) {
       setHasErrorsMecanicoYAparejoDeProduccion(hasErrorNew)
     }
@@ -312,7 +309,7 @@ let tratamientoPorOptions = [
 
 const mapStateToProps = state => ({
   formData: state.get('mecanicoYAparejoDeProduccion'),
-  hasErrors: state.getIn(['analisisDelAgua', 'hasErrors']),
+  hasErrors: state.getIn(['mecanicoYAparejoDeProduccion', 'hasErrors']),
   hasSubmitted: state.getIn(['global', 'hasSubmitted']),
 })
 

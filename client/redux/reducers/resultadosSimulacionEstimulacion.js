@@ -6,7 +6,6 @@ const initialState = Map({
     longitudDeAgujeroDeGusano: '',
     imgURL: null,
     evidenceSimulationImgURL: '',
-    checked: []
 })
 
 
@@ -20,10 +19,6 @@ const resultadosSimulacionEstimulacion = (state = initialState, action) => {
         return state.set('longitudDeAgujeroDeGusano', fromJS(action.value))
     case 'set_evidenceSimulationImgURL':
         return state.set('imgURL', fromJS(action.value))
-    case 'set_forms_checked' :
-        if(action.form == 'resultadosSimulacionEstimulacion')
-            return state.set('checked', fromJS(action.value))
-        return state
     default:
       return state
   }

@@ -34,6 +34,8 @@ const initialState = fromJS({
 
 const fichaTecnicaDelPozo = (state = initialState, action) => {
   switch (action.type) {
+    case 'set_hasErrorsFichaTecnicaDelPozo':
+      return state.set('hasErrors', fromJS(action.value))
     case 'set_intervaloProductor':
       return state.set('intervaloProductor', fromJS(action.value))
     case 'set_espesorBruto':
@@ -86,8 +88,6 @@ const fichaTecnicaDelPozo = (state = initialState, action) => {
       return state.set('checked', fromJS(action.value))
     case 'set_fichaTecnicaDelPozo':
       return state = fromJS(action.value)
-    case 'set_hasErrorsFichaTecnicaDelPozo':
-      return state.set('hasErrors', fromJS(action.value))
     default:
       return state
   }

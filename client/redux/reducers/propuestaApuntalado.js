@@ -10,7 +10,6 @@ const initialState = Map({
     volumenDeGelDeFractura: '',
     volumenDesplazamiento: '',
     volumenTotalDeLiquido: '',
-    
     hasErrors: true,
     moduloYoungArena: '',
     moduloYoungLutitas: '',
@@ -37,8 +36,7 @@ const initialState = Map({
         volN2Acum: '',
         relN2Liq: '',
         tiempo: '',
-    }],
-    checked: []
+    }]
 })
 
 const propuestaApuntalado = (state = initialState, action) => {
@@ -83,10 +81,6 @@ const propuestaApuntalado = (state = initialState, action) => {
             newState = newState.mergeDeep(action.volumes)
         }
         return newState
-    case 'set_forms_checked' :
-        if(action.form == 'propuestaApuntalado')
-           return state.set('checked', fromJS(action.value))
-        return state
     case 'set_propuestaCompany':
         return state.set('propuestaCompany', fromJS(action.value))
     default:

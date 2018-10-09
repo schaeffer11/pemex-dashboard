@@ -23,10 +23,8 @@ const initialState = Map({
     sulfatos: '',
     carbonatos: '',
     densidadAt15: '',
-    densidadAt20: '',
-    checked: []
+    densidadAt20: ''
 })
-
 
 const analisisDelAgua = (state = initialState, action) => {
   switch (action.type) {

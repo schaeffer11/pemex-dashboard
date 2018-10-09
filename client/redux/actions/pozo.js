@@ -128,7 +128,6 @@ export const setImgAparejoDeProduccionURL = value => ({ type: 'set_imgAparejoDeP
 export const setMecanicoYAparejoDeProduccion = value => ({ type: 'set_mecanicoYAparejoDeProduccion', value})
 export const setHasErrorsMecanicoYAparejoDeProduccion = value => ({ type: 'set_hasErrorsMecanicoYAparejoDeProduccion', value})
 
-
 //AnalisisDelAgua
 export const setWaterAnalysisBool = value => ({ type: 'set_waterAnalysisBool', value})
 export const setPH = value => ({ type: 'set_pH', value})
@@ -208,7 +207,7 @@ export const setPressureDepthPozo = value => ({ type: 'set_pressureDepthPozo', v
 export const setPressureDepthCampo = value => ({ type: 'set_pressureDepthCampo', value})
 export const setHasErrorsHistoricoDePressionCampo = value => ({ type: 'set_hasErrorsHistoricoDePresionCampo', value})
 export const setHasErrorsHistoricoDePressionPozo = value => ({ type: 'set_hasErrorsHistoricoDePresionPozo', value})
-
+ 
 //HistoricoDeAforos
 export const setAforosData = value => ({ type: 'set_aforosData', value})
 export const setHistoricoDeAforos = value => ({ type: 'set_historicoDeAforos', value})

@@ -11,7 +11,7 @@ import { InputRow, InputRowUnitless, InputRowSelectUnitless, InputDate } from '.
 import { setHasErrorsFichaTecnicaDelPozo, setTipoDeSistemo, setHistorialIntervencionesData, setEspesorBruto, 
   setCaliza, setDolomia, setArcilla, setPorosidad, setPermeabilidad, setSw, setCaa, setCga, setTipoDePozo, 
   setPws, setPwf, setPwsFecha, setPwfFecha, setDeltaPPerMes, setTyac, setPvt, setAparejoDeProduccion, 
-  setProfEmpacador, setProfSensorPYT, setTipoDeSap, formData, setChecked } from '../../../../redux/actions/pozo'
+  setProfEmpacador, setProfSensorPYT, setTipoDeSap, formData } from '../../../../redux/actions/pozo'
 
 @autobind class TechnicaDelPozo extends Component {
   constructor(props) {
@@ -104,7 +104,7 @@ import { setHasErrorsFichaTecnicaDelPozo, setTipoDeSistemo, setHistorialInterven
   }
 
   componentDidMount(){
-    let { setHasErrorsFichaTecnicaDelPozo, hasErrors, hasSubmitted } = this.props
+    let { setHasErrorsFichaTecnicaDelPozo, hasSubmitted } = this.props
 
     const { token } = this.props
     const headers = {
@@ -114,10 +114,9 @@ import { setHasErrorsFichaTecnicaDelPozo, setTipoDeSistemo, setHistorialInterven
       },
     }
 
-    if (hasSubmitted) {
-      let hasErrors = this.checkAllInputs()
-      setHasErrorsFichaTecnicaDelPozo(hasErrors)
-    }
+    let hasErrors = this.checkAllInputs(hasSubmitted)
+    setHasErrorsFichaTecnicaDelPozo(hasErrors)
+
 
      fetch('/api/getFieldWellMapping', headers)
       .then(r => r.json())
@@ -133,12 +132,12 @@ import { setHasErrorsFichaTecnicaDelPozo, setTipoDeSistemo, setHistorialInterven
     let { hasSubmitted } = this.props
 
     if (hasSubmitted !== nextProps.hasSubmitted) {
-      this.checkAllInputs()
+      this.checkAllInputs(true)
     }
   }
 
 
-  checkAllInputs() {
+  checkAllInputs(showErrors) {
     let { formData } = this.props
     formData = formData.toJS()
     const { errors } = this.state
@@ -147,10 +146,10 @@ import { setHasErrorsFichaTecnicaDelPozo, setTipoDeSistemo, setHistorialInterven
     Object.keys(errors).forEach(elem => {
       const errObj = errors[elem]
       if (errObj.type === 'text' || errObj.type === 'number') {
-        error = checkEmpty(formData[elem], elem, errors, this.setErrors)
+        error = checkEmpty(formData[elem], elem, errors, this.setErrors, showErrors)
       } 
       else if (errObj.type === 'date') {
-        error = checkDate(moment(formData[elem]).format('DD/MM/YYYY'), elem, errors, this.setErrors)
+        error = checkDate(moment(formData[elem]).format('DD/MM/YYYY'), elem, errors, this.setErrors, showErrors)
       }
       error === true ? hasErrors = true : null
     })

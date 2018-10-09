@@ -50,23 +50,21 @@ let columns = [
   }
 
   componentDidMount(){
-    let { setHasErrorsHistoricoDePressionCampo, hasErrors, hasSubmitted } = this.props
+    let { setHasErrorsHistoricoDePressionCampo, hasSubmitted } = this.props
 
-    if (hasSubmitted) {
-      let hasErrors = this.checkAllInputs()
-      setHasErrorsHistoricoDePressionCampo(hasErrors)
-    }
+    let hasErrors = this.checkAllInputs(hasSubmitted)
+    setHasErrorsHistoricoDePressionCampo(hasErrors)
   }
 
   componentDidUpdate(prevProps) {
     let { hasSubmitted } = this.props
 
     if (hasSubmitted !== prevProps.hasSubmitted) {
-      this.checkAllInputs()
+      this.checkAllInputs(true)
     }
   }
 
-  checkAllInputs() {
+  checkAllInputs(showErrors) {
     let { formData } = this.props
     formData = formData.toJS()
     const { errors } = this.state
@@ -77,11 +75,11 @@ let columns = [
       const errObj = errors[elem]
 
       if (errObj.type === 'text' || errObj.type === 'number') {
-        error = checkEmpty(formData[elem], elem, errors, this.setErrors)
+        error = checkEmpty(formData[elem], elem, errors, this.setErrors, showErrors)
         
       } 
       else if (errObj.type === 'date') {
-        error = checkDate(moment(formData[elem]).format('DD/MM/YYYY'), elem, errors, this.setErrors)
+        error = checkDate(moment(formData[elem]).format('DD/MM/YYYY'), elem, errors, this.setErrors, showErrors)
       }
       else if (errObj.type === 'table') {
         error = errObj.value === '' ? true : errObj.value

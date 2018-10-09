@@ -27,7 +27,6 @@ const initialState = fromJS({
         length: 1
     }],
     imgURL: null,
-    checked: []
 })
 
 
@@ -43,12 +42,6 @@ const evaluacionPetrofisica = (state = initialState, action) => {
         return state.set('imgURL', fromJS(action.value))
     case 'set_evaluacionPetrofisica':
         return state = fromJS(action.value)
-    case 'set_checked' :
-        return state.set('checked', fromJS(action.value))
-    case 'set_forms_checked' :
-        if(action.form == 'evaluacionPetrofisica')
-          return state.set('checked', fromJS(action.value))
-        return state
     default:
       return state
   }

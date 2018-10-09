@@ -8,7 +8,8 @@ import { setHasErrorsAnalisisDelAgua, setWaterAnalysisBool, setPH, setTemperatur
   setSalinidadConConductimetro, setSolidosDisueltosTotales, setDurezaTotalComoCaCO3, setDurezaDeCalcioComoCaCO3, 
   setDurezaDeMagnesioComoCaCO3, setAlcalinidadTotalComoCaCO3, setAlcalinidadALaFenolftaleinaComoCaCO3, setSalinidadComoNaCl,
    setSodio, setCalcio, setMagnesio, setFierro, setCloruros, setBicarbonatos, setSulfatos, setCarbonatos, setDensidadAt15, 
-   setDensidadAt20, setChecked } from '../../../../redux/actions/pozo'
+   setDensidadAt20 } from '../../../../redux/actions/pozo'
+
 import { checkEmpty, checkDate } from '../../../../lib/errorCheckers';
 
 
@@ -117,36 +118,41 @@ const yesOrNoOptions = [{
   componentDidMount(){
     let { setHasErrorsAnalisisDelAgua, hasSubmitted } = this.props
 
-    if (hasSubmitted) {
-      let hasErrors = this.checkAllInputs()
-      setHasErrorsAnalisisDelAgua(hasErrors)
-    }
+    let hasErrors = this.checkAllInputs(hasSubmitted)
+    setHasErrorsAnalisisDelAgua(hasErrors)
   }
 
   componentDidUpdate(prevProps) {
     let { hasSubmitted } = this.props
 
     if (hasSubmitted !== prevProps.hasSubmitted) {
-      this.checkAllInputs()
+      this.checkAllInputs(true)
     }
   }
 
-  checkAllInputs() {
+  checkAllInputs(showErrors) {
     let { formData } = this.props
     formData = formData.toJS()
+    let { waterAnalysisBool } = formData
+
     const { errors } = this.state
     let hasErrors = false
     let error 
 
-    Object.keys(errors).forEach(elem => {
+    let items = Object.keys(errors)
+    if (!waterAnalysisBool) {
+      items = []
+    }
+
+    items.forEach(elem => {
       const errObj = errors[elem]
 
       if (errObj.type === 'text' || errObj.type === 'number') {
-        error = checkEmpty(formData[elem], elem, errors, this.setErrors)
+        error = checkEmpty(formData[elem], elem, errors, this.setErrors, showErrors)
         
       } 
       else if (errObj.type === 'date') {
-        error = checkDate(moment(formData[elem]).format('DD/MM/YYYY'), elem, errors, this.setErrors)
+        error = checkDate(moment(formData[elem]).format('DD/MM/YYYY'), elem, errors, this.setErrors, showErrors)
       }
 
       error === true ? hasErrors = true : null
@@ -159,12 +165,17 @@ const yesOrNoOptions = [{
     this.setState({ errors })
   }
 
-  updateErrors(errors) {
+  updateErrors(errors, waterAnalysisBool = true) {
     let { hasErrors, setHasErrorsAnalisisDelAgua } = this.props
 
     let hasErrorNew = false
 
-    Object.keys(errors).forEach(key => {
+    let items = Object.keys(errors)
+    if (!waterAnalysisBool) {
+      items = []
+    }
+
+    items.forEach(key => {
       if (errors[key].value !== null){
         hasErrorNew = true
       } 
@@ -213,6 +224,13 @@ const yesOrNoOptions = [{
     )
   }
 
+  handleWaterAnalysisBoolChange(val) {
+    let { setWaterAnalysisBool } = this.props
+
+    setWaterAnalysisBool(val)
+    this.updateErrors(this.state.errors, val)
+  }
+
   render() {
     let { setWaterAnalysisBool, formData } = this.props
     formData = formData.toJS()
@@ -222,7 +240,7 @@ const yesOrNoOptions = [{
     return (
       <div className="form analisis-del-agua">
         <div className='left'>
-        <InputRowSelectUnitless header='¿El pozo tiene análisis de agua?' name='waterAnalysisBool' value={waterAnalysisBool} callback={(e) => setWaterAnalysisBool(e.value)} options={yesOrNoOptions} />
+        <InputRowSelectUnitless header='¿El pozo tiene análisis de agua?' name='waterAnalysisBool' value={waterAnalysisBool} callback={(e) => this.handleWaterAnalysisBoolChange(e.value)} options={yesOrNoOptions} />
         { waterAnalysisBool === true ? this.makeValoresForm() : null }
         </div>
         <div className='right'>

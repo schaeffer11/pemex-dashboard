@@ -289,6 +289,9 @@ router.get('/getFields', async (req, res) => {
           objectPath.set(finalObj, `${parent}.${child}`, data[0][key])
         }
       })
+      console.log('hehehhehe', data[0].HAS_ERRORS)
+
+      finalObj.fichaTecnicaDelCampo.hasErrors = data[0].HAS_ERRORS === 0 ? false : true
       res.json(finalObj)
     }
     else {
@@ -527,6 +530,7 @@ router.get('/getWell', async (req, res) => {
           objectPath.set(finalObj, `${parent}.${child}`, data[0][key])
         }
       })
+      finalObj.fichaTecnicaDelPozo.hasErrors = data[0].HAS_ERRORS === 0 ? false : true
       res.json(finalObj)
     }
     else {
@@ -730,6 +734,7 @@ router.get('/getMecanico', async (req, res) => {
           objectPath.set(finalObj, `${parent}.${child}`, data[0][key])
         }
       })
+      finalObj.mecanicoYAparejoDeProduccion.hasErrors = data[0].HAS_ERRORS === 0 ? false : true
       res.json(finalObj)
     }
     else {
@@ -777,6 +782,8 @@ router.get('/getAnalisisAgua', async (req, res) => {
           objectPath.set(finalObj, `${parent}.${child}`, data[0][key])
         }
       })
+      finalObj.analisisDelAgua.hasErrors = data[0].HAS_ERRORS === 0 ? false : true
+      finalObj.analisisDelAgua.waterAnalysisBool = data[0].WATER_ANALYSIS_BOOL === 0 ? false : true
       res.json(finalObj)
     }
     else {
@@ -1069,6 +1076,7 @@ router.get('/getFieldPressure', async (req, res) => {
         objectPath.push(finalObj, `${mainParent}.${innerParent}`, innerObj)
       })
       finalObj['historicoDePresion'].pressureDepthCampo = data[0].PRESSURE_DEPTH
+      finalObj.historicoDePresion.hasErrorsCampo = data[0].HAS_ERRORS === 0 ? false : true
       res.json(finalObj)
     }
     else if (action === 'loadTransaction'){
@@ -1121,6 +1129,7 @@ router.get('/getWellPressure', async (req, res) => {
         objectPath.push(finalObj, `${mainParent}.${innerParent}`, innerObj)
       })
       finalObj['historicoDePresion'].pressureDepthPozo = data[0].PRESSURE_DEPTH
+      finalObj.historicoDePresion.hasErrorsPozo = data[0].HAS_ERRORS === 0 ? false : true
       res.json(finalObj)
     }
     else if (action === 'loadTransaction'){
@@ -1338,7 +1347,10 @@ router.get('/getInterventionEstimulacion', async (req, res) => {
           const { parent, child } = map[key]
           objectPath.set(finalObj, `${parent}.${child}`, data[0][key])
         }
-      })   
+      }) 
+      finalObj.propuestaEstimulacion.hasErrors = data[0].HAS_ERRORS_PROPUESTA === 0 ? false : true
+      finalObj.resultadosSimulacionEstimulacion.hasErrors = data[0].HAS_ERRORS_RESULTS === 0 ? false : true
+      finalObj.estIncProduccionEstimulacion.hasErrors = data[0].HAS_ERRORS_EST_INC === 0 ? false : true
     }
     else {
       Object.keys(map).forEach(key => {
@@ -1367,7 +1379,7 @@ router.get('/getInterventionAcido', async (req, res) => {
     MODULO_YOUNG_ARENA: { parent: 'propuestaAcido', child: 'moduloYoungArena' },
     MODULO_YOUNG_LUTITAS: { parent: 'propuestaAcido', child: 'moduloYoungLutitas' }, 
     RELAC_POISSON_ARENA: { parent: 'propuestaAcido', child: 'relacPoissonArena' }, 
-    RELAC_POISSON_LUTITAS: { parent: 'propuestaAcido', child: 'relacPoissonLutitas' }, 
+    RELAC_POISSON_LUTITAS: { parent: 'propuestaAcido', child: 'relacPoissonLutatas' }, 
     GRADIENTE_DE_FRACTURA: { parent: 'propuestaAcido', child: 'gradienteDeFractura' }, 
     DENSIDAD_DE_DISPAROS: { parent: 'propuestaAcido', child: 'densidadDeDisparos' },
     DIAMETRO_DE_DISPAROS: { parent: 'propuestaAcido', child: 'diametroDeDisparos' }, 
@@ -1410,6 +1422,9 @@ router.get('/getInterventionAcido', async (req, res) => {
           objectPath.set(finalObj, `${parent}.${child}`, data[0][key])
         }
       })   
+      finalObj.resultadosSimulacionAcido.hasErrors = data[0].HAS_ERRORS_RESULTS === 0 ? false : true
+      finalObj.propuestaAcido.hasErrors = data[0].HAS_ERRORS_PROPUESTA === 0 ? false : true
+      finalObj.estIncProduccionAcido.hasErrors = data[0].HAS_ERRORS_EST_INC === 0 ? false : true
     }
     else {
       Object.keys(map).forEach(key => {
@@ -1417,6 +1432,7 @@ router.get('/getInterventionAcido', async (req, res) => {
         objectPath.set(finalObj, `${parent}.${child}`, '')
       })
     }
+
     res.json(finalObj)
   })
 })
@@ -1439,7 +1455,7 @@ router.get('/getInterventionApuntalado', async (req, res) => {
     MODULO_YOUNG_ARENA: { parent: 'propuestaApuntalado', child: 'moduloYoungArena' },
     MODULO_YOUNG_LUTITAS: { parent: 'propuestaApuntalado', child: 'moduloYoungLutitas' }, 
     RELAC_POISSON_ARENA: { parent: 'propuestaApuntalado', child: 'relacPoissonArena' }, 
-    RELAC_POISSON_LUTITAS: { parent: 'propuestaApuntalado', child: 'relacPoissonLutitas' }, 
+    RELAC_POISSON_LUTITAS: { parent: 'propuestaApuntalado', child: 'relacPoissonLutatas' }, 
     GRADIENTE_DE_FRACTURA: { parent: 'propuestaApuntalado', child: 'gradienteDeFractura' }, 
     DENSIDAD_DE_DISPAROS: { parent: 'propuestaApuntalado', child: 'densidadDeDisparos' },
     DIAMETRO_DE_DISPAROS: { parent: 'propuestaApuntalado', child: 'diametroDeDisparos' }, 
@@ -1480,6 +1496,9 @@ router.get('/getInterventionApuntalado', async (req, res) => {
           objectPath.set(finalObj, `${parent}.${child}`, data[0][key])
         }
       })   
+      finalObj.resultadosSimulacionApuntalado.hasErrors = data[0].HAS_ERRORS_RESULTS === 0 ? false : true
+      finalObj.propuestaApuntalado.hasErrors = data[0].HAS_ERRORS_PROPUESTA === 0 ? false : true
+      finalObj.estIncProduccionApuntalado.hasErrors = data[0].HAS_ERRORS_EST_INC === 0 ? false : true
     }
     else {
       Object.keys(map).forEach(key => {

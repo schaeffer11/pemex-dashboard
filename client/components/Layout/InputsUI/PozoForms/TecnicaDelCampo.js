@@ -12,7 +12,7 @@ import { setHasErrorsFichaTecnicaDelCampo, setTipoDeFluidoField, setDescubrimien
   setLitologiaField, setEspesorNetoField, setPorosidadField, setSwField, setKPromedioField, 
   setCaaField, setCgaField, setQoField, setQgField, setRgaField, setFwField, setNpField, 
   setGpField, setWpField, setRraField, setRrgField, setRrpceField, setH2sField, setCo2Field, 
-  setN2Field, setChecked } from '../../../../redux/actions/pozo'
+  setN2Field } from '../../../../redux/actions/pozo'
 
 let fluidoOptions = [
     { label: 'Aceite Negro', value: 'Aceite Negro' },
@@ -182,38 +182,40 @@ let litologiaOptions = [
   }
 
   componentDidMount(){
-    let { setHasErrorsFichaTecnicaDelCampo, hasErrors, hasSubmitted } = this.props
+    let { setHasErrorsFichaTecnicaDelCampo, hasSubmitted } = this.props
 
-    if (hasSubmitted) {
-      let hasErrors = this.checkAllInputs()
-      setHasErrorsFichaTecnicaDelCampo(hasErrors)
-    }
+    let hasErrors = this.checkAllInputs(hasSubmitted)
+    setHasErrorsFichaTecnicaDelCampo(hasErrors)
+
   }
 
   componentWillReceiveProps(nextProps) {
     let { hasSubmitted } = this.props
 
+
     if (hasSubmitted !== nextProps.hasSubmitted) {
-      this.checkAllInputs()
+      this.checkAllInputs(true)
     }
   }
 
-  checkAllInputs() {
+  checkAllInputs(showErrors) {
     let { formData } = this.props
     formData = formData.toJS()
     const { errors } = this.state
     let hasErrors = false
     let error 
 
+    console.log('checking all', showErrors)
+
     Object.keys(errors).forEach(elem => {
       const errObj = errors[elem]
 
       if (errObj.type === 'text' || errObj.type === 'number') {
-        error = checkEmpty(formData[elem], elem, errors, this.setErrors)
+        error = checkEmpty(formData[elem], elem, errors, this.setErrors, showErrors)
         
       } 
       else if (errObj.type === 'date') {
-        error = checkDate(moment(formData[elem]).format('DD/MM/YYYY'), elem, errors, this.setErrors)
+        error = checkDate(moment(formData[elem]).format('DD/MM/YYYY'), elem, errors, this.setErrors, showErrors)
       }
 
       error === true ? hasErrors = true : null
