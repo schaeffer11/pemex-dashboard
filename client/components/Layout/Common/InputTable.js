@@ -68,6 +68,23 @@ import { checkDate, checkEmpty, checkEmptySingular, checkDateSingular } from '..
     return { errors, rowError }
   }
 
+  checkAllRow(index) {
+    const { errors, rowError } = this.getErrors(index)
+    const { data } = this.props
+    const dataRow = data[index]
+    Object.keys(rowError).forEach(key => {
+      const value = dataRow[key]
+      let error = null
+      if (value === 0) return
+      if (!value || value.length < 1) {
+        error = 'Este campo no puede estar vacio'
+      }
+      rowError[key].value = error
+    })
+
+    this.updateErrors(rowError, index, errors)
+  }
+
   renderEditable(cellInfo) {
     let {data, setData } = this.props
     const { errors, rowError } = this.getErrors(cellInfo.index)
@@ -84,7 +101,7 @@ import { checkDate, checkEmpty, checkEmptySingular, checkDateSingular } from '..
           suppressContentEditableWarning
           value={value}
           onChange={e => {
-            data[cellInfo.index][cellInfo.column.id] = e.target.value;
+            data[cellInfo.index][cellInfo.column.id] = e.target.value
             setData(data)
           }}
           onBlur={(e) => checkEmpty(e.target.value, name, rowError, (e) => this.updateErrors(e, cellInfo.index, errors))}
@@ -98,20 +115,18 @@ import { checkDate, checkEmpty, checkEmptySingular, checkDateSingular } from '..
     let isDisabled = false
     const { id } = cellInfo.column
     const { sistema } = cellInfo.row
+    const disabled = []
     if (sistema === 'desplazamientoN2' || sistema === 'pre-colchon') {
       isDisabled = id === 'gastoLiqudo' || id === 'volLiquid' || id === 'relN2Liq'
+      disabled.push('gastoLiqudo', 'volLiquid', 'relN2Liq')
     } else {
       isDisabled = id === 'gastoN2' || id === 'volN2'
+      disabled.push('gastoN2', 'volN2')
     }
     const name = cellInfo.column.id
-    console.log('disabled', name)
-    const { errors, rowError } = this.getErrors(cellInfo.index)
-    // const style = {
-    //   backgroundColor: '#fafafa',
-    //   border: isDisabled ? 'none' : null
-    // }
+    const { rowError } = this.getErrors(cellInfo.index)
+  
     let style = {}
-    console.log('rowerror', rowError)
     if (rowError !== null && rowError[name] !== undefined && rowError[name].value !== null) {
       style.border = 'solid 2px red'
     }
@@ -125,10 +140,9 @@ import { checkDate, checkEmpty, checkEmptySingular, checkDateSingular } from '..
           suppressContentEditableWarning
           value={data[cellInfo.index][cellInfo.column.id]}
           onChange={e => {
-            data[cellInfo.index][cellInfo.column.id] = e.target.value;
-            setData(data)
+            data[cellInfo.index][cellInfo.column.id] = e.target.value
+            this.setDataPromise(data).then(() => this.checkAllRow(cellInfo.index))
           }}
-          onBlur={(e) => checkEmpty(e.target.value, name, rowError, (e) => this.updateErrors(e, cellInfo.index, errors))}
         />
       </div>
     )
@@ -193,10 +207,28 @@ import { checkDate, checkEmpty, checkEmptySingular, checkDateSingular } from '..
     )
   }
 
-  renderSelect() {
-    let {data, setData} = this.props
+  renderSelect(cellInfo) {
+    let {data, selectOptions } = this.props
+    const name = cellInfo.column.id
+    const { rowError } = this.getErrors(cellInfo.index)
+    let style = {}
+    if(rowError !== null && rowError[name] !== undefined && rowError[name].value !== null) {
+      style.border = 'solid 2px red'
+    }
     return (
-      <div>welcome to the machine</div>
+      <div style={style}>
+        <Select
+          simpleValue
+          placeholder="Seleccionar"
+          className='input'
+          options={selectOptions}
+          value={selectOptions.find(i=>i.value === cellInfo.row[name]) || null}
+          onChange={e => {
+            data[cellInfo.index][cellInfo.column.id] = e.value;
+            this.setDataPromise(data).then(e => this.checkAllRow(cellInfo.index))
+          }}
+        />
+      </div>
     )
   }
 
@@ -292,6 +324,7 @@ import { checkDate, checkEmpty, checkEmptySingular, checkDateSingular } from '..
   }
 
   render(){
+    console.log("da err", this.state.errors)
     let {columns, data} = this.props;
     columns.forEach(column => {
       if(column.cell === 'renderEditable')

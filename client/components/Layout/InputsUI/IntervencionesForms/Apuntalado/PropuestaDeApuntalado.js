@@ -21,41 +21,43 @@ import { checkEmpty, checkDate } from '../../../../../lib/errorCheckers'
       errors: {
           propuestaCompany: {
             type: 'text',
-            values: '',
+            value: '',
           },
           moduloYoungArena: {
             type: 'number',
-            values: '',
+            value: '',
           },
           moduloYoungLutitas: {
             type: 'number',
-            values: '',
+            value: '',
           },
           relacPoissonArena: {
             type: 'number',
-            values: '',
+            value: '',
           },
           relacPoissonLutatas: {
             type: 'number',
-            values: '',
+            value: '',
           },
           gradienteDeFractura: {
             type: 'number',
-            values: '',
+            value: '',
           },
           densidadDeDisparos: {
             type: 'number',
-            values: '',
+            value: '',
           },
           diametroDeDisparos: {
             type: 'number',
-            values: '',
+            value: '',
+          },
+          cedulaTable: {
+            type: 'table',
+            value: '',
           },
       }
     }
   }
-
-
 
   componentDidMount(){
     let { setHasErrorsPropuestaApuntalado, hasSubmitted } = this.props
@@ -118,6 +120,15 @@ import { checkEmpty, checkDate } from '../../../../../lib/errorCheckers'
     this.setState({ errors })
   }
 
+  checkForErrors(value, table) {
+    const errorsCopy = {...this.state.errors}
+    errorsCopy[table].value = value
+    this.setState({ errors: errorsCopy }, () => {
+      const { setHasErrorsPropuestaApuntalado } = this.props
+      const hasErrors = this.checkAllInputs()
+      setHasErrorsPropuestaApuntalado(hasErrors)
+    })
+  }
 
   makeGeneralForm() {
     let { formData, setPropuestaCompany, intervalos } = this.props
@@ -339,7 +350,38 @@ import { checkEmpty, checkDate } from '../../../../../lib/errorCheckers'
     
     const sistemaOptions = getSistemaOptions()
 
-    const objectTemplate = {}
+    // const objectTemplate = {}
+    const rowObj = {
+      error: true,
+      sistema: '',
+      nombreComercial: '',
+      tipoDeApuntalante: '',
+      concentraciDeApuntalante: '',
+      volLiquid: '',
+      gastoN2: '',
+      gastoLiqudo: '',
+      gastoEnFondo: '',
+      calidad: '',
+      volN2: '',
+      volLiquidoAcum: '',
+      volN2Acum: '',
+      relN2Liq: '',
+      tiempo: '',
+    }
+
+    const errors = [
+      { name: 'sistema', type: 'text' },
+      { name: 'nombreComercial', type: 'text' },
+      { name: 'tipoDeApuntalante', type: 'text' },
+      { name: 'concentraciDeApuntalante', type: 'number' },
+      { name: 'volLiquid', type: 'number' },
+      { name: 'gastoN2', type: 'number' },
+      { name: 'gastoLiqudo', type: 'number' },
+      { name: 'gastoEnFondo', type: 'number' },
+      { name: 'calidad', type: 'number' },
+      { name: 'volN2', type: 'number' },
+      { name: 'relN2Liq', type: 'number' },
+    ]
 
     let columns = [
       {
@@ -356,45 +398,11 @@ import { checkEmpty, checkDate } from '../../../../../lib/errorCheckers'
         Header: 'Etapa',
         accessor: 'etapa',
       },
-      // {
-      //   Header: 'Intervalo',
-      //   accessor: 'intervalo',
-      //   width: 200,
-      //   resizable: false,
-      //   style: {overflow: 'visible'},
-      //   Cell: row => {
-      //     return (
-      //       <div>
-      //         <Select
-      //           className='input'
-      //           simpleValue={true}
-      //           options={intervaloOptions}
-      //           value={intervaloOptions.find(i=>i.value === row.original.intervalo) || null}
-      //           onChange={(e) => this.handleSelect(row, e.value)} 
-      //         />
-      //       </div>
-      //     )
-      //   }
-      // },
       {
         Header: 'Sistema',
         accessor: 'sistema',
-        width: 200,
-        resizable: false,
+        cell: 'renderSelect',
         style: {overflow: 'visible'},
-        Cell: row => {
-          return (
-            <div>
-              <Select
-                className='input'
-                simpleValue={true}
-                options={sistemaOptions}
-                value={sistemaOptions.find(i=>i.value === row.original.sistema) || null}
-                onChange={(e) => this.handleSelect(row, e.value)} 
-              />
-            </div>
-          )
-        }
       },
       {
         Header: 'Nombre Comercial',
@@ -467,14 +475,16 @@ import { checkEmpty, checkDate } from '../../../../../lib/errorCheckers'
           <InputTable
             className="-striped"
             data={cedulaData}
-            newRow={objectTemplate}
+            selectOptions={sistemaOptions}
             setData={this.setAllData}
             columns={columns}
             showPagination={false}
             showPageSizeOptions={false}
-            pageSize={cedulaData.length}
             sortable={false}
-            getTdProps={this.deleteRow}
+            rowObj={rowObj}
+            errorArray={errors}
+            checkForErrors={val => this.checkForErrors(val, 'cedulaTable')}
+            isCedula
           />
         <button className='new-row-button' onClick={this.addNewRow}>Añadir un renglón</button>
         </div>

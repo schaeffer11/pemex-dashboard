@@ -21,23 +21,23 @@ import { checkEmpty, checkDate } from '../../../../../lib/errorCheckers'
       errors: {
         propuestaCompany: {
           type: 'text',
-          values: '',
+          value: '',
         },
         tipoDeEstimulacion: {
           type: 'text',
-          values: '',
+          value: '',
         },
         tipoDeColocacion: {
           type: 'text',
-          values: '',
+          value: '',
         },
         tiempoDeContacto: {
           type: 'number',
-          values: '',
+          value: '',
         },
         cedulaTable: {
           type: 'table',
-          values: '',
+          value: '',
         },
       }
     }
@@ -379,26 +379,32 @@ import { checkEmpty, checkDate } from '../../../../../lib/errorCheckers'
         Header: 'Etapa',
         accessor: 'etapa',
       }, 
+      // {
+      //   Header: 'Sistema',
+      //   accessor: 'sistema',
+      //   width: 200,
+      //   resizable: false,
+      //   style: {overflow: 'visible'},
+      //   Cell: row => {
+      //     return (
+      //       <div>
+      //         <Select
+      //           placeholder='sistema'
+      //           className='input'
+      //           simpleValue={true}
+      //           options={sistemaOptions}
+      //           value={sistemaOptions.find(i=>i.value === row.original.sistema) || null}
+      //           onChange={(e) => this.handleSelect(row, e.value)}
+      //         />
+      //       </div>
+      //     )
+      //   }
+      // },
       {
         Header: 'Sistema',
         accessor: 'sistema',
-        width: 200,
-        resizable: false,
+        cell: 'renderSelect',
         style: {overflow: 'visible'},
-        Cell: row => {
-          return (
-            <div>
-              <Select
-                placeholder='sistema'
-                className='input'
-                simpleValue={true}
-                options={sistemaOptions}
-                value={sistemaOptions.find(i=>i.value === row.original.sistema) || null}
-                onChange={(e) => this.handleSelect(row, e.value)} 
-              />
-            </div>
-          )
-        }
       },
       {
         Header: 'Nombre Comercial',
@@ -463,6 +469,7 @@ import { checkEmpty, checkDate } from '../../../../../lib/errorCheckers'
           <InputTable
             className="-striped"
             data={cedulaData}
+            selectOptions={sistemaOptions}
             setData={this.setAllData}
             columns={columns}
             showPagination={false}
@@ -471,6 +478,7 @@ import { checkEmpty, checkDate } from '../../../../../lib/errorCheckers'
             rowObj={rowObj}
             errorArray={errors}
             checkForErrors={val => this.checkForErrors(val, 'cedulaTable')}
+            isCedula
           />
         </div>
       </div>
