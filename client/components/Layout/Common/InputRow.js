@@ -260,6 +260,8 @@ export const InputDate = ({ name, onChange, value, header, onBlur, errors }) => 
         onBlur={handleBlur}
         selected={objValue}
         locale="es-mx"
+        showMonthDropdown
+        showYearDropdown
       />
       {errors[name] && errors[name].value !== null && <div className="error">{errors[name].value}</div>}      
     </div>
