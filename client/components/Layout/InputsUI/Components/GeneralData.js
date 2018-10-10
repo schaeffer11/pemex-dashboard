@@ -177,7 +177,7 @@ import { checkEmpty, checkDate } from '../../../../lib/errorCheckers'
     let { objetivo, alcances, tipoDeIntervenciones, fechaProgramadaIntervencion, intervencionProgramada } = interventionFormData
     let { subdireccion, activo, campo, pozo, formacion } = formData
 
-    if (!!(objetivo) && !!(alcances) && !!(tipoDeIntervenciones) && !!(subdireccion) && !!(activo) && !!(campo) && !!(pozo) && !!(formacion) && !!(fechaProgramadaIntervencion) && !!(intervencionProgramada)) {
+    if (!!(objetivo) && !!(alcances) && !!(tipoDeIntervenciones) && !!(subdireccion) && !!(activo) && !!(campo) && !!(pozo) && !!(formacion) && !!(fechaProgramadaIntervencion) && intervencionProgramada !== '') {
       return false
     }
 
@@ -295,6 +295,17 @@ import { checkEmpty, checkDate } from '../../../../lib/errorCheckers'
       {label: 'KS', value: 'KS'},
       {label: 'Paleoceno', value: 'paleoceno'},
       {label: 'Eoceno', value: 'eoceno'},
+      {label: 'Mioceno', value: 'Mioceno'},
+      {label: 'Mioceno Inferior', value: 'Mioceno Inferior'},
+      {label: 'Mioceno Medio', value: 'Mioceno Medio'},
+      {label: 'Encanto', value: 'Encanto'},
+      {label: 'Concepción Inferior', value: 'Concepción Inferior'},
+      {label: 'Concepción Superior', value: 'Concepción Superior'},
+      {label: 'Filisola', value: 'Filisola'},
+      {label: 'CCE', value: 'CCE'},
+      {label: 'KS-KM-KI', value: 'KS-KM-KI'},
+      {label: 'KS-KM', value: 'KS-KM'},
+      {label: 'KM-KI', value: 'KM-KI'},
     ]
 
 
@@ -413,6 +424,7 @@ import { checkEmpty, checkDate } from '../../../../lib/errorCheckers'
       fetch(`api/getWell?transactionID=${transactionID}&saved=1`, headers).then(r => r.json()),
       fetch(`api/getHistIntervenciones?transactionID=${transactionID}&saved=1`, headers).then(r => r.json()),
       fetch(`api/getMecanico?transactionID=${transactionID}&saved=1`, headers).then(r => r.json()),
+      fetch(`api/getSurvey?transactionID=${transactionID}&saved=1`, headers).then(r => r.json()),
       fetch(`api/getAnalisisAgua?transactionID=${transactionID}&saved=1`, headers).then(r => r.json()),
       fetch(`api/getEmboloViajero?transactionID=${transactionID}&saved=1`, headers).then(r => r.json()),
       fetch(`api/getBombeoNeumatico?transactionID=${transactionID}&saved=1`, headers).then(r => r.json()),
@@ -454,6 +466,9 @@ import { checkEmpty, checkDate } from '../../../../lib/errorCheckers'
             })
           })
         })
+
+
+        
         setLoading({ 
           isLoading: false,
           showNotification: true,
