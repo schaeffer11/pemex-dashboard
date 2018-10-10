@@ -40,13 +40,21 @@ import { checkEmpty, checkDate } from '../../../../../lib/errorCheckers';
   }
 
   checkAllInputs(showErrors) {
-    let { formData } = this.props
+    let { formData, propuestaData } = this.props
     formData = formData.toJS()
+    propuestaData = propuestaData.toJS()
+    let { tipoDeEstimulacion } = propuestaData
     const { errors } = this.state
     let hasErrors = false
     let error 
 
-    Object.keys(errors).forEach(elem => {
+    let items = Object.keys(errors)
+
+    if (tipoDeEstimulacion === 'limpieza') {
+      items = []
+    }
+
+    items.forEach(elem => {
       const errObj = errors[elem]
 
       if (errObj.type === 'text' || errObj.type === 'number') {
@@ -68,11 +76,18 @@ import { checkEmpty, checkDate } from '../../../../../lib/errorCheckers';
   }
 
   updateErrors(errors) {
-    let { hasErrors, setHasErrorsResultadosSimulacionEstimulacion } = this.props
-
+    let { hasErrors, setHasErrorsResultadosSimulacionEstimulacion, propuestaData } = this.props
+    propuestaData = propuestaData.toJS()
+    let { tipoDeEstimulacion } = propuestaData
     let hasErrorNew = false
 
-    Object.keys(errors).forEach(key => {
+    let items = Object.keys(errors)
+
+    if (tipoDeEstimulacion === 'limpieza') {
+      items = []
+    }
+
+    items.forEach(key => {
       if (errors[key].value !== null){
         hasErrorNew = true
       } 

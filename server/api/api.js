@@ -1735,17 +1735,23 @@ router.get('/getCedulaEstimulacion', async (req, res) => {
     VOL_N2_ACUM: { child: 'volN2Acum' }, 
     REL_N2_LIQ: { child: 'relN2Liq' }, 
     TIEMPO: { child: 'tiempo' },
+    HAS_ERRORS: { child: 'error' },
   }
 
   const mainParent = 'propuestaEstimulacion'
   const innerParent = 'cedulaData'
 
   getCedulaEstimulacion(transactionID, action, (data) => {
+    console.log(data)
     let finalObj = {}
+    let error = false
     if (data && data.length > 0) {
       data.forEach((d, index) => {
+        d.HAS_ERRORS = d.HAS_ERRORS === 0 ? false : true
+        d.HAS_ERRORS === true ? error = true : null
         const innerObj = {}
         Object.keys(d).forEach(k => {
+          
           if (map[k]) {
             const { child } = map[k]
             objectPath.set(innerObj, child, d[k])
@@ -1756,6 +1762,7 @@ router.get('/getCedulaEstimulacion', async (req, res) => {
         objectPath.push(finalObj, `${mainParent}.${innerParent}`, innerObj)
       })
       finalObj['propuestaEstimulacion'].propuestaCompany = data[0].COMPANIA
+      finalObj.propuestaEstimulacion.hasErrors = error
     }
     else {
       finalObj = {
@@ -1794,6 +1801,7 @@ router.get('/getCedulaAcido', async (req, res) => {
     VOL_N2_ACUM: { child: 'volN2Acum' }, 
     REL_N2_LIQ: { child: 'relN2Liq' }, 
     TIEMPO: { child: 'tiempo' },
+    HAS_ERRORS: { child: 'error' },
   }
 
   const mainParent = 'propuestaAcido'
@@ -1801,8 +1809,11 @@ router.get('/getCedulaAcido', async (req, res) => {
 
   getCedulaAcido(transactionID, action, (data) => {
     let finalObj = {}
+    let error = false
     if (data && data.length > 0) {
       data.forEach((d, index) => {
+        d.HAS_ERRORS = d.HAS_ERRORS === 0 ? false : true
+        d.HAS_ERRORS === true ? error = true : null
         const innerObj = {}
         Object.keys(d).forEach(k => {
           if (map[k]) {
@@ -1815,6 +1826,7 @@ router.get('/getCedulaAcido', async (req, res) => {
         objectPath.push(finalObj, `${mainParent}.${innerParent}`, innerObj)
       })
       finalObj['propuestaAcido'].propuestaCompany = data[0].COMPANIA
+      finalObj.propuestaAcido.hasErrors = error
     }
     else {
       finalObj = {
@@ -1853,6 +1865,7 @@ router.get('/getCedulaApuntalado', async (req, res) => {
     VOL_N2_ACUM: { child: 'volN2Acum' }, 
     REL_N2_LIQ: { child: 'relN2Liq' }, 
     TIEMPO: { child: 'tiempo' },
+    HAS_ERRORS: { child: 'error' },
   }
 
   const mainParent = 'propuestaApuntalado'
@@ -1860,8 +1873,11 @@ router.get('/getCedulaApuntalado', async (req, res) => {
 
   getCedulaApuntalado(transactionID, action, (data) => {
     let finalObj = {}
+    let error = false
     if (data && data.length > 0) {
       data.forEach((d, index) => {
+        d.HAS_ERRORS = d.HAS_ERRORS === 0 ? false : true
+        d.HAS_ERRORS === true ? error = true : null
         const innerObj = {}
         Object.keys(d).forEach(k => {
           if (map[k]) {
@@ -1874,6 +1890,7 @@ router.get('/getCedulaApuntalado', async (req, res) => {
         objectPath.push(finalObj, `${mainParent}.${innerParent}`, innerObj)
       })
       finalObj['propuestaApuntalado'].propuestaCompany = data[0].COMPANIA
+      finalObj.propuestaApuntalado.hasErrors = error
     }
     else {
       finalObj = {
@@ -1902,7 +1919,8 @@ router.get('/getCosts', async (req, res) => {
     UNIT: { child: 'unit' },
     COST_MNX: { child: 'cost' }, 
     COST_DLS: { child: 'costDLS' },
-    MNXtoDLS: { child: 'MNXtoDLS'}
+    MNXtoDLS: { child: 'MNXtoDLS'},
+    HAS_ERRORS: { child: 'error' }
   }
 
   const mainParent = 'estCost'
@@ -1910,8 +1928,11 @@ router.get('/getCosts', async (req, res) => {
 
   getCosts(transactionID, action, (data) => {
     let finalObj = {}
+    let error = false
     if (data && data.length > 0) {
       data.forEach((d, index) => {
+        d.HAS_ERRORS = d.HAS_ERRORS === 0 ? false : true
+        d.HAS_ERRORS === true ? error = true : null
         const innerObj = {}
         Object.keys(d).forEach(k => {
           if (map[k]) {
@@ -1923,6 +1944,7 @@ router.get('/getCosts', async (req, res) => {
         objectPath.set(innerObj, 'index', index)
         objectPath.push(finalObj, `${mainParent}.${innerParent}`, innerObj)
       })
+      finalObj.estCost.hasErrors = error
     }
     else {
       finalObj = {

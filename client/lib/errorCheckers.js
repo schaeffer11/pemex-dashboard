@@ -6,7 +6,7 @@ export function checkEmpty(value, name, errors, onBlur, showErrors = true) {
   } 
 
   if (error && !showErrors) {
-    error = 'Blank Error'
+    error = ''
   }
   if(errors !== null) {
     errors[name].value = error
@@ -33,7 +33,7 @@ export function checkDate(value, name, errors, onBlur, showErrors = true) {
     error = 'La fecha no esta en el formato correcto'
   }
   if (error && !showErrors) {
-    error = 'Blank Error'
+    error = ''
   }
   if(errors !== null) {
     errors[name].value = error

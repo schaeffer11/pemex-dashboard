@@ -65,7 +65,7 @@ const propuestaEstimulacion = (state = initialState, action) => {
         return state.set('volumenDesplazamientoN2', fromJS(action.value))
     case 'set_volumenTotalDeLiquido':
         return state.set('volumenTotalDeLiquido', fromJS(action.value))
-    case 'set_cedulaData':
+    case 'set_cedulaDataEstimulacion':
         let newState = state.set('cedulaData', fromJS(action.cedula))
         if (action.volumes !== null) {
             newState = newState.mergeDeep(action.volumes)

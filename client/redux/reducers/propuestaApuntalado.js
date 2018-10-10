@@ -76,7 +76,7 @@ const propuestaApuntalado = (state = initialState, action) => {
         return state.set('densidadDeDisparos', fromJS(action.value))
     case 'set_diametroDeDisparos':
         return state.set('diametroDeDisparos', fromJS(action.value))
-    case 'set_cedulaData':
+    case 'set_cedulaDataApuntalado':
         let newState = state.set('cedulaData', fromJS(action.cedula))
         if (action.volumes !== null) {
             newState = newState.mergeDeep(action.volumes)

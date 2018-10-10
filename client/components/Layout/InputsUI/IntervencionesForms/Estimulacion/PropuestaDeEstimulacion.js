@@ -6,7 +6,7 @@ import { connect } from 'react-redux'
 
 import InputTable from '../../../Common/InputTable'
 import { InputRow, InputRowUnitless, InputRowSelectUnitless, CalculatedValue } from '../../../Common/InputRow'
-import { setHasErrorsPropuestaEstimulacion, setCedulaData, setIntervalo, setLongitudDeIntervalo, setVolAparejo, 
+import { setHasErrorsResultadosSimulacionEstimulacion, setHasErrorsPropuestaEstimulacion, setCedulaData, setIntervalo, setLongitudDeIntervalo, setVolAparejo, 
   setCapacidadTotalDelPozo, setVolumenPrecolchonN2, setVolumenSistemaNoReativo, setVolumenSistemaReactivo, 
   setVolumenSistemaDivergente, setVolumenDesplazamientoLiquido, setVolumenDesplazamientoN2, setVolumenTotalDeLiquido, 
   setPropuestaCompany, setTipoDeEstimulacion, setTipoDeColocacion, setTiempoDeContacto } from '../../../../../redux/actions/intervencionesEstimulacion'
@@ -63,11 +63,19 @@ import { checkEmpty, checkDate } from '../../../../../lib/errorCheckers'
   checkAllInputs(hasSubmitted) {
     let { formData } = this.props
     formData = formData.toJS()
+    let { tipoDeEstimulacion } = formData
+
     const { errors } = this.state
     let hasErrors = false
     let error 
 
-    Object.keys(errors).forEach(elem => {
+    let items = Object.keys(errors)
+    
+    if (tipoDeEstimulacion === 'matricial') {
+      items = items.filter(i => i !== 'tiempoDeContacto' && i !== 'tipoDeColocacion')
+    }
+
+    items.forEach(elem => {
       const errObj = errors[elem]
 
       if (errObj.type === 'text' || errObj.type === 'number') {
@@ -91,10 +99,18 @@ import { checkEmpty, checkDate } from '../../../../../lib/errorCheckers'
 
   updateErrors(errors) {
     let { hasErrors, setHasErrorsPropuestaEstimulacion } = this.props
-
+    let { formData } = this.props
+    formData = formData.toJS()
+    let { tipoDeEstimulacion } = formData
     let hasErrorNew = false
 
-    Object.keys(errors).forEach(key => {
+     let items = Object.keys(errors)
+    
+    if (tipoDeEstimulacion === 'matricial') {
+      items = items.filter(i => i !== 'tiempoDeContacto' && i !== 'tipoDeColocacion')
+    }
+
+    items.forEach(key => {
       if (errors[key].value !== null){
         hasErrorNew = true
       } 
@@ -118,7 +134,24 @@ import { checkEmpty, checkDate } from '../../../../../lib/errorCheckers'
   }
 
   handleSelectTipoDeEstimulacion(val) {
-    let { setTipoDeEstimulacion, setTipoDeColocacion, setTiempoDeContacto, } = this.props
+    let { setTipoDeEstimulacion, setTipoDeColocacion, setTiempoDeContacto, setHasErrorsResultadosSimulacionEstimulacion, resultsData } = this.props
+    resultsData = resultsData.toJS()
+
+    let { penetracionRadial, longitudDeAgujeroDeGusano } = resultsData
+
+
+
+    if (val === 'limpieza') {
+      setHasErrorsResultadosSimulacionEstimulacion(false)
+    }
+    else {
+      if (penetracionRadial.length > 0 && longitudDeAgujeroDeGusano.length > 0) {
+        setHasErrorsResultadosSimulacionEstimulacion(false)
+      }
+      else {
+        setHasErrorsResultadosSimulacionEstimulacion(true)
+      }
+    }
 
     setTipoDeEstimulacion(val)
     setTipoDeColocacion(null)
@@ -514,6 +547,7 @@ import { checkEmpty, checkDate } from '../../../../../lib/errorCheckers'
 
 const mapStateToProps = state => ({
   formData: state.get('propuestaEstimulacion'),
+  resultsData: state.get('resultadosSimulacionEstimulacion'),
   intervalos: state.getIn(['evaluacionPetrofisica', 'layerData']),
   hasErrors: state.getIn(['propuestaEstimulacion', 'hasErrors']),
   hasSubmitted: state.getIn(['global', 'hasSubmitted']),
@@ -537,6 +571,7 @@ const mapDispatchToProps = dispatch => ({
   setTipoDeColocacion: val => dispatch(setTipoDeColocacion(val)), 
   setTiempoDeContacto: val => dispatch(setTiempoDeContacto(val)),
   setHasErrorsPropuestaEstimulacion: val => dispatch(setHasErrorsPropuestaEstimulacion(val)),
+  setHasErrorsResultadosSimulacionEstimulacion: val => dispatch(setHasErrorsResultadosSimulacionEstimulacion(val)),
 })
 
 export default connect(mapStateToProps, mapDispatchToProps)(PropuestaDeEstimulacion) 

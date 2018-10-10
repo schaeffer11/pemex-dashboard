@@ -20,7 +20,7 @@ export const setDensidadDeDisparos = value => ({ type: 'set_densidadDeDisparos',
 export const setDiametroDeDisparos = value => ({ type: 'set_diametroDeDisparos', value})
 export const setPropuestaCompany = value => ({ type: 'set_propuestaCompany', value})
 export const setCedulaData = (cedula, volumes) => ({
-  type: 'set_cedulaData',
+  type: 'set_cedulaDataApuntalado',
   volumes,
   cedula: cedula.map((row) => {
     row.etapa = row.index + 1

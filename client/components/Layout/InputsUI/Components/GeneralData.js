@@ -85,7 +85,6 @@ import { sortLabels } from '../../../../lib/formatters'
   }
 
   checkIncomplete() {
-    return false
     let { interventionFormData, formData } = this.props
 
     interventionFormData = interventionFormData.toJS()

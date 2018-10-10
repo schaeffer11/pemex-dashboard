@@ -24,7 +24,7 @@ export const setTipoDeEstimulacion = value => ({ type: 'set_tipoDeEstimulacion',
 export const setTipoDeColocacion = value => ({ type: 'set_tipoDeColocacion', value})
 export const setTiempoDeContacto = value => ({ type: 'set_tiempoDeContacto', value})
 export const setCedulaData = (cedula, volumes) => ({
-  type: 'set_cedulaData',
+  type: 'set_cedulaDataEstimulacion',
   volumes,
   cedula: cedula.map((row) => {
     row.etapa = row.index + 1
