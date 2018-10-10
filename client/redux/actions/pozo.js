@@ -5,6 +5,10 @@ export const setActivo = value => ({ type: 'set_activo', value})
 export const setCampo = value => ({ type: 'set_campo', value})
 export const setPozo = value => ({ type: 'set_pozo', value})
 export const setFormacion = value => ({ type: 'set_formacion', value})
+export const setFechaProgramadaIntervencion = value => ({ type: 'set_fechaProgramadaIntervencion', value})
+export const setFromSaveFichaTecnicaHighLevel = value => ({ type: 'set_fromSaveFichaTecnicaHighLevel', value})
+export const setHasErrorsFichaTecnicaHighLevel = value => ({ type: 'set_hasErrorsFichaTecnicaHighLevel', value})
+export const setIntervencionProgramada = value => ({ type: 'set_intervencionProgramada', value})
 
 //FichaTecnicaDelCampo
 export const setDescubrimientoField = value => ({ type: 'set_descubrimientoField', value})
@@ -130,6 +134,7 @@ export const setVolumenDeEspacioAnular = value => ({ type: 'set_volumenDeEspacio
 export const setImgBoreDiagramURL = value => ({ type: 'set_imgBoreDiagramURL', value})
 export const setImgAparejoDeProduccionURL = value => ({ type: 'set_imgAparejoDeProduccionURL', value})
 export const setMecanicoYAparejoDeProduccion = value => ({ type: 'set_mecanicoYAparejoDeProduccion', value})
+export const setDesviacion = value => ({ type: 'set_desviacion', value })
 export const setHasErrorsMecanicoYAparejoDeProduccion = value => ({ type: 'set_hasErrorsMecanicoYAparejoDeProduccion', value})
 export const setFromSaveMecanicoYAparejoDeProduccion = value => ({ type: 'set_fromSaveMecanicoYAparejoDeProduccion', value})
 

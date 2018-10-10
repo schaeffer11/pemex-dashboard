@@ -1,9 +1,9 @@
 import { Map, fromJS } from 'immutable'
 
-const initialState = Map({ 
+const initialState = fromJS({ 
     hasErrors: true,
     fromSave: false,
-	tipoDeTerminacion: '',
+	  tipoDeTerminacion: '',
     hIntervaloProductor: '',
     empacador: '',
     presionDifEmpacador: '',
@@ -22,6 +22,15 @@ const initialState = Map({
     volumenDeEspacioAnular: '',
     imgAparejoDeProduccionURL: '',
     imgURL: null,
+    desviacion: [{
+      depth: '',
+      inclination: '',
+      azimuth: '',
+      trueVerticalDepth: '',
+      x_offset: '',
+      y_offset: '',
+      error: true,
+    }],
 })
 
 
@@ -74,9 +83,12 @@ const mecanicoYAparejoDeProduccion = (state = initialState, action) => {
     case 'set_mecanicoYAparejoDeProduccion':
         return state = fromJS(action.value)
     case 'set_forms_checked' :
-        if(action.form == 'mecanicoYAparejoDeProduccion')
+        if(action.form == 'mecanicoYAparejoDeProduccion') {
           return state.set('checked', fromJS(action.value))
+        }
         return state
+    case 'set_desviacion':
+        return state.set('desviacion', fromJS(action.value))
     default:
       return state
   }

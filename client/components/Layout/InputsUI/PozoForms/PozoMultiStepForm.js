@@ -297,9 +297,11 @@ const forms = [
     })
 
       let data = await fetch(`api/getMecanico?transactionID=${selectedTransaction}`, headers).then(r => r.json())
+      let deviationData = await fetch(`api/getSurvey?transactionID=${selectedTransaction}`, headers).then(r => r.json())
 
-      if (data && !data.err) {
+      if (data && !data.err && deviationData && !deviationData.err) {
         let newObj = data.mecanicoYAparejoDeProduccion
+        newObj.desviacion = deviationData.mecanicoYAparejoDeProduccion.desviacion
         newObj.fromSave = true
         setMecanicoYAparejoDeProduccion(newObj)
 
