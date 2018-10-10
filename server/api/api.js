@@ -331,7 +331,7 @@ router.get('/getHistIntervencionesEstimulacionNew', async (req, res) => {
     if (data && data.length > 0) {
       data.forEach((d, index) => {
         d.FECHA ? d.FECHA = d.FECHA.toJSON().slice(0, 10) : null
-        d.HAS_ERRORS = d.HAS_ERRORS === 0 ? false : true
+        d.HAS_ERRORS = d.HAS_ERRORS === 0 || d.HAS_ERRORS === null ? false : true
         const innerObj = {}
         Object.keys(d).forEach(k => {
           if (map[k]) {
@@ -562,11 +562,11 @@ router.get('/getHistIntervenciones', async (req, res) => {
 
   getHistIntervenciones(transactionID, action, (data) => {
     const finalObj = {}
-
     if (data && data.length > 0) {
+      console.log('my data', data)
       data.forEach((d, index) => {
         d.DATE ? d.DATE = d.DATE.toJSON().slice(0, 10) : null
-        d.HAS_ERRORS = d.HAS_ERRORS === 0 ? false : true
+        d.HAS_ERRORS = d.HAS_ERRORS === 0 || d.HAS_ERRORS === undefined ? false : true
         const innerObj = {}
         Object.keys(d).forEach(k => {
           if (map[k]) {

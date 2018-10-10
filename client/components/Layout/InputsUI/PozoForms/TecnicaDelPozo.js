@@ -113,15 +113,11 @@ import { setHasErrorsFichaTecnicaDelPozo, setTipoDeSistemo, setHistorialInterven
         'content-type': 'application/json',
       },
     }
-
     let hasErrors = this.checkAllInputs(hasSubmitted)
     setHasErrorsFichaTecnicaDelPozo(hasErrors)
-
-
      fetch('/api/getFieldWellMapping', headers)
       .then(r => r.json())
       .then(r => {
-
         this.setState({
           fieldWellOptions: r
         })
@@ -132,9 +128,11 @@ import { setHasErrorsFichaTecnicaDelPozo, setTipoDeSistemo, setHistorialInterven
     let { hasSubmitted, formData, setFromSaveFichaTecnicaDelPozo, setHasErrorsFichaTecnicaDelPozo } = this.props
     formData = formData.toJS()
     let { fromSave } = formData
-    
+    console.log('component did update', 'fromSave', fromSave, formData, 'hasSubmitted', hasSubmitted, prevProps.hasSubmitted)
     if (hasSubmitted !== prevProps.hasSubmitted || fromSave) {
-      let err = this.checkAllInputs(true)
+      console.log('prior', formData)
+      let err = this.checkAllInputs(true, formData)
+      console.log('updating tecnica del pozo', err, this.state.errors)
       setHasErrorsFichaTecnicaDelPozo(err)
       if (fromSave === true) {
         setFromSaveFichaTecnicaDelPozo(false)
@@ -142,9 +140,10 @@ import { setHasErrorsFichaTecnicaDelPozo, setTipoDeSistemo, setHistorialInterven
     }
   }
 
-  checkAllInputs(showErrors) {
+  checkAllInputs(showErrors, data=null) {
     let { formData } = this.props
     formData = formData.toJS()
+    formData = data !== null ? data : formData
     const { errors } = this.state
     let hasErrors = false
     let error 
@@ -333,6 +332,7 @@ import { setHasErrorsFichaTecnicaDelPozo, setTipoDeSistemo, setHistorialInterven
             errorArray={errors}
             checkForErrors={val => this.checkForErrors(val, 'historialDeIntervenciones')}
             hasSubmitted={hasSubmitted}
+            fromSave={historialIntervencionesData.fromSave}
           />
         </div>
       </div>

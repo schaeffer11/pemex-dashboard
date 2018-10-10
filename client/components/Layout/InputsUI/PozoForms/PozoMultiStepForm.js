@@ -200,7 +200,9 @@ const forms = [
     if (data && !data.err && !interventionData.err) {
       let newObj = data.fichaTecnicaDelPozo
       newObj.historialIntervencionesData = interventionData.fichaTecnicaDelPozo.historialIntervencionesData
-      setFromSaveFichaTecnicaDelPozo(true)
+      newObj.fromSave = true
+      console.log('official data', newObj)
+      // setFromSaveFichaTecnicaDelPozo(true)
       setFichaTecnicaDelPozo(newObj)
       setLoading({ 
         isLoading: false,

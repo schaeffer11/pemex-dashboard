@@ -33,8 +33,8 @@ import { checkDate, checkEmpty, checkEmptySingular, checkDateSingular } from '..
   }
 
   componentDidUpdate(prevProps) {
-    const { data } = this.props
-    if (prevProps.data.length !== data.length) {
+    const { data, fromSave } = this.props
+    if (prevProps.data.length !== data.length || fromSave) {
       this.initializeErrors()
     }
   }
@@ -170,6 +170,8 @@ import { checkDate, checkEmpty, checkEmptySingular, checkDateSingular } from '..
       }
     })
     if (typeof checkForErrors === 'function') {
+      console.log('setting my outerstate error', hasError)
+
       checkForErrors(hasError)
     }
   }
