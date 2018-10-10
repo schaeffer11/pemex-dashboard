@@ -11,11 +11,10 @@ import Subtabs from './Components/Subtabs'
 import { pagesPozo, pagesIntervenciones } from '../../../lib/maps'
 import BaseIntervenciones from './IntervencionesForms/BaseIntervenciones'
 import PozoMultiStepForm from './PozoForms/PozoMultiStepForm'
-import { setShowForms } from '../../../redux/actions/global'
 import { submitForm } from '../../../redux/actions/pozoFormActions'
 import Notification from '../Common/Notification'
 import Loading from '../Common/Loading'
-import { setHasSubmitted } from '../../../redux/actions/global'
+import { setHasSubmitted, setIsLoading } from '../../../redux/actions/global'
 
 @autobind class InputsUI extends Component {
   constructor(props) {
@@ -87,7 +86,7 @@ import { setHasSubmitted } from '../../../redux/actions/global'
       hasErrorsPropuestaEstimulacion, hasErrorsPropuestaApuntalado, hasErrorsPropuestaAcido, hasErrorsResultadosSimulacionAcido, 
       hasErrorsResultadosSimulacionEstimulacion, hasErrorsResultadosSimulacionApuntalado, hasErrorsEstIncProduccionAcido,
       hasErrorsEstIncProduccionEstimulacion, hasErrorsEstIncProduccionApuntalado, hasErrorsEstCosts, hasErrorsHistoricoDeProduccion,
-      setHasSubmitted, hasErrorsHistoricoDeAforos, hasErrorsSistemasArtificialesDeProduccion  } = this.props
+      setHasSubmitted, hasErrorsHistoricoDeAforos, hasErrorsSistemasArtificialesDeProduccion, setIsLoading } = this.props
 
 
     if (action === 'submit') {
@@ -117,6 +116,11 @@ import { setHasSubmitted } from '../../../redux/actions/global'
         this.setState({'error': ''})
       }
       else {
+        setIsLoading({
+          showNotification: true,
+          notificationType: 'error',
+          notificationText: 'Su información no se ha guardado. Hay campos que no pueden estar vacios.'
+        })
         console.log('there was an errror, im out')
       }
     }
@@ -350,6 +354,7 @@ const mapStateToProps = state => ({
 
 const mapDispatchToProps = dispatch => ({
   setHasSubmitted: val => dispatch(setHasSubmitted(val)),
+  setIsLoading: val => dispatch(setIsLoading(val)),
   submitPozoForm: (action, token, name) => {dispatch(submitForm(action, token, name))},
 })
 

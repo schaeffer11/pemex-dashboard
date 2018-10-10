@@ -290,7 +290,7 @@ router.get('/getFields', async (req, res) => {
         }
       })
 
-      finalObj.fichaTecnicaDelCampo.hasErrors = data[0].HAS_ERRORS === 0 ? false : true
+      finalObj.fichaTecnicaDelCampo.hasErrors = data[0].HAS_ERRORS === 0 || data[0].HAS_ERRORS === undefined ? false : true
       res.json(finalObj)
     }
     else {
@@ -535,7 +535,7 @@ router.get('/getWell', async (req, res) => {
           objectPath.set(finalObj, `${parent}.${child}`, data[0][key])
         }
       })
-      finalObj.fichaTecnicaDelPozo.hasErrors = data[0].HAS_ERRORS === 0 ? false : true
+      finalObj.fichaTecnicaDelPozo.hasErrors = data[0].HAS_ERRORS === 0 || data[0].HAS_ERRORS === undefined ? false : true
       res.json(finalObj)
     }
     else {
@@ -744,7 +744,7 @@ router.get('/getMecanico', async (req, res) => {
           objectPath.set(finalObj, `${parent}.${child}`, data[0][key])
         }
       })
-      finalObj.mecanicoYAparejoDeProduccion.hasErrors = data[0].HAS_ERRORS === 0 ? false : true
+      finalObj.mecanicoYAparejoDeProduccion.hasErrors = data[0].HAS_ERRORS === 0 || data[0].HAS_ERRORS === undefined ? false : true
       res.json(finalObj)
     }
     else {
@@ -792,7 +792,7 @@ router.get('/getAnalisisAgua', async (req, res) => {
           objectPath.set(finalObj, `${parent}.${child}`, data[0][key])
         }
       })
-      finalObj.analisisDelAgua.hasErrors = data[0].HAS_ERRORS === 0 ? false : true
+      finalObj.analisisDelAgua.hasErrors = data[0].HAS_ERRORS === 0 || data[0].HAS_ERRORS === undefined ? false : true
       finalObj.analisisDelAgua.waterAnalysisBool = data[0].WATER_ANALYSIS_BOOL === 0 ? false : true
       res.json(finalObj)
     }
@@ -823,7 +823,8 @@ router.get('/getEmboloViajero', async (req, res) => {
           objectPath.set(finalObj, `${parent}.${child}`, data[0][key])
         }
       })
-      finalObj.sistemasArtificialesDeProduccion.hasErrors = data[0].HAS_ERRORS === 0 ? false : true
+      // finalObj.sistemasArtificialesDeProduccion.hasErrors = data[0].HAS_ERRORS === 0 || data[0].HAS_ERRORS === undefined ? false : true
+      finalObj.sistemasArtificialesDeProduccion.hasErrors = true
       res.json(finalObj)   
     }
     else if (action === 'loadSave') {
@@ -865,7 +866,8 @@ router.get('/getBombeoNeumatico', async (req, res) => {
           objectPath.set(finalObj, `${parent}.${child}`, data[0][key])
         }
       })
-      finalObj.sistemasArtificialesDeProduccion.hasErrors = data[0].HAS_ERRORS === 0 ? false : true
+      // finalObj.sistemasArtificialesDeProduccion.hasErrors = data[0].HAS_ERRORS === 0 || data[0].HAS_ERRORS === undefined ? false : true
+      finalObj.sistemasArtificialesDeProduccion.hasErrors = true
       res.json(finalObj)   
     }
     else if (action === 'loadSave') {
@@ -908,7 +910,8 @@ router.get('/getBombeoHidraulico', async (req, res) => {
           objectPath.set(finalObj, `${parent}.${child}`, data[0][key])
         }
       })
-      finalObj.sistemasArtificialesDeProduccion.hasErrors = data[0].HAS_ERRORS === 0 ? false : true
+      // finalObj.sistemasArtificialesDeProduccion.hasErrors = data[0].HAS_ERRORS === 0 || data[0].HAS_ERRORS === undefined ? false : true
+      finalObj.sistemasArtificialesDeProduccion.hasErrors = true
       res.json(finalObj)   
     }
     else if (action === 'loadSave') {
@@ -953,7 +956,9 @@ router.get('/getBombeoCavidades', async (req, res) => {
           objectPath.set(finalObj, `${parent}.${child}`, data[0][key])
         }
       })
-      finalObj.sistemasArtificialesDeProduccion.hasErrors = data[0].HAS_ERRORS === 0 ? false : true
+      // finalObj.sistemasArtificialesDeProduccion.hasErrors = data[0].HAS_ERRORS === 0 || data[0].HAS_ERRORS === undefined ? false : true
+      finalObj.sistemasArtificialesDeProduccion.hasErrors = true
+
       res.json(finalObj)   
     }
     else if (action === 'loadSave') {
@@ -997,7 +1002,8 @@ router.get('/getBombeoElectrocentrifugo', async (req, res) => {
           objectPath.set(finalObj, `${parent}.${child}`, data[0][key])
         }
       })
-      finalObj.sistemasArtificialesDeProduccion.hasErrors = data[0].HAS_ERRORS === 0 ? false : true
+      // finalObj.sistemasArtificialesDeProduccion.hasErrors = data[0].HAS_ERRORS === 0 || data[0].HAS_ERRORS === undefined ? false : true
+      finalObj.sistemasArtificialesDeProduccion.hasErrors = true
       res.json(finalObj)   
     }
     else if (action === 'loadSave') {
@@ -1044,7 +1050,8 @@ router.get('/getBombeoMecanico', async (req, res) => {
           objectPath.set(finalObj, `${parent}.${child}`, data[0][key])
         }
       })
-      finalObj.sistemasArtificialesDeProduccion.hasErrors = data[0].HAS_ERRORS === 0 ? false : true
+      // finalObj.sistemasArtificialesDeProduccion.hasErrors = data[0].HAS_ERRORS === 0 || data[0].HAS_ERRORS === undefined ? false : true
+      finalObj.sistemasArtificialesDeProduccion.hasErrors = true
       res.json(finalObj)   
     }
     else if (action === 'loadSave') {
