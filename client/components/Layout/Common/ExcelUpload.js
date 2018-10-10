@@ -26,6 +26,7 @@ const parseJson = (data, headers) => {
     })
     elem.length = data.length
     elem.index = index
+    elem.error = false
     return elem
   })
 }
@@ -113,7 +114,6 @@ const getErrors = (data, headers) => {
   }
 
   deactivateModal() {
-    console.log('deactivating modal')
     this.setState({ modalIsOpen: false })
   }
 

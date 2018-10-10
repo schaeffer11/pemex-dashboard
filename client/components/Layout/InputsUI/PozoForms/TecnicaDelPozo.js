@@ -11,7 +11,7 @@ import { InputRow, InputRowUnitless, InputRowSelectUnitless, InputDate } from '.
 import { setHasErrorsFichaTecnicaDelPozo, setTipoDeSistemo, setHistorialIntervencionesData, setEspesorBruto, 
   setCaliza, setDolomia, setArcilla, setPorosidad, setPermeabilidad, setSw, setCaa, setCga, setTipoDePozo, 
   setPws, setPwf, setPwsFecha, setPwfFecha, setDeltaPPerMes, setTyac, setPvt, setAparejoDeProduccion, 
-  setProfEmpacador, setProfSensorPYT, setTipoDeSap, formData } from '../../../../redux/actions/pozo'
+  setProfEmpacador, setProfSensorPYT, setTipoDeSap, setFromSaveFichaTecnicaDelPozo } from '../../../../redux/actions/pozo'
 
 @autobind class TechnicaDelPozo extends Component {
   constructor(props) {
@@ -113,33 +113,34 @@ import { setHasErrorsFichaTecnicaDelPozo, setTipoDeSistemo, setHistorialInterven
         'content-type': 'application/json',
       },
     }
-
     let hasErrors = this.checkAllInputs(hasSubmitted)
     setHasErrorsFichaTecnicaDelPozo(hasErrors)
-
-
      fetch('/api/getFieldWellMapping', headers)
       .then(r => r.json())
       .then(r => {
-
         this.setState({
           fieldWellOptions: r
         })
     })
   }
 
-  componentWillReceiveProps(nextProps) {
-    let { hasSubmitted } = this.props
-
-    if (hasSubmitted !== nextProps.hasSubmitted) {
-      this.checkAllInputs(true)
+  componentDidUpdate(prevProps) {
+    let { hasSubmitted, formData, setFromSaveFichaTecnicaDelPozo, setHasErrorsFichaTecnicaDelPozo } = this.props
+    formData = formData.toJS()
+    let { fromSave } = formData
+    if (hasSubmitted !== prevProps.hasSubmitted || fromSave) {
+      let err = this.checkAllInputs(true, formData)
+      setHasErrorsFichaTecnicaDelPozo(err)
+      if (fromSave === true) {
+        setFromSaveFichaTecnicaDelPozo(false)
+      }
     }
   }
 
-
-  checkAllInputs(showErrors) {
+  checkAllInputs(showErrors, data=null) {
     let { formData } = this.props
     formData = formData.toJS()
+    formData = data !== null ? data : formData
     const { errors } = this.state
     let hasErrors = false
     let error 
@@ -276,7 +277,7 @@ import { setHasErrorsFichaTecnicaDelPozo, setTipoDeSistemo, setHistorialInterven
   makeHistoricalInterventionsInput() {
     let { setHistorialIntervencionesData, formData, hasSubmitted } = this.props
     formData = formData.toJS()
-    let { historialIntervencionesData } = formData
+    let { historialIntervencionesData, fromSave } = formData
 
     const columns = [
       {
@@ -328,6 +329,7 @@ import { setHasErrorsFichaTecnicaDelPozo, setTipoDeSistemo, setHistorialInterven
             errorArray={errors}
             checkForErrors={val => this.checkForErrors(val, 'historialDeIntervenciones')}
             hasSubmitted={hasSubmitted}
+            fromSave={fromSave}
           />
         </div>
       </div>
@@ -379,6 +381,7 @@ const mapDispatchToProps = dispatch => ({
   setTipoDeSistemo: val => dispatch(setTipoDeSistemo(val)),
   setHistorialIntervencionesData: val => dispatch(setHistorialIntervencionesData(val)),
   setHasErrorsFichaTecnicaDelPozo: val => dispatch(setHasErrorsFichaTecnicaDelPozo(val)),
+  setFromSaveFichaTecnicaDelPozo: val => dispatch(setFromSaveFichaTecnicaDelPozo(val)),
 })
 
 export default connect(mapStateToProps, mapDispatchToProps)(TechnicaDelPozo)

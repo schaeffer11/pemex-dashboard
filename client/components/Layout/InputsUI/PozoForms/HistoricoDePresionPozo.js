@@ -3,7 +3,7 @@ import { connect } from 'react-redux'
 import autobind from 'autobind-decorator'
 import ReactTable from 'react-table'
 
-import { setHasErrorsHistoricoDePressionPozo, setPresionDataPozo, setPressureDepthPozo, setChecked } from '../../../../redux/actions/pozo'
+import { setFromSaveHistoricoDePressionPozo, setHasErrorsHistoricoDePressionPozo, setPresionDataPozo, setPressureDepthPozo, setChecked } from '../../../../redux/actions/pozo'
 import InputTable from '../../Common/InputTable'
 import ExcelUpload from '../../Common/ExcelUpload'
 import { InputRow } from '../../Common/InputRow'
@@ -53,19 +53,17 @@ let columns = [
   }
 
 
-  componentDidMount(){
-    let { setHasErrorsHistoricoDePressionPozo, hasSubmitted } = this.props
-
-    let hasErrors = this.checkAllInputs(hasSubmitted)
-    setHasErrorsHistoricoDePressionPozo(hasErrors)
-
-  }
-
   componentDidUpdate(prevProps) {
-    let { hasSubmitted } = this.props
-
-    if (hasSubmitted !== prevProps.hasSubmitted) {
-      this.checkAllInputs(true)
+    let { hasSubmitted, formData, setFromSaveHistoricoDePressionPozo, setHasErrorsHistoricoDePressionPozo } = this.props
+    formData = formData.toJS()
+    let { fromSavePozo } = formData
+    
+    if (hasSubmitted !== prevProps.hasSubmitted || fromSavePozo) {
+      let err = this.checkAllInputs(true)
+      setHasErrorsHistoricoDePressionPozo(err)
+      if (fromSavePozo === true) {
+        setFromSaveHistoricoDePressionPozo(false)
+      }
     }
   }
 
@@ -123,11 +121,9 @@ let columns = [
     this.setState({ errors: errorsCopy }, () => {
       const { setHasErrorsHistoricoDePressionPozo } = this.props
       const hasErrors = this.checkAllInputs()
-      console.log('has errors', hasErrors)
       setHasErrorsHistoricoDePressionPozo(hasErrors)
     })
   }
-  
 
   addNewRow() {
     let { formData, setPresionDataPozo } = this.props
@@ -164,7 +160,7 @@ let columns = [
   makeHistoricoDePresionTable() {
     let { formData, setPresionDataPozo, hasSubmitted } = this.props
     formData = formData.toJS()
-    let { presionDataPozo } = formData
+    let { presionDataPozo, fromSavePozo } = formData
     console.log('hola', presionDataPozo)
     const rowObj = {
       fecha: null,
@@ -192,6 +188,7 @@ let columns = [
             errorArray={errors}
             checkForErrors={this.checkForErrors}
             hasSubmitted={hasSubmitted}
+            fromSave={fromSavePozo}
           />
         </div>
       </div>
@@ -236,6 +233,7 @@ const mapDispatchToProps = dispatch => ({
     setChecked: val => dispatch(setChecked(val, 'historicoDePresion')),
     setPressureDepthPozo: val => dispatch(setPressureDepthPozo(val)),
     setHasErrorsHistoricoDePressionPozo: val => dispatch(setHasErrorsHistoricoDePressionPozo(val)),
+    setFromSaveHistoricoDePressionPozo: val => dispatch(setFromSaveHistoricoDePressionPozo(val)),
 })
 
 export default connect(mapStateToProps, mapDispatchToProps)(HistoricoDePresionPozo)

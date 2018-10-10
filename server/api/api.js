@@ -290,7 +290,7 @@ router.get('/getFields', async (req, res) => {
         }
       })
 
-      finalObj.fichaTecnicaDelCampo.hasErrors = data[0].HAS_ERRORS === 0 ? false : true
+      finalObj.fichaTecnicaDelCampo.hasErrors = data[0].HAS_ERRORS === 0 || data[0].HAS_ERRORS === undefined ? false : true
       res.json(finalObj)
     }
     else {
@@ -331,7 +331,7 @@ router.get('/getHistIntervencionesEstimulacionNew', async (req, res) => {
     if (data && data.length > 0) {
       data.forEach((d, index) => {
         d.FECHA ? d.FECHA = d.FECHA.toJSON().slice(0, 10) : null
-        d.HAS_ERRORS = d.HAS_ERRORS === 0 ? false : true
+        d.HAS_ERRORS = d.HAS_ERRORS === 0 || d.HAS_ERRORS === undefined || d.HAS_ERRORS === null ? false : true
         const innerObj = {}
         Object.keys(d).forEach(k => {
           if (map[k]) {
@@ -393,7 +393,7 @@ router.get('/getHistIntervencionesAcidoNew', async (req, res) => {
     if (data && data.length > 0) {
       data.forEach((d, index) => {
         d.FECHA ? d.FECHA = d.FECHA.toJSON().slice(0, 10) : null
-        d.HAS_ERRORS = d.HAS_ERRORS === 0 ? false : true
+        d.HAS_ERRORS = d.HAS_ERRORS === 0 || d.HAS_ERRORS === undefined ? false : true
         const innerObj = {}
         Object.keys(d).forEach(k => {
           if (map[k]) {
@@ -456,7 +456,7 @@ router.get('/getHistIntervencionesApuntaladoNew', async (req, res) => {
     if (data && data.length > 0) {
       data.forEach((d, index) => {
         d.FECHA ? d.FECHA = d.FECHA.toJSON().slice(0, 10) : null
-        d.HAS_ERRORS = d.HAS_ERRORS === 0 ? false : true
+        d.HAS_ERRORS = d.HAS_ERRORS === 0 || d.HAS_ERRORS === undefined ? false : true
         const innerObj = {}
         Object.keys(d).forEach(k => {
           if (map[k]) {
@@ -535,7 +535,7 @@ router.get('/getWell', async (req, res) => {
           objectPath.set(finalObj, `${parent}.${child}`, data[0][key])
         }
       })
-      finalObj.fichaTecnicaDelPozo.hasErrors = data[0].HAS_ERRORS === 0 ? false : true
+      finalObj.fichaTecnicaDelPozo.hasErrors = data[0].HAS_ERRORS === 0 || data[0].HAS_ERRORS === undefined ? false : true
       res.json(finalObj)
     }
     else {
@@ -562,11 +562,11 @@ router.get('/getHistIntervenciones', async (req, res) => {
 
   getHistIntervenciones(transactionID, action, (data) => {
     const finalObj = {}
-
     if (data && data.length > 0) {
+      console.log('my data', data)
       data.forEach((d, index) => {
         d.DATE ? d.DATE = d.DATE.toJSON().slice(0, 10) : null
-        d.HAS_ERRORS = d.HAS_ERRORS === 0 ? false : true
+        d.HAS_ERRORS = d.HAS_ERRORS === 0 || d.HAS_ERRORS === undefined || d.HAS_ERRORS === undefined ? false : true
         const innerObj = {}
         Object.keys(d).forEach(k => {
           if (map[k]) {
@@ -626,7 +626,7 @@ router.get('/getLayer', async (req, res) => {
     const finalObj = {}
     if (data && data.length > 0) {
       data.forEach((d, index) => {
-        d.HAS_ERRORS = d.HAS_ERRORS === 0 ? false : true
+        d.HAS_ERRORS = d.HAS_ERRORS === 0 || d.HAS_ERRORS === undefined ? false : true
         const innerObj = {}
         Object.keys(d).forEach(k => {
           if (map[k]) {
@@ -678,7 +678,7 @@ router.get('/getMudLoss', async (req, res) => {
     const finalObj = {}
     if (data && data.length > 0) {
       data.forEach((d, index) => {
-        d.HAS_ERRORS = d.HAS_ERRORS === 0 ? false : true
+        d.HAS_ERRORS = d.HAS_ERRORS === 0 || d.HAS_ERRORS === undefined ? false : true
         const innerObj = {}
         Object.keys(d).forEach(k => {
           if (map[k]) {
@@ -744,7 +744,7 @@ router.get('/getMecanico', async (req, res) => {
           objectPath.set(finalObj, `${parent}.${child}`, data[0][key])
         }
       })
-      finalObj.mecanicoYAparejoDeProduccion.hasErrors = data[0].HAS_ERRORS === 0 ? false : true
+      finalObj.mecanicoYAparejoDeProduccion.hasErrors = data[0].HAS_ERRORS === 0 || data[0].HAS_ERRORS === undefined ? false : true
       res.json(finalObj)
     }
     else {
@@ -792,7 +792,7 @@ router.get('/getAnalisisAgua', async (req, res) => {
           objectPath.set(finalObj, `${parent}.${child}`, data[0][key])
         }
       })
-      finalObj.analisisDelAgua.hasErrors = data[0].HAS_ERRORS === 0 ? false : true
+      finalObj.analisisDelAgua.hasErrors = data[0].HAS_ERRORS === 0 || data[0].HAS_ERRORS === undefined ? false : true
       finalObj.analisisDelAgua.waterAnalysisBool = data[0].WATER_ANALYSIS_BOOL === 0 ? false : true
       res.json(finalObj)
     }
@@ -823,7 +823,8 @@ router.get('/getEmboloViajero', async (req, res) => {
           objectPath.set(finalObj, `${parent}.${child}`, data[0][key])
         }
       })
-      finalObj.sistemasArtificialesDeProduccion.hasErrors = data[0].HAS_ERRORS === 0 ? false : true
+      // finalObj.sistemasArtificialesDeProduccion.hasErrors = data[0].HAS_ERRORS === 0 || data[0].HAS_ERRORS === undefined ? false : true
+      finalObj.sistemasArtificialesDeProduccion.hasErrors = true
       res.json(finalObj)   
     }
     else if (action === 'loadSave') {
@@ -865,7 +866,8 @@ router.get('/getBombeoNeumatico', async (req, res) => {
           objectPath.set(finalObj, `${parent}.${child}`, data[0][key])
         }
       })
-      finalObj.sistemasArtificialesDeProduccion.hasErrors = data[0].HAS_ERRORS === 0 ? false : true
+      // finalObj.sistemasArtificialesDeProduccion.hasErrors = data[0].HAS_ERRORS === 0 || data[0].HAS_ERRORS === undefined ? false : true
+      finalObj.sistemasArtificialesDeProduccion.hasErrors = true
       res.json(finalObj)   
     }
     else if (action === 'loadSave') {
@@ -908,7 +910,8 @@ router.get('/getBombeoHidraulico', async (req, res) => {
           objectPath.set(finalObj, `${parent}.${child}`, data[0][key])
         }
       })
-      finalObj.sistemasArtificialesDeProduccion.hasErrors = data[0].HAS_ERRORS === 0 ? false : true
+      // finalObj.sistemasArtificialesDeProduccion.hasErrors = data[0].HAS_ERRORS === 0 || data[0].HAS_ERRORS === undefined ? false : true
+      finalObj.sistemasArtificialesDeProduccion.hasErrors = true
       res.json(finalObj)   
     }
     else if (action === 'loadSave') {
@@ -953,7 +956,9 @@ router.get('/getBombeoCavidades', async (req, res) => {
           objectPath.set(finalObj, `${parent}.${child}`, data[0][key])
         }
       })
-      finalObj.sistemasArtificialesDeProduccion.hasErrors = data[0].HAS_ERRORS === 0 ? false : true
+      // finalObj.sistemasArtificialesDeProduccion.hasErrors = data[0].HAS_ERRORS === 0 || data[0].HAS_ERRORS === undefined ? false : true
+      finalObj.sistemasArtificialesDeProduccion.hasErrors = true
+
       res.json(finalObj)   
     }
     else if (action === 'loadSave') {
@@ -997,7 +1002,8 @@ router.get('/getBombeoElectrocentrifugo', async (req, res) => {
           objectPath.set(finalObj, `${parent}.${child}`, data[0][key])
         }
       })
-      finalObj.sistemasArtificialesDeProduccion.hasErrors = data[0].HAS_ERRORS === 0 ? false : true
+      // finalObj.sistemasArtificialesDeProduccion.hasErrors = data[0].HAS_ERRORS === 0 || data[0].HAS_ERRORS === undefined ? false : true
+      finalObj.sistemasArtificialesDeProduccion.hasErrors = true
       res.json(finalObj)   
     }
     else if (action === 'loadSave') {
@@ -1044,7 +1050,8 @@ router.get('/getBombeoMecanico', async (req, res) => {
           objectPath.set(finalObj, `${parent}.${child}`, data[0][key])
         }
       })
-      finalObj.sistemasArtificialesDeProduccion.hasErrors = data[0].HAS_ERRORS === 0 ? false : true
+      // finalObj.sistemasArtificialesDeProduccion.hasErrors = data[0].HAS_ERRORS === 0 || data[0].HAS_ERRORS === undefined ? false : true
+      finalObj.sistemasArtificialesDeProduccion.hasErrors = true
       res.json(finalObj)   
     }
     else if (action === 'loadSave') {
@@ -1081,7 +1088,7 @@ router.get('/getFieldPressure', async (req, res) => {
     if (data && data.length > 0) {
       data.forEach((d, index) => {
         d.FECHA ? d.FECHA = d.FECHA.toJSON().slice(0, 10) : null
-        d.HAS_ERRORS = d.HAS_ERRORS === 0 ? false : true
+        d.HAS_ERRORS = d.HAS_ERRORS === 0 || d.HAS_ERRORS === undefined ? false : true
         const innerObj = {}
         Object.keys(d).forEach(k => {
           if (map[k]) {
@@ -1136,7 +1143,7 @@ router.get('/getWellPressure', async (req, res) => {
     if (data && data.length > 0) {
       data.forEach((d, index) => {
         d.FECHA ? d.FECHA = d.FECHA.toJSON().slice(0, 10) : null
-        d.HAS_ERRORS = d.HAS_ERRORS === 0 ? false : true
+        d.HAS_ERRORS = d.HAS_ERRORS === 0 || d.HAS_ERRORS === undefined ? false : true
         const innerObj = {}
         Object.keys(d).forEach(k => {
           if (map[k]) {
@@ -1204,7 +1211,7 @@ router.get('/getWellAforos', async (req, res) => {
     if (data && data.length > 0) {
       data.forEach((d, index) => {
         d.FECHA ? d.FECHA = d.FECHA.toJSON().slice(0, 10) : null
-        d.HAS_ERRORS = d.HAS_ERRORS === 0 ? false : true
+        d.HAS_ERRORS = d.HAS_ERRORS === 0 || d.HAS_ERRORS === undefined ? false : true
         d.HAS_ERRORS === true ? error = true : null
         const innerObj = {}
         Object.keys(d).forEach(k => {
@@ -1262,7 +1269,7 @@ router.get('/getWellProduccion', async (req, res) => {
     if (data && data.length > 0) {
       data.forEach((d, index) => {
         d.Fecha ? d.Fecha = d.Fecha.toJSON().slice(0, 10) : null
-        d.HAS_ERRORS = d.HAS_ERRORS === 0 ? false : true
+        d.HAS_ERRORS = d.HAS_ERRORS === 0 || d.HAS_ERRORS === undefined ? false : true
         d.HAS_ERRORS === true ? error = true : null
         const innerObj = {}
         Object.keys(d).forEach(k => {
@@ -1747,7 +1754,7 @@ router.get('/getCedulaEstimulacion', async (req, res) => {
     let error = false
     if (data && data.length > 0) {
       data.forEach((d, index) => {
-        d.HAS_ERRORS = d.HAS_ERRORS === 0 ? false : true
+        d.HAS_ERRORS = d.HAS_ERRORS === 0 || d.HAS_ERRORS === undefined ? false : true
         d.HAS_ERRORS === true ? error = true : null
         const innerObj = {}
         Object.keys(d).forEach(k => {
@@ -1812,7 +1819,7 @@ router.get('/getCedulaAcido', async (req, res) => {
     let error = false
     if (data && data.length > 0) {
       data.forEach((d, index) => {
-        d.HAS_ERRORS = d.HAS_ERRORS === 0 ? false : true
+        d.HAS_ERRORS = d.HAS_ERRORS === 0 || d.HAS_ERRORS === undefined ? false : true
         d.HAS_ERRORS === true ? error = true : null
         const innerObj = {}
         Object.keys(d).forEach(k => {
@@ -1876,7 +1883,7 @@ router.get('/getCedulaApuntalado', async (req, res) => {
     let error = false
     if (data && data.length > 0) {
       data.forEach((d, index) => {
-        d.HAS_ERRORS = d.HAS_ERRORS === 0 ? false : true
+        d.HAS_ERRORS = d.HAS_ERRORS === 0 || d.HAS_ERRORS === undefined ? false : true
         d.HAS_ERRORS === true ? error = true : null
         const innerObj = {}
         Object.keys(d).forEach(k => {
@@ -1931,7 +1938,7 @@ router.get('/getCosts', async (req, res) => {
     let error = false
     if (data && data.length > 0) {
       data.forEach((d, index) => {
-        d.HAS_ERRORS = d.HAS_ERRORS === 0 ? false : true
+        d.HAS_ERRORS = d.HAS_ERRORS === 0 || d.HAS_ERRORS === undefined ? false : true
         d.HAS_ERRORS === true ? error = true : null
         const innerObj = {}
         Object.keys(d).forEach(k => {

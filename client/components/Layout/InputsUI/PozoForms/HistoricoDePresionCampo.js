@@ -3,7 +3,7 @@ import { connect } from 'react-redux'
 import autobind from 'autobind-decorator'
 import ReactTable from 'react-table'
 
-import { setHasErrorsHistoricoDePressionCampo, setPresionDataCampo, setPressureDepthCampo, setChecked } from '../../../../redux/actions/pozo'
+import { setFromSaveHistoricoDePressionCampo, setHasErrorsHistoricoDePressionCampo, setPresionDataCampo, setPressureDepthCampo, setChecked } from '../../../../redux/actions/pozo'
 import InputTable from '../../Common/InputTable'
 import ExcelUpload from '../../Common/ExcelUpload'
 import { InputRow } from '../../Common/InputRow'
@@ -57,10 +57,16 @@ let columns = [
   }
 
   componentDidUpdate(prevProps) {
-    let { hasSubmitted } = this.props
-
-    if (hasSubmitted !== prevProps.hasSubmitted) {
-      this.checkAllInputs(true)
+    let { hasSubmitted, formData, setFromSaveHistoricoDePressionCampo, setHasErrorsHistoricoDePressionCampo } = this.props
+    formData = formData.toJS()
+    let { fromSaveCampo } = formData
+    
+    if (hasSubmitted !== prevProps.hasSubmitted || fromSaveCampo) {
+      let err = this.checkAllInputs(true)
+      setHasErrorsHistoricoDePressionCampo(err)
+      if (fromSaveCampo === true) {
+        setFromSaveHistoricoDePressionCampo(false)
+      }
     }
   }
 
@@ -127,7 +133,7 @@ let columns = [
   makeHistoricoDePresionTable() {
     let { formData, setPresionDataCampo, hasSubmitted } = this.props
     formData = formData.toJS()
-    let { presionDataCampo } = formData
+    let { presionDataCampo, fromSaveCampo } = formData
     const rowObj = {
       fecha: null,
       Pws: '',
@@ -153,6 +159,7 @@ let columns = [
             errorArray={errors}
             checkForErrors={this.checkForErrors}
             hasSubmitted={hasSubmitted}
+            fromSave={fromSaveCampo}
           />
         </div>
       </div>
@@ -201,6 +208,7 @@ const mapDispatchToProps = dispatch => ({
     setChecked: val => dispatch(setChecked(val, 'historicoDePresion')),
     setPressureDepthCampo: val => dispatch(setPressureDepthCampo(val)),
     setHasErrorsHistoricoDePressionCampo: val => dispatch(setHasErrorsHistoricoDePressionCampo(val)),
+    setFromSaveHistoricoDePressionCampo: val => dispatch(setFromSaveHistoricoDePressionCampo(val)),
 })
 
 

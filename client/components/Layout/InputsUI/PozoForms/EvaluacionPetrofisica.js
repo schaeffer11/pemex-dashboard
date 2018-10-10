@@ -1,7 +1,7 @@
 import React, { Component } from 'react'
 import autobind from 'autobind-decorator'
 import { connect } from 'react-redux'
-import { setImgURL, setLayerData, setMudLossData, setHasErrorsEvaluacionPetrofisica } from '../../../../redux/actions/pozo'
+import { setFromSaveEvaluacionPetrofisica, setImgURL, setLayerData, setMudLossData, setHasErrorsEvaluacionPetrofisica } from '../../../../redux/actions/pozo'
 import InputTable from '../../Common/InputTable'
 
 let layerColumns = [
@@ -117,10 +117,16 @@ let mudLossColumns = [
   }
 
   componentDidUpdate(prevProps) {
-    let { hasSubmitted } = this.props
-
-    if (hasSubmitted !== prevProps.hasSubmitted) {
-      this.checkAllInputs()
+    let { hasSubmitted, formData, setFromSaveEvaluacionPetrofisica, setHasErrorsEvaluacionPetrofisica } = this.props
+    formData = formData.toJS()
+    let { fromSave } = formData
+    
+    if (hasSubmitted !== prevProps.hasSubmitted || fromSave) {
+      let err = this.checkAllInputs(true)
+      setHasErrorsEvaluacionPetrofisica(err)
+      if (fromSave === true) {
+        setFromSaveEvaluacionPetrofisica(false)
+      }
     }
   }
 
@@ -165,7 +171,7 @@ let mudLossColumns = [
   makeLayerTable() {
     let { setLayerData, formData, hasSubmitted } = this.props
     formData = formData.toJS()
-    let { layerData } = formData
+    let { layerData, fromSave } = formData
     const rowObj = {
       cimaMD: '',
       baseMD: '',
@@ -207,6 +213,7 @@ let mudLossColumns = [
             errorArray={errors}
             checkForErrors={val => this.checkForErrors(val, 'layerTable')}
             hasSubmitted={hasSubmitted}
+            fromSave={fromSave}
           />
         </div>
       </div>
@@ -216,7 +223,7 @@ let mudLossColumns = [
   makeMudLossTable() {
     let { setMudLossData, formData, hasSubmitted } = this.props
     formData = formData.toJS()
-    let { mudLossData } = formData
+    let { mudLossData, fromSave } = formData
     const rowObj = {
       cimaMD: '',
       baseMD: '',
@@ -248,6 +255,7 @@ let mudLossColumns = [
             rowObj={rowObj}
             checkForErrors={val => this.checkForErrors(val, 'mudTable')}
             hasSubmitted={hasSubmitted}
+            fromSave={fromSave}
           />
         </div>
       </div>
@@ -303,6 +311,7 @@ const mapDispatchToProps = dispatch => ({
   setLayerData: val => dispatch(setLayerData(val)),
   setMudLossData: val => dispatch(setMudLossData(val)),
   setHasErrorsEvaluacionPetrofisica: val => dispatch(setHasErrorsEvaluacionPetrofisica(val)),
+  setFromSaveEvaluacionPetrofisica: val => dispatch(setFromSaveEvaluacionPetrofisica(val)),
 })
 
 

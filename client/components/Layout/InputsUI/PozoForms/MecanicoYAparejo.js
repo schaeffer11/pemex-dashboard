@@ -4,7 +4,7 @@ import { List, Map, is } from 'immutable'
 import { connect } from 'react-redux'
 
 import { InputRow, InputRowUnitless, InputRowSelectUnitless } from '../../Common/InputRow'
-import { setHasErrorsMecanicoYAparejoDeProduccion, setTipoDeTerminacion, setHIntervaloProductor, setEmpacador, 
+import { setFromSaveMecanicoYAparejoDeProduccion, setHasErrorsMecanicoYAparejoDeProduccion, setTipoDeTerminacion, setHIntervaloProductor, setEmpacador, 
   setPresionDifEmpacador, setSensorPyt, setTipoDeLiner, setDiametroDeLiner, setTipoDePistolas, setDensidadDeDisparosMecanico, 
   setFase, setDiametroDeOrificio, setPenetracion, setTipoDeSAP, setTratamientoPor, setVolumenAparejoDeProduccion, 
   setVolumenCimaDeIntervalo, setVolumenBaseDeIntervalo, setVolumenDeEspacioAnular, setImgBoreDiagramURL, 
@@ -120,11 +120,17 @@ let tratamientoPorOptions = [
     setHasErrorsMecanicoYAparejoDeProduccion(hasErrors)
   }
 
-  componentWillReceiveProps(nextProps) {
-    let { hasSubmitted } = this.props
-
-    if (hasSubmitted !== nextProps.hasSubmitted) {
-      this.checkAllInputs(true)
+  componentDidUpdate(prevProps) {
+    let { hasSubmitted, formData, setFromSaveMecanicoYAparejoDeProduccion, setHasErrorsMecanicoYAparejoDeProduccion } = this.props
+    formData = formData.toJS()
+    let { fromSave } = formData
+    
+    if (hasSubmitted !== prevProps.hasSubmitted || fromSave) {
+      let err = this.checkAllInputs(true)
+      setHasErrorsMecanicoYAparejoDeProduccion(err)
+      if (fromSave === true) {
+        setFromSaveMecanicoYAparejoDeProduccion(false)
+      }
     }
   }
 
@@ -346,6 +352,7 @@ const mapDispatchToProps = dispatch => ({
   setImgBoreDiagramURL: val => dispatch(setImgBoreDiagramURL(val)),
   setImgAparejoDeProduccionURL: val => dispatch(setImgAparejoDeProduccionURL(val)),
   setHasErrorsMecanicoYAparejoDeProduccion: val => dispatch(setHasErrorsMecanicoYAparejoDeProduccion(val)),
+  setFromSaveMecanicoYAparejoDeProduccion: val => dispatch(setFromSaveMecanicoYAparejoDeProduccion(val)),
 })
 
 

@@ -24,6 +24,7 @@ const global = (state = initialState, action) => {
     case 'set_currentPage':
       return state.set('currentPage', action.value)
     case 'set_isLoading':
+      console.log('setting some loading stuff', action.obj)
       return state.mergeDeep(fromJS(action.obj))
     case 'reset_notification':
       return state.set('showNotification', false)

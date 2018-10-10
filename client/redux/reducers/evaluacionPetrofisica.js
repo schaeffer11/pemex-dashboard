@@ -2,6 +2,7 @@ import { Map, fromJS } from 'immutable'
 
 const initialState = fromJS({
     hasErrors: true,
+    fromSave: false,
     layerData: [{
         index: 0,
         interval: 1,
@@ -34,6 +35,8 @@ const evaluacionPetrofisica = (state = initialState, action) => {
   switch (action.type) {
     case 'set_hasErrorsEvaluacionPetrofisica':
       return state.set('hasErrors', fromJS(action.value))
+    case 'set_fromSaveEvaluacionPetrofisica':
+      return state.set('fromSave', fromJS(action.value))
     case 'set_layerData':
         return state.set('layerData', fromJS(action.value))
     case 'set_mudLossData':

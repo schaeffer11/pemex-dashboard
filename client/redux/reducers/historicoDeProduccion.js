@@ -3,6 +3,7 @@ import { Map, fromJS } from 'immutable'
 
 const initialState = fromJS({
     hasErrors: true,
+    fromSave: false,
     produccionData: [{
         fecha: null,
         dias: '',
@@ -29,6 +30,8 @@ const historicoDeProduccion = (state = initialState, action) => {
   switch (action.type) {
     case 'set_hasErrorsHistoricoDeProduccion':
       return state.set('hasErrors', fromJS(action.value))
+    case 'set_fromSaveHistoricoDeProduccion':
+      return state.set('fromSave', fromJS(action.value))
     case 'set_produccionData':
         return state.set('produccionData', fromJS(action.value))
     case 'set_historicoProduccion':

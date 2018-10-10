@@ -29,7 +29,19 @@ import { checkDate, checkEmpty, checkEmptySingular, checkDateSingular } from '..
   }
 
   componentDidMount() {
-    const { errorArray, data, hasSubmitted } = this.props
+    this.initializeErrors()
+  }
+
+  componentDidUpdate(prevProps) {
+    const { data, fromSave } = this.props
+    console.log('table is updating', fromSave, data)
+    if (prevProps.data.length !== data.length || fromSave) {
+      this.initializeErrors()
+    }
+  }
+
+  initializeErrors() {
+    const { errorArray, data } = this.props
     let errors = []
     let properRow = {}
     if (errorArray) {
@@ -93,7 +105,7 @@ import { checkDate, checkEmpty, checkEmptySingular, checkDateSingular } from '..
     const name = cellInfo.column.id
     const value = data[cellInfo.index][cellInfo.column.id]
     let style = { }
-    if(rowError !== null && rowError[name] !== undefined && rowError[name].value !== null) {
+    if(rowError && rowError[name] !== undefined && rowError[name].value !== null) {
       style.border = 'solid 2px red'
     }
     return (
@@ -129,7 +141,7 @@ import { checkDate, checkEmpty, checkEmptySingular, checkDateSingular } from '..
     const { rowError } = this.getErrors(cellInfo.index)
   
     let style = {}
-    if (rowError !== null && rowError[name] !== undefined && rowError[name].value !== null) {
+    if (rowError && rowError[name] !== undefined && rowError[name].value !== null) {
       style.border = 'solid 2px red'
     }
 
@@ -152,13 +164,15 @@ import { checkDate, checkEmpty, checkEmptySingular, checkDateSingular } from '..
 
   setOuterStateError() {
     let { data, checkForErrors } = this.props
-    let hasError = null 
+    let hasError = null
     data.forEach(row => {
       if (row.error === true) {
         hasError = true
       }
     })
     if (typeof checkForErrors === 'function') {
+      console.log('setting my outerstate error', hasError)
+
       checkForErrors(hasError)
     }
   }
@@ -189,7 +203,7 @@ import { checkDate, checkEmpty, checkEmptySingular, checkDateSingular } from '..
     const name = cellInfo.column.id
     const value = data[cellInfo.index][cellInfo.column.id]
     let style = { }
-    if(rowError !== null && rowError[name] !== undefined && rowError[name].value !== null) {
+    if(rowError && rowError[name] !== undefined && rowError[name].value !== null) {
       style.border = 'solid 2px red'
     }
     return (
@@ -214,7 +228,7 @@ import { checkDate, checkEmpty, checkEmptySingular, checkDateSingular } from '..
     const name = cellInfo.column.id
     const { rowError } = this.getErrors(cellInfo.index)
     let style = {}
-    if(rowError !== null && rowError[name] !== undefined && rowError[name].value !== null) {
+    if(rowError && rowError[name] !== undefined && rowError[name].value !== null) {
       style.border = 'solid 2px red'
     }
     return (
@@ -254,12 +268,11 @@ import { checkDate, checkEmpty, checkEmptySingular, checkDateSingular } from '..
         setData(data)
       }
     }
-    
-    let style = { }
-    if(rowError !== null && rowError[name] !== undefined && rowError[name].value !== null) {
+
+    let style = {}
+    if(rowError && rowError[name] !== undefined && rowError[name].value !== null) {
       style.border = 'solid 2px red'
     }
-
     const date = data[cellInfo.index][cellInfo.column.id]
     const objValue = date ? moment(date) : null 
     return (
@@ -296,9 +309,7 @@ import { checkDate, checkEmpty, checkEmptySingular, checkDateSingular } from '..
     data[0].length = 2
     rowObj.index = data.length
     rowObj.length = data.length + 1
-    console.log('adding new row', [...data, rowObj])
-    
-    this.setState({ errors: [...errors, newErrorRow]}, () => {
+    this.setState({ errors: [...errors, newErrorRow] }, () => {
       this.setOuterStateError()
     })
     setData([...data, rowObj])
@@ -327,8 +338,7 @@ import { checkDate, checkEmpty, checkEmptySingular, checkDateSingular } from '..
     }
   }
 
-  render(){
-    console.log("da err", this.state.errors)
+  render() {
     let {columns, data} = this.props;
     columns.forEach(column => {
       if(column.cell === 'renderEditable')

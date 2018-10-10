@@ -19,12 +19,13 @@ import HistoricoDeIntervenciones from './HistoricoDeIntervenciones'
 import { InputRow, InputRowUnitless, InputRowSelectUnitless, InputDate } from '../../Common/InputRow'
 
 import { setFichaTecnicaDelCampo, setHistorialDeIntervenciones, setFichaTecnicaDelPozo, setEvaluacionPetrofisica, setMecanicoYAparejoDeProduccion, 
-  setAnalisisDelAgua, setSistemasArtificialesDeProduccion, setPresionDataCampo, setPressureDepthCampo, setPresionDataPozo, setPressureDepthPozo, setHistoricoProduccion, setHistoricoDeAforos, setChecked } from '../../../../redux/actions/pozo'
+  setAnalisisDelAgua, setSistemasArtificialesDeProduccion, setPresionDataCampo, setPressureDepthCampo, setPresionDataPozo, setPressureDepthPozo, setHistoricoProduccion, setHistoricoDeAforos,
+  setFromSaveFichaTecnicaDelCampo, setFromSaveHistorialDeIntervenciones, setFromSaveFichaTecnicaDelPozo, setFromSaveEvaluacionPetrofisica, setFromSaveMecanicoYAparejoDeProduccion, setFromSaveAnalisisDelAgua, setFromSaveSistemas, setFromSaveHistoricoDePressionCampo, setFromSaveHistoricoDePressionPozo, setFromSaveHistoricoDeAforos, setFromSaveHistoricoDeProduccion, setAllPressure } from '../../../../redux/actions/pozo'
 import { setPage } from '../../../../redux/actions/global'
 
 const forms = [
   {'title' : 'Ficha Técnica del Campo', content: <TecnicaDelCampo /> },
-  {'title' : 'Ficha Técnica del Pozo' , errors: [], content:<TecnicaDelPozo /> },
+  {'title' : 'Ficha Técnica del Pozo' , content:<TecnicaDelPozo /> },
   {'title' : 'Histórico De Intervenciones', content: <HistoricoDeIntervenciones />},
   {'title' : 'Evaluación Petrofísica', content: <EvaluacionPetrofisica /> },
   {'title' : 'Edo. Mecánico y Aparejo de Producción', content: <MecanicoYAparejo /> },
@@ -75,7 +76,7 @@ const forms = [
 
   async loadTecnicaDelCampo() {
     let { selectedTransaction } = this.state
-    let { fichaTecnicaDelPozoHighLevel, setFichaTecnicaDelCampo, setLoading } = this.props
+    let { fichaTecnicaDelPozoHighLevel, setFichaTecnicaDelCampo, setLoading, setFromSaveFichaTecnicaDelCampo } = this.props
     fichaTecnicaDelPozoHighLevel = fichaTecnicaDelPozoHighLevel.toJS()
     let { campo, pozo } = fichaTecnicaDelPozoHighLevel
     const token = this.props.user.get('token')
@@ -94,7 +95,10 @@ const forms = [
     let data = await fetch(`api/getFields?transactionID=${selectedTransaction}`, headers).then(r => r.json())
 
     if (data && !data.err) {
-      setFichaTecnicaDelCampo(data.fichaTecnicaDelCampo)
+      let newObj = data.fichaTecnicaDelCampo
+      newObj.fromSave = true
+      setFichaTecnicaDelCampo(newObj)
+
       setLoading({ 
         isLoading: false,
         showNotification: true,
@@ -120,7 +124,7 @@ const forms = [
 
   async loadHistoricoDeIntervenciones() {
     let { selectedTransaction } = this.state
-    let { fichaTecnicaDelPozoHighLevel, setHistorialDeIntervenciones, setLoading } = this.props
+    let { fichaTecnicaDelPozoHighLevel, setHistorialDeIntervenciones, setLoading, setFromSaveHistorialDeIntervenciones } = this.props
     fichaTecnicaDelPozoHighLevel = fichaTecnicaDelPozoHighLevel.toJS()
     let { campo, pozo } = fichaTecnicaDelPozoHighLevel
     setLoading({ isLoading: true, loadText: 'Descargando' })
@@ -148,6 +152,7 @@ const forms = [
       newObj.historicoApuntaladoData = dataApuntalado.historialDeIntervenciones.historicoApuntaladoData
 
       setHistorialDeIntervenciones(newObj)
+      setFromSaveHistorialDeIntervenciones(true)
       setLoading({ 
         isLoading: false,
         showNotification: true,
@@ -174,7 +179,7 @@ const forms = [
 
   async loadTecnicaDelPozo() {
     let { selectedTransaction } = this.state
-    let { fichaTecnicaDelPozoHighLevel, setFichaTecnicaDelPozo, setLoading } = this.props
+    let { fichaTecnicaDelPozoHighLevel, setFichaTecnicaDelPozo, setLoading, setFromSaveFichaTecnicaDelPozo } = this.props
     fichaTecnicaDelPozoHighLevel = fichaTecnicaDelPozoHighLevel.toJS()
     let { pozo } = fichaTecnicaDelPozoHighLevel
     const token = this.props.user.get('token')
@@ -197,7 +202,7 @@ const forms = [
     if (data && !data.err && !interventionData.err) {
       let newObj = data.fichaTecnicaDelPozo
       newObj.historialIntervencionesData = interventionData.fichaTecnicaDelPozo.historialIntervencionesData
-
+      newObj.fromSave = true
       setFichaTecnicaDelPozo(newObj)
       setLoading({ 
         isLoading: false,
@@ -223,7 +228,7 @@ const forms = [
 
   async loadEvaluacionPetrofisica() {
     let { selectedTransaction } = this.state
-    let { fichaTecnicaDelPozoHighLevel, setEvaluacionPetrofisica, setLoading } = this.props
+    let { fichaTecnicaDelPozoHighLevel, setEvaluacionPetrofisica, setLoading, setFromSaveEvaluacionPetrofisica } = this.props
     fichaTecnicaDelPozoHighLevel = fichaTecnicaDelPozoHighLevel.toJS()
     let { pozo } = fichaTecnicaDelPozoHighLevel
     const token = this.props.user.get('token')
@@ -247,7 +252,8 @@ const forms = [
 
         let newObj = data.evaluacionPetrofisica
         newObj.layerData = layerData.evaluacionPetrofisica.layerData
-
+        newObj.fromSave = true
+        console.log('what is this?', newObj)
         setEvaluacionPetrofisica(newObj)
         setLoading({ 
           isLoading: false,
@@ -274,7 +280,7 @@ const forms = [
 
   async loadMecanicoYAparejo() {
     let { selectedTransaction } = this.state
-    let { fichaTecnicaDelPozoHighLevel, setMecanicoYAparejoDeProduccion, setLoading } = this.props
+    let { fichaTecnicaDelPozoHighLevel, setMecanicoYAparejoDeProduccion, setLoading, setFromSaveMecanicoYAparejoDeProduccion } = this.props
     fichaTecnicaDelPozoHighLevel = fichaTecnicaDelPozoHighLevel.toJS()
     let { pozo } = fichaTecnicaDelPozoHighLevel
     setLoading({ isLoading: true, loadText: 'Descargando' })
@@ -293,7 +299,13 @@ const forms = [
       let data = await fetch(`api/getMecanico?transactionID=${selectedTransaction}`, headers).then(r => r.json())
 
       if (data && !data.err) {
-        setMecanicoYAparejoDeProduccion(data.mecanicoYAparejoDeProduccion)
+        let newObj = data.mecanicoYAparejoDeProduccion
+        newObj.fromSave = true
+        setMecanicoYAparejoDeProduccion(newObj)
+
+        // setMecanicoYAparejoDeProduccion(data.mecanicoYAparejoDeProduccion)
+        // setFromSaveMecanicoYAparejoDeProduccion(true)
+
         setLoading({ 
           isLoading: false,
           showNotification: true,
@@ -317,7 +329,7 @@ const forms = [
 
   async loadAnalisisDelAgua() {
     let { selectedTransaction } = this.state
-    let { fichaTecnicaDelPozoHighLevel, setAnalisisDelAgua, setLoading } = this.props
+    let { fichaTecnicaDelPozoHighLevel, setAnalisisDelAgua, setLoading, setFromSaveAnalisisDelAgua } = this.props
     fichaTecnicaDelPozoHighLevel = fichaTecnicaDelPozoHighLevel.toJS()
     let { pozo } = fichaTecnicaDelPozoHighLevel
     const token = this.props.user.get('token')
@@ -337,7 +349,11 @@ const forms = [
       let data = await fetch(`api/getAnalisisAgua?transactionID=${selectedTransaction}`, headers).then(r => r.json())
 
       if (data && !data.err) {
-        setAnalisisDelAgua(data.analisisDelAgua)
+        let newObj = data.analisisDelAgua
+        newObj.fromSave = true
+        setAnalisisDelAgua(newObj)
+        // setFromSaveAnalisisDelAgua(true)
+        // setAnalisisDelAgua(data.analisisDelAgua)
         setLoading({ 
           isLoading: false,
           showNotification: true,
@@ -361,7 +377,7 @@ const forms = [
 
   async loadSistemasArtificialesDeProduccion() {
     let { selectedTransaction } = this.state
-    let { fichaTecnicaDelPozoHighLevel, setSistemasArtificialesDeProduccion, setLoading } = this.props
+    let { fichaTecnicaDelPozoHighLevel, setSistemasArtificialesDeProduccion, setLoading, setFromSaveSistemas } = this.props
     fichaTecnicaDelPozoHighLevel = fichaTecnicaDelPozoHighLevel.toJS()
     let { pozo } = fichaTecnicaDelPozoHighLevel
     const token = this.props.user.get('token')
@@ -409,10 +425,11 @@ const forms = [
         }
 
         if (data && !data.err) {
-        
+          
           let newObj = data.sistemasArtificialesDeProduccion
           newObj.tipoDeSistemo = type
-
+          newObj.fromSave = true
+          // setFromSaveSistemas(true)
           setSistemasArtificialesDeProduccion(newObj)
           setLoading({ 
             isLoading: false,
@@ -441,8 +458,9 @@ const forms = [
 
   async loadHistoricoDePresionCampo() {
     let { selectedTransaction } = this.state
-    let { fichaTecnicaDelPozoHighLevel, setPresionDataCampo, setPressureDepthCampo, setLoading } = this.props
+    let { fichaTecnicaDelPozoHighLevel, setLoading, historicoDePresion, setAllPressure } = this.props
     fichaTecnicaDelPozoHighLevel = fichaTecnicaDelPozoHighLevel.toJS()
+    historicoDePresion = historicoDePresion.toJS()
     let { pozo } = fichaTecnicaDelPozoHighLevel
     const token = this.props.user.get('token')
     const headers = {
@@ -466,11 +484,10 @@ const forms = [
       let data = await fetch(`api/getFieldPressure?transactionID=${selectedTransaction}`, headers).then(r => r.json())
 
     if (data && !data.err) {
-
-      let newObj = data.historicoDePresion.presionDataCampo
-
-      setPresionDataCampo(newObj)
-      setPressureDepthCampo(data.historicoDePresion.pressureDepthCampo)
+      historicoDePresion.presionDataCampo = data.historicoDePresion.presionDataCampo
+      historicoDePresion.pressureDepthCampo = data.historicoDePresion.pressureDepthCampo
+      historicoDePresion.fromSaveCampo = true
+      setAllPressure(historicoDePresion)
       setLoading({ 
         isLoading: false,
         showNotification: true,
@@ -496,8 +513,9 @@ const forms = [
 
   async loadHistoricoDePresionPozo() {
     let { selectedTransaction } = this.state
-    let { fichaTecnicaDelPozoHighLevel, setPresionDataPozo, setPressureDepthPozo, setLoading } = this.props
+    let { fichaTecnicaDelPozoHighLevel, setLoading, setAllPressure, historicoDePresion } = this.props
     fichaTecnicaDelPozoHighLevel = fichaTecnicaDelPozoHighLevel.toJS()
+    historicoDePresion = historicoDePresion.toJS()
     let { pozo } = fichaTecnicaDelPozoHighLevel
     const token = this.props.user.get('token')
     const headers = {
@@ -516,17 +534,16 @@ const forms = [
       let data = await fetch(`api/getWellPressure?transactionID=${selectedTransaction}`, headers).then(r => r.json())
 
       if (data && !data.err) {
-
-        let newObj = data.historicoDePresion.presionDataPozo
         setLoading({ 
           isLoading: false,
           showNotification: true,
           notificationType: 'success',
           notificationText: `Se ha descargado informacion del pozo: ${pozo}`
         })
-        setPresionDataPozo(newObj)
-        setPressureDepthPozo(data.historicoDePresion.pressureDepthPozo)
-
+      historicoDePresion.presionDataPozo = data.historicoDePresion.presionDataPozo
+      historicoDePresion.pressureDepthPozo = data.historicoDePresion.pressureDepthPozo
+      historicoDePresion.fromSavePozo = true
+      setAllPressure(historicoDePresion)
       }
       else { 
         console.log('no data found')
@@ -547,7 +564,7 @@ const forms = [
 
   async loadHistoricoDeProduccion() {
     let { selectedTransaction } = this.state
-    let { fichaTecnicaDelPozoHighLevel, setHistoricoProduccion, setLoading } = this.props
+    let { fichaTecnicaDelPozoHighLevel, setHistoricoProduccion, setLoading, setFromSaveHistoricoDeProduccion } = this.props
     fichaTecnicaDelPozoHighLevel = fichaTecnicaDelPozoHighLevel.toJS()
     let { pozo } = fichaTecnicaDelPozoHighLevel
     const token = this.props.user.get('token')
@@ -568,7 +585,8 @@ const forms = [
     if (produccionData && !produccionData.err ) {
 
       let newObj = produccionData.historicoDeProduccion
-
+      newObj.fromSave = true
+      // setFromSaveHistoricoDeProduccion(true)
       setHistoricoProduccion(newObj)
       setLoading({ 
         isLoading: false,
@@ -595,7 +613,7 @@ const forms = [
 
   async loadHistoricoDeAforos() {
     let { selectedTransaction } = this.state
-    let { fichaTecnicaDelPozoHighLevel, setHistoricoDeAforos, setLoading } = this.props
+    let { fichaTecnicaDelPozoHighLevel, setHistoricoDeAforos, setLoading, setFromSaveHistoricoDeAforos } = this.props
     fichaTecnicaDelPozoHighLevel = fichaTecnicaDelPozoHighLevel.toJS()
     let { pozo } = fichaTecnicaDelPozoHighLevel
     const token = this.props.user.get('token')
@@ -617,7 +635,8 @@ const forms = [
     if (aforosData && !aforosData.err) {
 
       let newObj = aforosData.historicoDeAforos
-
+      newObj.fromSave = true
+      // setFromSaveHistoricoDeAforos(true)
 
       setHistoricoDeAforos(newObj)
       setLoading({ 
@@ -843,6 +862,19 @@ const mapDispatchToProps = dispatch => ({
   setLoading: values => {dispatch(setIsLoading(values))},
   setPressureDepthCampo: values => {dispatch(setPressureDepthCampo(values))},
   setPressureDepthPozo: values => {dispatch(setPressureDepthPozo(values))},
+  setFromSaveFichaTecnicaDelCampo: values => {dispatch(setFromSaveFichaTecnicaDelCampo(values))},
+  setFromSaveHistorialDeIntervenciones: values => {dispatch(setFromSaveHistorialDeIntervenciones(values))},
+  setFromSaveFichaTecnicaDelPozo: values => {dispatch(setFromSaveFichaTecnicaDelPozo(values))},
+  setFromSaveEvaluacionPetrofisica: values => {dispatch(setFromSaveEvaluacionPetrofisica(values))},
+  setFromSaveMecanicoYAparejoDeProduccion: values => {dispatch(setFromSaveMecanicoYAparejoDeProduccion(values))},
+  setFromSaveAnalisisDelAgua: values => {dispatch(setFromSaveAnalisisDelAgua(values))},
+  setFromSaveSistemas: values => {dispatch(setFromSaveSistemas(values))},
+  setFromSaveHistoricoDePressionCampo: values => {dispatch(setFromSaveHistoricoDePressionCampo(values))},
+  setFromSaveHistoricoDePressionPozo: values => {dispatch(setFromSaveHistoricoDePressionPozo(values))},
+  setFromSaveHistoricoDeAforos: values => {dispatch(setFromSaveHistoricoDeAforos(values))},
+  setFromSaveHistoricoDePressionCampo: (val, depth) => dispatch(setFromSaveHistoricoDePressionCampo(val, depth)),
+  setAllPressure: (val, depth) => dispatch(setAllPressure(val)),
+  setFromSaveHistoricoDeProduccion: values => {dispatch(setFromSaveHistoricoDeProduccion(values))},
 })
 
 const mapStateToProps = state => ({
@@ -868,8 +900,8 @@ const mapStateToProps = state => ({
   historicoDeProduccionHasErrors: state.getIn(['historicoDeProduccion', 'hasErrors']),
   historicoDeAforosHasErrors: state.getIn(['historicoDeAforos', 'hasErrors']),
   sistemasArtificialesDeProduccionHasErrors: state.getIn(['sistemasArtificialesDeProduccion', 'hasErrors']),
-  user: state.get('user')
-
+  historicoDePresion: state.get('historicoDePresion'),
+  user: state.get('user'),
 })
 
 
