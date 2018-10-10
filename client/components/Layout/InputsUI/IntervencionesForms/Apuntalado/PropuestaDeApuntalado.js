@@ -486,7 +486,6 @@ import { checkEmpty, checkDate } from '../../../../../lib/errorCheckers'
             checkForErrors={val => this.checkForErrors(val, 'cedulaTable')}
             isCedula
           />
-        <button className='new-row-button' onClick={this.addNewRow}>Añadir un renglón</button>
         </div>
       </div>
     )

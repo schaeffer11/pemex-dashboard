@@ -8,9 +8,10 @@ export function checkEmpty(value, name, errors, onBlur, showErrors = true) {
   if (error && !showErrors) {
     error = 'Blank Error'
   }
-
-  errors[name].value = error
-  onBlur(errors)
+  if(errors !== null) {
+    errors[name].value = error
+    onBlur(errors)
+  }
   return error !== null
 }
 
@@ -34,8 +35,10 @@ export function checkDate(value, name, errors, onBlur, showErrors = true) {
   if (error && !showErrors) {
     error = 'Blank Error'
   }
-  errors[name].value = error
-  onBlur(errors)
+  if(errors !== null) {
+    errors[name].value = error
+    onBlur(errors)
+  }
   return error !== null
  }
 

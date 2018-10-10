@@ -207,6 +207,7 @@ const companyOptions = [
             pageSize={pruebasDeLaboratorioData.length}
             sortable={false}
             getTdProps={this.deleteRow}
+            ignoreAddRow
           />
         </div>
       </div>

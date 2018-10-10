@@ -278,6 +278,8 @@ import { checkDate, checkEmpty, checkEmptySingular, checkDateSingular } from '..
           onBlur={handleBlur}
           selected={objValue}
           locale="es-mx"
+          showMonthDropdown
+          showYearDropdown
         />
       </div>
     )
@@ -369,7 +371,7 @@ import { checkDate, checkEmpty, checkEmptySingular, checkDateSingular } from '..
           pageSize={pageSize}
           showPagination={showPagination}
         />
-        <button className='new-row-button' onClick={this.addNewRow}>Añadir un renglón</button>
+        {!this.props.ignoreAddRow && <button className='new-row-button' onClick={this.addNewRow}>Añadir un renglón</button>}
       </div>
     )
   }
