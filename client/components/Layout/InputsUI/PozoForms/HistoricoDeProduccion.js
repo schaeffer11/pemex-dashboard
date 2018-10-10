@@ -220,30 +220,6 @@ let columns = [
     this.setState({ errors })
   }
 
-  // updateErrors(errors) {
-  //   let { hasErrors, setHasErrorsHistoricoDeProduccion } = this.props
-
-  //   let hasErrorNew = false
-
-  //   Object.keys(errors).forEach(key => {
-  //     console.log('other', key, errors[key])
-  //     if (errors[key].value !== null){
-  //       hasErrorNew = true
-  //     } 
-  //   })
-
-  //   console.log('updating', hasErrorNew)
-
-  //   if (hasErrorNew != hasErrors) {
-  //     setHasErrorsHistoricoDeProduccion(hasErrorNew)
-  //   }
-
-  //   this.setState({ errors })
-  // }
-
-
-
-
   makeProductionGraph() {
     let { formData } = this.props
     formData = formData.toJS()

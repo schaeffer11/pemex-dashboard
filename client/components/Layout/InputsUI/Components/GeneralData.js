@@ -8,12 +8,13 @@ import AriaModal from 'react-aria-modal'
 import '../../../../styles/components/_query_modal.css'
 
 import { setObjetivo, setAlcances, setTipoDeIntervenciones } from '../../../../redux/actions/intervencionesEstimulacion'
-import { setSubdireccion, setActivo, setCampo, setPozo, setFormacion, setChecked } from '../../../../redux/actions/pozo'
+import { setSubdireccion, setActivo, setCampo, setPozo, setFormacion, setFechaProgramadaIntervencion, setFromSaveFichaTecnicaHighLevel, setHasErrorsFichaTecnicaHighLevel, setIntervencionProgramada } from '../../../../redux/actions/pozo'
 import { setShowForms, setIsLoading } from '../../../../redux/actions/global'
-import { InputRow, InputRowUnitless, InputRowSelectUnitless, TextAreaUnitless } from '../../Common/InputRow'
+import { InputDate, InputRow, InputRowUnitless, InputRowSelectUnitless, TextAreaUnitless } from '../../Common/InputRow'
 import Notification from '../../Common/Notification'
 import Loading from '../../Common/Loading'
 import { sortLabels } from '../../../../lib/formatters'
+import { checkEmpty, checkDate } from '../../../../lib/errorCheckers'
 
 @autobind class GeneralData extends Component {
   constructor(props) {
@@ -21,12 +22,42 @@ import { sortLabels } from '../../../../lib/formatters'
     this.state = { 
       isOpen: false,
       saveOptions: [],
-      selectedSave: null
+      selectedSave: null,
+      errors: {
+        subdireccion: {
+          type: 'number',
+          value: '',
+        },
+        bloque: {
+          type: 'number',
+          value: '',
+        },
+        activo: {
+          type: 'number',
+          value: '',
+        },
+        campo: {
+          type: 'number',
+          value: '',
+        },
+        pozo: {
+          type: 'number',
+          value: '',
+        },
+        formacion: {
+          type: 'number',
+          value: '',
+        },
+        fechaProgramadaIntervencion: {
+          type: 'number',
+          value: '',
+        },
+      }
     }
   }
 
   componentDidMount(){
-    let { user } = this.props
+    let { user, hasSubmitted } = this.props
     user = user.toJS()
     const { token, id } = user
     const headers = {
@@ -35,7 +66,8 @@ import { sortLabels } from '../../../../lib/formatters'
         'content-type': 'application/json',
       },
     }
-
+    let hasErrors = this.checkAllInputs(hasSubmitted)
+    setHasErrorsFichaTecnicaHighLevel(hasErrors)
     fetch(`/api/getAllSaves?userID=${id}`, headers)
       .then(r => r.json())
       .then( r => {
@@ -45,7 +77,58 @@ import { sortLabels } from '../../../../lib/formatters'
       })
   }
 
-  componentDidUpdate(){
+  componentDidUpdate(prevProps) {
+    let { hasSubmitted, formData, setFromSaveFichaTecnicaHighLevel, setHasErrorsFichaTecnicaHighLevel } = this.props
+    formData = formData.toJS()
+    let { fromSave } = formData
+    if (hasSubmitted !== prevProps.hasSubmitted || fromSave) {
+      let err = this.checkAllInputs(true, formData)
+      setHasErrorsFichaTecnicaHighLevel(err)
+      if (fromSave === true) {
+        setFromSaveFichaTecnicaHighLevel(false)
+      }
+    }
+  }
+
+  checkAllInputs(showErrors, data=null) {
+    let { formData } = this.props
+    formData = formData.toJS()
+    formData = data !== null ? data : formData
+    const { errors } = this.state
+    let hasErrors = false
+    let error 
+    Object.keys(errors).forEach(elem => {
+      const errObj = errors[elem]
+      if (errObj.type === 'text' || errObj.type === 'number') {
+        error = checkEmpty(formData[elem], elem, errors, this.setErrors, showErrors)
+      } 
+      else if (errObj.type === 'date') {
+        error = checkDate(moment(formData[elem]).format('DD/MM/YYYY'), elem, errors, this.setErrors, showErrors)
+      }
+      else if (errObj.type === 'table') {
+        error = errObj.value === '' ? true : errObj.value
+      }
+      error === true ? hasErrors = true : null
+    })
+    return hasErrors
+  }
+
+  setErrors(errors) {
+    this.setState({ errors })
+  }
+
+  updateErrors(errors) {
+    let { hasErrors, setHasErrorsFichaTecnicaHighLevel } = this.props
+    let hasErrorNew = false
+    Object.keys(errors).forEach(key => {
+      if (errors[key].value !== null){
+        hasErrorNew = true
+      } 
+    })
+    if (hasErrorNew != hasErrors) {
+      setHasErrorsFichaTecnicaHighLevel(hasErrorNew)
+    }
+    this.setState({ errors })
   }
 
   handleSelectSubdireccion(val) {
@@ -91,10 +174,10 @@ import { sortLabels } from '../../../../lib/formatters'
     formData = formData.toJS()
     
     
-    let { objetivo, alcances, tipoDeIntervenciones } = interventionFormData
+    let { objetivo, alcances, tipoDeIntervenciones, fechaProgramadaIntervencion, intervencionProgramada } = interventionFormData
     let { subdireccion, activo, campo, pozo, formacion } = formData
 
-    if (!!(objetivo) && !!(alcances) && !!(tipoDeIntervenciones) && !!(subdireccion) && !!(activo) && !!(campo) && !!(pozo) && !!(formacion)) {
+    if (!!(objetivo) && !!(alcances) && !!(tipoDeIntervenciones) && !!(subdireccion) && !!(activo) && !!(campo) && !!(pozo) && !!(formacion) && !!(fechaProgramadaIntervencion) && !!(intervencionProgramada)) {
       return false
     }
 
@@ -157,30 +240,42 @@ import { sortLabels } from '../../../../lib/formatters'
 
 
   makeGeneralInterventionForm() {
-    let { setObjetivo, setAlcances, setTipoDeIntervenciones, interventionFormData } = this.props
-
+    let { setObjetivo, setAlcances, setTipoDeIntervenciones, interventionFormData, setFechaProgramadaIntervencion, setIntervencionProgramada } = this.props
     interventionFormData = interventionFormData.toJS()
-
-    
-    let { objetivo, alcances, tipoDeIntervenciones } = interventionFormData
-
+    let { objetivo, alcances, tipoDeIntervenciones, fechaProgramadaIntervencion, intervencionProgramada } = interventionFormData
     let tipoDeIntervencionesOptions = [
       {label: 'Tratamiento de Estimulación', value: 'estimulacion'},
       {label: 'Fracturamiento Ácido', value: 'acido'},
       {label: 'Fracturamiento Apuntalado', value: 'apuntalado'},
     ]
-
-        return (
-          <div className='intervention-form'>
-            <div className='header'>
-              Intervención
-            </div>
-            <TextAreaUnitless header="Objetivo" name='objetivo' className={'objetivo'} value={objetivo} onChange={setObjetivo} tooltip='Describir el objetivo de la intervención indicando la causa principal, tipo de tratamiento a aplicar y técnica de colocación de los sistemas.' />
-            <TextAreaUnitless header="Alcances" name='alcances' className={'alcances'} value={alcances} onChange={setAlcances} tooltip='Describir los alcances que se pretenden obtener con la intervención programada a ejecutar.' />
-            <InputRowSelectUnitless header='Tipo de intervenciones' name='tipoDeIntervenciones' value={tipoDeIntervenciones} options={tipoDeIntervencionesOptions} callback={(e) => setTipoDeIntervenciones(e.value)} />
-          </div>
-
-        )
+    return (
+      <div className='intervention-form'>
+        <div className='header'>
+          Intervención
+        </div>
+        <TextAreaUnitless header="Objetivo" name='objetivo' className={'objetivo'} value={objetivo} onChange={setObjetivo} tooltip='Describir el objetivo de la intervención indicando la causa principal, tipo de tratamiento a aplicar y técnica de colocación de los sistemas.' />
+        <TextAreaUnitless header="Alcances" name='alcances' className={'alcances'} value={alcances} onChange={setAlcances} tooltip='Describir los alcances que se pretenden obtener con la intervención programada a ejecutar.' />
+        <InputRowSelectUnitless header='Tipo de intervenciones' name='tipoDeIntervenciones' value={tipoDeIntervenciones} options={tipoDeIntervencionesOptions} callback={(e) => setTipoDeIntervenciones(e.value)} />
+        <InputDate
+          header="Fecha Programada de Intervención"
+          name='fechaProgramadaIntervencion'
+          value={fechaProgramadaIntervencion}
+          onChange={setFechaProgramadaIntervencion}
+          onBlur={this.updateErrors}
+          errors={this.state.errors}
+        />
+        <InputRowSelectUnitless
+          header='Intervención Programada'
+          name='tipoDeIntervenciones'
+          value={intervencionProgramada}
+          options={[
+            {label: 'Sí', value: true},
+            {label: 'No', value: false},
+          ]}
+          callback={(e) => setIntervencionProgramada(e.value)}
+        />
+      </div>
+    )
   }
 
   makeGeneralForm() {
@@ -398,6 +493,7 @@ const mapStateToProps = state => ({
   user: state.get('user'),
   interventionFormData: state.get('objetivoYAlcancesIntervencion'),
   forms: state.get('forms'),
+  hasSubmitted: state.getIn(['global', 'hasSubmitted']),
 })
 
 const testLoadFromSave = (saved) => {
@@ -417,7 +513,12 @@ const mapDispatchToProps = dispatch => ({
   setTipoDeIntervenciones : val => dispatch(setTipoDeIntervenciones(val)),
   setShowForms : val => dispatch(setShowForms(val)),
   loadFromSave: values => {dispatch(testLoadFromSave(values))},
-  setLoading: obj => dispatch(setIsLoading(obj))
+  setLoading: obj => dispatch(setIsLoading(obj)),
+  setFechaProgramadaIntervencion: obj => dispatch(setFechaProgramadaIntervencion(obj)),
+  setHasErrorsFichaTecnicaHighLevel: obj => dispatch(setHasErrorsFichaTecnicaHighLevel(obj)),
+  setHasErrorsFichaTecnicaHighLevel: obj => dispatch(setHasErrorsFichaTecnicaHighLevel(obj)),
+  setFromSaveFichaTecnicaHighLevel: obj => dispatch(setFromSaveFichaTecnicaHighLevel(obj)),
+  setIntervencionProgramada: obj => dispatch(setIntervencionProgramada(obj)),
 })
 
 export default connect(mapStateToProps, mapDispatchToProps)(GeneralData)

@@ -5,6 +5,10 @@ export const setActivo = value => ({ type: 'set_activo', value})
 export const setCampo = value => ({ type: 'set_campo', value})
 export const setPozo = value => ({ type: 'set_pozo', value})
 export const setFormacion = value => ({ type: 'set_formacion', value})
+export const setFechaProgramadaIntervencion = value => ({ type: 'set_fechaProgramadaIntervencion', value})
+export const setFromSaveFichaTecnicaHighLevel = value => ({ type: 'set_fromSaveFichaTecnicaHighLevel', value})
+export const setHasErrorsFichaTecnicaHighLevel = value => ({ type: 'set_hasErrorsFichaTecnicaHighLevel', value})
+export const setIntervencionProgramada = value => ({ type: 'set_intervencionProgramada', value})
 
 //FichaTecnicaDelCampo
 export const setDescubrimientoField = value => ({ type: 'set_descubrimientoField', value})
