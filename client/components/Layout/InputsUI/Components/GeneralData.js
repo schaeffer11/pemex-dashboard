@@ -9,19 +9,23 @@ import '../../../../styles/components/_query_modal.css'
 
 import { setObjetivo, setAlcances, setTipoDeIntervenciones } from '../../../../redux/actions/intervencionesEstimulacion'
 import { setSubdireccion, setActivo, setCampo, setPozo, setFormacion, setChecked } from '../../../../redux/actions/pozo'
-import { setShowForms, setIsLoading } from '../../../../redux/actions/global'
+import { setShowForms, setIsLoading, setTransactionID } from '../../../../redux/actions/global'
 import { InputRow, InputRowUnitless, InputRowSelectUnitless, TextAreaUnitless } from '../../Common/InputRow'
 import Notification from '../../Common/Notification'
 import Loading from '../../Common/Loading'
 import { sortLabels } from '../../../../lib/formatters'
+import ButtonGroup from './ButtonGroup'
 
 @autobind class GeneralData extends Component {
   constructor(props) {
     super(props)
     this.state = { 
       isOpen: false,
+      formType: 'new',
       saveOptions: [],
-      selectedSave: null
+      selectedSave: null,
+      proposalOptions: [],
+      selectedProposal: null,
     }
   }
 
@@ -41,6 +45,15 @@ import { sortLabels } from '../../../../lib/formatters'
       .then( r => {
         this.setState({
           saveOptions: r
+        })
+      })
+
+    fetch(`/api/getTransactionNoResults?userID=${id}`, headers)
+      .then(r => r.json())
+      .then( r => {
+        console.log(r)
+        this.setState({
+          proposalOptions: r
         })
       })
   }
@@ -152,6 +165,12 @@ import { sortLabels } from '../../../../lib/formatters'
   handleSelectSave(id) {
     this.setState({
       selectedSave: id
+    })
+  }
+
+    handleSelectProposal(id) {
+    this.setState({
+      selectedProposal: id
     })
   }
 
@@ -273,9 +292,30 @@ import { sortLabels } from '../../../../lib/formatters'
         <InputRowSelectUnitless header="Campo" name="campo" value={campo} options={fieldOptions} callback={this.handleSelectField} name='campo'  />
         <InputRowSelectUnitless header="Pozo" name="pozo" value={pozo} options={wellOptions} callback={(e) => setPozo(e.value)} name='pozo'  />
         <InputRowSelectUnitless header="Formación" value={formacion} options={formacionOptions} callback={(e) => setFormacion(e.value)} name='formacion'  />
-        {}
       </div>
 
+    )
+  }
+
+  makeUploadResultsForm() {
+    let { proposalOptions, selectedProposal } = this.state
+
+    return (
+      <div className='upload-form'>
+        <div className='header'>
+          Select an intervention
+        </div>
+         <div className="body" style={{ height: '390px' }}>
+            {proposalOptions.map(i => {
+              let className = i.TRANSACTION_ID === selectedProposal ? 'save-item active-save' : 'save-item'
+               let date = new Date(i.INSERT_TIME)
+              date = `${date.getDate()}/${date.getMonth() + 1}/${date.getFullYear()}`
+              return (
+                <div key={`proposalOption_${i.TRANSACTION_ID}`} className={className} onClick={(e) => this.handleSelectProposal(i.TRANSACTION_ID)}>Well: {i.WELL_NAME}   Insert Date: {date}</div>
+                )
+            })}
+        </div> 
+      </div>
     )
   }
 
@@ -370,8 +410,22 @@ import { sortLabels } from '../../../../lib/formatters'
       })
   }
 
+  handleSelectFormType(val) {
+    this.setState({
+      formType: val
+    })
+  }
+
+  handleSiguienteResults() {
+    let { selectedProposal } = this.state
+    let { setShowForms, setTransactionID } = this.props
+
+    setShowForms('results')
+    setTransactionID(selectedProposal)
+  }
+
   render() {
-    let { isOpen, selectedSave } = this.state
+    let { isOpen, selectedSave, formType, selectedProposal } = this.state
     let { setShowForms } = this.props
 
     return (
@@ -379,6 +433,20 @@ import { sortLabels } from '../../../../lib/formatters'
         <div className='image'>
           <img src={'/images/homepageBannerThin2.jpg'} style={{width: '100%', borderRadius: '20px'}}></img> 
         </div>
+         <ButtonGroup 
+            className={'button-group'}
+            buttons={
+              [
+                { label: 'New Well', value: 'new', },
+                { label: 'Upload Results', value: 'upload' },
+              ]
+            }
+            onClick={this.handleSelectFormType}
+            individualButtonClass={'submit'}
+            active={formType}
+            disabled={false}
+          />
+        { formType === 'new' ?   
         <div className='form general-data'>
           { this.makeGeneralForm() }
           { this.makeGeneralInterventionForm() }
@@ -388,6 +456,10 @@ import { sortLabels } from '../../../../lib/formatters'
           <Loading />
           { isOpen ? this.buildModal() : null }
         </div>
+       : <div className='form general-data-upload'>
+          { this.makeUploadResultsForm() }
+          <button className='submit submit-continue' disabled={!selectedProposal} onClick={this.handleSiguienteResults}>Siguiente</button>
+       </div> }
       </div>
     )
   }
@@ -418,7 +490,8 @@ const mapDispatchToProps = dispatch => ({
   setTipoDeIntervenciones : val => dispatch(setTipoDeIntervenciones(val)),
   setShowForms : val => dispatch(setShowForms(val)),
   loadFromSave: values => {dispatch(testLoadFromSave(values))},
-  setLoading: obj => dispatch(setIsLoading(obj))
+  setLoading: obj => dispatch(setIsLoading(obj)),
+  setTransactionID: val => dispatch(setTransactionID(val)),
 })
 
 export default connect(mapStateToProps, mapDispatchToProps)(GeneralData)

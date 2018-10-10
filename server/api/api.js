@@ -15,7 +15,7 @@ import { create as createWell, getFields, getWell,
             getInterventionEsimulacion, getInterventionAcido, getInterventionApuntalado, 
             getLabTest, getCedulaEstimulacion, getCedulaAcido, getCedulaApuntalado, 
             getCosts, getInterventionImage } from './pozo'
-import { create as createDiagnostico } from './diagnosticos';
+// import { create as createDiagnostico } from './diagnosticos';
 import { getAuthorization } from '../middleware';
 
 const connection = db.getConnection(appConfig.users.database)
@@ -201,6 +201,16 @@ router.get('/getTransactionWell', (req, res) => {
     })
 })
 
+router.get('/getTransactionNoResults', (req, res) => {
+    let { userID } = req.query
+    
+    connection.query(`select * from Transactions t JOIN FieldWellMapping f ON t.WELL_FORMACION_ID = f.WELL_FORMACION_ID WHERE HAS_RESULTS = 0 AND USER_ID = ? ORDER BY INSERT_TIME DESC;`, 
+      [userID], (err, results) => {
+
+
+        res.json(results)
+    })
+})
 
 
 

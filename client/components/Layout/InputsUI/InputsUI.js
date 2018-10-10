@@ -290,14 +290,14 @@ import { setHasSubmitted, setIsLoading } from '../../../redux/actions/global'
       form = this.intervencionesForm
     }
 
-    if (!showForms) {
+    if (showForms === false) {
       return ( 
         <div className="input-forms">
           <GeneralData fieldWellOptions={fieldWellOptions}/>
         </div>
       )  
     } 
-    else {
+    else if (showForms === true) {
       return (
         <div className="input-forms">
           <Tabs handleSelectTab={this.handleSelectTab} selectedTab={selectedTab} />
@@ -318,7 +318,14 @@ import { setHasSubmitted, setIsLoading } from '../../../redux/actions/global'
           </div>
         </div>
       )
-    }      
+    }  
+    else {
+      return (
+        <div className='testing'>
+          HOWDY BITCH
+        </div>
+        )
+    }   
   }
 }
 

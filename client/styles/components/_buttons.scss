@@ -46,3 +46,24 @@ button {
     background: #C0C0C0;
   }
 }
+
+.button-group {
+  text-align: center;
+  padding-bottom: 15px;
+
+  .submit {
+    margin: 5px;
+  }
+
+  .active:after{ 
+    content: '' ; 
+    display: block ; 
+    position: relative ; 
+    top: 0 ; 
+    bottom: 0 ; 
+    left: 0 ; 
+    right: 0 ; 
+    border-radius: 5px ; 
+    border: 1px solid white ; 
+  }
+}
