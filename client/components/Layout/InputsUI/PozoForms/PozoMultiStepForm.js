@@ -95,8 +95,10 @@ const forms = [
     let data = await fetch(`api/getFields?transactionID=${selectedTransaction}`, headers).then(r => r.json())
 
     if (data && !data.err) {
-      setFichaTecnicaDelCampo(data.fichaTecnicaDelCampo)
-      setFromSaveFichaTecnicaDelCampo(true)
+      let newObj = data.fichaTecnicaDelCampo
+      newObj.fromSave = true
+      setFichaTecnicaDelCampo(newObj)
+
       setLoading({ 
         isLoading: false,
         showNotification: true,
@@ -297,8 +299,13 @@ const forms = [
       let data = await fetch(`api/getMecanico?transactionID=${selectedTransaction}`, headers).then(r => r.json())
 
       if (data && !data.err) {
-        setMecanicoYAparejoDeProduccion(data.mecanicoYAparejoDeProduccion)
-        setFromSaveMecanicoYAparejoDeProduccion(true)
+        let newObj = data.mecanicoYAparejoDeProduccion
+        newObj.fromSave = true
+        setMecanicoYAparejoDeProduccion(newObj)
+
+        // setMecanicoYAparejoDeProduccion(data.mecanicoYAparejoDeProduccion)
+        // setFromSaveMecanicoYAparejoDeProduccion(true)
+
         setLoading({ 
           isLoading: false,
           showNotification: true,
@@ -342,8 +349,11 @@ const forms = [
       let data = await fetch(`api/getAnalisisAgua?transactionID=${selectedTransaction}`, headers).then(r => r.json())
 
       if (data && !data.err) {
-        setFromSaveAnalisisDelAgua(true)
-        setAnalisisDelAgua(data.analisisDelAgua)
+        let newObj = data.analisisDelAgua
+        newObj.fromSave = true
+        setAnalisisDelAgua(newObj)
+        // setFromSaveAnalisisDelAgua(true)
+        // setAnalisisDelAgua(data.analisisDelAgua)
         setLoading({ 
           isLoading: false,
           showNotification: true,
@@ -418,7 +428,8 @@ const forms = [
           
           let newObj = data.sistemasArtificialesDeProduccion
           newObj.tipoDeSistemo = type
-          setFromSaveSistemas(true)
+          newObj.fromSave = true
+          // setFromSaveSistemas(true)
           setSistemasArtificialesDeProduccion(newObj)
           setLoading({ 
             isLoading: false,
