@@ -1,7 +1,7 @@
 import { Map, fromJS } from 'immutable'
 
 const initialState = Map({ 
-    hasErrors: false,
+    hasErrors: true,
     estimacionCostosData: [{
         index: 0,
         length: 1,

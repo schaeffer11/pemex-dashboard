@@ -87,14 +87,14 @@ import { setHasSubmitted } from '../../../redux/actions/global'
       hasErrorsPropuestaEstimulacion, hasErrorsPropuestaApuntalado, hasErrorsPropuestaAcido, hasErrorsResultadosSimulacionAcido, 
       hasErrorsResultadosSimulacionEstimulacion, hasErrorsResultadosSimulacionApuntalado, hasErrorsEstIncProduccionAcido,
       hasErrorsEstIncProduccionEstimulacion, hasErrorsEstIncProduccionApuntalado, hasErrorsEstCosts, hasErrorsHistoricoDeProduccion,
-      setHasSubmitted, hasErrorsHistoricoDeAforos } = this.props
+      setHasSubmitted, hasErrorsHistoricoDeAforos, hasErrorsSistemasArtificialesDeProduccion  } = this.props
 
 
     if (action === 'submit') {
       let hasErrors = false
       setHasSubmitted(true)
       if (hasErrorsFichaTecnicaDelPozo  || hasErrorsFichaTecnicaDelCampo || hasErrorsHistorialDeIntervenciones || hasErrorsEvaluacionPetrofisica
-        || hasErrorsMecanicoYAparejoDeProduccion || hasErrorsAnalisisDelAgua || hasErrorsHistoricoDePresionPozo || hasErrorsHistoricoDePresionCampo
+        || hasErrorsMecanicoYAparejoDeProduccion || hasErrorsAnalisisDelAgua || hasErrorsSistemasArtificialesDeProduccion || hasErrorsHistoricoDePresionPozo || hasErrorsHistoricoDePresionCampo
         || hasErrorsHistoricoDeProduccion || hasErrorsHistoricoDeAforos) {
         hasErrors = true
       }
@@ -330,6 +330,7 @@ const mapStateToProps = state => ({
   hasErrorsEvaluacionPetrofisica: state.getIn(['evaluacionPetrofisica', 'hasErrors']),
   hasErrorsMecanicoYAparejoDeProduccion: state.getIn(['mecanicoYAparejoDeProduccion', 'hasErrors']),
   hasErrorsAnalisisDelAgua: state.getIn(['analisisDelAgua', 'hasErrors']),
+  hasErrorsSistemasArtificialesDeProduccion: state.getIn(['sistemasArtificialesDeProduccion', 'hasErrors']),
   hasErrorsHistoricoDePresionCampo: state.getIn(['historicoDePresionCampo', 'hasErrors']),
   hasErrorsHistoricoDePresionPozo: state.getIn(['historicoDePresionPozo', 'hasErrors']),
   hasErrorsHistoricoDeProduccion: state.getIn(['historicoDeProduccion', 'hasErrors']),
