@@ -253,7 +253,7 @@ let columns = [
   makeHistoricoDeAforosInput() {
     let { formData, setAforosData, hasSubmitted } = this.props
     formData = formData.toJS()
-    let { aforosData } = formData
+    let { aforosData, fromSave } = formData
     const rowObj = {
       error: true,
       fecha: null,
@@ -306,6 +306,7 @@ let columns = [
             errorArray={errors}
             checkForErrors={this.checkForErrors}
             hasSubmitted={hasSubmitted}
+            fromSave={fromSave}
           />
         </div>
 

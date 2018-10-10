@@ -29,10 +29,6 @@ const historicoDePresion = (state = initialState, action) => {
       return state.set('hasErrorsPozo', fromJS(action.value))
     case 'set_fromSaveHistoricoDePresionCampo':
       return state.set('fromSaveCampo', fromJS(action.value))
-    case 'set_historicoDePresionCampoFromSave':
-      return state.set('presionDataCampo', fromJS(action.vaue)).set('fromSaveCampo', true)
-    case 'set_historicoDePresionPozoFromSave':
-      return state.set('presionDataPozo', fromJS(action.vaue)).set('fromSavePozo', true)
     case 'set_fromSaveHistoricoDePresionPozo':
       return state.set('fromSavePozo', fromJS(action.value))
     case 'set_presionDataCampo':

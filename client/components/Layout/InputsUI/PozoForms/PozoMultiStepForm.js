@@ -574,7 +574,8 @@ const forms = [
     if (produccionData && !produccionData.err ) {
 
       let newObj = produccionData.historicoDeProduccion
-      setFromSaveHistoricoDeProduccion(true)
+      newObj.fromSave = true
+      // setFromSaveHistoricoDeProduccion(true)
       setHistoricoProduccion(newObj)
       setLoading({ 
         isLoading: false,
@@ -623,7 +624,8 @@ const forms = [
     if (aforosData && !aforosData.err) {
 
       let newObj = aforosData.historicoDeAforos
-      setFromSaveHistoricoDeAforos(true)
+      newObj.fromSave = true
+      // setFromSaveHistoricoDeAforos(true)
 
       setHistoricoDeAforos(newObj)
       setLoading({ 

@@ -67,14 +67,6 @@ let columns = [
     }
   }
 
-  componentDidUpdate(prevProps) {
-    let { hasSubmitted } = this.props
-
-    if (hasSubmitted !== prevProps.hasSubmitted) {
-      this.checkAllInputs(true)
-    }
-  }
-
   checkAllInputs(showErrors) {
     let { formData } = this.props
     formData = formData.toJS()

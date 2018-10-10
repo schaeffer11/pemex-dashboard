@@ -287,9 +287,9 @@ let columns = [
   }
 
   makeHistoricoDeProduccionInput() {
-    let { formData , setProduccionData, setHistoricoProduccionLocal, hasSubmitted } = this.props
+    let { formData , setProduccionData, hasSubmitted } = this.props
     formData = formData.toJS()
-    let { produccionData } = formData
+    let { produccionData, fromSave } = formData
     const rowObj = { fecha: null, dias: '', qo: '', qw: '', qg: '', qgi: '', qo_vol: '', qw_vol: '', qg_vol: '', qgi_vol: '', np: '', wp: '', gp: '', gi: '', rga: '', fw: '', error: true }
 
     const errors = [
@@ -318,6 +318,7 @@ let columns = [
             rowObj={rowObj}
             checkForErrors={this.checkForErrors}
             hasSubmitted={hasSubmitted}
+            fromSave={fromSave}
           />
         </div>
 
