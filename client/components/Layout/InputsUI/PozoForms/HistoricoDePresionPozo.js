@@ -123,11 +123,9 @@ let columns = [
     this.setState({ errors: errorsCopy }, () => {
       const { setHasErrorsHistoricoDePressionPozo } = this.props
       const hasErrors = this.checkAllInputs()
-      console.log('has errors', hasErrors)
       setHasErrorsHistoricoDePressionPozo(hasErrors)
     })
   }
-  
 
   addNewRow() {
     let { formData, setPresionDataPozo } = this.props

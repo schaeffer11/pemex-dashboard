@@ -271,13 +271,13 @@ let columns = [
 
 
   checkForErrors(value) {
-    let { hasErrors, setHasErrorsHistoricoDeProduccion } = this.props
     const errorsCopy = {...this.state.errors}
     errorsCopy.table.value = value
-    if (value !== hasErrors) {
-      setHasErrorsHistoricoDeProduccion(value)
-    }
-    this.setState({ errors: errorsCopy })
+    this.setState({ errors: errorsCopy }, () => {
+      const { setHasErrorsHistoricoDeProduccion } = this.props
+      const hasErrors = this.checkAllInputs()
+      setHasErrorsHistoricoDeProduccion(hasErrors)
+    })
   }
 
   makeHistoricoDeProduccionInput() {
@@ -322,7 +322,6 @@ let columns = [
   render() {
     let { formData } = this.props
     let { errors } = this.state
-    console.log(errors)
     formData = formData.toJS()
     return (
       <div className="form historico-de-produccion">

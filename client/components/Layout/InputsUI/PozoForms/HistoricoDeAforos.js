@@ -206,13 +206,13 @@ let columns = [
   }
 
   checkForErrors(value) {
-    let { hasErrors, setHasErrorsHistoricoDeAforos } = this.props
     const errorsCopy = {...this.state.errors}
     errorsCopy.table.value = value
-    if (value !== hasErrors) {
-      setHasErrorsHistoricoDeAforos(value)
-    }
-    this.setState({ errors: errorsCopy })
+    this.setState({ errors: errorsCopy }, () => {
+      const { setHasErrorsHistoricoDeAforos } = this.props
+      const hasErrors = this.checkAllInputs()
+      setHasErrorsHistoricoDeAforos(hasErrors)
+    })
   }
 
   makeAforosGraph() {
