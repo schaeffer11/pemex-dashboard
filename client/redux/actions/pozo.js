@@ -130,6 +130,7 @@ export const setVolumenDeEspacioAnular = value => ({ type: 'set_volumenDeEspacio
 export const setImgBoreDiagramURL = value => ({ type: 'set_imgBoreDiagramURL', value})
 export const setImgAparejoDeProduccionURL = value => ({ type: 'set_imgAparejoDeProduccionURL', value})
 export const setMecanicoYAparejoDeProduccion = value => ({ type: 'set_mecanicoYAparejoDeProduccion', value})
+export const setDesviacion = value => ({ type: 'set_desviacion', value })
 export const setHasErrorsMecanicoYAparejoDeProduccion = value => ({ type: 'set_hasErrorsMecanicoYAparejoDeProduccion', value})
 export const setFromSaveMecanicoYAparejoDeProduccion = value => ({ type: 'set_fromSaveMecanicoYAparejoDeProduccion', value})
 

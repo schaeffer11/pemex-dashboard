@@ -143,7 +143,7 @@ import { sortLabels } from '../../../../lib/formatters'
                 )
             })}
         </div> 
-        <button className="submit submit-load" onClick={this.handleLoad}>Descargar borrador</button>
+        <button disabled={!selectedSave} className="submit submit-load" onClick={this.handleLoad}>Descargar borrador</button>
       </div>
       </AriaModal>
     )
@@ -341,7 +341,6 @@ import { sortLabels } from '../../../../lib/formatters'
     ])
       .catch(error => {
         console.log('some error i found', error)
-        // setLoading({ isLoading: false, loaded: 'error' })
         setLoading({ 
           isLoading: false,
           showNotification: true,

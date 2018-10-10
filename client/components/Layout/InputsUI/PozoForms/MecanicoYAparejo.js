@@ -2,13 +2,14 @@ import React, { Component } from 'react'
 import autobind from 'autobind-decorator'
 import { List, Map, is } from 'immutable' 
 import { connect } from 'react-redux'
-
+import InputTable from '../../Common/InputTable'
+import ExcelUpload from '../../Common/ExcelUpload'
 import { InputRow, InputRowUnitless, InputRowSelectUnitless } from '../../Common/InputRow'
 import { setFromSaveMecanicoYAparejoDeProduccion, setHasErrorsMecanicoYAparejoDeProduccion, setTipoDeTerminacion, setHIntervaloProductor, setEmpacador, 
   setPresionDifEmpacador, setSensorPyt, setTipoDeLiner, setDiametroDeLiner, setTipoDePistolas, setDensidadDeDisparosMecanico, 
   setFase, setDiametroDeOrificio, setPenetracion, setTipoDeSAP, setTratamientoPor, setVolumenAparejoDeProduccion, 
   setVolumenCimaDeIntervalo, setVolumenBaseDeIntervalo, setVolumenDeEspacioAnular, setImgBoreDiagramURL, 
-  setImgAparejoDeProduccionURL } from '../../../../redux/actions/pozo'
+  setImgAparejoDeProduccionURL, setDesviacion } from '../../../../redux/actions/pozo'
 import { checkEmpty, checkDate } from '../../../../lib/errorCheckers'
 
 
@@ -41,72 +42,76 @@ let tratamientoPorOptions = [
       errors: {
         tipoDeTerminacion: {
           type: 'text',
-          values: '',
+          value: '',
         },
         hIntervaloProductor: {
           type: 'number',
-          values: '',
+          value: '',
         },
         empacador: {
           type: 'number',
-          values: '',
+          value: '',
         },
         presionDifEmpacador: {
           type: 'number',
-          values: '',
+          value: '',
         },
         sensorPyt: {
           type: 'number',
-          values: '',
+          value: '',
         },
         tipoDeLiner: {
           type: 'text',
-          values: '',
+          value: '',
         },
         diametroDeLiner: {
           type: 'number',
-          values: '',
+          value: '',
         },
         tipoDePistolas: {
           type: 'text',
-          values: '',
+          value: '',
         },
         densidadDeDisparosMecanico: {
           type: 'number',
-          values: '',
+          value: '',
         },
         fase: {
           type: 'number',
-          values: '',
+          value: '',
         },
         diametroDeOrificio: {
           type: 'number',
-          values: '',
+          value: '',
         },
         penetracion: {
           type: 'number',
-          values: '',
+          value: '',
         },
         tratamientoPor: {
           type: 'text',
-          values: '',
+          value: '',
         },
         volumenAparejoDeProduccion: {
           type: 'number',
-          values: '',
+          value: '',
         },
         volumenCimaDeIntervalo: {
           type: 'number',
-          values: '',
+          value: '',
         },
         volumenBaseDeIntervalo: {
           type: 'number',
-          values: '',
+          value: '',
         },
         volumenDeEspacioAnular: {
           type: 'number',
-          values: '',
+          value: '',
         },
+        desviacion: {
+          type: 'table',
+          value: '',
+        }
       }
 
     }
@@ -157,6 +162,9 @@ let tratamientoPorOptions = [
       else if (errObj.type === 'date') {
         error = checkDate(moment(formData[elem]).format('DD/MM/YYYY'), elem, errors, this.setErrors, showErrors)
       }
+      else if (errObj.type === 'table') {
+        error = errObj.value === '' ? true : errObj.value
+      }
 
       error === true ? hasErrors = true : null
     })
@@ -190,6 +198,17 @@ let tratamientoPorOptions = [
     }
 
     this.setState({ errors })
+  }
+
+  checkForErrors(value, table) {
+    const errorsCopy = {...this.state.errors}
+    errorsCopy[table].value = value
+    this.setState({ errors: errorsCopy }, () => {
+      const { setHasErrorsMecanicoYAparejoDeProduccion, hasSubmitted } = this.props
+      const hasErrors = this.checkAllInputs(hasSubmitted)
+      console.log('checking for errors', hasErrors, this.state.errors)
+      setHasErrorsMecanicoYAparejoDeProduccion(hasErrors)
+    })
   }
 
 
@@ -294,6 +313,100 @@ let tratamientoPorOptions = [
     )
   }
 
+  makeDesviacionesTable() {
+    let { formData , setDesviacion, hasSubmitted } = this.props
+    formData = formData.toJS()
+    let { desviacion, fromSave } = formData
+    const columns = [
+      {
+        Header: '',
+        accessor: 'delete',
+        width: 35,
+        resizable: false,
+        Cell: row => {
+          if (row.original.length > 1) {
+            return (<div style={{color: 'white', background: 'red', borderRadius: '4px', textAlign: 'center', cursor: 'pointer'}}>X</div>)
+          }
+        }
+      },
+      {
+        Header: 'Profundidad',
+        accessor: 'depth',
+        cell: 'renderNumber',
+      },
+      {
+        Header: 'Inclinación',
+        accessor: 'inclination',
+        cell: 'renderNumber',
+      },
+      {
+        Header: 'Azimut',
+        accessor: 'azimuth',
+        cell: 'renderNumber',
+      },
+      {
+        Header: 'MV',
+        accessor: 'trueVerticalDepth',
+        cell: 'renderNumber',
+      },
+      {
+        Header: 'X',
+        accessor: 'x_offset',
+        cell: 'renderNumber',
+      },
+      {
+        Header: 'Y',
+        accessor: 'y_offset',
+        cell: 'renderNumber',
+      },
+    ]
+    const rowObj = {
+      depth: '',
+      inclination: '',
+      azimuth: '',
+      trueVerticalDepth: '',
+      x_offset: '',
+      y_offset: '',
+      error: true,
+    }
+    const errors = [
+      { name: 'depth', type: 'number' },
+      { name: 'inclination', type: 'number' },
+      { name: 'azimuth', type: 'number' },
+      { name: 'trueVerticalDepth', type: 'number' },
+      { name: 'x_offset', type: 'number' },
+      { name: 'y_offset', type: 'number' },
+      { name: 'error', type: 'number' },
+    ]
+    return (
+      <div>
+        <ExcelUpload
+          template="Survey"
+          headers={errors}
+          setData={this.props.setDesviacion}
+        />
+        <div className='historico-produccion' >
+          <div className='table'>
+            <InputTable
+              className="-striped"
+              data={desviacion}
+              setData={setDesviacion}
+              columns={columns}
+              showPagination={false}
+              showPageSizeOptions={false}
+              sortable={false}
+              errorArray={errors}
+              rowObj={rowObj}
+              checkForErrors={e => this.checkForErrors(e, 'desviacion')}
+              hasSubmitted={hasSubmitted}
+              fromSave={fromSave}
+            />
+          </div>
+        </div>
+      </div>
+    )
+  }
+
   makeAparejoDeProduccionInput() {
     let { formData, setImgAparejoDeProduccionURL } = this.props
     formData = formData.toJS()
@@ -307,7 +420,6 @@ let tratamientoPorOptions = [
   }
 
   render() {
-    console.log('render mecanico')
     return (
       <div className="form mecanico-y-aparejo">
         <div className='image'/>
@@ -318,6 +430,7 @@ let tratamientoPorOptions = [
           { this.makeCapacidadForm() }
           { this.makeBoreDiagramInput() }
         </div>
+        {this.makeDesviacionesTable()}
       </div>
     )
   }
@@ -353,6 +466,7 @@ const mapDispatchToProps = dispatch => ({
   setImgAparejoDeProduccionURL: val => dispatch(setImgAparejoDeProduccionURL(val)),
   setHasErrorsMecanicoYAparejoDeProduccion: val => dispatch(setHasErrorsMecanicoYAparejoDeProduccion(val)),
   setFromSaveMecanicoYAparejoDeProduccion: val => dispatch(setFromSaveMecanicoYAparejoDeProduccion(val)),
+  setDesviacion: val => dispatch(setDesviacion(val)),
 })
 
 
