@@ -11,7 +11,7 @@ import { setHasErrorsFichaTecnicaDelCampo, setTipoDeFluidoField, setDescubrimien
   setLitologiaField, setEspesorNetoField, setPorosidadField, setSwField, setKPromedioField, 
   setCaaField, setCgaField, setQoField, setQgField, setRgaField, setFwField, setNpField, 
   setGpField, setWpField, setRraField, setRrgField, setRrpceField, setH2sField, setCo2Field, 
-  setN2Field } from '../../../../redux/actions/pozo'
+  setN2Field, setFromSaveFichaTecnicaDelCampo } from '../../../../redux/actions/pozo'
 
 let fluidoOptions = [
     { label: 'Aceite Negro', value: 'Aceite Negro' },
@@ -188,12 +188,17 @@ let litologiaOptions = [
 
   }
 
-  componentWillReceiveProps(nextProps) {
-    let { hasSubmitted } = this.props
-
-
-    if (hasSubmitted !== nextProps.hasSubmitted) {
-      this.checkAllInputs(true)
+  componentDidUpdate(prevProps) {
+    let { hasSubmitted, formData, setFromSaveFichaTecnicaDelCampo, setHasErrorsFichaTecnicaDelCampo } = this.props
+    formData = formData.toJS()
+    let { fromSave } = formData
+    
+    if (hasSubmitted !== prevProps.hasSubmitted || fromSave) {
+      let err = this.checkAllInputs(true)
+      setHasErrorsFichaTecnicaDelCampo(err)
+      if (fromSave === true) {
+        setFromSaveFichaTecnicaDelCampo(false)
+      }
     }
   }
 
@@ -423,6 +428,7 @@ const mapDispatchToProps = dispatch => ({
   setN2Field: val => dispatch(setN2Field(val)),
   setTipoDeFluidoField: val => dispatch(setTipoDeFluidoField(val)),
   setHasErrorsFichaTecnicaDelCampo: val => dispatch(setHasErrorsFichaTecnicaDelCampo(val)),
+  setFromSaveFichaTecnicaDelCampo: val => dispatch(setFromSaveFichaTecnicaDelCampo(val)),
 })
 
 export default connect(mapStateToProps, mapDispatchToProps)(TecnicaDelCampo)

@@ -2,6 +2,7 @@ import { Map, fromJS } from 'immutable'
 
 const initialState = fromJS({
     hasErrors: true,
+    fromSave: false,
     aforosData: [{
         fecha: null,
         tiempo: '',
@@ -26,6 +27,8 @@ const initialState = fromJS({
 
 const historicoDeAforos = (state = initialState, action) => {
   switch (action.type) {
+    case 'set_fromSaveHistoricoDeAforos':
+      return state.set('fromSave', fromJS(action.value))
     case 'set_hasErrorsHistoricoDeAforos':
       return state.set('hasErrors', fromJS(action.value))
     case 'set_aforosData':

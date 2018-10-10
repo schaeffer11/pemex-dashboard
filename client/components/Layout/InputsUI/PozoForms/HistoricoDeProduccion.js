@@ -5,7 +5,7 @@ import ReactTable from 'react-table'
 
 import { InputRow, InputRowUnitless, InputRowSelectUnitless, InputDate } from '../../Common/InputRow'
 import ExcelUpload from '../../Common/ExcelUpload'
-import { setHasErrorsHistoricoDeProduccion, setProduccionData, setChecked, setHistoricoProduccionLocal } from '../../../../redux/actions/pozo'
+import { setFromSaveHistoricoDeProduccion, setHasErrorsHistoricoDeProduccion, setProduccionData, setChecked, setHistoricoProduccionLocal } from '../../../../redux/actions/pozo'
 import InputTable from '../../Common/InputTable'
 import ReactHighCharts from 'react-highcharts'
 
@@ -176,10 +176,16 @@ let columns = [
   }
 
   componentDidUpdate(prevProps) {
-    let { hasSubmitted } = this.props
-
-    if (hasSubmitted !== prevProps.hasSubmitted) {
-      this.checkAllInputs()
+    let { hasSubmitted, formData, setFromSaveHistoricoDeProduccion, setHasErrorsHistoricoDeProduccion } = this.props
+    formData = formData.toJS()
+    let { fromSave } = formData
+    
+    if (hasSubmitted !== prevProps.hasSubmitted || fromSave) {
+      let err = this.checkAllInputs(true)
+      setHasErrorsHistoricoDeProduccion(err)
+      if (fromSave === true) {
+        setFromSaveHistoricoDeProduccion(false)
+      }
     }
   }
 
@@ -355,6 +361,7 @@ const mapDispatchToProps = dispatch => ({
     setProduccionData: val => dispatch(setProduccionData(val)),
     setChecked: val => dispatch(setChecked(val, 'historicoDeProduccion')),
     setHistoricoProduccionLocal: (location, value) => dispatch(setHistoricoProduccionLocal(location, value)),
+    setFromSaveHistoricoDeProduccion: val => dispatch(setFromSaveHistoricoDeProduccion(val)),
 })
 
 export default connect(mapStateToProps, mapDispatchToProps)(HistoricoDeProduccion)

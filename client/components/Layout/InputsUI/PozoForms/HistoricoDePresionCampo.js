@@ -3,7 +3,7 @@ import { connect } from 'react-redux'
 import autobind from 'autobind-decorator'
 import ReactTable from 'react-table'
 
-import { setHasErrorsHistoricoDePressionCampo, setPresionDataCampo, setPressureDepthCampo, setChecked } from '../../../../redux/actions/pozo'
+import { setFromSaveHistoricoDePressionCampo, setHasErrorsHistoricoDePressionCampo, setPresionDataCampo, setPressureDepthCampo, setChecked } from '../../../../redux/actions/pozo'
 import InputTable from '../../Common/InputTable'
 import ExcelUpload from '../../Common/ExcelUpload'
 import { InputRow } from '../../Common/InputRow'
@@ -57,10 +57,16 @@ let columns = [
   }
 
   componentDidUpdate(prevProps) {
-    let { hasSubmitted } = this.props
-
-    if (hasSubmitted !== prevProps.hasSubmitted) {
-      this.checkAllInputs(true)
+    let { hasSubmitted, formData, setFromSaveHistoricoDePressionCampo, setHasErrorsHistoricoDePressionCampo } = this.props
+    formData = formData.toJS()
+    let { fromSave } = formData
+    
+    if (hasSubmitted !== prevProps.hasSubmitted || fromSave) {
+      let err = this.checkAllInputs(true)
+      setHasErrorsHistoricoDePressionCampo(err)
+      if (fromSave === true) {
+        setFromSaveHistoricoDePressionCampo(false)
+      }
     }
   }
 
@@ -201,6 +207,7 @@ const mapDispatchToProps = dispatch => ({
     setChecked: val => dispatch(setChecked(val, 'historicoDePresion')),
     setPressureDepthCampo: val => dispatch(setPressureDepthCampo(val)),
     setHasErrorsHistoricoDePressionCampo: val => dispatch(setHasErrorsHistoricoDePressionCampo(val)),
+    setFromSaveHistoricoDePressionCampo: val => dispatch(setFromSaveHistoricoDePressionCampo(val)),
 })
 
 

@@ -2,6 +2,7 @@ import { Map, fromJS } from 'immutable'
 
 const initialState = Map({ 
     hasErrors: true,
+    fromSave: false,
 	tipoDeTerminacion: '',
     hIntervaloProductor: '',
     empacador: '',
@@ -28,6 +29,8 @@ const mecanicoYAparejoDeProduccion = (state = initialState, action) => {
   switch (action.type) {
     case 'set_hasErrorsMecanicoYAparejoDeProduccion':
       return state.set('hasErrors', fromJS(action.value))
+    case 'set_fromSaveMecanicoYAparejoDeProduccion':
+      return state.set('fromSave', fromJS(action.value))
     case 'set_tipoDeTerminacion':
     	return state.set('tipoDeTerminacion', fromJS(action.value))
     case 'set_hIntervaloProductor':

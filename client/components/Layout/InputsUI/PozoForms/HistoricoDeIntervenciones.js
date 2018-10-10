@@ -1,7 +1,7 @@
 import React, { Component } from 'react'
 import { connect } from 'react-redux'
 import autobind from 'autobind-decorator'
-import { setHistoricoEstimulacionData, setHistoricoAcidoData, setHistoricoApuntaladoData, setHasErrorsHistorialDeIntervenciones } from '../../../../redux/actions/pozo'
+import { setFromSaveHistorialDeIntervenciones, setHistoricoEstimulacionData, setHistoricoAcidoData, setHistoricoApuntaladoData, setHasErrorsHistorialDeIntervenciones } from '../../../../redux/actions/pozo'
 import InputTable from '../../Common/InputTable'
 import { checkDate, checkEmpty } from '../../../../lib/errorCheckers'
 
@@ -276,10 +276,16 @@ let columnsApuntalado = [
   }
 
   componentDidUpdate(prevProps) {
-    let { hasSubmitted } = this.props
-
-    if (hasSubmitted !== prevProps.hasSubmitted) {
-      this.checkAllInputs()
+    let { hasSubmitted, formData, setFromSaveHistorialDeIntervenciones, setHasErrorsHistorialDeIntervenciones } = this.props
+    formData = formData.toJS()
+    let { fromSave } = formData
+    
+    if (hasSubmitted !== prevProps.hasSubmitted || fromSave) {
+      let err = this.checkAllInputs(true)
+      setHasErrorsHistorialDeIntervenciones(err)
+      if (fromSave === true) {
+        setFromSaveHistorialDeIntervenciones(false)
+      }
     }
   }
 
@@ -537,6 +543,7 @@ const mapDispatchToProps = dispatch => ({
     setHistoricoAcidoData: val => dispatch(setHistoricoAcidoData(val)),
     setHasErrorsHistorialDeIntervencionesDispatch: val => dispatch(setHasErrorsHistorialDeIntervenciones(val)),
     setHistoricoApuntaladoData: val => dispatch(setHistoricoApuntaladoData(val)),
+    setFromSaveHistorialDeIntervenciones: val => dispatch(setFromSaveHistorialDeIntervenciones(val)),
 })
 
 export default connect(mapStateToProps, mapDispatchToProps)(HistorialDeIntervenciones)

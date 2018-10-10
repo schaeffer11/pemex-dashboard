@@ -2,6 +2,7 @@ import { Map, fromJS } from 'immutable'
 
 const initialState = Map({ 
     hasErrors: true,
+    fromSave: false,
 	tipoDeSistemo: 'none',
     presionDeCabeza: '',
     presionDeLineaODeSeparador: '',
@@ -53,6 +54,8 @@ const sistemasArtificialesDeProduccion = (state = initialState, action) => {
   switch (action.type) {
     case 'set_hasErrorsSistemas':
       return state.set('hasErrors', fromJS(action.value))
+    case 'set_fromSaveSistemas':
+      return state.set('fromSave', fromJS(action.value))
     case 'set_tipoDeSistemo':
     	return state.set('tipoDeSistemo', fromJS(action.value))
     case 'set_presionDeCabeza':

@@ -38,6 +38,7 @@ const initialState = Map({
     co2Field: '',
     n2Field: '',
     hasErrors: true,
+    fromSave: false,
 })
 
 
@@ -45,6 +46,8 @@ const fichaTecnicaDelCampo = (state = initialState, action) => {
   switch (action.type) {
     case 'set_hasErrorsFichaTecnicaDelCampo':
       return state.set('hasErrors', fromJS(action.value))
+    case 'set_fromSaveFichaTecnicaDelCampo':
+      return state.set('fromSave', fromJS(action.value))
     case 'set_descubrimientoField':
         return state.set('descubrimientoField', fromJS(action.value))
     case 'set_fechaDeExplotacionField':

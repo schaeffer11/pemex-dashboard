@@ -2,7 +2,7 @@ import React, { Component } from 'react'
 import autobind from 'autobind-decorator'
 import { connect } from 'react-redux'
 import ExcelUpload from '../../Common/ExcelUpload'
-import { setAforosData, setChecked, setHasErrorsHistoricoDeAforos } from '../../../../redux/actions/pozo'
+import { setAforosData, setChecked, setHasErrorsHistoricoDeAforos, setFromSaveHistoricoDeAforos } from '../../../../redux/actions/pozo'
 import InputTable from '../../Common/InputTable'
 import ReactHighCharts from 'react-highcharts'
 
@@ -174,10 +174,16 @@ let columns = [
   }
 
   componentDidUpdate(prevProps) {
-    let { hasSubmitted } = this.props
-
-    if (hasSubmitted !== prevProps.hasSubmitted) {
-      this.checkAllInputs()
+    let { hasSubmitted, formData, setFromSaveHistoricoDeAforos, setHasErrorsHistoricoDeAforos } = this.props
+    formData = formData.toJS()
+    let { fromSave } = formData
+    
+    if (hasSubmitted !== prevProps.hasSubmitted || fromSave) {
+      let err = this.checkAllInputs(true)
+      setHasErrorsHistoricoDeAforos(err)
+      if (fromSave === true) {
+        setFromSaveHistoricoDeAforos(false)
+      }
     }
   }
 
@@ -351,6 +357,7 @@ const mapDispatchToProps = dispatch => ({
     setAforosData: val => dispatch(setAforosData(val)),
     setChecked: val => dispatch(setChecked(val, 'historicoDeAforos')),
     setHasErrorsHistoricoDeAforos: val => dispatch(setHasErrorsHistoricoDeAforos(val)),
+    setFromSaveHistoricoDeAforos: val => dispatch(setFromSaveHistoricoDeAforos(val)),
 })
 
 export default connect(mapStateToProps, mapDispatchToProps)(HistoricoDeAforos)

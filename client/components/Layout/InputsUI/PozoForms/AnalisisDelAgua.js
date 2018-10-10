@@ -3,7 +3,7 @@ import autobind from 'autobind-decorator'
 import { InputRow, InputRowUnitless, InputRowSelectUnitless } from '../../Common/InputRow'
 import { connect } from 'react-redux'
 import AnalisisDelAguaGraph from './AnalisisDelAguaGraph'
-import { setHasErrorsAnalisisDelAgua, setWaterAnalysisBool, setPH, setTemperaturaDeConductividad, setResistividad, 
+import { setFromSaveAnalisisDelAgua, setHasErrorsAnalisisDelAgua, setWaterAnalysisBool, setPH, setTemperaturaDeConductividad, setResistividad, 
   setSalinidadConConductimetro, setSolidosDisueltosTotales, setDurezaTotalComoCaCO3, setDurezaDeCalcioComoCaCO3, 
   setDurezaDeMagnesioComoCaCO3, setAlcalinidadTotalComoCaCO3, setAlcalinidadALaFenolftaleinaComoCaCO3, setSalinidadComoNaCl,
    setSodio, setCalcio, setMagnesio, setFierro, setCloruros, setBicarbonatos, setSulfatos, setCarbonatos, setDensidadAt15, 
@@ -122,10 +122,16 @@ const yesOrNoOptions = [{
   }
 
   componentDidUpdate(prevProps) {
-    let { hasSubmitted } = this.props
-
-    if (hasSubmitted !== prevProps.hasSubmitted) {
-      this.checkAllInputs(true)
+    let { hasSubmitted, formData, setFromSaveAnalisisDelAgua, setHasErrorsAnalisisDelAgua } = this.props
+    formData = formData.toJS()
+    let { fromSave } = formData
+    
+    if (hasSubmitted !== prevProps.hasSubmitted || fromSave) {
+      let err = this.checkAllInputs(true)
+      setHasErrorsAnalisisDelAgua(err)
+      if (fromSave === true) {
+        setFromSaveAnalisisDelAgua(false)
+      }
     }
   }
 
@@ -283,6 +289,7 @@ const mapDispatchToProps = dispatch => ({
   setDensidadAt15: val => dispatch(setDensidadAt15(val)),
   setDensidadAt20: val => dispatch(setDensidadAt20(val)),
   setHasErrorsAnalisisDelAgua: val => dispatch(setHasErrorsAnalisisDelAgua(val)),
+  setFromSaveAnalisisDelAgua: val => dispatch(setFromSaveAnalisisDelAgua(val)),
 })
 
 export default connect(mapStateToProps, mapDispatchToProps)(AnalisisDelAgua)

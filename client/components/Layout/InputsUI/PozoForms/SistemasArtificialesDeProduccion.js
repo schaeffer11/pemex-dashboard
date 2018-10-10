@@ -5,7 +5,7 @@ import { connect } from 'react-redux'
 
 import { checkEmpty, checkDate } from '../../../../lib/errorCheckers'
 import { InputRow, InputRowUnitless, InputRowSelectUnitless } from '../../Common/InputRow'
-import { setHasErrorsSistemas, setSistemasArtificialesImgURL, setTipoDeSistemo, setPresionDeCabeza, setPresionDeLineaODeSeparador, setNumeroDeDescargasOCiclosEV, setVolumenDesplazadoPorCircloEV, setPresionDeInyeccionBN, setPresionDeDescargaBN, setNumeroDeValvulasBN, setProfundidadDeLaVulvulaOperanteBN, setOrificioBN, setVolumenDeGasInyectadoBN, setProfundidadDeLaBombaBH, setTipoYMarcaDeBombaBH, setOrificioBH, setTipoDeCamisaBH, setFluidoMotrizBH, setEquipoSuperficialBH, setMotorYTipoDeMotorBCP, setProfunidadDelMotorBCP, setVelocidadBCP, setHpBCP, setArregloDeVarillasBCP, setTipoDeElastomeroBCP, setProfundidadDelAnclaAntitorqueBCP, setProfundidadDelMotorBE, setDiametroBE, setVoltsBE, setAmparajeBE, setArmaduraBE, setTipoDeCableBE, setLongitudDeCableBE, setRmpBE, setTipoDeUnidadBM, setVelocidadBM, setLongitudDeCareraBM, setTipoDeBombaSubsuperficialBM, setTamanoDeBombaSubsuperficialBM, setProfundidadDeLaBombaBM, setArregloDeVarillasBM, setCuantaConAnclaBM, setNivelDinamico, setNivelEstatico, setChecked } from '../../../../redux/actions/pozo'
+import { setFromSaveSistemas, setHasErrorsSistemas, setSistemasArtificialesImgURL, setTipoDeSistemo, setPresionDeCabeza, setPresionDeLineaODeSeparador, setNumeroDeDescargasOCiclosEV, setVolumenDesplazadoPorCircloEV, setPresionDeInyeccionBN, setPresionDeDescargaBN, setNumeroDeValvulasBN, setProfundidadDeLaVulvulaOperanteBN, setOrificioBN, setVolumenDeGasInyectadoBN, setProfundidadDeLaBombaBH, setTipoYMarcaDeBombaBH, setOrificioBH, setTipoDeCamisaBH, setFluidoMotrizBH, setEquipoSuperficialBH, setMotorYTipoDeMotorBCP, setProfunidadDelMotorBCP, setVelocidadBCP, setHpBCP, setArregloDeVarillasBCP, setTipoDeElastomeroBCP, setProfundidadDelAnclaAntitorqueBCP, setProfundidadDelMotorBE, setDiametroBE, setVoltsBE, setAmparajeBE, setArmaduraBE, setTipoDeCableBE, setLongitudDeCableBE, setRmpBE, setTipoDeUnidadBM, setVelocidadBM, setLongitudDeCareraBM, setTipoDeBombaSubsuperficialBM, setTamanoDeBombaSubsuperficialBM, setProfundidadDeLaBombaBM, setArregloDeVarillasBM, setCuantaConAnclaBM, setNivelDinamico, setNivelEstatico, setChecked } from '../../../../redux/actions/pozo'
 
 @autobind class SistemasArtificialesDeProduccion extends Component {
   constructor(props) {
@@ -189,10 +189,16 @@ import { setHasErrorsSistemas, setSistemasArtificialesImgURL, setTipoDeSistemo, 
   }
 
   componentDidUpdate(prevProps) {
-    let { hasSubmitted } = this.props
-
-    if (hasSubmitted !== prevProps.hasSubmitted) {
-      this.checkAllInputs(true)
+    let { hasSubmitted, formData, setFromSaveSistemas, setHasErrorsSistemas } = this.props
+    formData = formData.toJS()
+    let { fromSave } = formData
+    
+    if (hasSubmitted !== prevProps.hasSubmitted || fromSave) {
+      let err = this.checkAllInputs(true)
+      setHasErrorsSistemas(err)
+      if (fromSave === true) {
+        setFromSaveSistemas(false)
+      }
     }
   }
 
@@ -583,6 +589,7 @@ const mapDispatchToProps = dispatch => ({
   setNivelEstatico  : val => dispatch(setNivelEstatico(val)),
   setSistemasArtificialesImgURL: val => dispatch(setSistemasArtificialesImgURL(val)),
   setHasErrorsSistemas: val => dispatch(setHasErrorsSistemas(val)),
+  setFromSaveSistemas: val => dispatch(setFromSaveSistemas(val)),
 })
 
 export default connect(mapStateToProps, mapDispatchToProps)(SistemasArtificialesDeProduccion)

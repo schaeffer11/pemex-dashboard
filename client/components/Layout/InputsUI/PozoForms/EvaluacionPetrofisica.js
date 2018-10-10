@@ -1,7 +1,7 @@
 import React, { Component } from 'react'
 import autobind from 'autobind-decorator'
 import { connect } from 'react-redux'
-import { setImgURL, setLayerData, setMudLossData, setHasErrorsEvaluacionPetrofisica } from '../../../../redux/actions/pozo'
+import { setFromSaveEvaluacionPetrofisica, setImgURL, setLayerData, setMudLossData, setHasErrorsEvaluacionPetrofisica } from '../../../../redux/actions/pozo'
 import InputTable from '../../Common/InputTable'
 
 let layerColumns = [
@@ -117,10 +117,16 @@ let mudLossColumns = [
   }
 
   componentDidUpdate(prevProps) {
-    let { hasSubmitted } = this.props
-
-    if (hasSubmitted !== prevProps.hasSubmitted) {
-      this.checkAllInputs()
+    let { hasSubmitted, formData, setFromSaveEvaluacionPetrofisica, setHasErrorsEvaluacionPetrofisica } = this.props
+    formData = formData.toJS()
+    let { fromSave } = formData
+    
+    if (hasSubmitted !== prevProps.hasSubmitted || fromSave) {
+      let err = this.checkAllInputs(true)
+      setHasErrorsEvaluacionPetrofisica(err)
+      if (fromSave === true) {
+        setFromSaveEvaluacionPetrofisica(false)
+      }
     }
   }
 
@@ -303,6 +309,7 @@ const mapDispatchToProps = dispatch => ({
   setLayerData: val => dispatch(setLayerData(val)),
   setMudLossData: val => dispatch(setMudLossData(val)),
   setHasErrorsEvaluacionPetrofisica: val => dispatch(setHasErrorsEvaluacionPetrofisica(val)),
+  setFromSaveEvaluacionPetrofisica: val => dispatch(setFromSaveEvaluacionPetrofisica(val)),
 })
 
 

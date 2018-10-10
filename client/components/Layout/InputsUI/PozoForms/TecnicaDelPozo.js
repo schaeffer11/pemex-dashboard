@@ -11,7 +11,7 @@ import { InputRow, InputRowUnitless, InputRowSelectUnitless, InputDate } from '.
 import { setHasErrorsFichaTecnicaDelPozo, setTipoDeSistemo, setHistorialIntervencionesData, setEspesorBruto, 
   setCaliza, setDolomia, setArcilla, setPorosidad, setPermeabilidad, setSw, setCaa, setCga, setTipoDePozo, 
   setPws, setPwf, setPwsFecha, setPwfFecha, setDeltaPPerMes, setTyac, setPvt, setAparejoDeProduccion, 
-  setProfEmpacador, setProfSensorPYT, setTipoDeSap, formData } from '../../../../redux/actions/pozo'
+  setProfEmpacador, setProfSensorPYT, setTipoDeSap, setFromSaveFichaTecnicaDelPozo } from '../../../../redux/actions/pozo'
 
 @autobind class TechnicaDelPozo extends Component {
   constructor(props) {
@@ -128,14 +128,19 @@ import { setHasErrorsFichaTecnicaDelPozo, setTipoDeSistemo, setHistorialInterven
     })
   }
 
-  componentWillReceiveProps(nextProps) {
-    let { hasSubmitted } = this.props
-
-    if (hasSubmitted !== nextProps.hasSubmitted) {
-      this.checkAllInputs(true)
+  componentDidUpdate(prevProps) {
+    let { hasSubmitted, formData, setFromSaveFichaTecnicaDelPozo, setHasErrorsFichaTecnicaDelPozo } = this.props
+    formData = formData.toJS()
+    let { fromSave } = formData
+    
+    if (hasSubmitted !== prevProps.hasSubmitted || fromSave) {
+      let err = this.checkAllInputs(true)
+      setHasErrorsFichaTecnicaDelPozo(err)
+      if (fromSave === true) {
+        setFromSaveFichaTecnicaDelPozo(false)
+      }
     }
   }
-
 
   checkAllInputs(showErrors) {
     let { formData } = this.props
@@ -379,6 +384,7 @@ const mapDispatchToProps = dispatch => ({
   setTipoDeSistemo: val => dispatch(setTipoDeSistemo(val)),
   setHistorialIntervencionesData: val => dispatch(setHistorialIntervencionesData(val)),
   setHasErrorsFichaTecnicaDelPozo: val => dispatch(setHasErrorsFichaTecnicaDelPozo(val)),
+  setFromSaveFichaTecnicaDelPozo: val => dispatch(setFromSaveFichaTecnicaDelPozo(val)),
 })
 
 export default connect(mapStateToProps, mapDispatchToProps)(TechnicaDelPozo)
