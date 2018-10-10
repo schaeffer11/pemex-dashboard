@@ -20,7 +20,7 @@ import { InputRow, InputRowUnitless, InputRowSelectUnitless, InputDate } from '.
 
 import { setFichaTecnicaDelCampo, setHistorialDeIntervenciones, setFichaTecnicaDelPozo, setEvaluacionPetrofisica, setMecanicoYAparejoDeProduccion, 
   setAnalisisDelAgua, setSistemasArtificialesDeProduccion, setPresionDataCampo, setPressureDepthCampo, setPresionDataPozo, setPressureDepthPozo, setHistoricoProduccion, setHistoricoDeAforos,
-  setFromSaveFichaTecnicaDelCampo, setFromSaveHistorialDeIntervenciones, setFromSaveFichaTecnicaDelPozo, setFromSaveEvaluacionPetrofisica, setFromSaveMecanicoYAparejoDeProduccion, setFromSaveAnalisisDelAgua, setFromSaveSistemas, setFromSaveHistoricoDePressionCampo, setFromSaveHistoricoDePressionPozo, setFromSaveHistoricoDeAforos, setFromSaveHistoricoDeProduccion } from '../../../../redux/actions/pozo'
+  setFromSaveFichaTecnicaDelCampo, setFromSaveHistorialDeIntervenciones, setFromSaveFichaTecnicaDelPozo, setFromSaveEvaluacionPetrofisica, setFromSaveMecanicoYAparejoDeProduccion, setFromSaveAnalisisDelAgua, setFromSaveSistemas, setFromSaveHistoricoDePressionCampo, setFromSaveHistoricoDePressionPozo, setFromSaveHistoricoDeAforos, setFromSaveHistoricoDeProduccion, setAllPressure } from '../../../../redux/actions/pozo'
 import { setPage } from '../../../../redux/actions/global'
 
 const forms = [
@@ -201,8 +201,6 @@ const forms = [
       let newObj = data.fichaTecnicaDelPozo
       newObj.historialIntervencionesData = interventionData.fichaTecnicaDelPozo.historialIntervencionesData
       newObj.fromSave = true
-      console.log('official data', newObj)
-      // setFromSaveFichaTecnicaDelPozo(true)
       setFichaTecnicaDelPozo(newObj)
       setLoading({ 
         isLoading: false,
@@ -252,7 +250,8 @@ const forms = [
 
         let newObj = data.evaluacionPetrofisica
         newObj.layerData = layerData.evaluacionPetrofisica.layerData
-        setFromSaveEvaluacionPetrofisica(true)
+        newObj.fromSave = true
+        console.log('what is this?', newObj)
         setEvaluacionPetrofisica(newObj)
         setLoading({ 
           isLoading: false,
@@ -448,8 +447,9 @@ const forms = [
 
   async loadHistoricoDePresionCampo() {
     let { selectedTransaction } = this.state
-    let { fichaTecnicaDelPozoHighLevel, setPresionDataCampo, setPressureDepthCampo, setLoading, setFromSaveHistoricoDePressionCampo } = this.props
+    let { fichaTecnicaDelPozoHighLevel, setLoading, historicoDePresion, setAllPressure } = this.props
     fichaTecnicaDelPozoHighLevel = fichaTecnicaDelPozoHighLevel.toJS()
+    historicoDePresion = historicoDePresion.toJS()
     let { pozo } = fichaTecnicaDelPozoHighLevel
     const token = this.props.user.get('token')
     const headers = {
@@ -473,11 +473,10 @@ const forms = [
       let data = await fetch(`api/getFieldPressure?transactionID=${selectedTransaction}`, headers).then(r => r.json())
 
     if (data && !data.err) {
-
-      let newObj = data.historicoDePresion.presionDataCampo
-      setFromSaveHistoricoDePressionCampo(true)
-      setPresionDataCampo(newObj)
-      setPressureDepthCampo(data.historicoDePresion.pressureDepthCampo)
+      historicoDePresion.presionDataCampo = data.historicoDePresion.presionDataCampo
+      historicoDePresion.pressureDepthCampo = data.historicoDePresion.pressureDepthCampo
+      historicoDePresion.fromSaveCampo = true
+      setAllPressure(historicoDePresion)
       setLoading({ 
         isLoading: false,
         showNotification: true,
@@ -503,8 +502,9 @@ const forms = [
 
   async loadHistoricoDePresionPozo() {
     let { selectedTransaction } = this.state
-    let { fichaTecnicaDelPozoHighLevel, setPresionDataPozo, setPressureDepthPozo, setLoading, setFromSaveHistoricoDePressionPozo } = this.props
+    let { fichaTecnicaDelPozoHighLevel, setLoading, setAllPressure, historicoDePresion } = this.props
     fichaTecnicaDelPozoHighLevel = fichaTecnicaDelPozoHighLevel.toJS()
+    historicoDePresion = historicoDePresion.toJS()
     let { pozo } = fichaTecnicaDelPozoHighLevel
     const token = this.props.user.get('token')
     const headers = {
@@ -523,17 +523,16 @@ const forms = [
       let data = await fetch(`api/getWellPressure?transactionID=${selectedTransaction}`, headers).then(r => r.json())
 
       if (data && !data.err) {
-        setFromSaveHistoricoDePressionPozo(true)
-        let newObj = data.historicoDePresion.presionDataPozo
         setLoading({ 
           isLoading: false,
           showNotification: true,
           notificationType: 'success',
           notificationText: `Se ha descargado informacion del pozo: ${pozo}`
         })
-        setPresionDataPozo(newObj)
-        setPressureDepthPozo(data.historicoDePresion.pressureDepthPozo)
-
+      historicoDePresion.presionDataPozo = data.historicoDePresion.presionDataPozo
+      historicoDePresion.pressureDepthPozo = data.historicoDePresion.pressureDepthPozo
+      historicoDePresion.fromSavePozo = true
+      setAllPressure(historicoDePresion)
       }
       else { 
         console.log('no data found')
@@ -860,6 +859,8 @@ const mapDispatchToProps = dispatch => ({
   setFromSaveHistoricoDePressionCampo: values => {dispatch(setFromSaveHistoricoDePressionCampo(values))},
   setFromSaveHistoricoDePressionPozo: values => {dispatch(setFromSaveHistoricoDePressionPozo(values))},
   setFromSaveHistoricoDeAforos: values => {dispatch(setFromSaveHistoricoDeAforos(values))},
+  setFromSaveHistoricoDePressionCampo: (val, depth) => dispatch(setFromSaveHistoricoDePressionCampo(val, depth)),
+  setAllPressure: (val, depth) => dispatch(setAllPressure(val)),
   setFromSaveHistoricoDeProduccion: values => {dispatch(setFromSaveHistoricoDeProduccion(values))},
 })
 
@@ -886,8 +887,8 @@ const mapStateToProps = state => ({
   historicoDeProduccionHasErrors: state.getIn(['historicoDeProduccion', 'hasErrors']),
   historicoDeAforosHasErrors: state.getIn(['historicoDeAforos', 'hasErrors']),
   sistemasArtificialesDeProduccionHasErrors: state.getIn(['sistemasArtificialesDeProduccion', 'hasErrors']),
-  user: state.get('user')
-
+  historicoDePresion: state.get('historicoDePresion'),
+  user: state.get('user'),
 })
 
 

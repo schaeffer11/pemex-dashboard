@@ -171,7 +171,7 @@ let mudLossColumns = [
   makeLayerTable() {
     let { setLayerData, formData, hasSubmitted } = this.props
     formData = formData.toJS()
-    let { layerData } = formData
+    let { layerData, fromSave } = formData
     const rowObj = {
       cimaMD: '',
       baseMD: '',
@@ -213,6 +213,7 @@ let mudLossColumns = [
             errorArray={errors}
             checkForErrors={val => this.checkForErrors(val, 'layerTable')}
             hasSubmitted={hasSubmitted}
+            fromSave={fromSave}
           />
         </div>
       </div>
@@ -222,7 +223,7 @@ let mudLossColumns = [
   makeMudLossTable() {
     let { setMudLossData, formData, hasSubmitted } = this.props
     formData = formData.toJS()
-    let { mudLossData } = formData
+    let { mudLossData, fromSave } = formData
     const rowObj = {
       cimaMD: '',
       baseMD: '',
@@ -254,6 +255,7 @@ let mudLossColumns = [
             rowObj={rowObj}
             checkForErrors={val => this.checkForErrors(val, 'mudTable')}
             hasSubmitted={hasSubmitted}
+            fromSave={fromSave}
           />
         </div>
       </div>

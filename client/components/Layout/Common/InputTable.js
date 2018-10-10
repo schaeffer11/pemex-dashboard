@@ -34,6 +34,7 @@ import { checkDate, checkEmpty, checkEmptySingular, checkDateSingular } from '..
 
   componentDidUpdate(prevProps) {
     const { data, fromSave } = this.props
+    console.log('table is updating', fromSave, data)
     if (prevProps.data.length !== data.length || fromSave) {
       this.initializeErrors()
     }

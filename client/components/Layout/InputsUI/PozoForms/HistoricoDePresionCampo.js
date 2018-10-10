@@ -59,12 +59,12 @@ let columns = [
   componentDidUpdate(prevProps) {
     let { hasSubmitted, formData, setFromSaveHistoricoDePressionCampo, setHasErrorsHistoricoDePressionCampo } = this.props
     formData = formData.toJS()
-    let { fromSave } = formData
+    let { fromSaveCampo } = formData
     
-    if (hasSubmitted !== prevProps.hasSubmitted || fromSave) {
+    if (hasSubmitted !== prevProps.hasSubmitted || fromSaveCampo) {
       let err = this.checkAllInputs(true)
       setHasErrorsHistoricoDePressionCampo(err)
-      if (fromSave === true) {
+      if (fromSaveCampo === true) {
         setFromSaveHistoricoDePressionCampo(false)
       }
     }
@@ -133,7 +133,7 @@ let columns = [
   makeHistoricoDePresionTable() {
     let { formData, setPresionDataCampo, hasSubmitted } = this.props
     formData = formData.toJS()
-    let { presionDataCampo } = formData
+    let { presionDataCampo, fromSaveCampo } = formData
     const rowObj = {
       fecha: null,
       Pws: '',
@@ -159,6 +159,7 @@ let columns = [
             errorArray={errors}
             checkForErrors={this.checkForErrors}
             hasSubmitted={hasSubmitted}
+            fromSave={fromSaveCampo}
           />
         </div>
       </div>

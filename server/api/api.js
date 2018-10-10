@@ -331,7 +331,7 @@ router.get('/getHistIntervencionesEstimulacionNew', async (req, res) => {
     if (data && data.length > 0) {
       data.forEach((d, index) => {
         d.FECHA ? d.FECHA = d.FECHA.toJSON().slice(0, 10) : null
-        d.HAS_ERRORS = d.HAS_ERRORS === 0 || d.HAS_ERRORS === null ? false : true
+        d.HAS_ERRORS = d.HAS_ERRORS === 0 || d.HAS_ERRORS === undefined || d.HAS_ERRORS === null ? false : true
         const innerObj = {}
         Object.keys(d).forEach(k => {
           if (map[k]) {
@@ -393,7 +393,7 @@ router.get('/getHistIntervencionesAcidoNew', async (req, res) => {
     if (data && data.length > 0) {
       data.forEach((d, index) => {
         d.FECHA ? d.FECHA = d.FECHA.toJSON().slice(0, 10) : null
-        d.HAS_ERRORS = d.HAS_ERRORS === 0 ? false : true
+        d.HAS_ERRORS = d.HAS_ERRORS === 0 || d.HAS_ERRORS === undefined ? false : true
         const innerObj = {}
         Object.keys(d).forEach(k => {
           if (map[k]) {
@@ -456,7 +456,7 @@ router.get('/getHistIntervencionesApuntaladoNew', async (req, res) => {
     if (data && data.length > 0) {
       data.forEach((d, index) => {
         d.FECHA ? d.FECHA = d.FECHA.toJSON().slice(0, 10) : null
-        d.HAS_ERRORS = d.HAS_ERRORS === 0 ? false : true
+        d.HAS_ERRORS = d.HAS_ERRORS === 0 || d.HAS_ERRORS === undefined ? false : true
         const innerObj = {}
         Object.keys(d).forEach(k => {
           if (map[k]) {
@@ -566,7 +566,7 @@ router.get('/getHistIntervenciones', async (req, res) => {
       console.log('my data', data)
       data.forEach((d, index) => {
         d.DATE ? d.DATE = d.DATE.toJSON().slice(0, 10) : null
-        d.HAS_ERRORS = d.HAS_ERRORS === 0 || d.HAS_ERRORS === undefined ? false : true
+        d.HAS_ERRORS = d.HAS_ERRORS === 0 || d.HAS_ERRORS === undefined || d.HAS_ERRORS === undefined ? false : true
         const innerObj = {}
         Object.keys(d).forEach(k => {
           if (map[k]) {
@@ -626,7 +626,7 @@ router.get('/getLayer', async (req, res) => {
     const finalObj = {}
     if (data && data.length > 0) {
       data.forEach((d, index) => {
-        d.HAS_ERRORS = d.HAS_ERRORS === 0 ? false : true
+        d.HAS_ERRORS = d.HAS_ERRORS === 0 || d.HAS_ERRORS === undefined ? false : true
         const innerObj = {}
         Object.keys(d).forEach(k => {
           if (map[k]) {
@@ -678,7 +678,7 @@ router.get('/getMudLoss', async (req, res) => {
     const finalObj = {}
     if (data && data.length > 0) {
       data.forEach((d, index) => {
-        d.HAS_ERRORS = d.HAS_ERRORS === 0 ? false : true
+        d.HAS_ERRORS = d.HAS_ERRORS === 0 || d.HAS_ERRORS === undefined ? false : true
         const innerObj = {}
         Object.keys(d).forEach(k => {
           if (map[k]) {
@@ -1081,7 +1081,7 @@ router.get('/getFieldPressure', async (req, res) => {
     if (data && data.length > 0) {
       data.forEach((d, index) => {
         d.FECHA ? d.FECHA = d.FECHA.toJSON().slice(0, 10) : null
-        d.HAS_ERRORS = d.HAS_ERRORS === 0 ? false : true
+        d.HAS_ERRORS = d.HAS_ERRORS === 0 || d.HAS_ERRORS === undefined ? false : true
         const innerObj = {}
         Object.keys(d).forEach(k => {
           if (map[k]) {
@@ -1136,7 +1136,7 @@ router.get('/getWellPressure', async (req, res) => {
     if (data && data.length > 0) {
       data.forEach((d, index) => {
         d.FECHA ? d.FECHA = d.FECHA.toJSON().slice(0, 10) : null
-        d.HAS_ERRORS = d.HAS_ERRORS === 0 ? false : true
+        d.HAS_ERRORS = d.HAS_ERRORS === 0 || d.HAS_ERRORS === undefined ? false : true
         const innerObj = {}
         Object.keys(d).forEach(k => {
           if (map[k]) {
@@ -1204,7 +1204,7 @@ router.get('/getWellAforos', async (req, res) => {
     if (data && data.length > 0) {
       data.forEach((d, index) => {
         d.FECHA ? d.FECHA = d.FECHA.toJSON().slice(0, 10) : null
-        d.HAS_ERRORS = d.HAS_ERRORS === 0 ? false : true
+        d.HAS_ERRORS = d.HAS_ERRORS === 0 || d.HAS_ERRORS === undefined ? false : true
         d.HAS_ERRORS === true ? error = true : null
         const innerObj = {}
         Object.keys(d).forEach(k => {
@@ -1262,7 +1262,7 @@ router.get('/getWellProduccion', async (req, res) => {
     if (data && data.length > 0) {
       data.forEach((d, index) => {
         d.Fecha ? d.Fecha = d.Fecha.toJSON().slice(0, 10) : null
-        d.HAS_ERRORS = d.HAS_ERRORS === 0 ? false : true
+        d.HAS_ERRORS = d.HAS_ERRORS === 0 || d.HAS_ERRORS === undefined ? false : true
         d.HAS_ERRORS === true ? error = true : null
         const innerObj = {}
         Object.keys(d).forEach(k => {
@@ -1747,7 +1747,7 @@ router.get('/getCedulaEstimulacion', async (req, res) => {
     let error = false
     if (data && data.length > 0) {
       data.forEach((d, index) => {
-        d.HAS_ERRORS = d.HAS_ERRORS === 0 ? false : true
+        d.HAS_ERRORS = d.HAS_ERRORS === 0 || d.HAS_ERRORS === undefined ? false : true
         d.HAS_ERRORS === true ? error = true : null
         const innerObj = {}
         Object.keys(d).forEach(k => {
@@ -1812,7 +1812,7 @@ router.get('/getCedulaAcido', async (req, res) => {
     let error = false
     if (data && data.length > 0) {
       data.forEach((d, index) => {
-        d.HAS_ERRORS = d.HAS_ERRORS === 0 ? false : true
+        d.HAS_ERRORS = d.HAS_ERRORS === 0 || d.HAS_ERRORS === undefined ? false : true
         d.HAS_ERRORS === true ? error = true : null
         const innerObj = {}
         Object.keys(d).forEach(k => {
@@ -1876,7 +1876,7 @@ router.get('/getCedulaApuntalado', async (req, res) => {
     let error = false
     if (data && data.length > 0) {
       data.forEach((d, index) => {
-        d.HAS_ERRORS = d.HAS_ERRORS === 0 ? false : true
+        d.HAS_ERRORS = d.HAS_ERRORS === 0 || d.HAS_ERRORS === undefined ? false : true
         d.HAS_ERRORS === true ? error = true : null
         const innerObj = {}
         Object.keys(d).forEach(k => {
@@ -1931,7 +1931,7 @@ router.get('/getCosts', async (req, res) => {
     let error = false
     if (data && data.length > 0) {
       data.forEach((d, index) => {
-        d.HAS_ERRORS = d.HAS_ERRORS === 0 ? false : true
+        d.HAS_ERRORS = d.HAS_ERRORS === 0 || d.HAS_ERRORS === undefined ? false : true
         d.HAS_ERRORS === true ? error = true : null
         const innerObj = {}
         Object.keys(d).forEach(k => {

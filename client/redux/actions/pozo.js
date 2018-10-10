@@ -216,7 +216,7 @@ export const setPressureDepthCampo = value => ({ type: 'set_pressureDepthCampo',
 export const setHasErrorsHistoricoDePressionCampo = value => ({ type: 'set_hasErrorsHistoricoDePresionCampo', value})
 export const setFromSaveHistoricoDePressionCampo = value => ({ type: 'set_fromSaveHistoricoDePresionCampo', value})
 export const setHasErrorsHistoricoDePressionPozo = value => ({ type: 'set_hasErrorsHistoricoDePresionPozo', value})
-export const setFromSaveHistoricoDePressionPozo = value => ({ type: 'set_fromSaveHistoricoDePresionPozo', value})
+export const setAllPressure = value => ({ type: 'set_AllPressure', value})
  
 //HistoricoDeAforos
 export const setAforosData = value => ({ type: 'set_aforosData', value})

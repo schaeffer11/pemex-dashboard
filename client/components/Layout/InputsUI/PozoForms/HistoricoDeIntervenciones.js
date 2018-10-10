@@ -269,10 +269,10 @@ let columnsApuntalado = [
   }
 
   componentDidMount(){
-    let { setHasErrorsHistorialDeIntervencionesDispatch, hasSubmitted } = this.props
+    let { setHasErrorsHistorialDeIntervenciones, hasSubmitted } = this.props
 
     let hasErrors = this.checkAllInputs()
-    setHasErrorsHistorialDeIntervencionesDispatch(hasErrors)
+    setHasErrorsHistorialDeIntervenciones(hasErrors)
   }
 
   componentDidUpdate(prevProps) {
@@ -323,17 +323,17 @@ let columnsApuntalado = [
     errorsCopy[table].value = value
     // const has
     this.setState({ errors: errorsCopy }, () => {
-      const { setHasErrorsHistorialDeIntervencionesDispatch } = this.props
+      const { setHasErrorsHistorialDeIntervenciones } = this.props
       const hasErrors = this.checkAllInputs()
       console.log('do i have errors?', hasErrors)
-      setHasErrorsHistorialDeIntervencionesDispatch(hasErrors)
+      setHasErrorsHistorialDeIntervenciones(hasErrors)
     })
   }
 
   makeApuntaladoTable() {
     let { formData, setHistoricoApuntaladoData, hasSubmitted } = this.props
     formData = formData.toJS()
-    let { historicoApuntaladoData } = formData
+    let { historicoApuntaladoData, fromSave } = formData
 
     const rowObj = {
         fecha: null,
@@ -392,6 +392,7 @@ let columnsApuntalado = [
             errorArray={errors}
             checkForErrors={val => this.checkForErrors(val, 'apuntaladoTable')}
             hasSubmitted={hasSubmitted}
+            fromSave={fromSave}
           />
         </div>
       </div>
@@ -401,7 +402,7 @@ let columnsApuntalado = [
   makeAcidoTable() {
     let { formData, setHistoricoAcidoData, hasSubmitted } = this.props
     formData = formData.toJS()
-    let { historicoAcidoData } = formData
+    let { historicoAcidoData, fromSave } = formData
     const rowObj = {
       fecha: null,
       tipoDeTratamiento: '',
@@ -456,6 +457,7 @@ let columnsApuntalado = [
             rowObj={rowObj}
             checkForErrors={val => this.checkForErrors(val, 'acidoTable')}
             hasSubmitted={hasSubmitted}
+            fromSave={fromSave}
           />
         </div>
       </div>
@@ -465,7 +467,7 @@ let columnsApuntalado = [
   makeEstimulacionTable() {
     let { formData, setHistoricoEstimulacionData, hasSubmitted } = this.props
     formData = formData.toJS()
-    let { historicoEstimulacionData } = formData
+    let { historicoEstimulacionData, fromSave } = formData
     const rowObj = {
       fecha: null,
       tipoDeTratamiento: '',
@@ -515,6 +517,7 @@ let columnsApuntalado = [
             rowObj={rowObj}
             checkForErrors={val => this.checkForErrors(val, 'estimulacionTable')}
             hasSubmitted={hasSubmitted}
+            fromSave={fromSave}
           />
         </div>
       </div>
@@ -541,7 +544,7 @@ const mapStateToProps = state => ({
 const mapDispatchToProps = dispatch => ({
     setHistoricoEstimulacionData: val => dispatch(setHistoricoEstimulacionData(val)),
     setHistoricoAcidoData: val => dispatch(setHistoricoAcidoData(val)),
-    setHasErrorsHistorialDeIntervencionesDispatch: val => dispatch(setHasErrorsHistorialDeIntervenciones(val)),
+    setHasErrorsHistorialDeIntervenciones: val => dispatch(setHasErrorsHistorialDeIntervenciones(val)),
     setHistoricoApuntaladoData: val => dispatch(setHistoricoApuntaladoData(val)),
     setFromSaveHistorialDeIntervenciones: val => dispatch(setFromSaveHistorialDeIntervenciones(val)),
 })

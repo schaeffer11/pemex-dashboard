@@ -128,11 +128,8 @@ import { setHasErrorsFichaTecnicaDelPozo, setTipoDeSistemo, setHistorialInterven
     let { hasSubmitted, formData, setFromSaveFichaTecnicaDelPozo, setHasErrorsFichaTecnicaDelPozo } = this.props
     formData = formData.toJS()
     let { fromSave } = formData
-    console.log('component did update', 'fromSave', fromSave, formData, 'hasSubmitted', hasSubmitted, prevProps.hasSubmitted)
     if (hasSubmitted !== prevProps.hasSubmitted || fromSave) {
-      console.log('prior', formData)
       let err = this.checkAllInputs(true, formData)
-      console.log('updating tecnica del pozo', err, this.state.errors)
       setHasErrorsFichaTecnicaDelPozo(err)
       if (fromSave === true) {
         setFromSaveFichaTecnicaDelPozo(false)
@@ -280,7 +277,7 @@ import { setHasErrorsFichaTecnicaDelPozo, setTipoDeSistemo, setHistorialInterven
   makeHistoricalInterventionsInput() {
     let { setHistorialIntervencionesData, formData, hasSubmitted } = this.props
     formData = formData.toJS()
-    let { historialIntervencionesData } = formData
+    let { historialIntervencionesData, fromSave } = formData
 
     const columns = [
       {
@@ -332,7 +329,7 @@ import { setHasErrorsFichaTecnicaDelPozo, setTipoDeSistemo, setHistorialInterven
             errorArray={errors}
             checkForErrors={val => this.checkForErrors(val, 'historialDeIntervenciones')}
             hasSubmitted={hasSubmitted}
-            fromSave={historialIntervencionesData.fromSave}
+            fromSave={fromSave}
           />
         </div>
       </div>
