@@ -100,6 +100,10 @@ const grabadoOptions = [
   componentDidUpdate(prevProps) {
   }
 
+  validate() {
+    
+  }
+
 
   makeCaracterizacionFisico(index) {
     let { setPruebasDeLaboratorioData, pruebasDeLaboratorio } = this.props

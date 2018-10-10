@@ -1,6 +1,7 @@
 import { Map, fromJS } from 'immutable'
 
 const initialState = Map({ 
+    hasErrors: true,
     estIncEstrangulador: '',
     estIncPtp: '',
     estIncTtp: '',
@@ -19,12 +20,13 @@ const initialState = Map({
     estIncGastoCompromisoQg: '',
     obervacionesEstIncEstim: '',
     imgURL: null,
-    checked: []
 })
 
 
 const estIncProduccionEstimulacion = (state = initialState, action) => {
   switch (action.type) {
+    case 'set_hasErrorsEstIncProduccionEstimulacion':
+      return state.set('hasErrors', fromJS(action.value))
     case 'set_estIncEstrangulador':
         return state.set('estIncEstrangulador', fromJS(action.value))
     case 'set_estIncPtp':
@@ -61,10 +63,6 @@ const estIncProduccionEstimulacion = (state = initialState, action) => {
         return state.set('obervacionesEstIncEstim', fromJS(action.value))
     case 'set_estIncProdEstimulationImgURL':
         return state.set('imgURL', fromJS(action.value))
-    case 'set_forms_checked' :
-        if(action.form == 'estIncProduccionEstimulacion')
-            return state.set('checked', fromJS(action.value))
-        return state
     default:
       return state
   }

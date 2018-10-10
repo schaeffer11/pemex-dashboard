@@ -11,6 +11,7 @@ const initialState = Map({
     loadText: null,
     isLoading: false,
     currentPage: '',
+    hasSubmitted: false,
 })
 
 
@@ -28,6 +29,8 @@ const global = (state = initialState, action) => {
       return state.set('showNotification', false)
                   .set('notificationText', null)
                   .set('notificationType', null)
+    case 'set_hasSubmitted':
+      return state.set('hasSubmitted', action.value)
     default:
    		return state
   }

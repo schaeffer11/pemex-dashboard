@@ -1,7 +1,7 @@
 import { Map, fromJS } from 'immutable'
 
-const initialState = fromJS({ 
-    intervalos: [],
+const initialState = Map({ 
+    intervalo: '',
     longitudDeIntervalo: '',
     volAparejo: '',
     capacidadTotalDelPozo: '',
@@ -11,7 +11,8 @@ const initialState = fromJS({
     volumenSistemaDivergente: '',
     volumenDesplazamientoLiquido: '',
     volumenDesplazamientoGelLineal: '',  
-        moduloYoungArena: '',
+    hasErrors: true,
+    moduloYoungArena: '',
     moduloYoungLutitas: '',
     relacPoissonArena: '',
     relacPoissonLutatas: '',
@@ -22,9 +23,9 @@ const initialState = fromJS({
     cedulaData: [{
         etapa: 1,
         index: 0,
-        // intervalo: '',
-        nombreComercial: '',
+        error: true,
         sistema: '',
+        nombreComercial: '',
         tipoDeApuntalante: '',
         concentraciDeApuntalante: '',
         volLiquid: '',
@@ -37,15 +38,15 @@ const initialState = fromJS({
         volN2Acum: '',
         relN2Liq: '',
         tiempo: '',
-    }],
-    checked: []
+    }]
 })
-
 
 const propuestaAcido = (state = initialState, action) => {
   switch (action.type) {
+    case 'set_hasErrorsPropuestaAcido':
+      return state.set('hasErrors', fromJS(action.value))
     case 'set_intervalo':
-        return state.set('intervalos', fromJS(action.value))
+        return state.set('intervalo', fromJS(action.value))
     case 'set_longitudDeIntervalo':
         return state.set('longitudDeIntervalo', fromJS(action.value))
     case 'set_volAparejo':
@@ -78,16 +79,12 @@ const propuestaAcido = (state = initialState, action) => {
         return state.set('densidadDeDisparos', fromJS(action.value))
     case 'set_diametroDeDisparos':
         return state.set('diametroDeDisparos', fromJS(action.value))
-    case 'set_cedulaData':
+    case 'set_cedulaDataAcido':
         let newState = state.set('cedulaData', fromJS(action.cedula))
         if (action.volumes !== null) {
             newState = newState.mergeDeep(action.volumes)
         }
         return newState
-    case 'set_forms_checked' :
-        if(action.form == 'propuestaAcido')
-          return state.set('checked', fromJS(action.value))
-        return state
     case 'set_propuestaCompany':
         return state.set('propuestaCompany', fromJS(action.value))
     default:

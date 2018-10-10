@@ -4,7 +4,9 @@ import ReactTable from 'react-table'
 import autobind from 'autobind-decorator'
 import moment from 'moment'
 import DatePicker from 'react-datepicker'
-import MaskedTextInput from "react-text-mask";
+import MaskedTextInput from "react-text-mask"
+import Select from 'react-select'
+import { checkDate, checkEmpty, checkEmptySingular, checkDateSingular } from '../../../lib/errorCheckers'
 
 /*
  * Wrapper Component for ReactTable with reusable editable cells.
@@ -23,139 +25,311 @@ import MaskedTextInput from "react-text-mask";
 @autobind class InputTable extends React.Component {
   constructor(props) {
    super(props)
+   this.state={}
+  }
+
+  componentDidMount() {
+    const { errorArray, data, hasSubmitted } = this.props
+    let errors = []
+    let properRow = {}
+    if (errorArray) {
+      errorArray.forEach(({ name, type }) => {
+        properRow[name] = { value: null, type }
+      })
+
+      data.forEach(row => {
+        if (row.error === false) {
+          errors.push(properRow)
+        }
+        else {
+          let newRow = JSON.parse(JSON.stringify(properRow))
+          errorArray.forEach(({ name, type }) => {
+            let err
+            if (type === 'number') {
+              err = checkEmptySingular(row[name])
+            } else if (type === 'date') {
+              err = checkDateSingular(row[name])
+            }
+            newRow[name] = { value: err, type }
+          })
+          errors.push(newRow)
+        }
+      })
+    }
+    this.setState({ errors }, () => {
+      this.setOuterStateError()
+    })
+  }
+
+  getErrors(index) {
+    let errors = []
+    if (this.state.errors) {
+      errors = JSON.parse(JSON.stringify(this.state.errors))
+    }
+    const rowError = errors.length > 0 ? errors[index] : null
+    return { errors, rowError }
+  }
+
+  checkAllRow(index) {
+    const { errors, rowError } = this.getErrors(index)
+    const { data } = this.props
+    const dataRow = data[index]
+    Object.keys(rowError).forEach(key => {
+      const value = dataRow[key]
+      let error = null
+      if (value === 0) return
+      if (!value || value.length < 1) {
+        error = 'Este campo no puede estar vacio'
+      }
+      rowError[key].value = error
+    })
+
+    this.updateErrors(rowError, index, errors)
   }
 
   renderEditable(cellInfo) {
-    let {data, setData} = this.props
-
+    let {data, setData } = this.props
+    const { errors, rowError } = this.getErrors(cellInfo.index)
+    const name = cellInfo.column.id
+    const value = data[cellInfo.index][cellInfo.column.id]
+    let style = { }
+    if(rowError !== null && rowError[name] !== undefined && rowError[name].value !== null) {
+      style.border = 'solid 2px red'
+    }
     return (
-      <div
-        style={{ backgroundColor: "#fafafa" }}
-        contentEditable
-        suppressContentEditableWarning
-        onBlur={e => {
-          data[cellInfo.index][cellInfo.column.id] = e.target.innerHTML;
-          setData(data)
-        }}
-      >{data[cellInfo.index][cellInfo.column.id]}</div>
-    );
+      <div style={style}>
+        <input
+          contentEditable
+          suppressContentEditableWarning
+          value={value}
+          onChange={e => {
+            data[cellInfo.index][cellInfo.column.id] = e.target.value
+            setData(data)
+          }}
+          onBlur={(e) => checkEmpty(e.target.value, name, rowError, (e) => this.updateErrors(e, cellInfo.index, errors))}
+        />
+      </div>
+    )
   }
 
   renderNumberDisable(cellInfo) {
     let {data, setData} = this.props
-    let disabled = false
+    let isDisabled = false
     const { id } = cellInfo.column
     const { sistema } = cellInfo.row
-
+    const disabled = []
     if (sistema === 'desplazamientoN2' || sistema === 'pre-colchon') {
-      disabled = id === 'gastoLiqudo' || id === 'volLiquid' || id === 'relN2Liq'
+      isDisabled = id === 'gastoLiqudo' || id === 'volLiquid' || id === 'relN2Liq'
+      disabled.push('gastoLiqudo', 'volLiquid', 'relN2Liq')
     } else {
-      disabled = id === 'gastoN2' || id === 'volN2'
+      isDisabled = id === 'gastoN2' || id === 'volN2'
+      disabled.push('gastoN2', 'volN2')
+    }
+    const name = cellInfo.column.id
+    const { rowError } = this.getErrors(cellInfo.index)
+  
+    let style = {}
+    if (rowError !== null && rowError[name] !== undefined && rowError[name].value !== null) {
+      style.border = 'solid 2px red'
     }
 
-    const style = {
-      backgroundColor: '#fafafa',
-      border: disabled ? 'none' : null
-    }
     return (
-      <input
-        type="number"
-        disabled={disabled}
-        style={style}
-        contentEditable
-        suppressContentEditableWarning
-        value={data[cellInfo.index][cellInfo.column.id]}
-        onChange={e => {
-          data[cellInfo.index][cellInfo.column.id] = e.target.value;
-          setData(data)
-        }}
-      />
+      <div style={style}>
+        <input
+          type="number"
+          disabled={isDisabled}
+          contentEditable
+          suppressContentEditableWarning
+          value={data[cellInfo.index][cellInfo.column.id]}
+          onChange={e => {
+            data[cellInfo.index][cellInfo.column.id] = e.target.value
+            this.setDataPromise(data).then(() => this.checkAllRow(cellInfo.index))
+          }}
+        />
+      </div>
     )
   }
 
-  renderNumber(cellInfo){
-    let {data, setData} = this.props
-
-    return (
-      <input
-        type="number"
-        style={{ backgroundColor: "#fafafa" }}
-        contentEditable
-        suppressContentEditableWarning
-        value={data[cellInfo.index][cellInfo.column.id]}
-        onChange={e => {
-          data[cellInfo.index][cellInfo.column.id] = e.target.value;
-          setData(data)
-        }}
-      />
-    );
+  setOuterStateError() {
+    let { data, checkForErrors } = this.props
+    let hasError = null 
+    data.forEach(row => {
+      if (row.error === true) {
+        hasError = true
+      }
+    })
+    if (typeof checkForErrors === 'function') {
+      checkForErrors(hasError)
+    }
   }
 
-  renderSelect() {
-    let {data, setData} = this.props
+
+  updateErrors(e, i, errors) {
+    let { data, setData } = this.props
+    errors[i] = e
+    const hasErrors = Object.keys(e).filter(elem => {
+      if (e[elem].value !== null) {
+        return true
+      }
+      return false
+    })
+    const newErrorValue = hasErrors.length > 0
+    const oldErrorValue = data[i].error
+    if (oldErrorValue !== newErrorValue) {
+      data[i].error = hasErrors.length > 0
+      this.setOuterStateError()
+      setData(data)
+    }
+    this.setState({ errors })
+  }
+
+  renderNumber(cellInfo) {
+    let {data, setData } = this.props
+    const { errors, rowError } = this.getErrors(cellInfo.index)
+    const name = cellInfo.column.id
+    const value = data[cellInfo.index][cellInfo.column.id]
+    let style = { }
+    if(rowError !== null && rowError[name] !== undefined && rowError[name].value !== null) {
+      style.border = 'solid 2px red'
+    }
     return (
-      <div>welcome to the machine</div>
+      <div style={style}>
+        <input
+          type="number"
+          contentEditable
+          suppressContentEditableWarning
+          value={value}
+          onChange={e => {
+            data[cellInfo.index][cellInfo.column.id] = e.target.value;
+            setData(data)
+          }}
+          onBlur={(e) => checkEmpty(e.target.value, name, rowError, (e) => this.updateErrors(e, cellInfo.index, errors))}
+        />
+      </div>
+    )
+  }
+
+  renderSelect(cellInfo) {
+    let {data, selectOptions } = this.props
+    const name = cellInfo.column.id
+    const { rowError } = this.getErrors(cellInfo.index)
+    let style = {}
+    if(rowError !== null && rowError[name] !== undefined && rowError[name].value !== null) {
+      style.border = 'solid 2px red'
+    }
+    return (
+      <div style={style}>
+        <Select
+          simpleValue
+          placeholder="Seleccionar"
+          className='input'
+          options={selectOptions}
+          value={selectOptions.find(i=>i.value === cellInfo.row[name]) || null}
+          onChange={e => {
+            data[cellInfo.index][cellInfo.column.id] = e.value;
+            this.setDataPromise(data).then(e => this.checkAllRow(cellInfo.index))
+          }}
+        />
+      </div>
     )
   }
 
   renderDate(cellInfo){
     let {data, setData} = this.props
+    const name = cellInfo.column.id
+    const { errors, rowError } = this.getErrors(cellInfo.index)
+    let handleSelect = (date) => {
+      if (date.isValid()) {
+        checkDate(date, name, rowError, (e) => this.updateErrors(e, cellInfo.index, errors))
+        data[cellInfo.index][cellInfo.column.id] = date.format('YYYY-MM-DD')
+        setData(data)
+      }
+    }
+  
+    let handleBlur = (e) => {
+      const date = moment(e.target.value, 'DD/MM/YYYY')
+      if (!date.isValid() || e.target.value.includes('_')) {
+        checkDate(e.target.value, name, rowError, (e) => this.updateErrors(e, cellInfo.index, errors))
+        data[cellInfo.index][cellInfo.column.id] = null
+        setData(data)
+      }
+    }
+    
+    let style = { }
+    if(rowError !== null && rowError[name] !== undefined && rowError[name].value !== null) {
+      style.border = 'solid 2px red'
+    }
 
     const date = data[cellInfo.index][cellInfo.column.id]
-    const val = date ? moment(date) : null;
+    const objValue = date ? moment(date) : null 
     return (
-      <DatePicker 
-        customInput={
-              <MaskedTextInput
-                  type="text"
-                  mask={[/\d/, /\d/, "/", /\d/, /\d/, "/", /\d/, /\d/, /\d/, /\d/]}
-              />
-        }
-        isClearable={true}
-        locale="es-mx"
-        dateFormat="L"
-        onChange={ e => {
-          if(e){
-            data[cellInfo.index][cellInfo.column.id] = e.format('YYYY-MM-DD');
-            setData(data)
+      <div className='test' style={style}>
+        <DatePicker
+          customInput={
+            <MaskedTextInput
+              type="text"
+              mask={[/\d/, /\d/, "/", /\d/, /\d/, "/", /\d/, /\d/, /\d/, /\d/]}
+            />
           }
-        }}
-        selected={val} />
+          isClearable={false}
+          dateFormat="L"
+          name={name}
+          onChange={handleSelect}
+          onBlur={handleBlur}
+          selected={objValue}
+          locale="es-mx"
+          showMonthDropdown
+          showYearDropdown
+        />
+      </div>
     )
   }
 
   addNewRow() {
-    let {data, setData, newRow} = this.props
+    let { rowObj, setData, data, errorArray } = this.props
+    const { errors } = this.state
+    const newErrorRow = {}
+    errorArray.forEach(({ name, type }) => {
+      newErrorRow[name] = { value: '', type }
+    })
 
     data[0].length = 2
-
-    let newRowObj = Object.assign({}, newRow , { index: data.length, length: data.length + 1 , 'edited': false });
-    setData([...data, newRowObj])
+    rowObj.index = data.length
+    rowObj.length = data.length + 1
+    console.log('adding new row', [...data, rowObj])
+    
+    this.setState({ errors: [...errors, newErrorRow]}, () => {
+      this.setOuterStateError()
+    })
+    setData([...data, rowObj])
   }
 
+  setDataPromise(data) {
+    const { setData } = this.props
+    return new Promise((resolve) => {
+      resolve(setData(data))
+    })
+  }
 
   deleteRow(state, rowInfo, column, instance) {
     let {data, setData} = this.props
-
     return {
       onClick: e => {
         if (column.id === 'delete' && data.length > 1) {
           data.splice(rowInfo.original.index, 1)
-
           data.forEach((i, index) => {
             i.index = index
             i.length = data.length
           })
-          setData(data)
+          this.setDataPromise(data).then(e => this.setOuterStateError())
         }
       }
     }
   }
 
   render(){
-
+    console.log("da err", this.state.errors)
     let {columns, data} = this.props;
-
     columns.forEach(column => {
       if(column.cell === 'renderEditable')
         column.Cell = this.renderEditable
@@ -187,14 +361,18 @@ import MaskedTextInput from "react-text-mask";
         })
       }
     })
-
+    let pageSize = !data ? 1 : (data.length < 20 ? data.length : 20)
+    let showPagination = data.length > 20
     return (
-      <ReactTable { ...this.props } 
-        columns={columns}
-        getTdProps={this.deleteRow} 
-        pageSize={!data ? 1 : data.length}
-      />
-
+      <div>
+        <ReactTable { ...this.props } 
+          columns={columns}
+          getTdProps={this.deleteRow} 
+          pageSize={pageSize}
+          showPagination={showPagination}
+        />
+        {!this.props.ignoreAddRow && <button className='new-row-button' onClick={this.addNewRow}>Añadir un renglón</button>}
+      </div>
     )
   }
   

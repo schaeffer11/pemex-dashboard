@@ -1,3 +1,7 @@
+export const setHasErrorsPropuestaApuntalado = value => ({ type: 'set_hasErrorsPropuestaApuntalado', value})
+export const setHasErrorsResultadosSimulacionApuntalado = value => ({ type: 'set_hasErrorsResultadosSimulacionApuntalado', value})
+export const setHasErrorsEstIncProduccionApuntalado = value => ({ type: 'set_hasErrorsEstIncProduccionApuntalado', value})
+
 export const setIntervalo = value => ({ type: 'set_intervalo', value})
 export const setLongitudDeIntervalo = value => ({ type: 'set_longitudDeIntervalo', value})
 export const setVolAparejo = value => ({ type: 'set_volAparejo', value})
@@ -16,7 +20,7 @@ export const setDensidadDeDisparos = value => ({ type: 'set_densidadDeDisparos',
 export const setDiametroDeDisparos = value => ({ type: 'set_diametroDeDisparos', value})
 export const setPropuestaCompany = value => ({ type: 'set_propuestaCompany', value})
 export const setCedulaData = (cedula, volumes) => ({
-  type: 'set_cedulaData',
+  type: 'set_cedulaDataApuntalado',
   volumes,
   cedula: cedula.map((row) => {
     row.etapa = row.index + 1
@@ -83,27 +87,3 @@ export const setEstIncDeltaP = value => ({ type: 'set_estIncDeltaP', value})
 export const setEstIncGastoCompromisoQo = value => ({ type: 'set_estIncGastoCompromisoQo', value})
 export const setEstIncGastoCompromisoQg = value => ({ type: 'set_estIncGastoCompromisoQg', value})
 export const setObervacionesEstIncApuntalado = value => ({ type: 'set_obervacionesEstIncApuntalado', value})
-
-
-export const setEstCostoDeRentaDeBarco = value => ({ type: 'set_estCostoDeRentaDeBarco', value})
-export const setEstCostUnidadesDeAltaPresion = value => ({ type: 'set_estCostUnidadesDeAltaPresion', value})
-export const setEstCostDelGelDeFractura = value => ({ type: 'set_estCostDelGelDeFractura', value})
-export const setEstCostDeSistemoRactivo = value => ({ type: 'set_estCostDeSistemoRactivo', value})
-export const setEstCostDeSistemoNoRactivo = value => ({ type: 'set_estCostDeSistemoNoRactivo', value})
-export const setEstCostDeDivergentes = value => ({ type: 'set_estCostDeDivergentes', value})
-export const setEstCostDeN2 = value => ({ type: 'set_estCostDeN2', value})
-export const setEstCostDeHCL = value => ({ type: 'set_estCostDeHCL', value})
-export const setEstCostDeSistemasAcidosRetardados = value => ({ type: 'set_estCostDeSistemasAcidosRetardados', value})
-export const setEstCostDeCostoEquipoDeFacturamientoDePozos = value => ({ type: 'set_estCostDeCostoEquipoDeFacturamientoDePozos', value})
-export const setEstCostGelLineal = value => ({ type: 'set_estCostGelLineal', value})
-export const setEstCostTrabajosDeBombeoDiversos = value => ({ type: 'set_estCostTrabajosDeBombeoDiversos', value})
-export const setEstCostLlenadoDePozoYPruebaDeAdmision = value => ({ type: 'set_estCostLlenadoDePozoYPruebaDeAdmision', value})
-export const setEstCostMinifrac = value => ({ type: 'set_estCostMinifrac', value})
-export const setEstCostBacheNeutralizador = value => ({ type: 'set_estCostBacheNeutralizador', value})
-export const setEstCostProtectorDeArbol = value => ({ type: 'set_estCostProtectorDeArbol', value})
-
-export const setChecked = (value, form)  => ({
-   type: 'set_forms_checked',
-   form: form,
-   value: value
-})

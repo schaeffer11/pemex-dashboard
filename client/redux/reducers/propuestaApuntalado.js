@@ -10,7 +10,8 @@ const initialState = Map({
     volumenDeGelDeFractura: '',
     volumenDesplazamiento: '',
     volumenTotalDeLiquido: '',
-        moduloYoungArena: '',
+    hasErrors: true,
+    moduloYoungArena: '',
     moduloYoungLutitas: '',
     relacPoissonArena: '',
     relacPoissonLutatas: '',
@@ -21,8 +22,8 @@ const initialState = Map({
     cedulaData: [{
         etapa: 1,
         index: 0,
+        error: true,
         sistema: '',
-        // intervalo: '',
         nombreComercial: '',
         tipoDeApuntalante: '',
         concentraciDeApuntalante: '',
@@ -36,13 +37,13 @@ const initialState = Map({
         volN2Acum: '',
         relN2Liq: '',
         tiempo: '',
-    }],
-    checked: []
+    }]
 })
 
 const propuestaApuntalado = (state = initialState, action) => {
   switch (action.type) {
-
+    case 'set_hasErrorsPropuestaApuntalado':
+      return state.set('hasErrors', fromJS(action.value))
     case 'set_intervalo':
         return state.set('intervalo', fromJS(action.value))
     case 'set_longitudDeIntervalo':
@@ -75,16 +76,12 @@ const propuestaApuntalado = (state = initialState, action) => {
         return state.set('densidadDeDisparos', fromJS(action.value))
     case 'set_diametroDeDisparos':
         return state.set('diametroDeDisparos', fromJS(action.value))
-    case 'set_cedulaData':
+    case 'set_cedulaDataApuntalado':
         let newState = state.set('cedulaData', fromJS(action.cedula))
         if (action.volumes !== null) {
             newState = newState.mergeDeep(action.volumes)
         }
         return newState
-    case 'set_forms_checked' :
-        if(action.form == 'propuestaApuntalado')
-           return state.set('checked', fromJS(action.value))
-        return state
     case 'set_propuestaCompany':
         return state.set('propuestaCompany', fromJS(action.value))
     default:

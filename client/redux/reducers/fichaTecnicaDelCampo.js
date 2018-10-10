@@ -4,7 +4,7 @@ const initialState = Map({
 	descubrimientoField: '',
     fechaDeExplotacionField: null,
     numeroDePozosOperandoField: '',
-    pInicialAnoField: null,
+    pInicialAnoField: '',
     pActualFechaField: null,
     pInicialField: '',
     pActualField: '',
@@ -37,12 +37,14 @@ const initialState = Map({
     h2sField: '',
     co2Field: '',
     n2Field: '',
-    checked: []
+    hasErrors: true,
 })
 
 
 const fichaTecnicaDelCampo = (state = initialState, action) => {
   switch (action.type) {
+    case 'set_hasErrorsFichaTecnicaDelCampo':
+      return state.set('hasErrors', fromJS(action.value))
     case 'set_descubrimientoField':
         return state.set('descubrimientoField', fromJS(action.value))
     case 'set_fechaDeExplotacionField':
@@ -115,10 +117,6 @@ const fichaTecnicaDelCampo = (state = initialState, action) => {
         return state.set('co2Field', fromJS(action.value))
     case 'set_n2Field':
         return state.set('n2Field', fromJS(action.value))
-    case 'set_forms_checked' :
-        if(action.form == 'fichaTecnicaDelCampo')
-          return state.set('checked', fromJS(action.value))
-        return state
     case 'set_fichaTecnicaDelCampo':
         return state = fromJS(action.value)
     default:

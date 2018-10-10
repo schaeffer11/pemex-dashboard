@@ -1,10 +1,16 @@
 import React, { Component } from 'react'
 import autobind from 'autobind-decorator'
 import { List, Map, is } from 'immutable' 
-import { InputRow, InputRowUnitless, InputRowSelectUnitless } from '../../Common/InputRow'
-import {withValidate} from '../../Common/Validate'
-import { setTipoDeTerminacion, setHIntervaloProductor, setEmpacador, setPresionDifEmpacador, setSensorPyt, setTipoDeLiner, setDiametroDeLiner, setTipoDePistolas, setDensidadDeDisparosMecanico, setFase, setDiametroDeOrificio, setPenetracion, setTipoDeSAP, setTratamientoPor, setVolumenAparejoDeProduccion, setVolumenCimaDeIntervalo, setVolumenBaseDeIntervalo, setVolumenDeEspacioAnular, setImgBoreDiagramURL, setImgAparejoDeProduccionURL, setChecked} from '../../../../redux/actions/pozo'
 import { connect } from 'react-redux'
+
+import { InputRow, InputRowUnitless, InputRowSelectUnitless } from '../../Common/InputRow'
+import { setHasErrorsMecanicoYAparejoDeProduccion, setTipoDeTerminacion, setHIntervaloProductor, setEmpacador, 
+  setPresionDifEmpacador, setSensorPyt, setTipoDeLiner, setDiametroDeLiner, setTipoDePistolas, setDensidadDeDisparosMecanico, 
+  setFase, setDiametroDeOrificio, setPenetracion, setTipoDeSAP, setTratamientoPor, setVolumenAparejoDeProduccion, 
+  setVolumenCimaDeIntervalo, setVolumenBaseDeIntervalo, setVolumenDeEspacioAnular, setImgBoreDiagramURL, 
+  setImgAparejoDeProduccionURL } from '../../../../redux/actions/pozo'
+import { checkEmpty, checkDate } from '../../../../lib/errorCheckers'
+
 
 let tipoDeTerminacionOptions = [
   { label: 'Agujero Descubierto (AD)', value: 'Agujero Descubierto (AD)' },
@@ -32,18 +38,154 @@ let tratamientoPorOptions = [
   constructor(props) {
     super(props)
     this.state = {
-      containsErrors: false,
-      errors: [],
-      checked: []
+      errors: {
+        tipoDeTerminacion: {
+          type: 'text',
+          values: '',
+        },
+        hIntervaloProductor: {
+          type: 'number',
+          values: '',
+        },
+        empacador: {
+          type: 'number',
+          values: '',
+        },
+        presionDifEmpacador: {
+          type: 'number',
+          values: '',
+        },
+        sensorPyt: {
+          type: 'number',
+          values: '',
+        },
+        tipoDeLiner: {
+          type: 'text',
+          values: '',
+        },
+        diametroDeLiner: {
+          type: 'number',
+          values: '',
+        },
+        tipoDePistolas: {
+          type: 'text',
+          values: '',
+        },
+        densidadDeDisparosMecanico: {
+          type: 'number',
+          values: '',
+        },
+        fase: {
+          type: 'number',
+          values: '',
+        },
+        diametroDeOrificio: {
+          type: 'number',
+          values: '',
+        },
+        penetracion: {
+          type: 'number',
+          values: '',
+        },
+        tratamientoPor: {
+          type: 'text',
+          values: '',
+        },
+        volumenAparejoDeProduccion: {
+          type: 'number',
+          values: '',
+        },
+        volumenCimaDeIntervalo: {
+          type: 'number',
+          values: '',
+        },
+        volumenBaseDeIntervalo: {
+          type: 'number',
+          values: '',
+        },
+        volumenDeEspacioAnular: {
+          type: 'number',
+          values: '',
+        },
+      }
+
     }
   }
+
+  
   componentDidMount(){
+    let { setHasErrorsMecanicoYAparejoDeProduccion, hasSubmitted } = this.props
 
+    let hasErrors = this.checkAllInputs(hasSubmitted)
+    setHasErrorsMecanicoYAparejoDeProduccion(hasErrors)
   }
 
-  componentDidUpdate(){
+  componentWillReceiveProps(nextProps) {
+    let { hasSubmitted } = this.props
 
+    if (hasSubmitted !== nextProps.hasSubmitted) {
+      this.checkAllInputs(true)
+    }
   }
+
+  checkAllInputs(showErrors) {
+    let { formData } = this.props
+    formData = formData.toJS()
+    let { tipoDeTerminacion } = formData
+    const { errors } = this.state
+    let hasErrors = false
+    let error 
+    let items = Object.keys(errors)
+
+    if (tipoDeTerminacion === 'Agujero Descubierto (AD)') {
+      items = items.filter(i => i !== 'tipoDePistolas' && i !== 'densidadDeDisparosMecanico' && i !== 'fase' && i !== 'diametroDeOrificio' && i !== 'penetracion')
+    }
+
+    items.forEach(elem => {
+      const errObj = errors[elem]
+
+      if (errObj.type === 'text' || errObj.type === 'number') {
+        error = checkEmpty(formData[elem], elem, errors, this.setErrors, showErrors)
+        
+      } 
+      else if (errObj.type === 'date') {
+        error = checkDate(moment(formData[elem]).format('DD/MM/YYYY'), elem, errors, this.setErrors, showErrors)
+      }
+
+      error === true ? hasErrors = true : null
+    })
+
+    return hasErrors
+  }
+
+  setErrors(errors) {
+    this.setState({ errors })
+  }
+
+  updateErrors(errors) {
+    let { hasErrors, setHasErrorsMecanicoYAparejoDeProduccion, formData } = this.props
+    formData = formData.toJS()
+    let { tipoDeTerminacion } = formData
+    let hasErrorNew = false
+    let items = Object.keys(errors)
+
+    if (tipoDeTerminacion === 'Agujero Descubierto (AD)') {
+      items = items.filter(i => i !== 'tipoDePistolas' && i !== 'densidadDeDisparosMecanico' && i !== 'fase' && i !== 'diametroDeOrificio' && i !== 'penetracion')
+    }
+
+    items.forEach(key => {
+      if (errors[key].value !== null){
+        hasErrorNew = true
+      } 
+    })
+
+    if (hasErrorNew != hasErrors) {
+      setHasErrorsMecanicoYAparejoDeProduccion(hasErrorNew)
+    }
+
+    this.setState({ errors })
+  }
+
 
   handleSelectTerminacion(val) {
     let { tipoDeTerminacion, setTipoDeTerminacion } = this.props
@@ -79,28 +221,25 @@ let tratamientoPorOptions = [
           Terminación
         </div>
         TIPO
-        <InputRowSelectUnitless header="Tipo de terminación" value={tipoDeTerminacion} callback={this.handleSelectTipoDeTerminacion} options={tipoDeTerminacionOptions} name='tipoDeTerminacion' onBlur={this.validate} errors={this.state.errors} />
-        <InputRow header="h (intervalo productor)" value={hIntervaloProductor} onChange={setHIntervaloProductor} name='hIntervaloProductor' unit='mv' onBlur={this.validate} errors={this.state.errors} />
-        <InputRow header="Empacador" name='empacador' value={empacador} onChange={setEmpacador} unit='mv' onBlur={this.validate} errors={this.state.errors} />
-        <InputRow header="Presión dif. empacador" name='presionDifEmpacador' value={presionDifEmpacador} onChange={setPresionDifEmpacador} unit='psi' onBlur={this.validate} errors={this.state.errors} />
-        <InputRow header="Profundidad Sensor P y T" name='sensorPyt' value={sensorPyt} onChange={setSensorPyt} unit='mv' onBlur={this.validate} errors={this.state.errors} />
+        <InputRowSelectUnitless header="Tipo de terminación" value={tipoDeTerminacion} callback={this.handleSelectTipoDeTerminacion} options={tipoDeTerminacionOptions} name='tipoDeTerminacion' onBlur={this.updateErrors} errors={this.state.errors} />
+        <InputRow header="h (intervalo productor)" value={hIntervaloProductor} onChange={setHIntervaloProductor} name='hIntervaloProductor' unit='mv' onBlur={this.updateErrors} errors={this.state.errors} />
+        <InputRow header="Empacador" name='empacador' value={empacador} onChange={setEmpacador} unit='mv' onBlur={this.updateErrors} errors={this.state.errors} />
+        <InputRow header="Presión dif. empacador" name='presionDifEmpacador' value={presionDifEmpacador} onChange={setPresionDifEmpacador} unit='psi' onBlur={this.updateErrors} errors={this.state.errors} />
+        <InputRow header="Profundidad Sensor P y T" name='sensorPyt' value={sensorPyt} onChange={setSensorPyt} unit='mv' onBlur={this.updateErrors} errors={this.state.errors} />
         LINER
-        <InputRowSelectUnitless header="Tipo de liner" name='tipoDeLiner' value={tipoDeLiner} options={tipoDeLinerOptions} callback={(e) => setTipoDeLiner(e.value)} onBlur={this.validate} errors={this.state.errors} />
-        <InputRow header="Diámetro de liner" name='diametroDeLiner' value={diametroDeLiner} onChange={setDiametroDeLiner} unit='pg' onBlur={this.validate} errors={this.state.errors} />
+        <InputRowSelectUnitless header="Tipo de liner" name='tipoDeLiner' value={tipoDeLiner} options={tipoDeLinerOptions} callback={(e) => setTipoDeLiner(e.value)} onBlur={this.updateErrors} errors={this.state.errors} />
+        <InputRow header="Diámetro de liner" name='diametroDeLiner' value={diametroDeLiner} onChange={setDiametroDeLiner} unit='pg' onBlur={this.updateErrors} errors={this.state.errors} />
         {
           tipoDeTerminacion === 'Agujero Descubierto (AD)' ? null :
           <div>
             DISPAROS
-            <InputRowUnitless header="Tipo de pistolas" name='tipoDePistolas' value={tipoDePistolas} onChange={setTipoDePistolas}  onBlur={this.validate} errors={this.state.errors} />
-            <InputRow header="Densidad de disparos" name='densidadDeDisparosMecanico' value={densidadDeDisparosMecanico} onChange={setDensidadDeDisparosMecanico} unit='c/m' onBlur={this.validate} errors={this.state.errors} />
-            <InputRow header="Fase" name='fase' value={fase} onChange={setFase} unit='Grados' onBlur={this.validate} errors={this.state.errors} />
-            <InputRow header="Diámetro de orificio" name='diametroDeOrificio' value={diametroDeOrificio} onChange={setDiametroDeOrificio} unit='pg' onBlur={this.validate} errors={this.state.errors} />
-            <InputRow header="Penetración" name='penetracion' value={penetracion} onChange={setPenetracion} unit='pg' onBlur={this.validate} errors={this.state.errors} />
+            <InputRowUnitless header="Tipo de pistolas" name='tipoDePistolas' value={tipoDePistolas} onChange={setTipoDePistolas}  onBlur={this.updateErrors} errors={this.state.errors} />
+            <InputRow header="Densidad de disparos" name='densidadDeDisparosMecanico' value={densidadDeDisparosMecanico} onChange={setDensidadDeDisparosMecanico} unit='c/m' onBlur={this.updateErrors} errors={this.state.errors} />
+            <InputRow header="Fase" name='fase' value={fase} onChange={setFase} unit='Grados' onBlur={this.updateErrors} errors={this.state.errors} />
+            <InputRow header="Diámetro de orificio" name='diametroDeOrificio' value={diametroDeOrificio} onChange={setDiametroDeOrificio} unit='pg' onBlur={this.updateErrors} errors={this.state.errors} />
+            <InputRow header="Penetración" name='penetracion' value={penetracion} onChange={setPenetracion} unit='pg' onBlur={this.updateErrors} errors={this.state.errors} />
           </div>
         }
-{/*        SAP
-        <InputRowUnitless header="Tipo de SAP" name='tipoDeSAP' value={tipoDeSAP} onChange={setTipoDeSAP}/>*/}
-
       </div>
     )
   }
@@ -116,11 +255,11 @@ let tratamientoPorOptions = [
           Capacidad
         </div>
         VOLUMEN
-        <InputRowSelectUnitless header="Tratamiento por" name='tratamientoPor' value={tratamientoPor} callback={(e) => setTratamientoPor(e.value)} options={tratamientoPorOptions} onBlur={this.validate} errors={this.state.errors} />
-        <InputRow header="Volumen aparejo de producción" name='volumenAparejoDeProduccion' value={volumenAparejoDeProduccion} onChange={setVolumenAparejoDeProduccion} unit={<div>m<sup>3</sup></div>} onBlur={this.validate} errors={this.state.errors} />
-        <InputRow header="Volumen @ cima de intervalo" name='volumenCimaDeIntervalo' value={volumenCimaDeIntervalo} onChange={setVolumenCimaDeIntervalo} unit={<div>m<sup>3</sup></div>} onBlur={this.validate} errors={this.state.errors} />
-        <InputRow header="Volumen @ base de intervalo" name='volumenBaseDeIntervalo' value={volumenBaseDeIntervalo} onChange={setVolumenBaseDeIntervalo} unit={<div>m<sup>3</sup></div>} onBlur={this.validate} errors={this.state.errors} />
-        <InputRow header="Volumen de espacio anular (EA)" name='volumenDeEspacioAnular' value={volumenDeEspacioAnular} onChange={setVolumenDeEspacioAnular} unit={<div>m<sup>3</sup></div>} onBlur={this.validate} errors={this.state.errors} />
+        <InputRowSelectUnitless header="Tratamiento por" name='tratamientoPor' value={tratamientoPor} callback={(e) => setTratamientoPor(e.value)} options={tratamientoPorOptions} onBlur={this.updateErrors} errors={this.state.errors} />
+        <InputRow header="Volumen aparejo de producción" name='volumenAparejoDeProduccion' value={volumenAparejoDeProduccion} onChange={setVolumenAparejoDeProduccion} unit={<div>m<sup>3</sup></div>} onBlur={this.updateErrors} errors={this.state.errors} />
+        <InputRow header="Volumen @ cima de intervalo" name='volumenCimaDeIntervalo' value={volumenCimaDeIntervalo} onChange={setVolumenCimaDeIntervalo} unit={<div>m<sup>3</sup></div>} onBlur={this.updateErrors} errors={this.state.errors} />
+        <InputRow header="Volumen @ base de intervalo" name='volumenBaseDeIntervalo' value={volumenBaseDeIntervalo} onChange={setVolumenBaseDeIntervalo} unit={<div>m<sup>3</sup></div>} onBlur={this.updateErrors} errors={this.state.errors} />
+        <InputRow header="Volumen de espacio anular (EA)" name='volumenDeEspacioAnular' value={volumenDeEspacioAnular} onChange={setVolumenDeEspacioAnular} unit={<div>m<sup>3</sup></div>} onBlur={this.updateErrors} errors={this.state.errors} />
       </div>
     )
   }
@@ -181,6 +320,8 @@ let tratamientoPorOptions = [
 
 const mapStateToProps = state => ({
   formData: state.get('mecanicoYAparejoDeProduccion'),
+  hasErrors: state.getIn(['mecanicoYAparejoDeProduccion', 'hasErrors']),
+  hasSubmitted: state.getIn(['global', 'hasSubmitted']),
 })
 
 const mapDispatchToProps = dispatch => ({
@@ -204,7 +345,7 @@ const mapDispatchToProps = dispatch => ({
   setVolumenDeEspacioAnular: val => dispatch(setVolumenDeEspacioAnular(val)),
   setImgBoreDiagramURL: val => dispatch(setImgBoreDiagramURL(val)),
   setImgAparejoDeProduccionURL: val => dispatch(setImgAparejoDeProduccionURL(val)),
-  setChecked: val => dispatch(setChecked(val, 'mecanicoYAparejoDeProduccion'))
+  setHasErrorsMecanicoYAparejoDeProduccion: val => dispatch(setHasErrorsMecanicoYAparejoDeProduccion(val)),
 })
 
 

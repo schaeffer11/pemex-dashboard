@@ -1,11 +1,8 @@
 import React, { Component } from 'react'
 import autobind from 'autobind-decorator'
 import { connect } from 'react-redux'
-import {withValidate} from '../../Common/Validate'
-import { setImgURL, setLayerData, setMudLossData, setChecked } from '../../../../redux/actions/pozo'
+import { setImgURL, setLayerData, setMudLossData, setHasErrorsEvaluacionPetrofisica } from '../../../../redux/actions/pozo'
 import InputTable from '../../Common/InputTable'
-import ReactTable from 'react-table'
-import { freemem } from 'os';
 
 let layerColumns = [
   {
@@ -98,180 +95,161 @@ let mudLossColumns = [
   constructor(props) {
     super(props)
     this.state = {
+      errors: {
+        layerTable: {
+          value: '',
+          type: 'table',
+        },
+        mudTable: {
+          value: '',
+          type: 'table',
+        },
+      },
     }
 
   }
 
   componentDidMount(){
+    let { setHasErrorsEvaluacionPetrofisica, hasSubmitted } = this.props
 
+    let hasErrors = this.checkAllInputs()
+    setHasErrorsEvaluacionPetrofisica(hasErrors)
   }
 
+  componentDidUpdate(prevProps) {
+    let { hasSubmitted } = this.props
 
-//Duplicating these 3 functions for the sake of time, rather than making nice
-  renderEditable(cellInfo) {
-    let { setLayerData, formData } = this.props
-    formData = formData.toJS()
-    let { layerData } = formData
-
-    return (
-      <div
-        style={{ backgroundColor: "#fafafa" }}
-        contentEditable
-        suppressContentEditableWarning
-        onBlur={e => {
-          layerData[cellInfo.index][cellInfo.column.id] = e.target.innerHTML;
-          setLayerData(layerData)
-        }}
-      >{layerData[cellInfo.index][cellInfo.column.id]}</div>
-    );
-  }
-
-  renderEditableMudLoss(cellInfo) {
-    let { setMudLossData, formData } = this.props
-    formData = formData.toJS()
-    let { mudLossData } = formData
-
-    return (
-      <div
-        style={{ backgroundColor: "#fafafa" }}
-        contentEditable
-        suppressContentEditableWarning
-        onBlur={e => {
-          mudLossData[cellInfo.index][cellInfo.column.id] = e.target.innerHTML;
-          setMudLossData(mudLossData)
-        }}
-      >{mudLossData[cellInfo.index][cellInfo.column.id]}</div>
-    );
-  }
-
-  addNewRow() {
-    let { setLayerData, formData } = this.props
-    formData = formData.toJS()
-    let { layerData } = formData
-
-    layerData[0].length = 2
-
-    setLayerData([...layerData, {index: layerData.length, interval: '', cimaMD: '', baseMD: '', espesorBruto: '', espesorNeto: '', vArc: '', porosity: '', sw: '', dens: '', resis: '', perm: '', length: layerData.length + 1}])
-  }
-
-  addNewRowMudLoss() {
-    let { setMudLossData, formData } = this.props
-    formData = formData.toJS()
-    let { mudLossData } = formData
-
-    mudLossData[0].length = 2
-
-    setMudLossData([...mudLossData, {index: mudLossData.length, cimaMD: '', baseMD: '', lodoPerdido: '', densidad: '', length: mudLossData.length + 1}])
-  }
-
-  deleteRow(state, rowInfo, column, instance) {
-    let { setLayerData, formData } = this.props
-    formData = formData.toJS()
-    let { layerData } = formData
-
-    return {
-      onClick: e => {
-        if (column.id === 'delete' && layerData.length > 1) {
-          layerData.splice(rowInfo.original.index, 1)
-
-          layerData.forEach((i, index) => {
-            i.index = index
-            i.length = layerData.length
-          }) 
-
-          setLayerData(layerData)
-        }
-      }
+    if (hasSubmitted !== prevProps.hasSubmitted) {
+      this.checkAllInputs()
     }
   }
 
-  deleteRowMudLoss(state, rowInfo, column, instance) {
-    let { setMudLossData, formData } = this.props
+  checkAllInputs() {
+    let { formData } = this.props
     formData = formData.toJS()
-    let { mudLossData } = formData
+    const { errors } = this.state
+    let hasErrors = false
+    let error 
 
-    return {
-      onClick: e => {
-        if (column.id === 'delete' && mudLossData.length > 1) {
-          mudLossData.splice(rowInfo.original.index, 1)
-
-          mudLossData.forEach((i, index) => {
-            i.index = index
-            i.length = mudLossData.length
-          }) 
-
-          setMudLossData(mudLossData)
-        }
+    Object.keys(errors).forEach(elem => {
+      const errObj = errors[elem]
+      if (errObj.type === 'text' || errObj.type === 'number') {
+        error = checkEmpty(formData[elem], elem, errors, this.setErrors)
+      } 
+      else if (errObj.type === 'date') {
+        error = checkDate(moment(formData[elem]).format('DD/MM/YYYY'), elem, errors, this.setErrors)
       }
-    }
+      else if (errObj.type === 'table') {
+        error = errObj.value === '' ? true : errObj.value
+      }
+
+      error === true ? hasErrors = true : null
+    })
+    return hasErrors
   }
 
+  setErrors(errors) {
+    this.setState({ errors })
+  }
+
+  checkForErrors(value, table) {
+    const errorsCopy = {...this.state.errors}
+    errorsCopy[table].value = value
+    this.setState({ errors: errorsCopy }, () => {
+      const { setHasErrorsEvaluacionPetrofisica } = this.props
+      const hasErrors = this.checkAllInputs()
+      setHasErrorsEvaluacionPetrofisica(hasErrors)
+    })
+  }
 
   makeLayerTable() {
-    let { setLayerData, formData } = this.props
+    let { setLayerData, formData, hasSubmitted } = this.props
     formData = formData.toJS()
     let { layerData } = formData
-    let objectTemplate = {cimaMD: '', baseMD: '', lodoPerdido: '', densidad: ''}
-
+    const rowObj = {
+      cimaMD: '',
+      baseMD: '',
+      espesorNeto: '',
+      vArc: '',
+      porosity: '',
+      sw: '',
+      dens: '',
+      resis: '',
+      perm: '',
+      error: true,
+    }
+    const errors = [
+      { name: 'cimaMD', type: 'number'},
+      { name: 'baseMD', type: 'number'},
+      { name: 'espesorNeto', type: 'number'},
+      { name: 'vArc', type: 'number'},
+      { name: 'porosity', type: 'number'},
+      { name: 'sw', type: 'number'},
+      { name: 'dens', type: 'number'},
+      { name: 'resis', type: 'number'},
+      { name: 'perm', type: 'number'},
+    ]
     return (
       <div className='layer-table' style={{marginBot: '20px'}}> 
         <div className='header'>
           Propiedades promedio
         </div>
         <div className='table'>
-
           <InputTable
             className="-striped"
             data={layerData}
-            newRow={objectTemplate}
             setData={setLayerData}
             columns={layerColumns}
             showPagination={false}
             showPageSizeOptions={false}
-            pageSize={layerData.length}
             sortable={false}
-            getTdProps={this.deleteRow}
+            rowObj={rowObj}
+            errorArray={errors}
+            checkForErrors={val => this.checkForErrors(val, 'layerTable')}
+            hasSubmitted={hasSubmitted}
           />
-
         </div>
-        <button className='new-row-button' onClick={this.addNewRow}>Añadir un renglón</button>
       </div>
     )
   }
 
-
-
   makeMudLossTable() {
-    let { setMudLossData, formData } = this.props
+    let { setMudLossData, formData, hasSubmitted } = this.props
     formData = formData.toJS()
     let { mudLossData } = formData
-
-    let objectTemplate = {cimaMD: '', baseMD: '', lodoPerdido: '', densidad: ''}
-
+    const rowObj = {
+      cimaMD: '',
+      baseMD: '',
+      lodoPerdido: '',
+      densidad: '',
+      error: true,
+    }
+    const errors = [
+      { name: 'cimaMD', type: 'number' },
+      { name: 'baseMD', type: 'number' },
+      { name: 'lodoPerdido', type: 'number' },
+      { name: 'densidad', type: 'number' },
+    ]
     return (
       <div className="mud-loss-table" style={{marginBot: '20px'}}> 
         <div className='header'>
           Zona de pérdida
         </div>
         <div className='table'>
-
           <InputTable
-            location="EvaluacionPetrofisica"
             className="-striped"
             data={mudLossData}
-            newRow={objectTemplate}
             setData={setMudLossData}
             columns={mudLossColumns}
             showPagination={false}
             showPageSizeOptions={false}
-            pageSize={mudLossData.length}
             sortable={false}
-            getTdProps={this.deleteRowMudLoss}
+            errorArray={errors}
+            rowObj={rowObj}
+            checkForErrors={val => this.checkForErrors(val, 'mudTable')}
+            hasSubmitted={hasSubmitted}
           />
-
         </div>
-
-        <button className='new-row-button' onClick={this.addNewRowMudLoss}>Añadir un renglón</button>
       </div>
     )
   }
@@ -303,9 +281,7 @@ let mudLossColumns = [
     )
   }
 
-
   render() {
-    console.log('render petrofisica')
     return (
       <div className="form evaluacionPetrofisica">
         <div className="image"/>
@@ -317,16 +293,16 @@ let mudLossColumns = [
   }
 }
 
-
-
 const mapStateToProps = state => ({
   formData: state.get('evaluacionPetrofisica'),
+  hasSubmitted: state.getIn(['global', 'hasSubmitted']),
 })
 
 const mapDispatchToProps = dispatch => ({
   setImgURL: val => dispatch(setImgURL(val)),
   setLayerData: val => dispatch(setLayerData(val)),
   setMudLossData: val => dispatch(setMudLossData(val)),
+  setHasErrorsEvaluacionPetrofisica: val => dispatch(setHasErrorsEvaluacionPetrofisica(val)),
 })
 
 

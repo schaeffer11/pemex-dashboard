@@ -14,11 +14,11 @@ const INSERT_FIELDS_QUERY = {
       NUMERO_DE_POZOS_OPERANDO, P_INICIAL, P_INICIAL_ANO, P_ACTUAL, P_ACTUAL_FECHA, DP_PER_ANO, TYAC, PR, TIPO_DE_FLUIDO, DENSIDAD_DEL_ACEITE, P_SAT,
       RGA_FLUIDO, SALINIDAD, PVT_REPRESENTATIVO, LITOLOGIA, ESPESOR_NETO, POROSIDAD, SW, K_PROMEDIO, CAA, CGA,
       QO, QG, RGA, FW, NP, GP, WP, RESERVA_REMANENTE_DE_ACEITE, RESERVA_REMONENTE_DE_GAS, RESERVA_REMANENTE_DE_PETROLEO_CRUDO_EQUIVALENTE,
-      H2S, CO2, N2, TRANSACTION_ID) VALUES
+      H2S, CO2, N2, TRANSACTION_ID, HAS_ERRORS) VALUES
       (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, 
        ?, ?, ?, ?, ?, ?, ?, ?, ?, ?,
        ?, ?, ?, ?, ?, ?, ?, ?, ?, ?,
-       ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`,
+       ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`,
     submit: `INSERT INTO FieldsData (
       FIELD_FORMACION_ID, SUBDIRECCION, ACTIVO, FORMACION, DESCUBRIMIENTO, FECHA_DE_EXPLOTACION,
       NUMERO_DE_POZOS_OPERANDO, P_INICIAL, P_INICIAL_ANO, P_ACTUAL, P_ACTUAL_FECHA, DP_PER_ANO, TYAC, PR, TIPO_DE_FLUIDO, DENSIDAD_DEL_ACEITE, P_SAT,
@@ -53,10 +53,10 @@ const INSERT_WELL_QUERY = {
         CALIZA, DOLOMIA, ARCILLA, POROSIDAD,
         PERMEABILIDAD, SW, CAA, CGA, TIPO_DE_POZO,
         PWS, PWS_FECHA, PWF, PWF_FECHA, DELTA_P_PER_MES, TYAC, PVT,
-        APAREJO_DE_PRODUCCION, PROF_EMPACADOR, PROF_SENSOR_PYT, TIPO_DE_SISTEMA, TRANSACTION_ID) VALUES
+        APAREJO_DE_PRODUCCION, PROF_EMPACADOR, PROF_SENSOR_PYT, TIPO_DE_SISTEMA, TRANSACTION_ID, HAS_ERRORS) VALUES
         (?, ?, ?, ?, ?, ?, ?, ?, ?, ?,
          ?, ?, ?, ?, ?, ?, ?, ?, ?, ?,
-         ?, ?, ?, ?, ?)`,
+         ?, ?, ?, ?, ?, ?)`,
     submit: `INSERT INTO WellsData (
         WELL_FORMACION_ID, SUBDIRECCION, ACTIVO,
         FORMACION,
@@ -73,7 +73,7 @@ const INSERT_WELL_QUERY = {
 
 const INSERT_HIST_INTERVENCIONES_QUERY = {
     save: `INSERT INTO _WellUserInputInterventionsSave (
-        WELL_FORMACION_ID, INPUT_INTERVENTION_ID, DATE, DESCRIPTION, TRANSACTION_ID) VALUES
+        WELL_FORMACION_ID, INPUT_INTERVENTION_ID, DATE, DESCRIPTION, HAS_ERRORS, TRANSACTION_ID) VALUES
         ?`,
     submit: `INSERT INTO WellUserInputInterventions (
         WELL_FORMACION_ID, INPUT_INTERVENTION_ID, DATE, DESCRIPTION, TRANSACTION_ID) VALUES
@@ -85,7 +85,7 @@ const INSERT_HIST_INTERVENCIONES_QUERY = {
 const INSERT_LAYER_QUERY = {
     save: `INSERT INTO _WellLayersSave (
         INTERVAL_ID, WELL_FORMACION_ID, INTERVALO, CIMA_MD, BASE_MD, ESPESOR_BRUTO, ESPESOR_NETO,
-        V_ARC, POROSITY, SW, DENS, RESIS, PERMEABILIDAD, TRANSACTION_ID) VALUES
+        V_ARC, POROSITY, SW, DENS, RESIS, PERMEABILIDAD, HAS_ERRORS, TRANSACTION_ID) VALUES
         ?`,
     submit: `INSERT INTO WellLayers (
         INTERVAL_ID, WELL_FORMACION_ID, INTERVALO, CIMA_MD, BASE_MD, ESPESOR_BRUTO, ESPESOR_NETO,
@@ -97,7 +97,7 @@ const INSERT_LAYER_QUERY = {
 
 const INSERT_MUD_LOSS_QUERY = {
     save: `INSERT INTO _WellZonesSave (
-        ZONE_ID, WELL_FORMACION_ID, CIMA_MD, BASE_MD, LODO_PERDIDO, DENSIDAD, TRANSACTION_ID) VALUES
+        ZONE_ID, WELL_FORMACION_ID, CIMA_MD, BASE_MD, LODO_PERDIDO, DENSIDAD, HAS_ERRORS, TABLE_HAS_ERRORS, TRANSACTION_ID) VALUES
         ?`,
     submit: `INSERT INTO WellZones (
         ZONE_ID, WELL_FORMACION_ID, CIMA_MD, BASE_MD, LODO_PERDIDO, DENSIDAD, TRANSACTION_ID) VALUES
@@ -112,9 +112,9 @@ const INSERT_MECANICO_QUERY = {
         PRESION_DIF_EMPACADOR, SENSOR_PYT, TIP_DE_LINER, DIAMETRO_DE_LINER, TIPO_DE_PISTOLAS,
         DENSIDAD_DE_DISPAROS_MECANICO_DUPL, FASE, DIAMETRO_DE_ORIFICIO, PENETRACION,
         TRATAMIENTO_POR, VOLUMEN_APAREJO_DE_PRODUCCION, VOLUMEN_INTERVALO_CIMA, 
-        VOLUMEN_INTERVALO_BASE, VOLUMEN_DE_ESPACIO_ANULA, TRANSACTION_ID) VALUES 
+        VOLUMEN_INTERVALO_BASE, VOLUMEN_DE_ESPACIO_ANULA, TRANSACTION_ID, HAS_ERRORS) VALUES 
         (?, ?, ?, ?, ?, ?, ?, ?, ?, ?,
-         ?, ?, ?, ?, ?, ?, ?, ?, ?)`,
+         ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`,
     submit: `INSERT INTO WellMecanico (
         WELL_FORMACION_ID, TIPO_DE_TERMINACION, H_INTERVALO_PRODUCTOR, EMPACADOR,
         PRESION_DIF_EMPACADOR, SENSOR_PYT, TIP_DE_LINER, DIAMETRO_DE_LINER, TIPO_DE_PISTOLAS,
@@ -134,10 +134,10 @@ const INSERT_ANALISIS_AGUA_QUERY = {
         ALCALINIDAD_A_LA_FENOLFTALEINA_COMO_CaCO3,
         SALINIDAD_COMO_NaCL, SODIO, CALCIO, MAGNESIO, FIERRO,
         CLORUROS, BICARBONATOS, SULFATOS, CARBONATOS, DENSIDAD_15,
-        DENSIDAD_20, TRANSACTION_ID) VALUES 
+        DENSIDAD_20, TRANSACTION_ID, HAS_ERRORS, WATER_ANALYSIS_BOOL) VALUES 
         (?, ?, ?, ?, ?, ?, ?, ?, ?, ?,
          ?, ?, ?, ?, ?, ?, ?, ?, ?, ?,
-         ?, ?, ?)`,
+         ?, ?, ?, ?, ?)`,
     submit: `INSERT INTO WellAnalisisDelAgua (
         WELL_FORMACION_ID, PH, TEMPERATURA_DE_CONDUCTIVIDAD, RESISTIVIDAD, SALINIDAD_CON_CONDUCTIMETRO, SOLIDOS_DISUELTOS_TOTALES,
         DUREZA_TOTAL_COMO_CaCO3, DUREZA_DE_CALCIO_COMO_CaCO3, DUREZA_DE_MAGNESIO_COMO_CaCO3, ALCALINIDAD_TOTAL_COMO_CaCO3, 
@@ -155,8 +155,8 @@ const INSERT_ANALISIS_AGUA_QUERY = {
 const INSERT_EMBOLO_VIAJERO_QUERY = {
     save: `INSERT INTO _ProductionSystemsEmboloViajeroSave (
                 SYSTEM_ID, WELL_ID, FORMACION_ID, PRESION_DE_CABEZA, PRESION_DE_LINEA_O_DE_SEPARADOR,
-                NUMERO_DE_DESCARGAS_O_CIRCLOS, VOLUMEN_DESPLAZADO_POR_CIRCLO, TRANSACTION_ID) VALUES
-                (1, 1, 1, ?, ?, ?, ?, ?)`,
+                NUMERO_DE_DESCARGAS_O_CIRCLOS, VOLUMEN_DESPLAZADO_POR_CIRCLO, TRANSACTION_ID, HAS_ERRORS) VALUES
+                (1, 1, 1, ?, ?, ?, ?, ?, ?)`,
     submit: `INSERT INTO ProductionSystemsEmboloViajero (
                 SYSTEM_ID, WELL_ID, FORMACION_ID, PRESION_DE_CABEZA, PRESION_DE_LINEA_O_DE_SEPARADOR,
                 NUMERO_DE_DESCARGAS_O_CIRCLOS, VOLUMEN_DESPLAZADO_POR_CIRCLO, TRANSACTION_ID) VALUES
@@ -169,8 +169,8 @@ const INSERT_BOMBEO_NEUMATICO_QUERY = {
     save: `INSERT INTO _ProductionSystemsBombeoNeumaticoSave (
                 SYSTEM_ID, WELL_ID, FORMACION_ID, PRESION_DE_CABEZA, PRESION_DE_LINEA_O_DE_SEPARADOR,
                 PRESION_DE_INYECCION, PRESION_DE_DESCARGA, NUMERO_DE_VALVULAS, PREFUNDIDAD_DE_LA_VALVULA_OPERANTE,
-                ORIFICIO, VOLUMEN_DE_GAS_INYECTADO, TRANSACTION_ID) VALUES
-                (1, 1, 1, ?, ?, ?, ?, ?, ?, ?, ?, ?)`,
+                ORIFICIO, VOLUMEN_DE_GAS_INYECTADO, TRANSACTION_ID, HAS_ERRORS) VALUES
+                (1, 1, 1, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`,
     submit: `INSERT INTO ProductionSystemsBombeoNeumatico (
                 SYSTEM_ID, WELL_ID, FORMACION_ID, PRESION_DE_CABEZA, PRESION_DE_LINEA_O_DE_SEPARADOR,
                 PRESION_DE_INYECCION, PRESION_DE_DESCARGA, NUMERO_DE_VALVULAS, PREFUNDIDAD_DE_LA_VALVULA_OPERANTE,
@@ -183,8 +183,8 @@ const INSERT_BOMBEO_NEUMATICO_QUERY = {
 const INSERT_BOMBEO_HIDRAULICO_QUERY = {
     save: `INSERT INTO _ProductionSystemsBombeoHidraulicoSave (
                 SYSTEM_ID, WELL_ID, FORMACION_ID, PRESION_DE_CABEZA, PRESION_DE_LINEA_O_DE_SEPARADOR,
-                PROFUNDIDAD_DE_LA_BOMBA, TIPO_Y_MARCA_DE_BOMBA, ORIFICIO, TIPO_DE_CAMISA, FLUIDO_MOTRIZ, TRANSACTION_ID) VALUES
-                (1, 1, 1, ?, ?, ?, ?, ?, ?, ?, ?)`,
+                PROFUNDIDAD_DE_LA_BOMBA, TIPO_Y_MARCA_DE_BOMBA, ORIFICIO, TIPO_DE_CAMISA, FLUIDO_MOTRIZ, TRANSACTION_ID, HAS_ERRORS) VALUES
+                (1, 1, 1, ?, ?, ?, ?, ?, ?, ?, ?, ?)`,
     submit: `INSERT INTO ProductionSystemsBombeoHidraulico (
                 SYSTEM_ID, WELL_ID, FORMACION_ID, PRESION_DE_CABEZA, PRESION_DE_LINEA_O_DE_SEPARADOR,
                 PROFUNDIDAD_DE_LA_BOMBA, TIPO_Y_MARCA_DE_BOMBA, ORIFICIO, TIPO_DE_CAMISA, FLUIDO_MOTRIZ, TRANSACTION_ID) VALUES
@@ -197,8 +197,8 @@ const INSERT_BOMBEO_CAVIDADES_QUERY = {
     save: `INSERT INTO _ProductionSystemsBombeoCavidadesProgresivasSave (
                 SYSTEM_ID, WELL_ID, FORMACION_ID, PRESION_DE_CABEZA, PRESION_DE_LINEA_O_DE_SEPARADOR,
                 MOTOR_Y_TIPO_DE_MOTOR, PROFUNDIDAD_DEL_MOTOR, VELOCIDAD, HP, ARREGLO_DE_VARILLAS,
-                TIPO_DE_ELASTOMERO, PROFUNDIDAD_DEL_ANCLA_ANTITORQUE, TRANSACTION_ID) VALUES
-                (1, 1, 1, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`,
+                TIPO_DE_ELASTOMERO, PROFUNDIDAD_DEL_ANCLA_ANTITORQUE, TRANSACTION_ID, HAS_ERRORS) VALUES
+                (1, 1, 1, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`,
     submit: `INSERT INTO ProductionSystemsBombeoCavidadesProgresivas (
                 SYSTEM_ID, WELL_ID, FORMACION_ID, PRESION_DE_CABEZA, PRESION_DE_LINEA_O_DE_SEPARADOR,
                 MOTOR_Y_TIPO_DE_MOTOR, PROFUNDIDAD_DEL_MOTOR, VELOCIDAD, HP, ARREGLO_DE_VARILLAS,
@@ -212,8 +212,8 @@ const INSERT_BOMBEO_ELECTROCENTRIFUGO_QUERY = {
     save: `INSERT INTO _ProductionSystemsBombeoElectrocentrifugoSave (
                 SYSTEM_ID, WELL_ID, FORMACION_ID, PRESION_DE_CABEZA, PRESION_DE_LINEA_O_DE_SEPARADOR,
                 PROFUNDIDAD_DEL_MOTOR, DIAMETRO, VOLTS, AMPERAJE, ARMADURA,
-                TIPO_DE_CABLE, LONGITUD_DE_CABLE, RPM, TRANSACTION_ID) VALUES
-                (1, 1, 1, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`,
+                TIPO_DE_CABLE, LONGITUD_DE_CABLE, RPM, TRANSACTION_ID, HAS_ERRORS) VALUES
+                (1, 1, 1, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`,
     submit: `INSERT INTO ProductionSystemsBombeoElectrocentrifugo (
                 SYSTEM_ID, WELL_ID, FORMACION_ID, PRESION_DE_CABEZA, PRESION_DE_LINEA_O_DE_SEPARADOR,
                 PROFUNDIDAD_DEL_MOTOR, DIAMETRO, VOLTS, AMPERAJE, ARMADURA,
@@ -227,8 +227,8 @@ const INSERT_BOMBEO_MECANICO_QUERY = {
     save: `INSERT INTO _ProductionSystemsBombeoMecanicoSave (
                 SYSTEM_ID, WELL_ID, FORMACION_ID, PRESION_DE_CABEZA, PRESION_DE_LINEA_O_DE_SEPARADOR,
                 TIPO_DE_UNIDAD, VELOCIDAD, LONGITUD_DE_CARERA, TIPO_DE_BOMBA_SUBSUPERFICIAL, TAMANO_DE_BOMBA_SUBSUPERFICIAL,
-                PROFUNDIDAD_DE_LA_BOMBA, ARREGLO_DE_VARILLAS, CUANTA_CON_ANCIA_MECHANICO_O_EMPACADOR, NIVEL_DINAMICO, NIVEL_ESTATICO, TRANSACTION_ID) VALUES
-                (1, 1, 1, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`,
+                PROFUNDIDAD_DE_LA_BOMBA, ARREGLO_DE_VARILLAS, CUANTA_CON_ANCIA_MECHANICO_O_EMPACADOR, NIVEL_DINAMICO, NIVEL_ESTATICO, TRANSACTION_ID, HAS_ERRORS) VALUES
+                (1, 1, 1, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`,
     submit: `INSERT INTO ProductionSystemsBombeoMecanico (
                 SYSTEM_ID, WELL_ID, FORMACION_ID, PRESION_DE_CABEZA, PRESION_DE_LINEA_O_DE_SEPARADOR,
                 TIPO_DE_UNIDAD, VELOCIDAD, LONGITUD_DE_CARERA, TIPO_DE_BOMBA_SUBSUPERFICIAL, TAMANO_DE_BOMBA_SUBSUPERFICIAL,
@@ -242,7 +242,7 @@ const INSERT_BOMBEO_MECANICO_QUERY = {
 
 const INSERT_FIELD_PRESSURE_QUERY = {
     save: `INSERT INTO _FieldHistoricalPressureSave (
-        FIELD_FORMACION_ID, FECHA, PWS, PRESSURE_DEPTH, TRANSACTION_ID) VALUES
+        FIELD_FORMACION_ID, FECHA, PWS, PRESSURE_DEPTH, TRANSACTION_ID, HAS_ERRORS, TABLE_HAS_ERRORS) VALUES
         ?`,
     submit: `INSERT INTO FieldHistoricalPressure (
         FIELD_FORMACION_ID, FECHA, PWS, PRESSURE_DEPTH, TRANSACTION_ID) VALUES
@@ -253,7 +253,7 @@ const INSERT_FIELD_PRESSURE_QUERY = {
 
 const INSERT_WELL_PRESSURE_QUERY = {
     save: `INSERT INTO _WellHistoricalPressureSave (
-        WELL_FORMACION_ID, FECHA, PWS, PWF, PRESSURE_DEPTH, TRANSACTION_ID) VALUES
+        WELL_FORMACION_ID, FECHA, PWS, PWF, PRESSURE_DEPTH, TRANSACTION_ID, HAS_ERRORS, TABLE_HAS_ERRORS) VALUES
         ?`,
     submit: `INSERT INTO WellHistoricalPressure (
         WELL_FORMACION_ID, FECHA, PWS, PWF, PRESSURE_DEPTH, TRANSACTION_ID) VALUES
@@ -265,7 +265,7 @@ const INSERT_WELL_PRESSURE_QUERY = {
 const INSERT_WELL_AFOROS_QUERY = {
     save: `INSERT INTO _WellAforosSave (
         WELL_FORMACION_ID, FECHA, TIEMPO, ESTRANGULADOR, PTP, TTP, PBAJ, TBAJ, PSEP, TSEP, QL, 
-        QO, QG, QW, RGA, SALINIDAD, PH, TRANSACTION_ID) VALUES 
+        QO, QG, QW, RGA, SALINIDAD, PH, TRANSACTION_ID, HAS_ERRORS) VALUES 
         ?`,
     submit: `INSERT INTO WellAforos (
         WELL_FORMACION_ID, FECHA, TIEMPO, ESTRANGULADOR, PTP, TTP, PBAJ, TBAJ, PSEP, TSEP, QL, 
@@ -277,7 +277,7 @@ const INSERT_WELL_AFOROS_QUERY = {
 
 const INSERT_WELL_PRODUCCION_QUERY = {
     save: `INSERT INTO _WellHistoricalProduccionSave (
-        WELL_FORMACION_ID, Fecha, Dias, QO, QW, QG, QGI, QO_VOLUME, QW_VOLUME, QG_VOLUME, QGI_VOLUME, NP, WP, GP, GI, RGA, FW_FRACTION, TRANSACTION_ID)
+        WELL_FORMACION_ID, Fecha, Dias, QO, QW, QG, QGI, QO_VOLUME, QW_VOLUME, QG_VOLUME, QGI_VOLUME, NP, WP, GP, GI, RGA, FW_FRACTION, TRANSACTION_ID, HAS_ERRORS)
         VALUES 
         ?`,
     submit: `INSERT INTO WellHistoricalProduccion (
@@ -320,11 +320,11 @@ const INSERT_INTERVENTION_ESIMULACION_QUERY = {
         EST_INC_ESTRANGULADOR, EST_INC_Ptp, EST_INC_Ttp, EST_INC_Pbaj, EST_INC_Tbaj,
         EST_INC_Ptr, EST_INC_Qi, EST_INC_Qo, EST_INC_Qq, EST_INC_Qw,
         EST_INC_RGA, EST_INC_SALINIDAD, EST_INC_IP, EST_INC_DELTA_P, EST_INC_GASTO_COMPROMISO_Qo,
-        EST_INC_GASTO_COMPROMISO_Qg, EST_INC_OBSERVACIONES, TRANSACTION_ID) VALUES
+        EST_INC_GASTO_COMPROMISO_Qg, EST_INC_OBSERVACIONES, TRANSACTION_ID, HAS_ERRORS_PROPUESTA, HAS_ERRORS_RESULTS, HAS_ERRORS_EST_INC) VALUES
         (?, ?, ?, ?, ?, ?, ?, ?, ?, ?,
          ?, ?, ?, ?, ?, ?, ?, ?, ?, ?,
          ?, ?, ?, ?, ?, ?, ?, ?, ?, ?,
-         ?, ?)`,
+         ?, ?, ?, ?, ?)`,
     submit: `INSERT INTO IntervencionesEstimulacions (
         INTERVENTION_ID, WELL_FORMACION_ID, TIPO_DE_ESTIMULACION,
         VOLUMEN_PRECOLCHON_N2,
@@ -355,12 +355,12 @@ const INSERT_INTERVENTION_ACIDO_QUERY = {
         EFICIENCIA_DE_FLUIDO_DE_FRACTURA, EST_INC_ESTRANGULADOR, EST_INC_Ptp, EST_INC_Ttp, EST_INC_Pbaj,
         EST_INC_Tbaj, EST_INC_Ptr, EST_INC_Qi, EST_INC_Qo, EST_INC_Qq,
         EST_INC_Qw, EST_INC_RGA, EST_INC_SALINIDAD, EST_INC_IP, EST_INC_DELTA_P,
-        EST_INC_GASTO_COMPROMISO_Qo, EST_INC_GASTO_COMPROMISO_Qg, EST_INC_OBSERVACIONES, TRANSACTION_ID) VALUES
+        EST_INC_GASTO_COMPROMISO_Qo, EST_INC_GASTO_COMPROMISO_Qg, EST_INC_OBSERVACIONES, TRANSACTION_ID, HAS_ERRORS_PROPUESTA, HAS_ERRORS_RESULTS, HAS_ERRORS_EST_INC) VALUES
         (?, ?, ?, ?, ?, ?, ?, ?, ?, ?,
          ?, ?, ?, ?, ?, ?, ?, ?, ?, ?,
          ?, ?, ?, ?, ?, ?, ?, ?, ?, ?,
          ?, ?, ?, ?, ?, ?, ?, ?, ?, ?,
-         ?, ?, ?)`,
+         ?, ?, ?, ?, ?, ?)`,
     submit: `INSERT INTO IntervencionesAcido (
         INTERVENTION_ID, WELL_FORMACION_ID,
         VOLUMEN_PRECOLCHON_N2,
@@ -394,12 +394,12 @@ const INSERT_INTERVENTION_APUNTALADO_QUERY = {
         EST_INC_ESTRANGULADOR, EST_INC_Ptp, EST_INC_Ttp, EST_INC_Pbaj,
         EST_INC_Tbaj, EST_INC_Ptr, EST_INC_Qi, EST_INC_Qo, EST_INC_Qq,
         EST_INC_Qw, EST_INC_RGA, EST_INC_SALINIDAD, EST_INC_IP, EST_INC_DELTA_P,
-        EST_INC_GASTO_COMPROMISO_Qo, EST_INC_GASTO_COMPROMISO_Qg, EST_INC_OBSERVACIONES, TRANSACTION_ID) VALUES
+        EST_INC_GASTO_COMPROMISO_Qo, EST_INC_GASTO_COMPROMISO_Qg, EST_INC_OBSERVACIONES, TRANSACTION_ID, HAS_ERRORS_PROPUESTA, HAS_ERRORS_RESULTS, HAS_ERRORS_EST_INC) VALUES
         (?, ?, ?, ?, ?, ?, ?, ?, ?, ?,
          ?, ?, ?, ?, ?, ?, ?, ?, ?, ?,
          ?, ?, ?, ?, ?, ?, ?, ?, ?, ?,
          ?, ?, ?, ?, ?, ?, ?, ?, ?, ?,
-         ?, ?)`,
+         ?, ?, ?, ?, ?)`,
     submit: `INSERT INTO IntervencionesApuntalado (
         INTERVENTION_ID, WELL_FORMACION_ID, 
         VOLUMEN_PRECOLCHON_N2,
@@ -454,7 +454,7 @@ const INSERT_CEDULA_ESTIMULACION_QUERY = {
     save: `INSERT INTO _IntervencionesCedulaEstimulacionSave (
         CEDULA_ID, INTERVENTION_ID, WELL_FORMACION_ID, ETAPA, SISTEMA, NOMBRE_COMERCIAL,
         VOL_LIQUID, GASTO_N2, GASTO_LIQUIDO, GASTO_EN_FONDO, CALIDAD, VOL_N2, VOL_LIQUIDO_ACUM, 
-        VOL_N2_ACUM, REL_N2_LIQ, TIEMPO, COMPANIA, TRANSACTION_ID) VALUES ?`,
+        VOL_N2_ACUM, REL_N2_LIQ, TIEMPO, COMPANIA, TRANSACTION_ID, HAS_ERRORS) VALUES ?`,
     submit: `INSERT INTO IntervencionesCedulaEstimulacion (
         CEDULA_ID, INTERVENTION_ID, WELL_FORMACION_ID, ETAPA, SISTEMA, NOMBRE_COMERCIAL,
         VOL_LIQUID, GASTO_N2, GASTO_LIQUIDO, GASTO_EN_FONDO, CALIDAD, VOL_N2, VOL_LIQUIDO_ACUM, 
@@ -467,7 +467,7 @@ const INSERT_CEDULA_ACIDO_QUERY = {
     save: `INSERT INTO _IntervencionesCedulaAcidoSave (
         CEDULA_ID, INTERVENTION_ID, WELL_FORMACION_ID, ETAPA, SISTEMA, NOMBRE_COMERCIAL, TIPO_DE_APUNTALANTE, CONCENTRACION_DE_APUNTALANTE, 
         VOL_LIQUID, GASTO_N2, GASTO_LIQUIDO, GASTO_EN_FONDO, CALIDAD, VOL_N2, VOL_LIQUIDO_ACUM, 
-        VOL_N2_ACUM, REL_N2_LIQ, TIEMPO, COMPANIA, TRANSACTION_ID) VALUES ?`,
+        VOL_N2_ACUM, REL_N2_LIQ, TIEMPO, COMPANIA, TRANSACTION_ID, HAS_ERRORS) VALUES ?`,
     submit: `INSERT INTO IntervencionesCedulaAcido (
         CEDULA_ID, INTERVENTION_ID, WELL_FORMACION_ID, ETAPA, SISTEMA, NOMBRE_COMERCIAL, TIPO_DE_APUNTALANTE, CONCENTRACION_DE_APUNTALANTE, 
         VOL_LIQUID, GASTO_N2, GASTO_LIQUIDO, GASTO_EN_FONDO, CALIDAD, VOL_N2, VOL_LIQUIDO_ACUM, 
@@ -480,7 +480,7 @@ const INSERT_CEDULA_APUNTALADO_QUERY = {
     save: `INSERT INTO _IntervencionesCedulaApuntaladoSave (
         CEDULA_ID, INTERVENTION_ID, WELL_FORMACION_ID, ETAPA, SISTEMA, NOMBRE_COMERCIAL, TIPO_DE_APUNTALANTE, CONCENTRACION_DE_APUNTALANTE, 
         VOL_LIQUID, GASTO_N2, GASTO_LIQUIDO, GASTO_EN_FONDO, CALIDAD, VOL_N2, VOL_LIQUIDO_ACUM, 
-        VOL_N2_ACUM, REL_N2_LIQ, TIEMPO, COMPANIA, TRANSACTION_ID) VALUES ?`   ,
+        VOL_N2_ACUM, REL_N2_LIQ, TIEMPO, COMPANIA, TRANSACTION_ID, HAS_ERRORS) VALUES ?`   ,
     submit: `INSERT INTO IntervencionesCedulaApuntalado (
         CEDULA_ID, INTERVENTION_ID, WELL_FORMACION_ID, ETAPA, SISTEMA, NOMBRE_COMERCIAL, TIPO_DE_APUNTALANTE, CONCENTRACION_DE_APUNTALANTE, 
         VOL_LIQUID, GASTO_N2, GASTO_LIQUIDO, GASTO_EN_FONDO, CALIDAD, VOL_N2, VOL_LIQUIDO_ACUM, 
@@ -492,7 +492,7 @@ const INSERT_CEDULA_APUNTALADO_QUERY = {
 
 const INSERT_COSTS_QUERY = {
     save: `INSERT INTO _IntervencionesEstimatedCostsSave (
-        COST_ID, INTERVENTION_ID, ITEM, UNIT, COMPANY, COST_MNX, COST_DLS, MNXtoDLS, TRANSACTION_ID) VALUES ?`,
+        COST_ID, INTERVENTION_ID, ITEM, UNIT, COMPANY, COST_MNX, COST_DLS, MNXtoDLS, TRANSACTION_ID, HAS_ERRORS) VALUES ?`,
     submit: `INSERT INTO IntervencionesEstimatedCosts (
         COST_ID, INTERVENTION_ID, ITEM, UNIT, COMPANY, COST_MNX, COST_DLS, MNXtoDLS, TRANSACTION_ID) VALUES ?`,
     loadSave: `SELECT * FROM _IntervencionesEstimatedCostsSave WHERE TRANSACTION_ID = ?`,
@@ -952,8 +952,7 @@ export const create = async (body, action, cb) => {
   connection.beginTransaction(function(err) {
     if (err) { throw err; }
 
-    const errors = []
-    connection.query((action === 'save' ? INSERT_FIELDS_QUERY.save : INSERT_FIELDS_QUERY.submit), [
+    let values = [
     fieldFormacionID, subdireccion, activo, formacion,
     descubrimientoField, fechaDeExplotacionField, numeroDePozosOperandoField, pInicialField, pInicialAnoField, pActualField, pActualFechaField,
     dpPerAnoField, tyacField, prField, tipoDeFluidoField, densidadDelAceiteField, pSatField,
@@ -961,7 +960,14 @@ export const create = async (body, action, cb) => {
     porosidadField, swField, kPromedioField, caaField, cgaField,
     qoField, qgField, rgaField, fwField, npField,
     gpField, wpField, rraField, rrgField, rrpceField,
-    h2sField, co2Field, n2Field, transactionID], (err, results) => {
+    h2sField, co2Field, n2Field, transactionID]
+
+    if (action === 'save') {
+        values.push(finalObj.fichaTecnicaDelCampo.hasErrors === true ? 1 : 0)
+    }
+
+    const errors = []
+    connection.query((action === 'save' ? INSERT_FIELDS_QUERY.save : INSERT_FIELDS_QUERY.submit), values, (err, results) => {
       console.log('field', err)
       console.log('field', results)
       if (err) {
@@ -970,13 +976,19 @@ export const create = async (body, action, cb) => {
           cb(err)
         })
       }
-      connection.query((action === 'save' ? INSERT_WELL_QUERY.save : INSERT_WELL_QUERY.submit), [
-      wellFormacionID, subdireccion, activo,
+
+      values = [wellFormacionID, subdireccion, activo,
       formacion, caliza,
       dolomia, arcilla, porosidad, permeabilidad, sw,
       caa, cga, tipoDePozo, pws, pwsFecha, pwf, pwfFecha,
       deltaPPerMes, tyac, pvt, aparejoDeProduccion, profEmpacador,
-      profSensorPYT, tipoDeSistemo, transactionID ], (err, results) => {
+      profSensorPYT, tipoDeSistemo, transactionID]
+
+      if (action === 'save') {
+        values.push(finalObj.fichaTecnicaDelPozo.hasErrors === true ? 1 : 0)
+      }
+
+      connection.query((action === 'save' ? INSERT_WELL_QUERY.save : INSERT_WELL_QUERY.submit), values, (err, results) => {
         if (err) {
             return connection.rollback(function() {
               console.log('rolling back!!! 2')
@@ -985,11 +997,16 @@ export const create = async (body, action, cb) => {
         }
         console.log('well', err)
         console.log('well', results)
-        let values = []
+        values = []
 
         historialIntervencionesData.forEach(i => {
           inputInterventionID = Math.floor(Math.random() * 1000000000)
-          values.push([wellFormacionID, inputInterventionID, i.fecha, i.intervenciones, transactionID])
+          if (action === 'save') {
+            values.push([wellFormacionID, inputInterventionID, i.fecha, i.intervenciones, i.error, transactionID])  
+          }
+          else {
+            values.push([wellFormacionID, inputInterventionID, i.fecha, i.intervenciones, transactionID])  
+          }
         })
 
         connection.query((action === 'save' ? INSERT_HIST_INTERVENCIONES_QUERY.save : INSERT_HIST_INTERVENCIONES_QUERY.submit), [values], (err, results) => {
@@ -1006,8 +1023,14 @@ export const create = async (body, action, cb) => {
 
           layerData.forEach(i => {
             intervalID = Math.floor(Math.random() * 1000000000)
-            values.push([intervalID, wellFormacionID, i.interval, i.cimaMD, i.baseMD,
-              i.espesorBruto, i.espesorNeto, i.vArc, i.porosity, i.sw, i.dens, i.resis, i.perm, transactionID])
+            if (action === 'save') {
+                values.push([intervalID, wellFormacionID, i.interval, i.cimaMD, i.baseMD,
+              i.espesorBruto, i.espesorNeto, i.vArc, i.porosity, i.sw, i.dens, i.resis, i.perm, i.error, transactionID]) 
+            }
+            else {
+                values.push([intervalID, wellFormacionID, i.interval, i.cimaMD, i.baseMD,
+              i.espesorBruto, i.espesorNeto, i.vArc, i.porosity, i.sw, i.dens, i.resis, i.perm, transactionID])     
+            }
           })
 
           connection.query((action === 'save' ? INSERT_LAYER_QUERY.save : INSERT_LAYER_QUERY.submit), [values], (err, results) => {
@@ -1020,10 +1043,16 @@ export const create = async (body, action, cb) => {
               })
             }
             values = []
+            let tableError = finalObj.evaluacionPetrofisica.hasErrors === true ? 1 : 0
 
             mudLossData.forEach(i => {
               zoneID = Math.floor(Math.random() * 1000000000)
-              values.push([zoneID, wellFormacionID, i.cimaMD, i.baseMD, i.lodoPerdido, i.densidad, transactionID])
+              if (action === 'save') {
+                values.push([zoneID, wellFormacionID, i.cimaMD, i.baseMD, i.lodoPerdido, i.densidad, i.error, tableError, transactionID])
+              }
+              else {
+                values.push([zoneID, wellFormacionID, i.cimaMD, i.baseMD, i.lodoPerdido, i.densidad, transactionID])
+              }
             })
 
             connection.query((action === 'save' ? INSERT_MUD_LOSS_QUERY.save : INSERT_MUD_LOSS_QUERY.submit), [values], (err, results) => {
@@ -1036,12 +1065,16 @@ export const create = async (body, action, cb) => {
                 })
               }
 
-              connection.query((action === 'save' ? INSERT_MECANICO_QUERY.save : INSERT_MECANICO_QUERY.submit), [
-                wellFormacionID, tipoDeTerminacion, hIntervaloProductor, empacador, presionDifEmpacador, sensorPyt,
+              values = [wellFormacionID, tipoDeTerminacion, hIntervaloProductor, empacador, presionDifEmpacador, sensorPyt,
                 tipoDeLiner, diametroDeLiner, tipoDePistolas, densidadDeDisparosMecanico, fase,
                 diametroDeOrificio, penetracion, tratamientoPor, volumenAparejoDeProduccion,
-                volumenCimaDeIntervalo, volumenBaseDeIntervalo, volumenDeEspacioAnular, transactionID
-              ], (err, results) => {
+                volumenCimaDeIntervalo, volumenBaseDeIntervalo, volumenDeEspacioAnular, transactionID]
+
+              if (action === 'save') {
+                values.push(finalObj.mecanicoYAparejoDeProduccion.hasErrors === true ? 1 : 0)
+              }
+
+              connection.query((action === 'save' ? INSERT_MECANICO_QUERY.save : INSERT_MECANICO_QUERY.submit), values, (err, results) => {
                 if (err) {
                   return connection.rollback(function() {
                     console.log('rolling back!!! 2')
@@ -1051,14 +1084,20 @@ export const create = async (body, action, cb) => {
                 console.log('mecanico', err)
                 console.log('mecanico', results)
 
-
-                connection.query(waterAnalysisBool === false ? DUMMY_QUERY : (action === 'save' ? INSERT_ANALISIS_AGUA_QUERY.save : INSERT_ANALISIS_AGUA_QUERY.submit), [
-                    wellFormacionID, pH, temperaturaDeConductividad, resistividad, salinidadConConductimetro, solidosDisueltosTotales,
+                values = [wellFormacionID, pH, temperaturaDeConductividad, resistividad, salinidadConConductimetro, solidosDisueltosTotales,
                     durezaTotalComoCaCO3, durezaDeCalcioComoCaCO3, durezaDeMagnesioComoCaCO3, alcalinidadTotalComoCaCO3, alcalinidadALaFenolftaleinaComoCaCO3,
                     salinidadComoNaCl, sodio, calcio, magnesio, fierro,
                     cloruros, bicarbonatos, sulfatos, carbonatos, densidadAt15,
-                    densidadAt20, transactionID 
-                ], (err, results) => {
+                    densidadAt20, transactionID ]
+
+                if (action === 'save') {
+                  values.push(finalObj.analisisDelAgua.hasErrors === true ? 1 : 0)
+                  values.push(waterAnalysisBool)
+                }
+                let query
+
+                query = action === 'save' ? INSERT_ANALISIS_AGUA_QUERY.save : (waterAnalysisBool === false ? DUMMY_QUERY  : INSERT_ANALISIS_AGUA_QUERY.submit)
+                connection.query(query, values, (err, results) => {
                   if (err) {
                     return connection.rollback(function() {
                       console.log('rolling back!!! 2')
@@ -1068,75 +1107,90 @@ export const create = async (body, action, cb) => {
                   console.log('agua', err)
                   console.log('agua', results)
 
-                  let query = 'SELECT(1) FROM Users LIMIT 1'
+                  query = 'SELECT(1) FROM Users LIMIT 1'
 
                   switch(tipoDeSistemo) {
                     case 'emboloViajero':
                       query = action === 'save' ? `INSERT INTO _WellProductionSystemsEmboloViajeroSave (
                         WELL_FORMACION_ID, PRESION_DE_CABEZA, PRESION_DE_LINEA_O_DE_SEPARADOR,
-                        NUMERO_DE_DESCARGAS_O_CIRCLOS, VOLUMEN_DESPLAZADO_POR_CIRCLO, TRANSACTION_ID) VALUES
-                        (?, ?, ?, ?, ?, ?)` : `INSERT INTO WellProductionSystemsEmboloViajero (
+                        NUMERO_DE_DESCARGAS_O_CIRCLOS, VOLUMEN_DESPLAZADO_POR_CIRCLO, TRANSACTION_ID, HAS_ERRORS) VALUES
+                        (?, ?, ?, ?, ?, ?, ?)` : `INSERT INTO WellProductionSystemsEmboloViajero (
                         WELL_FORMACION_ID, PRESION_DE_CABEZA, PRESION_DE_LINEA_O_DE_SEPARADOR,
                         NUMERO_DE_DESCARGAS_O_CIRCLOS, VOLUMEN_DESPLAZADO_POR_CIRCLO, TRANSACTION_ID) VALUES
                         (?, ?, ?, ?, ?, ?)`
                       values = [wellFormacionID, presionDeCabeza, presionDeLineaODeSeparador, numeroDeDescargasOCiclosEV, volumenDesplazadoPorCircloEV, transactionID]
+                      if (action === 'save') {
+                        values.push(finalObj.sistemasArtificialesDeProduccion.hasErrors)
+                      }
                       break
                     case 'bombeoNeumatico':
                       query = action === 'save' ? `INSERT INTO _WellProductionSystemsBombeoNeumaticoSave (
                         WELL_FORMACION_ID, PRESION_DE_CABEZA, PRESION_DE_LINEA_O_DE_SEPARADOR,
                         PRESION_DE_INYECCION, PRESION_DE_DESCARGA, NUMERO_DE_VALVULAS, PREFUNDIDAD_DE_LA_VALVULA_OPERANTE,
-                        ORIFICIO, VOLUMEN_DE_GAS_INYECTADO, TRANSACTION_ID) VALUES
-                        (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)` : `INSERT INTO WellProductionSystemsBombeoNeumatico (
+                        ORIFICIO, VOLUMEN_DE_GAS_INYECTADO, TRANSACTION_ID, HAS_ERRORS) VALUES
+                        (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)` : `INSERT INTO WellProductionSystemsBombeoNeumatico (
                         WELL_FORMACION_ID, PRESION_DE_CABEZA, PRESION_DE_LINEA_O_DE_SEPARADOR,
                         PRESION_DE_INYECCION, PRESION_DE_DESCARGA, NUMERO_DE_VALVULAS, PREFUNDIDAD_DE_LA_VALVULA_OPERANTE,
                         ORIFICIO, VOLUMEN_DE_GAS_INYECTADO, TRANSACTION_ID) VALUES
                         (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`
                       values = [wellFormacionID, presionDeCabeza, presionDeLineaODeSeparador, presionDeInyeccionBN, presionDeDescargaBN, numeroDeValvulasBN,
                         profundidadDeLaVulvulaOperanteBN, orificioBN, volumenDeGasInyectadoBN, transactionID]
+                    if (action === 'save') {
+                        values.push(finalObj.sistemasArtificialesDeProduccion.hasErrors)
+                      }
                       break
                     case 'bombeoHidraulico':
                       query = action === 'save' ? `INSERT INTO _WellProductionSystemsBombeoHidraulicoSave (
                         WELL_FORMACION_ID, PRESION_DE_CABEZA, PRESION_DE_LINEA_O_DE_SEPARADOR,
-                        PROFUNDIDAD_DE_LA_BOMBA, TIPO_Y_MARCA_DE_BOMBA, ORIFICIO, TIPO_DE_CAMISA, FLUIDO_MOTRIZ, EQUIPO_SUPERFICIAL, TRANSACTION_ID) VALUES
-                        (?, ?, ?, ?, ?, ?, ?, ?, ?)` : `INSERT INTO WellProductionSystemsBombeoHidraulico (
+                        PROFUNDIDAD_DE_LA_BOMBA, TIPO_Y_MARCA_DE_BOMBA, ORIFICIO, TIPO_DE_CAMISA, FLUIDO_MOTRIZ, EQUIPO_SUPERFICIAL, TRANSACTION_ID, HAS_ERRORS) VALUES
+                        (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)` : `INSERT INTO WellProductionSystemsBombeoHidraulico (
                         WELL_FORMACION_ID, PRESION_DE_CABEZA, PRESION_DE_LINEA_O_DE_SEPARADOR,
                         PROFUNDIDAD_DE_LA_BOMBA, TIPO_Y_MARCA_DE_BOMBA, ORIFICIO, TIPO_DE_CAMISA, FLUIDO_MOTRIZ, EQUIPO_SUPERFICIAL, TRANSACTION_ID) VALUES
                         (?, ?, ?, ?, ?, ?, ?, ?, ?)`
                       values = [wellFormacionID, presionDeCabeza, presionDeLineaODeSeparador, profundidadDeLaBombaBH, tipoYMarcaDeBombaBH, orificioBH,
                         tipoDeCamisaBH, fluidoMotrizBH, equipoSuperficialBH, transactionID]
+                    if (action === 'save') {
+                        values.push(finalObj.sistemasArtificialesDeProduccion.hasErrors)
+                      }
                       break
                     case 'bombeoCavidadesProgresivas':
                       query = action === 'save' ? `INSERT INTO _WellProductionSystemsBombeoCavidadesProgresivasSave (
                         WELL_FORMACION_ID, PRESION_DE_CABEZA, PRESION_DE_LINEA_O_DE_SEPARADOR,
                         MOTOR_Y_TIPO_DE_MOTOR, PROFUNDIDAD_DEL_MOTOR, VELOCIDAD, HP, ARREGLO_DE_VARILLAS,
-                        TIPO_DE_ELASTOMERO, PROFUNDIDAD_DEL_ANCLA_ANTITORQUE, TRANSACTION_ID) VALUES
-                        (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)` : `INSERT INTO WellProductionSystemsBombeoCavidadesProgresivas (
+                        TIPO_DE_ELASTOMERO, PROFUNDIDAD_DEL_ANCLA_ANTITORQUE, TRANSACTION_ID, HAS_ERRORS) VALUES
+                        (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)` : `INSERT INTO WellProductionSystemsBombeoCavidadesProgresivas (
                         WELL_FORMACION_ID, PRESION_DE_CABEZA, PRESION_DE_LINEA_O_DE_SEPARADOR,
                         MOTOR_Y_TIPO_DE_MOTOR, PROFUNDIDAD_DEL_MOTOR, VELOCIDAD, HP, ARREGLO_DE_VARILLAS,
                         TIPO_DE_ELASTOMERO, PROFUNDIDAD_DEL_ANCLA_ANTITORQUE, TRANSACTION_ID) VALUES
                         (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`
                       values = [wellFormacionID, presionDeCabeza, presionDeLineaODeSeparador, motorYTipoDeMotorBCP, profunidadDelMotorBCP, velocidadBCP,
                         hpBCP, arregloDeVarillasBCP, tipoDeElastomeroBCP, profundidadDelAnclaAntitorqueBCP, transactionID]
+                    if (action === 'save') {
+                        values.push(finalObj.sistemasArtificialesDeProduccion.hasErrors)
+                      }
                       break
                     case 'bombeoElectrocentrifugo':
                       query = action === 'save' ? `INSERT INTO _WellProductionSystemsBombeoElectrocentrifugoSave (
                         WELL_FORMACION_ID, PRESION_DE_CABEZA, PRESION_DE_LINEA_O_DE_SEPARADOR,
                         PROFUNDIDAD_DEL_MOTOR, DIAMETRO, VOLTS, AMPERAJE, ARMADURA,
-                        TIPO_DE_CABLE, LONGITUD_DE_CABLE, RPM, TRANSACTION_ID) VALUES
-                        (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)` : `INSERT INTO WellProductionSystemsBombeoElectrocentrifugo (
+                        TIPO_DE_CABLE, LONGITUD_DE_CABLE, RPM, TRANSACTION_ID, HAS_ERRORS) VALUES
+                        (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)` : `INSERT INTO WellProductionSystemsBombeoElectrocentrifugo (
                         WELL_FORMACION_ID, PRESION_DE_CABEZA, PRESION_DE_LINEA_O_DE_SEPARADOR,
                         PROFUNDIDAD_DEL_MOTOR, DIAMETRO, VOLTS, AMPERAJE, ARMADURA,
                         TIPO_DE_CABLE, LONGITUD_DE_CABLE, RPM, TRANSACTION_ID) VALUES
                         (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`
                       values = [wellFormacionID, presionDeCabeza, presionDeLineaODeSeparador, profundidadDelMotorBE, diametroBE, voltsBE,
                         amparajeBE, armaduraBE, tipoDeCableBE, longitudDeCableBE, rmpBE, transactionID]
+                    if (action === 'save') {
+                        values.push(finalObj.sistemasArtificialesDeProduccion.hasErrors)
+                      }
                       break
                     case 'bombeoMecanico':
                       query = action === 'save' ? `INSERT INTO _WellProductionSystemsBombeoMecanicoSave (
                         WELL_FORMACION_ID, PRESION_DE_CABEZA, PRESION_DE_LINEA_O_DE_SEPARADOR,
                         TIPO_DE_UNIDAD, VELOCIDAD, LONGITUD_DE_CARERA, TIPO_DE_BOMBA_SUBSUPERFICIAL, TAMANO_DE_BOMBA_SUBSUPERFICIAL,
-                        PROFUNDIDAD_DE_LA_BOMBA, ARREGLO_DE_VARILLAS, CUANTA_CON_ANCIA_MECHANICO_O_EMPACADOR, NIVEL_DINAMICO, NIVEL_ESTATICO, TRANSACTION_ID) VALUES
-                        (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)` : `INSERT INTO WellProductionSystemsBombeoMecanico (
+                        PROFUNDIDAD_DE_LA_BOMBA, ARREGLO_DE_VARILLAS, CUANTA_CON_ANCIA_MECHANICO_O_EMPACADOR, NIVEL_DINAMICO, NIVEL_ESTATICO, TRANSACTION_ID, HAS_ERRORS) VALUES
+                        (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)` : `INSERT INTO WellProductionSystemsBombeoMecanico (
                         WELL_FORMACION_ID, PRESION_DE_CABEZA, PRESION_DE_LINEA_O_DE_SEPARADOR,
                         TIPO_DE_UNIDAD, VELOCIDAD, LONGITUD_DE_CARERA, TIPO_DE_BOMBA_SUBSUPERFICIAL, TAMANO_DE_BOMBA_SUBSUPERFICIAL,
                         PROFUNDIDAD_DE_LA_BOMBA, ARREGLO_DE_VARILLAS, CUANTA_CON_ANCIA_MECHANICO_O_EMPACADOR, NIVEL_DINAMICO, NIVEL_ESTATICO, TRANSACTION_ID) VALUES
@@ -1144,6 +1198,9 @@ export const create = async (body, action, cb) => {
                         values = [wellFormacionID, presionDeCabeza, presionDeLineaODeSeparador, tipoDeUnidadBM, velocidadBM, longitudDeCareraBM,
                           tipoDeBombaSubsuperficialBM, tamanoDeBombaSubsuperficialBM, profundidadDeLaBombaBM, arregloDeVarillasBM, CuantaConAnclaBM,
                           nivelDinamico, nivelEstatico, transactionID]
+                    if (action === 'save') {
+                        values.push(finalObj.sistemasArtificialesDeProduccion.hasErrors)
+                      }
                     break;
                   }
 
@@ -1160,8 +1217,13 @@ export const create = async (body, action, cb) => {
 
                     values = []
 
-                    presionDataCampo.forEach(i => {
-                      values.push([fieldFormacionID, i.fecha, i.Pws, pressureDepthCampo, transactionID])
+                    presionDataPozo.forEach(i => {
+                      let newRow = [wellFormacionID, i.fecha, i.Pws, pressureDepthCampo, transactionID]
+                      if (action === 'save') {
+                        newRow.push(i.error)
+                        newRow.push(finalObj.historicoDePresion.hasErrorsCampo === true ? 1 : 0)
+                      }
+                      values.push(newRow)
                     })
 
                     connection.query((action === 'save' ? INSERT_FIELD_PRESSURE_QUERY.save : INSERT_FIELD_PRESSURE_QUERY.submit), [values], (err, results) => {
@@ -1176,9 +1238,13 @@ export const create = async (body, action, cb) => {
 
                       values = []
 
-
                       presionDataPozo.forEach(i => {
-                        values.push([wellFormacionID, i.fecha, i.Pws, i.Pwf, pressureDepthPozo, transactionID])
+                        let newRow = [wellFormacionID, i.fecha, i.Pws, i.Pwf, pressureDepthPozo, transactionID]
+                        if (action === 'save') {
+                            newRow.push(i.error)
+                          newRow.push(finalObj.historicoDePresion.hasErrorsPozo === true ? 1 : 0)
+                        }
+                        values.push(newRow)
                       })
 
                       connection.query((action === 'save' ? INSERT_WELL_PRESSURE_QUERY.save : INSERT_WELL_PRESSURE_QUERY.submit), [values], (err, results) => {
@@ -1193,7 +1259,11 @@ export const create = async (body, action, cb) => {
 
                         values = []
                         aforosData.forEach(i => {
-                            values.push([wellFormacionID, i.fecha, i.tiempo, i.estrangulador, i.ptp, i.ttp, i.pbaj, i.tbaj, i.psep, i.tsep, i.ql, i.qo, i.qg, i.qw, i.rga, i.salinidad, i.ph, transactionID])
+                            let newRow = [wellFormacionID, i.fecha, i.tiempo, i.estrangulador, i.ptp, i.ttp, i.pbaj, i.tbaj, i.psep, i.tsep, i.ql, i.qo, i.qg, i.qw, i.rga, i.salinidad, i.ph, transactionID]
+                            if (action === 'save') {
+                                newRow.push(i.error)
+                            }
+                            values.push(newRow)
                         })
                         connection.query((action === 'save' ? INSERT_WELL_AFOROS_QUERY.save : INSERT_WELL_AFOROS_QUERY.submit), [values], (err, results) => {
                           console.log('well aforos', err)
@@ -1207,7 +1277,11 @@ export const create = async (body, action, cb) => {
 
                           values = []
                           produccionData.forEach(i => {
-                            values.push([wellFormacionID, i.fecha, i.dias, i.qo, i.qw, i.qg, i.qgi, i.qo_vol, i.qw_vol, i.qg_vol, i.qgi_vol, i.np, i.wp, i.gp, i.gi, i.rga, i.fw, transactionID])
+                            let newRow = [wellFormacionID, i.fecha, i.dias, i.qo, i.qw, i.qg, i.qgi, i.qo_vol, i.qw_vol, i.qg_vol, i.qgi_vol, i.np, i.wp, i.gp, i.gi, i.rga, i.fw, transactionID]
+                            if (action === 'save') {
+                                newRow.push(i.error)
+                            }
+                            values.push(newRow)
                           })
 
                           connection.query((action === 'save' ? INSERT_WELL_PRODUCCION_QUERY.save : INSERT_WELL_PRODUCCION_QUERY.submit), [values], (err, results) => {
@@ -1249,9 +1323,11 @@ export const create = async (body, action, cb) => {
                                 }
 
 
+
                                 query = tipoDeIntervenciones === 'estimulacion' ? (action === 'save' ? INSERT_INTERVENTION_ESIMULACION_QUERY.save : INSERT_INTERVENTION_ESIMULACION_QUERY.submit) : tipoDeIntervenciones === 'acido' ? (action === 'save' ? INSERT_INTERVENTION_ACIDO_QUERY.save : INSERT_INTERVENTION_ACIDO_QUERY.submit) : (action === 'save' ? INSERT_INTERVENTION_APUNTALADO_QUERY.save : INSERT_INTERVENTION_APUNTALADO_QUERY.submit)
 
-                                values = tipoDeIntervenciones === 'estimulacion' ? [
+                                if (tipoDeIntervenciones === 'estimulacion') {
+                                  values = [
                                     interventionID, wellFormacionID, tipoDeEstimulacion, volumenPrecolchonN2, volumenSistemaNoReativo, volumenSistemaReactivo, volumenSistemaDivergente,
                                     volumenDesplazamientoLiquido, volumenDesplazamientoN2, volumenTotalDeLiquido,
                                     tipoDeColocacion, tiempoDeContacto, penetracionRadial, longitudDeAgujeroDeGusano,
@@ -1261,18 +1337,35 @@ export const create = async (body, action, cb) => {
                                     estIncGastoCompromisoQg, obervacionesEstIncEstim, transactionID
                                   ]
 
-                                  : tipoDeIntervenciones === 'acido' ? [
-                                      interventionID, wellFormacionID, 
-                                      volumenPrecolchonN2, volumenSistemaNoReativo, volumenSistemaReactivo, volumenSistemaDivergente,
-                                    volumenDesplazamientoLiquido, volumenDesplazamientoN2, volumenTotalDeLiquido, 
-                                    moduloYoungArena, moduloYoungLutitas, relacPoissonArena,
-                                      relacPoissonLutatas, gradienteDeFractura, densidadDeDisparos, diametroDeDisparos, 
-                                      longitudTotal, longitudEfectivaGrabada, alturaGrabada, anchoPromedio, concentracionDelAcido,
-                                      conductividad, fcd, presionNeta, eficienciaDeFluidoDeFractura, estIncEstrangulador, estIncPtp, estIncTtp, estIncPbaj, estIncTbaj,
-                                      estIncPtr, estIncQl, estIncQo, estIncQg, estIncQw,
-                                      estIncRGA, estIncSalinidad, estIncIP, estIncDeltaP, estIncGastoCompromisoQo,
-                                      estIncGastoCompromisoQg, obervacionesEstIncAcido, transactionID
-                                    ] : [
+                                  if (action === 'save') {
+                                    values.push(finalObj.propuestaEstimulacion.hasErrors === true ? 1 : 0)
+                                    values.push(finalObj.resultadosSimulacionEstimulacion.hasErrors === true ? 1 : 0)
+                                    values.push(finalObj.estIncProduccionEstimulacion.hasErrors === true ? 1 : 0)
+                                  }
+
+                                }
+                                else if (tipoDeIntervenciones === 'acido'){ 
+                                  values = [
+                                    interventionID, wellFormacionID, 
+                                    volumenPrecolchonN2, volumenSistemaNoReativo, volumenSistemaReactivo, volumenSistemaDivergente,
+                                  volumenDesplazamientoLiquido, volumenDesplazamientoN2, volumenTotalDeLiquido, 
+                                  moduloYoungArena, moduloYoungLutitas, relacPoissonArena,
+                                    relacPoissonLutatas, gradienteDeFractura, densidadDeDisparos, diametroDeDisparos, 
+                                    longitudTotal, longitudEfectivaGrabada, alturaGrabada, anchoPromedio, concentracionDelAcido,
+                                    conductividad, fcd, presionNeta, eficienciaDeFluidoDeFractura, estIncEstrangulador, estIncPtp, estIncTtp, estIncPbaj, estIncTbaj,
+                                    estIncPtr, estIncQl, estIncQo, estIncQg, estIncQw,
+                                    estIncRGA, estIncSalinidad, estIncIP, estIncDeltaP, estIncGastoCompromisoQo,
+                                    estIncGastoCompromisoQg, obervacionesEstIncAcido, transactionID
+                                  ]
+
+                                  if (action === 'save') {
+                                    values.push(finalObj.propuestaAcido.hasErrors === true ? 1 : 0)
+                                    values.push(finalObj.resultadosSimulacionAcido.hasErrors === true ? 1 : 0)
+                                    values.push(finalObj.estIncProduccionAcido.hasErrors === true ? 1 : 0)
+                                  }
+                                }
+                                else if (tipoDeIntervenciones === 'apuntalado') {
+                                  values = [
                                       interventionID, wellFormacionID, 
                                       volumenPrecolchonN2, volumenSistemaNoReativo, volumenSistemaReactivo, volumenSistemaDivergente,
                                         volumenDesplazamientoLiquido, volumenDesplazamientoN2, volumenTotalDeLiquido, 
@@ -1285,8 +1378,16 @@ export const create = async (body, action, cb) => {
                                       estIncRGA, estIncSalinidad, estIncIP, estIncDeltaP, estIncGastoCompromisoQo,
                                       estIncGastoCompromisoQg, obervacionesEstIncApuntalado, transactionID
                                     ]
+                                  
+                                  if (action === 'save') {
+                                    values.push(finalObj.propuestaApuntalado.hasErrors === true ? 1 : 0)
+                                    values.push(finalObj.resultadosSimulacionApuntalado.hasErrors === true ? 1 : 0)
+                                    values.push(finalObj.estIncProduccionApuntalado.hasErrors === true ? 1 : 0)
+                                  }    
+                                } 
 
-
+                                console.log(query)
+                                console.log(values)
                                 connection.query(query, values, (err, results) => {
                                   console.log('intervention', err)
                                   console.log('intervention', results)
@@ -1333,7 +1434,12 @@ export const create = async (body, action, cb) => {
                                       if (cedulaData) {
                                         cedulaData.forEach(i => {
                                           let cedulaID = Math.floor(Math.random() * 1000000000)
-                                          values.push([cedulaID, interventionID, wellFormacionID, i.etapa, i.sistema, i.nombreComercial, i.volLiquid, i.gastoN2, i.gastoLiqudo, i.gastoEnFondo, i.calidad, i.volN2, i.volLiquidoAcum, i.volN2Acum, i.relN2Liq, i.tiempo, propuestaCompany, transactionID])
+                                          let newRow = [cedulaID, interventionID, wellFormacionID, i.etapa, i.sistema, i.nombreComercial, i.volLiquid, i.gastoN2, i.gastoLiqudo, i.gastoEnFondo, i.calidad, i.volN2, i.volLiquidoAcum, i.volN2Acum, i.relN2Liq, i.tiempo, propuestaCompany, transactionID]
+                                          if (action === 'save') {
+                                            newRow.push(i.error)
+                                          }
+                                          values.push(newRow)
+
                                         })  
                                       }
                                       else {
@@ -1346,7 +1452,12 @@ export const create = async (body, action, cb) => {
                                       if (cedulaData) {
                                         cedulaData.forEach(i => {
                                           let cedulaID = Math.floor(Math.random() * 1000000000)
-                                          values.push([cedulaID, interventionID, wellFormacionID, i.etapa, i.sistema, i.nombreComercial, i.tipoDeApuntalante, i.concentraciDeApuntalante, i.volLiquid, i.gastoN2, i.gastoLiqudo, i.gastoEnFondo, i.calidad, i.volN2, i.volLiquidoAcum, i.volN2Acum, i.relN2Liq, i.tiempo, propuestaCompany, transactionID])
+                                          let newRow = [cedulaID, interventionID, wellFormacionID, i.etapa, i.sistema, i.nombreComercial, i.tipoDeApuntalante, i.concentraciDeApuntalante, i.volLiquid, i.gastoN2, i.gastoLiqudo, i.gastoEnFondo, i.calidad, i.volN2, i.volLiquidoAcum, i.volN2Acum, i.relN2Liq, i.tiempo, propuestaCompany, transactionID]
+                                          if (action === 'save') {
+                                            newRow.push(i.error)
+                                          }
+                                          values.push(newRow)
+
                                         })   
                                       }
                                       else {
@@ -1371,7 +1482,11 @@ export const create = async (body, action, cb) => {
                                           values = []
                                           estimacionCostosData.forEach(i => {
                                             let costID = Math.floor(Math.random() * 1000000000)
-                                            values.push([costID, interventionID, i.item, i.unit, propuestaCompany, i.cost, i.costDLS, i.MNXtoDLS, transactionID])
+                                            let newRow = [costID, interventionID, i.item, i.unit, propuestaCompany, i.cost, i.costDLS, i.MNXtoDLS, transactionID]
+                                            if (action === 'save') {
+                                                newRow.push(finalObj.estCost.hasErrors)
+                                            }
+                                            values.push(newRow)
                                           })
 
                                           connection.query((action === 'save' ? INSERT_COSTS_QUERY.save : INSERT_COSTS_QUERY.submit), [values], (err, results) => {
@@ -1549,23 +1664,35 @@ export const create = async (body, action, cb) => {
 
                                                             connection.query(action === 'save' ? DUMMY_QUERY : `UPDATE FieldWellMapping set HAS_DATA = 1 WHERE WELL_FORMACION_ID = ?`, [wellFormacionID], (err, results) => {
                                                                
-
                                                                 values = []
 
+                                                                let tableError = finalObj.historialDeIntervenciones.hasErrors === true ? 1 : 0
                                                                 historicoEstimulacionData.forEach(i => {
-                                                                    values.push([wellFormacionID, 'estimulacion', i.fecha, i.tipoDeTratamiento, i.objetivo, i.compania, i.acidoVol, i.acidoNombre, i.solventeVol, i.solventeNombre, i.divergenteVol, i.divergenteNombre, i.totalN2, i.beneficioProgramado, i.beneficioOficial, -9999, -9999, -9999, -9999, -9999, -9999, -9999, -9999, -9999, -9999, -9999, -9999, -9999, transactionID ])
+                                                                    if (action === 'save') {
+                                                                        values.push([wellFormacionID, 'estimulacion', i.fecha, i.tipoDeTratamiento, i.objetivo, i.compania, i.acidoVol, i.acidoNombre, i.solventeVol, i.solventeNombre, i.divergenteVol, i.divergenteNombre, i.totalN2, i.beneficioProgramado, i.beneficioOficial, -9999, -9999, -9999, -9999, -9999, -9999, -9999, -9999, -9999, -9999, -9999, -9999, -9999, i.error, tableError, transactionID ])
+                                                                    }
+                                                                    else {
+                                                                        values.push([wellFormacionID, 'estimulacion', i.fecha, i.tipoDeTratamiento, i.objetivo, i.compania, i.acidoVol, i.acidoNombre, i.solventeVol, i.solventeNombre, i.divergenteVol, i.divergenteNombre, i.totalN2, i.beneficioProgramado, i.beneficioOficial, -9999, -9999, -9999, -9999, -9999, -9999, -9999, -9999, -9999, -9999, -9999, -9999, -9999, transactionID ])
+                                                                    }
+                                                    
                                                                 })
                                                                 historicoAcidoData.forEach(i => {
-                                                                    values.push([wellFormacionID, 'acido', i.fecha, i.tipoDeTratamiento, i.objetivo, i.compania, -9999, -9999, -9999, -9999, -9999, -9999, -9999, i.beneficioProgramado, i.beneficioOficial, i.base, i.cima, i.longitudGravada, i.alturaGravada, i.anchoGravado, i.conductividad, i.fcd, i.presionNeta, i.fluidoFractura, -9999, -9999, -9999, -9999, transactionID])
+                                                                    if (action === 'save') {
+                                                                        values.push([wellFormacionID, 'acido', i.fecha, i.tipoDeTratamiento, i.objetivo, i.compania, -9999, -9999, -9999, -9999, -9999, -9999, -9999, i.beneficioProgramado, i.beneficioOficial, i.base, i.cima, i.longitudGravada, i.alturaGravada, i.anchoGravado, i.conductividad, i.fcd, i.presionNeta, i.fluidoFractura, -9999, -9999, -9999, -9999, i.error, tableError, transactionID])
+                                                                    }
+                                                                    else {
+                                                                        values.push([wellFormacionID, 'acido', i.fecha, i.tipoDeTratamiento, i.objetivo, i.compania, -9999, -9999, -9999, -9999, -9999, -9999, -9999, i.beneficioProgramado, i.beneficioOficial, i.base, i.cima, i.longitudGravada, i.alturaGravada, i.anchoGravado, i.conductividad, i.fcd, i.presionNeta, i.fluidoFractura, -9999, -9999, -9999, -9999, transactionID])
+                                                                    }
                                                                 })
                                                                 historicoApuntaladoData.forEach(i => {
-                                                                    values.push([wellFormacionID, 'apuntalado', i.fecha, i.tipoDeTratamiento, i.objetivo, i.compania, -9999, -9999, -9999, -9999, -9999, -9999, -9999, i.beneficioProgramado, i.beneficioOficial, i.base, i.cima, -9999, -9999, -9999, i.conductividad, i.fcd, i.presionNeta, i.fluidoFractura, i.longitudApuntalada, i.alturaTotalDeFractura, i.anchoPromedio, i.concentracionAreal, transactionID])
+                                                                    if (action === 'save') {
+                                                                        values.push([wellFormacionID, 'apuntalado', i.fecha, i.tipoDeTratamiento, i.objetivo, i.compania, -9999, -9999, -9999, -9999, -9999, -9999, -9999, i.beneficioProgramado, i.beneficioOficial, i.base, i.cima, -9999, -9999, -9999, i.conductividad, i.fcd, i.presionNeta, i.fluidoFractura, i.longitudApuntalada, i.alturaTotalDeFractura, i.anchoPromedio, i.concentracionAreal, i.error, tableError, transactionID])
+                                                                    }
+                                                                    else {
+                                                                        values.push([wellFormacionID, 'apuntalado', i.fecha, i.tipoDeTratamiento, i.objetivo, i.compania, -9999, -9999, -9999, -9999, -9999, -9999, -9999, i.beneficioProgramado, i.beneficioOficial, i.base, i.cima, -9999, -9999, -9999, i.conductividad, i.fcd, i.presionNeta, i.fluidoFractura, i.longitudApuntalada, i.alturaTotalDeFractura, i.anchoPromedio, i.concentracionAreal, transactionID])
+                                                                    }
+                                                                    
                                                                 })
-
-                                                                values.forEach(i => {
-                                                                    console.log(i.length)
-                                                                })
-
 
                                                                 connection.query(action === 'save' ? INSERT_HIST_INTERVENCIONES_NEW_QUERY.save : INSERT_HIST_INTERVENCIONES_NEW_QUERY.submit, [values], (err, results) => {
                                                                     console.log('historial interventions', err)

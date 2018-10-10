@@ -2,7 +2,9 @@ import React from 'react'
 import Select from 'react-select'
 import DatePicker from 'react-datepicker'
 import MaskedTextInput from "react-text-mask";
+import Cleave from 'cleave.js/react'
 import moment from 'moment'
+import { checkEmpty, checkDate } from '../../../lib/errorCheckers'
 import datepicker from "react-datepicker/dist/react-datepicker.css";
 
 const generateErrorElements = ( name = '', errors = [] ) => {
@@ -15,25 +17,33 @@ const generateErrorElements = ( name = '', errors = [] ) => {
   return ''
 }
 
-export const InputRow = ({ header, type='number', name, unit, value, onChange, onBlur, index, errors = [], style = {} }) => {
-
+export const InputRow = ({ header, type='number', name, unit, value, onChange, onBlur, index, errors = {}, style = {} }) => {
   let handleChange = (e) => {
-    onChange(e.target.value, e)
+    onChange(e.target.rawValue, e)
   }
 
-  const errorElements = generateErrorElements(name, errors)
-
+  value = value === null ? '' : value
   return (
     <div className='input-row' style={style}>
       <div className='label'>
         {header}
       </div>
-      <input className='input' type={type} value={value} onChange={handleChange} onBlur={onBlur} name={name} index={index} required>
-      </input>
+      <Cleave
+        className="input"
+        options={{
+          numeral: true,
+          numeralThousandsGroupStyle: 'thousand'
+        }}
+        value={value}
+        onChange={handleChange}
+        onBlur={(e) => checkEmpty(e.target.rawValue, name, errors, onBlur)}
+        index={index}
+        name={name}
+      />
       <div className='unit'>
         {unit}
       </div>
-      { errorElements }
+      {errors[name] !== undefined && errors[name] !== null && <div className="error">{errors[name].value}</div>}
     </div>
     )
 }
@@ -55,21 +65,21 @@ export const CalculatedValue = ({ header, name, unit, value, style={} }) => {
   )
 }
 
-export const InputRowUnitless = ({ header, type='text', name, unit, value, onChange, onBlur, index={index}, errors = [] }) => {
+export const InputRowUnitless = ({ ref, header, type='text', name, unit, value, onChange, onBlur, index={index}, errors = {} }) => {
 
   let handleChange = (e) => {
     onChange(e.target.value, e)
   }
 
-  const errorElements = generateErrorElements(name, errors)
+  // const errorElements = generateErrorElements(name, errors)
  
   return (
     <div className='input-row input-row-unitless'>
       <div className='label'>
         {header}
       </div>
-      <input className='input' type={type} value={value} onChange={handleChange} onBlur={onBlur} name={name} index={index}/>
-      { errorElements }
+      <input className='input' type={type} value={value} onChange={handleChange} onBlur={(e) => checkEmpty(e.target.value, name, errors, onBlur)} name={name} index={index}/>
+      {errors[name] && errors[name].value !== null && <div className="error">{errors[name].value}</div>}
     </div>
     )
 }
@@ -89,7 +99,7 @@ export const InputRowSelectMulti = ({ header, name, value, options, callback, on
   {/* value={options.find(i=>i.value === value) || null}
         onChange={callback}
         onBlur={handleBlur} */}
-
+  console.log('i should display', errors[name])
   return (
     <div className='input-row input-row-unitless'>
       <div className='label'>
@@ -105,6 +115,7 @@ export const InputRowSelectMulti = ({ header, name, value, options, callback, on
         index={index}
         onBlur={handleBlur}
       />
+      {errors[name] !== null && <div className="error">{errors[name].value}</div>}
       {/* { errorElements } */}
     </div>
     )
@@ -126,25 +137,35 @@ export const InputRowSelectUnitless = ({ header, name, value, options, callback,
   }
   
   const errorElements = generateErrorElements(name, errors)
-
+  const realValue = options.find(i=>i.value === value) || null
   return (
     <div className='input-row input-row-unitless'>
       <div className='label'>
         {header}
       </div>
-      <Select placeholder="Seleccionar..." className='input' simpleValue={true} options={options} value={options.find(i=>i.value === value) || null} onChange={callback} onBlur={handleBlur} name={name} index={index} />
-      { errorElements }
+      <Select
+        placeholder="Seleccionar..."
+        className='input'
+        simpleValue={true}
+        options={options}
+        value={realValue}
+        onChange={callback}
+        onBlur={(e) => checkEmpty(realValue, name, errors, onBlur)}
+        name={name}
+        index={index} 
+      />
+      {/* { errorElements } */}
+      {errors[name] !== undefined && errors[name] !== null && <div className="error">{errors[name].value}</div>}
+
     </div>
     )
 }
 
-export const TextAreaUnitless = ({ header, name, unit, className, subheader, value, onChange, index, onBlur, tooltip, errors =[] }) => {
+export const TextAreaUnitless = ({ header, name, unit, className, subheader, value, onChange, index, onBlur, tooltip, errors = {} }) => {
   
   let handleChange = (e) => {
     onChange(e.target.value, e)
   }
-
-  const errorElements = generateErrorElements(name, errors)
 
   return (
     <div className={`input-row input-row-unitless ${className}`}>
@@ -153,9 +174,16 @@ export const TextAreaUnitless = ({ header, name, unit, className, subheader, val
         {subheader ? <br></br>: null}
         {subheader ? subheader : null}
       </div>
-      <textarea type='text' style={{height: '130px'}} value={value} onChange={handleChange} onBlur={onBlur} name={name} index={index}>
+      <textarea 
+        type='text' 
+        style={{height: '130px'}} 
+        value={value} 
+        onChange={handleChange} 
+        onBlur={(e) => checkEmpty(e.target.value, name, errors, onBlur)}
+        name={name} 
+        index={index}>
       </textarea>
-      { errorElements }
+      {errors[name] && errors[name].value !== null && <div className="error">{errors[name].value}</div>}
     </div>
     )
 }
@@ -195,13 +223,24 @@ export const InputRowCosts = ({ header, name, unit, value, onChange, index, onBl
 }
 
 export const InputDate = ({ name, onChange, value, header, onBlur, errors }) => {
-  const errorElements = generateErrorElements(name, errors)
-  let handleSelect = (date, event) => {
-    if(date)
+  // const errorElements = generateErrorElements(name, errors)
+  let handleSelect = (date) => {
+    if (date.isValid()) {
+      checkDate(date, name, errors, onBlur)
       onChange(date.format('YYYY-MM-DD'))
+    }
   }
+
+  function handleBlur(e) {
+    const date = moment(e.target.value, 'DD/MM/YYYY')
+
+    if (!date.isValid() || e.target.value.includes('_')) {
+      checkDate(e.target.value, name, errors, onBlur)
+      onChange(null)
+    }
+  }
+  
   const objValue = value ? moment(value) : null 
- 
   return (
      <div className='input-row input-row-unitless'>
       <div className='label'>
@@ -209,20 +248,22 @@ export const InputDate = ({ name, onChange, value, header, onBlur, errors }) => 
       </div>
       <DatePicker
         customInput={
-              <MaskedTextInput
-                  type="text"
-                  mask={[/\d/, /\d/, "/", /\d/, /\d/, "/", /\d/, /\d/, /\d/, /\d/]}
-              />
+          <MaskedTextInput
+            type="text"
+            mask={[/\d/, /\d/, "/", /\d/, /\d/, "/", /\d/, /\d/, /\d/, /\d/]}
+          />
         }
         isClearable={true}
         dateFormat="L"
         name={name}
         onChange={handleSelect}
-        onBlur={onBlur}
+        onBlur={handleBlur}
         selected={objValue}
         locale="es-mx"
+        showMonthDropdown
+        showYearDropdown
       />
-      {errorElements}
+      {errors[name] && errors[name].value !== null && <div className="error">{errors[name].value}</div>}      
     </div>
     
   )

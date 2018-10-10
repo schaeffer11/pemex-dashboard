@@ -1,6 +1,7 @@
 import { Map, fromJS } from 'immutable'
 
 const initialState = Map({ 
+    hasErrors: true,
 	tipoDeSistemo: 'none',
     presionDeCabeza: '',
     presionDeLineaODeSeparador: '',
@@ -45,12 +46,13 @@ const initialState = Map({
     nivelDinamico: '',
     nivelEstatico: '',
     imgURL: null,
-    checked: []
 })
 
 
 const sistemasArtificialesDeProduccion = (state = initialState, action) => {
   switch (action.type) {
+    case 'set_hasErrorsSistemas':
+      return state.set('hasErrors', fromJS(action.value))
     case 'set_tipoDeSistemo':
     	return state.set('tipoDeSistemo', fromJS(action.value))
     case 'set_presionDeCabeza':
@@ -139,10 +141,6 @@ const sistemasArtificialesDeProduccion = (state = initialState, action) => {
         return state.set('imgURL', fromJS(action.value))
     case 'set_sistemasArtificialesDeProduccion':
         return state = fromJS(action.value)
-    case 'set_forms_checked' :
-        if(action.form == 'sistemasArtificialesDeProduccion')
-          return state.set('checked', fromJS(action.value))
-        return state
     default:
       return state
   }

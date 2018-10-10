@@ -1,5 +1,8 @@
 import { costMap } from '../../lib/maps'
 
+export const setHasErrorsPropuestaEstimulacion = value => ({ type: 'set_hasErrorsPropuestaEstimulacion', value})
+export const setHasErrorsResultadosSimulacionEstimulacion = value => ({ type: 'set_hasErrorsResultadosSimulacionEstimulacion', value})
+export const setHasErrorsEstIncProduccionEstimulacion = value => ({ type: 'set_hasErrorsEstIncProduccionEstimulacion', value})
 
 export const setObjetivo = value => ({ type: 'set_objetivo', value})
 export const setAlcances = value => ({ type: 'set_alcances', value})
@@ -21,7 +24,7 @@ export const setTipoDeEstimulacion = value => ({ type: 'set_tipoDeEstimulacion',
 export const setTipoDeColocacion = value => ({ type: 'set_tipoDeColocacion', value})
 export const setTiempoDeContacto = value => ({ type: 'set_tiempoDeContacto', value})
 export const setCedulaData = (cedula, volumes) => ({
-  type: 'set_cedulaData',
+  type: 'set_cedulaDataEstimulacion',
   volumes,
   cedula: cedula.map((row) => {
     row.etapa = row.index + 1
@@ -29,14 +32,6 @@ export const setCedulaData = (cedula, volumes) => ({
   }),
 })
 
-export const setPruebasDeLaboratorioData = value => ({ type: 'set_pruebasDeLaboratorioData', value})
-export const setEstimacionCostosData = value => ({ 
-	type: 'set_estimacionCostos', 
-	value: value.map(i => {
-		i.unit = i.item.length > 0 && costMap.find(j => j.item === i.item) ? costMap.find(j => j.item === i.item).unit : ''
-		return i
-	})
-})
 
 export const setLabEvidenceImgURL = value => ({ type: 'set_labEvidenceImgURL', value})
 
@@ -63,15 +58,15 @@ export const setEstIncGastoCompromisoQg = value => ({ type: 'set_estIncGastoComp
 export const setObervacionesEstIncEstim = value => ({ type: 'set_obervacionesEstIncEstim', value})
 export const setEstIncProdEstimulationImgURL = value => ({ type: 'set_estIncProdEstimulationImgURL', value})
 
-export const setEstCostoDeRentaDeBarco = value => ({ type: 'set_estCostoDeRentaDeBarco', value})
-export const setEstCostDeSistemaReactivo = value => ({ type: 'set_estCostDeSistemaReactivo', value})
-export const setEstCostDeSistemaNoReactivo = value => ({ type: 'set_estCostDeSistemaNoReactivo', value})
-export const setEstCostDeDivergenes = value => ({ type: 'set_estCostDeDivergenes', value})
-export const setEstCostDeN2 = value => ({ type: 'set_estCostDeN2', value})
-export const setEstCostHCL = value => ({ type: 'set_estCostHCL', value})
 
-export const setChecked = (value, form)  => ({
-   type: 'set_forms_checked',
-   form: form,
-   value: value
+
+export const setPruebasDeLaboratorioData = value => ({ type: 'set_pruebasDeLaboratorioData', value})
+
+export const setEstimacionCostosData = value => ({ 
+  type: 'set_estimacionCostos', 
+  value: value.map(i => {
+    i.unit = i.length > 0 && costMap.find(j => j.item === i.item) ? costMap.find(j => j.item === i.item).unit : ''
+    return i
+  })
 })
+export const setHasErrorsEstCosts = value => ({ type: 'set_hasErrorsEstCosts', value})

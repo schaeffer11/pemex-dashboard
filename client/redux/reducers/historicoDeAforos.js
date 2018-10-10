@@ -1,6 +1,7 @@
 import { Map, fromJS } from 'immutable'
 
 const initialState = fromJS({
+    hasErrors: true,
     aforosData: [{
         fecha: null,
         tiempo: '',
@@ -18,19 +19,17 @@ const initialState = fromJS({
         rga: '',
         salinidad: '',
         ph: '',
+        error: true,
     }],
-    checked: [],
 })
 
 
 const historicoDeAforos = (state = initialState, action) => {
   switch (action.type) {
+    case 'set_hasErrorsHistoricoDeAforos':
+      return state.set('hasErrors', fromJS(action.value))
     case 'set_aforosData':
         return state.set('aforosData', fromJS(action.value))
-    case 'set_forms_checked' :
-        if(action.form == 'historicoDeAforos')
-           return state.set('checked', fromJS(action.value))
-        return state
     case 'set_historicoDeAforos':
         return state = fromJS(action.value)
     default:

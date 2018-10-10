@@ -1,0 +1,118 @@
+.diagnostico {
+  padding: .7em;
+
+  .title {
+    font-size: 1.5em;
+    font-weight: bold;
+    padding-bottom: 1em;
+    margin-bottom: 1em;
+    color: #585858;
+    border-bottom: 1px solid #585858;
+  }
+
+  .heading {
+    width: 100%;
+    clear: both;
+    padding: 25px;
+    margin-bottom: 5px;
+    display: table;
+
+    & > div {
+      width: 50%;
+      display: table-cell;
+    }
+  }
+
+  .header {
+    > div {
+      display: inline-block;
+      padding: 5px;
+      background: $table-row-alt-color;
+      font-weight: bold;
+    }
+  }
+
+  .row-title {
+    background: $table-row-alt-color;
+    margin: 2px 0;
+    padding: 5px;
+    font-weight: bold;
+  }
+
+  .error {
+    text-align: center;
+    color: red;
+    width: 100%;
+  }
+
+  form {
+    padding: 20px 40px;
+
+    .description {
+      width: 50%;
+    }
+
+    .bool {
+      width: 10%;
+
+      label {display: inline;}
+    }
+
+    .observations {
+      width: 40%;
+    }
+
+    .trow {
+      background: $table-row-color;
+      margin: 2px 0;
+
+      & > div {
+        padding: 5px;
+        display: inline-block;
+        vertical-align: top;
+        font-weight: 100;
+
+        &.indented {
+          padding: 5px 20px 5px;
+        }
+      }
+    }
+
+    .fecha > div {
+      display: inline-block;
+    }
+
+    input {
+      padding: 0.2em 0.4em;
+      border-radius: 0.3em;
+      border: 1px solid #ddd;
+      font-weight: 200;
+      outline: none;
+      font-size: 12px;
+    }
+
+    textarea {
+      width: 100%;
+      height: 80px;
+      box-sizing: border-box;
+      resize: none;
+      padding: 5px;
+      font-weight: 100;
+      font-size: .875em;
+    }
+
+    label {
+      color: black;
+      font-weight: 500;
+      font-size: .9em;
+      margin-right: 1em;
+    }
+
+    button {
+      display: block;
+      margin: auto;
+    }
+  }
+}
+
+

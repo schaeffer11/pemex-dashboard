@@ -14,6 +14,7 @@ const initialState = Map({
     volumenDesplazamientoN2: '',
     volumenTotalDeLiquido: '',
     */
+    hasErrors: true,
     propuestaCompany: '',
     tipoDeEstimulacion: '',
     tipoDeColocacion: '',
@@ -21,7 +22,7 @@ const initialState = Map({
     cedulaData: [{
         etapa: 1,
         index: 0,
-        // intervalo: '',
+        error: true,
         nombreComercial: '',
         sistema: '',
         volLiquid: '',
@@ -35,12 +36,13 @@ const initialState = Map({
         relN2Liq: '',
         tiempo: '',
     }],
-    checked: []
 })
 
 
 const propuestaEstimulacion = (state = initialState, action) => {
   switch (action.type) {
+      case 'set_hasErrorsPropuestaEstimulacion':
+      return state.set('hasErrors', fromJS(action.value))
     case 'set_intervalo':
         return state.set('intervalo', fromJS(action.value))
     case 'set_longitudDeIntervalo':
@@ -63,16 +65,12 @@ const propuestaEstimulacion = (state = initialState, action) => {
         return state.set('volumenDesplazamientoN2', fromJS(action.value))
     case 'set_volumenTotalDeLiquido':
         return state.set('volumenTotalDeLiquido', fromJS(action.value))
-    case 'set_cedulaData':
+    case 'set_cedulaDataEstimulacion':
         let newState = state.set('cedulaData', fromJS(action.cedula))
         if (action.volumes !== null) {
             newState = newState.mergeDeep(action.volumes)
         }
         return newState
-    case 'set_forms_checked' :
-        if(action.form == 'propuestaEstimulacion')
-            return state.set('checked', fromJS(action.value))
-        return state
     case 'set_propuestaCompany':
         return state.set('propuestaCompany', fromJS(action.value))
     case 'set_tipoDeEstimulacion':

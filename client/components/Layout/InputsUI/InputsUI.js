@@ -2,6 +2,8 @@ import React, { Component } from 'react'
 import autobind from 'autobind-decorator'
 import axios from 'axios';
 import { connect } from 'react-redux'
+import AriaModal from 'react-aria-modal'
+import '../../../styles/components/_query_modal.css'
 
 import GeneralData from './Components/GeneralData'
 import Tabs from './Components/Tabs'
@@ -13,8 +15,7 @@ import { setShowForms } from '../../../redux/actions/global'
 import { submitForm } from '../../../redux/actions/pozoFormActions'
 import Notification from '../Common/Notification'
 import Loading from '../Common/Loading'
-import AriaModal from 'react-aria-modal'
-import '../../../styles/components/_query_modal.css'
+import { setHasSubmitted } from '../../../redux/actions/global'
 
 @autobind class InputsUI extends Component {
   constructor(props) {
@@ -38,25 +39,6 @@ import '../../../styles/components/_query_modal.css'
   }
 
 
-  handleSelectTab(val) {
-    let selectedSub = val === 'Pozo' ? Object.keys(pagesPozo)[0] : Object.keys(pagesIntervenciones)[0]
-
-    this.setState({
-      selectedTab: val,
-      selectedSubtab: selectedSub,
-      error: '',
-      saveName: null,
-      comment: '',
-    })
-  }
-
-  handleSelectSubtab(val) {
-
-    this.setState({
-      selectedSubtab: val,
-    })
-  }
-
   componentDidMount() {
     const { token } = this.props
     const headers = {
@@ -76,18 +58,73 @@ import '../../../styles/components/_query_modal.css'
 
   }
 
-  componentDidUpdate(prevProps) {
 
+
+  handleSelectTab(val) {
+    let selectedSub = val === 'Pozo' ? Object.keys(pagesPozo)[0] : Object.keys(pagesIntervenciones)[0]
+
+    this.setState({
+      selectedTab: val,
+      selectedSubtab: selectedSub,
+      error: '',
+      saveName: null,
+      comment: '',
+    })
   }
+
+  handleSelectSubtab(val) {
+
+    this.setState({
+      selectedSubtab: val,
+    })
+  }
+
 
   handleSubmit(action) {
     let { saveName } = this.state
+    let { tipoDeIntervenciones, hasErrorsFichaTecnicaDelPozo, hasErrorsFichaTecnicaDelCampo, hasErrorsHistorialDeIntervenciones, hasErrorsEvaluacionPetrofisica, 
+      hasErrorsMecanicoYAparejoDeProduccion, hasErrorsAnalisisDelAgua, hasErrorsHistoricoDePresionCampo, hasErrorsHistoricoDePresionPozo,
+      hasErrorsPropuestaEstimulacion, hasErrorsPropuestaApuntalado, hasErrorsPropuestaAcido, hasErrorsResultadosSimulacionAcido, 
+      hasErrorsResultadosSimulacionEstimulacion, hasErrorsResultadosSimulacionApuntalado, hasErrorsEstIncProduccionAcido,
+      hasErrorsEstIncProduccionEstimulacion, hasErrorsEstIncProduccionApuntalado, hasErrorsEstCosts, hasErrorsHistoricoDeProduccion,
+      setHasSubmitted, hasErrorsHistoricoDeAforos, hasErrorsSistemasArtificialesDeProduccion  } = this.props
 
 
-    this.props.submitPozoForm(action, this.props.token, saveName)
-    this.setState({'error': ''})
+    if (action === 'submit') {
+      let hasErrors = false
+      setHasSubmitted(true)
+      if (hasErrorsFichaTecnicaDelPozo  || hasErrorsFichaTecnicaDelCampo || hasErrorsHistorialDeIntervenciones || hasErrorsEvaluacionPetrofisica
+        || hasErrorsMecanicoYAparejoDeProduccion || hasErrorsAnalisisDelAgua || hasErrorsSistemasArtificialesDeProduccion || hasErrorsHistoricoDePresionPozo || hasErrorsHistoricoDePresionCampo
+        || hasErrorsHistoricoDeProduccion || hasErrorsHistoricoDeAforos) {
+        hasErrors = true
+      }
+      if (tipoDeIntervenciones === 'estimulacion' && (hasErrorsPropuestaEstimulacion || hasErrorsResultadosSimulacionEstimulacion || hasErrorsEstIncProduccionEstimulacion)) {
+        hasErrors = true
+      }
+      else if (tipoDeIntervenciones === 'acido' && (hasErrorsPropuestaAcido || hasErrorsResultadosSimulacionAcido || hasErrorsEstIncProduccionAcido)) {
+        hasErrors = true
+      }      
+      else if (tipoDeIntervenciones === 'apuntalado' && (hasErrorsPropuestaApuntalado || hasErrorsResultadosSimulacionApuntalado || hasErrorsEstIncProduccionApuntalado)) {
+        hasErrors = true
+      }
+      if (hasErrorsEstCosts) {
+        hasErrors = true
+      }
 
-    this.deactivateModal()
+      if (!hasErrors) {
+
+        this.props.submitPozoForm(action, this.props.token, saveName)
+        this.setState({'error': ''})
+      }
+      else {
+        console.log('there was an errror, im out')
+      }
+    }
+    else {
+      this.props.submitPozoForm(action, this.props.token, saveName)
+      this.setState({'error': ''})
+      this.deactivateModal()
+    }
   }
 
   scrollToBottom() {
@@ -122,10 +159,6 @@ import '../../../styles/components/_query_modal.css'
     })
   }
 
-  validate(){
-    return this.pozoMultiStepFormRef.current.getWrappedInstance().validate() &
-        this.intervencionesFormRef.current.getWrappedInstance().validate()
-  }
 
   buildModal() {
     let {saveName} = this.state
@@ -199,10 +232,7 @@ import '../../../styles/components/_query_modal.css'
     })
 
   }
-
-
-
-
+ 
 
   buildBugModal() {
     let {comment, bugResponseError, bugResponseSuccess} = this.state
@@ -251,12 +281,9 @@ import '../../../styles/components/_query_modal.css'
 
     if (selectedTab === 'Pozo' && pagesPozo[selectedSubtab]) {
       form = this.pozoMultiStepForm
-      otherForm = this.intervencionesForm
-
     }
     else if (selectedTab === 'Intervenciones') {
       form = this.intervencionesForm
-      otherForm = this.pozoMultiStepForm
     }
 
     if (!showForms) {
@@ -272,9 +299,6 @@ import '../../../styles/components/_query_modal.css'
           <Tabs handleSelectTab={this.handleSelectTab} selectedTab={selectedTab} />
           <div className="tab-content">
             { form }
-          </div>
-          <div style={{display: 'none'}}>
-            { otherForm }
           </div>
           <button className="submit save-button"  onClick={(e) => this.activateModal()}>Guardar</button>
           <button className="submit submit-button" onClick={(e) => this.handleSubmit('submit')}>Enviar</button>
@@ -299,10 +323,33 @@ const mapStateToProps = state => ({
   global: state.get('global'),
   user: state.getIn(['user', 'id']),
   formsState: state.get('forms'),
-  token: state.getIn(['user', 'token'])
+  token: state.getIn(['user', 'token']),
+  hasErrorsFichaTecnicaDelPozo: state.getIn(['fichaTecnicaDelPozo', 'hasErrors']),
+  hasErrorsFichaTecnicaDelCampo: state.getIn(['fichaTecnicaDelCampo', 'hasErrors']),
+  hasErrorsHistorialDeIntervenciones: state.getIn(['historialDeIntervenciones', 'hasErrors']),
+  hasErrorsEvaluacionPetrofisica: state.getIn(['evaluacionPetrofisica', 'hasErrors']),
+  hasErrorsMecanicoYAparejoDeProduccion: state.getIn(['mecanicoYAparejoDeProduccion', 'hasErrors']),
+  hasErrorsAnalisisDelAgua: state.getIn(['analisisDelAgua', 'hasErrors']),
+  hasErrorsSistemasArtificialesDeProduccion: state.getIn(['sistemasArtificialesDeProduccion', 'hasErrors']),
+  hasErrorsHistoricoDePresionCampo: state.getIn(['historicoDePresionCampo', 'hasErrors']),
+  hasErrorsHistoricoDePresionPozo: state.getIn(['historicoDePresionPozo', 'hasErrors']),
+  hasErrorsHistoricoDeProduccion: state.getIn(['historicoDeProduccion', 'hasErrors']),
+  hasErrorsHistoricoDeAforos: state.getIn(['historicoDeAforos', 'hasErrors']),
+  hasErrorsPropuestaEstimulacion: state.getIn(['propuestaEstimulacion', 'hasErrors']),
+  hasErrorsPropuestaApuntalado: state.getIn(['propuestaApuntalado', 'hasErrors']),
+  hasErrorsPropuestaAcido: state.getIn(['propuestaAcido', 'hasErrors']),
+  hasErrorsResultadosSimulacionAcido: state.getIn(['resultadosSimulacionAcido', 'hasErrors']),
+  hasErrorsResultadosSimulacionEstimulacion: state.getIn(['resultadosSimulacionEstimulacion', 'hasErrors']),
+  hasErrorsResultadosSimulacionApuntalado: state.getIn(['resultadosSimulacionApuntalado', 'hasErrors']),
+  hasErrorsEstIncProduccionAcido: state.getIn(['estIncProduccionAcido', 'hasErrors']),
+  hasErrorsEstIncProduccionEstimulacion: state.getIn(['estIncProduccionEstimulacion', 'hasErrors']),
+  hasErrorsEstIncProduccionApuntalado: state.getIn(['estIncProduccionApuntalado', 'hasErrors']),
+  hasErrorsEstCosts: state.getIn(['estCost', 'hasErrors']),
+  tipoDeIntervenciones: state.getIn(['objetivoYAlcancesIntervencion', 'tipoDeIntervenciones']),
 })
 
 const mapDispatchToProps = dispatch => ({
+  setHasSubmitted: val => dispatch(setHasSubmitted(val)),
   submitPozoForm: (action, token, name) => {dispatch(submitForm(action, token, name))},
 })
 

@@ -54,7 +54,7 @@ import EstimacionCostos from '../EstimacionCostos'
 
 
   render() {
-    let { setShowForms } = this.props
+    let { setShowForms, hasSubmitted, propuestaHasErrors, resultadosSimulacionHasErrors, estIncProduccionHasErrors, estCostsHasErrors } = this.props
      let className = 'subtab'
 
 
@@ -67,6 +67,7 @@ import EstimacionCostos from '../EstimacionCostos'
       {'title' : 'Estimación de Costos de Estimulación', 'content': <EstimacionCostos /> }
     ]
 
+   let errors = [propuestaHasErrors, false, false, resultadosSimulacionHasErrors, estIncProduccionHasErrors, estCostsHasErrors]
 
      let title = forms[this.state.currentStep].title
 
@@ -74,8 +75,11 @@ import EstimacionCostos from '../EstimacionCostos'
          <div className={`multistep-form`}>
           <div className="subtabs">
               {forms.map( (tab, index) => {
-                 let active = this.state.currentStep === index ? 'active' : ''; 
-                   return <div className={`${className} ${active}`} onClick={() => this.handleClick(index)} key={index}><span></span> {tab.title} </div>
+                let active = this.state.currentStep === index ? 'active' : '';
+                let error = errors[index]
+                const errorClass = (error && hasSubmitted) ? 'error' : ''; 
+
+                   return <div className={`${className} ${active} ${errorClass}`} onClick={() => this.handleClick(index)} key={index}><span></span> {tab.title} </div>
                  }
               )}
           </div>
@@ -100,6 +104,11 @@ const mapDispatchToProps = dispatch => ({
 })
 
 const mapStateToProps = state => ({
+  hasSubmitted: state.getIn(['global', 'hasSubmitted']),
+  propuestaHasErrors: state.getIn(['propuestaEstimulacion', 'hasErrors']),
+  resultadosSimulacionHasErrors: state.getIn(['resultadosSimulacionEstimulacion', 'hasErrors']),
+  estIncProduccionHasErrors: state.getIn(['estIncProduccionEstimulacion', 'hasErrors']),
+  estCostsHasErrors: state.getIn(['estCost', 'hasErrors']),
 })
 
 export default connect(mapStateToProps, mapDispatchToProps)(EstimulacionMultiStepForm)

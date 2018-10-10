@@ -1,6 +1,7 @@
 import { Map, fromJS } from 'immutable'
 
 const initialState = Map({ 
+    hasErrors: true,
     longitudApuntalada: '',
     alturaTotalDeFractura: '',
     anchoPromedio: '',
@@ -9,13 +10,14 @@ const initialState = Map({
     fcd: '',
     presionNeta: '',
     eficienciaDeFluidoDeFractura: '',
-    imgURL: null,
-    checked: []
+    imgURL: null
 })
 
 
 const resultadosSimulacionApuntalado = (state = initialState, action) => {
   switch (action.type) {
+    case 'set_hasErrorsResultadosSimulacionApuntalado':
+      return state.set('hasErrors', fromJS(action.value))
     case 'set_longitudApuntalada':
         return state.set('longitudApuntalada', fromJS(action.value))
     case 'set_alturaTotalDeFractura':
@@ -34,10 +36,6 @@ const resultadosSimulacionApuntalado = (state = initialState, action) => {
         return state.set('eficienciaDeFluidoDeFractura', fromJS(action.value))
     case 'set_evidenceSimulationApuntaladoImgURL':
         return state.set('imgURL', fromJS(action.value))
-    case 'set_forms_checked' :
-        if(action.form == 'resultadosSimulacionApuntalado')
-           return state.set('checked', fromJS(action.value))
-        return state
     default:
       return state
   }
