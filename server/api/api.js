@@ -6,7 +6,7 @@ import fs from 'fs'
 import objectPath from 'object-path'
 import multer from 'multer'
 import { addObject, signedURL, deleteObject, getBuckets } from '../aws/index';
-import { create as createWell, getFields, getWell, getSurveys,
+import { create as createWell, createResults, getFields, getWell, getSurveys,
             getHistIntervenciones, getHistIntervencionesNew, getLayer, getMudLoss, getMecanico, 
             getAnalisisAgua, getEmboloViajero, getBombeoNeumatico, getBombeoHidraulico, 
             getBombeoCavidades, getBombeoElectrocentrifugo, getBombeoMecanico, 
@@ -232,6 +232,19 @@ router.post('/wellSave', async (req, res) => {
 
   // TODO: Find a way to clean up callbacks from createWell
   createWell(req.body, 'save', err => {
+    if (err) {
+      console.log('we got an error saving', err)
+      res.json({ isSaved: false })
+    } else {
+      console.log('all good in the saving neighborhood')
+      res.json({ isSaved: true })
+    }
+  })
+})
+
+
+router.post('/resultsSave', async (req, res) => {
+  createResults(req.body, err => {
     if (err) {
       console.log('we got an error saving', err)
       res.json({ isSaved: false })
