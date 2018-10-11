@@ -1376,7 +1376,7 @@ router.get('/getInterventionBase', async (req, res) => {
 
     if (data[0]) {
       data[0].FECHA_PROGRAMADA_INTERVENCION ? data[0].FECHA_PROGRAMADA_INTERVENCION = data[0].FECHA_PROGRAMADA_INTERVENCION.toJSON().slice(0, 10) : null
-      data[0].INTERVENCION_PROGRAMADA ? (data[0].INTERVENCION_PROGRAMADA = data[0].INTERVENCION_PROGRAMADA === 1 ? true : false) : null
+      data[0].INTERVENCION_PROGRAMADA !== undefined ? (data[0].INTERVENCION_PROGRAMADA = data[0].INTERVENCION_PROGRAMADA === 1 ? true : false) : null
       Object.keys(data[0]).forEach(key => {
         if (map[key]) {
           const { parent, child } = map[key]
