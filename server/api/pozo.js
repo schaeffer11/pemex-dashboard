@@ -1159,10 +1159,10 @@ export const create = async (body, action, cb) => {
                       query = action === 'save' ? `INSERT INTO _WellProductionSystemsBombeoHidraulicoSave (
                         WELL_FORMACION_ID, PRESION_DE_CABEZA, PRESION_DE_LINEA_O_DE_SEPARADOR,
                         PROFUNDIDAD_DE_LA_BOMBA, TIPO_Y_MARCA_DE_BOMBA, ORIFICIO, TIPO_DE_CAMISA, FLUIDO_MOTRIZ, EQUIPO_SUPERFICIAL, TRANSACTION_ID, HAS_ERRORS) VALUES
-                        (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)` : `INSERT INTO WellProductionSystemsBombeoHidraulico (
+                        (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)` : `INSERT INTO WellProductionSystemsBombeoHidraulico (
                         WELL_FORMACION_ID, PRESION_DE_CABEZA, PRESION_DE_LINEA_O_DE_SEPARADOR,
                         PROFUNDIDAD_DE_LA_BOMBA, TIPO_Y_MARCA_DE_BOMBA, ORIFICIO, TIPO_DE_CAMISA, FLUIDO_MOTRIZ, EQUIPO_SUPERFICIAL, TRANSACTION_ID) VALUES
-                        (?, ?, ?, ?, ?, ?, ?, ?, ?)`
+                        (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`
                       values = [wellFormacionID, presionDeCabeza, presionDeLineaODeSeparador, profundidadDeLaBombaBH, tipoYMarcaDeBombaBH, orificioBH,
                         tipoDeCamisaBH, fluidoMotrizBH, equipoSuperficialBH, transactionID]
                     if (action === 'save') {
