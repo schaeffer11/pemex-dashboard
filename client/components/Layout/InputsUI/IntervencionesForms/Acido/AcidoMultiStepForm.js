@@ -3,13 +3,24 @@ import { connect } from 'react-redux'
 import autobind from 'autobind-decorator'
 
 
-import { setIsLoading, setShowForms } from '../../../../../redux/actions/global'
+import { setIsLoading, setShowForms, setCurrentPage } from '../../../../../redux/actions/global'
 import EstimacionCostos from '../EstimacionCostos'
 import EstimacionIncProduccionAcido from './EstimacionIncProduccionAcido'
 import PropuestaDeAcido from './PropuestaDeAcido'
 import PruebasDeLaboratorio from '../PruebasDeLaboratorio'
 import PruebasDeLaboratorioExtra from '../PruebasDeLaboratorioExtra'
 import ResultadosDeLaSimulacionAcido from './ResultadosDeLaSimulacionAcido'
+
+
+     const forms = [
+      {'title' : 'Propuesta de Fracturamiento Ácido', 'content': <PropuestaDeAcido /> },  
+      {'title' : 'Pruebas de Laboratorio', 'content': <PruebasDeLaboratorio /> },
+      {'title' : 'Pruebas de Laboratorio de Fracturamiento Ácido', 'content': <PruebasDeLaboratorioExtra /> },
+      {'title' : 'Resultados de la Simulación de Fracturamiento Ácido', 'content': <ResultadosDeLaSimulacionAcido /> },
+      {'title' : 'Estimación del Incremento de Producción', 'content': <EstimacionIncProduccionAcido /> },
+      {'title' : 'Estimación de Costos de Fracturamiento Acido', 'content': <EstimacionCostos /> }
+    ]
+
 
 @autobind class AcidoMultiStepForm extends Component {
 
@@ -21,13 +32,19 @@ import ResultadosDeLaSimulacionAcido from './ResultadosDeLaSimulacionAcido'
   }
 
   handleClick(i){
+    let { setCurrentPage } = this.props
+
+    setCurrentPage(forms[i].title)
     this.setState({
       currentStep: i
     })
   }
 
   handleNextSubtab(){
-    if(this.forms.length > this.state.currentStep + 1){
+    let { setCurrentPage } = this.props
+
+    if(forms.length > this.state.currentStep + 1){
+      setCurrentPage(forms[this.state.currentStep + 1].title)
       this.setState({
         currentStep: this.state.currentStep + 1
       }) 
@@ -35,7 +52,11 @@ import ResultadosDeLaSimulacionAcido from './ResultadosDeLaSimulacionAcido'
   }
 
   handlePrevSubtab(){
+    let { setCurrentPage } = this.props
+
     if( this.state.currentStep - 1 >= 0){
+
+    setCurrentPage(forms[this.state.currentStep - 1].title)
       this.setState({
         currentStep: this.state.currentStep - 1
       })
@@ -47,14 +68,7 @@ import ResultadosDeLaSimulacionAcido from './ResultadosDeLaSimulacionAcido'
     let { setShowForms, hasSubmitted, propuestaHasErrors, resultadosSimulacionHasErrors, estIncProduccionHasErrors, estCostsHasErrors } = this.props
     let className = 'subtab'
 
-     const forms = [
-      {'title' : 'Propuesta de Fracturamiento Ácido', 'content': <PropuestaDeAcido /> },  
-      {'title' : 'Pruebas de Laboratorio', 'content': <PruebasDeLaboratorio /> },
-      {'title' : 'Pruebas de Laboratorio de Fracturamiento Ácido', 'content': <PruebasDeLaboratorioExtra /> },
-      {'title' : 'Resultados de la Simulación de Fracturamiento Ácido', 'content': <ResultadosDeLaSimulacionAcido /> },
-      {'title' : 'Estimación del Incremento de Producción', 'content': <EstimacionIncProduccionAcido /> },
-      {'title' : 'Estimación de Costos de Fracturamiento Acido', 'content': <EstimacionCostos /> }
-    ]
+
     
     let errors = [propuestaHasErrors, false, false, resultadosSimulacionHasErrors, estIncProduccionHasErrors, estCostsHasErrors]
     let title = forms[this.state.currentStep].title
@@ -90,6 +104,7 @@ import ResultadosDeLaSimulacionAcido from './ResultadosDeLaSimulacionAcido'
 
 const mapDispatchToProps = dispatch => ({
   setShowForms : values => { dispatch(setShowForms(values))},
+  setCurrentPage: values => {dispatch(setCurrentPage(values))},
 })
 
 const mapStateToProps = state => ({

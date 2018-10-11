@@ -2,13 +2,24 @@ import React, { Component } from 'react'
 import { connect } from 'react-redux'
 import autobind from 'autobind-decorator'
 
-import { setIsLoading, setShowForms } from '../../../../../redux/actions/global'
+import { setIsLoading, setShowForms, setCurrentPage } from '../../../../../redux/actions/global'
 import PropuestaDeApuntalado from './PropuestaDeApuntalado'
 import PruebasDeLaboratorio from '../PruebasDeLaboratorio'
 import PruebasDeLaboratorioExtra from '../PruebasDeLaboratorioExtra'
 import ResultadosDeLaSimulacionApuntalado from './ResultadosDeLaSimulacionApuntalado'
 import EstimacionIncProduccionApuntalado from './EstimacionIncProduccionApuntalado'
 import EstimacionCostos from '../EstimacionCostos'
+
+
+    const forms = [
+      {'title' : 'Propuesta de Fracturamiento Apuntalado', 'content': <PropuestaDeApuntalado /> },  
+      {'title' : 'Pruebas de Laboratorio', 'content': <PruebasDeLaboratorio /> },
+      {'title' : 'Pruebas de Laboratorio de Fracturamiento Apuntalado', 'content': <PruebasDeLaboratorioExtra /> },
+      {'title' : 'Resultados de la Simulación de Fracturamiento Apuntalado', 'content': <ResultadosDeLaSimulacionApuntalado /> },
+      {'title' : 'Estimación del Incremento de Producción', 'content': <EstimacionIncProduccionApuntalado /> },
+      {'title' : 'Estimación de Costos de Fracturamiento Apuntalado', 'content': <EstimacionCostos /> }
+    ];
+
 
 @autobind class ApuntaladoMultiStepForm extends Component {
 
@@ -22,25 +33,19 @@ import EstimacionCostos from '../EstimacionCostos'
   }
 
   handleClick(i){
+    let { setCurrentPage } = this.props
+
+    setCurrentPage(forms[i].title)
     this.setState({
       currentStep: i
     })
   }
 
   handleNextSubtab(){
-
-
-    const forms = [
-      {'title' : 'Propuesta de Fracturamiento Apuntalado' },  
-      {'title' : 'Pruebas de Laboratorio' },
-      {'title' : 'Pruebas de Laboratorio de Fracturamiento Apuntalado' },
-      {'title' : 'Resultados de la Simulación de Fracturamiento Apuntalado' },
-      {'title' : 'Estimación del Incremento de Producción' },
-      {'title' : 'Estimación de Costos de Fracturamiento Apuntalado' }
-    ]
-
+    let { setCurrentPage } = this.props
 
     if(forms.length > this.state.currentStep + 1){
+      setCurrentPage(forms[this.state.currentStep + 1].title)
       this.setState({
         currentStep: this.state.currentStep + 1
       }) 
@@ -48,7 +53,10 @@ import EstimacionCostos from '../EstimacionCostos'
   }
 
   handlePrevSubtab(){
+    let { setCurrentPage } = this.props
+
     if( this.state.currentStep - 1 >= 0){
+      setCurrentPage(forms[this.state.currentStep - 1].title)
       this.setState({
         currentStep: this.state.currentStep - 1
       })
@@ -60,15 +68,6 @@ import EstimacionCostos from '../EstimacionCostos'
     let { setShowForms, hasSubmitted, propuestaHasErrors, resultadosSimulacionHasErrors, estIncProduccionHasErrors, estCostsHasErrors } = this.props
     let className = 'subtab'
 
-
-    const forms = [
-      {'title' : 'Propuesta de Fracturamiento Apuntalado', 'content': <PropuestaDeApuntalado /> },  
-      {'title' : 'Pruebas de Laboratorio', 'content': <PruebasDeLaboratorio /> },
-      {'title' : 'Pruebas de Laboratorio de Fracturamiento Apuntalado', 'content': <PruebasDeLaboratorioExtra /> },
-      {'title' : 'Resultados de la Simulación de Fracturamiento Apuntalado', 'content': <ResultadosDeLaSimulacionApuntalado /> },
-      {'title' : 'Estimación del Incremento de Producción', 'content': <EstimacionIncProduccionApuntalado /> },
-      {'title' : 'Estimación de Costos de Fracturamiento Apuntalado', 'content': <EstimacionCostos /> }
-    ];
 
     let errors = [propuestaHasErrors, false, false, resultadosSimulacionHasErrors, estIncProduccionHasErrors, estCostsHasErrors]
     let title = forms[this.state.currentStep].title
@@ -103,6 +102,7 @@ import EstimacionCostos from '../EstimacionCostos'
 
 const mapDispatchToProps = dispatch => ({
     setShowForms : values => { dispatch(setShowForms(values))},
+      setCurrentPage: values => {dispatch(setCurrentPage(values))},
 })
 
 const mapStateToProps = state => ({
