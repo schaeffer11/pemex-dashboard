@@ -2,6 +2,7 @@ import React, { Component } from 'react'
 import { connect } from 'react-redux'
 import autobind from 'autobind-decorator'
 import HistoricoDeAforosResults from './HistoricoDeAforosResults' 
+import EstimacionCostosResults from './EstimacionCostosResults'
 
 import { setIsLoading, setShowForms } from '../../../../redux/actions/global'
 
@@ -11,7 +12,7 @@ const forms = [
   {'title' : 'Aforos', 'content': <HistoricoDeAforosResults /> },
   {'title' : 'Real Treatment', 'content': <div>Treatment Component </div> },
   {'title' : 'Geometry', 'content': <div>Geometry Component </div> },
-  {'title' : 'Real Costs', 'content': <div>Costs Compoent </div> }
+  {'title' : 'Real Costs', 'content': <EstimacionCostosResults /> }
 ]
 
 

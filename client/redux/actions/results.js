@@ -15,6 +15,12 @@ export const setGeneralTratamientoEstimulacion = (location, value) => ({
   type: 'set_generalHistoricoDeAforosResults',
 })
 
+export const setGeneralEstCostResults = (location, value) => ({
+  location,
+  value,
+  type: 'set_generalEstCostResults',
+})
+
 
 
 
