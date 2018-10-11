@@ -11,6 +11,7 @@ import Subtabs from './Components/Subtabs'
 import { pagesPozo, pagesIntervenciones } from '../../../lib/maps'
 import BaseIntervenciones from './IntervencionesForms/BaseIntervenciones'
 import PozoMultiStepForm from './PozoForms/PozoMultiStepForm'
+import ResultsMultiStepForm from './ResultsForms/ResultsMultiStepForm'
 import { submitForm } from '../../../redux/actions/pozoFormActions'
 import Notification from '../Common/Notification'
 import Loading from '../Common/Loading'
@@ -32,9 +33,11 @@ import { setHasSubmitted, setIsLoading } from '../../../redux/actions/global'
 
     this.pozoMultiStepFormRef = React.createRef();
     this.intervencionesFormRef = React.createRef();
+    this.resultsFromRef = React.createRef();
 
     this.pozoMultiStepForm = React.createElement(PozoMultiStepForm, { ref: this.pozoMultiStepFormRef });
     this.intervencionesForm = React.createElement(BaseIntervenciones,  { ref: this.intervencionesFormRef});
+    this.resultsForm = React.createElement(ResultsMultiStepForm, { ref: this.resultsFromRef})
   }
 
 
@@ -129,10 +132,6 @@ import { setHasSubmitted, setIsLoading } from '../../../redux/actions/global'
       this.setState({'error': ''})
       this.deactivateModal()
     }
-  }
-
-  scrollToBottom() {
-    this.testScroll.scrollIntoView({ behaviour: 'smooth'})
   }
 
   deactivateModal() {
@@ -281,13 +280,18 @@ import { setHasSubmitted, setIsLoading } from '../../../redux/actions/global'
     let { showForms } = global
 
     let form = null
-    let otherForm = null
 
-    if (selectedTab === 'Pozo' && pagesPozo[selectedSubtab]) {
-      form = this.pozoMultiStepForm
+    if (showForms === true) {
+      if (selectedTab === 'Pozo' && pagesPozo[selectedSubtab]) {
+        form = this.pozoMultiStepForm
+      }
+      else if (selectedTab === 'Intervenciones') {
+        form = this.intervencionesForm
+      }
     }
-    else if (selectedTab === 'Intervenciones') {
-      form = this.intervencionesForm
+    else if (showForms === 'results') {
+      console.log('i made it')
+      form = this.resultsForm
     }
 
     if (showForms === false) {
@@ -313,16 +317,20 @@ import { setHasSubmitted, setIsLoading } from '../../../redux/actions/global'
           <Loading />
           { isOpen ? this.buildModal() : null }
           { isOpenBug ? this.buildBugModal() : null }
-          <div style={{ float:"left", clear: "both" }}
-            ref={(el) => { this.testScroll = el; }}>
-          </div>
         </div>
       )
     }  
     else {
       return (
-        <div className='testing'>
-          HOWDY BITCH
+        <div className="input-forms">
+          <div className='tabs'>
+            <div className={`tab active`} >Results</div>
+          </div>
+          <div className='tab-content'> 
+           { form }
+          </div>
+        <Notification />
+        <Loading />
         </div>
         )
     }   
