@@ -21,7 +21,7 @@ import { InputRow, InputRowUnitless, InputRowSelectUnitless, InputDate } from '.
 import { setFichaTecnicaDelCampo, setHistorialDeIntervenciones, setFichaTecnicaDelPozo, setEvaluacionPetrofisica, setMecanicoYAparejoDeProduccion, 
   setAnalisisDelAgua, setSistemasArtificialesDeProduccion, setPresionDataCampo, setPressureDepthCampo, setPresionDataPozo, setPressureDepthPozo, setHistoricoProduccion, setHistoricoDeAforos,
   setFromSaveFichaTecnicaDelCampo, setFromSaveHistorialDeIntervenciones, setFromSaveFichaTecnicaDelPozo, setFromSaveEvaluacionPetrofisica, setFromSaveMecanicoYAparejoDeProduccion, setFromSaveAnalisisDelAgua, setFromSaveSistemas, setFromSaveHistoricoDePressionCampo, setFromSaveHistoricoDePressionPozo, setFromSaveHistoricoDeAforos, setFromSaveHistoricoDeProduccion, setAllPressure } from '../../../../redux/actions/pozo'
-import { setPage } from '../../../../redux/actions/global'
+import { setCurrentPage } from '../../../../redux/actions/global'
 
 const forms = [
   {'title' : 'Ficha Técnica del Campo', content: <TecnicaDelCampo /> },
@@ -638,7 +638,6 @@ const forms = [
 
       let newObj = aforosData.historicoDeAforos
       newObj.fromSave = true
-      // setFromSaveHistoricoDeAforos(true)
 
       setHistoricoDeAforos(newObj)
       setLoading({ 
@@ -665,15 +664,20 @@ const forms = [
 
 
   handleClick(i){
-    const type = forms[i].type
-    // this.props.setCurrentPage(type)
+    let { setCurrentPage } = this.props
+
+    setCurrentPage(forms[i].title)
+
     this.setState({
       currentStep: i
     })
   }
 
-  handleNextSubtab(){
+  handleNextSubtab(){    
+    let { setCurrentPage } = this.props
+
     if(forms.length > this.state.currentStep + 1){
+      setCurrentPage(forms[this.state.currentStep + 1].title)
       this.setState({
         currentStep: this.state.currentStep + 1
       })
@@ -681,12 +685,12 @@ const forms = [
   }
 
   handlePrevSubtab(){
+    let { setCurrentPage } = this.props
     const { currentStep } = this.state
     const newStep = currentStep - 1
+
     if(newStep >= 0){
-      // const { setCurrentPage } = this.props
-      const type = forms[newStep].type
-      // setCurrentPage(type)
+      setCurrentPage(forms[newStep].title)
       this.setState({
         currentStep: newStep
       })
@@ -876,6 +880,7 @@ const mapDispatchToProps = dispatch => ({
   setFromSaveHistoricoDeAforos: values => {dispatch(setFromSaveHistoricoDeAforos(values))},
   setFromSaveHistoricoDePressionCampo: (val, depth) => dispatch(setFromSaveHistoricoDePressionCampo(val, depth)),
   setAllPressure: (val, depth) => dispatch(setAllPressure(val)),
+  setCurrentPage: val => dispatch(setCurrentPage(val)),
   setFromSaveHistoricoDeProduccion: values => {dispatch(setFromSaveHistoricoDeProduccion(values))},
 })
 

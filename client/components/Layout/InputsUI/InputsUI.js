@@ -14,14 +14,13 @@ import PozoMultiStepForm from './PozoForms/PozoMultiStepForm'
 import { submitForm } from '../../../redux/actions/pozoFormActions'
 import Notification from '../Common/Notification'
 import Loading from '../Common/Loading'
-import { setHasSubmitted, setIsLoading } from '../../../redux/actions/global'
+import { setHasSubmitted, setIsLoading, setCurrentPage } from '../../../redux/actions/global'
 
 @autobind class InputsUI extends Component {
   constructor(props) {
     super(props)
     this.state = { 
       selectedTab: 'Pozo',
-      selectedSubtab: 'tecnicaDelPozo',
       isOpen: false,
       isOpenBug: false,
       error: '', 
@@ -61,24 +60,23 @@ import { setHasSubmitted, setIsLoading } from '../../../redux/actions/global'
 
 
   handleSelectTab(val) {
-    let selectedSub = val === 'Pozo' ? Object.keys(pagesPozo)[0] : Object.keys(pagesIntervenciones)[0]
+    let { setCurrentPage, tipoDeIntervenciones } = this.props
 
+    console.log(val)
+    if (val === 'Intervenciones') {
+      let name = tipoDeIntervenciones === 'estimulacion' ? 'propuestaEstimulacion' : tipoDeIntervenciones === 'acido' ? 'propuestaAcido' : 'propuestaApuntalado'
+      setCurrentPage(name)
+    }
+    else {
+      setCurrentPage('Ficha Technica del Campo')
+    }
     this.setState({
       selectedTab: val,
-      selectedSubtab: selectedSub,
       error: '',
       saveName: null,
       comment: '',
     })
   }
-
-  handleSelectSubtab(val) {
-
-    this.setState({
-      selectedSubtab: val,
-    })
-  }
-
 
   handleSubmit(action) {
     let { saveName } = this.state
@@ -203,15 +201,21 @@ import { setHasSubmitted, setIsLoading } from '../../../redux/actions/global'
   }
 
   handleSubmitBug() {
-      let { comment , selectedSubtab} = this.state
-      const { token, user } = this.props
+
+      let { comment } = this.state
+      let { token, user, global } = this.props
+      global = global.toJS()
+      let { currentPage } = global
       const headers = {
         'Authorization': `Bearer ${token}`,
       }
+
+      let selectedSubtab = 'est'
+
       const formData = new FormData()
       const cleanComment = comment.trim().replace(/&nbsp;/g, '').replace(/<[^\/>][^>]*><\/[^>]+>/g, '').replace(/\s+$/, '')
       formData.append('comment', JSON.stringify(cleanComment))
-      formData.append('page', JSON.stringify(selectedSubtab))
+      formData.append('page', JSON.stringify(currentPage))
       formData.append('user', JSON.stringify(user))
       fetch('/api/comment', {
         headers,
@@ -237,6 +241,7 @@ import { setHasSubmitted, setIsLoading } from '../../../redux/actions/global'
 
   buildBugModal() {
     let {comment, bugResponseError, bugResponseSuccess} = this.state
+
     const isBlank = /^\s*$/.test(comment)
     const disabled = bugResponseSuccess || !comment || comment === '' || isBlank
     return (
@@ -274,17 +279,19 @@ import { setHasSubmitted, setIsLoading } from '../../../redux/actions/global'
 
 
   render() {
-    let { selectedTab, selectedSubtab, error, isOpen, isOpenBug, saveName, fieldWellOptions } = this.state
+    let { selectedTab, error, isOpen, isOpenBug, saveName, fieldWellOptions } = this.state
     let { global } = this.props
 
     global = global.toJS()
+
+
 
     let { showForms } = global
 
     let form = null
     let otherForm = null
 
-    if (selectedTab === 'Pozo' && pagesPozo[selectedSubtab]) {
+    if (selectedTab === 'Pozo') {
       form = this.pozoMultiStepForm
     }
     else if (selectedTab === 'Intervenciones') {
@@ -357,6 +364,7 @@ const mapDispatchToProps = dispatch => ({
   setHasSubmitted: val => dispatch(setHasSubmitted(val)),
   setIsLoading: val => dispatch(setIsLoading(val)),
   submitPozoForm: (action, token, name) => {dispatch(submitForm(action, token, name))},
+  setCurrentPage: val => {dispatch(setCurrentPage(val))},
 })
 
 export default connect(mapStateToProps, mapDispatchToProps)(InputsUI)

@@ -12,6 +12,7 @@ const initialState = Map({
     isLoading: false,
     currentPage: '',
     hasSubmitted: false,
+    
 })
 
 
