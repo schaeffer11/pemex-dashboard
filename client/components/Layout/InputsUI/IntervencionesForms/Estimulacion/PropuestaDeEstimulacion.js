@@ -11,7 +11,8 @@ import { setHasErrorsResultadosSimulacionEstimulacion, setHasErrorsPropuestaEsti
   setVolumenSistemaDivergente, setVolumenDesplazamientoLiquido, setVolumenDesplazamientoN2, setVolumenTotalDeLiquido, 
   setPropuestaCompany, setTipoDeEstimulacion, setTipoDeColocacion, setTiempoDeContacto } from '../../../../../redux/actions/intervencionesEstimulacion'
 import { setEspesorBruto } from '../../../../../redux/actions/pozo'
-import { round, calculateVolumes, getSistemaOptions } from '../helpers'
+// import { round, calculateVolumes, getSistemaOptions } from '../../../../../lib/helpers'
+import { round, calculateVolumes, getSistemaOptions } from '../../../../../lib/helpers'
 import { checkEmpty, checkDate } from '../../../../../lib/errorCheckers'
 
 @autobind class PropuestaDeEstimulacion extends Component {

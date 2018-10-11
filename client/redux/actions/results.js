@@ -4,8 +4,7 @@ export const setGeneralHistoricoDeAforosResults = (location, value) => ({
   type: 'set_generalHistoricoDeAforosResults',
 })
 
-export const setGeneralTratamientoEstimulacion = (location, value) => ({
-  location,
+export const setGeneralTratamientoEstimulacion = (value) => ({
   value,
-  type: 'set_generalHistoricoDeAforosResults',
+  type: 'set_generalTratamientoEstimulacion',
 })

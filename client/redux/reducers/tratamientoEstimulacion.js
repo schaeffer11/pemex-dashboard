@@ -29,6 +29,7 @@ const initialState = fromJS({
 const tratamientoEstimulacion = (state = initialState, action) => {
   switch (action.type) {
     case 'set_generalTratamientoEstimulacion':
+      console.log('what am i merging?', action.value)
       return state.mergeDeep(fromJS(action.value))
     // case 'set_intervalo':
     //     return state.set('intervalo', fromJS(action.value))

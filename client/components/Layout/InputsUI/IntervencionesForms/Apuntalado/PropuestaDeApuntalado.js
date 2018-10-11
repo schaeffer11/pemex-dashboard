@@ -11,7 +11,7 @@ import { setHasErrorsPropuestaApuntalado, setCedulaData, setModuloYoungArena, se
   setIntervalo, setLongitudDeIntervalo, setVolAparejo, setCapacidadTotalDelPozo, setVolumenPrecolchonN2, 
   setVolumenDeApuntalante, setVolumenDeGelDeFractura, setVolumenDesplazamiento, setVolumenTotalDeLiquido, 
   setPropuestaCompany } from '../../../../../redux/actions/intervencionesApuntalado'
-import { round, calculateVolumes, getSistemaOptions } from '../helpers'
+import { round, calculateVolumes, getSistemaOptions } from '../../../../../lib/helpers'
 import { checkEmpty, checkDate } from '../../../../../lib/errorCheckers'
 
 @autobind class PropuestaDeApuntalado extends Component {

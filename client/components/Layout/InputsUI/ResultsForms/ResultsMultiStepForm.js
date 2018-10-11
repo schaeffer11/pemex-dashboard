@@ -1,15 +1,14 @@
 import React, { Component } from 'react'
 import { connect } from 'react-redux'
 import autobind from 'autobind-decorator'
-import HistoricoDeAforosResults from './HistoricoDeAforosResults' 
+import HistoricoDeAforosResults from './HistoricoDeAforosResults'
+import TratamientoEstimulacion from './TratamientoEstimulacion'
 
 import { setIsLoading, setShowForms } from '../../../../redux/actions/global'
-
-
 const forms = [
   {'title' : 'Graph of Treatment', 'content': <div>Treatment Image Component</div> },
   {'title' : 'Aforos', 'content': <HistoricoDeAforosResults /> },
-  {'title' : 'Real Treatment', 'content': <div>Treatment Component </div> },
+  {'title' : 'Real Treatment', 'content': <TratamientoEstimulacion /> },
   {'title' : 'Geometry', 'content': <div>Geometry Component </div> },
   {'title' : 'Real Costs', 'content': <div>Costs Compoent </div> }
 ]
@@ -24,6 +23,32 @@ const forms = [
     }
   }
 
+  async componentDidMount() {
+    const { propuestaID, token } = this.props
+    const headers = {
+      'Authorization': `Bearer ${token}`,
+    }
+
+    const metaDataArray = await Promise.all([
+      fetch(`api/getLayer?transactionID=${propuestaID}`, headers).then(r => r.json()),
+      fetch(`api/getInterventionBase?transactionID=${propuestaID}`, headers).then(r => r.json()),
+    ]).catch(r => console.log('something went wrong', r))
+    // const { propuestaEstimulacion } = await fetch(`/api/getCedulaEstimulacion?transactionID=${propuestaId}`, headers).then(r => r.json()).then(r => r)
+    // const intervencion = await fetch(`/api/getInterventionEstimulacion?transactionID=${propuestaId}`, headers).then(r => r.json()).then(r => r)  }
+    const metaData = {}
+    metaDataArray.forEach(elem => {
+      const key = Object.keys(elem)[0]
+      metaData[key] = elem[key]
+    })
+    console.log('meta data', metaData)
+    const { evaluacionPetrofisica, objetivoYAlcancesIntervencion } = metaData
+    const intervals = evaluacionPetrofisica.layerData.map(({ cimaMD, baseMD }) => `${baseMD}-${cimaMD}`)
+    const interventionType = objetivoYAlcancesIntervencion.tipoDeIntervenciones
+  }
+
+
+
+
   handleClick(i){
     this.setState({
       currentStep: i
@@ -31,7 +56,7 @@ const forms = [
   }
 
   handleNextSubtab(){
-    if(forms.length > this.state.currentStep + 1){
+    if (forms.length > this.state.currentStep + 1) {
       this.setState({
         currentStep: this.state.currentStep + 1
       }) 
@@ -89,6 +114,8 @@ const mapDispatchToProps = dispatch => ({
 
 const mapStateToProps = state => ({
   hasSubmitted: state.getIn(['global', 'hasSubmitted']),
+  token: state.getIn(['user', 'token']),
+  propuestaID: state.getIn(['global', 'transactionID']),
 })
 
 export default connect(mapStateToProps, mapDispatchToProps)(ResultsMultiStepForm)
