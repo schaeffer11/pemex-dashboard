@@ -1,16 +1,18 @@
 import React, { Component } from 'react'
 import autobind from 'autobind-decorator'
 import { connect } from 'react-redux'
-import InputTable from '../../../Common/InputTable'
-import { InputRow, InputRowSelectUnitless, CalculatedValue } from '../../../Common/InputRow'
+// import InputTable from '../../../Common/InputTable'
+import InputTable from '../../Common/InputTable'
+import { InputRow, InputRowSelectUnitless, CalculatedValue } from '../../Common/InputRow'
 import { setGeneralTratamientoEstimulacion } from '../../../../redux/actions/results'
-import { round, calculateVolumes, getSistemaOptions } from '../helpers'
-import { checkEmpty, checkDate } from '../../../../../lib/errorCheckers'
+import { round, calculateVolumes, getSistemaOptions } from '../../../../lib/helpers'
+import { checkEmpty, checkDate } from '../../../../lib/errorCheckers'
 
-@autobind class PropuestaDeEstimulacion extends Component {
+@autobind class TratamientoEstimulacion extends Component {
   constructor(props) {
     super(props)
-    this.state = { 
+    this.state = {
+      propuestaCompany: '',
       errors: {
         propuestaCompany: {
           type: 'text',
@@ -37,10 +39,10 @@ import { checkEmpty, checkDate } from '../../../../../lib/errorCheckers'
   }
 
 
-
-  componentDidMount(){
-    let { setGeneralTratamientoEstimulacion, hasSubmitted } = this.props
-
+  async componentDidMount(){
+    let { setGeneralTratamientoEstimulacion, hasSubmitted, propuestaId, token } = this.props
+    const { propuestaCompany } = propuestaEstimulacion
+    this.setState({ propuestaCompany })
     let hasErrors = this.checkAllInputs(hasSubmitted)
     setGeneralTratamientoEstimulacion({ hasErrors })
   }
@@ -151,7 +153,7 @@ import { checkEmpty, checkDate } from '../../../../../lib/errorCheckers'
   makeGeneralForm() {
     let { formData, setPropuestaCompany, setGeneralTratamientoEstimulacion, intervalos } = this.props
     // formData = formData.toJS()
-    intervalos = intervalos.toJS()
+    // intervalos = intervalos.toJS()
     let { tratamientoCompany, tipoDeEstimulacion } = formData
     const companyOptions = [
       { label: 'Halliburton', value: 'Halliburton' },
@@ -317,7 +319,6 @@ import { checkEmpty, checkDate } from '../../../../../lib/errorCheckers'
       volumenTotalDeLiquido: calculateVolumes(cedulaData, 'volLiquid'),
     }
     setGeneralTratamientoEstimulacion({ cedulaData, ...volumes })
-    // setCedulaData(cedulaData, volumes)
   }
 
   makeCedulaTable() {
@@ -369,31 +370,11 @@ import { checkEmpty, checkDate } from '../../../../../lib/errorCheckers'
             return (<div style={{color: 'white', background: 'red', borderRadius: '4px', textAlign: 'center', cursor: 'pointer'}}>X</div>)
           }
         }
-      }, {
+      },
+      {
         Header: 'Etapa',
         accessor: 'etapa',
       }, 
-      // {
-      //   Header: 'Sistema',
-      //   accessor: 'sistema',
-      //   width: 200,
-      //   resizable: false,
-      //   style: {overflow: 'visible'},
-      //   Cell: row => {
-      //     return (
-      //       <div>
-      //         <Select
-      //           placeholder='sistema'
-      //           className='input'
-      //           simpleValue={true}
-      //           options={sistemaOptions}
-      //           value={sistemaOptions.find(i=>i.value === row.original.sistema) || null}
-      //           onChange={(e) => this.handleSelect(row, e.value)}
-      //         />
-      //       </div>
-      //     )
-      //   }
-      // },
       {
         Header: 'Sistema',
         accessor: 'sistema',
@@ -479,12 +460,10 @@ import { checkEmpty, checkDate } from '../../../../../lib/errorCheckers'
     )
   }
 
-
   render() {
     let { formData } = this.props
-    formData = formData.toJS()
     let { tipoDeEstimulacion } = formData
-
+    console.log('propuesta company', this.state.propuestaCompany)
     return (
       <div className="form propuesta-de-estimulacion">
         <div className='top'>
@@ -505,17 +484,18 @@ import { checkEmpty, checkDate } from '../../../../../lib/errorCheckers'
   }
 }
 
-
 const mapStateToProps = state => ({
   formData: state.get('tratamientoEstimulacion').toJS(),
   hasErrors: state.getIn(['tratamientoEstimulacion', 'hasErrors']),
   hasSubmitted: state.getIn(['global', 'hasSubmitted']),
+  propuestaId: state.getIn(['global', 'transactionID']),
+  token: state.getIn(['user', 'token']),
 })
 
 const mapDispatchToProps = dispatch => ({
-  setGeneralTratamientoEstimulacion: (location, value) => {
-    dispatch(setGeneralTratamientoEstimulacion(location, value))
+  setGeneralTratamientoEstimulacion: (value) => {
+    dispatch(setGeneralTratamientoEstimulacion(value))
   }
 })
 
-export default connect(mapStateToProps, mapDispatchToProps)(PropuestaDeEstimulacion) 
+export default connect(mapStateToProps, mapDispatchToProps)(TratamientoEstimulacion) 

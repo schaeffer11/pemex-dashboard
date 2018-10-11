@@ -11,7 +11,7 @@ import { setHasErrorsPropuestaAcido, setCedulaData, setModuloYoungArena, setModu
    setLongitudDeIntervalo, setVolAparejo, setCapacidadTotalDelPozo, setVolumenPrecolchonN2,
     setVolumenSistemaNoReativo, setVolumenSistemaReactivo, setVolumenSistemaDivergente, 
     setVolumenDesplazamientoLiquido, setVolumenDesplazamientoGelLineal, setPropuestaCompany } from '../../../../../redux/actions/intervencionesAcido'
-import { round, calculateVolumes, getSistemaOptions } from '../helpers'
+import { round, calculateVolumes, getSistemaOptions } from '../../../../../lib/helpers'
 import { checkEmpty, checkDate } from '../../../../../lib/errorCheckers'
 
 @autobind class PropuestaDeAcido extends Component {

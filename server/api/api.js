@@ -1815,7 +1815,6 @@ router.get('/getLabTest', async (req, res) => {
 
 router.get('/getCedulaEstimulacion', async (req, res) => {
   let { transactionID, saved } = req.query
-
   let action = saved ? 'loadSave' : 'loadTransaction'
 
 

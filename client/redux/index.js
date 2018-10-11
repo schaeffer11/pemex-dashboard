@@ -27,6 +27,7 @@ import historicoDeProduccion from './reducers/historicoDeProduccion'
 import historialDeIntervenciones from './reducers/historialDeIntervenciones'
 import historicoDeAforos from './reducers/historicoDeAforos'
 import historicoDeAforosResults from './reducers/historicoDeAforosResults'
+import tratamientoEstimulacion from './reducers/tratamientoEstimulacion'
 import forms from './reducers/forms'
 import global from './reducers/global'
 
@@ -60,6 +61,7 @@ const appReducer = combineReducers({
   historicoDeAforos,
   global,
   historicoDeAforosResults,
+  tratamientoEstimulacion,
 })
 
 const rootReducer = (state, action) => {
