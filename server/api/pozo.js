@@ -1409,10 +1409,10 @@ export const create = async (body, action, cb) => {
                                   console.log('intervention', results)
                                   if (err) {
                                     // TODO: READD!!!
-                                    // return connection.rollback(function() {
-                                    //   console.log('rolling back!!! 2')
-                                    //   cb(err)
-                                    // })
+                                    return connection.rollback(function() {
+                                      console.log('rolling back!!! 2')
+                                      cb(err)
+                                    })
                                   }
 
                                   values = []
@@ -1436,10 +1436,10 @@ export const create = async (body, action, cb) => {
                                     console.log('lab tests', results)
                                     if (err) {
                                       // TODO: READD!!!
-                                      // return connection.rollback(function() {
-                                      //   console.log('rolling back!!! 2')
-                                      //   cb(err)
-                                      // })
+                                      return connection.rollback(function() {
+                                        console.log('rolling back!!! 2')
+                                        cb(err)
+                                      })
                                     }
 
                                     query = tipoDeIntervenciones === 'estimulacion' ? (action === 'save' ? INSERT_CEDULA_ESTIMULACION_QUERY.save : INSERT_CEDULA_ESTIMULACION_QUERY.submit) : tipoDeIntervenciones === 'acido' ? (action === 'save' ? INSERT_CEDULA_ACIDO_QUERY.save : INSERT_CEDULA_ACIDO_QUERY.submit) : (action === 'save' ? INSERT_CEDULA_APUNTALADO_QUERY.save : INSERT_CEDULA_APUNTALADO_QUERY.submit)
@@ -1510,10 +1510,10 @@ export const create = async (body, action, cb) => {
                                             console.log('costs', results)
                                             if (err) {
                                               // TODO: READD!!!
-                                              // return connection.rollback(function() {
-                                              //   console.log('rolling back!!! 2')
-                                              //   cb(err)
-                                              // })
+                                              return connection.rollback(function() {
+                                                console.log('rolling back!!! 2')
+                                                cb(err)
+                                              })
                                             }
 
                                             values = [
