@@ -330,32 +330,32 @@ let tratamientoPorOptions = [
         }
       },
       {
-        Header: 'Profundidad',
+        Header: <div>Profundidad<br></br>(m)</div>,
         accessor: 'depth',
         cell: 'renderNumber',
       },
       {
-        Header: 'Inclinación',
+        Header: <div>Inclinación<br></br>(grados)</div>,
         accessor: 'inclination',
         cell: 'renderNumber',
       },
       {
-        Header: 'Azimut',
+        Header: <div>Azimut<br></br>(grados)</div>,
         accessor: 'azimuth',
         cell: 'renderNumber',
       },
       {
-        Header: 'MV',
+        Header: <div>MV<br></br>(metros)</div>,
         accessor: 'trueVerticalDepth',
         cell: 'renderNumber',
       },
       {
-        Header: 'X',
+        Header: <div>X<br></br>(metros)</div>,
         accessor: 'x_offset',
         cell: 'renderNumber',
       },
       {
-        Header: 'Y',
+        Header: <div>Y<br></br>(metros)</div>,
         accessor: 'y_offset',
         cell: 'renderNumber',
       },
@@ -380,6 +380,9 @@ let tratamientoPorOptions = [
     ]
     return (
       <div>
+        <div className='header'>
+          Desviación
+        </div>
         <ExcelUpload
           template="Survey"
           headers={errors}
