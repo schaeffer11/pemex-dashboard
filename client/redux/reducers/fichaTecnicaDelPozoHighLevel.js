@@ -1,12 +1,12 @@
 import { Map, fromJS } from 'immutable'
 
 const initialState = Map({ 
-	subdireccion: '',
-	bloque: '',
-	activo: '',
-	campo: '',
-	pozo: '',
-	formacion: '',
+  subdireccion: '',
+  bloque: '',
+  activo: '',
+  campo: '',
+  pozo: '',
+  formacion: '',
 })
 
 
