@@ -13,16 +13,16 @@ import BaseIntervenciones from './IntervencionesForms/BaseIntervenciones'
 import PozoMultiStepForm from './PozoForms/PozoMultiStepForm'
 import ResultsMultiStepForm from './ResultsForms/ResultsMultiStepForm'
 import { submitForm } from '../../../redux/actions/pozoFormActions'
+import { submitResultsForm } from '../../../redux/actions/results'
 import Notification from '../Common/Notification'
 import Loading from '../Common/Loading'
-import { setHasSubmitted, setIsLoading } from '../../../redux/actions/global'
+import { setHasSubmitted, setIsLoading, setCurrentPage } from '../../../redux/actions/global'
 
 @autobind class InputsUI extends Component {
   constructor(props) {
     super(props)
     this.state = { 
       selectedTab: 'Pozo',
-      selectedSubtab: 'tecnicaDelPozo',
       isOpen: false,
       isOpenBug: false,
       error: '', 
@@ -64,24 +64,23 @@ import { setHasSubmitted, setIsLoading } from '../../../redux/actions/global'
 
 
   handleSelectTab(val) {
-    let selectedSub = val === 'Pozo' ? Object.keys(pagesPozo)[0] : Object.keys(pagesIntervenciones)[0]
+    let { setCurrentPage, tipoDeIntervenciones } = this.props
 
+    console.log(val)
+    if (val === 'Intervenciones') {
+      let name = tipoDeIntervenciones === 'estimulacion' ? 'propuestaEstimulacion' : tipoDeIntervenciones === 'acido' ? 'propuestaAcido' : 'propuestaApuntalado'
+      setCurrentPage(name)
+    }
+    else {
+      setCurrentPage('Ficha Technica del Campo')
+    }
     this.setState({
       selectedTab: val,
-      selectedSubtab: selectedSub,
       error: '',
       saveName: null,
       comment: '',
     })
   }
-
-  handleSelectSubtab(val) {
-
-    this.setState({
-      selectedSubtab: val,
-    })
-  }
-
 
   handleSubmit(action) {
     let { saveName } = this.state
@@ -134,6 +133,38 @@ import { setHasSubmitted, setIsLoading } from '../../../redux/actions/global'
       this.deactivateModal()
     }
   }
+
+  handleSubmitResults(action) {
+    let { setHasSubmitted, hasErrorsHistoricoDeAforosResults } = this.props
+
+    if (action === 'submit') {
+      let hasErrors = false
+      setHasSubmitted(true)
+      
+      console.log('aforos errors', hasErrorsHistoricoDeAforosResults)
+
+
+      if (hasErrorsHistoricoDeAforosResults) {
+        hasErrors = true
+      }
+
+      if (!hasErrors) {
+        this.props.submitResultsForm(action, this.props.token)
+        this.setState({'error': ''})
+      }
+      else {
+        setIsLoading({
+          showNotification: true,
+          notificationType: 'error',
+          notificationText: 'Su información no se ha guardado. Hay campos que no pueden estar vacios.'
+        })
+        console.log('there was an errror, im out')
+      }
+    }
+  }
+
+
+
 
   deactivateModal() {
     this.setState({
@@ -202,15 +233,21 @@ import { setHasSubmitted, setIsLoading } from '../../../redux/actions/global'
   }
 
   handleSubmitBug() {
-      let { comment , selectedSubtab} = this.state
-      const { token, user } = this.props
+
+      let { comment } = this.state
+      let { token, user, global } = this.props
+      global = global.toJS()
+      let { currentPage } = global
       const headers = {
         'Authorization': `Bearer ${token}`,
       }
+
+      let selectedSubtab = 'est'
+
       const formData = new FormData()
       const cleanComment = comment.trim().replace(/&nbsp;/g, '').replace(/<[^\/>][^>]*><\/[^>]+>/g, '').replace(/\s+$/, '')
       formData.append('comment', JSON.stringify(cleanComment))
-      formData.append('page', JSON.stringify(selectedSubtab))
+      formData.append('page', JSON.stringify(currentPage))
       formData.append('user', JSON.stringify(user))
       fetch('/api/comment', {
         headers,
@@ -236,6 +273,7 @@ import { setHasSubmitted, setIsLoading } from '../../../redux/actions/global'
 
   buildBugModal() {
     let {comment, bugResponseError, bugResponseSuccess} = this.state
+
     const isBlank = /^\s*$/.test(comment)
     const disabled = bugResponseSuccess || !comment || comment === '' || isBlank
     return (
@@ -273,10 +311,12 @@ import { setHasSubmitted, setIsLoading } from '../../../redux/actions/global'
 
 
   render() {
-    let { selectedTab, selectedSubtab, error, isOpen, isOpenBug, saveName, fieldWellOptions } = this.state
+    let { selectedTab, error, isOpen, isOpenBug, saveName, fieldWellOptions } = this.state
     let { global } = this.props
 
     global = global.toJS()
+
+
 
     let { showForms } = global
 
@@ -291,7 +331,6 @@ import { setHasSubmitted, setIsLoading } from '../../../redux/actions/global'
       }
     }
     else if (showForms === 'results') {
-      console.log('i made it')
       form = this.resultsForm
     }
 
@@ -330,6 +369,7 @@ import { setHasSubmitted, setIsLoading } from '../../../redux/actions/global'
           <div className='tab-content'> 
            { form }
           </div>
+          <button className="submit submit-button" onClick={(e) => this.handleSubmitResults('submit')}>Enviar</button>
         <Notification />
         <Loading />
         </div>
@@ -365,6 +405,7 @@ const mapStateToProps = state => ({
   hasErrorsEstIncProduccionEstimulacion: state.getIn(['estIncProduccionEstimulacion', 'hasErrors']),
   hasErrorsEstIncProduccionApuntalado: state.getIn(['estIncProduccionApuntalado', 'hasErrors']),
   hasErrorsEstCosts: state.getIn(['estCost', 'hasErrors']),
+  hasErrorsHistoricoDeAforosResults: state.getIn(['historicoDeAforosResults', 'hasErrors']),
   tipoDeIntervenciones: state.getIn(['objetivoYAlcancesIntervencion', 'tipoDeIntervenciones']),
 })
 
@@ -372,6 +413,8 @@ const mapDispatchToProps = dispatch => ({
   setHasSubmitted: val => dispatch(setHasSubmitted(val)),
   setIsLoading: val => dispatch(setIsLoading(val)),
   submitPozoForm: (action, token, name) => {dispatch(submitForm(action, token, name))},
+  submitResultsForm: (action, token) => {dispatch(submitResultsForm(action, token))},
+  setCurrentPage: val => {dispatch(setCurrentPage(val))},
 })
 
 export default connect(mapStateToProps, mapDispatchToProps)(InputsUI)

@@ -73,10 +73,10 @@ const forms = [
 
 
   render() {
-    let { setShowForms, hasSubmitted } = this.props
+    let { setShowForms, hasSubmitted, hasErrorsHistoricoDeAforosResults } = this.props
      let className = 'subtab'
 
-   let errors = [false, false, false, false, false, false]
+   let errors = [false, hasErrorsHistoricoDeAforosResults, false, false, false, false]
 
      let title = forms[this.state.currentStep].title
 
@@ -116,6 +116,7 @@ const mapStateToProps = state => ({
   hasSubmitted: state.getIn(['global', 'hasSubmitted']),
   token: state.getIn(['user', 'token']),
   propuestaID: state.getIn(['global', 'transactionID']),
+  hasErrorsHistoricoDeAforosResults: state.getIn(['historicoDeAforosResults', 'hasErrors']),
 })
 
 export default connect(mapStateToProps, mapDispatchToProps)(ResultsMultiStepForm)

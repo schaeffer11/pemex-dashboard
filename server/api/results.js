@@ -10,16 +10,16 @@ import { addObject, signedURL, deleteObject, getBuckets } from '../aws/index';
 const INSERT_COSTS_QUERY = {
     save: ``,
     submit: `INSERT INTO ResultsCosts (
-        COST_ID, INTERVENTION_ID, FECHA, COMPANY, COST_MNX, COST_DLS, MNXtoDLS, TRANSACTION_ID) VALUES ?`,
+        COST_ID, INTERVENTION_ID, FECHA, COMPANY, COST_MNX, COST_DLS, MNXtoDLS, PROPUESTA_ID, TRANSACTION_ID) VALUES ?`,
     loadSave: ``,
     loadTransaction: ``    
 }
 
 const INSERT_AFOROS_QUERY = {
     save: ``,
-    submit: `INSERT INTO WellAforos (
+    submit: `INSERT INTO ResultsAforos (
         WELL_FORMACION_ID, FECHA, TIEMPO, ESTRANGULADOR, PTP, TTP, PBAJ, TBAJ, PSEP, TSEP, QL, 
-        QO, QG, QW, RGA, SALINIDAD, PH, TRANSACTION_ID) VALUES 
+        QO, QG, QW, RGA, SALINIDAD, PH, PROPUESTA_ID, TRANSACTION_ID) VALUES 
         ?`,     
     loadSave: ``,
     loadTransaction: ``    
@@ -28,7 +28,7 @@ const INSERT_AFOROS_QUERY = {
 const INSERT_IMAGES_QUERY = {
     save: ``,
     submit: `INSERT INTO ResultsImages (
-        WELL_FORMACION_ID, IMAGE_NAME, IMG_URL, TRANSACTION_ID) VALUES
+        WELL_FORMACION_ID, IMAGE_NAME, IMG_URL, PROPUESTA_ID, TRANSACTION_ID) VALUES
         ?`,
     loadSave: ``,
     loadTransaction: ``,
@@ -40,7 +40,7 @@ const INSERT_CEDULA_ESTIMULACION_QUERY = {
     submit: `INSERT INTO ResultsCedulaEstimulacion (
         CEDULA_ID, INTERVENTION_ID, WELL_FORMACION_ID, ETAPA, SISTEMA, NOMBRE_COMERCIAL,
         VOL_LIQUID, GASTO_N2, GASTO_LIQUIDO, GASTO_EN_FONDO, CALIDAD, VOL_N2, VOL_LIQUIDO_ACUM, 
-        VOL_N2_ACUM, REL_N2_LIQ, TIEMPO, COMPANIA, TRANSACTION_ID) VALUES ?`,
+        VOL_N2_ACUM, REL_N2_LIQ, TIEMPO, COMPANIA, PROPUESTA_ID, TRANSACTION_ID) VALUES ?`,
     loadSave: ``,
     loadTransaction: ``    
 }
@@ -50,7 +50,7 @@ const INSERT_CEDULA_ACIDO_QUERY = {
     submit: `INSERT INTO ResultsCedulaAcido (
         CEDULA_ID, INTERVENTION_ID, WELL_FORMACION_ID, ETAPA, SISTEMA, NOMBRE_COMERCIAL, TIPO_DE_APUNTALANTE, CONCENTRACION_DE_APUNTALANTE, 
         VOL_LIQUID, GASTO_N2, GASTO_LIQUIDO, GASTO_EN_FONDO, CALIDAD, VOL_N2, VOL_LIQUIDO_ACUM, 
-        VOL_N2_ACUM, REL_N2_LIQ, TIEMPO, COMPANIA, TRANSACTION_ID) VALUES ?`,
+        VOL_N2_ACUM, REL_N2_LIQ, TIEMPO, COMPANIA, PROPUESTA_ID, TRANSACTION_ID) VALUES ?`,
     loadSave: ``,
     loadTransaction: ``    
 }
@@ -60,9 +60,16 @@ const INSERT_CEDULA_APUNTALADO_QUERY = {
     submit: `INSERT INTO ResultsCedulaApuntalado (
         CEDULA_ID, INTERVENTION_ID, WELL_FORMACION_ID, ETAPA, SISTEMA, NOMBRE_COMERCIAL, TIPO_DE_APUNTALANTE, CONCENTRACION_DE_APUNTALANTE, 
         VOL_LIQUID, GASTO_N2, GASTO_LIQUIDO, GASTO_EN_FONDO, CALIDAD, VOL_N2, VOL_LIQUIDO_ACUM, 
-        VOL_N2_ACUM, REL_N2_LIQ, TIEMPO, COMPANIA, TRANSACTION_ID) VALUES ?`        ,
+        VOL_N2_ACUM, REL_N2_LIQ, TIEMPO, COMPANIA, PROPUESTA_ID, TRANSACTION_ID) VALUES ?`        ,
     loadSave: ``,
     loadTransaction: ``    
+}
+
+const INSERT_TRANSACTION = {
+    save: ``,
+    submit: `INSERT INTO TransactionsResults (
+        TRANSACTION_ID, PROPUESTA_ID, USER_ID, WELL_FORMACION_ID) VALUES
+        (?, ?, ?, ?)`, 
 }
 
 
@@ -70,6 +77,7 @@ const DUMMY_QUERY = 'SELECT(1) FROM Users LIMIT 1'
 
 
 export const createResults = async (body, action, cb) => {
+  console.log('im in results')
   const allKeys = Object.keys(body)
   const finalObj = {}
 
@@ -104,58 +112,52 @@ export const createResults = async (body, action, cb) => {
     finalObj[k] = innerObj
   }
 
+  console.log(finalObj)
+
+
   let userID = finalObj.user.id
-  let transactionID = finalObj.global.transactionID
-  let wellFormacionID = 'SOMETHING'
-  let interventionID = 'SOMETHING'
-  let tipoDeIntervenciones = 'SOMETHING'
+  let propuestaID = finalObj.global.transactionID
+  let transactionID = Math.floor(Math.random() * 1000000000)
 
-  let { estimacionCostosData, compania } = finalObj.estCostResults
+  // let { estimacionCostosData, compania } = finalObj.estCostResults
+  let estimacionCostosData = []
+  let comapnia = 'something'
 
-  let { aforosData } = finalObj.someRegister
+  let { aforosData } = finalObj.historicoDeAforosResults
 
-  let { geometryData } = finalObj.someRegister
+  // let { geometryData } = finalObj.someRegister
+  let geometryData = []
 
-  let treatmentGraphImg = finalObj.someRegister.imgUrl
+  // let treatmentGraphImg = finalObj.someRegister.imgUrl
+  let treatmentGraphImg = 'empty'
 
-  let { cedulaData } = finalObj.someRegister
+  // let { cedulaData } = finalObj.someRegister
+  let cedulaData = []
 
 // write to db
   connection.beginTransaction(function(err) {
     if (err) { throw err; }
 
-    let values = []
 
-    estimacionCostosData.forEach(i => {
+    connection.query(`SELECT t.WELL_FORMACION_ID, INTERVENCIONES_ID, TIPO_DE_INTERVENCIONES FROM Transactions t 
+      JOIN Intervenciones i ON t.TRANSACTION_ID = i.TRANSACTION_ID 
+      WHERE t.TRANSACTION_ID = ?`, [propuestaID], (err, results) => {
 
-    })
 
-    estimacionCostosData.forEach(i => {
-      let costID = 'SOMETHING'
-      let newRow = [costID, interventionID, i.fecha, compania, i.cost, i.costDLS, i.MNXtoDLS, transactionID]
-      values.push(newRow)
-    })
+      let wellFormacionID = results[0].WELL_FORMACION_ID
+      let interventionID = results[0].INTERVENCIONES_ID
+      let tipoDeIntervenciones = results[0].TIPO_DE_INTERVENCIONES
 
-    connection.query(INSERT_COSTS_QUERY.submit, [values], (err, results) => {
-      console.log('costs', err)
-      console.log('costs', results)
-      if (err) {
-        return connection.rollback(function() {
-          console.log('rolling back!!! 2')
-          cb(err)
-        })
-      }
+      let values = []
 
-      values = []
-      aforosData.forEach(i => {
-          let newRow = [wellFormacionID, i.fecha, i.tiempo, i.estrangulador, i.ptp, i.ttp, i.pbaj, i.tbaj, i.psep, i.tsep, 
-            i.ql, i.qo, i.qg, i.qw, i.rga, i.salinidad, i.ph, transactionID]
-          values.push(newRow)
+      estimacionCostosData.forEach(i => {
+        let newRow = [i.costID, interventionID, i.fecha, compania, i.cost, i.costDLS, i.MNXtoDLS, propuestaID, transactionID]
+        values.push(newRow)
       })
 
-      connection.query(INSERT_AFOROS_QUERY.submit, [values], (err, results) => {
-        console.log('aforos', err)
-        console.log('aforos', results)
+      connection.query(values.length === 0 ? DUMMY_QUERY : INSERT_COSTS_QUERY.submit, [values], (err, results) => {
+        console.log('costs', err)
+        console.log('costs', results)
         if (err) {
           return connection.rollback(function() {
             console.log('rolling back!!! 2')
@@ -164,16 +166,15 @@ export const createResults = async (body, action, cb) => {
         }
 
         values = []
-        geometryData.forEach(i => {
-            let newRow = [wellFormacionID, 'Geometry', i.imgUrl, transactionID]
+        aforosData.forEach(i => {
+            let newRow = [wellFormacionID, i.fecha, i.tiempo, i.estrangulador, i.ptp, i.ttp, i.pbaj, i.tbaj, i.psep, i.tsep, 
+              i.ql, i.qo, i.qg, i.qw, i.rga, i.salinidad, i.ph, propuestaID, transactionID]
             values.push(newRow)
         })
 
-        values.push([wellFormacionID, 'Treatment Graph', treatmentGraphImg, transactionID])
-
-        connection.query(INSERT_IMAGES_QUERY.submit, [values], (err, results) => {
-          console.log('images', err)
-          console.log('images', results)
+        connection.query(values.length === 0 ? DUMMY_QUERY : INSERT_AFOROS_QUERY.submit, [values], (err, results) => {
+          console.log('aforos', err)
+          console.log('aforos', results)
           if (err) {
             return connection.rollback(function() {
               console.log('rolling back!!! 2')
@@ -181,38 +182,15 @@ export const createResults = async (body, action, cb) => {
             })
           }
 
-          let query = tipoDeIntervenciones === 'estimulacion' ? INSERT_CEDULA_ESTIMULACION_QUERY.submit : tipoDeIntervenciones === 'acido' ? INSERT_CEDULA_ACIDO_QUERY.submit : INSERT_CEDULA_APUNTALADO_QUERY.submit
-
           values = []
+          geometryData.forEach(i => {
+              let newRow = [wellFormacionID, 'Geometry', i.imgUrl, propuestaID, transactionID]
+              values.push(newRow)
+          })
 
-          if (tipoDeIntervenciones === 'estimulacion') {
-            if (cedulaData) {
-              cedulaData.forEach(i => {
-                let cedulaID = 'SOMETHING'
-                let newRow = [cedulaID, interventionID, wellFormacionID, i.etapa, i.sistema, i.nombreComercial, i.volLiquid, i.gastoN2, i.gastoLiqudo, i.gastoEnFondo, i.calidad, i.volN2, i.volLiquidoAcum, i.volN2Acum, i.relN2Liq, i.tiempo, compania, transactionID]
-                if (action === 'save') {
-                  newRow.push(i.error)
-                }
-                values.push(newRow)
+          values.push([wellFormacionID, 'Treatment Graph', treatmentGraphImg, propuestaID, transactionID])
 
-              })  
-            }
-          } 
-          else {
-            if (cedulaData) {
-              cedulaData.forEach(i => {
-                let cedulaID = 'SOMETHING'
-                let newRow = [cedulaID, interventionID, wellFormacionID, i.etapa, i.sistema, i.nombreComercial, i.tipoDeApuntalante, i.concentraciDeApuntalante, i.volLiquid, i.gastoN2, i.gastoLiqudo, i.gastoEnFondo, i.calidad, i.volN2, i.volLiquidoAcum, i.volN2Acum, i.relN2Liq, i.tiempo, compania, transactionID]
-                if (action === 'save') {
-                  newRow.push(i.error)
-                }
-                values.push(newRow)
-
-              })   
-            }
-          }
-
-          connection.query(query, [values], (err, results) => {
+          connection.query(values.length === 0 ? DUMMY_QUERY : INSERT_IMAGES_QUERY.submit, [values], (err, results) => {
             console.log('images', err)
             console.log('images', results)
             if (err) {
@@ -222,16 +200,82 @@ export const createResults = async (body, action, cb) => {
               })
             }
 
-            connection.commit(function(err) {
-                if (err) {
+            let query = tipoDeIntervenciones === 'estimulacion' ? INSERT_CEDULA_ESTIMULACION_QUERY.submit : tipoDeIntervenciones === 'acido' ? INSERT_CEDULA_ACIDO_QUERY.submit : INSERT_CEDULA_APUNTALADO_QUERY.submit
+
+            values = []
+
+            if (tipoDeIntervenciones === 'estimulacion') {
+              if (cedulaData) {
+                cedulaData.forEach(i => {
+                  let cedulaID = 'SOMETHING'
+                  let newRow = [cedulaID, interventionID, wellFormacionID, i.etapa, i.sistema, i.nombreComercial, i.volLiquid, i.gastoN2, i.gastoLiqudo, i.gastoEnFondo, i.calidad, i.volN2, i.volLiquidoAcum, i.volN2Acum, i.relN2Liq, i.tiempo, compania, propuestaID, transactionID]
+                  if (action === 'save') {
+                    newRow.push(i.error)
+                  }
+                  values.push(newRow)
+
+                })  
+              }
+            } 
+            else {
+              if (cedulaData) {
+                cedulaData.forEach(i => {
+                  let cedulaID = 'SOMETHING'
+                  let newRow = [cedulaID, interventionID, wellFormacionID, i.etapa, i.sistema, i.nombreComercial, i.tipoDeApuntalante, i.concentraciDeApuntalante, i.volLiquid, i.gastoN2, i.gastoLiqudo, i.gastoEnFondo, i.calidad, i.volN2, i.volLiquidoAcum, i.volN2Acum, i.relN2Liq, i.tiempo, compania, propuestaID, transactionID]
+                  if (action === 'save') {
+                    newRow.push(i.error)
+                  }
+                  values.push(newRow)
+
+                })   
+              }
+            }
+
+            connection.query(values.length === 0 ? DUMMY_QUERY : query, [values], (err, results) => {
+              console.log('cedula', err)
+              console.log('cedula', results)
+              if (err) {
+                return connection.rollback(function() {
+                  console.log('rolling back!!! 2')
                   cb(err)
+                })
+              }
+
+              values = [transactionID, propuestaID, userID, wellFormacionID]
+              connection.query((INSERT_TRANSACTION.submit), values, (err, results) => {
+                console.log('transaction', err)
+                console.log('transaction', results)
+                if (err) {
                   return connection.rollback(function() {
-                    console.log('something went terrible')
-                    throw err;
-                  });
+                    console.log('rolling back!!! 2')
+                    cb(err)
+                  })
                 }
-                console.log('success!');
-                cb(null)
+
+                connection.query(`UPDATE Transactions SET HAS_RESULTS = 1 WHERE TRANSACTION_ID = ?`, [propuestaID], (err, results) => {
+                  console.log('update old trans', err)
+                  console.log('update old trans', results)
+                  if (err) {
+                    return connection.rollback(function() {
+                      console.log('rolling back!!! 2')
+                      cb(err)
+                    })
+                  }
+
+
+                  connection.commit(function(err) {
+                      if (err) {
+                        cb(err)
+                        return connection.rollback(function() {
+                          console.log('something went terrible')
+                          throw err;
+                        });
+                      }
+                      console.log('success!');
+                      cb(null)
+                  })
+                })
+              })
             })
           })
         })

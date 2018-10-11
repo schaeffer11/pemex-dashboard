@@ -83,7 +83,6 @@ import ButtonGroup from './ButtonGroup'
     fetch(`/api/getTransactionNoResults?userID=${id}`, headers)
       .then(r => r.json())
       .then( r => {
-        console.log(r)
         this.setState({
           proposalOptions: r
         })

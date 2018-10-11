@@ -164,10 +164,6 @@ import { checkEmpty, checkDate } from '../../../../lib/errorCheckers';
     setEstimacionCostosData(data)
   }
 
-
-
-
-
   makeCostsForm() {
     let { setEstimacionCostosData, setMNXtoDLS, formData } = this.props
     let { itemOptions, costOpt } = this.state
