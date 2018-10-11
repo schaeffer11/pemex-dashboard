@@ -1,13 +1,14 @@
 import React, { Component } from 'react'
 import { connect } from 'react-redux'
 import autobind from 'autobind-decorator'
+import HistoricoDeAforosResults from './HistoricoDeAforosResults' 
 
 import { setIsLoading, setShowForms } from '../../../../redux/actions/global'
 
 
 const forms = [
   {'title' : 'Graph of Treatment', 'content': <div>Treatment Image Component</div> },
-  {'title' : 'Aforos', 'content': <div>Aforos Component </div> },
+  {'title' : 'Aforos', 'content': <HistoricoDeAforosResults /> },
   {'title' : 'Real Treatment', 'content': <div>Treatment Component </div> },
   {'title' : 'Geometry', 'content': <div>Geometry Component </div> },
   {'title' : 'Real Costs', 'content': <div>Costs Compoent </div> }
