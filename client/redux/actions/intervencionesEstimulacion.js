@@ -1,5 +1,3 @@
-import { costMap } from '../../lib/maps'
-
 export const setHasErrorsPropuestaEstimulacion = value => ({ type: 'set_hasErrorsPropuestaEstimulacion', value})
 export const setHasErrorsResultadosSimulacionEstimulacion = value => ({ type: 'set_hasErrorsResultadosSimulacionEstimulacion', value})
 export const setHasErrorsEstIncProduccionEstimulacion = value => ({ type: 'set_hasErrorsEstIncProduccionEstimulacion', value})
@@ -62,11 +60,5 @@ export const setEstIncProdEstimulationImgURL = value => ({ type: 'set_estIncProd
 
 export const setPruebasDeLaboratorioData = value => ({ type: 'set_pruebasDeLaboratorioData', value})
 
-export const setEstimacionCostosData = value => ({ 
-  type: 'set_estimacionCostos', 
-  value: value.map(i => {
-    i.unit = i.length > 0 && costMap.find(j => j.item === i.item) ? costMap.find(j => j.item === i.item).unit : ''
-    return i
-  })
-})
+export const setEstimacionCostosData = value => ({ type: 'set_estimacionCostos', value })
 export const setHasErrorsEstCosts = value => ({ type: 'set_hasErrorsEstCosts', value})

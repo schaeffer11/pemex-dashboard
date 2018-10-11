@@ -8,16 +8,9 @@ import InputTable from '../../Common/InputTable'
 
 import { InputRow, InputRowUnitless, InputRowSelectUnitless, TextAreaUnitless } from '../../Common/InputRow'
 import {setEstimacionCostosData, setMNXtoDLS, setHasErrorsEstCosts } from '../../../../redux/actions/intervencionesEstimulacion'
-import { costMap } from '../../../../lib/maps'
 import { sortLabels } from '../../../../lib/formatters'
 import { checkEmpty, checkDate } from '../../../../lib/errorCheckers';
 
-console.log(costMap)
-
-export const itemOptions = costMap.map(i => ({
-  label: i.item,
-  value: i.item,
-})).sort(sortLabels)
 
 @autobind class EstimacionCostos extends Component {
   constructor(props) {
@@ -30,15 +23,38 @@ export const itemOptions = costMap.map(i => ({
           value: '',
         },
       },
+      costMap: [],
+      itemOptions: [],
     }
   }
 
 
   componentDidMount(){
     let { setHasErrorsEstCosts, hasSubmitted } = this.props
+    const token = this.props.user.get('token')
+    const headers = {
+      headers: {
+        'Authorization': `Bearer ${token}`,
+        'content-type': 'application/json',
+      },
+    }
 
     let hasErrors = this.checkAllInputs(hasSubmitted)
     setHasErrorsEstCosts(hasErrors)
+
+    fetch(`api/getCostItems`, headers)
+    .then(r => r.json())
+    .then( r => {
+      let itemOptions = r.map(i => ({
+        label: i.ITEM,
+        value: i.COST_ID,
+      })).sort(sortLabels)
+
+      this.setState({
+        costMap: r,
+        itemOptions: itemOptions
+      })
+    })
 
   }
 
@@ -137,10 +153,27 @@ export const itemOptions = costMap.map(i => ({
     setEstimacionCostosData(estimacionCostosData)
   }
 
+  setEstimacionCostosData(data) {
+    let { costMap } = this.state
+    let { setEstimacionCostosData } = this.props
+
+    data.forEach(row => {
+      row.unit = costMap.find(i => i.COST_ID === row.item) ? costMap.find(i => i.COST_ID === row.item).UNIT : null
+    })
+
+    setEstimacionCostosData(data)
+  }
+
+
+
+
+
   makeCostsForm() {
     let { setEstimacionCostosData, setMNXtoDLS, formData } = this.props
+    let { itemOptions, costOpt } = this.state
     formData = formData.toJS()
     let { estimacionCostosData, MNXtoDLS } = formData
+    
     const rowObj = {
       fecha: null,
       cost: '',
@@ -206,7 +239,7 @@ export const itemOptions = costMap.map(i => ({
           <InputTable
             className="-striped"
             data={estimacionCostosData}
-            setData={setEstimacionCostosData}
+            setData={this.setEstimacionCostosData}
             columns={columns}
             showPagination={false}
             showPageSizeOptions={false}
@@ -258,6 +291,7 @@ export const itemOptions = costMap.map(i => ({
 
 const mapStateToProps = state => ({
   formData: state.get('estCost'),
+  user: state.get('user'),
 })
 
 const mapDispatchToProps = dispatch => ({

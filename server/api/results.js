@@ -10,7 +10,7 @@ import { addObject, signedURL, deleteObject, getBuckets } from '../aws/index';
 const INSERT_COSTS_QUERY = {
     save: ``,
     submit: `INSERT INTO ResultsCosts (
-        COST_ID, INTERVENTION_ID, ITEM, UNIT, FECHA, COMPANY, COST_MNX, COST_DLS, MNXtoDLS, TRANSACTION_ID) VALUES ?`,
+        COST_ID, INTERVENTION_ID, FECHA, COMPANY, COST_MNX, COST_DLS, MNXtoDLS, TRANSACTION_ID) VALUES ?`,
     loadSave: ``,
     loadTransaction: ``    
 }
@@ -132,7 +132,7 @@ export const createResults = async (body, action, cb) => {
 
     estimacionCostosData.forEach(i => {
       let costID = 'SOMETHING'
-      let newRow = [costID, interventionID, i.item, i.unit, i.fecha, compania, i.cost, i.costDLS, i.MNXtoDLS, transactionID]
+      let newRow = [costID, interventionID, i.fecha, compania, i.cost, i.costDLS, i.MNXtoDLS, transactionID]
       values.push(newRow)
     })
 

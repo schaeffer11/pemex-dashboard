@@ -115,6 +115,14 @@ router.get('/getFieldWellMapping', (req, res) => {
 })
 
 
+router.get('/getCostItems', (req, res) => {
+    connection.query(`SELECT * FROM CostMap`, (err, results) => {
+      res.json(results)
+    })
+})
+
+
+
 router.get('/getAllSaves', (req, res) => {
     let { userID } = req.query
     
