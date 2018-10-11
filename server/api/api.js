@@ -6,7 +6,7 @@ import fs from 'fs'
 import objectPath from 'object-path'
 import multer from 'multer'
 import { addObject, signedURL, deleteObject, getBuckets } from '../aws/index';
-import { create as createWell, getFields, getWell, 
+import { create as createWell, getFields, getWell, getSurveys,
             getHistIntervenciones, getHistIntervencionesNew, getLayer, getMudLoss, getMecanico, 
             getAnalisisAgua, getEmboloViajero, getBombeoNeumatico, getBombeoHidraulico, 
             getBombeoCavidades, getBombeoElectrocentrifugo, getBombeoMecanico, 
@@ -605,6 +605,61 @@ router.get('/getHistIntervenciones', async (req, res) => {
     }
   })
 })
+
+
+
+router.get('/getSurvey', async (req, res) => {
+  let { transactionID, saved } = req.query
+
+  let action = saved ? 'loadSave' : 'loadTransaction'
+
+
+  const map = {
+    PROFUNDIDAD: { child: 'depth' },
+    INCLINACION: { child: 'inclination'},
+    AZIMUT: { child: 'azimuth'},
+    MV: { child: 'trueVerticalDepth'},
+    X: { child: 'x_offset'},
+    Y: { child: 'y_offset'},
+    HAS_ERRORS: { child: 'error'}
+  }
+
+  const mainParent = 'mecanicoYAparejoDeProduccion'
+  const innerParent = 'desviacion'
+
+  getSurveys(transactionID, action, (data) => {
+    const finalObj = {}
+    if (data && data.length > 0) {
+      data.forEach((d, index) => {
+        d.HAS_ERRORS = d.HAS_ERRORS === 0 || d.HAS_ERRORS === undefined ? false : true
+        const innerObj = {}
+        Object.keys(d).forEach(k => {
+          if (map[k]) {
+            const { child } = map[k]
+            objectPath.set(innerObj, child, d[k])
+          }
+        })
+        objectPath.set(innerObj, 'length', data.length)
+        objectPath.set(innerObj, 'index', index)
+        objectPath.push(finalObj, `${mainParent}.${innerParent}`, innerObj)
+      })
+      res.json(finalObj)
+    }
+    else if (action === 'loadTransaction'){
+      res.json({ err: 'No value found in database'  })
+    }
+    else {
+      res.json({
+        [mainParent]: {
+          [innerParent]: [
+          {depth: '', inclination: '', azimuth: '', trueVerticalDepth: '', x_offset: '', y_offset: '', error: true}
+          ]
+        }
+      })
+    }
+  })
+})
+
 
 
 
@@ -1321,13 +1376,17 @@ router.get('/getInterventionBase', async (req, res) => {
   const map = {
     OBJETIVO: { parent: 'objetivoYAlcancesIntervencion', child: 'objetivo' }, 
     ALCANCES: { parent: 'objetivoYAlcancesIntervencion', child: 'alcances' },
-    TIPO_DE_INTERVENCIONES: { parent: 'objetivoYAlcancesIntervencion', child: 'tipoDeIntervenciones' }, 
+    TIPO_DE_INTERVENCIONES: { parent: 'objetivoYAlcancesIntervencion', child: 'tipoDeIntervenciones' },
+    FECHA_PROGRAMADA_INTERVENCION: { parent: 'objetivoYAlcancesIntervencion', child: 'fechaProgramadaIntervencion'},
+    INTERVENCION_PROGRAMADA: { parent: 'objetivoYAlcancesIntervencion', child: 'intervencionProgramada'},
   }
 
   getInterventionBase(transactionID, action, (data) => {
     const finalObj = {}
 
     if (data[0]) {
+      data[0].FECHA_PROGRAMADA_INTERVENCION ? data[0].FECHA_PROGRAMADA_INTERVENCION = data[0].FECHA_PROGRAMADA_INTERVENCION.toJSON().slice(0, 10) : null
+      data[0].INTERVENCION_PROGRAMADA !== undefined ? (data[0].INTERVENCION_PROGRAMADA = data[0].INTERVENCION_PROGRAMADA === 1 ? true : false) : null
       Object.keys(data[0]).forEach(key => {
         if (map[key]) {
           const { parent, child } = map[key]

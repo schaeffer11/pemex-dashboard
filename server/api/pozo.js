@@ -71,6 +71,17 @@ const INSERT_WELL_QUERY = {
     loadTransaction: `SELECT * FROM WellsData WHERE TRANSACTION_ID = ?`    
 }
 
+const INSERT_SURVERY_QUERY = {
+    save: `INSERT INTO _WellSurveysSave (
+        SURVEY_ID, WELL_FORMACION_ID, PROFUNDIDAD, INCLINACION, AZIMUT,
+        MV, X, Y, TRANSACTION_ID, HAS_ERRORS) VALUES ?`,
+    submit: `INSERT INTO WellSurveys (
+        SURVEY_ID, WELL_FORMACION_ID, PROFUNDIDAD, INCLINACION, AZIMUT,
+        MV, X, Y, TRANSACTION_ID) VALUES ?`,
+    loadSave: `SELECT * FROM _WellSurveysSave WHERE TRANSACTION_ID = ?`,
+    loadTransaction: `SELECT * FROM WellSurveys WHERE TRANSACTION_ID = ?`
+}
+
 const INSERT_HIST_INTERVENCIONES_QUERY = {
     save: `INSERT INTO _WellUserInputInterventionsSave (
         WELL_FORMACION_ID, INPUT_INTERVENTION_ID, DATE, DESCRIPTION, HAS_ERRORS, TRANSACTION_ID) VALUES
@@ -301,11 +312,11 @@ const INSERT_WELL_IMAGE_QUERY = {
 
 const INSERT_INTERVENTION_BASE_QUERY = {
     save: `INSERT INTO _IntervencionesSave (
-      INTERVENCIONES_ID, WELL_FORMACION_ID, OBJETIVO, ALCANCES, TIPO_DE_INTERVENCIONES, TRANSACTION_ID)
-      VALUES (?, ?, ?, ?, ?, ?)`,
+      INTERVENCIONES_ID, WELL_FORMACION_ID, OBJETIVO, ALCANCES, TIPO_DE_INTERVENCIONES, FECHA_PROGRAMADA_INTERVENCION, INTERVENCION_PROGRAMADA, TRANSACTION_ID)
+      VALUES (?, ?, ?, ?, ?, ?, ?, ?)`,
     submit: `INSERT INTO Intervenciones (
-      INTERVENCIONES_ID, WELL_FORMACION_ID, OBJETIVO, ALCANCES, TIPO_DE_INTERVENCIONES, TRANSACTION_ID)
-      VALUES (?, ?, ?, ?, ?, ?)`,
+      INTERVENCIONES_ID, WELL_FORMACION_ID, OBJETIVO, ALCANCES, TIPO_DE_INTERVENCIONES, FECHA_PROGRAMADA_INTERVENCION, INTERVENCION_PROGRAMADA, TRANSACTION_ID)
+      VALUES (?, ?, ?, ?, ?, ?, ?, ?)`,
     loadSave: `SELECT * FROM _IntervencionesSave WHERE TRANSACTION_ID = ?`,
     loadTransaction: `SELECT * FROM Intervenciones WHERE TRANSACTION_ID = ?`    
 }
@@ -621,6 +632,11 @@ export const getHistIntervenciones = async (transID, action, cb) => {
    })
 }
 
+export const getSurveys = async (transID, action, cb) => {
+    connection.query(INSERT_SURVERY_QUERY[action], [transID], (err, results) => {
+        cb(results)
+    })
+}
 
 export const getLayer = async (transID, action, cb) => {
   connection.query(INSERT_LAYER_QUERY[action], [transID], (err, results) => {
@@ -833,7 +849,7 @@ export const create = async (body, action, cb) => {
   let { tipoDeTerminacion, hIntervaloProductor, empacador, presionDifEmpacador, sensorPyt,
     tipoDeLiner, diametroDeLiner, tipoDePistolas, densidadDeDisparosMecanico, fase,
     diametroDeOrificio, penetracion, tratamientoPor, volumenAparejoDeProduccion,
-    volumenCimaDeIntervalo, volumenBaseDeIntervalo, volumenDeEspacioAnular } = finalObj.mecanicoYAparejoDeProduccion
+    volumenCimaDeIntervalo, volumenBaseDeIntervalo, volumenDeEspacioAnular, desviacion } = finalObj.mecanicoYAparejoDeProduccion
 
   let {waterAnalysisBool, pH, temperaturaDeConductividad, resistividad, salinidadConConductimetro, solidosDisueltosTotales,
     durezaTotalComoCaCO3, durezaDeCalcioComoCaCO3, durezaDeMagnesioComoCaCO3, alcalinidadTotalComoCaCO3, alcalinidadALaFenolftaleinaComoCaCO3,
@@ -867,7 +883,7 @@ export const create = async (body, action, cb) => {
 
 
 
-  let { objetivo, alcances, tipoDeIntervenciones } = finalObj.objetivoYAlcancesIntervencion
+  let { objetivo, alcances, tipoDeIntervenciones, fechaProgramadaIntervencion, intervencionProgramada } = finalObj.objetivoYAlcancesIntervencion
 
   let { pruebasDeLaboratorioData } = finalObj.pruebasDeLaboratorio
 
@@ -1311,7 +1327,7 @@ export const create = async (body, action, cb) => {
                               }
 
                               connection.query((action === 'save' ? INSERT_INTERVENTION_BASE_QUERY.save : INSERT_INTERVENTION_BASE_QUERY.submit), [
-                                interventionID, wellFormacionID, objetivo, alcances, tipoDeIntervenciones, transactionID
+                                interventionID, wellFormacionID, objetivo, alcances, tipoDeIntervenciones, fechaProgramadaIntervencion, intervencionProgramada, transactionID
                               ], (err, results) => {
                                 console.log('intervention base', err)
                                 console.log('intervention base', results)
@@ -1705,24 +1721,49 @@ export const create = async (body, action, cb) => {
                                                                       })
                                                                     }
 
+                                                                    values = []
+                                                                    console.log(desviacion)
+                                                                    console.log(finalObj.mecanicoYAparejoDeProduccion)
 
-                                                                    connection.commit(function(err) {
-                                                                        if (err) {
+                                                                    desviacion.forEach(i => {
+                                                                      console.log(' im a row')
+                                                                      let surveyID = Math.floor(Math.random() * 1000000000)
+                                                                      let newRow = [surveyID, wellFormacionID, i.depth, i.inclination, i.azimuth, i.trueVerticalDepth, i.x_offset, i.y_offset, transactionID]
+                                                                     
+                                                                      if (action === 'save') {
+                                                                        newRow.push(i.error)
+                                                                      }
+                                                                      values.push(newRow)
+                                                                    })  
+                                                                    console.log(action, INSERT_SURVERY_QUERY.save, values)
+                                                                    connection.query(action === 'save' ? INSERT_SURVERY_QUERY.save : INSERT_SURVERY_QUERY.submit, [values], (err, results) => {
+                                                                      console.log('surveys', err)
+                                                                      console.log('surveys', results)
+
+                                                                      if (err) {
+                                                                        return connection.rollback(function() {
+                                                                          console.log('rolling back!!! 2')
                                                                           cb(err)
-                                                                          return connection.rollback(function() {
-                                                                            console.log('something went terrible')
-                                                                            throw err;
-                                                                          });
-                                                                        }
-                                                                        console.log('success!');
-                                                                        var log = 'Post ' + results + ' added';
-                                                                        console.log(log)
-                                                                        cb(null)
+                                                                        })
+                                                                      }
+
+                                                                      connection.commit(function(err) {
+                                                                          if (err) {
+                                                                            cb(err)
+                                                                            return connection.rollback(function() {
+                                                                              console.log('something went terrible')
+                                                                              throw err;
+                                                                            });
+                                                                          }
+                                                                          console.log('success!');
+                                                                          var log = 'Post ' + results + ' added';
+                                                                          console.log(log)
+                                                                          cb(null)
+                                                                      })
+
                                                                     })
                                                                 })
-
                                                             })
-
                                                           })
                                                         })
                                                       })

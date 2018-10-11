@@ -29,6 +29,7 @@ import { setHasSubmitted, setIsLoading } from '../../../redux/actions/global'
       fieldWellOptions: [],
       bugResponseError: false,
       bugResponseSuccess: false,
+      comment: '',
     }
 
     this.pozoMultiStepFormRef = React.createRef();
@@ -114,7 +115,6 @@ import { setHasSubmitted, setIsLoading } from '../../../redux/actions/global'
       }
 
       if (!hasErrors) {
-
         this.props.submitPozoForm(action, this.props.token, saveName)
         this.setState({'error': ''})
       }
@@ -128,7 +128,8 @@ import { setHasSubmitted, setIsLoading } from '../../../redux/actions/global'
       }
     }
     else {
-      this.props.submitPozoForm(action, this.props.token, saveName)
+      const cleanSaveName = saveName.trim()
+      this.props.submitPozoForm(action, this.props.token, cleanSaveName)
       this.setState({'error': ''})
       this.deactivateModal()
     }
@@ -147,6 +148,7 @@ import { setHasSubmitted, setIsLoading } from '../../../redux/actions/global'
       bugResponseError: false,
       bugResponseSuccess: false,
       isOpenBug: false,
+      comment: '',
     })
   }
 
@@ -165,7 +167,6 @@ import { setHasSubmitted, setIsLoading } from '../../../redux/actions/global'
 
   buildModal() {
     let {saveName} = this.state
-
     return (
       <AriaModal
         titleId="save-modal"
@@ -203,17 +204,14 @@ import { setHasSubmitted, setIsLoading } from '../../../redux/actions/global'
   handleSubmitBug() {
       let { comment , selectedSubtab} = this.state
       const { token, user } = this.props
-
       const headers = {
         'Authorization': `Bearer ${token}`,
       }
-
       const formData = new FormData()
-
-      formData.append('comment', JSON.stringify(comment))
+      const cleanComment = comment.trim().replace(/&nbsp;/g, '').replace(/<[^\/>][^>]*><\/[^>]+>/g, '').replace(/\s+$/, '')
+      formData.append('comment', JSON.stringify(cleanComment))
       formData.append('page', JSON.stringify(selectedSubtab))
       formData.append('user', JSON.stringify(user))
-
       fetch('/api/comment', {
         headers,
         method: 'POST',
@@ -233,13 +231,13 @@ import { setHasSubmitted, setIsLoading } from '../../../redux/actions/global'
             })
           }
     })
-
   }
  
 
   buildBugModal() {
     let {comment, bugResponseError, bugResponseSuccess} = this.state
-
+    const isBlank = /^\s*$/.test(comment)
+    const disabled = bugResponseSuccess || !comment || comment === '' || isBlank
     return (
       <AriaModal
         titleId="save-modal"
@@ -260,9 +258,12 @@ import { setHasSubmitted, setIsLoading } from '../../../redux/actions/global'
         </div>
         <div className="modal-body">
           <textarea style={{ width: '500px', height: '200px' }} value={comment} onChange={this.handleCommentInput}> </textarea><br/>
-          <button disabled={bugResponseSuccess} className="submit save-button"  onClick={(e) => this.handleSubmitBug() }>{'Enviar'}</button>
+          <button disabled={disabled} className="submit save-button"  onClick={(e) => this.handleSubmitBug() }>{'Enviar'}</button>
           {bugResponseError && <div style={{color: 'red', fontWeight: 500}}>Comentarios son limitados a 1000 caracteres</div>}
-          {bugResponseSuccess && <div style={{color: 'green', fontWeight: 500}}>Gracias por su retroalimentación</div>}
+          {bugResponseSuccess && <div style={{color: 'green', fontWeight: 500}}>
+              <p>Gracias por su retroalimentación.</p>
+              <p>El equipo de desarrolladores se pondra en contacto con usted si una clarificación es necesaria.</p>
+          </div>}
         </div> 
       </div>
       </AriaModal>
