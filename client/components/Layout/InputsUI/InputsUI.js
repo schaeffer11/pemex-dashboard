@@ -13,6 +13,7 @@ import BaseIntervenciones from './IntervencionesForms/BaseIntervenciones'
 import PozoMultiStepForm from './PozoForms/PozoMultiStepForm'
 import ResultsMultiStepForm from './ResultsForms/ResultsMultiStepForm'
 import { submitForm } from '../../../redux/actions/pozoFormActions'
+import { submitResultsForm } from '../../../redux/actions/results'
 import Notification from '../Common/Notification'
 import Loading from '../Common/Loading'
 import { setHasSubmitted, setIsLoading } from '../../../redux/actions/global'
@@ -134,6 +135,38 @@ import { setHasSubmitted, setIsLoading } from '../../../redux/actions/global'
       this.deactivateModal()
     }
   }
+
+  handleSubmitResults(action) {
+    let { setHasSubmitted, hasErrorsHistoricoDeAforosResults } = this.props
+
+    if (action === 'submit') {
+      let hasErrors = false
+      setHasSubmitted(true)
+      
+      console.log('aforos errors', hasErrorsHistoricoDeAforosResults)
+
+
+      if (hasErrorsHistoricoDeAforosResults) {
+        hasErrors = true
+      }
+
+      if (!hasErrors) {
+        this.props.submitResultsForm(action, this.props.token)
+        this.setState({'error': ''})
+      }
+      else {
+        setIsLoading({
+          showNotification: true,
+          notificationType: 'error',
+          notificationText: 'Su información no se ha guardado. Hay campos que no pueden estar vacios.'
+        })
+        console.log('there was an errror, im out')
+      }
+    }
+  }
+
+
+
 
   deactivateModal() {
     this.setState({
@@ -291,7 +324,6 @@ import { setHasSubmitted, setIsLoading } from '../../../redux/actions/global'
       }
     }
     else if (showForms === 'results') {
-      console.log('i made it')
       form = this.resultsForm
     }
 
@@ -330,6 +362,7 @@ import { setHasSubmitted, setIsLoading } from '../../../redux/actions/global'
           <div className='tab-content'> 
            { form }
           </div>
+          <button className="submit submit-button" onClick={(e) => this.handleSubmitResults('submit')}>Enviar</button>
         <Notification />
         <Loading />
         </div>
@@ -365,6 +398,7 @@ const mapStateToProps = state => ({
   hasErrorsEstIncProduccionEstimulacion: state.getIn(['estIncProduccionEstimulacion', 'hasErrors']),
   hasErrorsEstIncProduccionApuntalado: state.getIn(['estIncProduccionApuntalado', 'hasErrors']),
   hasErrorsEstCosts: state.getIn(['estCost', 'hasErrors']),
+  hasErrorsHistoricoDeAforosResults: state.getIn(['historicoDeAforosResults', 'hasErrors']),
   tipoDeIntervenciones: state.getIn(['objetivoYAlcancesIntervencion', 'tipoDeIntervenciones']),
 })
 
@@ -372,6 +406,7 @@ const mapDispatchToProps = dispatch => ({
   setHasSubmitted: val => dispatch(setHasSubmitted(val)),
   setIsLoading: val => dispatch(setIsLoading(val)),
   submitPozoForm: (action, token, name) => {dispatch(submitForm(action, token, name))},
+  submitResultsForm: (action, token) => {dispatch(submitResultsForm(action, token))},
 })
 
 export default connect(mapStateToProps, mapDispatchToProps)(InputsUI)

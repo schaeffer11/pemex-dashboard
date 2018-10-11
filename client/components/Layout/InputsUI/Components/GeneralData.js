@@ -9,7 +9,7 @@ import '../../../../styles/components/_query_modal.css'
 
 import { setObjetivo, setAlcances, setTipoDeIntervenciones } from '../../../../redux/actions/intervencionesEstimulacion'
 import { setSubdireccion, setActivo, setCampo, setPozo, setFormacion, setFechaProgramadaIntervencion, setFromSaveFichaTecnicaHighLevel, setHasErrorsFichaTecnicaHighLevel, setIntervencionProgramada } from '../../../../redux/actions/pozo'
-import { setShowForms, setIsLoading } from '../../../../redux/actions/global'
+import { setShowForms, setIsLoading, setTransactionID } from '../../../../redux/actions/global'
 import { InputDate, InputRow, InputRowUnitless, InputRowSelectUnitless, TextAreaUnitless } from '../../Common/InputRow'
 import Notification from '../../Common/Notification'
 import Loading from '../../Common/Loading'
@@ -83,7 +83,6 @@ import ButtonGroup from './ButtonGroup'
     fetch(`/api/getTransactionNoResults?userID=${id}`, headers)
       .then(r => r.json())
       .then( r => {
-        console.log(r)
         this.setState({
           proposalOptions: r
         })

@@ -6,7 +6,7 @@ import fs from 'fs'
 import objectPath from 'object-path'
 import multer from 'multer'
 import { addObject, signedURL, deleteObject, getBuckets } from '../aws/index';
-import { create as createWell, createResults, getFields, getWell, getSurveys,
+import { create as createWell, getFields, getWell, getSurveys,
             getHistIntervenciones, getHistIntervencionesNew, getLayer, getMudLoss, getMecanico, 
             getAnalisisAgua, getEmboloViajero, getBombeoNeumatico, getBombeoHidraulico, 
             getBombeoCavidades, getBombeoElectrocentrifugo, getBombeoMecanico, 
@@ -15,6 +15,8 @@ import { create as createWell, createResults, getFields, getWell, getSurveys,
             getInterventionEsimulacion, getInterventionAcido, getInterventionApuntalado, 
             getLabTest, getCedulaEstimulacion, getCedulaAcido, getCedulaApuntalado, 
             getCosts, getInterventionImage } from './pozo'
+import { createResults } from './results'
+
 // import { create as createDiagnostico } from './diagnosticos';
 import { getAuthorization } from '../middleware';
 
@@ -222,14 +224,15 @@ router.get('/getTransactionNoResults', (req, res) => {
 
 
 
-
 router.post('/well', async (req, res) => {
+
+  // TODO: Find a way to clean up callbacks from createWell
   createWell(req.body, 'submit', err => {
     if (err) {
       console.log('we got an error saving', err)
       res.json({ isSubmitted: false })
     } else {
-      console.log('all good in the saving neighborhood')
+      console.log('all good in the submitting neighborhood')
       res.json({ isSubmitted: true })
     }
   })
@@ -251,14 +254,14 @@ router.post('/wellSave', async (req, res) => {
 })
 
 
-router.post('/resultsSave', async (req, res) => {
-  createResults(req.body, err => {
+router.post('/results', async (req, res) => {
+  createResults(req.body, 'save', err => {
     if (err) {
       console.log('we got an error saving', err)
-      res.json({ isSaved: false })
+      res.json({ isSubmitted: false })
     } else {
-      console.log('all good in the saving neighborhood')
-      res.json({ isSaved: true })
+      console.log('all good in the submitting neighborhood')
+      res.json({ isSubmitted: true })
     }
   })
 })
