@@ -136,7 +136,8 @@ import { setHasSubmitted, setIsLoading, setCurrentPage } from '../../../redux/ac
 
   handleSubmitResults(action) {
     let { setHasSubmitted, hasErrorsHistoricoDeAforosResults, hasErrorsEstCostResults, 
-      hasErrorsTratamientoEstimulacion, hasErrorsTratamientoAcido, tipoDeIntervencionesResults } = this.props
+      hasErrorsTratamientoEstimulacion, hasErrorsTratamientoAcido, hasErrorsTratamientoApuntalado,
+      tipoDeIntervencionesResults } = this.props
 
     if (action === 'submit') {
       let hasErrors = false
@@ -151,7 +152,7 @@ import { setHasSubmitted, setIsLoading, setCurrentPage } from '../../../redux/ac
       else if (tipoDeIntervencionesResults === 'acido' && (hasErrorsTratamientoAcido)) {
         hasErrors = true
       }      
-      else if (tipoDeIntervencionesResults === 'apuntalado' && (false)) {
+      else if (tipoDeIntervencionesResults === 'apuntalado' && (hasErrorsTratamientoApuntalado)) {
         hasErrors = true
       }
 
@@ -412,6 +413,7 @@ const mapStateToProps = state => ({
   hasErrorsEstCostResults: state.getIn(['estCostResults', 'hasErrors']),
   hasErrorsTratamientoEstimulacion: state.getIn(['tratamientoEstimulacion', 'hasErrors']),
   hasErrorsTratamientoAcido: state.getIn(['tratamientoAcido', 'hasErrors']),
+  hasErrorsTratamientoApuntalado: state.getIn(['tratamientoApuntalado', 'hasErrors']),
   tipoDeIntervenciones: state.getIn(['objetivoYAlcancesIntervencion', 'tipoDeIntervenciones']),
   tipoDeIntervencionesResults: state.getIn(['resultsMeta', 'interventionType']),
 })

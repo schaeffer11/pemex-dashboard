@@ -50,7 +50,8 @@ export function submitResultsForm(action, token) {
 
     
  
-    let filteredKeys = ['user', 'global', 'historicoDeAforosResults', 'estCostResults', 'tratamientoEstimulacion', 'tratamientoAcido', 'resultsMeta']
+    let filteredKeys = ['user', 'global', 'historicoDeAforosResults', 'estCostResults', 
+    'tratamientoEstimulacion', 'tratamientoAcido', 'tratamientoApuntalado', 'resultsMeta']
 
 
     // const { pozo } = convertedFields.global
