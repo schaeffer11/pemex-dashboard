@@ -1485,6 +1485,9 @@ router.get('/getInterventionEstimulacion', async (req, res) => {
         const { parent, child } = map[key]
         objectPath.set(finalObj, `${parent}.${child}`, '')
       })
+      finalObj.propuestaEstimulacion.hasErrors = true
+      finalObj.resultadosSimulacionEstimulacion.hasErrors = true
+      finalObj.estIncProduccionEstimulacion.hasErrors = true
     }
     res.json(finalObj)
   })
@@ -1559,6 +1562,9 @@ router.get('/getInterventionAcido', async (req, res) => {
         const { parent, child } = map[key]
         objectPath.set(finalObj, `${parent}.${child}`, '')
       })
+      finalObj.resultadosSimulacionAcido.hasErrors = true
+      finalObj.propuestaAcido.hasErrors = true
+      finalObj.estIncProduccionAcido.hasErrors = true
     }
 
     res.json(finalObj)
@@ -1633,6 +1639,9 @@ router.get('/getInterventionApuntalado', async (req, res) => {
         const { parent, child } = map[key]
         objectPath.set(finalObj, `${parent}.${child}`, '')
       })
+      finalObj.resultadosSimulacionApuntalado.hasErrors = true
+      finalObj.propuestaApuntalado.hasErrors = true
+      finalObj.estIncProduccionApuntalado.hasErrors = true
     }
     res.json(finalObj)
   })
