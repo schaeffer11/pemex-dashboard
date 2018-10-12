@@ -19,6 +19,11 @@ export const setMergeTratamientoAcido = (value) => ({
   type: 'set_mergeTratamientoAcido',
 })
 
+export const setMergeTratamientoApuntalado = (value) => ({
+  value,
+  type: 'set_mergeTratamientoApuntalado',
+})
+
 export const setMergeResultsMeta = (value) => ({
   value,
   type: 'set_mergeResultsMeta',

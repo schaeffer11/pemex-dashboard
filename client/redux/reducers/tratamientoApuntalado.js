@@ -1,12 +1,12 @@
-import { fromJS } from 'immutable'
+import { Map, fromJS } from 'immutable'
 
 const initialState = fromJS({ 
+    capacidadTotalDelPozo: '',
     volumenPrecolchonN2: '',
-    volumenSistemaNoReativo: '',
-    volumenSistemaReactivo: '',
-    volumenSistemaDivergente: '',
-    volumenDesplazamientoLiquido: '',
-    volumenDesplazamientoGelLineal: '',  
+    volumenDeApuntalante: '',
+    volumenDeGelDeFractura: '',
+    volumenDesplazamiento: '',
+    volumenTotalDeLiquido: '',
     hasErrors: true,
     moduloYoungArena: '',
     moduloYoungLutitas: '',
@@ -15,7 +15,7 @@ const initialState = fromJS({
     gradienteDeFractura: '',
     densidadDeDisparos: '',
     diametroDeDisparos: '',
-    tratamientoCompany: '',
+    tratamientoCompany: '', 
     cedulaData: [{
         etapa: 1,
         index: 0,
@@ -37,13 +37,13 @@ const initialState = fromJS({
     }]
 })
 
-const tratamientoAcido = (state = initialState, action) => {
+const tratamientoApuntalado = (state = initialState, action) => {
   switch (action.type) {
-    case 'set_mergeTratamientoAcido':
+    case 'set_mergeTratamientoApuntalado':
       return state.mergeDeep(fromJS(action.value))
     default:
       return state
   }
 }
 
-export default tratamientoAcido
+export default tratamientoApuntalado

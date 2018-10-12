@@ -8,12 +8,12 @@ import { setMergeTratamientoAcido } from '../../../../redux/actions/results'
 import { round, calculateVolumes, getSistemaOptions } from '../../../../lib/helpers'
 import { checkEmpty, checkDate } from '../../../../lib/errorCheckers'
 
-@autobind class PropuestaDeAcido extends Component {
+@autobind class TratamientoAcido extends Component {
   constructor(props) {
     super(props)
     this.state = { 
       errors: {
-          propuestaCompany: {
+          tratamientoCompany: {
             type: 'text',
             value: '',
           },
@@ -130,7 +130,7 @@ import { checkEmpty, checkDate } from '../../../../lib/errorCheckers'
     let { formData, setMergeTratamientoAcido, intervals } = this.props
     // formData = formData.toJS()
     // intervalos = intervalos.toJS()
-    let { propuestaCompany } = formData
+    let { tratamientoCompany } = formData
     const companyOptions = [
       { label: 'Halliburton', value: 'Halliburton' },
       { label: 'Schlumberger', value: 'Schlumberger' },
@@ -149,12 +149,12 @@ import { checkEmpty, checkDate } from '../../../../lib/errorCheckers'
         </div>
         <InputRowSelectUnitless
           header="Compañía Seleccionada para el Tratamiento"
-          name="propuestaCompany"
+          name="tratamientoCompany"
           options={companyOptions}
           onBlur={this.updateErrors}
           errors={this.state.errors}
-          value={propuestaCompany}
-          callback={e => setMergeTratamientoAcido({ propuestaCompany: e.value })}
+          value={tratamientoCompany}
+          callback={e => setMergeTratamientoAcido({ tratamientoCompany: e.value })}
         />
         <CalculatedValue
           header={<div>Intervalos</div>}
@@ -483,8 +483,8 @@ const mapDispatchToProps = dispatch => ({
   // setGradienteDeFractura: val => dispatch(setGradienteDeFractura(val)),
   // setDensidadDeDisparos: val => dispatch(setDensidadDeDisparos(val)),
   // setDiametroDeDisparos: val => dispatch(setDiametroDeDisparos(val)),
-  // setPropuestaCompany: val => dispatch(setPropuestaCompany(val)),
+  // settratamientoCompany: val => dispatch(settratamientoCompany(val)),
   // setHasErrorsPropuestaAcido: val => dispatch(setHasErrorsPropuestaAcido(val)),
 })
 
-export default connect(mapStateToProps, mapDispatchToProps)(PropuestaDeAcido)
+export default connect(mapStateToProps, mapDispatchToProps)(TratamientoAcido)

@@ -184,15 +184,6 @@ import { checkEmpty, checkDate } from '../../../../lib/errorCheckers'
           callback={e => setMergeTratamientoEstimulacion({ tratamientoCompany: e.value })}
           errors={this.state.errors}
         />
-        {/* <InputRowSelectUnitless
-          header="Tipo de estimulación"
-          name="tipoDeEstimulacion"
-          options={estimulacionOptions}
-          onBlur={this.updateErrors}
-          value={tipoDeEstimulacion}
-          callback={e => this.handleSelectTipoDeEstimulacion(e.value)}
-          errors={this.state.errors}
-        /> */}
         <CalculatedValue
           header={<div>Intervalos</div>}
           value={intervalsDiv}
