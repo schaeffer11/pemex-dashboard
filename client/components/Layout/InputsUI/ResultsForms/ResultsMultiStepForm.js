@@ -39,6 +39,7 @@ const mergeKeys = elem => {
       fetch(`api/getLayer?transactionID=${propuestaID}`, headers).then(r => r.json()),
       fetch(`api/getInterventionBase?transactionID=${propuestaID}`, headers).then(r => r.json()),
     ]).catch(r => console.log('something went wrong', r))
+    console.log('metaDataArray', metaDataArray)
     let metaData = Object.assign({}, ...metaDataArray.map(mergeKeys))
     const { evaluacionPetrofisica, objetivoYAlcancesIntervencion } = metaData
     const intervals = evaluacionPetrofisica.layerData.map(({ cimaMD, baseMD }) => `${baseMD}-${cimaMD}`)
@@ -49,18 +50,29 @@ const mergeKeys = elem => {
       fetch(`api/getCedula${interventionTypeCapitalized}?transactionID=${propuestaID}`, headers)
         .then(r => r.json())
         .then(r => {
+          console.log("da r", r)
           const { propuestaCompany } = r[Object.keys(r)[0]]
           return { propuestaCompany }
+        }),
+        fetch(`api/getIntervention${interventionTypeCapitalized}?transactionID=${propuestaID}`, headers)
+        .then(r => r.json())
+        .then(r => {
+          return { propuesta: r[`propuesta${interventionTypeCapitalized}`] }
         }),
     ]).catch(r => console.log('something went wrong', r))
     
     metaData = Object.assign(metaData, ...interventionSpecificData.map(mergeKeys))
     const { propuestaCompany } = metaData
-    setMergeResultsMeta({
+    console.log('meta dataaa', metaData)
+    const metaForRedux = {
       intervals,
       interventionType,
       propuestaCompany,
-    })
+    }
+    if (interventionType === 'estimulacion') {
+      metaForRedux.stimulationType = metaData.propuesta.tipoDeEstimulacion
+    }
+    setMergeResultsMeta(metaForRedux)
   }
 
 

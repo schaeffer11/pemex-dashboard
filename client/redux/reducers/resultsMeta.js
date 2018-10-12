@@ -4,6 +4,7 @@ const initialState = fromJS({
     intervals: [],
     interventionType: '',
     propuestaCompany: '',
+    stimulationType: '',
 })
 
 const ResultsMeta = (state = initialState, action) => {

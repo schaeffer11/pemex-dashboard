@@ -148,7 +148,7 @@ import { checkEmpty, checkDate } from '../../../../lib/errorCheckers'
 
 
   makeGeneralForm() {
-    let { formData, setMergeTratamientoEstimulacion, intervals } = this.props
+    let { formData, setMergeTratamientoEstimulacion, intervals, stimulationType } = this.props
     // formData = formData.toJS()
     // intervalos = intervalos.toJS()
     let { tratamientoCompany, tipoDeEstimulacion } = formData
@@ -196,6 +196,10 @@ import { checkEmpty, checkDate } from '../../../../lib/errorCheckers'
         <CalculatedValue
           header={<div>Intervalos</div>}
           value={intervalsDiv}
+        />
+        <CalculatedValue
+          header={<div>Tipo de estimulación</div>}
+          value={stimulationType}
         />
       </div>
     )
@@ -485,8 +489,9 @@ const mapStateToProps = state => ({
   hasErrors: state.getIn(['tratamientoEstimulacion', 'hasErrors']),
   hasSubmitted: state.getIn(['global', 'hasSubmitted']),
   propuestaId: state.getIn(['global', 'transactionID']),
-  token: state.getIn(['user', 'token']),
   intervals: state.getIn(['resultsMeta', 'intervals']),
+  stimulationType: state.getIn(['resultsMeta', 'stimulationType']),
+  token: state.getIn(['user', 'token']),
 })
 
 const mapDispatchToProps = dispatch => ({
