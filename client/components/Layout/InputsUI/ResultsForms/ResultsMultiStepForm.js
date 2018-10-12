@@ -102,10 +102,10 @@ const mergeKeys = elem => {
 
 
   render() {
-    let { setShowForms, hasSubmitted, hasErrorsHistoricoDeAforosResults } = this.props
+    let { setShowForms, hasSubmitted, hasErrorsHistoricoDeAforosResults, hasErrorsEstCostResults } = this.props
      let className = 'subtab'
 
-   let errors = [false, hasErrorsHistoricoDeAforosResults, false, false, false, false]
+   let errors = [false, hasErrorsHistoricoDeAforosResults, false, false, hasErrorsEstCostResults]
 
      let title = forms[this.state.currentStep].title
 
@@ -147,6 +147,7 @@ const mapStateToProps = state => ({
   token: state.getIn(['user', 'token']),
   propuestaID: state.getIn(['global', 'transactionID']),
   hasErrorsHistoricoDeAforosResults: state.getIn(['historicoDeAforosResults', 'hasErrors']),
+  hasErrorsEstCostResults: state.getIn(['estCostResults', 'hasErrors']),
 })
 
 export default connect(mapStateToProps, mapDispatchToProps)(ResultsMultiStepForm)
