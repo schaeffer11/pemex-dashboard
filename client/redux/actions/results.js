@@ -46,7 +46,7 @@ export function submitResultsForm(action, token) {
 
     
  
-    let filteredKeys = ['user', 'global', 'historicoDeAforosResults', 'estCostResults', 'resultsMeta']
+    let filteredKeys = ['user', 'global', 'historicoDeAforosResults', 'estCostResults', 'tratamientoEstimulacion', 'resultsMeta']
 
 
     // const { pozo } = convertedFields.global

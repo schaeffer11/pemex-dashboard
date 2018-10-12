@@ -214,7 +214,10 @@ router.get('/getTransactionWell', (req, res) => {
 router.get('/getTransactionNoResults', (req, res) => {
     let { userID } = req.query
     
-    connection.query(`select * from Transactions t JOIN FieldWellMapping f ON t.WELL_FORMACION_ID = f.WELL_FORMACION_ID WHERE HAS_RESULTS = 0 AND USER_ID = ? ORDER BY INSERT_TIME DESC;`, 
+    connection.query(`select * from Transactions t 
+      JOIN FieldWellMapping f ON t.WELL_FORMACION_ID = f.WELL_FORMACION_ID 
+      JOIN Intervenciones i ON t.TRANSACTION_ID = i.TRANSACTION_ID
+      WHERE HAS_RESULTS = 0 AND USER_ID = ? ORDER BY INSERT_TIME DESC;`, 
       [userID], (err, results) => {
 
 

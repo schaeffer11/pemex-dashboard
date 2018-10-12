@@ -17,10 +17,6 @@ import { checkEmpty, checkDate } from '../../../../lib/errorCheckers'
           type: 'text',
           value: '',
         },
-        tipoDeEstimulacion: {
-          type: 'text',
-          value: '',
-        },
         tipoDeColocacion: {
           type: 'text',
           value: '',
@@ -53,9 +49,8 @@ import { checkEmpty, checkDate } from '../../../../lib/errorCheckers'
   }
 
   checkAllInputs(hasSubmitted) {
-    let { formData } = this.props
-    // formData = formData.toJS()
-    let { tipoDeEstimulacion } = formData
+    let { formData, stimulationType } = this.props
+
 
     const { errors } = this.state
     let hasErrors = false
@@ -63,7 +58,7 @@ import { checkEmpty, checkDate } from '../../../../lib/errorCheckers'
 
     let items = Object.keys(errors)
     
-    if (tipoDeEstimulacion === 'matricial') {
+    if (stimulationType === 'matricial') {
       items = items.filter(i => i !== 'tiempoDeContacto' && i !== 'tipoDeColocacion')
     }
 
@@ -90,13 +85,11 @@ import { checkEmpty, checkDate } from '../../../../lib/errorCheckers'
   }
 
   updateErrors(errors) {
-    let { hasErrors, setMergeTratamientoEstimulacion } = this.props
-    let { formData } = this.props
-    // formData = formData.toJS()
-    let { tipoDeEstimulacion } = formData
+    let { hasErrors, setMergeTratamientoEstimulacion, formData, stimulationType } = this.props
+
     let hasErrorNew = false
     let items = Object.keys(errors)
-    if (tipoDeEstimulacion === 'matricial') {
+    if (stimulationType === 'matricial') {
       items = items.filter(i => i !== 'tiempoDeContacto' && i !== 'tipoDeColocacion')
     }
     items.forEach(key => {
@@ -465,16 +458,15 @@ import { checkEmpty, checkDate } from '../../../../lib/errorCheckers'
   }
 
   render() {
-    let { formData } = this.props
-    let { tipoDeEstimulacion } = formData
+    let { formData, stimulationType } = this.props
+
     return (
       <div className="form propuesta-de-estimulacion">
         <div className='top'>
           <div className="left">
             { this.makeGeneralForm() }
-            { tipoDeEstimulacion === 'limpieza' ? this.makeLimpiezaForm() : null}
             { this.makeDetallesForm() }
-            { this.makeLimpiezaForm() }
+            { stimulationType === 'limpieza' ? this.makeLimpiezaForm() : null}
           </div>
           <div className="right">
             <div className='image'/>

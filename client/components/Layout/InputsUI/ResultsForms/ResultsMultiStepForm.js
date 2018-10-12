@@ -102,37 +102,38 @@ const mergeKeys = elem => {
 
 
   render() {
-    let { setShowForms, hasSubmitted, hasErrorsHistoricoDeAforosResults, hasErrorsEstCostResults } = this.props
-     let className = 'subtab'
+    let { setShowForms, hasSubmitted, hasErrorsHistoricoDeAforosResults, hasErrorsEstCostResults, hasErrorsTratamientoEstimulacion, tipoDeIntervencionesResults } = this.props
+    let className = 'subtab'
 
-   let errors = [false, hasErrorsHistoricoDeAforosResults, false, false, hasErrorsEstCostResults]
+    let tratamientoError = tipoDeIntervencionesResults === 'estimulacion' ? hasErrorsTratamientoEstimulacion : (tipoDeIntervencionesResults === 'acido' ? false : false)
+    let errors = [false, hasErrorsHistoricoDeAforosResults, tratamientoError, false, hasErrorsEstCostResults]
 
-     let title = forms[this.state.currentStep].title
+    let title = forms[this.state.currentStep].title
 
-     return (
-         <div className={`multistep-form`}>
-          <div className="subtabs">
-              {forms.map( (tab, index) => {
-                let active = this.state.currentStep === index ? 'active' : '';
-                let error = errors[index]
-                const errorClass = (error && hasSubmitted) ? 'error' : ''; 
+    return (
+       <div className={`multistep-form`}>
+        <div className="subtabs">
+            {forms.map( (tab, index) => {
+              let active = this.state.currentStep === index ? 'active' : '';
+              let error = errors[index]
+              const errorClass = (error && hasSubmitted) ? 'error' : ''; 
 
-                   return <div className={`${className} ${active} ${errorClass}`} onClick={() => this.handleClick(index)} key={index}><span></span> {tab.title} </div>
-                 }
-              )}
+                 return <div className={`${className} ${active} ${errorClass}`} onClick={() => this.handleClick(index)} key={index}><span></span> {tab.title} </div>
+               }
+            )}
+        </div>
+        <div className="content">
+          <div className="tab-title">
+            <i className="far fa-caret-square-left" style={{position: 'relative', fontSize: '50px', left: '-20px', top: '7px', color: '#70AC46'}} onClick={(e) => setShowForms(false)}></i>
+            { title }
+            <button className="cta next" onClick={this.handleNextSubtab}>Siguiente</button>
+            <button className="cta prev" onClick={this.handlePrevSubtab}>Anterior</button> 
           </div>
-          <div className="content">
-            <div className="tab-title">
-              <i className="far fa-caret-square-left" style={{position: 'relative', fontSize: '50px', left: '-20px', top: '7px', color: '#70AC46'}} onClick={(e) => setShowForms(false)}></i>
-              { title }
-              <button className="cta next" onClick={this.handleNextSubtab}>Siguiente</button>
-              <button className="cta prev" onClick={this.handlePrevSubtab}>Anterior</button> 
-            </div>
 
-            {forms[this.state.currentStep].content}
+          {forms[this.state.currentStep].content}
 
-          </div>
-         </div>
+        </div>
+      </div>
      );
   }
 }
@@ -148,6 +149,8 @@ const mapStateToProps = state => ({
   propuestaID: state.getIn(['global', 'transactionID']),
   hasErrorsHistoricoDeAforosResults: state.getIn(['historicoDeAforosResults', 'hasErrors']),
   hasErrorsEstCostResults: state.getIn(['estCostResults', 'hasErrors']),
+  hasErrorsTratamientoEstimulacion: state.getIn(['tratamientoEstimulacion', 'hasErrors']),
+  tipoDeIntervencionesResults: state.getIn(['resultsMeta', 'interventionType']),
 })
 
 export default connect(mapStateToProps, mapDispatchToProps)(ResultsMultiStepForm)
