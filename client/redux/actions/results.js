@@ -9,6 +9,17 @@ export const setGeneralHistoricoDeAforosResults = (location, value) => ({
   type: 'set_generalHistoricoDeAforosResults',
 })
 
+export const setGeneralEvaluacionAcido = (location, value) => ({
+  location,
+  value,
+  type: 'set_generalEvaluacionAcido',
+})
+
+export const setMergeEvaluacionAcido = (value) => ({
+  value,
+  type: 'set_mergeEvaluacionAcido',
+})
+
 export const setMergeTratamientoEstimulacion = (value) => ({
   value,
   type: 'set_mergeTratamientoEstimulacion',

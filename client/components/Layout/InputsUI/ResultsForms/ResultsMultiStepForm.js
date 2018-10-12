@@ -2,8 +2,8 @@ import React, { Component } from 'react'
 import { connect } from 'react-redux'
 import autobind from 'autobind-decorator'
 import HistoricoDeAforosResults from './HistoricoDeAforosResults'
-import TratamientoEstimulacion from './TratamientoEstimulacion'
 import Tratamientos from './Tratamientos'
+import Evaluaciones from './Evaluaciones'
 import { setMergeResultsMeta } from '../../../../redux/actions/results'
 import EstimacionCostosResults from './EstimacionCostosResults'
 
@@ -12,7 +12,7 @@ const forms = [
   {'title' : 'Graph of Treatment', 'content': <div>Treatment Image Component</div> },
   {'title' : 'Aforos', 'content': <HistoricoDeAforosResults /> },
   {'title' : 'Real Treatment', 'content': <Tratamientos /> },
-  {'title' : 'Geometry', 'content': <div>Geometry Component </div> },
+  {'title' : 'Geometry', 'content': <Evaluaciones /> },
   {'title' : 'Real Costs', 'content': <EstimacionCostosResults /> }
 ]
 
