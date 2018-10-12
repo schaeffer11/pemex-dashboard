@@ -3,7 +3,6 @@ import { fromJS } from 'immutable'
 const initialState = fromJS({
     hasErrors: true,
     tratamientoCompany: '',
-    tipoDeEstimulacion: '',
     tipoDeColocacion: '',
     tiempoDeContacto: '',
     cedulaData: [{

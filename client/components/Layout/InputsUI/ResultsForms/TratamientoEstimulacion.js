@@ -205,38 +205,41 @@ import { checkEmpty, checkDate } from '../../../../lib/errorCheckers'
     )
   }
 
-  // makeLimpiezaForm() {
-  //   let { setTipoDeColocacion, setTiempoDeContacto, formData } = this.props
-  //   formData = formData.toJS()
-  //   let { tipoDeColocacion, tiempoDeContacto } = formData
-    
-  //   const colocacionOptions = [
-  //     { label: 'Directo', value: 'Directo'},
-  //     { label: 'Tubería Flexible', value: 'Tuberia Flexible'}
-  //   ]
-
-  //   return (
-  //     <div className='limpieza-form' >
-  //       <div className='header'>
-  //         Limpieza de Aparejo
-  //       </div>
-  //       <InputRowSelectUnitless 
-  //         header="Tipo de colocación" 
-  //         name='tipoDeColocacion' 
-  //         options={colocacionOptions}
-  //         onBlur={this.updateErrors} 
-  //         value={tipoDeColocacion} 
-  //         callback={(e) => setTipoDeColocacion(e.value)}
-  //         errors={this.state.errors}
-  //       />
-  //       <InputRow header="Tiempo de contacto" name='tiempoDeContacto' unit="min" value={tiempoDeContacto} onChange={setTiempoDeContacto} errors={this.state.errors} onBlur={this.updateErrors} />
-  //     </div>
-  //   )
-  // }
-
+  makeLimpiezaForm() {
+    let { setMergeTratamientoEstimulacion, formData } = this.props
+    let { tipoDeColocacion, tiempoDeContacto } = formData
+    const colocacionOptions = [
+      { label: 'Directo', value: 'Directo'},
+      { label: 'Tubería Flexible', value: 'Tuberia Flexible'}
+    ]
+    return (
+      <div className='limpieza-form' >
+        <div className='header'>
+          Limpieza de Aparejo
+        </div>
+        <InputRowSelectUnitless 
+          header="Tipo de colocación" 
+          name='tipoDeColocacion' 
+          options={colocacionOptions}
+          onBlur={this.updateErrors} 
+          value={tipoDeColocacion} 
+          callback={(e) => setMergeTratamientoEstimulacion({ tipoDeColocacion: e.value })}
+          errors={this.state.errors}
+        />
+        <InputRow 
+          header="Tiempo de contacto"
+          name='tiempoDeContacto'
+          unit="min"
+          value={tiempoDeContacto}
+          onChange={(e) => setMergeTratamientoEstimulacion({ tiempoDeContacto: e })}
+          errors={this.state.errors}
+          onBlur={this.updateErrors} />
+      </div>
+    )
+  }
+  
   makeDetallesForm() {
     let { formData } = this.props
-    // formData = formData.toJS()
     const { volumenSistemaReactivo,
       volumenSistemaNoReativo,
       volumenSistemaDivergente,
@@ -471,6 +474,7 @@ import { checkEmpty, checkDate } from '../../../../lib/errorCheckers'
             { this.makeGeneralForm() }
             { tipoDeEstimulacion === 'limpieza' ? this.makeLimpiezaForm() : null}
             { this.makeDetallesForm() }
+            { this.makeLimpiezaForm() }
           </div>
           <div className="right">
             <div className='image'/>
