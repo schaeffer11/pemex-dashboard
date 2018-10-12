@@ -5,6 +5,7 @@ import HistoricoDeAforosResults from './HistoricoDeAforosResults'
 import TratamientoEstimulacion from './TratamientoEstimulacion'
 import Tratamientos from './Tratamientos'
 import { setMergeResultsMeta } from '../../../../redux/actions/results'
+import EstimacionCostosResults from './EstimacionCostosResults'
 
 import { setIsLoading, setShowForms } from '../../../../redux/actions/global'
 const forms = [
@@ -12,7 +13,7 @@ const forms = [
   {'title' : 'Aforos', 'content': <HistoricoDeAforosResults /> },
   {'title' : 'Real Treatment', 'content': <Tratamientos /> },
   {'title' : 'Geometry', 'content': <div>Geometry Component </div> },
-  {'title' : 'Real Costs', 'content': <div>Costs Compoent </div> }
+  {'title' : 'Real Costs', 'content': <EstimacionCostosResults /> }
 ]
 
 const mergeKeys = elem => {

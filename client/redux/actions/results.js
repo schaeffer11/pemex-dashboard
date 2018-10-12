@@ -18,6 +18,18 @@ export const setMergeResultsMeta = (value) => ({
   value,
   type: 'set_mergeResultsMeta',
 })
+export const setGeneralEstCostResults = (location, value) => ({
+  location,
+  value,
+  type: 'set_generalEstCostResults',
+})
+
+
+
+
+
+
+
 
 
 export function submitResultsForm(action, token) {
