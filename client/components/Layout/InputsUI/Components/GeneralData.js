@@ -414,9 +414,11 @@ import ButtonGroup from './ButtonGroup'
             {proposalOptions.map(i => {
               let className = i.TRANSACTION_ID === selectedProposal ? 'save-item active-save' : 'save-item'
                let date = new Date(i.INSERT_TIME)
+               let proposedDate = new Date(i.FECHA_PROGRAMADA_INTERVENCION)
               date = `${date.getDate()}/${date.getMonth() + 1}/${date.getFullYear()}`
+              proposedDate = `${proposedDate.getDate()}/${proposedDate.getMonth() + 1}/${proposedDate.getFullYear()}`
               return (
-                <div key={`proposalOption_${i.TRANSACTION_ID}`} className={className} onClick={(e) => this.handleSelectProposal(i.TRANSACTION_ID)}>Well: {i.WELL_NAME}   Insert Date: {date}</div>
+                <div key={`proposalOption_${i.TRANSACTION_ID}`} className={className} onClick={(e) => this.handleSelectProposal(i.TRANSACTION_ID)}>Well: {i.WELL_NAME}  Proposed Date: {proposedDate} Type of Intervention: {i.TIPO_DE_INTERVENCIONES}</div>
                 )
             })}
         </div> 
