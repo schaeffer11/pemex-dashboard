@@ -180,6 +180,7 @@ import { checkEmpty, checkDate } from '../../../../lib/errorCheckers';
     }
 
     const errors = [
+      { name: 'fecha', type: 'date'},
       { name: 'item', type: 'text' },
       { name: 'cost', type: 'number' },
       { name: 'costDLS', type: 'number' },
@@ -196,7 +197,10 @@ import { checkEmpty, checkDate } from '../../../../lib/errorCheckers';
               }
             }
       }, 
-      {
+      { Header: 'Fecha',
+        accessor: 'fecha',
+        cell: 'renderDate',
+      }, {
         Header: 'Concepto',
         accessor: 'item',
         cell: 'renderSelect',

@@ -119,7 +119,7 @@ export const createResults = async (body, action, cb) => {
   let propuestaID = finalObj.global.transactionID
   let transactionID = Math.floor(Math.random() * 1000000000)
 
-  let { estimacionCostosData, compania } = finalObj.estCostResults
+  let { estimacionCostosData } = finalObj.estCostResults
   compania = 'something'
 
   let { aforosData } = finalObj.historicoDeAforosResults
