@@ -9,17 +9,15 @@ export const setGeneralHistoricoDeAforosResults = (location, value) => ({
   type: 'set_generalHistoricoDeAforosResults',
 })
 
-export const setGeneralTratamientoEstimulacion = (value) => ({
+export const setMergeTratamientoEstimulacion = (value) => ({
   value,
-  type: 'set_generalTratamientoEstimulacion',
+  type: 'set_mergeTratamientoEstimulacion',
 })
 
-
-
-
-
-
-
+export const setMergeResultsMeta = (value) => ({
+  value,
+  type: 'set_mergeResultsMeta',
+})
 
 
 export function submitResultsForm(action, token) {

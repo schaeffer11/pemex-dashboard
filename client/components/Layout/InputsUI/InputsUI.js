@@ -319,11 +319,9 @@ import { setHasSubmitted, setIsLoading, setCurrentPage } from '../../../redux/ac
 
 
     let { showForms } = global
-
     let form = null
-
     if (showForms === true) {
-      if (selectedTab === 'Pozo' && pagesPozo[selectedSubtab]) {
+      if (selectedTab === 'Pozo') {
         form = this.pozoMultiStepForm
       }
       else if (selectedTab === 'Intervenciones') {

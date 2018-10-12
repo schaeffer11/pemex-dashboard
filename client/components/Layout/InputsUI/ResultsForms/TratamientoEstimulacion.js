@@ -4,7 +4,7 @@ import { connect } from 'react-redux'
 // import InputTable from '../../../Common/InputTable'
 import InputTable from '../../Common/InputTable'
 import { InputRow, InputRowSelectUnitless, CalculatedValue } from '../../Common/InputRow'
-import { setGeneralTratamientoEstimulacion } from '../../../../redux/actions/results'
+import { setMergeTratamientoEstimulacion } from '../../../../redux/actions/results'
 import { round, calculateVolumes, getSistemaOptions } from '../../../../lib/helpers'
 import { checkEmpty, checkDate } from '../../../../lib/errorCheckers'
 
@@ -12,9 +12,8 @@ import { checkEmpty, checkDate } from '../../../../lib/errorCheckers'
   constructor(props) {
     super(props)
     this.state = {
-      propuestaCompany: '',
       errors: {
-        propuestaCompany: {
+        tratamientoCompany: {
           type: 'text',
           value: '',
         },
@@ -40,11 +39,9 @@ import { checkEmpty, checkDate } from '../../../../lib/errorCheckers'
 
 
   async componentDidMount(){
-    let { setGeneralTratamientoEstimulacion, hasSubmitted, propuestaId, token } = this.props
-    const { propuestaCompany } = propuestaEstimulacion
-    this.setState({ propuestaCompany })
+    let { setMergeTratamientoEstimulacion, hasSubmitted } = this.props
     let hasErrors = this.checkAllInputs(hasSubmitted)
-    setGeneralTratamientoEstimulacion({ hasErrors })
+    setMergeTratamientoEstimulacion({ hasErrors })
   }
 
   componentDidUpdate(prevProps) {
@@ -93,7 +90,7 @@ import { checkEmpty, checkDate } from '../../../../lib/errorCheckers'
   }
 
   updateErrors(errors) {
-    let { hasErrors, setGeneralTratamientoEstimulacion } = this.props
+    let { hasErrors, setMergeTratamientoEstimulacion } = this.props
     let { formData } = this.props
     // formData = formData.toJS()
     let { tipoDeEstimulacion } = formData
@@ -108,7 +105,7 @@ import { checkEmpty, checkDate } from '../../../../lib/errorCheckers'
       } 
     })
     if (hasErrorNew != hasErrors) {
-      setGeneralTratamientoEstimulacion({ hasErrors: hasErrorNew })
+      setMergeTratamientoEstimulacion({ hasErrors: hasErrorNew })
     }
     this.setState({ errors })
   }
@@ -117,9 +114,9 @@ import { checkEmpty, checkDate } from '../../../../lib/errorCheckers'
     const errorsCopy = {...this.state.errors}
     errorsCopy[table].value = value
     this.setState({ errors: errorsCopy }, () => {
-      const { setGeneralTratamientoEstimulacion } = this.props
+      const { setMergeTratamientoEstimulacion } = this.props
       const hasErrors = this.checkAllInputs()
-      setGeneralTratamientoEstimulacion({ hasErrors })
+      setMergeTratamientoEstimulacion({ hasErrors })
     })
   }
 
@@ -151,7 +148,7 @@ import { checkEmpty, checkDate } from '../../../../lib/errorCheckers'
 
 
   makeGeneralForm() {
-    let { formData, setPropuestaCompany, setGeneralTratamientoEstimulacion, intervalos } = this.props
+    let { formData, setMergeTratamientoEstimulacion, intervals } = this.props
     // formData = formData.toJS()
     // intervalos = intervalos.toJS()
     let { tratamientoCompany, tipoDeEstimulacion } = formData
@@ -170,7 +167,7 @@ import { checkEmpty, checkDate } from '../../../../lib/errorCheckers'
     //   { label: 'Matricial', value: 'matricial'}
     // ]
 
-    // const intervals = intervalos.map(elem => <div key={`intervalo_${elem.cimaMD}-${elem.baseMD}`}>{`${elem.cimaMD}-${elem.baseMD}`}</div>)
+    const intervalsDiv = intervals.map(elem => <div key={`intervalo_${elem}`}>{elem}</div>)
 
 
     return (
@@ -180,11 +177,11 @@ import { checkEmpty, checkDate } from '../../../../lib/errorCheckers'
         </div>
         <InputRowSelectUnitless
           header="Compañía Seleccionada para el Tratamiento"
-          name="propuestaCompany"
+          name="tratamientoCompany"
           options={companyOptions}
           onBlur={this.updateErrors}
           value={tratamientoCompany}
-          callback={e => setGeneralTratamientoEstimulacion({ tratamientoCompany: e.value })}
+          callback={e => setMergeTratamientoEstimulacion({ tratamientoCompany: e.value })}
           errors={this.state.errors}
         />
         {/* <InputRowSelectUnitless
@@ -196,10 +193,10 @@ import { checkEmpty, checkDate } from '../../../../lib/errorCheckers'
           callback={e => this.handleSelectTipoDeEstimulacion(e.value)}
           errors={this.state.errors}
         /> */}
-        {/* <CalculatedValue
+        <CalculatedValue
           header={<div>Intervalos</div>}
-          value={intervals}
-        /> */}
+          value={intervalsDiv}
+        />
       </div>
     )
   }
@@ -289,7 +286,7 @@ import { checkEmpty, checkDate } from '../../../../lib/errorCheckers'
   }
 
   setAllData(data) {
-    const { setCedulaData, setGeneralTratamientoEstimulacion } = this.props
+    const { setCedulaData, setMergeTratamientoEstimulacion } = this.props
     const cedulaData = data.map((row, i) => {
       let { sistema, relN2Liq, gastoLiqudo, volLiquid } = row
       if (sistema === 'desplazamientoN2' || sistema === 'pre-colchon') {
@@ -318,11 +315,11 @@ import { checkEmpty, checkDate } from '../../../../lib/errorCheckers'
       volumenPrecolchonN2: calculateVolumes(cedulaData, 'volN2', 'pre-colchon'),
       volumenTotalDeLiquido: calculateVolumes(cedulaData, 'volLiquid'),
     }
-    setGeneralTratamientoEstimulacion({ cedulaData, ...volumes })
+    setMergeTratamientoEstimulacion({ cedulaData, ...volumes })
   }
 
   makeCedulaTable() {
-    let { formData, setCedulaData, setGeneralTratamientoEstimulacion, intervalos } = this.props
+    let { formData, setCedulaData, setMergeTratamientoEstimulacion, intervalos } = this.props
     // formData = formData.toJS()
     // intervalos = intervalos.toJS()
     let { cedulaData } = formData
@@ -463,7 +460,6 @@ import { checkEmpty, checkDate } from '../../../../lib/errorCheckers'
   render() {
     let { formData } = this.props
     let { tipoDeEstimulacion } = formData
-    console.log('propuesta company', this.state.propuestaCompany)
     return (
       <div className="form propuesta-de-estimulacion">
         <div className='top'>
@@ -490,11 +486,12 @@ const mapStateToProps = state => ({
   hasSubmitted: state.getIn(['global', 'hasSubmitted']),
   propuestaId: state.getIn(['global', 'transactionID']),
   token: state.getIn(['user', 'token']),
+  intervals: state.getIn(['resultsMeta', 'intervals']),
 })
 
 const mapDispatchToProps = dispatch => ({
-  setGeneralTratamientoEstimulacion: (value) => {
-    dispatch(setGeneralTratamientoEstimulacion(value))
+  setMergeTratamientoEstimulacion: (value) => {
+    dispatch(setMergeTratamientoEstimulacion(value))
   }
 })
 
