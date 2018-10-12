@@ -93,6 +93,9 @@ import { checkEmpty, checkDate } from '../../../../../lib/errorCheckers'
       else if (errObj.type === 'date') {
         error = checkDate(moment(formData[elem]).format('DD/MM/YYYY'), elem, errors, this.setErrors, showErrors)
       }
+      else if (errObj.type === 'table') {
+        error = errObj.value === '' ? true : errObj.value
+      }
 
       error === true ? hasErrors = true : null
     })

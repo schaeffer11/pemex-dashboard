@@ -1,8 +1,8 @@
 import { fromJS } from 'immutable'
 
 const initialState = fromJS({ 
-    volAparejo: '',
-    capacidadTotalDelPozo: '',
+    // volAparejo: '',
+    // capacidadTotalDelPozo: '',
     volumenPrecolchonN2: '',
     volumenSistemaNoReativo: '',
     volumenSistemaReactivo: '',
