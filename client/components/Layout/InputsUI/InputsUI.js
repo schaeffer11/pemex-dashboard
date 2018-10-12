@@ -135,16 +135,13 @@ import { setHasSubmitted, setIsLoading, setCurrentPage } from '../../../redux/ac
   }
 
   handleSubmitResults(action) {
-    let { setHasSubmitted, hasErrorsHistoricoDeAforosResults } = this.props
+    let { setHasSubmitted, hasErrorsHistoricoDeAforosResults, hasErrorsEstCostResults } = this.props
 
     if (action === 'submit') {
       let hasErrors = false
       setHasSubmitted(true)
       
-      console.log('aforos errors', hasErrorsHistoricoDeAforosResults)
-
-
-      if (hasErrorsHistoricoDeAforosResults) {
+      if (hasErrorsHistoricoDeAforosResults || hasErrorsEstCostResults) {
         hasErrors = true
       }
 
@@ -404,6 +401,7 @@ const mapStateToProps = state => ({
   hasErrorsEstIncProduccionApuntalado: state.getIn(['estIncProduccionApuntalado', 'hasErrors']),
   hasErrorsEstCosts: state.getIn(['estCost', 'hasErrors']),
   hasErrorsHistoricoDeAforosResults: state.getIn(['historicoDeAforosResults', 'hasErrors']),
+  hasErrorsEstCostResults: state.getIn(['estCostResults', 'hasErrors']),
   tipoDeIntervenciones: state.getIn(['objetivoYAlcancesIntervencion', 'tipoDeIntervenciones']),
 })
 

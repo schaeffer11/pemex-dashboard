@@ -120,7 +120,8 @@ export const createResults = async (body, action, cb) => {
   let transactionID = Math.floor(Math.random() * 1000000000)
 
   let { estimacionCostosData } = finalObj.estCostResults
-  compania = 'something'
+
+  let { propuestaCompany } = finalObj.resultsMeta
 
   let { aforosData } = finalObj.historicoDeAforosResults
 
@@ -150,7 +151,7 @@ export const createResults = async (body, action, cb) => {
       let values = []
 
       estimacionCostosData.forEach(i => {
-        let newRow = [i.item, interventionID, i.fecha, compania, i.cost, i.costDLS, i.MNXtoDLS, propuestaID, transactionID]
+        let newRow = [i.item, interventionID, i.fecha, propuestaCompany, i.cost, i.costDLS, i.MNXtoDLS, propuestaID, transactionID]
         values.push(newRow)
       })
 
