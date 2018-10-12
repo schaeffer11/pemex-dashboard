@@ -198,10 +198,19 @@ export const createResults = async (body, action, cb) => {
   else if (interventionType === 'acido') {
       var { volumenPrecolchonN2, volumenSistemaNoReativo, volumenSistemaReactivo, volumenSistemaDivergente,
         volumenDesplazamientoLiquido, volumenDesplazamientoN2, volumenTotalDeLiquido, moduloYoungArena, moduloYoungLutitas, relacPoissonArena,
-        relacPoissonLutatas, gradienteDeFractura, densidadDeDisparos, diametroDeDisparos, cedulaData } = finalObj.propuestaAcido
+        relacPoissonLutatas, gradienteDeFractura, densidadDeDisparos, diametroDeDisparos, cedulaData } = finalObj.tratamientoAcido
 
       // var { longitudTotal, longitudEfectivaGrabada, alturaGrabada, anchoPromedio, concentracionDelAcido,
       //   conductividad, fcd, presionNeta, eficienciaDeFluidoDeFractura } = finalObj.SOMEREGISTER
+      var longitudTotal = 0
+      var longitudEfectivaGrabada = 0
+      var alturaGrabada = 0
+      var anchoPromedio = 0
+      var concentracionDelAcido= 0
+      var conductividad = 0
+      var fcd = 0
+      var presionNeta = 0
+      var eficienciaDeFluidoDeFractura= 0
   }
 
   else if (interventionType === 'apuntalado') {
