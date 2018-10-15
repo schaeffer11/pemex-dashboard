@@ -34,6 +34,7 @@ import evaluacionAcido from './reducers/evaluacionAcido'
 import evaluacionApuntalado from './reducers/evaluacionApuntalado'
 import evaluacionEstimulacion from './reducers/evaluacionEstimulacion'
 import resultsMeta from './reducers/resultsMeta'
+import graficaTratamiento from './reducers/graficaTratamiento'
 import forms from './reducers/forms'
 import global from './reducers/global'
 
@@ -73,6 +74,7 @@ const appReducer = combineReducers({
   evaluacionAcido,
   evaluacionApuntalado,
   evaluacionEstimulacion,
+  graficaTratamiento,
   resultsMeta,
 })
 

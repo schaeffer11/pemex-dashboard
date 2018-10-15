@@ -3,6 +3,12 @@ import Immutable from 'immutable'
 
 
 
+export const setGeneralGraficaTratamiento = (location, value) => ({
+  location,
+  value,
+  type: 'set_generalGraficaTratamiento',
+})
+
 export const setGeneralHistoricoDeAforosResults = (location, value) => ({
   location,
   value,

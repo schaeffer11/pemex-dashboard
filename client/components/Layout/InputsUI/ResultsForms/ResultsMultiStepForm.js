@@ -4,12 +4,13 @@ import autobind from 'autobind-decorator'
 import HistoricoDeAforosResults from './HistoricoDeAforosResults'
 import Tratamientos from './Tratamientos'
 import Evaluaciones from './Evaluaciones'
+import GraficaTratamiento from './GraficaTratamiento'
 import { setMergeResultsMeta } from '../../../../redux/actions/results'
 import EstimacionCostosResults from './EstimacionCostosResults'
 
 import { setIsLoading, setShowForms } from '../../../../redux/actions/global'
 const forms = [
-  {'title' : 'Graph of Treatment', 'content': <div>Treatment Image Component</div> },
+  {'title' : 'Graph of Treatment', 'content': <GraficaTratamiento /> },
   {'title' : 'Aforos', 'content': <HistoricoDeAforosResults /> },
   {'title' : 'Real Treatment', 'content': <Tratamientos /> },
   {'title' : 'Geometry', 'content': <Evaluaciones /> },
