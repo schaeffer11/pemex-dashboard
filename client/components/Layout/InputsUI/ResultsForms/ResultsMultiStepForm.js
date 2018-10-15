@@ -103,11 +103,13 @@ const mergeKeys = elem => {
 
   render() {
     let { setShowForms, hasSubmitted, hasErrorsHistoricoDeAforosResults, hasErrorsEstCostResults, hasErrorsTratamientoEstimulacion, 
-      hasErrorsTratamientoAcido, hasErrorsTratamientoApuntalado, tipoDeIntervencionesResults } = this.props
+      hasErrorsTratamientoAcido, hasErrorsTratamientoApuntalado, tipoDeIntervencionesResults, hasErrorsEvaluacionApuntalado, 
+      hasErrorsEvaluacionAcido, hasErrorsEvaluacionEstimulacion, stimulationType } = this.props
     let className = 'subtab'
 
+    let evaluacionErrors = tipoDeIntervencionesResults === 'estimulacion' ? (stimulationType === 'matricial' ? hasErrorsEvaluacionEstimulacion : false) : (tipoDeIntervencionesResults === 'acido' ? hasErrorsEvaluacionAcido : hasErrorsEvaluacionApuntalado)
     let tratamientoError = tipoDeIntervencionesResults === 'estimulacion' ? hasErrorsTratamientoEstimulacion : (tipoDeIntervencionesResults === 'acido' ? hasErrorsTratamientoAcido : hasErrorsTratamientoApuntalado)
-    let errors = [false, hasErrorsHistoricoDeAforosResults, tratamientoError, false, hasErrorsEstCostResults]
+    let errors = [false, hasErrorsHistoricoDeAforosResults, tratamientoError, evaluacionErrors, hasErrorsEstCostResults]
 
     let title = forms[this.state.currentStep].title
 
@@ -148,11 +150,15 @@ const mapStateToProps = state => ({
   hasSubmitted: state.getIn(['global', 'hasSubmitted']),
   token: state.getIn(['user', 'token']),
   propuestaID: state.getIn(['global', 'transactionID']),
+  stimulationType: state.getIn(['resultsMeta', 'stimulationType']),
   hasErrorsHistoricoDeAforosResults: state.getIn(['historicoDeAforosResults', 'hasErrors']),
   hasErrorsEstCostResults: state.getIn(['estCostResults', 'hasErrors']),
   hasErrorsTratamientoEstimulacion: state.getIn(['tratamientoEstimulacion', 'hasErrors']),
   hasErrorsTratamientoAcido: state.getIn(['tratamientoAcido', 'hasErrors']),
   hasErrorsTratamientoApuntalado: state.getIn(['tratamientoApuntalado', 'hasErrors']),
+  hasErrorsEvaluacionApuntalado: state.getIn(['evaluacionApuntalado', 'hasErrors']),
+  hasErrorsEvaluacionAcido: state.getIn(['evaluacionAcido', 'hasErrors']),
+  hasErrorsEvaluacionEstimulacion: state.getIn(['evaluacionEstimulacion', 'hasErrors']),
   tipoDeIntervencionesResults: state.getIn(['resultsMeta', 'interventionType']),
 })
 

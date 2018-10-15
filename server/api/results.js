@@ -186,9 +186,7 @@ export const createResults = async (body, action, cb) => {
       var { tipoDeColocacion, tiempoDeContacto, volumenPrecolchonN2, volumenSistemaNoReativo, volumenSistemaReactivo, volumenSistemaDivergente,
         volumenDesplazamientoLiquido, volumenDesplazamientoN2, volumenTotalDeLiquido, cedulaData } = finalObj.tratamientoEstimulacion
 
-      // var { penetracionRadial, longitudDeAgujeroDeGusano } = finalObj.SOMEREGISTER
-      var penetracionRadial = 'test'
-      var longitudDeAgujeroDeGusano = 'test'
+      var { penetracionRadial, longitudDeAgujeroDeGusano } = finalObj.evaluacionEstimulacion
 
       if (stimulationType === 'matricial') {
         tipoDeColocacion = null
@@ -200,17 +198,8 @@ export const createResults = async (body, action, cb) => {
         volumenDesplazamientoLiquido, volumenDesplazamientoN2, volumenTotalDeLiquido, moduloYoungArena, moduloYoungLutitas, relacPoissonArena,
         relacPoissonLutatas, gradienteDeFractura, densidadDeDisparos, diametroDeDisparos, cedulaData } = finalObj.tratamientoAcido
 
-      // var { longitudTotal, longitudEfectivaGrabada, alturaGrabada, anchoPromedio, concentracionDelAcido,
-      //   conductividad, fcd, presionNeta, eficienciaDeFluidoDeFractura } = finalObj.SOMEREGISTER
-      var longitudTotal = 0
-      var longitudEfectivaGrabada = 0
-      var alturaGrabada = 0
-      var anchoPromedio = 0
-      var concentracionDelAcido= 0
-      var conductividad = 0
-      var fcd = 0
-      var presionNeta = 0
-      var eficienciaDeFluidoDeFractura= 0
+      var { longitudTotal, longitudEfectivaGrabada, alturaGrabada, anchoPromedio, concentracionDelAcido,
+        conductividad, fcd, presionNeta, eficienciaDeFluidoDeFractura } = finalObj.evaluacionAcido
   }
 
   else if (interventionType === 'apuntalado') {
@@ -218,16 +207,9 @@ export const createResults = async (body, action, cb) => {
         volumenDesplazamientoLiquido, volumenDesplazamientoN2, volumenTotalDeLiquido, moduloYoungArena, moduloYoungLutitas, relacPoissonArena,
         relacPoissonLutatas, gradienteDeFractura, densidadDeDisparos, diametroDeDisparos, cedulaData } = finalObj.tratamientoApuntalado
 
-      // var { longitudApuntalada, alturaTotalDeFractura, anchoPromedio, concentractionAreal, conductividad,
-      //   fcd, presionNeta, eficienciaDeFluidoDeFractura  } = finalObj.SOMEREGISTER
-      var longitudApuntalada = 0
-      var alturaTotalDeFractura = 0
-      var anchoPromedio = 0
-      var concentractionAreal = 0
-      var conductividad= 0
-      var fcd = 0
-      var presionNeta = 0
-      var eficienciaDeFluidoDeFractura= 0
+      var { longitudApuntalada, alturaTotalDeFractura, anchoPromedio, concentracionAreal, conductividad,
+        fcd, presionNeta, eficienciaDeFluidoDeFractura  } = finalObj.evaluacionApuntalado
+
   }
 
 // write to db
@@ -358,7 +340,7 @@ export const createResults = async (body, action, cb) => {
                       volumenDesplazamientoLiquido, volumenDesplazamientoN2, volumenTotalDeLiquido, 
                       moduloYoungArena, moduloYoungLutitas, relacPoissonArena,
                     relacPoissonLutatas, gradienteDeFractura, densidadDeDisparos, diametroDeDisparos,
-                    longitudApuntalada, alturaTotalDeFractura, anchoPromedio, concentractionAreal, conductividad,
+                    longitudApuntalada, alturaTotalDeFractura, anchoPromedio, concentracionAreal, conductividad,
                     fcd, presionNeta, eficienciaDeFluidoDeFractura, propuestaID, transactionID
                   ]
               } 

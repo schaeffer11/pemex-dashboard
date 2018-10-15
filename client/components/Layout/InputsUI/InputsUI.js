@@ -137,7 +137,10 @@ import { setHasSubmitted, setIsLoading, setCurrentPage } from '../../../redux/ac
   handleSubmitResults(action) {
     let { setHasSubmitted, hasErrorsHistoricoDeAforosResults, hasErrorsEstCostResults, 
       hasErrorsTratamientoEstimulacion, hasErrorsTratamientoAcido, hasErrorsTratamientoApuntalado,
-      tipoDeIntervencionesResults } = this.props
+      tipoDeIntervencionesResults, hasErrorsEvaluacionApuntalado, hasErrorsEvaluacionAcido, hasErrorsEvaluacionEstimulacion,
+      stimulationType } = this.props
+
+    hasErrorsEvaluacionEstimulacion = stimulationType === 'matricial' ? hasErrorsEvaluacionEstimulacion : false
 
     if (action === 'submit') {
       let hasErrors = false
@@ -146,13 +149,13 @@ import { setHasSubmitted, setIsLoading, setCurrentPage } from '../../../redux/ac
       if (hasErrorsHistoricoDeAforosResults || hasErrorsEstCostResults) {
         hasErrors = true
       }
-      if (tipoDeIntervencionesResults === 'estimulacion' && (hasErrorsTratamientoEstimulacion)) {
+      if (tipoDeIntervencionesResults === 'estimulacion' && (hasErrorsTratamientoEstimulacion || hasErrorsEvaluacionEstimulacion)) {
         hasErrors = true
       }
-      else if (tipoDeIntervencionesResults === 'acido' && (hasErrorsTratamientoAcido)) {
+      else if (tipoDeIntervencionesResults === 'acido' && (hasErrorsTratamientoAcido || hasErrorsEvaluacionAcido)) {
         hasErrors = true
       }      
-      else if (tipoDeIntervencionesResults === 'apuntalado' && (hasErrorsTratamientoApuntalado)) {
+      else if (tipoDeIntervencionesResults === 'apuntalado' && (hasErrorsTratamientoApuntalado || hasErrorsEvaluacionApuntalado)) {
         hasErrors = true
       }
 
@@ -388,6 +391,7 @@ const mapStateToProps = state => ({
   user: state.getIn(['user', 'id']),
   formsState: state.get('forms'),
   token: state.getIn(['user', 'token']),
+  stimulationType: state.getIn(['resultsMeta', 'stimulationType']),
   hasErrorsFichaTecnicaDelPozo: state.getIn(['fichaTecnicaDelPozo', 'hasErrors']),
   hasErrorsFichaTecnicaDelCampo: state.getIn(['fichaTecnicaDelCampo', 'hasErrors']),
   hasErrorsHistorialDeIntervenciones: state.getIn(['historialDeIntervenciones', 'hasErrors']),
@@ -414,6 +418,9 @@ const mapStateToProps = state => ({
   hasErrorsTratamientoEstimulacion: state.getIn(['tratamientoEstimulacion', 'hasErrors']),
   hasErrorsTratamientoAcido: state.getIn(['tratamientoAcido', 'hasErrors']),
   hasErrorsTratamientoApuntalado: state.getIn(['tratamientoApuntalado', 'hasErrors']),
+  hasErrorsEvaluacionApuntalado: state.getIn(['evaluacionApuntalado', 'hasErrors']),
+  hasErrorsEvaluacionAcido: state.getIn(['evaluacionAcido', 'hasErrors']),
+  hasErrorsEvaluacionEstimulacion: state.getIn(['evaluacionEstimulacion', 'hasErrors']),
   tipoDeIntervenciones: state.getIn(['objetivoYAlcancesIntervencion', 'tipoDeIntervenciones']),
   tipoDeIntervencionesResults: state.getIn(['resultsMeta', 'interventionType']),
 })
