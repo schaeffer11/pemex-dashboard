@@ -4,7 +4,7 @@ import { connect } from 'react-redux'
 // import InputTable from '../../../Common/InputTable'
 import InputTable from '../../Common/InputTable'
 import { InputRow, InputRowSelectUnitless, CalculatedValue } from '../../Common/InputRow'
-import { setMergeTratamientoEstimulacion } from '../../../../redux/actions/results'
+import { setMergeTratamientoEstimulacion, setCedulaTratamientoEstimulacion } from '../../../../redux/actions/results'
 import { round, calculateVolumes, getSistemaOptions } from '../../../../lib/helpers'
 import { checkEmpty, checkDate } from '../../../../lib/errorCheckers'
 
@@ -277,7 +277,8 @@ import { checkEmpty, checkDate } from '../../../../lib/errorCheckers'
   }
 
   setAllData(data) {
-    const { setCedulaData, setMergeTratamientoEstimulacion } = this.props
+    const { setCedulaTratamientoEstimulacion, setMergeTratamientoEstimulacion } = this.props
+    console.log('what s the data', data)
     const cedulaData = data.map((row, i) => {
       let { sistema, relN2Liq, gastoLiqudo, volLiquid } = row
       if (sistema === 'desplazamientoN2' || sistema === 'pre-colchon') {
@@ -306,7 +307,7 @@ import { checkEmpty, checkDate } from '../../../../lib/errorCheckers'
       volumenPrecolchonN2: calculateVolumes(cedulaData, 'volN2', 'pre-colchon'),
       volumenTotalDeLiquido: calculateVolumes(cedulaData, 'volLiquid'),
     }
-    setMergeTratamientoEstimulacion({ cedulaData, ...volumes })
+    setCedulaTratamientoEstimulacion(cedulaData, volumes)
   }
 
   makeCedulaTable() {
@@ -484,6 +485,9 @@ const mapStateToProps = state => ({
 const mapDispatchToProps = dispatch => ({
   setMergeTratamientoEstimulacion: (value) => {
     dispatch(setMergeTratamientoEstimulacion(value))
+  },
+  setCedulaTratamientoEstimulacion: (cedula, volumes) => {
+    dispatch(setCedulaTratamientoEstimulacion(cedula, volumes))
   }
 })
 

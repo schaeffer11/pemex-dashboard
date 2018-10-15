@@ -74,6 +74,7 @@ const getErrors = (data, headers) => {
     headers.forEach(elem => {
       initialValues[elem.name] = ''
     })
+    console.log('what is this initial values', initialValues)
     setData([initialValues])
     if (!file) {
       return this.setState({ isAccepted: true, errors: [] })
@@ -88,8 +89,9 @@ const getErrors = (data, headers) => {
       const workbook = XLSX.read(data, { type: 'binary' })
       const sheetName = workbook.SheetNames[0]
       const sheet = workbook.Sheets[sheetName]
+      console.log('sheet', sheet)
       let jsonData = XLSX.utils.sheet_to_json(sheet, { header: headers.map(elem => elem.name) })
-      console.log('json', jsonData,sheet)
+      console.log('json', jsonData)
       /**
        * Remove header from file
        * Parse data to fix dates and add missing data

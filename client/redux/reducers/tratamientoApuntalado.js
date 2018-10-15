@@ -41,6 +41,12 @@ const tratamientoApuntalado = (state = initialState, action) => {
   switch (action.type) {
     case 'set_mergeTratamientoApuntalado':
       return state.mergeDeep(fromJS(action.value))
+    case 'set_cedulaTratamientoApuntalado':
+      let newState = state.set('cedulaData', fromJS(action.cedula))
+      if (action.volumes !== null) {
+          newState = newState.mergeDeep(action.volumes)
+      }
+      return newState
     default:
       return state
   }

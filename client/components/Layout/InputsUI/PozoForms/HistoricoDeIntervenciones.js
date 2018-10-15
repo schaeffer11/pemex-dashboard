@@ -326,7 +326,6 @@ let columnsApuntalado = [
     this.setState({ errors: errorsCopy }, () => {
       const { setHasErrorsHistorialDeIntervenciones } = this.props
       const hasErrors = this.checkAllInputs()
-      console.log('do i have errors?', hasErrors)
       setHasErrorsHistorialDeIntervenciones(hasErrors)
     })
   }
@@ -380,10 +379,11 @@ let columnsApuntalado = [
         <div className='header'>
           Histórico de fracturamientos apuntalados realizados al pozo
         </div>
-        {/* <ExcelUpload
-          headers={[errors]}
+        <ExcelUpload
+          template='HistoricoAforo'
+          headers={errors}
           setData={setHistoricoApuntaladoData}
-        /> */}
+        />
         <div className='table'>
           <InputTable
             className="-striped"

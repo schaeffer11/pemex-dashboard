@@ -53,14 +53,32 @@ export const setMergeTratamientoEstimulacion = (value) => ({
   type: 'set_mergeTratamientoEstimulacion',
 })
 
+export const setCedulaTratamientoEstimulacion = (cedula, volumes) => ({
+  cedula,
+  volumes,
+  type: 'set_cedulaTratamientoEstimulacion',
+})
+
 export const setMergeTratamientoAcido = (value) => ({
   value,
   type: 'set_mergeTratamientoAcido',
 })
 
+export const setCedulaTratamientoAcido = (cedula, volumes) => ({
+  cedula,
+  volumes,
+  type: 'set_cedulaTratamientoAcido',
+})
+
 export const setMergeTratamientoApuntalado = (value) => ({
   value,
   type: 'set_mergeTratamientoApuntalado',
+})
+
+export const setCedulaTratamientoApuntalado = (cedula, volumes) => ({
+  cedula,
+  volumes,
+  type: 'set_cedulaTratamientoApuntalado',
 })
 
 export const setMergeResultsMeta = (value) => ({

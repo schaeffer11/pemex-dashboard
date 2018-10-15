@@ -41,6 +41,12 @@ const tratamientoAcido = (state = initialState, action) => {
   switch (action.type) {
     case 'set_mergeTratamientoAcido':
       return state.mergeDeep(fromJS(action.value))
+    case 'set_cedulaTratamientoAcido':
+      let newState = state.set('cedulaData', fromJS(action.cedula))
+      if (action.volumes !== null) {
+          newState = newState.mergeDeep(action.volumes)
+      }
+      return newState
     default:
       return state
   }

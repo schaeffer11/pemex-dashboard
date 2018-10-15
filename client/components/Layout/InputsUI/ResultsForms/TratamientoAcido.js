@@ -4,7 +4,7 @@ import { connect } from 'react-redux'
 
 import InputTable from '../../Common/InputTable'
 import { CalculatedValue, InputRow, InputRowSelectUnitless } from '../../Common/InputRow'
-import { setMergeTratamientoAcido } from '../../../../redux/actions/results'
+import { setMergeTratamientoAcido, setCedulaTratamientoAcido } from '../../../../redux/actions/results'
 import { round, calculateVolumes, getSistemaOptions } from '../../../../lib/helpers'
 import { checkEmpty, checkDate } from '../../../../lib/errorCheckers'
 
@@ -257,7 +257,7 @@ import { checkEmpty, checkDate } from '../../../../lib/errorCheckers'
     );
   }
   setAllData(data) {
-    const { setMergeTratamientoAcido } = this.props
+    const { setCedulaTratamientoAcido } = this.props
     const cedulaData = data.map((row, i) => {
       let { sistema, relN2Liq, gastoLiqudo, volLiquid } = row
       if (sistema === 'desplazamientoN2' || sistema === 'pre-colchon') {
@@ -286,7 +286,7 @@ import { checkEmpty, checkDate } from '../../../../lib/errorCheckers'
       volumenPrecolchonN2: calculateVolumes(cedulaData, 'volN2', 'pre-colchon'),
       volumenTotalDeLiquido: calculateVolumes(cedulaData, 'volLiquid'),
     }
-    setMergeTratamientoAcido({ cedulaData, ...volumes })
+    setCedulaTratamientoAcido(cedulaData, volumes)
   }
 
   makeCedulaTable() {
@@ -464,27 +464,10 @@ const mapStateToProps = state => ({
 const mapDispatchToProps = dispatch => ({
   setMergeTratamientoAcido: (value) => {
     dispatch(setMergeTratamientoAcido(value))
-  }
-  // setIntervalo: val => dispatch(setIntervalo(val)),
-  // setLongitudDeIntervalo: val => dispatch(setLongitudDeIntervalo(val)),
-  // setVolAparejo: val => dispatch(setVolAparejo(val)),
-  // setCapacidadTotalDelPozo: val => dispatch(setCapacidadTotalDelPozo(val)),
-  // setVolumenPrecolchonN2: val => dispatch(setVolumenPrecolchonN2(val)),
-  // setVolumenSistemaNoReativo: val => dispatch(setVolumenSistemaNoReativo(val)),
-  // setVolumenSistemaReactivo: val => dispatch(setVolumenSistemaReactivo(val)),
-  // setVolumenSistemaDivergente: val => dispatch(setVolumenSistemaDivergente(val)),
-  // setVolumenDesplazamientoLiquido: val => dispatch(setVolumenDesplazamientoLiquido(val)),
-  // setVolumenDesplazamientoGelLineal: val => dispatch(setVolumenDesplazamientoGelLineal(val)),
-  // setCedulaData: (cedula, volumes = null) => dispatch(setCedulaData(cedula, volumes)),
-  // setModuloYoungArena: val => dispatch(setModuloYoungArena(val)),
-  // setModuloYoungLutitas: val => dispatch(setModuloYoungLutitas(val)),
-  // setRelacPoissonArena: val => dispatch(setRelacPoissonArena(val)),
-  // setRelacPoissonLutatas: val => dispatch(setRelacPoissonLutatas(val)),
-  // setGradienteDeFractura: val => dispatch(setGradienteDeFractura(val)),
-  // setDensidadDeDisparos: val => dispatch(setDensidadDeDisparos(val)),
-  // setDiametroDeDisparos: val => dispatch(setDiametroDeDisparos(val)),
-  // settratamientoCompany: val => dispatch(settratamientoCompany(val)),
-  // setHasErrorsPropuestaAcido: val => dispatch(setHasErrorsPropuestaAcido(val)),
+  },
+  setCedulaTratamientoAcido: (cedula, volumes) => {
+    dispatch(setCedulaTratamientoAcido(cedula, volumes))
+  },
 })
 
 export default connect(mapStateToProps, mapDispatchToProps)(TratamientoAcido)

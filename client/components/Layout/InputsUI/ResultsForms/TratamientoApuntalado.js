@@ -5,7 +5,7 @@ import { connect } from 'react-redux'
 import { InputRow, CalculatedValue, InputRowSelectUnitless } from '../../Common/InputRow'
 import { round, calculateVolumes, getSistemaOptions } from '../../../../lib/helpers'
 import { checkEmpty, checkDate } from '../../../../lib/errorCheckers'
-import { setMergeTratamientoApuntalado } from '../../../../redux/actions/results'
+import { setMergeTratamientoApuntalado, setCedulaTratamientoApuntalado } from '../../../../redux/actions/results'
 
 @autobind class TratamientoApuntalado extends Component {
   constructor(props) {
@@ -233,7 +233,7 @@ import { setMergeTratamientoApuntalado } from '../../../../redux/actions/results
   }
 
   setAllData(data) {
-    const { setMergeTratamientoApuntalado } = this.props
+    const { setCedulaTratamientoApuntalado } = this.props
     const cedulaData = data.map((row, i) => {
       let { sistema, relN2Liq, gastoLiqudo, volLiquid } = row
       if (sistema === 'desplazamientoN2' || sistema === 'pre-colchon') {
@@ -262,7 +262,7 @@ import { setMergeTratamientoApuntalado } from '../../../../redux/actions/results
       volumenPrecolchonN2: calculateVolumes(cedulaData, 'volN2', 'pre-colchon'),
       volumenTotalDeLiquido: calculateVolumes(cedulaData, 'volLiquid'),
     }
-    setMergeTratamientoApuntalado({ cedulaData, ...volumes })
+    setCedulaTratamientoApuntalado(cedulaData, volumes)
   }
 
   makeCedulaTable() {
@@ -443,6 +443,9 @@ const mapStateToProps = state => ({
 const mapDispatchToProps = dispatch => ({
   setMergeTratamientoApuntalado: (value) => {
     dispatch(setMergeTratamientoApuntalado(value))
+  },
+  setCedulaTratamientoApuntalado: (cedula, volumes) => {
+    dispatch(setCedulaTratamientoApuntalado(cedula, volumes))
   }
 })
 
