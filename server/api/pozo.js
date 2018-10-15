@@ -96,11 +96,11 @@ const INSERT_HIST_INTERVENCIONES_QUERY = {
 const INSERT_LAYER_QUERY = {
     save: `INSERT INTO _WellLayersSave (
         INTERVAL_ID, WELL_FORMACION_ID, INTERVALO, CIMA_MD, BASE_MD, ESPESOR_BRUTO, ESPESOR_NETO,
-        V_ARC, POROSITY, SW, DENS, RESIS, PERMEABILIDAD, HAS_ERRORS, TRANSACTION_ID) VALUES
+        V_ARC, V_CAL, V_DOL, POROSITY, SW, DENS, RESIS, PERMEABILIDAD, HAS_ERRORS, TRANSACTION_ID) VALUES
         ?`,
     submit: `INSERT INTO WellLayers (
         INTERVAL_ID, WELL_FORMACION_ID, INTERVALO, CIMA_MD, BASE_MD, ESPESOR_BRUTO, ESPESOR_NETO,
-        V_ARC, POROSITY, SW, DENS, RESIS, PERMEABILIDAD, TRANSACTION_ID) VALUES
+        V_ARC, V_CAL, V_DOL, POROSITY, SW, DENS, RESIS, PERMEABILIDAD, TRANSACTION_ID) VALUES
         ?`,
     loadSave: `SELECT * FROM _WellLayersSave WHERE TRANSACTION_ID = ?`,
     loadTransaction: `SELECT * FROM WellLayers WHERE TRANSACTION_ID = ?`    
@@ -1041,11 +1041,11 @@ export const create = async (body, action, cb) => {
             intervalID = Math.floor(Math.random() * 1000000000)
             if (action === 'save') {
                 values.push([intervalID, wellFormacionID, i.interval, i.cimaMD, i.baseMD,
-              i.espesorBruto, i.espesorNeto, i.vArc, i.porosity, i.sw, i.dens, i.resis, i.perm, i.error, transactionID]) 
+              i.espesorBruto, i.espesorNeto, i.vArc, i.vCal, i.vDol, i.porosity, i.sw, i.dens, i.resis, i.perm, i.error, transactionID]) 
             }
             else {
                 values.push([intervalID, wellFormacionID, i.interval, i.cimaMD, i.baseMD,
-              i.espesorBruto, i.espesorNeto, i.vArc, i.porosity, i.sw, i.dens, i.resis, i.perm, transactionID])     
+              i.espesorBruto, i.espesorNeto, i.vArc, i.vCal, i.vDol, i.porosity, i.sw, i.dens, i.resis, i.perm, transactionID])     
             }
           })
 

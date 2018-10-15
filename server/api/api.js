@@ -703,6 +703,8 @@ router.get('/getLayer', async (req, res) => {
     ESPESOR_BRUTO: { child: 'espesorBruto'},
     ESPESOR_NETO: { child: 'espesorNeto'},
     V_ARC: { child: 'vArc'},
+    V_CAL: { child: 'vCal'},
+    V_DOL: { child: 'vDol'},
     POROSITY: { child: 'porosity'},
     SW: { child: 'sw'},
     DENS: { child: 'dens'},
