@@ -10,11 +10,11 @@ import EstimacionCostosResults from './EstimacionCostosResults'
 
 import { setIsLoading, setShowForms } from '../../../../redux/actions/global'
 const forms = [
-  {'title' : 'Graph of Treatment', 'content': <GraficaTratamiento /> },
+  {'title' : 'Gráfica de tratamiento', 'content': <GraficaTratamiento /> },
   {'title' : 'Aforos', 'content': <HistoricoDeAforosResults /> },
-  {'title' : 'Real Treatment', 'content': <Tratamientos /> },
-  {'title' : 'Geometry', 'content': <Evaluaciones /> },
-  {'title' : 'Real Costs', 'content': <EstimacionCostosResults /> }
+  {'title' : 'Tratamiento', 'content': <Tratamientos /> },
+  {'title' : 'Evaluación', 'content': <Evaluaciones /> },
+  {'title' : 'Costos de la intervención', 'content': <EstimacionCostosResults /> }
 ]
 
 const mergeKeys = elem => {

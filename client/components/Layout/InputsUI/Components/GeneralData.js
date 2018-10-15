@@ -408,7 +408,7 @@ import ButtonGroup from './ButtonGroup'
     return (
       <div className='upload-form'>
         <div className='header'>
-          Select an intervention
+          Seleccione una intervención
         </div>
          <div className="body" style={{ height: '390px' }}>
             {proposalOptions.map(i => {
@@ -418,7 +418,7 @@ import ButtonGroup from './ButtonGroup'
               date = `${date.getDate()}/${date.getMonth() + 1}/${date.getFullYear()}`
               proposedDate = `${proposedDate.getDate()}/${proposedDate.getMonth() + 1}/${proposedDate.getFullYear()}`
               return (
-                <div key={`proposalOption_${i.TRANSACTION_ID}`} className={className} onClick={(e) => this.handleSelectProposal(i.TRANSACTION_ID)}>Well: {i.WELL_NAME}  Proposed Date: {proposedDate} Type of Intervention: {i.TIPO_DE_INTERVENCIONES}</div>
+                <div key={`proposalOption_${i.TRANSACTION_ID}`} className={className} onClick={(e) => this.handleSelectProposal(i.TRANSACTION_ID)}>Pozo: <b>{i.WELL_NAME}</b>  Fecha de la propuesta: <b>{proposedDate}</b>  Tipo de intervención: <b>{i.TIPO_DE_INTERVENCIONES}</b></div>
                 )
             })}
         </div> 
@@ -547,8 +547,8 @@ import ButtonGroup from './ButtonGroup'
             className={'button-group'}
             buttons={
               [
-                { label: 'New Well', value: 'new', },
-                { label: 'Upload Results', value: 'upload' },
+                { label: 'Propuesta', value: 'new', },
+                { label: 'Resultados', value: 'upload' },
               ]
             }
             onClick={this.handleSelectFormType}

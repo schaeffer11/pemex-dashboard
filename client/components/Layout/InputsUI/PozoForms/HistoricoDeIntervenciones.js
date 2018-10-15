@@ -357,9 +357,9 @@ let columnsApuntalado = [
 
       const errors = [
         { name: 'fecha', type: 'date' },
-        { name: 'tipoDeTratamiento', type: 'number' },
-        { name: 'objetivo', type: 'number' },
-        { name: 'compania', type: 'number' },
+        { name: 'tipoDeTratamiento', type: 'text' },
+        { name: 'objetivo', type: 'text' },
+        { name: 'compania', type: 'text' },
         { name: 'cima', type: 'number' },
         { name: 'base', type: 'number' },
         { name: 'longitudApuntalada', type: 'number' },
@@ -428,9 +428,9 @@ let columnsApuntalado = [
     }
     const errors = [
       { name: 'fecha', type: 'date' },
-      { name: 'tipoDeTratamiento', type: 'number' },
-      { name: 'objetivo', type: 'number' },
-      { name: 'compania', type: 'number' },
+      { name: 'tipoDeTratamiento', type: 'text' },
+      { name: 'objetivo', type: 'text' },
+      { name: 'compania', type: 'text' },
       { name: 'base', type: 'number' },
       { name: 'cima', type: 'number' },
       { name: 'longitudGravada', type: 'number' },
@@ -449,6 +449,11 @@ let columnsApuntalado = [
         <div className='header'>
           Histórico de fracturamientos ácidos realizados al pozo
         </div>
+        <ExcelUpload
+          template='HistoricoAforo'
+          headers={errors}
+          setData={setHistoricoAcidoData}
+        />
         <div className='table'>
           <InputTable
             className="-striped"
@@ -491,9 +496,9 @@ let columnsApuntalado = [
     }
     const errors = [
       { name: 'fecha', type: 'date' },
-      { name: 'tipoDeTratamiento', type: 'number' },
-      { name: 'objetivo', type: 'number' },
-      { name: 'compania', type: 'number' },
+      { name: 'tipoDeTratamiento', type: 'text' },
+      { name: 'objetivo', type: 'text' },
+      { name: 'compania', type: 'text' },
       { name: 'acidoVol', type: 'number' },
       { name: 'acidoNombre', type: 'number' },
       { name: 'solventeVol', type: 'number' },
@@ -509,6 +514,11 @@ let columnsApuntalado = [
         <div className='header'>
           Histórico de tratamientos de estimulación
         </div>
+        <ExcelUpload
+          template='HistoricoAforo'
+          headers={errors}
+          setData={setHistoricoEstimulacionData}
+        />
         <div className='table'>
           <InputTable
             className="-striped"

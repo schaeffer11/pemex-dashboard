@@ -28,7 +28,7 @@
 .save-item {
   height: 30px;
   background: #f2f2f2;
-
+  cursor: pointer;
 }
 
 .save-item:nth-child(even) {
