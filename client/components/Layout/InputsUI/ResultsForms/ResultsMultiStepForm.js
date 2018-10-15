@@ -102,10 +102,11 @@ const mergeKeys = elem => {
 
 
   render() {
-    let { setShowForms, hasSubmitted, hasErrorsHistoricoDeAforosResults, hasErrorsEstCostResults, hasErrorsTratamientoEstimulacion, hasErrorsTratamientoAcido, tipoDeIntervencionesResults } = this.props
+    let { setShowForms, hasSubmitted, hasErrorsHistoricoDeAforosResults, hasErrorsEstCostResults, hasErrorsTratamientoEstimulacion, 
+      hasErrorsTratamientoAcido, hasErrorsTratamientoApuntalado, tipoDeIntervencionesResults } = this.props
     let className = 'subtab'
 
-    let tratamientoError = tipoDeIntervencionesResults === 'estimulacion' ? hasErrorsTratamientoEstimulacion : (tipoDeIntervencionesResults === 'acido' ? hasErrorsTratamientoAcido : false)
+    let tratamientoError = tipoDeIntervencionesResults === 'estimulacion' ? hasErrorsTratamientoEstimulacion : (tipoDeIntervencionesResults === 'acido' ? hasErrorsTratamientoAcido : hasErrorsTratamientoApuntalado)
     let errors = [false, hasErrorsHistoricoDeAforosResults, tratamientoError, false, hasErrorsEstCostResults]
 
     let title = forms[this.state.currentStep].title
@@ -151,6 +152,7 @@ const mapStateToProps = state => ({
   hasErrorsEstCostResults: state.getIn(['estCostResults', 'hasErrors']),
   hasErrorsTratamientoEstimulacion: state.getIn(['tratamientoEstimulacion', 'hasErrors']),
   hasErrorsTratamientoAcido: state.getIn(['tratamientoAcido', 'hasErrors']),
+  hasErrorsTratamientoApuntalado: state.getIn(['tratamientoApuntalado', 'hasErrors']),
   tipoDeIntervencionesResults: state.getIn(['resultsMeta', 'interventionType']),
 })
 

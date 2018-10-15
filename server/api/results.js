@@ -216,10 +216,18 @@ export const createResults = async (body, action, cb) => {
   else if (interventionType === 'apuntalado') {
       var { volumenPrecolchonN2, volumenSistemaNoReativo, volumenSistemaReactivo, volumenSistemaDivergente,
         volumenDesplazamientoLiquido, volumenDesplazamientoN2, volumenTotalDeLiquido, moduloYoungArena, moduloYoungLutitas, relacPoissonArena,
-        relacPoissonLutatas, gradienteDeFractura, densidadDeDisparos, diametroDeDisparos, cedulaData } = finalObj.propuestaApuntalado
+        relacPoissonLutatas, gradienteDeFractura, densidadDeDisparos, diametroDeDisparos, cedulaData } = finalObj.tratamientoApuntalado
 
       // var { longitudApuntalada, alturaTotalDeFractura, anchoPromedio, concentractionAreal, conductividad,
       //   fcd, presionNeta, eficienciaDeFluidoDeFractura  } = finalObj.SOMEREGISTER
+      var longitudApuntalada = 0
+      var alturaTotalDeFractura = 0
+      var anchoPromedio = 0
+      var concentractionAreal = 0
+      var conductividad= 0
+      var fcd = 0
+      var presionNeta = 0
+      var eficienciaDeFluidoDeFractura= 0
   }
 
 // write to db
