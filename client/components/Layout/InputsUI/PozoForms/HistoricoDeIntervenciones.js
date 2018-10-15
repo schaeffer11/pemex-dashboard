@@ -29,7 +29,7 @@ let columnsEstimulacion = [
      }, { 
       Header: 'Objetivo',
       accessor: 'objetivo',
-      cell: 'renderEditable',
+      cell: 'renderTextarea',
     }, { 
       Header: 'Compañía',
       accessor: 'compania',
@@ -111,7 +111,7 @@ let columnsAcido = [
    }, { 
     Header: 'Objetivo',
     accessor: 'objetivo',
-    cell: 'renderEditable',
+    cell: 'renderTextarea',
   }, {
     Header: 'Compañía',
     accessor: 'compania',
@@ -188,7 +188,7 @@ let columnsApuntalado = [
    }, { 
     Header: 'Objetivo',
     accessor: 'objetivo',
-    cell: 'renderEditable',
+    cell: 'renderTextarea',
   }, {
     Header: 'Compañía',
     accessor: 'compania',
