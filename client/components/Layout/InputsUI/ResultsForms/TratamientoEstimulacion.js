@@ -1,30 +1,19 @@
 import React, { Component } from 'react'
 import autobind from 'autobind-decorator'
-import ReactTable from 'react-table'
-import Select from 'react-select'
 import { connect } from 'react-redux'
+// import InputTable from '../../../Common/InputTable'
+import InputTable from '../../Common/InputTable'
+import { InputRow, InputRowSelectUnitless, CalculatedValue } from '../../Common/InputRow'
+import { setMergeTratamientoEstimulacion } from '../../../../redux/actions/results'
+import { round, calculateVolumes, getSistemaOptions } from '../../../../lib/helpers'
+import { checkEmpty, checkDate } from '../../../../lib/errorCheckers'
 
-import InputTable from '../../../Common/InputTable'
-import { InputRow, InputRowUnitless, InputRowSelectUnitless, CalculatedValue } from '../../../Common/InputRow'
-import { setHasErrorsResultadosSimulacionEstimulacion, setHasErrorsPropuestaEstimulacion, setCedulaData, setIntervalo, setLongitudDeIntervalo, setVolAparejo, 
-  setCapacidadTotalDelPozo, setVolumenPrecolchonN2, setVolumenSistemaNoReativo, setVolumenSistemaReactivo, 
-  setVolumenSistemaDivergente, setVolumenDesplazamientoLiquido, setVolumenDesplazamientoN2, setVolumenTotalDeLiquido, 
-  setPropuestaCompany, setTipoDeEstimulacion, setTipoDeColocacion, setTiempoDeContacto } from '../../../../../redux/actions/intervencionesEstimulacion'
-import { setEspesorBruto } from '../../../../../redux/actions/pozo'
-import { round, calculateVolumes, getSistemaOptions } from '../../../../../lib/helpers'
-import { setPenetracionRadial, setLongitudDeAgujeroDeGusano } from '../../../../../redux/actions/intervencionesEstimulacion'
-import { checkEmpty, checkDate } from '../../../../../lib/errorCheckers'
-
-@autobind class PropuestaDeEstimulacion extends Component {
+@autobind class TratamientoEstimulacion extends Component {
   constructor(props) {
     super(props)
-    this.state = { 
+    this.state = {
       errors: {
-        propuestaCompany: {
-          type: 'text',
-          value: '',
-        },
-        tipoDeEstimulacion: {
+        tratamientoCompany: {
           type: 'text',
           value: '',
         },
@@ -45,12 +34,10 @@ import { checkEmpty, checkDate } from '../../../../../lib/errorCheckers'
   }
 
 
-
-  componentDidMount(){
-    let { setHasErrorsPropuestaEstimulacion, hasSubmitted } = this.props
-
+  async componentDidMount(){
+    let { setMergeTratamientoEstimulacion, hasSubmitted } = this.props
     let hasErrors = this.checkAllInputs(hasSubmitted)
-    setHasErrorsPropuestaEstimulacion(hasErrors)
+    setMergeTratamientoEstimulacion({ hasErrors })
   }
 
   componentDidUpdate(prevProps) {
@@ -62,9 +49,8 @@ import { checkEmpty, checkDate } from '../../../../../lib/errorCheckers'
   }
 
   checkAllInputs(hasSubmitted) {
-    let { formData } = this.props
-    formData = formData.toJS()
-    let { tipoDeEstimulacion } = formData
+    let { formData, stimulationType } = this.props
+
 
     const { errors } = this.state
     let hasErrors = false
@@ -72,7 +58,7 @@ import { checkEmpty, checkDate } from '../../../../../lib/errorCheckers'
 
     let items = Object.keys(errors)
     
-    if (tipoDeEstimulacion === 'matricial') {
+    if (stimulationType === 'matricial') {
       items = items.filter(i => i !== 'tiempoDeContacto' && i !== 'tipoDeColocacion')
     }
 
@@ -99,28 +85,21 @@ import { checkEmpty, checkDate } from '../../../../../lib/errorCheckers'
   }
 
   updateErrors(errors) {
-    let { hasErrors, setHasErrorsPropuestaEstimulacion } = this.props
-    let { formData } = this.props
-    formData = formData.toJS()
-    let { tipoDeEstimulacion } = formData
-    let hasErrorNew = false
+    let { hasErrors, setMergeTratamientoEstimulacion, formData, stimulationType } = this.props
 
-     let items = Object.keys(errors)
-    
-    if (tipoDeEstimulacion === 'matricial') {
+    let hasErrorNew = false
+    let items = Object.keys(errors)
+    if (stimulationType === 'matricial') {
       items = items.filter(i => i !== 'tiempoDeContacto' && i !== 'tipoDeColocacion')
     }
-
     items.forEach(key => {
       if (errors[key].value !== null){
         hasErrorNew = true
       } 
     })
-
     if (hasErrorNew != hasErrors) {
-      setHasErrorsPropuestaEstimulacion(hasErrorNew)
+      setMergeTratamientoEstimulacion({ hasErrors: hasErrorNew })
     }
-
     this.setState({ errors })
   }
 
@@ -128,47 +107,44 @@ import { checkEmpty, checkDate } from '../../../../../lib/errorCheckers'
     const errorsCopy = {...this.state.errors}
     errorsCopy[table].value = value
     this.setState({ errors: errorsCopy }, () => {
-      const { setHasErrorsPropuestaEstimulacion } = this.props
+      const { setMergeTratamientoEstimulacion } = this.props
       const hasErrors = this.checkAllInputs()
-      setHasErrorsPropuestaEstimulacion(hasErrors)
+      setMergeTratamientoEstimulacion({ hasErrors })
     })
   }
 
-  handleSelectTipoDeEstimulacion(val) {
-    let { setTipoDeEstimulacion, setTipoDeColocacion, setTiempoDeContacto, 
-      setHasErrorsResultadosSimulacionEstimulacion, resultsData, setPenetracionRadial,
-      setLongitudDeAgujeroDeGusano } = this.props
-    resultsData = resultsData.toJS()
+  // handleSelectTipoDeEstimulacion(val) {
+  //   let { setTipoDeEstimulacion, setTipoDeColocacion, setTiempoDeContacto, setHasErrorsResultadosSimulacionEstimulacion, resultsData } = this.props
+  //   resultsData = resultsData.toJS()
 
-    let { penetracionRadial, longitudDeAgujeroDeGusano } = resultsData
+  //   let { penetracionRadial, longitudDeAgujeroDeGusano } = resultsData
 
 
 
-    if (val === 'limpieza') {
-      setHasErrorsResultadosSimulacionEstimulacion(false)
-    }
-    else {
-      if (penetracionRadial && penetracionRadial.length > 0 && longitudDeAgujeroDeGusano && longitudDeAgujeroDeGusano.length > 0) {
-        setHasErrorsResultadosSimulacionEstimulacion(false)
-      }
-      else {
-        setHasErrorsResultadosSimulacionEstimulacion(true)
-      }
-    }
+  //   if (val === 'limpieza') {
+  //     setHasErrorsResultadosSimulacionEstimulacion(false)
+  //   }
+  //   else {
+  //     if (penetracionRadial.length > 0 && longitudDeAgujeroDeGusano.length > 0) {
+  //       setHasErrorsResultadosSimulacionEstimulacion(false)
+  //     }
+  //     else {
+  //       setHasErrorsResultadosSimulacionEstimulacion(true)
+  //     }
+  //   }
 
-    setTipoDeEstimulacion(val)
-    setTipoDeColocacion(null)
-    setTiempoDeContacto(null)
-    setPenetracionRadial(null)
-    setLongitudDeAgujeroDeGusano(null)
-  }
+  //   setTipoDeEstimulacion(val)
+  //   setTipoDeColocacion(null)
+  //   setTiempoDeContacto(null)
+
+  // }
 
 
   makeGeneralForm() {
-    let { formData, setPropuestaCompany, setTipoDeEstimulacion, intervalos } = this.props
-    formData = formData.toJS()
-    intervalos = intervalos.toJS()
-    let { propuestaCompany, tipoDeEstimulacion } = formData
+    let { formData, setMergeTratamientoEstimulacion, intervals, stimulationType } = this.props
+    // formData = formData.toJS()
+    // intervalos = intervalos.toJS()
+    let { tratamientoCompany, tipoDeEstimulacion } = formData
     const companyOptions = [
       { label: 'Halliburton', value: 'Halliburton' },
       { label: 'Schlumberger', value: 'Schlumberger' },
@@ -179,12 +155,12 @@ import { checkEmpty, checkDate } from '../../../../../lib/errorCheckers'
       value: 'Weatherford' }
     ]
 
-    const estimulacionOptions = [
-      { label: 'Limpieza', value: 'limpieza'},
-      { label: 'Matricial', value: 'matricial'}
-    ]
+    // const estimulacionOptions = [
+    //   { label: 'Limpieza', value: 'limpieza'},
+    //   { label: 'Matricial', value: 'matricial'}
+    // ]
 
-    const intervals = intervalos.map(elem => <div key={`intervalo_${elem.cimaMD}-${elem.baseMD}`}>{`${elem.cimaMD}-${elem.baseMD}`}</div>)
+    const intervalsDiv = intervals.map(elem => <div key={`intervalo_${elem}`}>{elem}</div>)
 
 
     return (
@@ -194,40 +170,32 @@ import { checkEmpty, checkDate } from '../../../../../lib/errorCheckers'
         </div>
         <InputRowSelectUnitless
           header="Compañía Seleccionada para el Tratamiento"
-          name="propuestaCompany"
+          name="tratamientoCompany"
           options={companyOptions}
           onBlur={this.updateErrors}
-          value={propuestaCompany}
-          callback={e => setPropuestaCompany(e.value)}
-          errors={this.state.errors}
-        />
-        <InputRowSelectUnitless
-          header="Tipo de estimulación"
-          name="tipoDeEstimulacion"
-          options={estimulacionOptions}
-          onBlur={this.updateErrors}
-          value={tipoDeEstimulacion}
-          callback={e => this.handleSelectTipoDeEstimulacion(e.value)}
+          value={tratamientoCompany}
+          callback={e => setMergeTratamientoEstimulacion({ tratamientoCompany: e.value })}
           errors={this.state.errors}
         />
         <CalculatedValue
           header={<div>Intervalos</div>}
-          value={intervals}
+          value={intervalsDiv}
+        />
+        <CalculatedValue
+          header={<div>Tipo de estimulación</div>}
+          value={stimulationType}
         />
       </div>
     )
   }
 
   makeLimpiezaForm() {
-    let { setTipoDeColocacion, setTiempoDeContacto, formData } = this.props
-    formData = formData.toJS()
+    let { setMergeTratamientoEstimulacion, formData } = this.props
     let { tipoDeColocacion, tiempoDeContacto } = formData
-    
     const colocacionOptions = [
       { label: 'Directo', value: 'Directo'},
       { label: 'Tubería Flexible', value: 'Tuberia Flexible'}
     ]
-
     return (
       <div className='limpieza-form' >
         <div className='header'>
@@ -239,17 +207,23 @@ import { checkEmpty, checkDate } from '../../../../../lib/errorCheckers'
           options={colocacionOptions}
           onBlur={this.updateErrors} 
           value={tipoDeColocacion} 
-          callback={(e) => setTipoDeColocacion(e.value)}
+          callback={(e) => setMergeTratamientoEstimulacion({ tipoDeColocacion: e.value })}
           errors={this.state.errors}
         />
-        <InputRow header="Tiempo de contacto" name='tiempoDeContacto' unit="min" value={tiempoDeContacto} onChange={setTiempoDeContacto} errors={this.state.errors} onBlur={this.updateErrors} />
+        <InputRow 
+          header="Tiempo de contacto"
+          name='tiempoDeContacto'
+          unit="min"
+          value={tiempoDeContacto}
+          onChange={(e) => setMergeTratamientoEstimulacion({ tiempoDeContacto: e })}
+          errors={this.state.errors}
+          onBlur={this.updateErrors} />
       </div>
     )
   }
-
+  
   makeDetallesForm() {
     let { formData } = this.props
-    formData = formData.toJS()
     const { volumenSistemaReactivo,
       volumenSistemaNoReativo,
       volumenSistemaDivergente,
@@ -302,36 +276,8 @@ import { checkEmpty, checkDate } from '../../../../../lib/errorCheckers'
     )
   }
 
-  renderEditable(cellInfo) {
-    let { setCedulaData, formData } = this.props
-    formData = formData.toJS()
-    let { cedulaData } = formData
-
-    return (
-      <div
-        style={{ backgroundColor: "#fafafa" }}
-        contentEditable
-        suppressContentEditableWarning
-        onBlur={e => {
-          cedulaData[cellInfo.index][cellInfo.column.id] = e.target.innerHTML;
-          setCedulaData(cedulaData)
-        }}
-      >{cedulaData[cellInfo.index][cellInfo.column.id]}</div>
-    );
-  }
-
-  handleSelect(row, e) {
-    let { formData, setCedulaData } = this.props
-    formData = formData.toJS()
-    let { cedulaData } = formData
-
-    cedulaData[row.index][row.column.id] = e
-
-    setCedulaData(cedulaData)
-  }
-
   setAllData(data) {
-    const { setCedulaData } = this.props
+    const { setCedulaData, setMergeTratamientoEstimulacion } = this.props
     const cedulaData = data.map((row, i) => {
       let { sistema, relN2Liq, gastoLiqudo, volLiquid } = row
       if (sistema === 'desplazamientoN2' || sistema === 'pre-colchon') {
@@ -347,6 +293,7 @@ import { checkEmpty, checkDate } from '../../../../../lib/errorCheckers'
       const prev = data[i - 1]
       row.volLiquidoAcum = prev ? round(parseFloat(prev.volLiquidoAcum) + parseFloat(row.volLiquid)) : row.volLiquid
       row.volN2Acum = prev ? round(parseFloat(prev.volN2Acum) + parseFloat(row.volN2)) : row.volN2
+      row.etapa = row.index + 1
       return row
     })
 
@@ -359,20 +306,19 @@ import { checkEmpty, checkDate } from '../../../../../lib/errorCheckers'
       volumenPrecolchonN2: calculateVolumes(cedulaData, 'volN2', 'pre-colchon'),
       volumenTotalDeLiquido: calculateVolumes(cedulaData, 'volLiquid'),
     }
-
-    setCedulaData(cedulaData, volumes)
+    setMergeTratamientoEstimulacion({ cedulaData, ...volumes })
   }
 
   makeCedulaTable() {
-    let { formData, setCedulaData, intervalos } = this.props
-    formData = formData.toJS()
-    intervalos = intervalos.toJS()
+    let { formData, setCedulaData, setMergeTratamientoEstimulacion, intervalos } = this.props
+    // formData = formData.toJS()
+    // intervalos = intervalos.toJS()
     let { cedulaData } = formData
 
-    const intervaloOptions = intervalos.map(elem =>({
-      value: `${elem.cimaMD}-${elem.baseMD}`,
-      label: `${elem.cimaMD}-${elem.baseMD}`,
-    }))
+    // const intervaloOptions = intervalos.map(elem =>({
+    //   value: `${elem.cimaMD}-${elem.baseMD}`,
+    //   label: `${elem.cimaMD}-${elem.baseMD}`,
+    // }))
 
     const sistemaOptions = getSistemaOptions()
     const rowObj = {
@@ -412,31 +358,11 @@ import { checkEmpty, checkDate } from '../../../../../lib/errorCheckers'
             return (<div style={{color: 'white', background: 'red', borderRadius: '4px', textAlign: 'center', cursor: 'pointer'}}>X</div>)
           }
         }
-      }, {
+      },
+      {
         Header: 'Etapa',
         accessor: 'etapa',
       }, 
-      // {
-      //   Header: 'Sistema',
-      //   accessor: 'sistema',
-      //   width: 200,
-      //   resizable: false,
-      //   style: {overflow: 'visible'},
-      //   Cell: row => {
-      //     return (
-      //       <div>
-      //         <Select
-      //           placeholder='sistema'
-      //           className='input'
-      //           simpleValue={true}
-      //           options={sistemaOptions}
-      //           value={sistemaOptions.find(i=>i.value === row.original.sistema) || null}
-      //           onChange={(e) => this.handleSelect(row, e.value)}
-      //         />
-      //       </div>
-      //     )
-      //   }
-      // },
       {
         Header: 'Sistema',
         accessor: 'sistema',
@@ -522,19 +448,16 @@ import { checkEmpty, checkDate } from '../../../../../lib/errorCheckers'
     )
   }
 
-
   render() {
-    let { formData } = this.props
-    formData = formData.toJS()
-    let { tipoDeEstimulacion } = formData
+    let { formData, stimulationType } = this.props
 
     return (
       <div className="form propuesta-de-estimulacion">
         <div className='top'>
           <div className="left">
             { this.makeGeneralForm() }
-            { tipoDeEstimulacion === 'limpieza' ? this.makeLimpiezaForm() : null}
             { this.makeDetallesForm() }
+            { stimulationType === 'limpieza' ? this.makeLimpiezaForm() : null}
           </div>
           <div className="right">
             <div className='image'/>
@@ -548,36 +471,20 @@ import { checkEmpty, checkDate } from '../../../../../lib/errorCheckers'
   }
 }
 
-
 const mapStateToProps = state => ({
-  formData: state.get('propuestaEstimulacion'),
-  resultsData: state.get('resultadosSimulacionEstimulacion'),
-  intervalos: state.getIn(['evaluacionPetrofisica', 'layerData']),
-  hasErrors: state.getIn(['propuestaEstimulacion', 'hasErrors']),
+  formData: state.get('tratamientoEstimulacion').toJS(),
+  hasErrors: state.getIn(['tratamientoEstimulacion', 'hasErrors']),
   hasSubmitted: state.getIn(['global', 'hasSubmitted']),
+  propuestaId: state.getIn(['global', 'transactionID']),
+  intervals: state.getIn(['resultsMeta', 'intervals']),
+  stimulationType: state.getIn(['resultsMeta', 'stimulationType']),
+  token: state.getIn(['user', 'token']),
 })
 
 const mapDispatchToProps = dispatch => ({
-  setIntervalo: val => dispatch(setIntervalo(val)),
-  setLongitudDeIntervalo: val => dispatch(setLongitudDeIntervalo(val)),
-  setVolAparejo: val => dispatch(setVolAparejo(val)),
-  setCapacidadTotalDelPozo: val => dispatch(setCapacidadTotalDelPozo(val)),
-  setVolumenPrecolchonN2: val => dispatch(setVolumenPrecolchonN2(val)),
-  setVolumenSistemaNoReativo: val => dispatch(setVolumenSistemaNoReativo(val)),
-  setVolumenSistemaReactivo: val => dispatch(setVolumenSistemaReactivo(val)),
-  setVolumenSistemaDivergente: val => dispatch(setVolumenSistemaDivergente(val)),
-  setVolumenDesplazamientoLiquido: val => dispatch(setVolumenDesplazamientoLiquido(val)),
-  setVolumenDesplazamientoN2: val => dispatch(setVolumenDesplazamientoN2(val)),
-  setVolumenTotalDeLiquido: val => dispatch(setVolumenTotalDeLiquido(val)),
-  setCedulaData: (cedula, volumes = null) => dispatch(setCedulaData(cedula, volumes)),
-  setPropuestaCompany: val => dispatch(setPropuestaCompany(val)),
-  setTipoDeEstimulacion: val => dispatch(setTipoDeEstimulacion(val)),
-  setTipoDeColocacion: val => dispatch(setTipoDeColocacion(val)), 
-  setTiempoDeContacto: val => dispatch(setTiempoDeContacto(val)),
-  setHasErrorsPropuestaEstimulacion: val => dispatch(setHasErrorsPropuestaEstimulacion(val)),
-  setHasErrorsResultadosSimulacionEstimulacion: val => dispatch(setHasErrorsResultadosSimulacionEstimulacion(val)),
-  setPenetracionRadial: val => dispatch(setPenetracionRadial(val)),
-  setLongitudDeAgujeroDeGusano: val => dispatch(setLongitudDeAgujeroDeGusano(val)),
+  setMergeTratamientoEstimulacion: (value) => {
+    dispatch(setMergeTratamientoEstimulacion(value))
+  }
 })
 
-export default connect(mapStateToProps, mapDispatchToProps)(PropuestaDeEstimulacion) 
+export default connect(mapStateToProps, mapDispatchToProps)(TratamientoEstimulacion) 

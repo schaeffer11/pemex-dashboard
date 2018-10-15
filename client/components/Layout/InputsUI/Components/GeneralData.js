@@ -9,19 +9,23 @@ import '../../../../styles/components/_query_modal.css'
 
 import { setObjetivo, setAlcances, setTipoDeIntervenciones } from '../../../../redux/actions/intervencionesEstimulacion'
 import { setSubdireccion, setActivo, setCampo, setPozo, setFormacion, setFechaProgramadaIntervencion, setFromSaveFichaTecnicaHighLevel, setHasErrorsFichaTecnicaHighLevel, setIntervencionProgramada } from '../../../../redux/actions/pozo'
-import { setShowForms, setIsLoading } from '../../../../redux/actions/global'
+import { setShowForms, setIsLoading, setTransactionID } from '../../../../redux/actions/global'
 import { InputDate, InputRow, InputRowUnitless, InputRowSelectUnitless, TextAreaUnitless } from '../../Common/InputRow'
 import Notification from '../../Common/Notification'
 import Loading from '../../Common/Loading'
 import { sortLabels } from '../../../../lib/formatters'
 import { checkEmpty, checkDate } from '../../../../lib/errorCheckers'
+import ButtonGroup from './ButtonGroup'
 
 @autobind class GeneralData extends Component {
   constructor(props) {
     super(props)
     this.state = { 
       isOpen: false,
+      formType: 'new',
       saveOptions: [],
+      proposalOptions: [],
+      selectedProposal: null,
       selectedSave: null,
       errors: {
         subdireccion: {
@@ -73,6 +77,14 @@ import { checkEmpty, checkDate } from '../../../../lib/errorCheckers'
       .then( r => {
         this.setState({
           saveOptions: r
+        })
+      })
+
+    fetch(`/api/getTransactionNoResults?userID=${id}`, headers)
+      .then(r => r.json())
+      .then( r => {
+        this.setState({
+          proposalOptions: r
         })
       })
   }
@@ -238,6 +250,12 @@ import { checkEmpty, checkDate } from '../../../../lib/errorCheckers'
     })
   }
 
+    handleSelectProposal(id) {
+    this.setState({
+      selectedProposal: id
+    })
+  }
+
 
   makeGeneralInterventionForm() {
     let { setObjetivo, setAlcances, setTipoDeIntervenciones, interventionFormData, setFechaProgramadaIntervencion, setIntervencionProgramada } = this.props
@@ -379,9 +397,32 @@ import { checkEmpty, checkDate } from '../../../../lib/errorCheckers'
         <InputRowSelectUnitless header="Campo" name="campo" value={campo} options={fieldOptions} callback={this.handleSelectField} name='campo'  />
         <InputRowSelectUnitless header="Pozo" name="pozo" value={pozo} options={wellOptions} callback={(e) => setPozo(e.value)} name='pozo'  />
         <InputRowSelectUnitless header="Formación" value={formacion} options={formacionOptions} callback={(e) => setFormacion(e.value)} name='formacion'  />
-        {}
       </div>
 
+    )
+  }
+
+  makeUploadResultsForm() {
+    let { proposalOptions, selectedProposal } = this.state
+
+    return (
+      <div className='upload-form'>
+        <div className='header'>
+          Select an intervention
+        </div>
+         <div className="body" style={{ height: '390px' }}>
+            {proposalOptions.map(i => {
+              let className = i.TRANSACTION_ID === selectedProposal ? 'save-item active-save' : 'save-item'
+               let date = new Date(i.INSERT_TIME)
+               let proposedDate = new Date(i.FECHA_PROGRAMADA_INTERVENCION)
+              date = `${date.getDate()}/${date.getMonth() + 1}/${date.getFullYear()}`
+              proposedDate = `${proposedDate.getDate()}/${proposedDate.getMonth() + 1}/${proposedDate.getFullYear()}`
+              return (
+                <div key={`proposalOption_${i.TRANSACTION_ID}`} className={className} onClick={(e) => this.handleSelectProposal(i.TRANSACTION_ID)}>Well: {i.WELL_NAME}  Proposed Date: {proposedDate} Type of Intervention: {i.TIPO_DE_INTERVENCIONES}</div>
+                )
+            })}
+        </div> 
+      </div>
     )
   }
 
@@ -479,8 +520,22 @@ import { checkEmpty, checkDate } from '../../../../lib/errorCheckers'
       })
   }
 
+  handleSelectFormType(val) {
+    this.setState({
+      formType: val
+    })
+  }
+
+  handleSiguienteResults() {
+    let { selectedProposal } = this.state
+    let { setShowForms, setTransactionID } = this.props
+
+    setShowForms('results')
+    setTransactionID(selectedProposal)
+  }
+
   render() {
-    let { isOpen, selectedSave } = this.state
+    let { isOpen, selectedSave, formType, selectedProposal } = this.state
     let { setShowForms } = this.props
 
     return (
@@ -488,6 +543,20 @@ import { checkEmpty, checkDate } from '../../../../lib/errorCheckers'
         <div className='image'>
           <img src={'/images/homepageBannerThin2.jpg'} style={{width: '100%', borderRadius: '20px'}}></img> 
         </div>
+         <ButtonGroup 
+            className={'button-group'}
+            buttons={
+              [
+                { label: 'New Well', value: 'new', },
+                { label: 'Upload Results', value: 'upload' },
+              ]
+            }
+            onClick={this.handleSelectFormType}
+            individualButtonClass={'submit'}
+            active={formType}
+            disabled={false}
+          />
+        { formType === 'new' ?   
         <div className='form general-data'>
           { this.makeGeneralForm() }
           { this.makeGeneralInterventionForm() }
@@ -497,6 +566,10 @@ import { checkEmpty, checkDate } from '../../../../lib/errorCheckers'
           <Loading />
           { isOpen ? this.buildModal() : null }
         </div>
+       : <div className='form general-data-upload'>
+          { this.makeUploadResultsForm() }
+          <button className='submit submit-continue' disabled={!selectedProposal} onClick={this.handleSiguienteResults}>Siguiente</button>
+       </div> }
       </div>
     )
   }
@@ -528,6 +601,7 @@ const mapDispatchToProps = dispatch => ({
   setTipoDeIntervenciones : val => dispatch(setTipoDeIntervenciones(val)),
   setShowForms : val => dispatch(setShowForms(val)),
   loadFromSave: values => {dispatch(testLoadFromSave(values))},
+  setTransactionID: val => dispatch(setTransactionID(val)),
   setLoading: obj => dispatch(setIsLoading(obj)),
   setFechaProgramadaIntervencion: obj => dispatch(setFechaProgramadaIntervencion(obj)),
   setHasErrorsFichaTecnicaHighLevel: obj => dispatch(setHasErrorsFichaTecnicaHighLevel(obj)),

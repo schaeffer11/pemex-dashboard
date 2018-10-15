@@ -89,6 +89,7 @@ const getErrors = (data, headers) => {
       const sheetName = workbook.SheetNames[0]
       const sheet = workbook.Sheets[sheetName]
       let jsonData = XLSX.utils.sheet_to_json(sheet, { header: headers.map(elem => elem.name) })
+      console.log('json', jsonData,sheet)
       /**
        * Remove header from file
        * Parse data to fix dates and add missing data

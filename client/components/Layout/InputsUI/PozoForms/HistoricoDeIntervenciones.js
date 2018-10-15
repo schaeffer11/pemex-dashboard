@@ -3,6 +3,7 @@ import { connect } from 'react-redux'
 import autobind from 'autobind-decorator'
 import { setFromSaveHistorialDeIntervenciones, setHistoricoEstimulacionData, setHistoricoAcidoData, setHistoricoApuntaladoData, setHasErrorsHistorialDeIntervenciones } from '../../../../redux/actions/pozo'
 import InputTable from '../../Common/InputTable'
+import ExcelUpload from '../../Common/ExcelUpload'
 import { checkDate, checkEmpty } from '../../../../lib/errorCheckers'
 
 let columnsEstimulacion = [
@@ -29,7 +30,7 @@ let columnsEstimulacion = [
      }, { 
       Header: 'Objetivo',
       accessor: 'objetivo',
-      cell: 'renderEditable',
+      cell: 'renderTextarea',
     }, { 
       Header: 'Compañía',
       accessor: 'compania',
@@ -111,7 +112,7 @@ let columnsAcido = [
    }, { 
     Header: 'Objetivo',
     accessor: 'objetivo',
-    cell: 'renderEditable',
+    cell: 'renderTextarea',
   }, {
     Header: 'Compañía',
     accessor: 'compania',
@@ -188,7 +189,7 @@ let columnsApuntalado = [
    }, { 
     Header: 'Objetivo',
     accessor: 'objetivo',
-    cell: 'renderEditable',
+    cell: 'renderTextarea',
   }, {
     Header: 'Compañía',
     accessor: 'compania',
@@ -379,6 +380,10 @@ let columnsApuntalado = [
         <div className='header'>
           Histórico de fracturamientos apuntalados realizados al pozo
         </div>
+        {/* <ExcelUpload
+          headers={[errors]}
+          setData={setHistoricoApuntaladoData}
+        /> */}
         <div className='table'>
           <InputTable
             className="-striped"

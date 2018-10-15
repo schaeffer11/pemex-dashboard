@@ -1,4 +1,4 @@
-import { Map, fromJS } from 'immutable'
+import { fromJS } from 'immutable'
 
 const initialState = fromJS({
     hasErrors: true,
@@ -11,6 +11,8 @@ const initialState = fromJS({
         espesorBruto: 0,
         espesorNeto: '',
         vArc: '',
+        vCal: '',
+        vDol: '',
         porosity: '',
         sw: '',
         dens: '',

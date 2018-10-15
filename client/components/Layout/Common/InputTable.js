@@ -123,6 +123,31 @@ import { checkDate, checkEmpty, checkEmptySingular, checkDateSingular } from '..
     )
   }
 
+  renderTextarea(cellInfo) {
+    let {data, setData } = this.props
+    const { errors, rowError } = this.getErrors(cellInfo.index)
+    const name = cellInfo.column.id
+    const value = data[cellInfo.index][cellInfo.column.id]
+    let style = { }
+    if(rowError && rowError[name] !== undefined && rowError[name].value !== null) {
+      style.border = 'solid 2px red'
+    }
+    return (
+      <div style={style}>
+        <textarea
+          contentEditable
+          suppressContentEditableWarning
+          value={value}
+          onChange={e => {
+            data[cellInfo.index][cellInfo.column.id] = e.target.value
+            setData(data)
+          }}
+          onBlur={(e) => checkEmpty(e.target.value, name, rowError, (e) => this.updateErrors(e, cellInfo.index, errors))}
+        />
+      </div>
+    )
+  }
+
   renderNumberDisable(cellInfo) {
     let {data, setData} = this.props
     let isDisabled = false
@@ -348,6 +373,8 @@ import { checkDate, checkEmpty, checkEmptySingular, checkDateSingular } from '..
         column.Cell = this.renderNumberDisable
       else if(column.cell === 'renderSelect')
         column.Cell = this.renderSelect
+      else if(column.cell === 'renderTextarea')
+        column.Cell = this.renderTextarea
       else if(column.cell)
         column.Cell = null
 
@@ -363,6 +390,8 @@ import { checkDate, checkEmpty, checkEmptySingular, checkDateSingular } from '..
             subColumn.Cell = this.renderNumberDisable
           else if(subColumn.cell === 'renderSelect')
             subColumn.Cell = this.renderSelect
+          else if(subColumn.cell === 'renderTextarea')
+            subColumn.Cell = this.renderTextarea
           else if(subColumn.cell)
             subColumn.Cell = null
         })

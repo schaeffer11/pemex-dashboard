@@ -1,25 +1,18 @@
 import React, { Component } from 'react'
 import autobind from 'autobind-decorator'
-import InputTable from '../../../Common/InputTable'
-import ReactTable from 'react-table'
-import Select from 'react-select'
+import InputTable from '../../Common/InputTable'
 import { connect } from 'react-redux'
+import { InputRow, CalculatedValue, InputRowSelectUnitless } from '../../Common/InputRow'
+import { round, calculateVolumes, getSistemaOptions } from '../../../../lib/helpers'
+import { checkEmpty, checkDate } from '../../../../lib/errorCheckers'
+import { setMergeTratamientoApuntalado } from '../../../../redux/actions/results'
 
-import { InputRow, CalculatedValue, InputRowUnitless, InputRowSelectUnitless } from '../../../Common/InputRow'
-import { setHasErrorsPropuestaApuntalado, setCedulaData, setModuloYoungArena, setModuloYoungLutitas, 
-  setRelacPoissonArena, setRelacPoissonLutatas, setGradienteDeFractura, setDensidadDeDisparos, setDiametroDeDisparos, 
-  setIntervalo, setLongitudDeIntervalo, setVolAparejo, setCapacidadTotalDelPozo, setVolumenPrecolchonN2, 
-  setVolumenDeApuntalante, setVolumenDeGelDeFractura, setVolumenDesplazamiento, setVolumenTotalDeLiquido, 
-  setPropuestaCompany } from '../../../../../redux/actions/intervencionesApuntalado'
-import { round, calculateVolumes, getSistemaOptions } from '../../../../../lib/helpers'
-import { checkEmpty, checkDate } from '../../../../../lib/errorCheckers'
-
-@autobind class PropuestaDeApuntalado extends Component {
+@autobind class TratamientoApuntalado extends Component {
   constructor(props) {
     super(props)
     this.state = { 
       errors: {
-          propuestaCompany: {
+        tratamientoCompany: {
             type: 'text',
             value: '',
           },
@@ -60,10 +53,10 @@ import { checkEmpty, checkDate } from '../../../../../lib/errorCheckers'
   }
 
   componentDidMount(){
-    let { setHasErrorsPropuestaApuntalado, hasSubmitted } = this.props
+    let { setMergeTratamientoApuntalado, hasSubmitted } = this.props
 
     let hasErrors = this.checkAllInputs(hasSubmitted)
-    setHasErrorsPropuestaApuntalado(hasErrors)
+    setMergeTratamientoApuntalado({ hasErrors })
   }
 
   componentDidUpdate(prevProps) {
@@ -76,7 +69,6 @@ import { checkEmpty, checkDate } from '../../../../../lib/errorCheckers'
 
   checkAllInputs(showErrors) {
     let { formData } = this.props
-    formData = formData.toJS()
     const { errors } = this.state
     let hasErrors = false
     let error 
@@ -106,20 +98,16 @@ import { checkEmpty, checkDate } from '../../../../../lib/errorCheckers'
   }
 
   updateErrors(errors) {
-    let { hasErrors, setHasErrorsPropuestaApuntalado } = this.props
-
+    let { hasErrors, setMergeTratamientoApuntalado } = this.props
     let hasErrorNew = false
-
     Object.keys(errors).forEach(key => {
       if (errors[key].value !== null){
         hasErrorNew = true
       } 
     })
-
     if (hasErrorNew != hasErrors) {
-      setHasErrorsPropuestaApuntalado(hasErrorNew)
+      setMergeTratamientoApuntalado({ hasErrors: hasErrorNew })
     }
-
     this.setState({ errors })
   }
 
@@ -127,17 +115,15 @@ import { checkEmpty, checkDate } from '../../../../../lib/errorCheckers'
     const errorsCopy = {...this.state.errors}
     errorsCopy[table].value = value
     this.setState({ errors: errorsCopy }, () => {
-      const { setHasErrorsPropuestaApuntalado } = this.props
+      const { setMergeTratamientoApuntalado } = this.props
       const hasErrors = this.checkAllInputs()
-      setHasErrorsPropuestaApuntalado(hasErrors)
+      setMergeTratamientoApuntalado({ hasErrors })
     })
   }
 
   makeGeneralForm() {
-    let { formData, setPropuestaCompany, intervalos } = this.props
-    formData = formData.toJS()
-    intervalos = intervalos.toJS()
-    let { propuestaCompany } = formData
+    let { formData, setMergeTratamientoApuntalado, intervals } = this.props
+    let { tratamientoCompany } = formData
     const companyOptions = [
       { label: 'Halliburton', value: 'Halliburton' },
       { label: 'Schlumberger', value: 'Schlumberger' },
@@ -148,7 +134,7 @@ import { checkEmpty, checkDate } from '../../../../../lib/errorCheckers'
       value: 'Weatherford' }
     ]
 
-    const intervals = intervalos.map(elem => <div key={`intervalo_${elem.cimaMD}-${elem.baseMD}`}>{`${elem.cimaMD}-${elem.baseMD}`}</div>)
+    const intervalsDiv = intervals.map(elem => <div key={`intervalo_${elem}`}>{elem}</div>)
 
     return (
       <div className='general-form' >
@@ -157,16 +143,16 @@ import { checkEmpty, checkDate } from '../../../../../lib/errorCheckers'
         </div>
         <InputRowSelectUnitless
           header="Compañía Seleccionada para el Tratamiento"
-          name="propuestaCompany"
+          name="tratamientoCompany"
           options={companyOptions}
           onBlur={this.updateErrors}
           errors={this.state.errors}
-          value={propuestaCompany}
-          callback={e => setPropuestaCompany(e.value)}
+          value={tratamientoCompany}
+          callback={e => setMergeTratamientoApuntalado({ tratamientoCompany: e.value })}
         />
         <CalculatedValue
           header={<div>Intervalos</div>}
-          value={intervals}
+          value={intervalsDiv}
         />
       </div>
     )
@@ -174,7 +160,6 @@ import { checkEmpty, checkDate } from '../../../../../lib/errorCheckers'
 
   makeDetallesForm() {
     let { formData } = this.props
-    formData = formData.toJS()
     const { volumenSistemaReactivo,
       volumenSistemaNoReativo,
       volumenSistemaDivergente,
@@ -228,8 +213,7 @@ import { checkEmpty, checkDate } from '../../../../../lib/errorCheckers'
   }
 
   makeGeomecanicaForm() {
-    let { setModuloYoungArena, setModuloYoungLutitas, setRelacPoissonArena, setRelacPoissonLutatas, setGradienteDeFractura, setDensidadDeDisparos, setDiametroDeDisparos, formData } = this.props
-    formData = formData.toJS()
+    let { setMergeTratamientoApuntalado, formData } = this.props
     let { moduloYoungArena, moduloYoungLutitas, relacPoissonArena, relacPoissonLutatas, gradienteDeFractura, densidadDeDisparos, diametroDeDisparos } = formData
     
     return (
@@ -237,79 +221,19 @@ import { checkEmpty, checkDate } from '../../../../../lib/errorCheckers'
         <div className='header'>
           Información de Geomecánica
         </div>
-        <InputRow header="Módulo young arena" name='moduloYoungArena' value={moduloYoungArena} onChange={setModuloYoungArena} unit='psi'  errors={this.state.errors} onBlur={this.updateErrors}/>
-        <InputRow header="Módulo young lutitas" name='moduloYoungLutitas' value={moduloYoungLutitas} onChange={setModuloYoungLutitas} unit='psi'  errors={this.state.errors} onBlur={this.updateErrors}/>
-        <InputRow header="Relac. poisson arena" name='relacPoissonArena' value={relacPoissonArena} onChange={setRelacPoissonArena} unit='adim'  errors={this.state.errors} onBlur={this.updateErrors}/>
-        <InputRow header="Relac. poisson lutatas" name='relacPoissonLutatas' value={relacPoissonLutatas} onChange={setRelacPoissonLutatas} unit='adim'  errors={this.state.errors} onBlur={this.updateErrors}/>
-        <InputRow header="Gradiente de fractura" name='gradienteDeFractura' value={gradienteDeFractura} onChange={setGradienteDeFractura} unit='psi/ft'  errors={this.state.errors} onBlur={this.updateErrors}/>
-        <InputRow header="Densidad de disparos" name='densidadDeDisparos' value={densidadDeDisparos} onChange={setDensidadDeDisparos} unit='c/m'  errors={this.state.errors} onBlur={this.updateErrors}/>
-        <InputRow header="Diámetro de disparos" name='diametroDeDisparos' value={diametroDeDisparos} onChange={setDiametroDeDisparos} unit='pg'  errors={this.state.errors} onBlur={this.updateErrors}/>
+        <InputRow header="Módulo young arena" name='moduloYoungArena' value={moduloYoungArena} onChange={e => setMergeTratamientoApuntalado({ moduloYoungArena: e})} unit='psi'  errors={this.state.errors} onBlur={this.updateErrors}/>
+        <InputRow header="Módulo young lutitas" name='moduloYoungLutitas' value={moduloYoungLutitas} onChange={e => setMergeTratamientoApuntalado({ moduloYoungLutitas: e})} unit='psi'  errors={this.state.errors} onBlur={this.updateErrors}/>
+        <InputRow header="Relac. poisson arena" name='relacPoissonArena' value={relacPoissonArena} onChange={e => setMergeTratamientoApuntalado({ relacPoissonArena: e})} unit='adim'  errors={this.state.errors} onBlur={this.updateErrors}/>
+        <InputRow header="Relac. poisson lutatas" name='relacPoissonLutatas' value={relacPoissonLutatas} onChange={e => setMergeTratamientoApuntalado({ relacPoissonLutatas: e})} unit='adim'  errors={this.state.errors} onBlur={this.updateErrors}/>
+        <InputRow header="Gradiente de fractura" name='gradienteDeFractura' value={gradienteDeFractura} onChange={e => setMergeTratamientoApuntalado({ gradienteDeFractura: e})} unit='psi/ft'  errors={this.state.errors} onBlur={this.updateErrors}/>
+        <InputRow header="Densidad de disparos" name='densidadDeDisparos' value={densidadDeDisparos} onChange={e => setMergeTratamientoApuntalado({ densidadDeDisparos: e})} unit='c/m'  errors={this.state.errors} onBlur={this.updateErrors}/>
+        <InputRow header="Diámetro de disparos" name='diametroDeDisparos' value={diametroDeDisparos} onChange={e => setMergeTratamientoApuntalado({ diametroDeDisparos: e})} unit='pg'  errors={this.state.errors} onBlur={this.updateErrors}/>
       </div>
     )
   }
 
-  renderEditable(cellInfo) {
-    let { setCedulaData, formData } = this.props
-    formData = formData.toJS()
-    let { cedulaData } = formData
-
-    return (
-      <div
-        style={{ backgroundColor: "#fafafa" }}
-        contentEditable
-        suppressContentEditableWarning
-        onBlur={e => {
-          cedulaData[cellInfo.index][cellInfo.column.id] = e.target.innerHTML;
-          setCedulaData(cedulaData)
-        }}
-      >{cedulaData[cellInfo.index][cellInfo.column.id]}</div>
-    );
-  }
-
-  addNewRow() {
-    let { formData, setCedulaData } = this.props
-    formData = formData.toJS()
-    let { cedulaData } = formData
-
-    cedulaData[0].length = 2
-
-    setCedulaData([...cedulaData, {index: cedulaData.length, type: '', fechaMuestreo: '', fechaPrueba: '', compania: '', superviso: '', length: cedulaData.length + 1, 'edited': false}])
-  }
-
-
-  deleteRow(state, rowInfo, column, instance) {
-    let { formData, setCedulaData } = this.props
-    formData = formData.toJS()
-    let { cedulaData } = formData
-
-    return {
-      onClick: e => {
-        if (column.id === 'delete' && cedulaData.length > 1) {
-          cedulaData.splice(rowInfo.original.index, 1)
-
-          cedulaData.forEach((i, index) => {
-            i.index = index
-            i.length = cedulaData.length
-          }) 
-
-          setCedulaData(cedulaData)
-        }
-      }
-    }
-  }
-
-  handleSelect(row, e) {
-    let { formData, setCedulaData } = this.props
-    formData = formData.toJS()
-    let { cedulaData } = formData
-
-    cedulaData[row.index][row.column.id] = e
-
-    setCedulaData(cedulaData)
-  }
-
   setAllData(data) {
-    const { setCedulaData } = this.props
+    const { setMergeTratamientoApuntalado } = this.props
     const cedulaData = data.map((row, i) => {
       let { sistema, relN2Liq, gastoLiqudo, volLiquid } = row
       if (sistema === 'desplazamientoN2' || sistema === 'pre-colchon') {
@@ -325,6 +249,7 @@ import { checkEmpty, checkDate } from '../../../../../lib/errorCheckers'
       const prev = data[i - 1]
       row.volLiquidoAcum = prev ? round(parseFloat(prev.volLiquidoAcum) + parseFloat(row.volLiquid)) : row.volLiquid
       row.volN2Acum = prev ? round(parseFloat(prev.volN2Acum) + parseFloat(row.volN2)) : row.volN2
+      row.etapa = row.index + 1
       return row
     })
 
@@ -337,23 +262,13 @@ import { checkEmpty, checkDate } from '../../../../../lib/errorCheckers'
       volumenPrecolchonN2: calculateVolumes(cedulaData, 'volN2', 'pre-colchon'),
       volumenTotalDeLiquido: calculateVolumes(cedulaData, 'volLiquid'),
     }
-    setCedulaData(cedulaData, volumes)
+    setMergeTratamientoApuntalado({ cedulaData, ...volumes })
   }
 
   makeCedulaTable() {
-    let { formData, setCedulaData, intervalos } = this.props
-    formData = formData.toJS()
-    let { cedulaData } = formData
-    intervalos = intervalos.toJS()
-
-    const intervaloOptions = intervalos.map(elem =>({
-      value: `${elem.cimaMD}-${elem.baseMD}`,
-      label: `${elem.cimaMD}-${elem.baseMD}`,
-    }))
-    
+    let { formData, intervalos } = this.props
+    let { cedulaData } = formData    
     const sistemaOptions = getSistemaOptions()
-
-    // const objectTemplate = {}
     const rowObj = {
       error: true,
       sistema: '',
@@ -371,7 +286,6 @@ import { checkEmpty, checkDate } from '../../../../../lib/errorCheckers'
       relN2Liq: '',
       tiempo: '',
     }
-
     const errors = [
       { name: 'sistema', type: 'text' },
       { name: 'nombreComercial', type: 'text' },
@@ -386,7 +300,7 @@ import { checkEmpty, checkDate } from '../../../../../lib/errorCheckers'
       { name: 'relN2Liq', type: 'number' },
     ]
 
-    let columns = [
+    const columns = [
       {
         Header: '',
         accessor: 'delete',
@@ -520,32 +434,16 @@ import { checkEmpty, checkDate } from '../../../../../lib/errorCheckers'
 
 
 const mapStateToProps = state => ({
-  formData: state.get('propuestaApuntalado'),
-  intervalos: state.getIn(['evaluacionPetrofisica', 'layerData']),
+  formData: state.get('tratamientoApuntalado').toJS(),
+  intervals: state.getIn(['resultsMeta', 'intervals']),
   hasErrors: state.getIn(['propuestaApuntalado', 'hasErrors']),
   hasSubmitted: state.getIn(['global', 'hasSubmitted']),
 })
 
 const mapDispatchToProps = dispatch => ({
-  setIntervalo: val => dispatch(setIntervalo(val)),
-  setLongitudDeIntervalo: val => dispatch(setLongitudDeIntervalo(val)),
-  setVolAparejo: val => dispatch(setVolAparejo(val)),
-  setCapacidadTotalDelPozo: val => dispatch(setCapacidadTotalDelPozo(val)),
-  setVolumenPrecolchonN2: val => dispatch(setVolumenPrecolchonN2(val)),
-  setVolumenDeApuntalante: val => dispatch(setVolumenDeApuntalante(val)),
-  setVolumenDeGelDeFractura: val => dispatch(setVolumenDeGelDeFractura(val)),
-  setVolumenDesplazamiento: val => dispatch(setVolumenDesplazamiento(val)),
-  setVolumenTotalDeLiquido: val => dispatch(setVolumenTotalDeLiquido(val)),
-  setCedulaData: (cedula, volumes = null) => dispatch(setCedulaData(cedula, volumes)),
-  setModuloYoungArena: val => dispatch(setModuloYoungArena(val)),
-  setModuloYoungLutitas: val => dispatch(setModuloYoungLutitas(val)),
-  setRelacPoissonArena: val => dispatch(setRelacPoissonArena(val)),
-  setRelacPoissonLutatas: val => dispatch(setRelacPoissonLutatas(val)),
-  setGradienteDeFractura: val => dispatch(setGradienteDeFractura(val)),
-  setDensidadDeDisparos: val => dispatch(setDensidadDeDisparos(val)),
-  setDiametroDeDisparos: val => dispatch(setDiametroDeDisparos(val)),
-  setPropuestaCompany: val => dispatch(setPropuestaCompany(val)),
-  setHasErrorsPropuestaApuntalado: val => dispatch(setHasErrorsPropuestaApuntalado(val)),
+  setMergeTratamientoApuntalado: (value) => {
+    dispatch(setMergeTratamientoApuntalado(value))
+  }
 })
 
-export default connect(mapStateToProps, mapDispatchToProps)(PropuestaDeApuntalado)
+export default connect(mapStateToProps, mapDispatchToProps)(TratamientoApuntalado)

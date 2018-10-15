@@ -7,12 +7,12 @@ import Select from 'react-select'
 import InputTable from '../../Common/InputTable'
 
 import { InputRow, InputRowUnitless, InputRowSelectUnitless, TextAreaUnitless } from '../../Common/InputRow'
-import {setEstimacionCostosData, setMNXtoDLS, setHasErrorsEstCosts } from '../../../../redux/actions/intervencionesEstimulacion'
+import { setGeneralEstCostResults } from '../../../../redux/actions/results'
 import { sortLabels } from '../../../../lib/formatters'
 import { checkEmpty, checkDate } from '../../../../lib/errorCheckers';
 
 
-@autobind class EstimacionCostos extends Component {
+@autobind class EstimacionCostosResults extends Component {
   constructor(props) {
     super(props)
     this.state = {
@@ -30,7 +30,7 @@ import { checkEmpty, checkDate } from '../../../../lib/errorCheckers';
 
 
   componentDidMount(){
-    let { setHasErrorsEstCosts, hasSubmitted } = this.props
+    let { setGeneralEstCostResults, hasSubmitted } = this.props
     const token = this.props.user.get('token')
     const headers = {
       headers: {
@@ -40,7 +40,7 @@ import { checkEmpty, checkDate } from '../../../../lib/errorCheckers';
     }
 
     let hasErrors = this.checkAllInputs(hasSubmitted)
-    setHasErrorsEstCosts(hasErrors)
+    setGeneralEstCostResults(['hasErrors'], hasErrors)
 
     fetch(`api/getCostItems`, headers)
     .then(r => r.json())
@@ -98,7 +98,7 @@ import { checkEmpty, checkDate } from '../../../../lib/errorCheckers';
   }
 
   updateErrors(errors) {
-    let { hasErrors, setHasErrorsEstCosts } = this.props
+    let { hasErrors, setGeneralEstCostResults } = this.props
     let hasErrorNew = false
 
     Object.keys(errors).forEach(key => {
@@ -108,7 +108,7 @@ import { checkEmpty, checkDate } from '../../../../lib/errorCheckers';
     })
 
     if (hasErrorNew != hasErrors) {
-      setHasErrorsEstCosts(hasErrorNew)
+      setGeneralEstCostResults(['hasErrors'], hasErrorNew)
     }
 
     this.setState({ errors })
@@ -118,15 +118,15 @@ import { checkEmpty, checkDate } from '../../../../lib/errorCheckers';
     const errorsCopy = {...this.state.errors}
     errorsCopy[table].value = value
     this.setState({ errors: errorsCopy }, () => {
-      const { setHasErrorsEstCosts } = this.props
+      const { setGeneralEstCostResults } = this.props
       const hasErrors = this.checkAllInputs()
-      setHasErrorsEstCosts(hasErrors)
+      setGeneralEstCostResults(['hasErrors'], hasErrors)
     })
   }
 
 
   renderEditable(cellInfo) {
-    let { setEstimacionCostosData, formData } = this.props
+    let { setGeneralEstCostResults, formData } = this.props
     formData = formData.toJS()
     let { estimacionCostosData } = formData
 
@@ -137,35 +137,35 @@ import { checkEmpty, checkDate } from '../../../../lib/errorCheckers';
         suppressContentEditableWarning
         onBlur={e => {
           estimacionCostosData[cellInfo.index][cellInfo.column.id] = e.target.innerHTML;
-          setEstimacionCostosData(estimacionCostosData)
+          setGeneralEstCostResults(['estimacionCostosData'], estimacionCostosData)
         }}
       >{estimacionCostosData[cellInfo.index][cellInfo.column.id]}</div>
     );
   }
 
   handleSelectCompany(row, e) {
-    let { formData, setEstimacionCostosData } = this.props
+    let { formData, setGeneralEstCostResults } = this.props
     formData = formData.toJS()
     let { estimacionCostosData } = formData
 
     estimacionCostosData[row.index].compania = e
 
-    setEstimacionCostosData(estimacionCostosData)
+    setGeneralEstCostResults(['estimacionCostosData'], estimacionCostosData)
   }
 
   setEstimacionCostosData(data) {
     let { costMap } = this.state
-    let { setEstimacionCostosData } = this.props
+    let { setGeneralEstCostResults } = this.props
 
     data.forEach(row => {
       row.unit = costMap.find(i => i.COST_ID === row.item) ? costMap.find(i => i.COST_ID === row.item).UNIT : null
     })
 
-    setEstimacionCostosData(data)
+    setGeneralEstCostResults(['estimacionCostosData'], data)
   }
 
   makeCostsForm() {
-    let { setEstimacionCostosData, setMNXtoDLS, formData } = this.props
+    let { formData } = this.props
     let { itemOptions, costOpt } = this.state
     formData = formData.toJS()
     let { estimacionCostosData, MNXtoDLS } = formData
@@ -180,6 +180,7 @@ import { checkEmpty, checkDate } from '../../../../lib/errorCheckers';
     }
 
     const errors = [
+      { name: 'fecha', type: 'date'},
       { name: 'item', type: 'text' },
       { name: 'cost', type: 'number' },
       { name: 'costDLS', type: 'number' },
@@ -196,7 +197,10 @@ import { checkEmpty, checkDate } from '../../../../lib/errorCheckers';
               }
             }
       }, 
-      {
+      { Header: 'Fecha',
+        accessor: 'fecha',
+        cell: 'renderDate',
+      }, {
         Header: 'Concepto',
         accessor: 'item',
         cell: 'renderSelect',
@@ -251,7 +255,7 @@ import { checkEmpty, checkDate } from '../../../../lib/errorCheckers';
   }
 
   render() {
-    let { setEstimacionCostosData, formData } = this.props
+    let { formData } = this.props
     formData = formData.toJS()
     let { estimacionCostosData } = formData
 
@@ -286,16 +290,13 @@ import { checkEmpty, checkDate } from '../../../../lib/errorCheckers';
 
 
 const mapStateToProps = state => ({
-  formData: state.get('estCost'),
+  formData: state.get('estCostResults'),
   user: state.get('user'),
 })
 
 const mapDispatchToProps = dispatch => ({
-  setEstimacionCostosData: val => dispatch(setEstimacionCostosData(val)),
-  setMNXtoDLS: val => dispatch(setMNXtoDLS(val)),
-  setChecked: values => {dispatch(setChecked(values, 'estCost'))},
-  setHasErrorsEstCosts: val => dispatch(setHasErrorsEstCosts(val))
+  setGeneralEstCostResults: (location, value) => dispatch(setGeneralEstCostResults(location, value)),
 })
 
-export default connect(mapStateToProps, mapDispatchToProps)(EstimacionCostos)
+export default connect(mapStateToProps, mapDispatchToProps)(EstimacionCostosResults)
 

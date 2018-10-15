@@ -96,11 +96,11 @@ const INSERT_HIST_INTERVENCIONES_QUERY = {
 const INSERT_LAYER_QUERY = {
     save: `INSERT INTO _WellLayersSave (
         INTERVAL_ID, WELL_FORMACION_ID, INTERVALO, CIMA_MD, BASE_MD, ESPESOR_BRUTO, ESPESOR_NETO,
-        V_ARC, POROSITY, SW, DENS, RESIS, PERMEABILIDAD, HAS_ERRORS, TRANSACTION_ID) VALUES
+        V_ARC, V_CAL, V_DOL, POROSITY, SW, DENS, RESIS, PERMEABILIDAD, HAS_ERRORS, TRANSACTION_ID) VALUES
         ?`,
     submit: `INSERT INTO WellLayers (
         INTERVAL_ID, WELL_FORMACION_ID, INTERVALO, CIMA_MD, BASE_MD, ESPESOR_BRUTO, ESPESOR_NETO,
-        V_ARC, POROSITY, SW, DENS, RESIS, PERMEABILIDAD, TRANSACTION_ID) VALUES
+        V_ARC, V_CAL, V_DOL, POROSITY, SW, DENS, RESIS, PERMEABILIDAD, TRANSACTION_ID) VALUES
         ?`,
     loadSave: `SELECT * FROM _WellLayersSave WHERE TRANSACTION_ID = ?`,
     loadTransaction: `SELECT * FROM WellLayers WHERE TRANSACTION_ID = ?`    
@@ -375,7 +375,7 @@ const INSERT_INTERVENTION_ACIDO_QUERY = {
     submit: `INSERT INTO IntervencionesAcido (
         INTERVENTION_ID, WELL_FORMACION_ID,
         VOLUMEN_PRECOLCHON_N2,
-        VOLUMEN_SISTEMA_NO_REACTIVO, VOLUMEN_SISTEMA_REACTIVO, VOLUMEN_SISTEMA_DIVERGENTE, VOLUMEN_DISPLAZAMIENTO_LIQUIDO, VOLUMEN_DESPLAZAMIENTO_N2,
+        VOLUMEN_SISTEMA_NO_REACTIVO, VOLUMEN_SISTEMA_REACTIVO, VOLUMEN_SISTEMA_DIVERGENTE, VOLUMEN_DESPLAZAMIENTO_LIQUIDO, VOLUMEN_DESPLAZAMIENTO_N2,
         VOLUMEN_TOTAL_DE_LIQUIDO, MODULO_YOUNG_ARENA,
         MODULO_YOUNG_LUTITAS, RELAC_POISSON_ARENA, RELAC_POISSON_LUTITAS, GRADIENTE_DE_FRACTURA, DENSIDAD_DE_DISPAROS,
         DIAMETRO_DE_DISPAROS, LONGITUD_TOTAL, LONGITUD_EFECTIVA_GRABADA,
@@ -414,7 +414,7 @@ const INSERT_INTERVENTION_APUNTALADO_QUERY = {
     submit: `INSERT INTO IntervencionesApuntalado (
         INTERVENTION_ID, WELL_FORMACION_ID, 
         VOLUMEN_PRECOLCHON_N2,
-        VOLUMEN_SISTEMA_NO_REACTIVO, VOLUMEN_SISTEMA_REACTIVO, VOLUMEN_SISTEMA_DIVERGENTE, VOLUMEN_DISPLAZAMIENTO_LIQUIDO, VOLUMEN_DESPLAZAMIENTO_N2,
+        VOLUMEN_SISTEMA_NO_REACTIVO, VOLUMEN_SISTEMA_REACTIVO, VOLUMEN_SISTEMA_DIVERGENTE, VOLUMEN_DESPLAZAMIENTO_LIQUIDO, VOLUMEN_DESPLAZAMIENTO_N2,
         VOLUMEN_TOTAL_DE_LIQUIDO, MODULO_YOUNG_ARENA,
         MODULO_YOUNG_LUTITAS, RELAC_POISSON_ARENA, RELAC_POISSON_LUTITAS, GRADIENTE_DE_FRACTURA, DENSIDAD_DE_DISPAROS,
         DIAMETRO_DE_DISPAROS, LONGITUD_APUNTALADA, ALTURA_TOTAL_DE_FRACTURA, ANCHO_PROMEDIO,
@@ -1041,11 +1041,11 @@ export const create = async (body, action, cb) => {
             intervalID = Math.floor(Math.random() * 1000000000)
             if (action === 'save') {
                 values.push([intervalID, wellFormacionID, i.interval, i.cimaMD, i.baseMD,
-              i.espesorBruto, i.espesorNeto, i.vArc, i.porosity, i.sw, i.dens, i.resis, i.perm, i.error, transactionID]) 
+              i.espesorBruto, i.espesorNeto, i.vArc, i.vCal, i.vDol, i.porosity, i.sw, i.dens, i.resis, i.perm, i.error, transactionID]) 
             }
             else {
                 values.push([intervalID, wellFormacionID, i.interval, i.cimaMD, i.baseMD,
-              i.espesorBruto, i.espesorNeto, i.vArc, i.porosity, i.sw, i.dens, i.resis, i.perm, transactionID])     
+              i.espesorBruto, i.espesorNeto, i.vArc, i.vCal, i.vDol, i.porosity, i.sw, i.dens, i.resis, i.perm, transactionID])     
             }
           })
 
