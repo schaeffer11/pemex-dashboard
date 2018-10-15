@@ -88,9 +88,11 @@ import { checkDate, checkEmpty, checkEmptySingular, checkDateSingular } from '..
     Object.keys(rowError).forEach(key => {
       const value = dataRow[key]
       let error = null
-      if (value === 0) return
       if (!value || value.length < 1) {
         error = 'Este campo no puede estar vacio'
+      }
+      if (typeof value === 'number' && value === 0) {
+        error = null
       }
       rowError[key].value = error
     })

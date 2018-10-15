@@ -425,7 +425,7 @@ import { setMergeTratamientoApuntalado, setCedulaTratamientoApuntalado } from '.
           </div>
         </div>
         <div className='bot'>
-          { this.makeCedulaTable() }       
+          { this.makeCedulaTable() }
         </div>
       </div>
     )
