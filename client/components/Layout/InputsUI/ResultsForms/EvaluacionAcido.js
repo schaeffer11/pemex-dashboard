@@ -98,19 +98,13 @@ import { setGeneralEvaluacionAcido, setMergeEvaluacionAcido } from '../../../../
 
   updateErrors(errors) {
     let { hasErrors, setGeneralEvaluacionAcido } = this.props
-
     let hasErrorNew = false
-
     Object.keys(errors).forEach(key => {
       if (errors[key].value !== null){
         hasErrorNew = true
       } 
     })
-
-    if (hasErrorNew != hasErrors) {
-      setGeneralEvaluacionAcido(['hasErrors'], hasErrorNew)
-    }
-
+    setGeneralEvaluacionAcido(['hasErrors'], hasErrorNew)
     this.setState({ errors })
   }
 

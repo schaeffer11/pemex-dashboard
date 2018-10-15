@@ -94,19 +94,13 @@ import { setGeneralEvaluacionApuntalado, setMergeEvaluacionApuntalado } from '..
 
   updateErrors(errors) {
     let { hasErrors, setGeneralEvaluacionApuntalado } = this.props
-
     let hasErrorNew = false
-
     Object.keys(errors).forEach(key => {
       if (errors[key].value !== null){
         hasErrorNew = true
       } 
     })
-
-    if (hasErrorNew != hasErrors) {
-      setGeneralEvaluacionApuntalado(['hasErrors'], hasErrorNew)
-    }
-
+    setGeneralEvaluacionApuntalado(['hasErrors'], hasErrorNew)
     this.setState({ errors })
   }
 
