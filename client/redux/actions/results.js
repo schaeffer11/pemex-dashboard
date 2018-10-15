@@ -20,6 +20,17 @@ export const setMergeEvaluacionAcido = (value) => ({
   type: 'set_mergeEvaluacionAcido',
 })
 
+export const setGeneralEvaluacionApuntalado = (location, value) => ({
+  location,
+  value,
+  type: 'set_generalEvaluacionApuntalado',
+})
+
+export const setMergeEvaluacionApuntalado = (value) => ({
+  value,
+  type: 'set_mergeEvaluacionApuntalado',
+})
+
 export const setMergeTratamientoEstimulacion = (value) => ({
   value,
   type: 'set_mergeTratamientoEstimulacion',
