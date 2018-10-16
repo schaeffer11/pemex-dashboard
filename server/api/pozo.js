@@ -809,13 +809,16 @@ export const create = async (body, action, cb) => {
     for (let iKey of innerKeys) {
       const property = innerObj[iKey]
       if (Array.isArray(property)) {
+        let i = 0
         for (let j of property) {
           if (j.img) {
+            j.imgName = [transactionID, k, i].join('.')
             const buf = Buffer.from(j.img, 'base64')
             const t = await addObject(buf, j.imgName).catch(reason => console.log(reason))
             j.img = t
             console.log('uploaded img', k, t)
           }
+          i++
         }
       }
     }

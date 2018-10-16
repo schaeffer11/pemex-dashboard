@@ -207,7 +207,6 @@ import { setGeneralEvaluacionAcido, setMergeEvaluacionAcido } from '../../../../
     let { files } = e.target
     console.log(files)
     let localImgUrl = window.URL.createObjectURL(files[0])
-    // setURL(localImgUrl)
     setGeneralEvaluacionAcido(['geometria', index, 'imgURL'], localImgUrl)
   }
 

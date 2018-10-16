@@ -92,6 +92,34 @@ export const setGeneralEstCostResults = (location, value) => ({
   type: 'set_generalEstCostResults',
 })
 
+function bufferToBase64(buf) {
+  var binstr = Array.prototype.map.call(buf, function (ch) {
+      return String.fromCharCode(ch);
+  }).join('');
+  return btoa(binstr);
+}
+
+function getBase64FromURL(imgURL) {
+  return new Promise((resolve, reject) => {
+    const xhr = new XMLHttpRequest()
+    xhr.open('GET', imgURL, true)
+    xhr.responseType = 'arraybuffer'
+  
+    xhr.onload = function(e) {
+
+      if (this.status == 200) {
+        var uInt8Array = new Uint8Array(this.response);
+        var byte3 = uInt8Array[4]; 
+        const base64 = bufferToBase64(uInt8Array)
+        resolve(base64)
+      } else {
+        reject('no image')
+      }
+    }
+    xhr.send()
+  })
+}
+
 
 export function submitResultsForm(action, token) {
   return async (dispatch, getState) => {
@@ -107,7 +135,7 @@ export function submitResultsForm(action, token) {
 
     
  
-    let filteredKeys = ['user', 'global', 'historicoDeAforosResults', 'estCostResults', 
+    let filteredKeys = ['user', 'global', 'graficaTratamiento', 'historicoDeAforosResults', 'estCostResults', 
     'tratamientoEstimulacion', 'tratamientoAcido', 'tratamientoApuntalado', 
     'evaluacionApuntalado', 'evaluacionAcido', 'evaluacionEstimulacion', 'resultsMeta']
 
