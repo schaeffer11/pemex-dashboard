@@ -89,7 +89,7 @@ import { setGeneralEvaluacionEstimulacion, setMergeEvaluacionEstimulacion } from
         <div className='header'>
         </div>
         <InputRow
-          header="Longitud apuntalada"
+          header="Penetración radial"
           name='penetracionRadial'
           unit="m"
           value={penetracionRadial}
@@ -98,7 +98,7 @@ import { setGeneralEvaluacionEstimulacion, setMergeEvaluacionEstimulacion } from
           onBlur={this.updateErrors}
         />
         <InputRow
-          header="Altura total fractura"
+          header="Longitud de agujero de gusano"
           name='longitudDeAgujeroDeGusano'
           unit="m"
           value={longitudDeAgujeroDeGusano}

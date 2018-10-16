@@ -184,7 +184,7 @@ export const createResults = async (body, action, cb) => {
       var { tipoDeColocacion, tiempoDeContacto, volumenPrecolchonN2, volumenSistemaNoReativo, volumenSistemaReactivo, volumenSistemaDivergente,
         volumenDesplazamientoLiquido, volumenDesplazamientoN2, volumenTotalDeLiquido, cedulaData } = finalObj.tratamientoEstimulacion
 
-      var { penetracionRadial, longitudDeAgujeroDeGusan, geometria } = finalObj.evaluacionEstimulacion
+      var { penetracionRadial, longitudDeAgujeroDeGusano, geometria } = finalObj.evaluacionEstimulacion
 
       if (stimulationType === 'matricial') {
         tipoDeColocacion = null
@@ -197,7 +197,7 @@ export const createResults = async (body, action, cb) => {
         relacPoissonLutatas, gradienteDeFractura, densidadDeDisparos, diametroDeDisparos, cedulaData } = finalObj.tratamientoAcido
 
       var { longitudTotal, longitudEfectivaGrabada, alturaGrabada, anchoPromedio, concentracionDelAcido,
-        conductividad, fcd, presionNeta, eficienciaDeFluidoDeFractur, geometria } = finalObj.evaluacionAcido
+        conductividad, fcd, presionNeta, eficienciaDeFluidoDeFractura, geometria } = finalObj.evaluacionAcido
   }
 
   else if (interventionType === 'apuntalado') {
