@@ -33,7 +33,6 @@ router.get('/jobBreakdown', (req, res) => {
 })
 
 
-
 router.get('/aforosData', (req, res) => {
   let {  } = req.body
   let query = `
@@ -79,10 +78,6 @@ WHERE aforos.TRANSACTION_ID = aforo_results.PROPUESTA_ID`
       }
     })
 })
-
-
-
-
 
 
 

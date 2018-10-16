@@ -68,6 +68,10 @@ app.use('/api', api)
 import executiveRoutes from './api/tableroDeControl/executive'
 app.use('/executive', executiveRoutes)
 
+
+import statisticsRoutes from './api/tableroDeControl/statistics'
+app.use('/statistics', statisticsRoutes)
+
 // ENABLE LOGGING AND CACHE CONTROL
 app.use(logger)
 
