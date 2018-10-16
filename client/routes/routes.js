@@ -1,22 +1,22 @@
 import React from 'react'
-import Test from '../components/Layout/TableroDeControlUI/Test'
-import Test2 from '../components/Layout/TableroDeControlUI/Test2'
+import ExecutiveUI from '../components/Layout/TableroDeControlUI/Executive/ExecutiveUI'
+import StatisticsUI from '../components/Layout/TableroDeControlUI/Statistics/StatisticsUI'
 
 
 const routes = () => [
   {
-    path: '/tablero_control/test',
+    path: '/tablero_control/executive',
     exact: true,
-    name: 'test',
+    name: 'executive',
     class: 'tablero_control',
-    component: () => <Test />,
+    component: () => <ExecutiveUI />,
   },
   {
-    path: '/tablero_control/test2',
+    path: '/tablero_control/statistics',
     exact: true,
-    name: 'test2',
+    name: 'statistics',
     class: 'tablero_control',
-    component: () => <Test2 />,
+    component: () => <StatisticsUI />,
   },
 ]
 export default routes

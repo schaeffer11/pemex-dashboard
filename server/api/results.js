@@ -184,11 +184,14 @@ export const createResults = async (body, action, cb) => {
       var { tipoDeColocacion, tiempoDeContacto, volumenPrecolchonN2, volumenSistemaNoReativo, volumenSistemaReactivo, volumenSistemaDivergente,
         volumenDesplazamientoLiquido, volumenDesplazamientoN2, volumenTotalDeLiquido, cedulaData } = finalObj.tratamientoEstimulacion
 
-      var { penetracionRadial, longitudDeAgujeroDeGusano, geometria } = finalObj.evaluacionEstimulacion
+      var { penetracionRadial, longitudDeAgujeroDeGusano } = finalObj.evaluacionEstimulacion
 
+      var geometria = []
+      
       if (stimulationType === 'matricial') {
         tipoDeColocacion = null
         tiempoDeContacto = null
+        geometria = finalObj.evaluacionEstimulacion.geometria
       }
   }
   else if (interventionType === 'acido') {

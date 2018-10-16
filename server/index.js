@@ -65,6 +65,9 @@ app.use(auth)
 import api from './api/api'
 app.use('/api', api)
 
+import executiveRoutes from './api/tableroDeControl/executive'
+app.use('/executive', executiveRoutes)
+
 // ENABLE LOGGING AND CACHE CONTROL
 app.use(logger)
 

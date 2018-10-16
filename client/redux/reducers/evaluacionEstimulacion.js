@@ -4,6 +4,11 @@ const initialState = fromJS({
     hasErrors: true,
     penetracionRadial: '',
     longitudDeAgujeroDeGusano: '',
+    geometria: [{
+      intervalo: '',
+      imgURL: '',
+      imgName: '',
+    }],
 })
 
 
