@@ -37,18 +37,23 @@ router.get('/jobBreakdown', (req, res) => {
 router.get('/aforosData', (req, res) => {
   let {  } = req.body
 
-  let query = `SELECT * FROM 
-      (SELECT WELL_FORMACION_ID, FECHA, QO, QW FROM
-        (
-          select WELL_FORMACION_ID, MAX(FECHA) FECHA
-          FROM WellAforos WHERE QO != '-999' GROUP BY WELL_FORMACION_ID
-        ) A INNER JOIN WellAforos B USING(WELL_FORMACION_ID, FECHA)) as aforos,
-      (SELECT WELL_FORMACION_ID as WELL_FORMACION_ID_DUPL, FECHA, QO as QO_RESULT, QW as QW_RESULT FROM
-        (
-          select WELL_FORMACION_ID, MAX(FECHA) FECHA
-          FROM ResultsAforos WHERE QO != '-999' GROUP BY WELL_FORMACION_ID
-        ) A INNER JOIN ResultsAforos B USING(WELL_FORMACION_ID, FECHA)) as aforo_results
-      WHERE aforos.WELL_FORMACION_ID = aforo_results.WELL_FORMACION_ID_DUPL`
+      }))
+  let query = `
+    SELECT * FROM 
+
+    (SELECT A.WELL_FORMACION_ID, WELL_NAME, TRANSACTION_ID, FECHA, QO, QW FROM
+    (
+      select WellAforos.WELL_FORMACION_ID, WELL_NAME, TRANSACTION_ID, MAX(FECHA) FECHA
+      FROM WellAforos JOIN FieldWellMapping ON WellAforos.WELL_FORMACION_ID = FieldWellMapping.WELL_FORMACION_ID 
+      WHERE QO != '-999' GROUP BY TRANSACTION_ID
+    ) A INNER JOIN WellAforos B USING(TRANSACTION_ID, FECHA)) as aforos,
+
+    (SELECT A.PROPUESTA_ID, QO as QO_RESULT, QW as QW_RESULT FROM
+    (
+      select WELL_FORMACION_ID, PROPUESTA_ID, TRANSACTION_ID, MAX(FECHA) FECHA
+      FROM ResultsAforos WHERE QO != '-999' GROUP BY TRANSACTION_ID
+    ) A INNER JOIN ResultsAforos B USING(TRANSACTION_ID, FECHA)) as aforo_results 
+    WHERE aforos.TRANSACTION_ID = aforo_results.PROPUESTA_ID`
 
 
   connection.query(query, (err, results) => {
@@ -57,6 +62,7 @@ router.get('/aforosData', (req, res) => {
     
       results = results.map(i => ({
         id: i.WELL_FORMACION_ID,
+        name: i.WELL_NAME,
         date: i.FECHA,
         qo: i.QO,
         qw: i.QW,
