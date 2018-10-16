@@ -380,7 +380,7 @@ let columnsApuntalado = [
           Histórico de fracturamientos apuntalados realizados al pozo
         </div>
         <ExcelUpload
-          template='HistoricoAforo'
+          template='HistorialIntervencionesFracApunt'
           headers={errors}
           setData={setHistoricoApuntaladoData}
         />
@@ -450,7 +450,7 @@ let columnsApuntalado = [
           Histórico de fracturamientos ácidos realizados al pozo
         </div>
         <ExcelUpload
-          template='HistoricoAforo'
+          template='HistorialIntervencionesFracAcido'
           headers={errors}
           setData={setHistoricoAcidoData}
         />
@@ -515,7 +515,7 @@ let columnsApuntalado = [
           Histórico de tratamientos de estimulación
         </div>
         <ExcelUpload
-          template='HistoricoAforo'
+          template='HistorialIntervencionesEstimulacion'
           headers={errors}
           setData={setHistoricoEstimulacionData}
         />

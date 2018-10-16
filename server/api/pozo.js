@@ -796,21 +796,19 @@ export const create = async (body, action, cb) => {
     const innerObj = JSON.parse(body[k])
     const innerKeys = Object.keys(innerObj)
     // look for immediate images
-    if (innerObj.img) {
+    if (innerObj.img && action !== 'save') {
       innerObj.imgName = [transactionID, innerObj.imgName].join('.')
       console.log('found image', k, innerObj.imgName)
-
       const buf = Buffer.from(innerObj.img, 'base64')
       const t = await addObject(buf, innerObj.imgName).catch(reason => console.log(reason))
       innerObj.img = t
       console.log('uploaded img', t, k)
     }
-
     for (let iKey of innerKeys) {
       const property = innerObj[iKey]
       if (Array.isArray(property)) {
         for (let j of property) {
-          if (j.img) {
+          if (j.img && action !== 'save') {
             j.imgName = [transactionID, j.imgName].join('.')
             const buf = Buffer.from(j.img, 'base64')
             const t = await addObject(buf, j.imgName).catch(reason => console.log(reason))
@@ -822,7 +820,6 @@ export const create = async (body, action, cb) => {
     }
     finalObj[k] = innerObj
   }
-
 
   let userID = finalObj.user.id
 

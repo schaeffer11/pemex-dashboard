@@ -171,7 +171,7 @@ const getErrors = (data, headers) => {
           className="submit download-template"
           onClick={() => window.location.replace(`/api/get_template/${this.props.template}`)}
         >
-          Descarga Plantilla de Esta Página
+          Descarga Plantilla de Esta Sección
         </button>
         <input
           type="file"
