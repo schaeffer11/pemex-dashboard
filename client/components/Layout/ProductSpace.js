@@ -31,9 +31,8 @@ import LoginForm from '../User/LoginForm'
         <div className="productspace">
           <PrivateRoute exact path="/carga_datos" component={InputsUI} user={this.props.user} />
           <PrivateRoute exact path="/diagnosticos" component={DiagnosticosUI} user={this.props.user} />
-          <PrivateRoute exact path="/tablero_control" component={TableroDeControlUI} user={this.props.user} />
+          <PrivateRoute path="/tablero_control" component={TableroDeControlUI} user={this.props.user} />
           <Route exact path="/" component={HomeUI} />
-
           { this.props.user === null && (
             <div className="login">
               <div className="loginModal">
