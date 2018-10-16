@@ -70,10 +70,11 @@ const getErrors = (data, headers) => {
     const { headers, setData } = this.props
     const file = e.target.files[0]
     // First we must empty the table
-    const initialValues = {}
+    const initialValues = { error: true }
     headers.forEach(elem => {
-      initialValues[elem.name] = ''
+      initialValues[elem.name] = elem.type === 'date' ? null : ''
     })
+    console.log('what is this initial values', initialValues)
     setData([initialValues])
     if (!file) {
       return this.setState({ isAccepted: true, errors: [] })
@@ -88,7 +89,9 @@ const getErrors = (data, headers) => {
       const workbook = XLSX.read(data, { type: 'binary' })
       const sheetName = workbook.SheetNames[0]
       const sheet = workbook.Sheets[sheetName]
+      console.log('sheet', sheet)
       let jsonData = XLSX.utils.sheet_to_json(sheet, { header: headers.map(elem => elem.name) })
+      console.log('json', jsonData)
       /**
        * Remove header from file
        * Parse data to fix dates and add missing data
@@ -101,8 +104,9 @@ const getErrors = (data, headers) => {
       console.log('parsedData',parsedData)
       if (errors.length > 0) {
         return this.setState({ errors, isAccepted: false, modalIsOpen: true })
+      } else {
+        setData(parsedData)
       }
-      setData(parsedData)
       return this.setState({ isAccepted: true })
     }
 
@@ -168,7 +172,7 @@ const getErrors = (data, headers) => {
           className="submit download-template"
           onClick={() => window.location.replace(`/api/get_template/${this.props.template}`)}
         >
-          Descarga Plantilla de Esta Página
+          Descarga Plantilla de Esta Sección
         </button>
         <input
           type="file"

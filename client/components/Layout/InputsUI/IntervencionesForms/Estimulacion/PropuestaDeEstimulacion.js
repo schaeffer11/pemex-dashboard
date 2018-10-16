@@ -11,7 +11,8 @@ import { setHasErrorsResultadosSimulacionEstimulacion, setHasErrorsPropuestaEsti
   setVolumenSistemaDivergente, setVolumenDesplazamientoLiquido, setVolumenDesplazamientoN2, setVolumenTotalDeLiquido, 
   setPropuestaCompany, setTipoDeEstimulacion, setTipoDeColocacion, setTiempoDeContacto } from '../../../../../redux/actions/intervencionesEstimulacion'
 import { setEspesorBruto } from '../../../../../redux/actions/pozo'
-import { round, calculateVolumes, getSistemaOptions } from '../helpers'
+import { round, calculateVolumes, getSistemaOptions } from '../../../../../lib/helpers'
+import { setPenetracionRadial, setLongitudDeAgujeroDeGusano } from '../../../../../redux/actions/intervencionesEstimulacion'
 import { checkEmpty, checkDate } from '../../../../../lib/errorCheckers'
 
 @autobind class PropuestaDeEstimulacion extends Component {
@@ -134,7 +135,9 @@ import { checkEmpty, checkDate } from '../../../../../lib/errorCheckers'
   }
 
   handleSelectTipoDeEstimulacion(val) {
-    let { setTipoDeEstimulacion, setTipoDeColocacion, setTiempoDeContacto, setHasErrorsResultadosSimulacionEstimulacion, resultsData } = this.props
+    let { setTipoDeEstimulacion, setTipoDeColocacion, setTiempoDeContacto, 
+      setHasErrorsResultadosSimulacionEstimulacion, resultsData, setPenetracionRadial,
+      setLongitudDeAgujeroDeGusano } = this.props
     resultsData = resultsData.toJS()
 
     let { penetracionRadial, longitudDeAgujeroDeGusano } = resultsData
@@ -145,7 +148,7 @@ import { checkEmpty, checkDate } from '../../../../../lib/errorCheckers'
       setHasErrorsResultadosSimulacionEstimulacion(false)
     }
     else {
-      if (penetracionRadial.length > 0 && longitudDeAgujeroDeGusano.length > 0) {
+      if (penetracionRadial && penetracionRadial.length > 0 && longitudDeAgujeroDeGusano && longitudDeAgujeroDeGusano.length > 0) {
         setHasErrorsResultadosSimulacionEstimulacion(false)
       }
       else {
@@ -156,7 +159,8 @@ import { checkEmpty, checkDate } from '../../../../../lib/errorCheckers'
     setTipoDeEstimulacion(val)
     setTipoDeColocacion(null)
     setTiempoDeContacto(null)
-
+    setPenetracionRadial(null)
+    setLongitudDeAgujeroDeGusano(null)
   }
 
 
@@ -572,6 +576,8 @@ const mapDispatchToProps = dispatch => ({
   setTiempoDeContacto: val => dispatch(setTiempoDeContacto(val)),
   setHasErrorsPropuestaEstimulacion: val => dispatch(setHasErrorsPropuestaEstimulacion(val)),
   setHasErrorsResultadosSimulacionEstimulacion: val => dispatch(setHasErrorsResultadosSimulacionEstimulacion(val)),
+  setPenetracionRadial: val => dispatch(setPenetracionRadial(val)),
+  setLongitudDeAgujeroDeGusano: val => dispatch(setLongitudDeAgujeroDeGusano(val)),
 })
 
 export default connect(mapStateToProps, mapDispatchToProps)(PropuestaDeEstimulacion) 

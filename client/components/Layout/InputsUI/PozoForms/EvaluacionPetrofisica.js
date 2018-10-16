@@ -34,11 +34,23 @@ let layerColumns = [
     Header: <div>Espesor Neto<br></br>(md)</div>,
     accessor: 'espesorNeto',
     cell: 'renderNumber',
-  }, { 
+  }, 
+  { 
     Header: <div>V arc.<br></br>(%)</div>,
     accessor: 'vArc',
     cell: 'renderNumber',
-  }, { 
+  }, 
+  { 
+    Header: <div>V Cal.<br></br>(%)</div>,
+    accessor: 'vCal',
+    cell: 'renderNumber',
+  }, 
+  { 
+    Header: <div>V Dol.<br></br>(%)</div>,
+    accessor: 'vDol',
+    cell: 'renderNumber',
+  }, 
+  { 
     Header: <div>Porosidad<br></br>(%)</div>,
     accessor: 'porosity',
     cell: 'renderNumber',
@@ -189,6 +201,8 @@ let mudLossColumns = [
       { name: 'baseMD', type: 'number'},
       { name: 'espesorNeto', type: 'number'},
       { name: 'vArc', type: 'number'},
+      { name: 'vCal', type: 'number'},
+      { name: 'vDol', type: 'number'},
       { name: 'porosity', type: 'number'},
       { name: 'sw', type: 'number'},
       { name: 'dens', type: 'number'},
@@ -268,7 +282,7 @@ let mudLossColumns = [
     let { files } = e.target
     let localImgUrl = window.URL.createObjectURL(files[0])
 
-    setImgURL(localImgUrl)
+    setImgURL(localImgUrl, 'evaluacionPetrofisica')
   }
 
   makeImgInput() {
@@ -307,7 +321,7 @@ const mapStateToProps = state => ({
 })
 
 const mapDispatchToProps = dispatch => ({
-  setImgURL: val => dispatch(setImgURL(val)),
+  setImgURL: (url, name) => dispatch(setImgURL(url, name)),
   setLayerData: val => dispatch(setLayerData(val)),
   setMudLossData: val => dispatch(setMudLossData(val)),
   setHasErrorsEvaluacionPetrofisica: val => dispatch(setHasErrorsEvaluacionPetrofisica(val)),

@@ -12,6 +12,7 @@ const initialState = Map({
     isLoading: false,
     currentPage: '',
     hasSubmitted: false,
+    transactionID: null
 })
 
 
@@ -32,6 +33,8 @@ const global = (state = initialState, action) => {
                   .set('notificationType', null)
     case 'set_hasSubmitted':
       return state.set('hasSubmitted', action.value)
+    case 'set_transactionID':
+      return state.set('transactionID', action.value)
     default:
    		return state
   }

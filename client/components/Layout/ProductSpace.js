@@ -28,7 +28,7 @@ import LoginForm from '../User/LoginForm'
     return (
       <BrowserRouter>
         <div className="productspace">
-          <PrivateRoute exact path="/inputs" component={InputsUI} user={this.props.user} />
+          <PrivateRoute exact path="/carga_datos" component={InputsUI} user={this.props.user} />
           <PrivateRoute exact path="/diagnosticos" component={DiagnosticosUI} user={this.props.user} />
           <Route exact path="/" component={HomeUI} />
 

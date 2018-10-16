@@ -20,11 +20,21 @@ import estIncProduccionEstimulacion from './reducers/estIncProduccionEstimulacio
 import estIncProduccionAcido from './reducers/estIncProduccionAcido'
 import estIncProduccionApuntalado from './reducers/estIncProduccionApuntalado'
 import estCost from './reducers/estCost'
+import estCostResults from './reducers/estCostResults'
 import evaluacionPetrofisica from './reducers/evaluacionPetrofisica'
 import historicoDePresion from './reducers/historicoDePresion'
 import historicoDeProduccion from './reducers/historicoDeProduccion'
 import historialDeIntervenciones from './reducers/historialDeIntervenciones'
 import historicoDeAforos from './reducers/historicoDeAforos'
+import historicoDeAforosResults from './reducers/historicoDeAforosResults'
+import tratamientoEstimulacion from './reducers/tratamientoEstimulacion'
+import tratamientoAcido from './reducers/tratamientoAcido'
+import tratamientoApuntalado from './reducers/tratamientoApuntalado'
+import evaluacionAcido from './reducers/evaluacionAcido'
+import evaluacionApuntalado from './reducers/evaluacionApuntalado'
+import evaluacionEstimulacion from './reducers/evaluacionEstimulacion'
+import resultsMeta from './reducers/resultsMeta'
+import graficaTratamiento from './reducers/graficaTratamiento'
 import forms from './reducers/forms'
 import global from './reducers/global'
 
@@ -50,12 +60,22 @@ const appReducer = combineReducers({
   estIncProduccionAcido,
   estIncProduccionApuntalado,
   estCost,
+  estCostResults,
   evaluacionPetrofisica,
   historicoDePresion,
   historicoDeProduccion,
   historialDeIntervenciones,
   historicoDeAforos,
-  global
+  global,
+  historicoDeAforosResults,
+  tratamientoEstimulacion,
+  tratamientoAcido,
+  tratamientoApuntalado,
+  evaluacionAcido,
+  evaluacionApuntalado,
+  evaluacionEstimulacion,
+  graficaTratamiento,
+  resultsMeta,
 })
 
 const rootReducer = (state, action) => {

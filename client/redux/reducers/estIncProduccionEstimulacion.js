@@ -1,6 +1,6 @@
 import { Map, fromJS } from 'immutable'
 
-const initialState = Map({ 
+const initialState = fromJS({ 
     hasErrors: true,
     estIncEstrangulador: '',
     estIncPtp: '',
@@ -20,6 +20,7 @@ const initialState = Map({
     estIncGastoCompromisoQg: '',
     obervacionesEstIncEstim: '',
     imgURL: null,
+    imgName: '',
 })
 
 
@@ -62,7 +63,7 @@ const estIncProduccionEstimulacion = (state = initialState, action) => {
     case 'set_obervacionesEstIncEstim':
         return state.set('obervacionesEstIncEstim', fromJS(action.value))
     case 'set_estIncProdEstimulationImgURL':
-        return state.set('imgURL', fromJS(action.value))
+        return state.set('imgURL', fromJS(action.url)).set('imgName', fromJS(action.name))
     default:
       return state
   }

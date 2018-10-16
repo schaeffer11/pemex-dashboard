@@ -1,4 +1,4 @@
-import { Map, fromJS } from 'immutable'
+import { fromJS } from 'immutable'
 
 const initialState = fromJS({
     hasErrors: true,
@@ -11,6 +11,8 @@ const initialState = fromJS({
         espesorBruto: 0,
         espesorNeto: '',
         vArc: '',
+        vCal: '',
+        vDol: '',
         porosity: '',
         sw: '',
         dens: '',
@@ -28,6 +30,7 @@ const initialState = fromJS({
         length: 1
     }],
     imgURL: null,
+    imgNane: '',
 })
 
 
@@ -42,7 +45,7 @@ const evaluacionPetrofisica = (state = initialState, action) => {
     case 'set_mudLossData':
         return state.set('mudLossData', fromJS(action.value))   
     case 'set_imgURL':
-        return state.set('imgURL', fromJS(action.value))
+        return state.set('imgURL', fromJS(action.url)).set('imgName', fromJS(action.name))
     case 'set_evaluacionPetrofisica':
         return state = fromJS(action.value)
     default:

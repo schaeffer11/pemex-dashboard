@@ -57,7 +57,7 @@ export const setTurbidez = value => ({ type: 'set_turbidez', value})
 export const setResistencia = value => ({ type: 'set_resistencia', value})
 export const setPruebaDeSolubilidadConAcida = value => ({ type: 'set_pruebaDeSolubilidadConAcida', value})
 export const setObervacionesPruebasLabApuntalado = value => ({ type: 'set_obervacionesPruebasLabApuntalado', value})
-export const setEstIncProdApuntaladoImgURL = value => ({ type: 'set_estIncProdApuntaladoImgURL', value})
+export const setEstIncProdApuntaladoImgURL = (url, name) => ({ type: 'set_estIncProdApuntaladoImgURL', url, name})
 
 export const setLongitudApuntalada = value => ({ type: 'set_longitudApuntalada', value})
 export const setAlturaTotalDeFractura = value => ({ type: 'set_alturaTotalDeFractura', value})
@@ -67,7 +67,7 @@ export const setConductividad = value => ({ type: 'set_conductividad', value})
 export const setFcd = value => ({ type: 'set_fcd', value})
 export const setPresionNeta = value => ({ type: 'set_presionNeta', value})
 export const setEficienciaDeFluidoDeFractura = value => ({ type: 'set_eficienciaDeFluidoDeFractura', value})
-export const setEvidenceSimulationApuntaladoImgURL = value => ({ type: 'set_evidenceSimulationApuntaladoImgURL', value})
+export const setEvidenceSimulationApuntaladoImgURL = (url, name) => ({ type: 'set_evidenceSimulationApuntaladoImgURL', url, name})
 
 
 export const setEstIncEstrangulador = value => ({ type: 'set_estIncEstrangulador', value})

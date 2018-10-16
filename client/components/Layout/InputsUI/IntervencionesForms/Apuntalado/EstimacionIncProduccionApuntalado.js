@@ -211,7 +211,7 @@ import { checkEmpty, checkDate } from '../../../../../lib/errorCheckers'
     let { files } = e.target
     let localImgUrl = window.URL.createObjectURL(files[0])
 
-    setURL(localImgUrl)
+    setURL(localImgUrl, 'estIncrementoProduccionApuntalado')
   }
 
   makeImageInput() {
@@ -272,7 +272,7 @@ const mapDispatchToProps = dispatch => ({
   setEstIncGastoCompromisoQo: val => dispatch(setEstIncGastoCompromisoQo(val)),
   setEstIncGastoCompromisoQg: val => dispatch(setEstIncGastoCompromisoQg(val)),
   setObervacionesEstIncApuntalado: val => dispatch(setObervacionesEstIncApuntalado(val)),
-  setEstIncProdApuntaladoImgURL: val => dispatch(setEstIncProdApuntaladoImgURL(val)),
+  setEstIncProdApuntaladoImgURL: (url, name) => dispatch(setEstIncProdApuntaladoImgURL(url, name)),
   setHasErrorsEstIncProduccionApuntalado: val => dispatch(setHasErrorsEstIncProduccionApuntalado(val)),
 })
 

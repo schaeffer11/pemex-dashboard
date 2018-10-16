@@ -128,10 +128,10 @@ let columns = [
     Header: <div>Q<sub>gi</sub><br></br>(MMpc/d)</div>,
     accessor: 'qgi',
   }, { 
-    Header: <div>N<sub>p</sub><br></br>(MMbbl)</div>,
+    Header: <div>N<sub>p</sub><br></br>(bbl)</div>,
     accessor: 'np',
   }, { 
-    Header: <div>W<sub>p</sub><br></br>(MMbbl)</div>,
+    Header: <div>W<sub>p</sub><br></br>(bbl)</div>,
     accessor: 'wp',
   }, { 
     Header: <div>G<sub>p</sub><br></br>(MMpc)</div>,
