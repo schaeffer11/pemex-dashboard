@@ -448,7 +448,7 @@ import { setFromSaveSistemas, setHasErrorsSistemas, setSistemasArtificialesImgUR
     let { files } = e.target
     let localImgUrl = window.URL.createObjectURL(files[0])
 
-    setSistemasArtificialesImgURL(localImgUrl)
+    setSistemasArtificialesImgURL(localImgUrl, 'sistemasArtificialesDeProduccion')
   }
 
   makeImgInput() {
@@ -587,7 +587,7 @@ const mapDispatchToProps = dispatch => ({
   setCuantaConAnclaBM: val => dispatch(setCuantaConAnclaBM(val)),
   setNivelDinamico: val => dispatch(setNivelDinamico(val)),
   setNivelEstatico  : val => dispatch(setNivelEstatico(val)),
-  setSistemasArtificialesImgURL: val => dispatch(setSistemasArtificialesImgURL(val)),
+  setSistemasArtificialesImgURL: (url, name) => dispatch(setSistemasArtificialesImgURL(url, name)),
   setHasErrorsSistemas: val => dispatch(setHasErrorsSistemas(val)),
   setFromSaveSistemas: val => dispatch(setFromSaveSistemas(val)),
 })

@@ -54,11 +54,24 @@ export const setEstIncDeltaP = value => ({ type: 'set_estIncDeltaP', value})
 export const setEstIncGastoCompromisoQo = value => ({ type: 'set_estIncGastoCompromisoQo', value})
 export const setEstIncGastoCompromisoQg = value => ({ type: 'set_estIncGastoCompromisoQg', value})
 export const setObervacionesEstIncEstim = value => ({ type: 'set_obervacionesEstIncEstim', value})
-export const setEstIncProdEstimulationImgURL = value => ({ type: 'set_estIncProdEstimulationImgURL', value})
+export const setEstIncProdEstimulationImgURL = (url, name) => ({ type: 'set_estIncProdEstimulationImgURL', url, name})
 
 
 
 export const setPruebasDeLaboratorioData = value => ({ type: 'set_pruebasDeLaboratorioData', value})
+export const setPruebasDeLaboratorioImg = (index, url, name) => {
+  console.log('ici')
+ return { index,
+  url,
+  name,
+  type: 'set_pruebasDeLaboratorioImg'}
+}
+
+export const setEvidenceSimulationImgURL = (url, name) => ({
+  url,
+  name,
+  type: 'set_evidenceSimulationImgURL',
+})
 
 export const setEstimacionCostosData = value => ({ type: 'set_estimacionCostos', value })
 export const setHasErrorsEstCosts = value => ({ type: 'set_hasErrorsEstCosts', value})

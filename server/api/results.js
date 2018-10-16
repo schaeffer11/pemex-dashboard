@@ -139,9 +139,8 @@ export const createResults = async (body, action, cb) => {
 
     // look for immediate images
     if (innerObj.img) {
-      innerObj.imgName = [transactionID, k].join('.')
+      innerObj.imgName = [transactionID, innerObj.imgName].join('.')
       console.log('found image', k, innerObj.imgName)
-
       const buf = Buffer.from(innerObj.img, 'base64')
       const t = await addObject(buf, innerObj.imgName).catch(reason => console.log('something went wrong', reason))
       innerObj.img = t
@@ -154,7 +153,7 @@ export const createResults = async (body, action, cb) => {
         let i = 0
         for (let j of property) {
           if (j.img) {
-            j.imgName = [transactionID, k, i].join('.')
+            j.imgName = [transactionID, j.imgName].join('.')
             const buf = Buffer.from(j.img, 'base64')
             const t = await addObject(buf, j.imgName).catch(reason => console.log('something went wrong', reason))
             j.img = t

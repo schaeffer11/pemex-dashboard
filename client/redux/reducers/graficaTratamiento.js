@@ -2,6 +2,7 @@ import { fromJS } from 'immutable'
 
 const initialState = fromJS({
   imgURL: '',
+  imgName: '',
 })
 
 const graficaTratamiento = (state = initialState, action) => {

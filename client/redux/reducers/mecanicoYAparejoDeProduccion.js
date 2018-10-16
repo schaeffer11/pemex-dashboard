@@ -22,6 +22,7 @@ const initialState = fromJS({
     volumenDeEspacioAnular: '',
     imgAparejoDeProduccionURL: '',
     imgURL: null,
+    imgName: '',
     desviacion: [{
       depth: '',
       inclination: '',
@@ -77,7 +78,7 @@ const mecanicoYAparejoDeProduccion = (state = initialState, action) => {
     case 'set_volumenDeEspacioAnular':
         return state.set('volumenDeEspacioAnular', fromJS(action.value))
     case 'set_imgBoreDiagramURL':
-        return state.set('imgURL', fromJS(action.value))
+        return state.set('imgURL', fromJS(action.url)).set('imgName', fromJS(action.name))
     case 'set_imgAparejoDeProduccionURL':
         return state.set('imgAparejoDeProduccionURL', fromJS(action.value))
     case 'set_mecanicoYAparejoDeProduccion':

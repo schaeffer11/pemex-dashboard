@@ -1,6 +1,6 @@
-import { Map, fromJS } from 'immutable'
+import { fromJS } from 'immutable'
 
-const initialState = Map({ 
+const initialState = fromJS({ 
     hasErrors: true,
     longitudTotal: '',
     longitudEfectivaGrabada: '',
@@ -11,7 +11,8 @@ const initialState = Map({
     fcd: '',
     presionNeta: '',
     eficienciaDeFluidoDeFractura: '',
-    imgURL: null
+    imgURL: null,
+    imgName: '',
 })
 
 
@@ -38,7 +39,7 @@ const resultadosSimulacionAcido = (state = initialState, action) => {
     case 'set_eficienciaDeFluidoDeFractura':
         return state.set('eficienciaDeFluidoDeFractura', fromJS(action.value))
     case 'set_evidenceSimulationAcidoImgURL':
-        return state.set('imgURL', fromJS(action.value))
+        return state.set('imgURL', fromJS(action.url)).set('imgName', fromJS(action.name))
     default:
       return state
   }

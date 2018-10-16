@@ -282,7 +282,7 @@ let mudLossColumns = [
     let { files } = e.target
     let localImgUrl = window.URL.createObjectURL(files[0])
 
-    setImgURL(localImgUrl)
+    setImgURL(localImgUrl, 'evaluacionPetrofisica')
   }
 
   makeImgInput() {
@@ -321,7 +321,7 @@ const mapStateToProps = state => ({
 })
 
 const mapDispatchToProps = dispatch => ({
-  setImgURL: val => dispatch(setImgURL(val)),
+  setImgURL: (url, name) => dispatch(setImgURL(url, name)),
   setLayerData: val => dispatch(setLayerData(val)),
   setMudLossData: val => dispatch(setMudLossData(val)),
   setHasErrorsEvaluacionPetrofisica: val => dispatch(setHasErrorsEvaluacionPetrofisica(val)),

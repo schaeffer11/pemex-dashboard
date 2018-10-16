@@ -201,13 +201,14 @@ import { setGeneralEvaluacionAcido, setMergeEvaluacionAcido } from '../../../../
     )
   }
 
-  handleFileUpload(e, index) {
+  handleFileUpload(e, index, intervalo) {
     console.log('da index', index)
     const { setGeneralEvaluacionAcido } = this.props
     let { files } = e.target
     console.log(files)
     let localImgUrl = window.URL.createObjectURL(files[0])
     setGeneralEvaluacionAcido(['geometria', index, 'imgURL'], localImgUrl)
+    setGeneralEvaluacionAcido(['geometria', index, 'imgName'], ['evaluacionAcido', intervalo].join('.'))
   }
 
   makeGeometryInput() {
@@ -224,7 +225,7 @@ import { setGeneralEvaluacionAcido, setMergeEvaluacionAcido } from '../../../../
           <input
             type='file'
             accept="image/*"
-            onChange={(e) => this.handleFileUpload(e, index)}
+            onChange={(e) => this.handleFileUpload(e, index, intervalo)}
           />
           {imgURL ? <img className='img-preview' src={imgURL} /> : null }
         </div>

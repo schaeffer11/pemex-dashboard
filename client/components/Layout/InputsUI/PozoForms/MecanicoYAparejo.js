@@ -294,7 +294,7 @@ let tratamientoPorOptions = [
     let { files } = e.target
     let localImgUrl = window.URL.createObjectURL(files[0])
 
-    setURL(localImgUrl)
+    setURL(localImgUrl, 'mecanicoYAparejo')
   }
 
   makeBoreDiagramInput() {
@@ -465,7 +465,7 @@ const mapDispatchToProps = dispatch => ({
   setVolumenCimaDeIntervalo: val => dispatch(setVolumenCimaDeIntervalo(val)),
   setVolumenBaseDeIntervalo: val => dispatch(setVolumenBaseDeIntervalo(val)),
   setVolumenDeEspacioAnular: val => dispatch(setVolumenDeEspacioAnular(val)),
-  setImgBoreDiagramURL: val => dispatch(setImgBoreDiagramURL(val)),
+  setImgBoreDiagramURL: (url, name) => dispatch(setImgBoreDiagramURL(url, name)),
   setImgAparejoDeProduccionURL: val => dispatch(setImgAparejoDeProduccionURL(val)),
   setHasErrorsMecanicoYAparejoDeProduccion: val => dispatch(setHasErrorsMecanicoYAparejoDeProduccion(val)),
   setFromSaveMecanicoYAparejoDeProduccion: val => dispatch(setFromSaveMecanicoYAparejoDeProduccion(val)),

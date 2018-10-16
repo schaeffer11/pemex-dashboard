@@ -22,6 +22,7 @@ import { setGeneralGraficaTratamiento } from '../../../../redux/actions/results'
     let { files } = e.target
     let localImgUrl = window.URL.createObjectURL(files[0])
     setGeneralGraficaTratamiento(['imgURL'], localImgUrl)
+    setGeneralGraficaTratamiento(['imgName'], 'graficaTratamiento')
   }
 
   render() {

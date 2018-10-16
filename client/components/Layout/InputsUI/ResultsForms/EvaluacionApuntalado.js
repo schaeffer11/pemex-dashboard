@@ -188,14 +188,14 @@ import { setGeneralEvaluacionApuntalado, setMergeEvaluacionApuntalado } from '..
     )
   }
 
-  handleFileUpload(e, index) {
+  handleFileUpload(e, index, intervalo) {
     console.log('da index', index)
     const { setGeneralEvaluacionApuntalado } = this.props
     let { files } = e.target
     console.log(files)
     let localImgUrl = window.URL.createObjectURL(files[0])
-    // setURL(localImgUrl)
     setGeneralEvaluacionApuntalado(['geometria', index, 'imgURL'], localImgUrl)
+    setGeneralEvaluacionApuntalado(['geometria', index, 'imgName'], ['evaluacionApuntalado', intervalo].join('.'))
   }
 
   makeGeometryInput() {
@@ -212,7 +212,7 @@ import { setGeneralEvaluacionApuntalado, setMergeEvaluacionApuntalado } from '..
           <input
             type='file'
             accept="image/*"
-            onChange={(e) => this.handleFileUpload(e, index)}
+            onChange={(e) => this.handleFileUpload(e, index, intervalo)}
           />
           {imgURL ? <img className='img-preview' src={imgURL} /> : null }
         </div>

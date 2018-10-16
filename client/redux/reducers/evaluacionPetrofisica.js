@@ -30,6 +30,7 @@ const initialState = fromJS({
         length: 1
     }],
     imgURL: null,
+    imgNane: '',
 })
 
 
@@ -44,7 +45,7 @@ const evaluacionPetrofisica = (state = initialState, action) => {
     case 'set_mudLossData':
         return state.set('mudLossData', fromJS(action.value))   
     case 'set_imgURL':
-        return state.set('imgURL', fromJS(action.value))
+        return state.set('imgURL', fromJS(action.url)).set('imgName', fromJS(action.name))
     case 'set_evaluacionPetrofisica':
         return state = fromJS(action.value)
     default:
