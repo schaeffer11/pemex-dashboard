@@ -2,7 +2,7 @@ import React, { Component } from 'react'
 import autobind from 'autobind-decorator'
 import { InputRow, InputRowUnitless, InputRowSelectUnitless, TextAreaUnitless } from '../../Common/InputRow'
 import { options as typeOptions } from './PruebasDeLaboratorio'
-import { setPruebasDeLaboratorioData } from '../../../../redux/actions/intervencionesEstimulacion'
+import { setPruebasDeLaboratorioData, setPruebasDeLaboratorioImg } from '../../../../redux/actions/intervencionesEstimulacion'
 import { setLabEvidenceImgURL } from '../../../../redux/actions/intervencionesEstimulacion'
 import { connect } from 'react-redux'
 import ReactTable from 'react-table'
@@ -128,6 +128,7 @@ const grabadoOptions = [
           <InputRow header="pH del agua" name='phDelAgua' value={pruebasDeLaboratorioData[index].phDelAgua} onChange={this.updateValue} index={index} unit='adim' errors={this.state.errors} onBlur={this.validate} />
           <InputRow header="Salinidad del agua" name='salinidadDelAgua' value={pruebasDeLaboratorioData[index].salinidadDelAgua} onChange={this.updateValue} index={index} unit='ppm' errors={this.state.errors} onBlur={this.validate} />
           <InputRow header="Salinidad del aceite" name='salinidadDelAceite' value={pruebasDeLaboratorioData[index].salinidadDelAceite} onChange={this.updateValue} index={index} unit='ppm' errors={this.state.errors} onBlur={this.validate} />
+          {this.makeImageInput(index, 'caracterizacionFisicoQuimica')}
         </div>
     )
   }
@@ -144,8 +145,7 @@ const grabadoOptions = [
           <InputRowSelectUnitless header="Tipo de sistema químico empleado" name='tipoDeSistemaEmpleado' value={pruebasDeLaboratorioData[index].tipoDeSistemaEmpleado} options={tipoDeSistemaEmpleadoOptions} callback={(e) => this.handleSelectNonTable(e.value, 'tipoDeSistemaEmpleado', index)} index={index} errors={this.state.errors} onBlur={this.validate} />
           <InputRow header="Peso final de la muestra" name='pesoDeLaMuestraFinal' value={pruebasDeLaboratorioData[index].pesoDeLaMuestraFinal} onChange={this.updateValue} index={index} unit='gr' errors={this.state.errors} onBlur={this.validate} />
           <InputRow header="Solubilidad" name='solubilidad' value={pruebasDeLaboratorioData[index].solubilidad} onChange={this.updateValue} index={index} unit='%' errors={this.state.errors} onBlur={this.validate} />
-          
-
+          {this.makeImageInput(index, 'solubilidad')}
         </div>
     )
   }
@@ -164,6 +164,7 @@ const grabadoOptions = [
           <InputRow header="Aglutinamiento" name='aglutinamiento' value={pruebasDeLaboratorioData[index].aglutinamiento} onChange={this.updateValue} index={index} unit='adim' errors={this.state.errors} onBlur={this.validate} />
           <InputRow header="Turbidez" name='turbidez' value={pruebasDeLaboratorioData[index].turbidez} onChange={this.updateValue} index={index} unit='adim' errors={this.state.errors} onBlur={this.validate} />
           <InputRow header="Solubilidad" name='solubilidad' value={pruebasDeLaboratorioData[index].solubilidad} onChange={this.updateValue} index={index} unit='%' />
+          {this.makeImageInput(index, 'apuntalante')}
         </div>
     )
   }
@@ -181,13 +182,14 @@ const grabadoOptions = [
           <InputRow header="Tiempo de rompimiento" name='tiempoDeRompimiento' value={pruebasDeLaboratorioData[index].tiempoDeRompimiento} onChange={this.updateValue} index={index} />
           <InputRow header="Dosificación de quebradores" name='dosificacionDeQuebradors' value={pruebasDeLaboratorioData[index].dosificacionDeQuebradors} onChange={this.updateValue} index={index} unit='adim' />
           <InputRow header="Viscosidad del gel de fractura" name='viscosidadDelGelDeFractura' value={pruebasDeLaboratorioData[index].viscosidadDelGelDeFractura} onChange={this.updateValue} index={index} unit='adim' />
+          {this.makeImageInput(index, 'gelFractura')}
         </div>
     )
   }
 
 
 
-  updateValue(value, event){
+  updateValue(value, event, isImageName = false){
     if(event === undefined)
       return
     if (typeof event.preventDefault === 'function') {
@@ -199,7 +201,11 @@ const grabadoOptions = [
 
     let index = event.target.getAttribute('index')
     let pruebas = {...pruebasDeLaboratorio}
-    pruebas.pruebasDeLaboratorioData[index][event.target.name] = value
+    if (isImageName) {
+      pruebas.pruebasDeLaboratorioData[index].imgName = value
+    } else {
+      pruebas.pruebasDeLaboratorioData[index][event.target.name] = value
+    }
 
     setPruebasDeLaboratorioData(pruebas.pruebasDeLaboratorioData)
   }
@@ -490,6 +496,7 @@ const grabadoOptions = [
           />
         </div>
         <button className='new-row-button' index={index} onClick={(e) => this.addNewRow(e, index)}>Añadir un renglón</button>
+        {this.makeImageInput(index, 'compatibilidadPorEmulsion')}
       </div>
     )
   }
@@ -570,32 +577,36 @@ const grabadoOptions = [
           />
         </div>
         <button className='new-row-button' index={index} onClick={(e) => this.addNewRowGrabado(e, index)}>Añadir un renglón</button>
+        {this.makeImageInput(index, 'grabado')}
       </div>
     )
   }
 
 
-  handleFileUpload(e, setURL) {
+  handleFileUpload(e, index, imgName) {
     e.preventDefault()
+    const { setPruebasDeLaboratorioImg } = this.props
     let { files } = e.target
     let localImgUrl = window.URL.createObjectURL(files[0])
-
-    setURL(localImgUrl, e)
+    console.log('setting image', index)
+    setPruebasDeLaboratorioImg(index, localImgUrl, `pruebasDeLaboratorio.${imgName}`)
+    {/* setURL(`pruebasDeLaboratorio.${imgName}`, e, true) */}
   }
 
-  makeImageInput(index) {
+  makeImageInput(index, name) {
     let { pruebasDeLaboratorio } = this.props
     pruebasDeLaboratorio = pruebasDeLaboratorio.toJS()
     let { pruebasDeLaboratorioData } = pruebasDeLaboratorio
 
     let imgURL = pruebasDeLaboratorioData[index].imgURL
+    const imgName = [name, index].join('.')
 
     return (
       <div style={{marginBot: '20px'}}>
         <div className='header'>
           Cargar evidencia del laboratorio
         </div>
-        <input type='file' name='imgURL' accept="image/*" onChange={(e) => this.handleFileUpload(e, this.updateValue)} index={index}></input>
+        <input type='file' name='imgURL' accept="image/*" onChange={(e) => this.handleFileUpload(e, index, imgName)} index={index}></input>
         {imgURL ? <img className='img-preview' src={imgURL}></img> : null }
       </div>
     )
@@ -629,7 +640,7 @@ const grabadoOptions = [
           <div className="collapsable-content">   
             { formList[form.type] }
             <TextAreaUnitless header="Observaciones" name='obervaciones' className={'obervaciones'} value={form.obervaciones} onChange={this.updateValue} index={i}/> 
-            { this.makeImageInput(i) }
+            {/* { this.makeImageInput(i) } */}
           </div>
         </div>
       </div>
@@ -656,6 +667,9 @@ const mapStateToProps = state => ({
 const mapDispatchToProps = dispatch => ({
     setLabEvidenceImgURL: val => dispatch(setLabEvidenceImgURL(val)),
     setPruebasDeLaboratorioData: val => dispatch(setPruebasDeLaboratorioData(val)),
+    setPruebasDeLaboratorioImg: (index, url, name) => {
+      dispatch(setPruebasDeLaboratorioImg(index, url, name))
+    }
 })
 
 

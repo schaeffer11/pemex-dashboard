@@ -265,12 +265,16 @@
     }
 
     .general-data {
-			margin-bottom: 1em;
+		margin-bottom: 1em;
     	display: grid;
     	grid-column-gap: 10px;
     	position: relative;
     	width: 80%;
+    	height: 520px;
     	left: 10%;
+    	border: solid 2px green;
+    	border-radius: 5px;
+    	padding: 20px;
     	grid-template-columns: calc(50% - 215px) 200px 200px calc(50% - 215px);
     	grid-template-areas: 	
     							'general general intervention intervention'
@@ -306,7 +310,41 @@
     		margin-top: 24px;
     	}
     }
+
+
+    .general-data-upload {
+		margin-bottom: 1em;
+    	position: relative;
+    	width: 80%;
+    	height: 520px;
+    	left: 10%;
+    	border: solid 2px green;
+    	border-radius: 5px;
+    	padding: 20px;
+    	text-align: center;
+
+    	.upload-form {
+    		text-align: left;
+    	}
+
+    	.body {
+    		height: 300px;
+    		overflow: auto;
+    		border-bottom: solid 1px black
+    	}
+
+    	.submit-continue {
+    	    width: 200px;
+    	    display: inline-block;
+    		position: relative;
+    		margin-top: 24px;
+    		position: absolute;
+    		bottom: 20px;
+    		left: calc(50% - 100px);
+    	}
+    }
     
+
 	//WELL FORMS
 	.tecnica-del-pozo-high-level {
 		.main-form {

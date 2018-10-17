@@ -1,6 +1,6 @@
-import { Map, fromJS } from 'immutable'
+import { fromJS } from 'immutable'
 
-const initialState = Map({ 
+const initialState = fromJS({ 
     pruebasDeLaboratorioData: [{
         index: 0,
         type: null,
@@ -17,6 +17,10 @@ const pruebasDeLaboratorio = (state = initialState, action) => {
   switch (action.type) {
     case 'set_pruebasDeLaboratorioData':
         return state.set('pruebasDeLaboratorioData', fromJS(action.value))
+    case 'set_pruebasDeLaboratorioImg':
+    console.log('in here', action.index, action.name)
+        return state.setIn(['pruebasDeLaboratorioData', action.index, 'imgURL'], action.url)
+            .setIn(['pruebasDeLaboratorioData', action.index, 'imgName'], action.name)
     default:
       return state
   }

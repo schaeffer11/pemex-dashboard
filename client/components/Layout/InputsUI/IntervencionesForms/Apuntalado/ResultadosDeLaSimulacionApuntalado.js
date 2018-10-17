@@ -140,7 +140,7 @@ import { checkEmpty, checkDate } from '../../../../../lib/errorCheckers'
 
     let localImgUrl = window.URL.createObjectURL(files[0])
 
-    setURL(localImgUrl)
+    setURL(localImgUrl, 'simulacionApuntalado')
   }
 
   makeEvidenceSimulationInput() {
@@ -189,7 +189,7 @@ const mapDispatchToProps = dispatch => ({
   setFcd: val => dispatch(setFcd(val)),
   setPresionNeta: val => dispatch(setPresionNeta(val)),
   setEficienciaDeFluidoDeFractura: val => dispatch(setEficienciaDeFluidoDeFractura(val)),
-  setEvidenceSimulationApuntaladoImgURL: val => dispatch(setEvidenceSimulationApuntaladoImgURL(val)),
+  setEvidenceSimulationApuntaladoImgURL: (url, name) => dispatch(setEvidenceSimulationApuntaladoImgURL(url, name)),
   setHasErrorsResultadosSimulacionApuntalado: val => dispatch(setHasErrorsResultadosSimulacionApuntalado(val)),
 })
 

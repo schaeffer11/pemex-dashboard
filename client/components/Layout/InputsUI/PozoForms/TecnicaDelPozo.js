@@ -298,7 +298,7 @@ import { setHasErrorsFichaTecnicaDelPozo, setTipoDeSistemo, setHistorialInterven
       }, {
         Header: 'Historial de Intervenciones',
         accessor: 'intervenciones',
-        cell: 'renderEditable',
+        cell: 'renderTextarea',
       }
     ]
     const rowObj = {

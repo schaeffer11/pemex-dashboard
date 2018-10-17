@@ -15,8 +15,11 @@ import { create as createWell, getFields, getWell, getSurveys,
             getInterventionEsimulacion, getInterventionAcido, getInterventionApuntalado, 
             getLabTest, getCedulaEstimulacion, getCedulaAcido, getCedulaApuntalado, 
             getCosts, getInterventionImage } from './pozo'
-import { create as createDiagnostico } from './diagnosticos';
+
 import { create as createCompromiso, mine as myCompromisos, get as getCompromisos } from './compromisos';
+import { createResults } from './results'
+
+// import { create as createDiagnostico } from './diagnosticos';
 import { getAuthorization } from '../middleware';
 
 const connection = db.getConnection(appConfig.users.database)
@@ -144,6 +147,14 @@ router.get('/getFieldWellMapping', (req, res) => {
 })
 
 
+router.get('/getCostItems', (req, res) => {
+    connection.query(`SELECT * FROM CostMap`, (err, results) => {
+      res.json(results)
+    })
+})
+
+
+
 router.get('/getAllSaves', (req, res) => {
     let { userID } = req.query
     
@@ -230,17 +241,31 @@ router.get('/getTransactionWell', (req, res) => {
     })
 })
 
+router.get('/getTransactionNoResults', (req, res) => {
+    let { userID } = req.query
+    
+    connection.query(`select * from Transactions t 
+      JOIN FieldWellMapping f ON t.WELL_FORMACION_ID = f.WELL_FORMACION_ID 
+      JOIN Intervenciones i ON t.TRANSACTION_ID = i.TRANSACTION_ID
+      WHERE HAS_RESULTS = 0 AND USER_ID = ? ORDER BY INSERT_TIME DESC;`, 
+      [userID], (err, results) => {
 
+
+        res.json(results)
+    })
+})
 
 
 
 router.post('/well', async (req, res) => {
+
+  // TODO: Find a way to clean up callbacks from createWell
   createWell(req.body, 'submit', err => {
     if (err) {
       console.log('we got an error saving', err)
       res.json({ isSubmitted: false })
     } else {
-      console.log('all good in the saving neighborhood')
+      console.log('all good in the submitting neighborhood')
       res.json({ isSubmitted: true })
     }
   })
@@ -257,6 +282,19 @@ router.post('/wellSave', async (req, res) => {
     } else {
       console.log('all good in the saving neighborhood')
       res.json({ isSaved: true })
+    }
+  })
+})
+
+
+router.post('/results', async (req, res) => {
+  createResults(req.body, 'save', err => {
+    if (err) {
+      console.log('we got an error saving', err)
+      res.json({ isSubmitted: false })
+    } else {
+      console.log('all good in the submitting neighborhood')
+      res.json({ isSubmitted: true })
     }
   })
 })
@@ -695,6 +733,8 @@ router.get('/getLayer', async (req, res) => {
     ESPESOR_BRUTO: { child: 'espesorBruto'},
     ESPESOR_NETO: { child: 'espesorNeto'},
     V_ARC: { child: 'vArc'},
+    V_CAL: { child: 'vCal'},
+    V_DOL: { child: 'vDol'},
     POROSITY: { child: 'porosity'},
     SW: { child: 'sw'},
     DENS: { child: 'dens'},
@@ -1480,6 +1520,9 @@ router.get('/getInterventionEstimulacion', async (req, res) => {
         const { parent, child } = map[key]
         objectPath.set(finalObj, `${parent}.${child}`, '')
       })
+      finalObj.propuestaEstimulacion.hasErrors = true
+      finalObj.resultadosSimulacionEstimulacion.hasErrors = true
+      finalObj.estIncProduccionEstimulacion.hasErrors = true
     }
     res.json(finalObj)
   })
@@ -1554,6 +1597,9 @@ router.get('/getInterventionAcido', async (req, res) => {
         const { parent, child } = map[key]
         objectPath.set(finalObj, `${parent}.${child}`, '')
       })
+      finalObj.resultadosSimulacionAcido.hasErrors = true
+      finalObj.propuestaAcido.hasErrors = true
+      finalObj.estIncProduccionAcido.hasErrors = true
     }
 
     res.json(finalObj)
@@ -1628,6 +1674,9 @@ router.get('/getInterventionApuntalado', async (req, res) => {
         const { parent, child } = map[key]
         objectPath.set(finalObj, `${parent}.${child}`, '')
       })
+      finalObj.resultadosSimulacionApuntalado.hasErrors = true
+      finalObj.propuestaApuntalado.hasErrors = true
+      finalObj.estIncProduccionApuntalado.hasErrors = true
     }
     res.json(finalObj)
   })
@@ -1810,7 +1859,6 @@ router.get('/getLabTest', async (req, res) => {
 
 router.get('/getCedulaEstimulacion', async (req, res) => {
   let { transactionID, saved } = req.query
-
   let action = saved ? 'loadSave' : 'loadTransaction'
 
 

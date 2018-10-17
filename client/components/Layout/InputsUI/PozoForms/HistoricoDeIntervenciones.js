@@ -3,6 +3,7 @@ import { connect } from 'react-redux'
 import autobind from 'autobind-decorator'
 import { setFromSaveHistorialDeIntervenciones, setHistoricoEstimulacionData, setHistoricoAcidoData, setHistoricoApuntaladoData, setHasErrorsHistorialDeIntervenciones } from '../../../../redux/actions/pozo'
 import InputTable from '../../Common/InputTable'
+import ExcelUpload from '../../Common/ExcelUpload'
 import { checkDate, checkEmpty } from '../../../../lib/errorCheckers'
 
 let columnsEstimulacion = [
@@ -29,7 +30,7 @@ let columnsEstimulacion = [
      }, { 
       Header: 'Objetivo',
       accessor: 'objetivo',
-      cell: 'renderEditable',
+      cell: 'renderTextarea',
     }, { 
       Header: 'Compañía',
       accessor: 'compania',
@@ -111,7 +112,7 @@ let columnsAcido = [
    }, { 
     Header: 'Objetivo',
     accessor: 'objetivo',
-    cell: 'renderEditable',
+    cell: 'renderTextarea',
   }, {
     Header: 'Compañía',
     accessor: 'compania',
@@ -188,7 +189,7 @@ let columnsApuntalado = [
    }, { 
     Header: 'Objetivo',
     accessor: 'objetivo',
-    cell: 'renderEditable',
+    cell: 'renderTextarea',
   }, {
     Header: 'Compañía',
     accessor: 'compania',
@@ -325,7 +326,6 @@ let columnsApuntalado = [
     this.setState({ errors: errorsCopy }, () => {
       const { setHasErrorsHistorialDeIntervenciones } = this.props
       const hasErrors = this.checkAllInputs()
-      console.log('do i have errors?', hasErrors)
       setHasErrorsHistorialDeIntervenciones(hasErrors)
     })
   }
@@ -357,9 +357,9 @@ let columnsApuntalado = [
 
       const errors = [
         { name: 'fecha', type: 'date' },
-        { name: 'tipoDeTratamiento', type: 'number' },
-        { name: 'objetivo', type: 'number' },
-        { name: 'compania', type: 'number' },
+        { name: 'tipoDeTratamiento', type: 'text' },
+        { name: 'objetivo', type: 'text' },
+        { name: 'compania', type: 'text' },
         { name: 'cima', type: 'number' },
         { name: 'base', type: 'number' },
         { name: 'longitudApuntalada', type: 'number' },
@@ -379,6 +379,11 @@ let columnsApuntalado = [
         <div className='header'>
           Histórico de fracturamientos apuntalados realizados al pozo
         </div>
+        <ExcelUpload
+          template='HistorialIntervencionesFracApunt'
+          headers={errors}
+          setData={setHistoricoApuntaladoData}
+        />
         <div className='table'>
           <InputTable
             className="-striped"
@@ -423,9 +428,9 @@ let columnsApuntalado = [
     }
     const errors = [
       { name: 'fecha', type: 'date' },
-      { name: 'tipoDeTratamiento', type: 'number' },
-      { name: 'objetivo', type: 'number' },
-      { name: 'compania', type: 'number' },
+      { name: 'tipoDeTratamiento', type: 'text' },
+      { name: 'objetivo', type: 'text' },
+      { name: 'compania', type: 'text' },
       { name: 'base', type: 'number' },
       { name: 'cima', type: 'number' },
       { name: 'longitudGravada', type: 'number' },
@@ -444,6 +449,11 @@ let columnsApuntalado = [
         <div className='header'>
           Histórico de fracturamientos ácidos realizados al pozo
         </div>
+        <ExcelUpload
+          template='HistorialIntervencionesFracAcido'
+          headers={errors}
+          setData={setHistoricoAcidoData}
+        />
         <div className='table'>
           <InputTable
             className="-striped"
@@ -486,15 +496,15 @@ let columnsApuntalado = [
     }
     const errors = [
       { name: 'fecha', type: 'date' },
-      { name: 'tipoDeTratamiento', type: 'number' },
-      { name: 'objetivo', type: 'number' },
-      { name: 'compania', type: 'number' },
+      { name: 'tipoDeTratamiento', type: 'text' },
+      { name: 'objetivo', type: 'text' },
+      { name: 'compania', type: 'text' },
       { name: 'acidoVol', type: 'number' },
-      { name: 'acidoNombre', type: 'number' },
+      { name: 'acidoNombre', type: 'text' },
       { name: 'solventeVol', type: 'number' },
-      { name: 'solventeNombre', type: 'number' },
+      { name: 'solventeNombre', type: 'text' },
       { name: 'divergenteVol', type: 'number' },
-      { name: 'divergenteNombre', type: 'number' },
+      { name: 'divergenteNombre', type: 'text' },
       { name: 'totalN2', type: 'number' },
       { name: 'beneficioProgramado', type: 'number' },
       { name: 'beneficioOficial', type: 'number' },
@@ -504,6 +514,11 @@ let columnsApuntalado = [
         <div className='header'>
           Histórico de tratamientos de estimulación
         </div>
+        <ExcelUpload
+          template='HistorialIntervencionesEstimulacion'
+          headers={errors}
+          setData={setHistoricoEstimulacionData}
+        />
         <div className='table'>
           <InputTable
             className="-striped"

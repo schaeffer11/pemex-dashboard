@@ -11,7 +11,9 @@ import Subtabs from './Components/Subtabs'
 import { pagesPozo, pagesIntervenciones } from '../../../lib/maps'
 import BaseIntervenciones from './IntervencionesForms/BaseIntervenciones'
 import PozoMultiStepForm from './PozoForms/PozoMultiStepForm'
+import ResultsMultiStepForm from './ResultsForms/ResultsMultiStepForm'
 import { submitForm } from '../../../redux/actions/pozoFormActions'
+import { submitResultsForm } from '../../../redux/actions/results'
 import Notification from '../Common/Notification'
 import Loading from '../Common/Loading'
 import { setHasSubmitted, setIsLoading, setCurrentPage } from '../../../redux/actions/global'
@@ -32,9 +34,11 @@ import { setHasSubmitted, setIsLoading, setCurrentPage } from '../../../redux/ac
 
     this.pozoMultiStepFormRef = React.createRef();
     this.intervencionesFormRef = React.createRef();
+    this.resultsFromRef = React.createRef();
 
     this.pozoMultiStepForm = React.createElement(PozoMultiStepForm, { ref: this.pozoMultiStepFormRef });
     this.intervencionesForm = React.createElement(BaseIntervenciones,  { ref: this.intervencionesFormRef});
+    this.resultsForm = React.createElement(ResultsMultiStepForm, { ref: this.resultsFromRef})
   }
 
 
@@ -130,9 +134,46 @@ import { setHasSubmitted, setIsLoading, setCurrentPage } from '../../../redux/ac
     }
   }
 
-  scrollToBottom() {
-    this.testScroll.scrollIntoView({ behaviour: 'smooth'})
+  handleSubmitResults(action) {
+    let { setHasSubmitted, hasErrorsHistoricoDeAforosResults, hasErrorsEstCostResults, 
+      hasErrorsTratamientoEstimulacion, hasErrorsTratamientoAcido, hasErrorsTratamientoApuntalado,
+      tipoDeIntervencionesResults, hasErrorsEvaluacionApuntalado, hasErrorsEvaluacionAcido, hasErrorsEvaluacionEstimulacion,
+      stimulationType } = this.props
+
+    hasErrorsEvaluacionEstimulacion = stimulationType === 'matricial' ? hasErrorsEvaluacionEstimulacion : false
+
+    if (action === 'submit') {
+      let hasErrors = false
+      setHasSubmitted(true)
+      
+      if (hasErrorsHistoricoDeAforosResults || hasErrorsEstCostResults) {
+        hasErrors = true
+      }
+      if (tipoDeIntervencionesResults === 'estimulacion' && (hasErrorsTratamientoEstimulacion || hasErrorsEvaluacionEstimulacion)) {
+        hasErrors = true
+      }
+      else if (tipoDeIntervencionesResults === 'acido' && (hasErrorsTratamientoAcido || hasErrorsEvaluacionAcido)) {
+        hasErrors = true
+      }      
+      else if (tipoDeIntervencionesResults === 'apuntalado' && (hasErrorsTratamientoApuntalado || hasErrorsEvaluacionApuntalado)) {
+        hasErrors = true
+      }
+
+      if (!hasErrors) {
+        this.props.submitResultsForm(action, this.props.token)
+        this.setState({'error': ''})
+      }
+      else {
+        setIsLoading({
+          showNotification: true,
+          notificationType: 'error',
+          notificationText: 'Su información no se ha guardado. Hay campos que no pueden estar vacios.'
+        })
+        console.log('there was an errror, im out')
+      }
+    }
   }
+
 
   deactivateModal() {
     this.setState({
@@ -287,25 +328,27 @@ import { setHasSubmitted, setIsLoading, setCurrentPage } from '../../../redux/ac
 
 
     let { showForms } = global
-
     let form = null
-    let otherForm = null
-
-    if (selectedTab === 'Pozo') {
-      form = this.pozoMultiStepForm
+    if (showForms === true) {
+      if (selectedTab === 'Pozo') {
+        form = this.pozoMultiStepForm
+      }
+      else if (selectedTab === 'Intervenciones') {
+        form = this.intervencionesForm
+      }
     }
-    else if (selectedTab === 'Intervenciones') {
-      form = this.intervencionesForm
+    else if (showForms === 'results') {
+      form = this.resultsForm
     }
 
-    if (!showForms) {
+    if (showForms === false) {
       return ( 
         <div className="input-forms">
           <GeneralData fieldWellOptions={fieldWellOptions}/>
         </div>
       )  
     } 
-    else {
+    else if (showForms === true) {
       return (
         <div className="input-forms">
           <Tabs handleSelectTab={this.handleSelectTab} selectedTab={selectedTab} />
@@ -321,12 +364,24 @@ import { setHasSubmitted, setIsLoading, setCurrentPage } from '../../../redux/ac
           <Loading />
           { isOpen ? this.buildModal() : null }
           { isOpenBug ? this.buildBugModal() : null }
-          <div style={{ float:"left", clear: "both" }}
-            ref={(el) => { this.testScroll = el; }}>
-          </div>
         </div>
       )
-    }      
+    }  
+    else {
+      return (
+        <div className="input-forms">
+          <div className='tabs'>
+            <div className={`tab active`} >Results</div>
+          </div>
+          <div className='tab-content'> 
+           { form }
+          </div>
+          <button className="submit submit-button" onClick={(e) => this.handleSubmitResults('submit')}>Enviar</button>
+        <Notification />
+        <Loading />
+        </div>
+        )
+    }   
   }
 }
 
@@ -336,6 +391,7 @@ const mapStateToProps = state => ({
   user: state.getIn(['user', 'id']),
   formsState: state.get('forms'),
   token: state.getIn(['user', 'token']),
+  stimulationType: state.getIn(['resultsMeta', 'stimulationType']),
   hasErrorsFichaTecnicaDelPozo: state.getIn(['fichaTecnicaDelPozo', 'hasErrors']),
   hasErrorsFichaTecnicaDelCampo: state.getIn(['fichaTecnicaDelCampo', 'hasErrors']),
   hasErrorsHistorialDeIntervenciones: state.getIn(['historialDeIntervenciones', 'hasErrors']),
@@ -357,13 +413,23 @@ const mapStateToProps = state => ({
   hasErrorsEstIncProduccionEstimulacion: state.getIn(['estIncProduccionEstimulacion', 'hasErrors']),
   hasErrorsEstIncProduccionApuntalado: state.getIn(['estIncProduccionApuntalado', 'hasErrors']),
   hasErrorsEstCosts: state.getIn(['estCost', 'hasErrors']),
+  hasErrorsHistoricoDeAforosResults: state.getIn(['historicoDeAforosResults', 'hasErrors']),
+  hasErrorsEstCostResults: state.getIn(['estCostResults', 'hasErrors']),
+  hasErrorsTratamientoEstimulacion: state.getIn(['tratamientoEstimulacion', 'hasErrors']),
+  hasErrorsTratamientoAcido: state.getIn(['tratamientoAcido', 'hasErrors']),
+  hasErrorsTratamientoApuntalado: state.getIn(['tratamientoApuntalado', 'hasErrors']),
+  hasErrorsEvaluacionApuntalado: state.getIn(['evaluacionApuntalado', 'hasErrors']),
+  hasErrorsEvaluacionAcido: state.getIn(['evaluacionAcido', 'hasErrors']),
+  hasErrorsEvaluacionEstimulacion: state.getIn(['evaluacionEstimulacion', 'hasErrors']),
   tipoDeIntervenciones: state.getIn(['objetivoYAlcancesIntervencion', 'tipoDeIntervenciones']),
+  tipoDeIntervencionesResults: state.getIn(['resultsMeta', 'interventionType']),
 })
 
 const mapDispatchToProps = dispatch => ({
   setHasSubmitted: val => dispatch(setHasSubmitted(val)),
   setIsLoading: val => dispatch(setIsLoading(val)),
   submitPozoForm: (action, token, name) => {dispatch(submitForm(action, token, name))},
+  submitResultsForm: (action, token) => {dispatch(submitResultsForm(action, token))},
   setCurrentPage: val => {dispatch(setCurrentPage(val))},
 })
 

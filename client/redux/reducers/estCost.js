@@ -1,6 +1,6 @@
 import { Map, fromJS } from 'immutable'
 
-const initialState = Map({ 
+const initialState = fromJS({ 
     hasErrors: true,
     estimacionCostosData: [{
         index: 0,
@@ -11,10 +11,9 @@ const initialState = Map({
         MNXtoDLS: '',
         compania: '',
     }],
-
 })
 
-const estCostAcido = (state = initialState, action) => {
+const estCost = (state = initialState, action) => {
   switch (action.type) {
     case 'set_hasErrorsEstCosts':
       return state.set('hasErrors', fromJS(action.value))
@@ -25,4 +24,4 @@ const estCostAcido = (state = initialState, action) => {
   }
 }
 
-export default estCostAcido
+export default estCost

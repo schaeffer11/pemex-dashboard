@@ -2,10 +2,37 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="2e5bf0f0-73e2-4434-9516-9002af263568" name="Default" comment="">
-      <change beforePath="" afterPath="$PROJECT_DIR$/client/components/Layout/InputsUI/PozoForms/HistoricoDeAforos.js" />
-      <change beforePath="" afterPath="$PROJECT_DIR$/client/redux/reducers/historicoDeAforos.js" />
-      <change beforePath="$PROJECT_DIR$/client/components/Layout/Common/InputRow.js" afterPath="$PROJECT_DIR$/client/components/Layout/Common/InputRow.js" />
+      <change beforePath="" afterPath="$PROJECT_DIR$/client/components/Layout/InputsUI/Components/ButtonGroup.js" />
+      <change beforePath="" afterPath="$PROJECT_DIR$/client/components/Layout/InputsUI/ResultsForms/EstimacionCostosResults.js" />
+      <change beforePath="" afterPath="$PROJECT_DIR$/client/components/Layout/InputsUI/ResultsForms/EvaluacionAcido.js" />
+      <change beforePath="" afterPath="$PROJECT_DIR$/client/components/Layout/InputsUI/ResultsForms/EvaluacionApuntalado.js" />
+      <change beforePath="" afterPath="$PROJECT_DIR$/client/components/Layout/InputsUI/ResultsForms/EvaluacionEstimulacion.js" />
+      <change beforePath="" afterPath="$PROJECT_DIR$/client/components/Layout/InputsUI/ResultsForms/Evaluaciones.js" />
+      <change beforePath="" afterPath="$PROJECT_DIR$/client/components/Layout/InputsUI/ResultsForms/GraficaTratamiento.js" />
+      <change beforePath="" afterPath="$PROJECT_DIR$/client/components/Layout/InputsUI/ResultsForms/HistoricoDeAforosResults.js" />
+      <change beforePath="" afterPath="$PROJECT_DIR$/client/components/Layout/InputsUI/ResultsForms/ResultsMultiStepForm.js" />
+      <change beforePath="" afterPath="$PROJECT_DIR$/client/components/Layout/InputsUI/ResultsForms/TratamientoAcido.js" />
+      <change beforePath="" afterPath="$PROJECT_DIR$/client/components/Layout/InputsUI/ResultsForms/TratamientoApuntalado.js" />
+      <change beforePath="" afterPath="$PROJECT_DIR$/client/components/Layout/InputsUI/ResultsForms/TratamientoEstimulacion.js" />
+      <change beforePath="" afterPath="$PROJECT_DIR$/client/components/Layout/InputsUI/ResultsForms/Tratamientos.js" />
+      <change beforePath="" afterPath="$PROJECT_DIR$/client/redux/actions/results.js" />
+      <change beforePath="" afterPath="$PROJECT_DIR$/client/redux/reducers/estCostResults.js" />
+      <change beforePath="" afterPath="$PROJECT_DIR$/client/redux/reducers/evaluacionAcido.js" />
+      <change beforePath="" afterPath="$PROJECT_DIR$/client/redux/reducers/evaluacionApuntalado.js" />
+      <change beforePath="" afterPath="$PROJECT_DIR$/client/redux/reducers/evaluacionEstimulacion.js" />
+      <change beforePath="" afterPath="$PROJECT_DIR$/client/redux/reducers/graficaTratamiento.js" />
+      <change beforePath="" afterPath="$PROJECT_DIR$/client/redux/reducers/historicoDeAforosResults.js" />
+      <change beforePath="" afterPath="$PROJECT_DIR$/client/redux/reducers/resultsMeta.js" />
+      <change beforePath="" afterPath="$PROJECT_DIR$/client/redux/reducers/tratamientoAcido.js" />
+      <change beforePath="" afterPath="$PROJECT_DIR$/client/redux/reducers/tratamientoApuntalado.js" />
+      <change beforePath="" afterPath="$PROJECT_DIR$/client/redux/reducers/tratamientoEstimulacion.js" />
+      <change beforePath="" afterPath="$PROJECT_DIR$/server/api/results.js" />
+      <change beforePath="" afterPath="$PROJECT_DIR$/templates/HistorialIntervencionesEstimulacion.xlsx" />
+      <change beforePath="" afterPath="$PROJECT_DIR$/templates/HistorialIntervencionesFracAcido.xlsx" />
+      <change beforePath="" afterPath="$PROJECT_DIR$/templates/HistorialIntervencionesFracApunt.xlsx" />
+      <change beforePath="$PROJECT_DIR$/client/components/Layout/Common/ExcelUpload.js" afterPath="$PROJECT_DIR$/client/components/Layout/Common/ExcelUpload.js" />
       <change beforePath="$PROJECT_DIR$/client/components/Layout/Common/InputTable.js" afterPath="$PROJECT_DIR$/client/components/Layout/Common/InputTable.js" />
+      <change beforePath="$PROJECT_DIR$/client/components/Layout/HomeUI/HomeUI.js" afterPath="$PROJECT_DIR$/client/components/Layout/HomeUI/HomeUI.js" />
       <change beforePath="$PROJECT_DIR$/client/components/Layout/InputsUI/Components/GeneralData.js" afterPath="$PROJECT_DIR$/client/components/Layout/InputsUI/Components/GeneralData.js" />
       <change beforePath="$PROJECT_DIR$/client/components/Layout/InputsUI/InputsUI.js" afterPath="$PROJECT_DIR$/client/components/Layout/InputsUI/InputsUI.js" />
       <change beforePath="$PROJECT_DIR$/client/components/Layout/InputsUI/IntervencionesForms/Acido/EstimacionIncProduccionAcido.js" afterPath="$PROJECT_DIR$/client/components/Layout/InputsUI/IntervencionesForms/Acido/EstimacionIncProduccionAcido.js" />
@@ -19,35 +46,45 @@
       <change beforePath="$PROJECT_DIR$/client/components/Layout/InputsUI/IntervencionesForms/Estimulacion/PropuestaDeEstimulacion.js" afterPath="$PROJECT_DIR$/client/components/Layout/InputsUI/IntervencionesForms/Estimulacion/PropuestaDeEstimulacion.js" />
       <change beforePath="$PROJECT_DIR$/client/components/Layout/InputsUI/IntervencionesForms/Estimulacion/ResultadosDeLaSimulacionEstimulacion.js" afterPath="$PROJECT_DIR$/client/components/Layout/InputsUI/IntervencionesForms/Estimulacion/ResultadosDeLaSimulacionEstimulacion.js" />
       <change beforePath="$PROJECT_DIR$/client/components/Layout/InputsUI/IntervencionesForms/PruebasDeLaboratorioExtra.js" afterPath="$PROJECT_DIR$/client/components/Layout/InputsUI/IntervencionesForms/PruebasDeLaboratorioExtra.js" />
-      <change beforePath="$PROJECT_DIR$/client/components/Layout/InputsUI/PozoForms/AnalisisDelAgua.js" afterPath="$PROJECT_DIR$/client/components/Layout/InputsUI/PozoForms/AnalisisDelAgua.js" />
+      <change beforePath="$PROJECT_DIR$/client/components/Layout/InputsUI/IntervencionesForms/helpers.js" afterPath="$PROJECT_DIR$/client/lib/helpers.js" />
       <change beforePath="$PROJECT_DIR$/client/components/Layout/InputsUI/PozoForms/EvaluacionPetrofisica.js" afterPath="$PROJECT_DIR$/client/components/Layout/InputsUI/PozoForms/EvaluacionPetrofisica.js" />
-      <change beforePath="$PROJECT_DIR$/client/components/Layout/InputsUI/PozoForms/HistoricoDePresionCampo.js" afterPath="$PROJECT_DIR$/client/components/Layout/InputsUI/PozoForms/HistoricoDePresionCampo.js" />
-      <change beforePath="$PROJECT_DIR$/client/components/Layout/InputsUI/PozoForms/HistoricoDePresionPozo.js" afterPath="$PROJECT_DIR$/client/components/Layout/InputsUI/PozoForms/HistoricoDePresionPozo.js" />
+      <change beforePath="$PROJECT_DIR$/client/components/Layout/InputsUI/PozoForms/HistoricoDeAforos.js" afterPath="$PROJECT_DIR$/client/components/Layout/InputsUI/PozoForms/HistoricoDeAforos.js" />
+      <change beforePath="$PROJECT_DIR$/client/components/Layout/InputsUI/PozoForms/HistoricoDeIntervenciones.js" afterPath="$PROJECT_DIR$/client/components/Layout/InputsUI/PozoForms/HistoricoDeIntervenciones.js" />
       <change beforePath="$PROJECT_DIR$/client/components/Layout/InputsUI/PozoForms/HistoricoDeProduccion.js" afterPath="$PROJECT_DIR$/client/components/Layout/InputsUI/PozoForms/HistoricoDeProduccion.js" />
       <change beforePath="$PROJECT_DIR$/client/components/Layout/InputsUI/PozoForms/MecanicoYAparejo.js" afterPath="$PROJECT_DIR$/client/components/Layout/InputsUI/PozoForms/MecanicoYAparejo.js" />
-      <change beforePath="$PROJECT_DIR$/client/components/Layout/InputsUI/PozoForms/PozoMultiStepForm.js" afterPath="$PROJECT_DIR$/client/components/Layout/InputsUI/PozoForms/PozoMultiStepForm.js" />
       <change beforePath="$PROJECT_DIR$/client/components/Layout/InputsUI/PozoForms/SistemasArtificialesDeProduccion.js" afterPath="$PROJECT_DIR$/client/components/Layout/InputsUI/PozoForms/SistemasArtificialesDeProduccion.js" />
-      <change beforePath="$PROJECT_DIR$/client/components/Layout/InputsUI/PozoForms/TecnicaDelCampo.js" afterPath="$PROJECT_DIR$/client/components/Layout/InputsUI/PozoForms/TecnicaDelCampo.js" />
       <change beforePath="$PROJECT_DIR$/client/components/Layout/InputsUI/PozoForms/TecnicaDelPozo.js" afterPath="$PROJECT_DIR$/client/components/Layout/InputsUI/PozoForms/TecnicaDelPozo.js" />
+      <change beforePath="$PROJECT_DIR$/client/components/Layout/ProductSpace.js" afterPath="$PROJECT_DIR$/client/components/Layout/ProductSpace.js" />
+      <change beforePath="$PROJECT_DIR$/client/lib/maps.js" afterPath="$PROJECT_DIR$/client/lib/maps.js" />
+      <change beforePath="$PROJECT_DIR$/client/redux/actions/global.js" afterPath="$PROJECT_DIR$/client/redux/actions/global.js" />
       <change beforePath="$PROJECT_DIR$/client/redux/actions/intervencionesAcido.js" afterPath="$PROJECT_DIR$/client/redux/actions/intervencionesAcido.js" />
       <change beforePath="$PROJECT_DIR$/client/redux/actions/intervencionesApuntalado.js" afterPath="$PROJECT_DIR$/client/redux/actions/intervencionesApuntalado.js" />
       <change beforePath="$PROJECT_DIR$/client/redux/actions/intervencionesEstimulacion.js" afterPath="$PROJECT_DIR$/client/redux/actions/intervencionesEstimulacion.js" />
       <change beforePath="$PROJECT_DIR$/client/redux/actions/pozo.js" afterPath="$PROJECT_DIR$/client/redux/actions/pozo.js" />
       <change beforePath="$PROJECT_DIR$/client/redux/actions/pozoFormActions.js" afterPath="$PROJECT_DIR$/client/redux/actions/pozoFormActions.js" />
       <change beforePath="$PROJECT_DIR$/client/redux/index.js" afterPath="$PROJECT_DIR$/client/redux/index.js" />
+      <change beforePath="$PROJECT_DIR$/client/redux/reducers/estCost.js" afterPath="$PROJECT_DIR$/client/redux/reducers/estCost.js" />
+      <change beforePath="$PROJECT_DIR$/client/redux/reducers/estIncProduccionAcido.js" afterPath="$PROJECT_DIR$/client/redux/reducers/estIncProduccionAcido.js" />
+      <change beforePath="$PROJECT_DIR$/client/redux/reducers/estIncProduccionApuntalado.js" afterPath="$PROJECT_DIR$/client/redux/reducers/estIncProduccionApuntalado.js" />
+      <change beforePath="$PROJECT_DIR$/client/redux/reducers/estIncProduccionEstimulacion.js" afterPath="$PROJECT_DIR$/client/redux/reducers/estIncProduccionEstimulacion.js" />
       <change beforePath="$PROJECT_DIR$/client/redux/reducers/evaluacionPetrofisica.js" afterPath="$PROJECT_DIR$/client/redux/reducers/evaluacionPetrofisica.js" />
-      <change beforePath="$PROJECT_DIR$/client/redux/reducers/fichaTecnicaDelCampo.js" afterPath="$PROJECT_DIR$/client/redux/reducers/fichaTecnicaDelCampo.js" />
-      <change beforePath="$PROJECT_DIR$/client/redux/reducers/fichaTecnicaDelPozo.js" afterPath="$PROJECT_DIR$/client/redux/reducers/fichaTecnicaDelPozo.js" />
-      <change beforePath="$PROJECT_DIR$/client/redux/reducers/historicoDePresion.js" afterPath="$PROJECT_DIR$/client/redux/reducers/historicoDePresion.js" />
-      <change beforePath="$PROJECT_DIR$/client/redux/reducers/historicoDeProduccion.js" afterPath="$PROJECT_DIR$/client/redux/reducers/historicoDeProduccion.js" />
+      <change beforePath="$PROJECT_DIR$/client/redux/reducers/global.js" afterPath="$PROJECT_DIR$/client/redux/reducers/global.js" />
+      <change beforePath="$PROJECT_DIR$/client/redux/reducers/mecanicoYAparejoDeProduccion.js" afterPath="$PROJECT_DIR$/client/redux/reducers/mecanicoYAparejoDeProduccion.js" />
       <change beforePath="$PROJECT_DIR$/client/redux/reducers/propuestaAcido.js" afterPath="$PROJECT_DIR$/client/redux/reducers/propuestaAcido.js" />
       <change beforePath="$PROJECT_DIR$/client/redux/reducers/propuestaApuntalado.js" afterPath="$PROJECT_DIR$/client/redux/reducers/propuestaApuntalado.js" />
       <change beforePath="$PROJECT_DIR$/client/redux/reducers/propuestaEstimulacion.js" afterPath="$PROJECT_DIR$/client/redux/reducers/propuestaEstimulacion.js" />
-      <change beforePath="$PROJECT_DIR$/client/styles/components/_tables.scss" afterPath="$PROJECT_DIR$/client/styles/components/_tables.scss" />
+      <change beforePath="$PROJECT_DIR$/client/redux/reducers/pruebasDeLaboratorio.js" afterPath="$PROJECT_DIR$/client/redux/reducers/pruebasDeLaboratorio.js" />
+      <change beforePath="$PROJECT_DIR$/client/redux/reducers/resultadosSimulacionAcido.js" afterPath="$PROJECT_DIR$/client/redux/reducers/resultadosSimulacionAcido.js" />
+      <change beforePath="$PROJECT_DIR$/client/redux/reducers/resultadosSimulacionApuntalado.js" afterPath="$PROJECT_DIR$/client/redux/reducers/resultadosSimulacionApuntalado.js" />
+      <change beforePath="$PROJECT_DIR$/client/redux/reducers/resultadosSimulacionEstimulacion.js" afterPath="$PROJECT_DIR$/client/redux/reducers/resultadosSimulacionEstimulacion.js" />
+      <change beforePath="$PROJECT_DIR$/client/redux/reducers/sistemasArtificialesDeProduccion.js" afterPath="$PROJECT_DIR$/client/redux/reducers/sistemasArtificialesDeProduccion.js" />
+      <change beforePath="$PROJECT_DIR$/client/styles/components/_buttons.scss" afterPath="$PROJECT_DIR$/client/styles/components/_buttons.scss" />
+      <change beforePath="$PROJECT_DIR$/client/styles/components/_query_modal.css" afterPath="$PROJECT_DIR$/client/styles/components/_query_modal.css" />
       <change beforePath="$PROJECT_DIR$/client/styles/pages/_inputs.scss" afterPath="$PROJECT_DIR$/client/styles/pages/_inputs.scss" />
       <change beforePath="$PROJECT_DIR$/server/api/api.js" afterPath="$PROJECT_DIR$/server/api/api.js" />
+      <change beforePath="$PROJECT_DIR$/server/api/intervenciones.js" afterPath="" />
       <change beforePath="$PROJECT_DIR$/server/api/pozo.js" afterPath="$PROJECT_DIR$/server/api/pozo.js" />
-      <change beforePath="$PROJECT_DIR$/server/auth/users.js" afterPath="$PROJECT_DIR$/server/auth/users.js" />
+      <change beforePath="$PROJECT_DIR$/server/aws/index.js" afterPath="$PROJECT_DIR$/server/aws/index.js" />
     </list>
     <ignored path="$PROJECT_DIR$/dist-dev/client/js/" />
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
@@ -58,12 +95,70 @@
     <option name="LAST_RESOLUTION" value="IGNORE" />
   </component>
   <component name="FileEditorManager">
-    <leaf>
-      <file leaf-file-name="PozoMultiStepForm.js" pinned="false" current-in-tab="true">
-        <entry file="file://$PROJECT_DIR$/client/components/Layout/InputsUI/PozoForms/PozoMultiStepForm.js">
+    <leaf SIDE_TABS_SIZE_LIMIT_KEY="300">
+      <file leaf-file-name="api.js" pinned="false" current-in-tab="true">
+        <entry file="file://$PROJECT_DIR$/server/api/api.js">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="212">
+              <caret line="400" column="39" lean-forward="false" selection-start-line="400" selection-start-column="39" selection-end-line="400" selection-end-column="39" />
+              <folding>
+                <element signature="e#0#32#0" expanded="true" />
+              </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="compromisos.js" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/server/api/compromisos.js">
           <provider selected="true" editor-type-id="text-editor">
             <state relative-caret-position="165">
-              <caret line="742" column="7" lean-forward="true" selection-start-line="742" selection-start-column="7" selection-end-line="742" selection-end-column="7" />
+              <caret line="11" column="27" lean-forward="false" selection-start-line="11" selection-start-column="27" selection-end-line="11" selection-end-column="27" />
+              <folding>
+                <element signature="e#0#26#0" expanded="true" />
+              </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="diagnosticos.js" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/server/api/diagnosticos.js">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="-2427">
+              <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="2" selection-end-column="61" />
+              <folding>
+                <element signature="e#0#26#0" expanded="true" />
+              </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="users.js" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/server/auth/users.js">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="-73">
+              <caret line="67" column="4" lean-forward="false" selection-start-line="67" selection-start-column="4" selection-end-line="67" selection-end-column="37" />
+              <folding>
+                <element signature="e#0#34#0" expanded="true" />
+              </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="index.js" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/server/auth/index.js">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="591">
+              <caret line="52" column="2" lean-forward="false" selection-start-line="52" selection-start-column="2" selection-end-line="52" selection-end-column="28" />
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="CompromisosUI.js" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/client/components/Layout/CompromisosUI/CompromisosUI.js">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="584">
+              <caret line="166" column="46" lean-forward="false" selection-start-line="166" selection-start-column="46" selection-end-line="166" selection-end-column="46" />
               <folding>
                 <element signature="e#0#40#0" expanded="true" />
               </folding>
@@ -71,21 +166,21 @@
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="fichaTecnicaDelPozo.js" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/client/redux/reducers/fichaTecnicaDelPozo.js">
+      <file leaf-file-name="DiagnosticoForm.js" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/client/components/Layout/DiagnosticosUI/DiagnosticoForm.js">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="179">
-              <caret line="40" column="6" lean-forward="false" selection-start-line="40" selection-start-column="6" selection-end-line="40" selection-end-column="6" />
+            <state relative-caret-position="1560">
+              <caret line="856" column="26" lean-forward="false" selection-start-line="856" selection-start-column="20" selection-end-line="856" selection-end-column="26" />
               <folding />
             </state>
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="TecnicaDelPozo.js" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/client/components/Layout/InputsUI/PozoForms/TecnicaDelPozo.js">
+      <file leaf-file-name="CompromisosForm.js" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/client/components/Layout/CompromisosUI/CompromisosForm.js">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="173">
-              <caret line="455" column="28" lean-forward="false" selection-start-line="455" selection-start-column="28" selection-end-line="455" selection-end-column="28" />
+            <state relative-caret-position="-565">
+              <caret line="110" column="87" lean-forward="false" selection-start-line="110" selection-start-column="87" selection-end-line="110" selection-end-column="87" />
               <folding>
                 <element signature="e#0#40#0" expanded="true" />
               </folding>
@@ -93,78 +188,12 @@
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="historicoDeProduccion.js" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/client/redux/reducers/historicoDeProduccion.js">
+      <file leaf-file-name="_compromisos.scss" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/client/styles/pages/_compromisos.scss">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="223">
-              <caret line="32" column="20" lean-forward="false" selection-start-line="32" selection-start-column="20" selection-end-line="32" selection-end-column="20" />
+            <state relative-caret-position="195">
+              <caret line="13" column="18" lean-forward="false" selection-start-line="13" selection-start-column="18" selection-end-line="13" selection-end-column="18" />
               <folding />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="HistoricoDePresionPozo.js" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/client/components/Layout/InputsUI/PozoForms/HistoricoDePresionPozo.js">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="212">
-              <caret line="202" column="69" lean-forward="false" selection-start-line="202" selection-start-column="69" selection-end-line="202" selection-end-column="69" />
-              <folding>
-                <element signature="e#0#40#0" expanded="true" />
-              </folding>
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="HistoricoDePresionCampo.js" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/client/components/Layout/InputsUI/PozoForms/HistoricoDePresionCampo.js">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="182">
-              <caret line="207" column="71" lean-forward="false" selection-start-line="207" selection-start-column="71" selection-end-line="207" selection-end-column="71" />
-              <folding>
-                <element signature="e#0#40#0" expanded="true" />
-              </folding>
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="historicoDePresion.js" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/client/redux/reducers/historicoDePresion.js">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="253">
-              <caret line="32" column="68" lean-forward="false" selection-start-line="32" selection-start-column="68" selection-end-line="32" selection-end-column="68" />
-              <folding />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="propuestaAcido.js" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/client/redux/reducers/propuestaAcido.js">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="226">
-              <caret line="87" column="66" lean-forward="false" selection-start-line="87" selection-start-column="66" selection-end-line="87" selection-end-column="66" />
-              <folding />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="propuestaApuntalado.js" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/client/redux/reducers/propuestaApuntalado.js">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="226">
-              <caret line="84" column="66" lean-forward="false" selection-start-line="84" selection-start-column="66" selection-end-line="84" selection-end-column="66" />
-              <folding />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="PropuestaDeAcido.js" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/client/components/Layout/InputsUI/IntervencionesForms/Acido/PropuestaDeAcido.js">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="212">
-              <caret line="524" column="65" lean-forward="false" selection-start-line="524" selection-start-column="65" selection-end-line="524" selection-end-column="65" />
-              <folding>
-                <element signature="e#0#40#0" expanded="true" />
-              </folding>
             </state>
           </provider>
         </entry>
@@ -177,6 +206,8 @@
       <find>&lt;&lt;&lt;</find>
       <find>loadFunc</find>
       <find>&lt;&lt;</find>
+      <find>createDia</find>
+      <find>===</find>
     </findStrings>
   </component>
   <component name="Git.Settings">
@@ -199,6 +230,7 @@
         <option value="$PROJECT_DIR$/client/redux/reducers/fichaTecnicaDelPozo.js" />
         <option value="$PROJECT_DIR$/client/components/Layout/InputsUI/PozoForms/TecnicaDelPozo.js" />
         <option value="$PROJECT_DIR$/client/components/Layout/InputsUI/PozoForms/PozoMultiStepForm.js" />
+        <option value="$PROJECT_DIR$/server/api/api.js" />
       </list>
     </option>
   </component>
@@ -229,7 +261,128 @@
       <foldersAlwaysOnTop value="true" />
     </navigator>
     <panes>
-      <pane id="ProjectPane" />
+      <pane id="ProjectPane">
+        <subPane>
+          <expand>
+            <path>
+              <item name="pemex-app-web-stimulation" type="b2602c69:ProjectViewProjectNode" />
+              <item name="pemex-app-web-stimulation" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="pemex-app-web-stimulation" type="b2602c69:ProjectViewProjectNode" />
+              <item name="pemex-app-web-stimulation" type="462c0819:PsiDirectoryNode" />
+              <item name="client" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="pemex-app-web-stimulation" type="b2602c69:ProjectViewProjectNode" />
+              <item name="pemex-app-web-stimulation" type="462c0819:PsiDirectoryNode" />
+              <item name="client" type="462c0819:PsiDirectoryNode" />
+              <item name="components" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="pemex-app-web-stimulation" type="b2602c69:ProjectViewProjectNode" />
+              <item name="pemex-app-web-stimulation" type="462c0819:PsiDirectoryNode" />
+              <item name="client" type="462c0819:PsiDirectoryNode" />
+              <item name="components" type="462c0819:PsiDirectoryNode" />
+              <item name="Layout" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="pemex-app-web-stimulation" type="b2602c69:ProjectViewProjectNode" />
+              <item name="pemex-app-web-stimulation" type="462c0819:PsiDirectoryNode" />
+              <item name="client" type="462c0819:PsiDirectoryNode" />
+              <item name="components" type="462c0819:PsiDirectoryNode" />
+              <item name="Layout" type="462c0819:PsiDirectoryNode" />
+              <item name="CompromisosUI" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="pemex-app-web-stimulation" type="b2602c69:ProjectViewProjectNode" />
+              <item name="pemex-app-web-stimulation" type="462c0819:PsiDirectoryNode" />
+              <item name="client" type="462c0819:PsiDirectoryNode" />
+              <item name="components" type="462c0819:PsiDirectoryNode" />
+              <item name="Layout" type="462c0819:PsiDirectoryNode" />
+              <item name="DiagnosticosUI" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="pemex-app-web-stimulation" type="b2602c69:ProjectViewProjectNode" />
+              <item name="pemex-app-web-stimulation" type="462c0819:PsiDirectoryNode" />
+              <item name="client" type="462c0819:PsiDirectoryNode" />
+              <item name="components" type="462c0819:PsiDirectoryNode" />
+              <item name="Layout" type="462c0819:PsiDirectoryNode" />
+              <item name="HomeUI" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="pemex-app-web-stimulation" type="b2602c69:ProjectViewProjectNode" />
+              <item name="pemex-app-web-stimulation" type="462c0819:PsiDirectoryNode" />
+              <item name="client" type="462c0819:PsiDirectoryNode" />
+              <item name="components" type="462c0819:PsiDirectoryNode" />
+              <item name="Layout" type="462c0819:PsiDirectoryNode" />
+              <item name="InputsUI" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="pemex-app-web-stimulation" type="b2602c69:ProjectViewProjectNode" />
+              <item name="pemex-app-web-stimulation" type="462c0819:PsiDirectoryNode" />
+              <item name="client" type="462c0819:PsiDirectoryNode" />
+              <item name="components" type="462c0819:PsiDirectoryNode" />
+              <item name="Layout" type="462c0819:PsiDirectoryNode" />
+              <item name="InputsUI" type="462c0819:PsiDirectoryNode" />
+              <item name="Components" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="pemex-app-web-stimulation" type="b2602c69:ProjectViewProjectNode" />
+              <item name="pemex-app-web-stimulation" type="462c0819:PsiDirectoryNode" />
+              <item name="client" type="462c0819:PsiDirectoryNode" />
+              <item name="components" type="462c0819:PsiDirectoryNode" />
+              <item name="Layout" type="462c0819:PsiDirectoryNode" />
+              <item name="InputsUI" type="462c0819:PsiDirectoryNode" />
+              <item name="PozoForms" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="pemex-app-web-stimulation" type="b2602c69:ProjectViewProjectNode" />
+              <item name="pemex-app-web-stimulation" type="462c0819:PsiDirectoryNode" />
+              <item name="client" type="462c0819:PsiDirectoryNode" />
+              <item name="styles" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="pemex-app-web-stimulation" type="b2602c69:ProjectViewProjectNode" />
+              <item name="pemex-app-web-stimulation" type="462c0819:PsiDirectoryNode" />
+              <item name="client" type="462c0819:PsiDirectoryNode" />
+              <item name="styles" type="462c0819:PsiDirectoryNode" />
+              <item name="components" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="pemex-app-web-stimulation" type="b2602c69:ProjectViewProjectNode" />
+              <item name="pemex-app-web-stimulation" type="462c0819:PsiDirectoryNode" />
+              <item name="client" type="462c0819:PsiDirectoryNode" />
+              <item name="styles" type="462c0819:PsiDirectoryNode" />
+              <item name="pages" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="pemex-app-web-stimulation" type="b2602c69:ProjectViewProjectNode" />
+              <item name="pemex-app-web-stimulation" type="462c0819:PsiDirectoryNode" />
+              <item name="server" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="pemex-app-web-stimulation" type="b2602c69:ProjectViewProjectNode" />
+              <item name="pemex-app-web-stimulation" type="462c0819:PsiDirectoryNode" />
+              <item name="server" type="462c0819:PsiDirectoryNode" />
+              <item name="api" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="pemex-app-web-stimulation" type="b2602c69:ProjectViewProjectNode" />
+              <item name="pemex-app-web-stimulation" type="462c0819:PsiDirectoryNode" />
+              <item name="server" type="462c0819:PsiDirectoryNode" />
+              <item name="auth" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="pemex-app-web-stimulation" type="b2602c69:ProjectViewProjectNode" />
+              <item name="pemex-app-web-stimulation" type="462c0819:PsiDirectoryNode" />
+              <item name="server" type="462c0819:PsiDirectoryNode" />
+              <item name="lib" type="462c0819:PsiDirectoryNode" />
+            </path>
+          </expand>
+          <select />
+        </subPane>
+      </pane>
       <pane id="Scope" />
       <pane id="Scratches" />
     </panes>
@@ -268,30 +421,51 @@
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="1194000" />
+    <option name="totallyTimeSpent" value="1442000" />
   </component>
   <component name="ToolWindowManager">
-    <frame x="15" y="23" width="1400" height="833" extended-state="0" />
+    <frame x="3" y="50" width="1437" height="846" extended-state="0" />
     <editor active="true" />
     <layout>
-      <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.24945612" sideWeight="0.5" order="0" side_tool="false" content_ui="combo" />
+      <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.24293785" sideWeight="0.5" order="0" side_tool="false" content_ui="combo" />
       <window_info id="TODO" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="6" side_tool="false" content_ui="tabs" />
-      <window_info id="Docker" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="false" weight="0.33" sideWeight="0.5" order="-1" side_tool="false" content_ui="tabs" />
-      <window_info id="Event Log" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="-1" side_tool="true" content_ui="tabs" />
+      <window_info id="Docker" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="false" weight="0.33" sideWeight="0.5" order="8" side_tool="false" content_ui="tabs" />
+      <window_info id="Event Log" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="8" side_tool="true" content_ui="tabs" />
+      <window_info id="Version Control" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.3292683" sideWeight="0.5" order="8" side_tool="false" content_ui="tabs" />
       <window_info id="Run" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
-      <window_info id="Version Control" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.3292683" sideWeight="0.5" order="-1" side_tool="false" content_ui="tabs" />
       <window_info id="Structure" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.24945612" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
-      <window_info id="Terminal" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="-1" side_tool="false" content_ui="tabs" />
+      <window_info id="Terminal" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="8" side_tool="false" content_ui="tabs" />
+      <window_info id="Favorites" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="3" side_tool="true" content_ui="tabs" />
       <window_info id="Debug" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.4" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
-      <window_info id="Favorites" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="-1" side_tool="true" content_ui="tabs" />
       <window_info id="Cvs" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="4" side_tool="false" content_ui="tabs" />
-      <window_info id="Hierarchy" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="2" side_tool="false" content_ui="combo" />
+      <window_info id="TODO" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="6" side_tool="false" content_ui="tabs" />
       <window_info id="Message" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="0" side_tool="false" content_ui="tabs" />
       <window_info id="Commander" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.4" sideWeight="0.5" order="0" side_tool="false" content_ui="tabs" />
-      <window_info id="Find" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
       <window_info id="Inspection" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.4" sideWeight="0.5" order="5" side_tool="false" content_ui="tabs" />
+      <window_info id="Hierarchy" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="2" side_tool="false" content_ui="combo" />
+      <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.24945612" sideWeight="0.5" order="0" side_tool="false" content_ui="combo" />
+      <window_info id="Find" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
       <window_info id="Ant Build" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
     </layout>
+    <layout-to-restore>
+      <window_info id="TODO" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="6" side_tool="false" content_ui="tabs" />
+      <window_info id="Cvs" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="4" side_tool="false" content_ui="tabs" />
+      <window_info id="Message" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="0" side_tool="false" content_ui="tabs" />
+      <window_info id="Commander" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.4" sideWeight="0.5" order="0" side_tool="false" content_ui="tabs" />
+      <window_info id="Event Log" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="7" side_tool="true" content_ui="tabs" />
+      <window_info id="Inspection" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.4" sideWeight="0.5" order="5" side_tool="false" content_ui="tabs" />
+      <window_info id="Version Control" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.3292683" sideWeight="0.5" order="8" side_tool="false" content_ui="tabs" />
+      <window_info id="Run" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
+      <window_info id="Terminal" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="9" side_tool="false" content_ui="tabs" />
+      <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.24293785" sideWeight="0.5" order="0" side_tool="false" content_ui="combo" />
+      <window_info id="Hierarchy" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="2" side_tool="false" content_ui="combo" />
+      <window_info id="Docker" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="false" weight="0.33" sideWeight="0.5" order="10" side_tool="false" content_ui="tabs" />
+      <window_info id="Find" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
+      <window_info id="Structure" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.24945612" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
+      <window_info id="Ant Build" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
+      <window_info id="Favorites" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="2" side_tool="true" content_ui="tabs" />
+      <window_info id="Debug" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.4" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
+    </layout-to-restore>
   </component>
   <component name="TypeScriptGeneratedFilesManager">
     <option name="version" value="1" />
@@ -304,6 +478,331 @@
     <watches-manager />
   </component>
   <component name="editorHistoryManager">
+    <entry file="file://$PROJECT_DIR$/client/components/Layout/ProductBar/Actions.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="0">
+          <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
+          <folding>
+            <element signature="e#11#36#0" expanded="false" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/package.json">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="705">
+          <caret line="85" column="27" lean-forward="false" selection-start-line="85" selection-start-column="23" selection-end-line="85" selection-end-column="27" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/client/styles/_productbar.scss">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="765">
+          <caret line="51" column="8" lean-forward="false" selection-start-line="51" selection-start-column="8" selection-end-line="51" selection-end-column="8" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/client/components/Layout/InputsUI/PozoForms/AnalisisDelAgua.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="-216">
+          <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/client/components/Layout/Common/InputTable.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="75">
+          <caret line="5" column="41" lean-forward="false" selection-start-line="5" selection-start-column="18" selection-end-line="5" selection-end-column="41" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/client/styles/_settings.scss">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="165">
+          <caret line="11" column="0" lean-forward="false" selection-start-line="11" selection-start-column="0" selection-end-line="11" selection-end-column="0" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/client/components/Layout/Common/InputRow.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="660">
+          <caret line="242" column="48" lean-forward="false" selection-start-line="242" selection-start-column="48" selection-end-line="242" selection-end-column="48" />
+          <folding>
+            <element signature="e#0#25#0" expanded="false" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/client/components/Layout/HomeUI/HomeUI.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="1080">
+          <caret line="74" column="130" lean-forward="false" selection-start-line="74" selection-start-column="130" selection-end-line="74" selection-end-column="130" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/client/components/Layout/ProductSpace.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="75">
+          <caret line="5" column="56" lean-forward="false" selection-start-line="5" selection-start-column="56" selection-end-line="5" selection-end-column="56" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/client/components/Layout/ProductBar/index.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="0">
+          <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/client/components/Layout/App.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="165">
+          <caret line="18" column="70" lean-forward="true" selection-start-line="18" selection-start-column="70" selection-end-line="18" selection-end-column="70" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/client/index.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="150">
+          <caret line="27" column="2" lean-forward="false" selection-start-line="27" selection-start-column="2" selection-end-line="27" selection-end-column="2" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/server/auth/session-store.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="0">
+          <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
+          <folding>
+            <element signature="e#0#25#0" expanded="false" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/server/logger.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="0">
+          <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/server/middleware.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="0">
+          <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/client/components/Layout/InputsUI/PozoForms/HistoricoDeAforos.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="-4887">
+          <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
+          <folding>
+            <element signature="e#0#40#0" expanded="false" />
+            <marker date="1539784278000" expanded="true" signature="777:821" ph="..." />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/client/components/Layout/InputsUI/PozoForms/MecanicoYAparejo.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="1669">
+          <caret line="248" column="22" lean-forward="false" selection-start-line="248" selection-start-column="17" selection-end-line="248" selection-end-column="22" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/client/components/Layout/InputsUI/PozoForms/TecnicaDelCampo.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="212">
+          <caret line="259" column="30" lean-forward="false" selection-start-line="259" selection-start-column="30" selection-end-line="259" selection-end-column="30" />
+          <folding>
+            <element signature="e#0#40#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/client/components/Layout/InputsUI/InputsUI.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="562">
+          <caret line="237" column="6" lean-forward="true" selection-start-line="219" selection-start-column="6" selection-end-line="237" selection-end-column="6" />
+          <folding>
+            <element signature="e#0#40#0" expanded="false" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/client/components/Layout/InputsUI/PozoForms/PozoMultiStepForm.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="212">
+          <caret line="793" column="35" lean-forward="true" selection-start-line="793" selection-start-column="18" selection-end-line="793" selection-end-column="35" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/client/styles/app.scss">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="542">
+          <caret line="127" column="28" lean-forward="false" selection-start-line="127" selection-start-column="28" selection-end-line="127" selection-end-column="28" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/client/components/Layout/DiagnosticosUI/DiagnosticosUI.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="210">
+          <caret line="18" column="0" lean-forward="true" selection-start-line="0" selection-start-column="0" selection-end-line="34" selection-end-column="0" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/client/styles/pages/_diagnosticos.scss">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="45">
+          <caret line="3" column="2" lean-forward="true" selection-start-line="3" selection-start-column="2" selection-end-line="10" selection-end-column="3" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/client/styles/pages/_compromisos.scss">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="195">
+          <caret line="13" column="18" lean-forward="false" selection-start-line="13" selection-start-column="18" selection-end-line="13" selection-end-column="18" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/client/components/Layout/DiagnosticosUI/DiagnosticoForm.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="1560">
+          <caret line="856" column="26" lean-forward="false" selection-start-line="856" selection-start-column="20" selection-end-line="856" selection-end-column="26" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/client/components/Layout/InputsUI/PozoForms/TecnicaDelPozo.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="212">
+          <caret line="127" column="16" lean-forward="false" selection-start-line="127" selection-start-column="16" selection-end-line="127" selection-end-column="16" />
+          <folding>
+            <element signature="e#0#40#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/server/api/intervenciones.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="30">
+          <caret line="2" column="50" lean-forward="false" selection-start-line="2" selection-start-column="46" selection-end-line="2" selection-end-column="50" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/server/api/pozo.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="212">
+          <caret line="825" column="10" lean-forward="false" selection-start-line="825" selection-start-column="6" selection-end-line="825" selection-end-column="10" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/server/index.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="150">
+          <caret line="23" column="7" lean-forward="false" selection-start-line="23" selection-start-column="7" selection-end-line="23" selection-end-column="7" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/server/auth/index.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="591">
+          <caret line="52" column="2" lean-forward="false" selection-start-line="52" selection-start-column="2" selection-end-line="52" selection-end-column="28" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/client/components/Layout/InputsUI/Components/GeneralData.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="212">
+          <caret line="105" column="32" lean-forward="false" selection-start-line="105" selection-start-column="26" selection-end-line="105" selection-end-column="32" />
+          <folding>
+            <element signature="e#0#40#0" expanded="false" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/server/api/diagnosticos.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="-2427">
+          <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="2" selection-end-column="61" />
+          <folding>
+            <element signature="e#0#26#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/server/auth/users.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="-73">
+          <caret line="67" column="4" lean-forward="false" selection-start-line="67" selection-start-column="4" selection-end-line="67" selection-end-column="37" />
+          <folding>
+            <element signature="e#0#34#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/server/api/compromisos.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="165">
+          <caret line="11" column="27" lean-forward="false" selection-start-line="11" selection-start-column="27" selection-end-line="11" selection-end-column="27" />
+          <folding>
+            <element signature="e#0#26#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/client/components/Layout/CompromisosUI/CompromisosForm.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="-565">
+          <caret line="110" column="87" lean-forward="false" selection-start-line="110" selection-start-column="87" selection-end-line="110" selection-end-column="87" />
+          <folding>
+            <element signature="e#0#40#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/client/components/Layout/CompromisosUI/CompromisosUI.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="584">
+          <caret line="166" column="46" lean-forward="false" selection-start-line="166" selection-start-column="46" selection-end-line="166" selection-end-column="46" />
+          <folding>
+            <element signature="e#0#40#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/server/api/api.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="212">
+          <caret line="400" column="39" lean-forward="false" selection-start-line="400" selection-start-column="39" selection-end-line="400" selection-end-column="39" />
+          <folding>
+            <element signature="e#0#32#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
     <entry file="file://$PROJECT_DIR$/client/components/Layout/InputsUI/PozoForms/TecnicaDelCampo.js">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="60">
@@ -318,9 +817,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="197">
           <caret line="509" column="72" lean-forward="false" selection-start-line="509" selection-start-column="72" selection-end-line="509" selection-end-column="72" />
-          <folding>
-            <element signature="e#0#40#0" expanded="true" />
-          </folding>
         </state>
       </provider>
     </entry>
@@ -328,7 +824,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="241">
           <caret line="67" column="66" lean-forward="false" selection-start-line="67" selection-start-column="66" selection-end-line="67" selection-end-column="66" />
-          <folding />
         </state>
       </provider>
     </entry>
@@ -336,9 +831,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="197">
           <caret line="533" column="70" lean-forward="false" selection-start-line="533" selection-start-column="70" selection-end-line="533" selection-end-column="70" />
-          <folding>
-            <element signature="e#0#40#0" expanded="true" />
-          </folding>
         </state>
       </provider>
     </entry>
@@ -346,9 +838,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="212">
           <caret line="524" column="65" lean-forward="false" selection-start-line="524" selection-start-column="65" selection-end-line="524" selection-end-column="65" />
-          <folding>
-            <element signature="e#0#40#0" expanded="true" />
-          </folding>
         </state>
       </provider>
     </entry>
@@ -356,7 +845,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="226">
           <caret line="84" column="66" lean-forward="false" selection-start-line="84" selection-start-column="66" selection-end-line="84" selection-end-column="66" />
-          <folding />
         </state>
       </provider>
     </entry>
@@ -364,7 +852,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="226">
           <caret line="87" column="66" lean-forward="false" selection-start-line="87" selection-start-column="66" selection-end-line="87" selection-end-column="66" />
-          <folding />
         </state>
       </provider>
     </entry>
@@ -372,7 +859,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="223">
           <caret line="32" column="20" lean-forward="false" selection-start-line="32" selection-start-column="20" selection-end-line="32" selection-end-column="20" />
-          <folding />
         </state>
       </provider>
     </entry>
@@ -380,9 +866,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="212">
           <caret line="202" column="69" lean-forward="false" selection-start-line="202" selection-start-column="69" selection-end-line="202" selection-end-column="69" />
-          <folding>
-            <element signature="e#0#40#0" expanded="true" />
-          </folding>
         </state>
       </provider>
     </entry>
@@ -390,9 +873,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="182">
           <caret line="207" column="71" lean-forward="false" selection-start-line="207" selection-start-column="71" selection-end-line="207" selection-end-column="71" />
-          <folding>
-            <element signature="e#0#40#0" expanded="true" />
-          </folding>
         </state>
       </provider>
     </entry>
@@ -400,7 +880,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="253">
           <caret line="32" column="68" lean-forward="false" selection-start-line="32" selection-start-column="68" selection-end-line="32" selection-end-column="68" />
-          <folding />
         </state>
       </provider>
     </entry>
@@ -408,7 +887,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="179">
           <caret line="40" column="6" lean-forward="false" selection-start-line="40" selection-start-column="6" selection-end-line="40" selection-end-column="6" />
-          <folding />
         </state>
       </provider>
     </entry>
@@ -426,9 +904,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="165">
           <caret line="742" column="7" lean-forward="true" selection-start-line="742" selection-start-column="7" selection-end-line="742" selection-end-column="7" />
-          <folding>
-            <element signature="e#0#40#0" expanded="true" />
-          </folding>
         </state>
       </provider>
     </entry>

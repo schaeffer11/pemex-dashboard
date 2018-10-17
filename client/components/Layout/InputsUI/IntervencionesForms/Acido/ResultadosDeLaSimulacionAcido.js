@@ -141,7 +141,7 @@ import { checkEmpty, checkDate } from '../../../../../lib/errorCheckers'
 
     let localImgUrl = window.URL.createObjectURL(files[0])
 
-    setURL(localImgUrl)
+    setURL(localImgUrl, 'simulacionAcido')
   }
 
   makeEvidenceSimulationInput() {
@@ -193,7 +193,7 @@ const mapDispatchToProps = dispatch => ({
   setFcd: val => dispatch(setFcd(val)),
   setPresionNeta: val => dispatch(setPresionNeta(val)),
   setEficienciaDeFluidoDeFractura: val => dispatch(setEficienciaDeFluidoDeFractura(val)),
-  setEvidenceSimulationAcidoImgURL: val => dispatch(setEvidenceSimulationAcidoImgURL(val)),
+  setEvidenceSimulationAcidoImgURL: (url, name) => dispatch(setEvidenceSimulationAcidoImgURL(url, name)),
   setHasErrorsResultadosSimulacionAcido: val => dispatch(setHasErrorsResultadosSimulacionAcido(val)),
 })
 

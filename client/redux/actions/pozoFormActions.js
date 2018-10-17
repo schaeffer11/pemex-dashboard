@@ -36,6 +36,7 @@ export function submitForm(action, token, saveName) {
     const ignore = {
       app: true,
       router: true,
+      historicoDeAforosResults: true,
     }
     const errors = []
     const convertedFields = getState().toJS()

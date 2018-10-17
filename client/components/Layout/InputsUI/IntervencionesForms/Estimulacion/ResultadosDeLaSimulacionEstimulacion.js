@@ -123,7 +123,7 @@ import { checkEmpty, checkDate } from '../../../../../lib/errorCheckers';
 
     let localImgUrl = window.URL.createObjectURL(files[0])
 
-    setURL(localImgUrl)
+    setURL(localImgUrl, 'simulacionEstimulacion')
   }
 
   makeEvidenceSimulationInput() {
@@ -171,7 +171,7 @@ const mapStateToProps = state => ({
 const mapDispatchToProps = dispatch => ({
   setPenetracionRadial: val => dispatch(setPenetracionRadial(val)),
   setLongitudDeAgujeroDeGusano: val => dispatch(setLongitudDeAgujeroDeGusano(val)),
-  setEvidenceSimulationImgURL: val => dispatch(setEvidenceSimulationImgURL(val)),
+  setEvidenceSimulationImgURL: (url, name) => dispatch(setEvidenceSimulationImgURL(url, name)),
   setHasErrorsResultadosSimulacionEstimulacion: val => dispatch(setHasErrorsResultadosSimulacionEstimulacion(val)),
 })
 
