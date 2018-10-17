@@ -1581,6 +1581,10 @@ export const create = async (body, action, cb) => {
                                                 [interventionID, 'Simulation Results', simResultsFile, transactionID]
                                               ]
 
+                                              pruebasDeLaboratorioData.forEach((i, index) => {
+                                                values.push([interventionID, 'Lab Data ' + index, i.imgURL, transactionID])
+                                              })
+
                                               connection.query((action === 'save' ? INSERT_INTERVENTION_IMAGE_QUERY.save : INSERT_INTERVENTION_IMAGE_QUERY.submit), [values], (err, results) => {
                                                 console.log('intervention img', err)
                                                 console.log('intervention img', results)
