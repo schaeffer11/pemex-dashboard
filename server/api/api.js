@@ -15,6 +15,8 @@ import { create as createWell, getFields, getWell, getSurveys,
             getInterventionEsimulacion, getInterventionAcido, getInterventionApuntalado, 
             getLabTest, getCedulaEstimulacion, getCedulaAcido, getCedulaApuntalado, 
             getCosts, getInterventionImage } from './pozo'
+
+import { create as createCompromiso, mine as myCompromisos, get as getCompromisos } from './compromisos';
 import { createResults } from './results'
 
 // import { create as createDiagnostico } from './diagnosticos';
@@ -97,6 +99,34 @@ router.post('/comment', (req, res) => {
     })
 })
 
+router.get('/users', (req, res) => {
+    let table = appConfig.users.table
+    connection.query(`SELECT username, id FROM ??`, [table], (err, results) => {
+        if (err) {
+            res.json([])
+        }
+
+        res.json({ results })
+    })
+})
+
+router.get('/activo', (req, res) => {
+    connection.query(`SELECT DISTINCT ACTIVO_NAME, ACTIVO_ID FROM FieldWellMapping`, (err, results) => {
+        res.json(results)
+    })
+})
+
+router.post('/compromiso', (req, res) => {
+  createCompromiso(req, res)
+})
+
+router.get('/compromiso/mine', (req, res) => {
+    myCompromisos(req, res)
+})
+
+router.get('/compromiso', (req, res) => {
+    getCompromisos(req, res)
+})
 
 router.post('/diagnostico', (req, res) => {
     createDiagnostico(req, res)
