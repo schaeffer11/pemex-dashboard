@@ -7,26 +7,25 @@ import ReactHighcharts from 'react-highcharts'
 @autobind class JobBreakdown extends PureComponent {
   render() {
     let { data } = this.props
-    console.log('got this data', data)
 
     let config = {
 	    chart: {
 	        type: 'pie'
 	    },
 	    title: {
-	        text: 'Test'
+	        text: 'Job Breakdown'
 	    },
 	    credits: {
 	    	enabled: false
 	    },
 	    series: [{
-	        name: 'Test',
+	        name: 'Count',
 	        data: data
 	    }]
 		}
 
     return (
-      <div className="job-breakdown">
+      <div className="job-breakdown test">
       	<ReactHighcharts
       		className='chart'
       		config={config}

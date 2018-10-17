@@ -37,6 +37,7 @@ import resultsMeta from './reducers/resultsMeta'
 import graficaTratamiento from './reducers/graficaTratamiento'
 import forms from './reducers/forms'
 import global from './reducers/global'
+import globalAnalysis from './reducers/globalAnalysis'
 
 const appReducer = combineReducers({
   app,
@@ -67,6 +68,7 @@ const appReducer = combineReducers({
   historialDeIntervenciones,
   historicoDeAforos,
   global,
+  globalAnalysis,
   historicoDeAforosResults,
   tratamientoEstimulacion,
   tratamientoAcido,
