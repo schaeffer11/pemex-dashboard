@@ -778,7 +778,25 @@ export const getInterventionImages = async (transID, action, cb) => {
     })
 }
 
-
+async function handleImageUploads(obj, transactionID) {
+  const objShallowCopy = {...obj}
+  if (objShallowCopy.imgSource === 'local') {
+    objShallowCopy.imgName = [transactionID, objShallowCopy.imgName].join('.')
+    const buf = Buffer.from(objShallowCopy.img, 'base64')
+    const t = await addObject(buf, objShallowCopy.imgName).catch(reason => console.log(reason))
+    objShallowCopy.img = t
+  } else if (objShallowCopy.imgSource === 's3') {
+    const nameWithoutTransaction = objShallowCopy.imgName.split('.').slice(1).join('.')
+    const oldTransactionID = objShallowCopy.imgName.split('.')[0]
+    const oldKey = [oldTransactionID, nameWithoutTransaction].join('.')
+    const newKey = [transactionID, nameWithoutTransaction].join('.')
+    console.log('copying the old object', nameWithoutTransaction, oldKey, newKey)
+    const objectCopy = await copyObject(oldKey, newKey).catch(r => console.log('something went wrong with the copy', r))
+    console.log('done copying', objectCopy)
+    objShallowCopy.imgName = newKey
+  }
+  return objShallowCopy
+}
 
 export const create = async (body, action, cb) => {
   let transactionID = Math.floor(Math.random() * 1000000000)
@@ -792,45 +810,19 @@ export const create = async (body, action, cb) => {
   console.log(allKeys)
 
   for(let k of allKeys) {
-
     const innerObj = JSON.parse(body[k])
     const innerKeys = Object.keys(innerObj)
     // look for immediate images
     if (innerObj.img) {
       console.log('found image', k, innerObj.imgName)
-      if (innerObj.imgSource === 'local') {
-        innerObj.imgName = [transactionID, innerObj.imgName].join('.')
-        const buf = Buffer.from(innerObj.img, 'base64')
-        const t = await addObject(buf, innerObj.imgName).catch(reason => console.log(reason))
-        innerObj.img = t
-        console.log('uploaded img', t, k)
-      } else if (innerObj.imgSource === 's3') {
-        const nameWithoutTransaction = innerObj.imgName.split('.').slice(1)
-        const oldTransactionID = innerObj.imgName.split('.')[0]
-        const oldKey = [oldTransactionID, nameWithoutTransaction].join('.')
-        const newKey = [transactionID, nameWithoutTransaction].join('.')
-        console.log('copying the old object', oldKey, newKey)
-        const objectCopy = await copyObject(oldKey, newKey).catch(r => console.log('something went wrong with the copy', r))
-        console.log('done copying', objectCopy)
-        // const deletedObject = await deleteObject(oldKey)
-      }
+      innerObj = await handleImageUploads(innerObj, transactionID)
     }
     for (let iKey of innerKeys) {
       const property = innerObj[iKey]
       if (Array.isArray(property)) {
         for (let j of property) {
           if (j.img) {
-            j.imgName = [transactionID, j.imgName].join('.')
-            if (innerObj.imgSource === 'local') {
-              const buf = Buffer.from(j.img, 'base64')
-              const t = await addObject(buf, j.imgName).catch(reason => console.log(reason))
-              j.img = t
-            } else if (innerObj.imgSource === 's3') {
-              const oldTransactionID = innerObj.imgName.split('.')[0]
-              const oldKey = [oldTransactionID, nameWithoutTransaction].join('.')
-              const newKey = [transactionID, nameWithoutTransaction].join('.')
-              const objectCopy = await copyObject(oldKey, newKey).catch(r => console.log('something went wrong with the copy', r))
-            }
+            j = await handleImageUploads(j, transactionID)
           }
         }
       }
