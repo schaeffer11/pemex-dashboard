@@ -4,6 +4,7 @@ import { connect } from 'react-redux'
 
 import Filters from '../Common/Filters'
 import AvgCostBar from './AvgCostBar'
+import CostBar from './CostBar'
 
 @autobind class statisticsUI extends Component {
   constructor(props) {
@@ -11,6 +12,7 @@ import AvgCostBar from './AvgCostBar'
     this.state = { 
       fieldWellOptions: [],
       avgCostData: [],
+      costData: []
     }
   }
 
@@ -20,7 +22,6 @@ import AvgCostBar from './AvgCostBar'
     globalAnalysis = globalAnalysis.toJS()
     let { activo, field, well, formation } = globalAnalysis
 
-    console.log(activo, field, well, formation)
     //TODO MAKE PARALLEL
     const { token } = this.props
     const headers = {
@@ -57,6 +58,25 @@ import AvgCostBar from './AvgCostBar'
 	  		avgCostData: res
 	  	})
   	})
+
+    fetch(`/statistics/costData`, {
+      method: 'POST',
+      headers: {
+        'content-type': 'application/json',
+      },
+      body: JSON.stringify({
+        activo,
+        field,
+        well,
+        formation
+      })
+    })
+    .then(res => res.json())
+    .then(res => {
+      this.setState({
+        costData: res
+      })
+    })
   }
 
   componentDidMount() {
@@ -83,12 +103,14 @@ import AvgCostBar from './AvgCostBar'
   }
 
   render() {
-    let { fieldWellOptions, avgCostData } = this.state
+    let { fieldWellOptions, avgCostData, costData } = this.state
 
     return (
       <div className="home">
         <Filters fieldWellOptions={fieldWellOptions} />
-        <CostBar data={avgCostData} />
+        <CostBar data={costData} />
+        <AvgCostBar data={avgCostData} />
+
       </div>
     )
   }

@@ -9,21 +9,18 @@ import ReactHighcharts from 'react-highcharts'
     let { data } = this.props
     
     data = data.map(i => {
-      console.log(i)
       return {
         name: i.name,
-        data: [i.totalCost]
+        data: [i.avgCost]
       }
     })
-
-    console.log(data)
 
     let config = {
 	    chart: {
 	        type: 'column'
 	    },
 	    title: {
-	        text: 'Costs'
+	        text: 'Avg Cost Per Job'
 	    },
 	    credits: {
 	    	enabled: false
