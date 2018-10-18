@@ -4,22 +4,32 @@ import ReactHighcharts from 'react-highcharts'
 
 
 
-@autobind class CostBar extends PureComponent {
+@autobind class CostCompanyBar extends PureComponent {
   render() {
     let { data } = this.props
 
     console.log(data)
+
     data = data.map(i => {
       let val
 
-      if (i.TIPO_DE_INTERVENCIONES === 'acido'){
-        val = [0, i.TOTAL_COST, 0]
+      if (i.COMPANY === 'Halliburton'){
+        val = [i.TOTAL_COST, 0, 0, 0, 0, 0]
       }
-      else if (i.TIPO_DE_INTERVENCIONES === 'apuntalado') {
-        val = [0, 0, i.TOTAL_COST]
+      else if (i.COMPANY === 'Schlumberger') {
+        val = [0, i.TOTAL_COST, 0, 0, 0, 0]
+      }
+      else if (i.COMPANY === 'PFM') {
+        val = [0, 0, i.TOTAL_COST, 0, 0, 0]
+      }
+      else if (i.COMPANY === 'Chemiservices') {
+        val = [0, 0, 0, i.TOTAL_COST, 0, 0]
+      }
+      else if (i.COMPANY === 'BJ') {
+        val = [0, 0, 0, 0, i.TOTAL_COST, 0]
       }
       else {
-        val = [i.TOTAL_COST, 0, 0]
+        val = [0, 0, 0, 0, 0, i.TOTAL_COST]
       }
 
       return {
@@ -39,7 +49,7 @@ import ReactHighcharts from 'react-highcharts'
         enabled: false
       },
       xAxis: {
-        categories: ['Estimulacion', 'Acido', 'Apuntalado']
+        categories: ['Halliburton', 'Schlumberger', 'PFM', 'Chemiservices', 'BJ', 'Weatherford']
       },
 	    credits: {
 	    	enabled: false
@@ -64,4 +74,4 @@ import ReactHighcharts from 'react-highcharts'
 }
 
 
-export default CostBar
+export default CostCompanyBar

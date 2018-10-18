@@ -4,14 +4,17 @@ import { connect } from 'react-redux'
 
 import Filters from '../Common/Filters'
 import AvgCostBar from './AvgCostBar'
+import AvgCostCompanyBar from './AvgCostCompanyBar'
 import CostBar from './CostBar'
+import CostCompanyBar from './CostCompanyBar'
 
 @autobind class statisticsUI extends Component {
   constructor(props) {
     super(props)
     this.state = { 
       fieldWellOptions: [],
-      avgCostData: [],
+      avgCostDataType: [],
+      avgCostDataCompany: [],
       costData: []
     }
   }
@@ -55,9 +58,28 @@ import CostBar from './CostBar'
   	.then(res => res.json())
   	.then(res => {
 	  	this.setState({
-	  		avgCostData: res
+	  		avgCostDataType: res
 	  	})
   	})
+
+    fetch(`/statistics/avgCostByCompany`, {
+      method: 'POST',
+      headers: {
+        'content-type': 'application/json',
+      },
+      body: JSON.stringify({
+        activo,
+        field,
+        well,
+        formation
+      })
+    })
+    .then(res => res.json())
+    .then(res => {
+      this.setState({
+        avgCostDataCompany: res
+      })
+    })
 
     fetch(`/statistics/costData`, {
       method: 'POST',
@@ -103,13 +125,15 @@ import CostBar from './CostBar'
   }
 
   render() {
-    let { fieldWellOptions, avgCostData, costData } = this.state
+    let { fieldWellOptions, avgCostDataType, avgCostDataCompany, costData } = this.state
 
     return (
       <div className="home">
         <Filters fieldWellOptions={fieldWellOptions} />
         <CostBar data={costData} />
-        <AvgCostBar data={avgCostData} />
+        <AvgCostBar data={avgCostDataType} />
+        <CostCompanyBar data={costData} />
+        <AvgCostCompanyBar data={avgCostDataCompany} />
 
       </div>
     )

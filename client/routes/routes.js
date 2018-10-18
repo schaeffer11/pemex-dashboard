@@ -1,7 +1,7 @@
 import React from 'react'
 import ExecutiveUI from '../components/Layout/TableroDeControlUI/Executive/ExecutiveUI'
 import StatisticsUI from '../components/Layout/TableroDeControlUI/Statistics/StatisticsUI'
-
+import WellViewUI from '../components/Layout/TableroDeControlUI/WellView/WellViewUI'
 
 const routes = () => [
   {
@@ -17,6 +17,13 @@ const routes = () => [
     name: 'statistics',
     class: 'tablero_control',
     component: () => <StatisticsUI />,
+  },
+  {
+    path: '/tablero_control/wellView',
+    exact: true,
+    name: 'wellView',
+    class: 'tablero_control',
+    component: () => <WellViewUI />,
   },
 ]
 export default routes
