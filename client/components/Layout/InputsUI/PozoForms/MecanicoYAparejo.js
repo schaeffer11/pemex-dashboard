@@ -293,8 +293,7 @@ let tratamientoPorOptions = [
     e.preventDefault()
     let { files } = e.target
     let localImgUrl = window.URL.createObjectURL(files[0])
-
-    setURL(localImgUrl, 'mecanicoYAparejo')
+    setURL(localImgUrl, 'mecanicoYAparejoDeProduccion')
   }
 
   makeBoreDiagramInput() {

@@ -21,6 +21,7 @@ const initialState = fromJS({
     obervacionesEstIncEstim: '',
     imgURL: null,
     imgName: '',
+    imgSource: null,
 })
 
 
@@ -63,7 +64,7 @@ const estIncProduccionEstimulacion = (state = initialState, action) => {
     case 'set_obervacionesEstIncEstim':
         return state.set('obervacionesEstIncEstim', fromJS(action.value))
     case 'set_estIncProdEstimulationImgURL':
-        return state.set('imgURL', fromJS(action.url)).set('imgName', fromJS(action.name))
+        return state.set('imgURL', fromJS(action.url)).set('imgName', fromJS(action.name)).set('imgSource', 'local')
     default:
       return state
   }

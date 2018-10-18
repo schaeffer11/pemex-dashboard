@@ -4,7 +4,7 @@ const connection = db.getConnection(appConfig.users.database)
 import path from 'path'
 import fs from 'fs'
 import multer from 'multer'
-import { addObject, signedURL, deleteObject, getBuckets } from '../aws/index';
+import { addObject, signedURL, deleteObject, getBuckets, copyObject } from '../aws/index';
 
 
 
@@ -822,13 +822,31 @@ export const getCosts = async (transID, action, cb) => {
         cb(results)
     })
 }
-export const getInterventionImage = async (transID, action, cb) => {
+export const getInterventionImages = async (transID, action, cb) => {
     connection.query(INSERT_INTERVENTION_IMAGE_QUERY[action], [transID], (err, results) => {
         cb(results)
     })
 }
 
-
+async function handleImageUploads(obj, transactionID) {
+  const objShallowCopy = {...obj}
+  if (objShallowCopy.imgSource === 'local') {
+    objShallowCopy.imgName = [transactionID, objShallowCopy.imgName].join('.')
+    const buf = Buffer.from(objShallowCopy.img, 'base64')
+    const t = await addObject(buf, objShallowCopy.imgName).catch(reason => console.log(reason))
+    objShallowCopy.img = t
+  } else if (objShallowCopy.imgSource === 's3') {
+    const nameWithoutTransaction = objShallowCopy.imgName.split('.').slice(1).join('.')
+    const oldTransactionID = objShallowCopy.imgName.split('.')[0]
+    const oldKey = [oldTransactionID, nameWithoutTransaction].join('.')
+    const newKey = [transactionID, nameWithoutTransaction].join('.')
+    console.log('copying the old object', nameWithoutTransaction, oldKey, newKey)
+    const objectCopy = await copyObject(oldKey, newKey).catch(r => console.log('something went wrong with the copy', r))
+    console.log('done copying', objectCopy)
+    objShallowCopy.imgName = newKey
+  }
+  return objShallowCopy
+}
 
 export const create = async (body, action, cb) => {
   let transactionID = Math.floor(Math.random() * 1000000000)
@@ -840,28 +858,19 @@ export const create = async (body, action, cb) => {
   const finalObj = {}
 
   for(let k of allKeys) {
-
     const innerObj = JSON.parse(body[k])
     const innerKeys = Object.keys(innerObj)
     // look for immediate images
-    if (innerObj.img && action !== 'save') {
-      innerObj.imgName = [transactionID, innerObj.imgName].join('.')
+    if (innerObj.img) {
       console.log('found image', k, innerObj.imgName)
-      const buf = Buffer.from(innerObj.img, 'base64')
-      const t = await addObject(buf, innerObj.imgName).catch(reason => console.log(reason))
-      innerObj.img = t
-      console.log('uploaded img', t, k)
+      innerObj = await handleImageUploads(innerObj, transactionID)
     }
     for (let iKey of innerKeys) {
       const property = innerObj[iKey]
       if (Array.isArray(property)) {
         for (let j of property) {
-          if (j.img && action !== 'save') {
-            j.imgName = [transactionID, j.imgName].join('.')
-            const buf = Buffer.from(j.img, 'base64')
-            const t = await addObject(buf, j.imgName).catch(reason => console.log(reason))
-            j.img = t
-            console.log('uploaded img', k, t)
+          if (j.img) {
+            j = await handleImageUploads(j, transactionID)
           }
         }
       }
@@ -1581,9 +1590,9 @@ export const create = async (body, action, cb) => {
                                                 [interventionID, 'Simulation Results', simResultsFile, transactionID]
                                               ]
 
-                                              pruebasDeLaboratorioData.forEach((i, index) => {
-                                                values.push([interventionID, 'Lab Data ' + index, i.imgURL, transactionID])
-                                              })
+                                              pruebasDeLaboratorioData.forEach(i => {
+                                              values.push([interventionID, 'Lab Data', i.imgName, transactionID])
+                                            })
 
                                               connection.query((action === 'save' ? INSERT_INTERVENTION_IMAGE_QUERY.save : INSERT_INTERVENTION_IMAGE_QUERY.submit), [values], (err, results) => {
                                                 console.log('intervention img', err)

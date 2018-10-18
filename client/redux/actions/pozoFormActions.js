@@ -70,7 +70,7 @@ export function submitForm(action, token, saveName) {
         // look for immediate images
         if (innerObj.hasOwnProperty('imgURL')) {
           if (innerObj.imgURL) {
-            const img = await getBase64FromURL(innerObj.imgURL)
+            const img = innerObj.imgSource === 'local' ? await getBase64FromURL(innerObj.imgURL) : 'exists in s3'
             innerObj.img = img
             // innerObj.imgName = [pozo, k, utc].join('.')
           }
@@ -84,7 +84,8 @@ export function submitForm(action, token, saveName) {
             for (let j of property) {
               if (j.hasOwnProperty('imgURL')) {
                 if (j.imgURL) {
-                  const img = await getBase64FromURL(j.imgURL)
+                  const img = innerObj.imgSource === 'local' ? await getBase64FromURL(innerObj.imgURL) : 'exists in s3'
+                  // const img = await getBase64FromURL(j.imgURL)
                   j.img = img
                   // j.imgName = [pozo, k, j.type, index, utc].join('.')
                   index += 1
