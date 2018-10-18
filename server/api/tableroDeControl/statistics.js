@@ -9,14 +9,15 @@ import appConfig from '../../../app-config.js'
 const connection = db.getConnection(appConfig.users.database)
 const router = Router()
 
-router.get('/costByType', (req, res) => {
-  let {  } = req.body
+router.post('/avgCostByType', (req, res) => {
+  let { activo, field, well, formation } = req.body
   let query = `
-
-select SUM(COST_MNX + COST_DLS * MNXtoDLS) as TOTAL_COST, SUM(COST_MNX + COST_DLS * MNXtoDLS) / COUNT(1) AS AVG_COST, TIPO_DE_INTERVENCIONES 
+select SUM(TOTAL_COST) / COUNT(1) as AVG_COST, TIPO_DE_INTERVENCIONES
+FROM
+(select SUM(COST_MNX + COST_DLS * MNXtoDLS) as TOTAL_COST, TIPO_DE_INTERVENCIONES 
 from ResultsCosts rc 
 JOIN Intervenciones i ON rc.PROPUESTA_ID = i.TRANSACTION_ID 
-GROUP BY TIPO_DE_INTERVENCIONES
+GROUP BY INTERVENTION_ID) a GROUP BY TIPO_DE_INTERVENCIONES
 `
 
   connection.query(query, (err, results) => {
@@ -25,7 +26,6 @@ GROUP BY TIPO_DE_INTERVENCIONES
     
       results = results.map(i => ({
         name: i.TIPO_DE_INTERVENCIONES,
-        totalCost: i.TOTAL_COST,
         avgCost: i.AVG_COST
       }))
 

@@ -178,6 +178,7 @@ import { sortLabels } from '../../../../lib/formatters'
 	      <div className='formation-selector' >
 	        Formation
 	        <Select
+            isDisabled
 	          value={realFormation}
 	          options={formationOptions}
 	          onChange={this.handleSelectFormation}

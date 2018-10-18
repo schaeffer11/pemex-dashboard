@@ -26,19 +26,39 @@ import Filters from '../Common/Filters'
 
     console.log(activo, field, well, formation)
     //TODO MAKE PARALLEL
-  	fetch(`/executive/jobBreakdown`)
+  	fetch(`/executive/jobBreakdown`, {
+      method: 'POST',
+      headers: {
+        'content-type': 'application/json',
+      },
+      body: JSON.stringify({
+        activo,
+        field,
+        well,
+        formation
+      })
+    })
   	.then(res => res.json())
   	.then(res => {
-  		console.log(res)
 	  	this.setState({
 	  		jobBreakdownData: res
 	  	})
   	})
 
-    fetch(`/executive/aforosData`)
+    fetch(`/executive/aforosData`, {
+      method: 'POST',
+      headers: {
+        'content-type': 'application/json',
+      },
+      body: JSON.stringify({
+        activo,
+        field,
+        well,
+        formation
+      })
+    })
     .then(res => res.json())
     .then(res => {
-      console.log(res)
       this.setState({
         aforosData: res
       })
@@ -70,7 +90,6 @@ import Filters from '../Common/Filters'
   }
 
   componentDidUpdate(prevProps) {
-    console.log('updated')
     let { globalAnalysis } = this.props
     let prevGlobalAnalysis = prevProps.globalAnalysis
 
@@ -79,10 +98,10 @@ import Filters from '../Common/Filters'
 
 
 		let { activo, field, well, formation } = globalAnalysis
-    let activoPrev = globalAnalysis.activo
-    let fieldPrev = globalAnalysis.field
-    let wellPrev = globalAnalysis.well
-    let formationPrev = globalAnalysis.formation
+    let activoPrev = prevGlobalAnalysis.activo
+    let fieldPrev = prevGlobalAnalysis.field
+    let wellPrev = prevGlobalAnalysis.well
+    let formationPrev = prevGlobalAnalysis.formation
 
     if (activo !== activoPrev || field !== fieldPrev || well !== wellPrev || formation !== formationPrev) {
 			this.fetchData()	
