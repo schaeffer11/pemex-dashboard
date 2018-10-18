@@ -9,7 +9,7 @@ import '../../../../styles/components/_query_modal.css'
 
 import { setObjetivo, setAlcances, setTipoDeIntervenciones } from '../../../../redux/actions/intervencionesEstimulacion'
 import { setSubdireccion, setActivo, setCampo, setPozo, setFormacion, setFechaProgramadaIntervencion, setFromSaveFichaTecnicaHighLevel, setHasErrorsFichaTecnicaHighLevel, setIntervencionProgramada } from '../../../../redux/actions/pozo'
-import { setShowForms, setIsLoading, setTransactionID } from '../../../../redux/actions/global'
+import { setShowForms, setIsLoading, setTransactionID, setSaveName } from '../../../../redux/actions/global'
 import { InputDate, InputRow, InputRowUnitless, InputRowSelectUnitless, TextAreaUnitless } from '../../Common/InputRow'
 import Notification from '../../Common/Notification'
 import Loading from '../../Common/Loading'
@@ -51,6 +51,7 @@ function handleImagesFromSave(images, state) {
       proposalOptions: [],
       selectedProposal: null,
       selectedSave: null,
+      selectedSaveName: null,
       errors: {
         subdireccion: {
           type: 'number',
@@ -259,7 +260,7 @@ function handleImagesFromSave(images, state) {
             {saveOptions.map(i => {
               let className = i.id === selectedSave ? 'save-item active-save' : 'save-item'
               return (
-                <div key={`saveOption_${i.id}`} className={className} onClick={(e) => this.handleSelectSave(i.id)}>{i.name}</div>
+                <div key={`saveOption_${i.id}`} className={className} onClick={(e) => this.handleSelectSave(i.id, i.name)}>{i.name}</div>
                 )
             })}
         </div> 
@@ -269,9 +270,10 @@ function handleImagesFromSave(images, state) {
     )
   }
 
-  handleSelectSave(id) {
+  handleSelectSave(id, name) {
     this.setState({
-      selectedSave: id
+      selectedSave: id,
+      selectedSaveName: name
     })
   }
 
@@ -453,8 +455,8 @@ function handleImagesFromSave(images, state) {
 
   
   async handleLoad() {
-    let { selectedSave } = this.state
-    let { user, formData, setLoading } = this.props
+    let { selectedSave, selectedSaveName } = this.state
+    let { user, formData, setLoading, setSaveName } = this.props
 
     this.setState({
       isOpen: false
@@ -567,6 +569,7 @@ function handleImagesFromSave(images, state) {
         notificationType: 'success',
         notificationText: `Se ha descargado informacion del pozo: ${wellID}`
       })
+      setSaveName(selectedSaveName)
       this.props.loadFromSave(newState)
 
 
@@ -661,6 +664,7 @@ const mapDispatchToProps = dispatch => ({
   setHasErrorsFichaTecnicaHighLevel: obj => dispatch(setHasErrorsFichaTecnicaHighLevel(obj)),
   setFromSaveFichaTecnicaHighLevel: obj => dispatch(setFromSaveFichaTecnicaHighLevel(obj)),
   setIntervencionProgramada: obj => dispatch(setIntervencionProgramada(obj)),
+  setSaveName: obj => dispatch(setSaveName(obj)),
 })
 
 export default connect(mapStateToProps, mapDispatchToProps)(GeneralData)

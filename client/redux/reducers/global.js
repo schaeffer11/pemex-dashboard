@@ -12,7 +12,8 @@ const initialState = Map({
     isLoading: false,
     currentPage: '',
     hasSubmitted: false,
-    transactionID: null
+    transactionID: null,
+    saveName: null,
 })
 
 
@@ -35,6 +36,8 @@ const global = (state = initialState, action) => {
       return state.set('hasSubmitted', action.value)
     case 'set_transactionID':
       return state.set('transactionID', action.value)
+    case 'set_saveName':
+      return state.set('saveName', action.value)
     default:
    		return state
   }
