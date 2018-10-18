@@ -555,12 +555,16 @@ function handleImagesFromSave(images, state) {
         })
       })
 
-      const wellImages = await fetch(`api/getWellImages?transactionID=${transactionID}&saved=1`, headers).then(r => r.json())
-      console.log('these are the wellimages', wellImages)
-      newState = handleImagesFromSave(wellImages, newState)
-      const interventionImages = await fetch(`api/getInterventionImages?transactionID=${transactionID}&saved=1`, headers).then(r => r.json())
-      console.log('these are the intervention images', interventionImages)
-      newState = handleImagesFromSave(interventionImages, newState)
+      const allImages = await fetch(`api/getImages?transactionID=${transactionID}&saved=1`, headers).then(r => r.json())
+      console.log('all images', allImages)
+      newState = handleImagesFromSave(allImages, newState)
+
+      // const wellImages = await fetch(`api/getWellImages?transactionID=${transactionID}&saved=1`, headers).then(r => r.json())
+      // console.log('well images', wellImages)
+      // newState = handleImagesFromSave(wellImages, newState)
+      // const interventionImages = await fetch(`api/getInterventionImages?transactionID=${transactionID}&saved=1`, headers).then(r => r.json())
+      // console.log('intervention images', interventionImages)
+      // newState = handleImagesFromSave(interventionImages, newState)
       console.log('da newState', newState)
 
       setLoading({ 

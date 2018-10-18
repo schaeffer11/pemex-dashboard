@@ -772,6 +772,7 @@ export const getWellProduccion = async (transID, action, cb) => {
 
 export const getWellImages = async (transID, action, cb) => {
   connection.query(INSERT_WELL_IMAGE_QUERY[action], [transID], (err, results) => {
+    console.log('got images?', err, results)
     cb(results)
    })
 }
@@ -828,11 +829,34 @@ export const getInterventionImages = async (transID, action, cb) => {
     })
 }
 
+async function loopAndDelete(images) {
+  const filteredData = images.filter(well => well.IMG_URL !== null && well.IMG_URL !== '')
+  const deletedArray = []
+  for (let elem of filteredData) {
+    console.log('elem', elem)
+    const deletedObject = await deleteObject(elem.IMG_URL)
+    deletedArray.push(deletedObject)
+  }
+  return deletedArray
+}
+
+const deleteImages = (transactionID, action) => new Promise((resolve, reject) => {
+  console.log('getting images', transactionID, action)
+  getWellImages(transactionID, 'loadSave', async wellImages => {
+    const deletedWellImages = await loopAndDelete(wellImages)
+    getInterventionImages(transactionID, 'loadSave', async interventionImages => {
+      const deletedInterventionImages = await loopAndDelete(interventionImages)
+      resolve({ deletedWellImages, deletedInterventionImages })
+    })
+  })
+})
+
 async function handleImageUploads(obj, transactionID) {
   const objShallowCopy = {...obj}
   if (objShallowCopy.imgSource === 'local') {
     objShallowCopy.imgName = [transactionID, objShallowCopy.imgName].join('.')
     const buf = Buffer.from(objShallowCopy.img, 'base64')
+    console.log('adding image to s3', objShallowCopy.imgName, transactionID)
     const t = await addObject(buf, objShallowCopy.imgName).catch(reason => console.log(reason))
     objShallowCopy.img = t
   } else if (objShallowCopy.imgSource === 's3') {
@@ -851,10 +875,6 @@ async function handleImageUploads(obj, transactionID) {
 export const create = async (body, action, cb) => {
   let transactionID = Math.floor(Math.random() * 1000000000)
   const allKeys = Object.keys(body)
-  // const { pozo } = JSON.parse(body.fichaTecnicaDelPozoHighLevel)
-
-
-
   const finalObj = {}
 
   for(let k of allKeys) {
@@ -868,9 +888,15 @@ export const create = async (body, action, cb) => {
     for (let iKey of innerKeys) {
       const property = innerObj[iKey]
       if (Array.isArray(property)) {
+        let index = 0
         for (let j of property) {
           if (j.img) {
+            console.log('property has an image')
             j = await handleImageUploads(j, transactionID)
+            console.log('uploaded image', j.imgName)
+            // mutate object with correct imgName
+            innerObj[iKey][index].imgName = j.imgName
+            index += 1
           }
         }
       }
@@ -1806,7 +1832,7 @@ export const create = async (body, action, cb) => {
                                                                         values.push(newRow)
                                                                       })  
                                                                       
-                                                                      connection.query(action === 'save' ? INSERT_SURVERY_QUERY.save : INSERT_SURVERY_QUERY.submit, [values], (err, results) => {
+                                                                      connection.query(action === 'save' ? INSERT_SURVERY_QUERY.save : INSERT_SURVERY_QUERY.submit, [values], async (err, results) => {
                                                                         console.log('surveys', err)
                                                                         console.log('surveys', results)
 
@@ -1822,9 +1848,16 @@ export const create = async (body, action, cb) => {
                                                                           values.push(deleteID)
                                                                         }
 
+                                                                        if (deleteID !== null) {
+                                                                          console.log('getting wellimages', deleteID)
+                                                                          const deletedImages = await deleteImages(deleteID, action).catch(r => console.log('something went wrong'))
+                                                                          console.log('i should get some deletions', deletedImages)
+                                                                        }
+
                                                                         connection.query(action === 'save' ? DELETE_QUERY : DUMMY_QUERY, values, (err, results) => {
                                                                           console.log('deletesss', err)
-                                                                          console.log('deletesss', results)
+                                                                          console.log('deletesss', results, deleteID)
+                                                                          
 
                                                                           if (err) {
                                                                             return connection.rollback(function() {
@@ -1844,7 +1877,7 @@ export const create = async (body, action, cb) => {
                                                                             console.log('success!');
                                                                             var log = 'Post ' + results + ' added';
                                                                             console.log(log)
-                                                                            cb(null)
+                                                                            cb(null, transactionID)
                                                                           })
                                                                         })
                                                                       })

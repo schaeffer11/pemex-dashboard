@@ -275,13 +275,13 @@ router.post('/well', async (req, res) => {
 router.post('/wellSave', async (req, res) => {
 
   // TODO: Find a way to clean up callbacks from createWell
-  createWell(req.body, 'save', err => {
+  createWell(req.body, 'save', (err, transactionID) => {
     if (err) {
       console.log('we got an error saving', err)
       res.json({ isSaved: false })
     } else {
       console.log('all good in the saving neighborhood')
-      res.json({ isSaved: true })
+      res.json({ isSaved: true, imgID: transactionID })
     }
   })
 })
@@ -1413,6 +1413,18 @@ router.get('/getWellProduccion', async (req, res) => {
   })
 })
 
+const getImagesForClient = async (transactionID, action) => new Promise((resolve, reject) => {
+  getWellImages(transactionID, action, async (wellImages) => {
+    const formattedWellImages = await handleImageResponse(wellImages)
+    console.log('format well img', formattedWellImages)
+    getInterventionImages(transactionID, action, async (interventionImages) => {
+      const formattedInterventionImages = await handleImageResponse(interventionImages)
+      console.log('format intervention img', formattedInterventionImages)
+      resolve({ ...formattedWellImages, ...formattedInterventionImages })
+    })
+  })
+})
+
 async function handleImageResponse(data) {
   const filteredData = data.filter(well => well.IMG_URL !== null && well.IMG_URL !== '').sort((a, b) => {
     if(a.label < b.label) return -1;
@@ -1444,6 +1456,14 @@ async function handleImageResponse(data) {
   }
   return Object.assign(final, finalArray)
 }
+
+router.get('/getImages', async (req, res) => {
+  const { transactionID, saved } = req.query
+  const action = saved ? 'loadSave' : 'loadTransaction'
+  const imagesForClient = await getImagesForClient(transactionID, action).catch(r => console.log('something went wrong getting images'))
+  console.log('da images from client', imagesForClient)
+  res.json(imagesForClient)
+})
 router.get('/getWellImages', async (req, res) => {
   let { transactionID, saved } = req.query
   let action = saved ? 'loadSave' : 'loadTransaction'
