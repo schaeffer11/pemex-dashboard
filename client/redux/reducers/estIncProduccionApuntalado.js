@@ -21,6 +21,7 @@ const initialState = fromJS({
     obervacionesEstIncApuntalado: '',
     imgURL: null,
     imgName: '',
+    imgSource: null,
 })
 
 
@@ -63,7 +64,7 @@ const estIncProduccionApuntalado = (state = initialState, action) => {
     case 'set_obervacionesEstIncApuntalado':
         return state.set('obervacionesEstIncApuntalado', fromJS(action.value))
     case 'set_estIncProdApuntaladoImgURL':
-        return state.set('imgURL', fromJS(action.url)).set('imgName', action.name)
+        return state.set('imgURL', fromJS(action.url)).set('imgName', action.name).set('imgSource', 'local')
     default:
       return state
   }

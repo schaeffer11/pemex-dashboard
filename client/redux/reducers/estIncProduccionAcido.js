@@ -1,4 +1,4 @@
-import { Map, fromJS } from 'immutable'
+import { fromJS } from 'immutable'
 
 const initialState = fromJS({ 
     hasErrors: true,
@@ -21,6 +21,7 @@ const initialState = fromJS({
     obervacionesEstIncAcido: '',
     imgURL: null,
     imgName: '',
+    imgSource: null,
 })
 
 
@@ -63,7 +64,7 @@ const estIncProduccionAcido = (state = initialState, action) => {
     case 'set_obervacionesEstIncAcido':
         return state.set('obervacionesEstIncAcido', fromJS(action.value))
     case 'set_estIncProdAcidoImgURL':
-        return state.set('imgURL', fromJS(action.url)).set('imgName', fromJS(action.name))
+        return state.set('imgURL', fromJS(action.url)).set('imgName', fromJS(action.name)).set('imgSource', 'local')
     default:
       return state
   }

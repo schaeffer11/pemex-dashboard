@@ -4,7 +4,7 @@ const connection = db.getConnection(appConfig.users.database)
 import path from 'path'
 import fs from 'fs'
 import multer from 'multer'
-import { addObject, signedURL, deleteObject, getBuckets } from '../aws/index';
+import { addObject, signedURL, deleteObject, getBuckets, copyObject } from '../aws/index';
 
 
 
@@ -772,7 +772,7 @@ export const getCosts = async (transID, action, cb) => {
         cb(results)
     })
 }
-export const getInterventionImage = async (transID, action, cb) => {
+export const getInterventionImages = async (transID, action, cb) => {
     connection.query(INSERT_INTERVENTION_IMAGE_QUERY[action], [transID], (err, results) => {
         cb(results)
     })
@@ -796,24 +796,41 @@ export const create = async (body, action, cb) => {
     const innerObj = JSON.parse(body[k])
     const innerKeys = Object.keys(innerObj)
     // look for immediate images
-    if (innerObj.img && action !== 'save') {
-      innerObj.imgName = [transactionID, innerObj.imgName].join('.')
+    if (innerObj.img) {
       console.log('found image', k, innerObj.imgName)
-      const buf = Buffer.from(innerObj.img, 'base64')
-      const t = await addObject(buf, innerObj.imgName).catch(reason => console.log(reason))
-      innerObj.img = t
-      console.log('uploaded img', t, k)
+      if (innerObj.imgSource === 'local') {
+        innerObj.imgName = [transactionID, innerObj.imgName].join('.')
+        const buf = Buffer.from(innerObj.img, 'base64')
+        const t = await addObject(buf, innerObj.imgName).catch(reason => console.log(reason))
+        innerObj.img = t
+        console.log('uploaded img', t, k)
+      } else if (innerObj.imgSource === 's3') {
+        const nameWithoutTransaction = innerObj.imgName.split('.').slice(1)
+        const oldTransactionID = innerObj.imgName.split('.')[0]
+        const oldKey = [oldTransactionID, nameWithoutTransaction].join('.')
+        const newKey = [transactionID, nameWithoutTransaction].join('.')
+        console.log('copying the old object', oldKey, newKey)
+        const objectCopy = await copyObject(oldKey, newKey).catch(r => console.log('something went wrong with the copy', r))
+        console.log('done copying', objectCopy)
+        // const deletedObject = await deleteObject(oldKey)
+      }
     }
     for (let iKey of innerKeys) {
       const property = innerObj[iKey]
       if (Array.isArray(property)) {
         for (let j of property) {
-          if (j.img && action !== 'save') {
+          if (j.img) {
             j.imgName = [transactionID, j.imgName].join('.')
-            const buf = Buffer.from(j.img, 'base64')
-            const t = await addObject(buf, j.imgName).catch(reason => console.log(reason))
-            j.img = t
-            console.log('uploaded img', k, t)
+            if (innerObj.imgSource === 'local') {
+              const buf = Buffer.from(j.img, 'base64')
+              const t = await addObject(buf, j.imgName).catch(reason => console.log(reason))
+              j.img = t
+            } else if (innerObj.imgSource === 's3') {
+              const oldTransactionID = innerObj.imgName.split('.')[0]
+              const oldKey = [oldTransactionID, nameWithoutTransaction].join('.')
+              const newKey = [transactionID, nameWithoutTransaction].join('.')
+              const objectCopy = await copyObject(oldKey, newKey).catch(r => console.log('something went wrong with the copy', r))
+            }
           }
         }
       }
@@ -1519,7 +1536,9 @@ export const create = async (body, action, cb) => {
                                               [interventionID, 'Est Inc Prod', incProdFile, transactionID],
                                               [interventionID, 'Simulation Results', simResultsFile, transactionID]
                                             ]
-
+                                            pruebasDeLaboratorioData.forEach(i => {
+                                              values.push([interventionID, 'Lab Data', i.imgName, transactionID])
+                                            })
                                             connection.query((action === 'save' ? INSERT_INTERVENTION_IMAGE_QUERY.save : INSERT_INTERVENTION_IMAGE_QUERY.submit), [values], (err, results) => {
                                               console.log('intervention img', err)
                                               console.log('intervention img', results)

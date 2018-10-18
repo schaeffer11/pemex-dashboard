@@ -58,3 +58,18 @@ export const addObject = (buf, Key) => new Promise((resolve, reject) => {
     }
   })
 })
+
+export const copyObject = (oldKey, newKey) => new Promise((resolve, reject) => {
+  const params = {
+    Bucket: 'pemex-prod-01',
+    CopySource: `/pemex-prod-01/${oldKey}`, 
+    Key: newKey,
+  }
+  s3.copyObject(params, (err, data) => {
+    if (err) {
+      reject(err)
+    } else {
+      resolve({ Key: newKey, data })
+    }
+  })
+})

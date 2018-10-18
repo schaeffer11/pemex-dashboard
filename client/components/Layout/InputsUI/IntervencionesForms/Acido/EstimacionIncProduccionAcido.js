@@ -214,7 +214,7 @@ import { checkEmpty, checkDate } from '../../../../../lib/errorCheckers'
     let { files } = e.target
     let localImgUrl = window.URL.createObjectURL(files[0])
 
-    setURL(localImgUrl, 'estIncrementoProduccionAcido')
+    setURL(localImgUrl, 'estIncProduccionAcido')
   }
 
   makeImageInput() {

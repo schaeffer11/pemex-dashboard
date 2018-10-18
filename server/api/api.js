@@ -10,11 +10,11 @@ import { create as createWell, getFields, getWell, getSurveys,
             getHistIntervenciones, getHistIntervencionesNew, getLayer, getMudLoss, getMecanico, 
             getAnalisisAgua, getEmboloViajero, getBombeoNeumatico, getBombeoHidraulico, 
             getBombeoCavidades, getBombeoElectrocentrifugo, getBombeoMecanico, 
-            getFieldPressure, getWellPressure, 
+            getFieldPressure, getWellPressure,
             getWellAforos, getWellProduccion, getWellImages, getInterventionBase, 
             getInterventionEsimulacion, getInterventionAcido, getInterventionApuntalado, 
             getLabTest, getCedulaEstimulacion, getCedulaAcido, getCedulaApuntalado, 
-            getCosts, getInterventionImage } from './pozo'
+            getCosts, getInterventionImages } from './pozo'
 
 import { create as createCompromiso, mine as myCompromisos, get as getCompromisos } from './compromisos';
 import { createResults } from './results'
@@ -838,7 +838,6 @@ router.get('/getMecanico', async (req, res) => {
 
   let action = saved ? 'loadSave' : 'loadTransaction'
 
-
   const map = {
     TIPO_DE_TERMINACION: { parent: 'mecanicoYAparejoDeProduccion', child: 'tipoDeTerminacion'},
     H_INTERVALO_PRODUCTOR: { parent: 'mecanicoYAparejoDeProduccion', child: 'hIntervaloProductor'},
@@ -860,7 +859,6 @@ router.get('/getMecanico', async (req, res) => {
   }
 
   getMecanico(transactionID, action, (data) => {
-    
     if (data && data.length > 0) {const finalObj = {}
       Object.keys(data[0]).forEach(key => {
         if (map[key]) {
@@ -1415,14 +1413,52 @@ router.get('/getWellProduccion', async (req, res) => {
   })
 })
 
+async function handleImageResponse(data) {
+  const filteredData = data.filter(well => well.IMG_URL !== null && well.IMG_URL !== '').sort((a, b) => {
+    if(a.label < b.label) return -1;
+    if(a.label > b.label) return 1;
+    return 0;
+  })
+  const final = {}
+  const finalArray = {}
+  for (let well of filteredData) {
+    const imgName = well.IMG_URL
+    const imgInformation = well.IMG_URL.split('.')
+    const parent = imgInformation[1]
+    const index = imgInformation[imgInformation.length - 1]
+    const isNumber = /^[0-9]*$/.test(index)
+    // get img url from s3
+    const imgURL = await signedURL(imgName)
+    const innerObj = {
+      imgName,
+      imgURL,
+      imgSource: 's3',
+    }
+    // determine if we need to store in array
+    if (isNumber) {
+      // this is naive assumes everything is in order
+      objectPath.push(final, parent, innerObj)
+    } else {
+      objectPath.set(final, parent, innerObj)
+    }
+  }
+  return Object.assign(final, finalArray)
+}
 router.get('/getWellImages', async (req, res) => {
   let { transactionID, saved } = req.query
-
   let action = saved ? 'loadSave' : 'loadTransaction'
+  getWellImages(transactionID, action, async (data) => {
+    const final = await handleImageResponse(data)
+    res.json(final)
+  })
+})
 
-
-  getWellImages(transactionID, action, (data) => {
-    res.json(data)
+router.get('/getInterventionImages', async (req, res) => {
+  let { transactionID, saved } = req.query
+  let action = saved ? 'loadSave' : 'loadTransaction'
+  getInterventionImages(transactionID, action, async (data) => {
+    const final = await handleImageResponse(data)
+    res.json(final)
   })
 })
 
@@ -2102,18 +2138,6 @@ router.get('/getCosts', async (req, res) => {
     res.json(finalObj)
   })
 })
-
-router.get('/getInterventionImage', async (req, res) => {
-  let { transactionID, saved } = req.query
-
-  let action = saved ? 'loadSave' : 'loadTransaction'
-
-
-  getInterventionImage(transactionID, action, (data) => {
-    res.json(data)
-  })
-})
-
 
 router.get('*', (req, res) => {
   res.status(404).send(`No API endpoint found for "${req.url}"`)

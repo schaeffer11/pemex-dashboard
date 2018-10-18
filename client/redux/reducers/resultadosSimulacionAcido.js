@@ -12,6 +12,7 @@ const initialState = fromJS({
     presionNeta: '',
     eficienciaDeFluidoDeFractura: '',
     imgURL: null,
+    imgSource: null,
     imgName: '',
 })
 
@@ -39,7 +40,7 @@ const resultadosSimulacionAcido = (state = initialState, action) => {
     case 'set_eficienciaDeFluidoDeFractura':
         return state.set('eficienciaDeFluidoDeFractura', fromJS(action.value))
     case 'set_evidenceSimulationAcidoImgURL':
-        return state.set('imgURL', fromJS(action.url)).set('imgName', fromJS(action.name))
+        return state.set('imgURL', fromJS(action.url)).set('imgName', fromJS(action.name)).set('imgSource', 'local')
     default:
       return state
   }
