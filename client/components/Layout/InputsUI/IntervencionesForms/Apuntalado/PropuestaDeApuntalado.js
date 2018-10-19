@@ -1,11 +1,9 @@
 import React, { Component } from 'react'
 import autobind from 'autobind-decorator'
 import InputTable from '../../../Common/InputTable'
-import ReactTable from 'react-table'
-import Select from 'react-select'
 import { connect } from 'react-redux'
 
-import { InputRow, CalculatedValue, InputRowUnitless, InputRowSelectUnitless } from '../../../Common/InputRow'
+import { InputRow, CalculatedValue, InputRowSelectUnitless } from '../../../Common/InputRow'
 import { setHasErrorsPropuestaApuntalado, setCedulaData, setModuloYoungArena, setModuloYoungLutitas, 
   setRelacPoissonArena, setRelacPoissonLutatas, setGradienteDeFractura, setDensidadDeDisparos, setDiametroDeDisparos, 
   setIntervalo, setLongitudDeIntervalo, setVolAparejo, setCapacidadTotalDelPozo, setVolumenPrecolchonN2, 

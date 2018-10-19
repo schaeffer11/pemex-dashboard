@@ -1,14 +1,10 @@
-import { Map, fromJS } from 'immutable'
+import { fromJS } from 'immutable'
 
 const initialState = fromJS({ 
-    intervalo: '',
-    longitudDeIntervalo: '',
-    volAparejo: '',
-    capacidadTotalDelPozo: '',
     volumenPrecolchonN2: '',
-    volumenDeApuntalante: '',
-    volumenDeGelDeFractura: '',
-    volumenDesplazamiento: '',
+    volumenApuntalante: '',
+    volumenGelFractura: '',
+    volumenDesplazamientoLiquido: '',
     volumenTotalDeLiquido: '',
     hasErrors: true,
     moduloYoungArena: '',
