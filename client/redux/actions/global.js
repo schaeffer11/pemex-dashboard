@@ -1,6 +1,7 @@
 export const setShowForms = value => ({ type: 'set_showForms', value })
 export const setSaved = value => ({ type: 'set_saved', value })
 export const setIsLoading = obj => ({ type: 'set_isLoading', obj })
+export const setImagesInState = images => ({ type: 'set_imagesInState', images })
 export const resetNotification = () => ({ type: 'reset_notification' })
 export const setCurrentPage = value => ({ type: 'set_currentPage', value })
 export const setHasSubmitted = value => ({ type: 'set_hasSubmitted', value})

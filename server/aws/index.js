@@ -6,9 +6,11 @@ AWS.config.s3 = config
 
 const s3 = new AWS.S3()
 export const signedURL = Key => new Promise((resolve, reject) => {
+  // expires in two hours (seconds)
   const params = {
     Key,
     Bucket: 'pemex-prod-01',
+    Expires: 60 * 60 * 2
   }
   s3.getSignedUrl('getObject', params, (err, url) => {
     if (err) {

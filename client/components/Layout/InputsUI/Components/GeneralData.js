@@ -13,33 +13,9 @@ import { setShowForms, setIsLoading, setTransactionID, setSaveName } from '../..
 import { InputDate, InputRow, InputRowUnitless, InputRowSelectUnitless, TextAreaUnitless } from '../../Common/InputRow'
 import Notification from '../../Common/Notification'
 import Loading from '../../Common/Loading'
-import { sortLabels } from '../../../../lib/formatters'
+import { sortLabels, handleImagesFromServer } from '../../../../lib/formatters'
 import { checkEmpty, checkDate } from '../../../../lib/errorCheckers'
 import ButtonGroup from './ButtonGroup'
-
-function handleImagesFromSave(images, state) {
-  const shallowStateCopy = {...state}
-  const imagesKeys = Object.keys(images)
-  if (imagesKeys.length > 0) {
-    imagesKeys.forEach(parent => {
-      if (parent === 'pruebasDeLaboratorio') {
-        images[parent].forEach((elem, index) => {
-          const { imgURL, imgName, imgSource } = elem
-          objectPath.set(shallowStateCopy, `pruebasDeLaboratorio.pruebasDeLaboratorioData.${index}.imgURL`, imgURL)
-          objectPath.set(shallowStateCopy, `pruebasDeLaboratorio.pruebasDeLaboratorioData.${index}.imgName`, imgName)
-          objectPath.set(shallowStateCopy, `pruebasDeLaboratorio.pruebasDeLaboratorioData.${index}.imgSource`, imgSource)
-        })
-      } else {
-        const { imgURL, imgName, imgSource } = images[parent]
-        objectPath.set(shallowStateCopy, `${parent}.imgURL`, imgURL)
-        objectPath.set(shallowStateCopy, `${parent}.imgName`, imgName)
-        objectPath.set(shallowStateCopy, `${parent}.imgSource`, imgSource)
-      }
-    })
-  }
-  console.log('shallow state copy', shallowStateCopy)
-  return shallowStateCopy
-}
 
 @autobind class GeneralData extends Component {
   constructor(props) {
@@ -205,7 +181,6 @@ function handleImagesFromSave(images, state) {
   }
 
   checkIncomplete() {
-    return false
     let { interventionFormData, formData } = this.props
 
     interventionFormData = interventionFormData.toJS()
@@ -523,57 +498,29 @@ function handleImagesFromSave(images, state) {
           notificationText: `No se ha descargado informacion del pozo: ${pozo}`
         })
       })
-      // .then((results) => {
-      //   const newState = {}
-      //   console.log(results)
-      //   results.forEach(r => {
-      //     const rKeys = Object.keys(r)
-      //     rKeys.forEach(registerName => {
-      //       Object.keys(r[registerName]).forEach(key => {
-      //         objectPath.set(newState, `${registerName}.${key}`, r[registerName][key])
-      //       })
-      //     })
-      //   })
 
-      //   setLoading({ 
-      //     isLoading: false,
-      //     showNotification: true,
-      //     notificationType: 'success',
-      //     notificationText: `Se ha descargado informacion del pozo: ${wellID}`
-      //   })
-      //   this.props.loadFromSave(newState)
-      // })
-
-      let newState = {}
-      console.log(results)
-      results.forEach(r => {
-        const rKeys = Object.keys(r)
-        rKeys.forEach(registerName => {
-          Object.keys(r[registerName]).forEach(key => {
-            objectPath.set(newState, `${registerName}.${key}`, r[registerName][key])
-          })
+    let newState = {}
+    console.log(results)
+    results.forEach(r => {
+      const rKeys = Object.keys(r)
+      rKeys.forEach(registerName => {
+        Object.keys(r[registerName]).forEach(key => {
+          objectPath.set(newState, `${registerName}.${key}`, r[registerName][key])
         })
       })
+    })
 
-      const wellImages = await fetch(`api/getWellImages?transactionID=${transactionID}&saved=1`, headers).then(r => r.json())
-      console.log('these are the wellimages', wellImages)
-      newState = handleImagesFromSave(wellImages, newState)
-      const interventionImages = await fetch(`api/getInterventionImages?transactionID=${transactionID}&saved=1`, headers).then(r => r.json())
-      console.log('these are the intervention images', interventionImages)
-      newState = handleImagesFromSave(interventionImages, newState)
-      console.log('da newState', newState)
+    const allImages = await fetch(`api/getImages?transactionID=${transactionID}&saved=1`, headers).then(r => r.json())
+    newState = handleImagesFromServer(allImages, newState)
 
-      setLoading({ 
-        isLoading: false,
-        showNotification: true,
-        notificationType: 'success',
-        notificationText: `Se ha descargado informacion del pozo: ${wellID}`
-      })
-      setSaveName(selectedSaveName)
-      this.props.loadFromSave(newState)
-
-
-    
+    setLoading({ 
+      isLoading: false,
+      showNotification: true,
+      notificationType: 'success',
+      notificationText: `Se ha descargado informacion del pozo: ${wellID}`
+    })
+    setSaveName(selectedSaveName)
+    this.props.loadFromSave(newState)
   }
 
   handleSelectFormType(val) {
