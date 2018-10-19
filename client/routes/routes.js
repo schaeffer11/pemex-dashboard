@@ -2,6 +2,7 @@ import React from 'react'
 import ExecutiveUI from '../components/Layout/TableroDeControlUI/Executive/ExecutiveUI'
 import StatisticsUI from '../components/Layout/TableroDeControlUI/Statistics/StatisticsUI'
 import WellViewUI from '../components/Layout/TableroDeControlUI/WellView/WellViewUI'
+import JobViewUI from '../components/Layout/TableroDeControlUI/JobView/JobViewUI'
 
 const routes = () => [
   {
@@ -24,6 +25,13 @@ const routes = () => [
     name: 'wellView',
     class: 'tablero_control',
     component: () => <WellViewUI />,
+  },
+  {
+    path: '/tablero_control/jobView',
+    exact: true,
+    name: 'jobView',
+    class: 'tablero_control',
+    component: () => <JobViewUI />,
   },
 ]
 export default routes

@@ -2,6 +2,7 @@
 import React, { Component } from 'react'
 import autobind from 'autobind-decorator'
 import AsyncSelect from 'react-select/lib/Async'
+import Select from 'react-select'
 import { connect } from 'react-redux'
 
 import { setActivo, setField, setWell, setFormation } from '../../../../redux/actions/global'
@@ -74,17 +75,19 @@ import { sortLabels } from '../../../../lib/formatters'
     globalAnalysis = globalAnalysis.toJS()
     let { well } = globalAnalysis
 
-    let options = wellOptions.filter(i => i.value === well)
+    // let options = wellOptions.filter(i => i.value === well)
   	const realWell = wellOptions.find(i=>i.value === well) || null
 
     return (
 	      <div className='well-selector' >
 	        Well
-	        <AsyncSelect
+{/*	        <AsyncSelect*/}
+{/*            loadOptions={this.filterOptions}*/}
+            {/*options={options}*/}
+          <Select
 	          value={realWell}
-	          options={options}
+            options={wellOptions}
 	          onChange={this.handleSelectWell}
-            loadOptions={this.filterOptions}
 	          isClearable = {true}
 	        />
 	      </div>

@@ -39,7 +39,7 @@ import Images from './Images'
       },
     }
 
-    fetch('/api/getFieldWellMapping', headers)
+    fetch('/api/getFieldWellMappingHasData', headers)
       .then(r => r.json())
       .then(r => {
 
@@ -164,14 +164,10 @@ import Images from './Images'
             })
           })
 
-          fetch(`/well/getWellImages`, {
-            method: 'POST',
+          fetch(`/api/getWellImages?transactionID=${transactionID}`, {
             headers: {
               'content-type': 'application/json',
             },
-            body: JSON.stringify({
-              transactionID
-            })
           })
           .then(res => res.json())
           .then(res => {
