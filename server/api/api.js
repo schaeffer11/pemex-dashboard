@@ -27,6 +27,50 @@ const env = process.env.NODE_ENV || 'dev'
 const isProduction = env === 'production'
 const router = Router()
 
+const getImagesForClient = async (transactionID, action) => new Promise((resolve, reject) => {
+  getWellImages(transactionID, action, async (wellImages) => {
+    const formattedWellImages = await handleImageResponse(wellImages)
+    console.log('format well img', formattedWellImages)
+    getInterventionImages(transactionID, action, async (interventionImages) => {
+      const formattedInterventionImages = await handleImageResponse(interventionImages)
+      console.log('format intervention img', formattedInterventionImages)
+      resolve({ ...formattedWellImages, ...formattedInterventionImages })
+    })
+  })
+})
+
+async function handleImageResponse(data) {
+  const filteredData = data.filter(well => well.IMG_URL !== null && well.IMG_URL !== '').sort((a, b) => {
+    if(a.label < b.label) return -1;
+    if(a.label > b.label) return 1;
+    return 0;
+  })
+  const final = {}
+  const finalArray = {}
+  for (let well of filteredData) {
+    const imgName = well.IMG_URL
+    const imgInformation = well.IMG_URL.split('.')
+    const parent = imgInformation[1]
+    const index = imgInformation[imgInformation.length - 1]
+    const isNumber = /^[0-9]*$/.test(index)
+    // get img url from s3
+    const imgURL = await signedURL(imgName)
+    const innerObj = {
+      imgName,
+      imgURL,
+      imgSource: 's3',
+    }
+    // determine if we need to store in array
+    if (isNumber) {
+      // this is naive assumes everything is in order
+      objectPath.push(final, parent, innerObj)
+    } else {
+      objectPath.set(final, parent, innerObj)
+    }
+  }
+  return Object.assign(final, finalArray)
+}
+
 // We do not want to check authorization for templates so we put above middleware!
 router.get('/get_template/:template', (req, res) => {
   const { template } = req.params
@@ -275,13 +319,14 @@ router.post('/well', async (req, res) => {
 router.post('/wellSave', async (req, res) => {
 
   // TODO: Find a way to clean up callbacks from createWell
-  createWell(req.body, 'save', (err, transactionID) => {
+  createWell(req.body, 'save', async (err, transactionID) => {
     if (err) {
       console.log('we got an error saving', err)
       res.json({ isSaved: false })
     } else {
       console.log('all good in the saving neighborhood')
-      res.json({ isSaved: true, imgID: transactionID })
+      const images = await getImagesForClient(transactionID, 'loadSave')
+      res.json({ isSaved: true, images })
     }
   })
 })
@@ -1413,49 +1458,7 @@ router.get('/getWellProduccion', async (req, res) => {
   })
 })
 
-const getImagesForClient = async (transactionID, action) => new Promise((resolve, reject) => {
-  getWellImages(transactionID, action, async (wellImages) => {
-    const formattedWellImages = await handleImageResponse(wellImages)
-    console.log('format well img', formattedWellImages)
-    getInterventionImages(transactionID, action, async (interventionImages) => {
-      const formattedInterventionImages = await handleImageResponse(interventionImages)
-      console.log('format intervention img', formattedInterventionImages)
-      resolve({ ...formattedWellImages, ...formattedInterventionImages })
-    })
-  })
-})
 
-async function handleImageResponse(data) {
-  const filteredData = data.filter(well => well.IMG_URL !== null && well.IMG_URL !== '').sort((a, b) => {
-    if(a.label < b.label) return -1;
-    if(a.label > b.label) return 1;
-    return 0;
-  })
-  const final = {}
-  const finalArray = {}
-  for (let well of filteredData) {
-    const imgName = well.IMG_URL
-    const imgInformation = well.IMG_URL.split('.')
-    const parent = imgInformation[1]
-    const index = imgInformation[imgInformation.length - 1]
-    const isNumber = /^[0-9]*$/.test(index)
-    // get img url from s3
-    const imgURL = await signedURL(imgName)
-    const innerObj = {
-      imgName,
-      imgURL,
-      imgSource: 's3',
-    }
-    // determine if we need to store in array
-    if (isNumber) {
-      // this is naive assumes everything is in order
-      objectPath.push(final, parent, innerObj)
-    } else {
-      objectPath.set(final, parent, innerObj)
-    }
-  }
-  return Object.assign(final, finalArray)
-}
 
 router.get('/getImages', async (req, res) => {
   const { transactionID, saved } = req.query

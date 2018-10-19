@@ -13,33 +13,33 @@ import { setShowForms, setIsLoading, setTransactionID, setSaveName } from '../..
 import { InputDate, InputRow, InputRowUnitless, InputRowSelectUnitless, TextAreaUnitless } from '../../Common/InputRow'
 import Notification from '../../Common/Notification'
 import Loading from '../../Common/Loading'
-import { sortLabels } from '../../../../lib/formatters'
+import { sortLabels, handleImagesFromServer } from '../../../../lib/formatters'
 import { checkEmpty, checkDate } from '../../../../lib/errorCheckers'
 import ButtonGroup from './ButtonGroup'
 
-function handleImagesFromSave(images, state) {
-  const shallowStateCopy = {...state}
-  const imagesKeys = Object.keys(images)
-  if (imagesKeys.length > 0) {
-    imagesKeys.forEach(parent => {
-      if (parent === 'pruebasDeLaboratorio') {
-        images[parent].forEach((elem, index) => {
-          const { imgURL, imgName, imgSource } = elem
-          objectPath.set(shallowStateCopy, `pruebasDeLaboratorio.pruebasDeLaboratorioData.${index}.imgURL`, imgURL)
-          objectPath.set(shallowStateCopy, `pruebasDeLaboratorio.pruebasDeLaboratorioData.${index}.imgName`, imgName)
-          objectPath.set(shallowStateCopy, `pruebasDeLaboratorio.pruebasDeLaboratorioData.${index}.imgSource`, imgSource)
-        })
-      } else {
-        const { imgURL, imgName, imgSource } = images[parent]
-        objectPath.set(shallowStateCopy, `${parent}.imgURL`, imgURL)
-        objectPath.set(shallowStateCopy, `${parent}.imgName`, imgName)
-        objectPath.set(shallowStateCopy, `${parent}.imgSource`, imgSource)
-      }
-    })
-  }
-  console.log('shallow state copy', shallowStateCopy)
-  return shallowStateCopy
-}
+// function handleImagesFromServer(images, state) {
+//   const shallowStateCopy = {...state}
+//   const imagesKeys = Object.keys(images)
+//   if (imagesKeys.length > 0) {
+//     imagesKeys.forEach(parent => {
+//       if (parent === 'pruebasDeLaboratorio') {
+//         images[parent].forEach((elem, index) => {
+//           const { imgURL, imgName, imgSource } = elem
+//           objectPath.set(shallowStateCopy, `pruebasDeLaboratorio.pruebasDeLaboratorioData.${index}.imgURL`, imgURL)
+//           objectPath.set(shallowStateCopy, `pruebasDeLaboratorio.pruebasDeLaboratorioData.${index}.imgName`, imgName)
+//           objectPath.set(shallowStateCopy, `pruebasDeLaboratorio.pruebasDeLaboratorioData.${index}.imgSource`, imgSource)
+//         })
+//       } else {
+//         const { imgURL, imgName, imgSource } = images[parent]
+//         objectPath.set(shallowStateCopy, `${parent}.imgURL`, imgURL)
+//         objectPath.set(shallowStateCopy, `${parent}.imgName`, imgName)
+//         objectPath.set(shallowStateCopy, `${parent}.imgSource`, imgSource)
+//       }
+//     })
+//   }
+//   console.log('shallow state copy', shallowStateCopy)
+//   return shallowStateCopy
+// }
 
 @autobind class GeneralData extends Component {
   constructor(props) {
@@ -557,14 +557,7 @@ function handleImagesFromSave(images, state) {
 
       const allImages = await fetch(`api/getImages?transactionID=${transactionID}&saved=1`, headers).then(r => r.json())
       console.log('all images', allImages)
-      newState = handleImagesFromSave(allImages, newState)
-
-      // const wellImages = await fetch(`api/getWellImages?transactionID=${transactionID}&saved=1`, headers).then(r => r.json())
-      // console.log('well images', wellImages)
-      // newState = handleImagesFromSave(wellImages, newState)
-      // const interventionImages = await fetch(`api/getInterventionImages?transactionID=${transactionID}&saved=1`, headers).then(r => r.json())
-      // console.log('intervention images', interventionImages)
-      // newState = handleImagesFromSave(interventionImages, newState)
+      newState = handleImagesFromServer(allImages, newState)
       console.log('da newState', newState)
 
       setLoading({ 

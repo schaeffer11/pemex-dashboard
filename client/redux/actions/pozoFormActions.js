@@ -1,4 +1,4 @@
-import { setIsSaved, setIsLoading } from '../../redux/actions/global'
+import { setIsSaved, setIsLoading, setImagesInState } from '../../redux/actions/global'
 import Immutable from 'immutable'
 
 function bufferToBase64(buf) {
@@ -114,12 +114,14 @@ export function submitForm(action, token, saveName) {
         body: formData,
       })
         .then(r => r.json())
-        .then(({ isSaved }) => {
+        .then(({ isSaved, images }) => {
+          console.log('i got back images?', isSaved, images)
           let notificationType = ''
           let notificationText = ''
           if (isSaved) {
             notificationType = 'success'
             notificationText = 'Su información se ha guardado'
+            dispatch(setImagesInState(images))
           } else {
             notificationType = 'error'
             notificationText = 'Su información no se guardó'
