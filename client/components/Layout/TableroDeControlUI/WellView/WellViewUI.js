@@ -19,7 +19,8 @@ import Images from './Images'
       layerData: [],
       productionData: [],
       pressureData: [],
-      aforosData: []
+      aforosData: [],
+      imageData: []
     }
   }
 
@@ -163,6 +164,22 @@ import Images from './Images'
             })
           })
 
+          fetch(`/well/getWellImages`, {
+            method: 'POST',
+            headers: {
+              'content-type': 'application/json',
+            },
+            body: JSON.stringify({
+              transactionID
+            })
+          })
+          .then(res => res.json())
+          .then(res => {
+            this.setState({
+              imageData: res
+            })
+          })
+
         }
       })     
     }
@@ -188,7 +205,7 @@ import Images from './Images'
   }
 
   render() {
-    let { fieldWellOptions, wellData, zoneData, layerData, productionData, pressureData , aforosData} = this.state
+    let { fieldWellOptions, wellData, zoneData, layerData, productionData, pressureData , aforosData, imageData } = this.state
 
     console.log('well', wellData)
     console.log('zone', zoneData)
@@ -196,6 +213,7 @@ import Images from './Images'
     console.log('production', productionData)
     console.log('pressure', pressureData)
     console.log('aforos', aforosData)
+    console.log('images', imageData)
 
     return (
       <div className="home">
@@ -204,7 +222,7 @@ import Images from './Images'
         <ProductionGraph data={productionData} />
         <PressureGraph data={pressureData} />
         <AforosGraph data={aforosData} />
-        <Images data={[]} />
+        <Images data={imageData} />
       </div>
     )
   }
