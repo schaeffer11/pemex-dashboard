@@ -16,7 +16,7 @@ import { submitForm } from '../../../redux/actions/pozoFormActions'
 import { submitResultsForm } from '../../../redux/actions/results'
 import Notification from '../Common/Notification'
 import Loading from '../Common/Loading'
-import { setHasSubmitted, setIsLoading, setCurrentPage } from '../../../redux/actions/global'
+import { setHasSubmitted, setIsLoading, setCurrentPage, setSaveName } from '../../../redux/actions/global'
 
 @autobind class InputsUI extends Component {
   constructor(props) {
@@ -30,6 +30,7 @@ import { setHasSubmitted, setIsLoading, setCurrentPage } from '../../../redux/ac
       bugResponseError: false,
       bugResponseSuccess: false,
       comment: '',
+      saveName: null
     }
 
     this.pozoMultiStepFormRef = React.createRef();
@@ -43,7 +44,8 @@ import { setHasSubmitted, setIsLoading, setCurrentPage } from '../../../redux/ac
 
 
   componentDidMount() {
-    const { token } = this.props
+    const { token, saveName } = this.props
+    console.log('mounted,', saveName)
     const headers = {
       headers: {
         'Authorization': `Bearer ${token}`,
@@ -55,13 +57,22 @@ import { setHasSubmitted, setIsLoading, setCurrentPage } from '../../../redux/ac
       .then(r => {
 
         this.setState({
-          fieldWellOptions: r
+          fieldWellOptions: r,
+          saveName: saveName
         })
     })
 
   }
 
-
+  componentDidUpdate(prevProps) {
+    let { saveName } = this.props
+    if (saveName !== prevProps.saveName) {
+      console.log('updatigngggggggg')
+      this.setState({
+        saveName: saveName
+      })
+    }
+  }
 
   handleSelectTab(val) {
     let { setCurrentPage, tipoDeIntervenciones } = this.props
@@ -77,7 +88,6 @@ import { setHasSubmitted, setIsLoading, setCurrentPage } from '../../../redux/ac
     this.setState({
       selectedTab: val,
       error: '',
-      saveName: null,
       comment: '',
     })
   }
@@ -89,7 +99,7 @@ import { setHasSubmitted, setIsLoading, setCurrentPage } from '../../../redux/ac
       hasErrorsPropuestaEstimulacion, hasErrorsPropuestaApuntalado, hasErrorsPropuestaAcido, hasErrorsResultadosSimulacionAcido, 
       hasErrorsResultadosSimulacionEstimulacion, hasErrorsResultadosSimulacionApuntalado, hasErrorsEstIncProduccionAcido,
       hasErrorsEstIncProduccionEstimulacion, hasErrorsEstIncProduccionApuntalado, hasErrorsEstCosts, hasErrorsHistoricoDeProduccion,
-      setHasSubmitted, hasErrorsHistoricoDeAforos, hasErrorsSistemasArtificialesDeProduccion, setIsLoading } = this.props
+      setHasSubmitted, hasErrorsHistoricoDeAforos, hasErrorsSistemasArtificialesDeProduccion, setIsLoading, setSaveName } = this.props
 
 
     if (action === 'submit') {
@@ -129,6 +139,7 @@ import { setHasSubmitted, setIsLoading, setCurrentPage } from '../../../redux/ac
     else {
       const cleanSaveName = saveName.trim()
       this.props.submitPozoForm(action, this.props.token, cleanSaveName)
+      setSaveName(cleanSaveName)
       this.setState({'error': ''})
       this.deactivateModal()
     }
@@ -178,7 +189,6 @@ import { setHasSubmitted, setIsLoading, setCurrentPage } from '../../../redux/ac
   deactivateModal() {
     this.setState({
       isOpen: false,
-      saveName: null
     })
   }
 
@@ -226,7 +236,7 @@ import { setHasSubmitted, setIsLoading, setCurrentPage } from '../../../redux/ac
           Dar nombre a la sesion a guardar
         </div>
         <div className="modal-body">
-          <input onChange={(e) => this.setState({saveName: e.target.value})}></input>
+          <input onChange={(e) => this.setState({saveName: e.target.value})} value={saveName}></input>
           <br></br>
           <button className="submit save-button" style={{marginTop: '25px'}} disabled={!saveName} onClick={(e) => this.handleSubmit('save')}>{'Guardar'}</button>
         </div> 
@@ -423,6 +433,7 @@ const mapStateToProps = state => ({
   hasErrorsEvaluacionEstimulacion: state.getIn(['evaluacionEstimulacion', 'hasErrors']),
   tipoDeIntervenciones: state.getIn(['objetivoYAlcancesIntervencion', 'tipoDeIntervenciones']),
   tipoDeIntervencionesResults: state.getIn(['resultsMeta', 'interventionType']),
+  saveName: state.getIn(['global', 'saveName']),
 })
 
 const mapDispatchToProps = dispatch => ({
@@ -431,6 +442,7 @@ const mapDispatchToProps = dispatch => ({
   submitPozoForm: (action, token, name) => {dispatch(submitForm(action, token, name))},
   submitResultsForm: (action, token) => {dispatch(submitResultsForm(action, token))},
   setCurrentPage: val => {dispatch(setCurrentPage(val))},
+  setSaveName: val => {dispatch(setSaveName(val))},
 })
 
 export default connect(mapStateToProps, mapDispatchToProps)(InputsUI)

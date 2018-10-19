@@ -461,9 +461,9 @@ import { setFromSaveSistemas, setHasErrorsSistemas, setSistemasArtificialesImgUR
         <div className='header'>
           Cargar imagen del sistema de producción
         </div>
-        <input type='file' accept="image/*" onChange={this.handleFileUpload}></input>
+        {/* <input type='file' accept="image/*" onChange={this.handleFileUpload}></input> */}
 
-        {imgURL ? <img className='img-preview' src={imgURL}></img> : null }
+        {/* {imgURL ? <img className='img-preview' src={imgURL}></img> : null } */}
       </div>
     )
   }

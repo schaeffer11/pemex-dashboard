@@ -140,7 +140,7 @@ import { checkEmpty, checkDate } from '../../../../../lib/errorCheckers'
 
     let localImgUrl = window.URL.createObjectURL(files[0])
 
-    setURL(localImgUrl, 'simulacionApuntalado')
+    setURL(localImgUrl, 'resultadosSimulacionApuntalado')
   }
 
   makeEvidenceSimulationInput() {
