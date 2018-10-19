@@ -34,7 +34,7 @@ import CostCompanyBar from './CostCompanyBar'
       },
     }
 
-    fetch('/api/getFieldWellMapping', headers)
+    fetch('/api/getFieldWellMappingHasData', headers)
       .then(r => r.json())
       .then(r => {
 
@@ -128,13 +128,16 @@ import CostCompanyBar from './CostCompanyBar'
     let { fieldWellOptions, avgCostDataType, avgCostDataCompany, costData } = this.state
 
     return (
-      <div className="home">
-        <Filters fieldWellOptions={fieldWellOptions} />
-        <CostBar data={costData} />
-        <AvgCostBar data={avgCostDataType} />
-        <CostCompanyBar data={costData} />
-        <AvgCostCompanyBar data={avgCostDataCompany} />
-
+      <div className="data statistics">
+        <div className='header'>
+          <Filters fieldWellOptions={fieldWellOptions} />
+        </div>
+        <div className='content'>
+          <CostBar data={costData} />
+          <AvgCostBar data={avgCostDataType} />
+          <CostCompanyBar data={costData} />
+          <AvgCostCompanyBar data={avgCostDataCompany} />
+        </div>
       </div>
     )
   }

@@ -33,7 +33,6 @@ GROUP BY i.TRANSACTION_ID
 
   connection.query(query, value, (err, results) => {
       console.log('err', err)
-      console.log('results', results)
 
      if (err) {
         res.json({ success: false})
@@ -71,7 +70,6 @@ GROUP BY INTERVENTION_ID) a GROUP BY TIPO_DE_INTERVENCIONES
 
   connection.query(query, value, (err, results) => {
       console.log('err', err)
-      console.log('results', results)
     
       results = results.map(i => ({
         name: i.TIPO_DE_INTERVENCIONES,
@@ -115,7 +113,6 @@ GROUP BY INTERVENTION_ID
 
   connection.query(query, value, (err, results) => {
       console.log('err', err)
-      console.log('results', results)
     
       results = results.map(i => ({
         name: i.COMPANY,

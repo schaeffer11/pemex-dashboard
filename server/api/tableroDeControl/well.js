@@ -19,7 +19,6 @@ select TRANSACTION_ID from Transactions WHERE WELL_FORMACION_ID = ? ORDER BY INS
 
   connection.query(query, well, (err, results) => {
       console.log('comment err', err)
-      console.log('comment results', results)
 
      if (err) {
         res.json({ success: false})
@@ -41,7 +40,6 @@ WHERE w.TRANSACTION_ID = ?`
 
   connection.query(query, transactionID, (err, results) => {
       console.log('comment err', err)
-      console.log('comment results', results)
 
      if (err) {
         res.json({ success: false})
@@ -59,7 +57,6 @@ router.post('/zoneData', (req, res) => {
 
   connection.query(query, transactionID, (err, results) => {
       console.log('comment err', err)
-      console.log('comment results', results)
 
      if (err) {
         res.json({ success: false})
@@ -77,7 +74,6 @@ router.post('/layerData', (req, res) => {
 
   connection.query(query, transactionID, (err, results) => {
       console.log('comment err', err)
-      console.log('comment results', results)
 
      if (err) {
         res.json({ success: false})
@@ -95,7 +91,6 @@ router.post('/productionData', (req, res) => {
 
   connection.query(query, transactionID, (err, results) => {
       console.log('comment err', err)
-      console.log('comment results', results)
 
      if (err) {
         res.json({ success: false})
@@ -113,7 +108,6 @@ router.post('/pressureData', (req, res) => {
 
   connection.query(query, transactionID, (err, results) => {
       console.log('comment err', err)
-      console.log('comment results', results)
 
      if (err) {
         res.json({ success: false})
@@ -131,7 +125,6 @@ router.post('/aforosData', (req, res) => {
 
   connection.query(query, transactionID, (err, results) => {
       console.log('comment err', err)
-      console.log('comment results', results)
 
      if (err) {
         res.json({ success: false})

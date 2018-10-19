@@ -35,16 +35,35 @@ import { sortLabels } from '../../../../lib/formatters'
   }
 
   handleSelectField(val) {
-  	let { setField, setWell } = this.props
+  	let { setField, setWell, fieldWellOptions, globalAnalysis } = this.props
+    globalAnalysis = globalAnalysis.toJS()
+    let { activo } = globalAnalysis
+
   	let value = val ? val.value : null
+    let row = fieldWellOptions.find(i => i.FIELD_FORMACION_ID === val.value)
+    if (!activo) {
+      setActivo(val)
+    }
 
   	setField(value)
   	setWell(null)
   }
 
   handleSelectWell(val) {
-  	let { setWell } = this.props
+  	let { setWell, setField, setActivo, fieldWellOptions, globalAnalysis } = this.props
+    globalAnalysis = globalAnalysis.toJS()
+    let { field, activo } = globalAnalysis
   	let value = val ? val.value : null
+
+
+    let row = fieldWellOptions.find(i => i.WELL_FORMACION_ID === val.value)
+
+    if (!field) {
+      setField(row.FIELD_FORMACION_ID)
+    }
+    if (!activo) {
+      setActivo(row.ACTIVO_ID)
+    }
 
   	setWell(value)
   }
@@ -66,44 +85,59 @@ import { sortLabels } from '../../../../lib/formatters'
     let fieldOptions = []
     let wellOptions = []
 
-
-
-    let fieldSubset = []
-    let wellSubset = []
-
     if (fieldWellOptions.length > 0) {
-
       let usedActivos = []
-
       let activos = []
+      let usedFields = []
+      let fields = []
+      let usedWells = []
+      let wells = []
+
       fieldWellOptions.forEach(i => {
         if (!usedActivos.includes(i.ACTIVO_ID)) {
           usedActivos.push(i.ACTIVO_ID)
           activos.push(i)
         }
-
+        if (!usedFields.includes(i.FIELD_FORMACION_ID)) {
+          usedFields.push(i.FIELD_FORMACION_ID)
+          fields.push(i)
+        }
+        if (!usedWells.includes(i.WELL_FORMACION_ID)) {
+          usedWells.push(i.WELL_FORMACION_ID)
+          wells.push(i)
+        }
       })
-      activoOptions = activos.map(i => ({label: i.ACTIVO_NAME, value: i.ACTIVO_ID})).sort(sortLabels)
 
+      activoOptions = activos.map(i => ({label: i.ACTIVO_NAME, value: i.ACTIVO_ID})).sort(sortLabels)
+      fieldOptions = fields.map(i => ({label: i.FIELD_NAME, value: i.FIELD_FORMACION_ID})).sort(sortLabels)
+      wellOptions = wells.map(i => ({ label: i.WELL_NAME, value: i.WELL_FORMACION_ID})).sort(sortLabels)
 
       if (activo) {
-        fieldSubset = fieldWellOptions.filter(i => i.ACTIVO_ID === parseInt(activo))
-        let usedFields = []
-        let fields = []
+        let fieldSubset = fieldWellOptions.filter(i => i.ACTIVO_ID === parseInt(activo))
+        usedFields = []
+        fields = []
+        usedWells = []
+        wells = []
         fieldSubset.forEach(i => {
           if (!usedFields.includes(i.FIELD_FORMACION_ID)) {
             usedFields.push(i.FIELD_FORMACION_ID)
             fields.push(i)
           }
+          if (!usedWells.includes(i.WELL_FORMACION_ID)) {
+            usedWells.push(i.WELL_FORMACION_ID)
+            wells.push(i)
+          }
         })
 
         fieldOptions = fields.map(i => ({label: i.FIELD_NAME, value: i.FIELD_FORMACION_ID})).sort(sortLabels)
+        wellOptions = wells.map(i => ({ label: i.WELL_NAME, value: i.WELL_FORMACION_ID})).sort(sortLabels)
       }
 
+
       if (field) {
-        wellSubset = fieldSubset.filter(i => i.FIELD_FORMACION_ID === parseInt(field))
-        let usedWells = []
-        let wells = []
+        let wellSubset = fieldWellOptions.filter(i => i.FIELD_FORMACION_ID === parseInt(field))
+        usedWells = []
+        wells = []
         wellSubset.forEach(i => {
           if (!usedWells.includes(i.WELL_FORMACION_ID)) {
             usedWells.push(i.WELL_FORMACION_ID)
@@ -112,7 +146,6 @@ import { sortLabels } from '../../../../lib/formatters'
         })
 
         wellOptions = wells.map(i => ({ label: i.WELL_NAME, value: i.WELL_FORMACION_ID})).sort(sortLabels)
-
       }
     }
 

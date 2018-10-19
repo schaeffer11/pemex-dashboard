@@ -1,0 +1,17 @@
+.statistics {
+	display: grid;
+	grid-template-rows: 275px calc(100vh - 275px);
+	grid-template-areas: 	'header' 
+							'content';
+
+	.header {
+		grid-area: header;
+	}
+
+	.content {
+		grid-area: content;
+		overflow-y: auto;
+		padding-left: 20px;
+		padding-right:20px;
+	}
+}

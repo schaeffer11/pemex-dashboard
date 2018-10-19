@@ -72,7 +72,7 @@ import Filters from '../Common/Filters'
       },
     }
 
-    fetch('/api/getFieldWellMapping', headers)
+    fetch('/api/getFieldWellMappingHasData', headers)
       .then(r => r.json())
       .then(r => {
 
@@ -112,12 +112,16 @@ import Filters from '../Common/Filters'
     let { jobBreakdownData, aforosData, fieldWellOptions } = this.state
 
     return (
-      <div className="home">
-        <Filters fieldWellOptions={fieldWellOptions} />
-      	<JobBreakdown data={jobBreakdownData} />
-        <ClassificationBreakdown data={aforosData} />
-        <DeltaOil data={aforosData} />
-        <DeltaWater data={aforosData} />
+      <div className="data executive">
+        <div className='header'>
+          <Filters fieldWellOptions={fieldWellOptions} />
+        </div>
+        <div className='content'>
+        	<JobBreakdown data={jobBreakdownData} />
+          <ClassificationBreakdown data={aforosData} />
+          <DeltaOil data={aforosData} />
+          <DeltaWater data={aforosData} />
+        </div>
       </div>
     )
   }

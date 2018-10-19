@@ -79,8 +79,7 @@ WHERE aforos.TRANSACTION_ID = aforo_results.PROPUESTA_ID`
 
   connection.query(query, value, (err, results) => {
       console.log('comment err', err)
-      console.log('comment results', results)
-    
+
       results = results.map(i => ({
         id: i.WELL_FORMACION_ID,
         name: i.WELL_NAME,

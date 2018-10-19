@@ -63,10 +63,17 @@ import { sortLabels } from '../../../../lib/formatters'
   }
 
   handleSelectWell(val) {
-  	let { setWell } = this.props
-  	let value = val ? val.value : null
+    let { setWell, setField, setActivo, fieldWellOptions, globalAnalysis } = this.props
+    globalAnalysis = globalAnalysis.toJS()
+    let { field, activo } = globalAnalysis
+    let value = val ? val.value : null
 
-  	setWell(value)
+    let row = fieldWellOptions.find(i => i.WELL_FORMACION_ID === val.value)
+
+    setField(row.FIELD_FORMACION_ID)
+    setActivo(row.ACTIVO_ID)
+
+    setWell(value)
   }
 
   render() {

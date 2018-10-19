@@ -6,24 +6,21 @@ import routes from '../../../routes/routes'
 const Reservoir = (props) => {
   return (
     <div className="analysis-content">
-      <h1>
-        menu
-      </h1>
-      <ul>
+      <div className='menu'>
         {
           routes().map(route => (
-            <li key={route.name}>
+            <div className='menu-item'>
               <NavLink
                 to={route.path}
                 activeClassName="active"
-                className={`--${route.class}`}
+                className={`menu-link`}
               >
                 {route.name}
               </NavLink>
-            </li>
+            </div>
           ))
         }
-      </ul>
+      </div>
       {routes().map(route => (
         <Route
           key={route.name}

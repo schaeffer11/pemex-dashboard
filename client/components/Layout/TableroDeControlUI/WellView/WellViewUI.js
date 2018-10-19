@@ -212,13 +212,17 @@ import Images from './Images'
     console.log('images', imageData)
 
     return (
-      <div className="home">
-        <WellSelect fieldWellOptions={fieldWellOptions}/>
-        <KPIGroup data={wellData} />
-        <ProductionGraph data={productionData} />
-        <PressureGraph data={pressureData} />
-        <AforosGraph data={aforosData} />
-        <Images data={imageData} />
+      <div className="data well-view">
+        <div className='header'>
+          <WellSelect fieldWellOptions={fieldWellOptions}/>
+        </div>
+        <div className='content'>
+          <KPIGroup data={wellData} />
+          <ProductionGraph data={productionData} />
+          <PressureGraph data={pressureData} />
+          <AforosGraph data={aforosData} />
+          <Images data={imageData} />
+        </div>
       </div>
     )
   }

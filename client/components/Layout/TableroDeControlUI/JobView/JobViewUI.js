@@ -109,6 +109,7 @@ import Images from './Images'
 
   componentDidMount() {
   	this.fetchData()
+    this.fetchJobs()
   }
 
   componentDidUpdate(prevProps) {
@@ -140,11 +141,15 @@ import Images from './Images'
     console.log('images', imageData)
 
     return (
-      <div className="home">
-        <WellSelect fieldWellOptions={fieldWellOptions}/>
-        <JobSelect options={jobOptions}/>
-        {job}
-        <Images data={imageData} />
+      <div className="data job-view">
+        <div className='header' >
+          <WellSelect fieldWellOptions={fieldWellOptions}/>
+          <JobSelect options={jobOptions}/>
+        </div>
+        <div className='content'>
+          {job}
+          <Images data={imageData} />
+        </div>
       </div>
     )
   }
