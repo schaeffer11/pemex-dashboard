@@ -10,7 +10,7 @@ import ReactHighcharts from 'react-highcharts'
 	let max = 0
 
     data = data.map(i => {
-    	let color = i.qwResult > i.qw ? 'green' : 'red'
+    	let color = i.qwResult <= i.qw ? 'green' : 'red'
     	if (i.qw > max) {
     		max = i.qw
     	}

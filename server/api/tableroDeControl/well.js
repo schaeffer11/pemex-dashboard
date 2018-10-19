@@ -12,12 +12,12 @@ const router = Router()
 
 
 router.post('/previousTransaction', (req, res) => {
-  let { wellID } = req.body
+  let { well } = req.body
 
   let query = `
 select TRANSACTION_ID from Transactions WHERE WELL_FORMACION_ID = ? ORDER BY INSERT_TIME DESC LIMIT 1;`
 
-  connection.query(query, wellID, (err, results) => {
+  connection.query(query, well, (err, results) => {
       console.log('comment err', err)
       console.log('comment results', results)
 
@@ -36,6 +36,7 @@ router.post('/wellData', (req, res) => {
   let query = `
 SELECT * FROM WellsData w
 JOIN WellMecanico wm ON w.TRANSACTION_ID = wm.TRANSACTION_ID 
+JOIN FieldWellMapping fwm ON w.WELL_FORMACION_ID = fwm.WELL_FORMACION_ID
 WHERE w.TRANSACTION_ID = ?`
 
   connection.query(query, transactionID, (err, results) => {
@@ -90,7 +91,7 @@ router.post('/layerData', (req, res) => {
 router.post('/productionData', (req, res) => {
   let { transactionID } = req.body
 
-  let query = `SELECT * FROM WellHistoricalProduccion WHERE TRANSACTION_ID = ?`
+  let query = `SELECT * FROM WellHistoricalProduccion WHERE TRANSACTION_ID = ? ORDER BY Fecha DESC`
 
   connection.query(query, transactionID, (err, results) => {
       console.log('comment err', err)
@@ -108,7 +109,25 @@ router.post('/productionData', (req, res) => {
 router.post('/pressureData', (req, res) => {
   let { transactionID } = req.body
 
-  let query = `SELECT * FROM WellHistoricalPressure WHERE TRANSACTION_ID = ?`
+  let query = `SELECT * FROM WellHistoricalPressure WHERE TRANSACTION_ID = ? ORDER BY FECHA DESC`
+
+  connection.query(query, transactionID, (err, results) => {
+      console.log('comment err', err)
+      console.log('comment results', results)
+
+     if (err) {
+        res.json({ success: false})
+      }
+      else {
+        res.json(results)
+      }
+    })
+})
+
+router.post('/aforosData', (req, res) => {
+  let { transactionID } = req.body
+
+  let query = `SELECT * FROM WellAforos WHERE TRANSACTION_ID = ?`
 
   connection.query(query, transactionID, (err, results) => {
       console.log('comment err', err)

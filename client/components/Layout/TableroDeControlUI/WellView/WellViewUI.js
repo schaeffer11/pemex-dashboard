@@ -3,6 +3,11 @@ import autobind from 'autobind-decorator'
 import { connect } from 'react-redux'
 
 import WellSelect from '../Common/WellSelect'
+import ProductionGraph from './ProductionGraph'
+import PressureGraph from './PressureGraph'
+import AforosGraph from './AforosGraph'
+import KPIGroup from './KPIGroup'
+import Images from './Images'
 
 @autobind class wellViewUI extends Component {
   constructor(props) {
@@ -13,7 +18,8 @@ import WellSelect from '../Common/WellSelect'
       zoneData: [],
       layerData: [],
       productionData: [],
-      pressureData: []
+      pressureData: [],
+      aforosData: []
     }
   }
 
@@ -41,104 +47,125 @@ import WellSelect from '../Common/WellSelect'
         })
     })
 
-
-  fetch(`/well/previousTransaction`, {
-      method: 'POST',
-      headers: {
-        'content-type': 'application/json',
-      },
-      body: JSON.stringify({
-        well
-      })
-    })
-    .then(res => res.json())
-    .then(res => {
-      let transactionID = res
-
-      fetch(`/well/wellData`, {
-        method: 'POST',
-        headers: {
-          'content-type': 'application/json',
-        },
-        body: JSON.stringify({
-          transactionID
+    if (well) {
+      console.log('this shouldnt be null', well)
+      fetch(`/well/previousTransaction`, {
+          method: 'POST',
+          headers: {
+            'content-type': 'application/json',
+          },
+          body: JSON.stringify({
+            well
+          })
         })
-      })
       .then(res => res.json())
       .then(res => {
-        this.setState({
-          wellData: res
-        })
-      })
+        console.log(res, res.success)
+        if (!res.success !== false) {
+          console.log('madeit')
+          let transactionID = res[0].TRANSACTION_ID
 
-      fetch(`/well/zoneData`, {
-        method: 'POST',
-        headers: {
-          'content-type': 'application/json',
-        },
-        body: JSON.stringify({
-          transactionID
-        })
-      })
-      .then(res => res.json())
-      .then(res => {
-        this.setState({
-          zoneData: res
-        })
-      })
+          console.log(transactionID)
 
-      fetch(`/well/layerData`, {
-        method: 'POST',
-        headers: {
-          'content-type': 'application/json',
-        },
-        body: JSON.stringify({
-          transactionID
-        })
-      })
-      .then(res => res.json())
-      .then(res => {
-        this.setState({
-          layerData: res
-        })
-      })
+          fetch(`/well/wellData`, {
+            method: 'POST',
+            headers: {
+              'content-type': 'application/json',
+            },
+            body: JSON.stringify({
+              transactionID
+            })
+          })
+          .then(res => res.json())
+          .then(res => {
+            this.setState({
+              wellData: res
+            })
+          })
 
-      fetch(`/well/productionData`, {
-        method: 'POST',
-        headers: {
-          'content-type': 'application/json',
-        },
-        body: JSON.stringify({
-          transactionID
-        })
-      })
-      .then(res => res.json())
-      .then(res => {
-        this.setState({
-          productionData: res
-        })
-      })
+          fetch(`/well/zoneData`, {
+            method: 'POST',
+            headers: {
+              'content-type': 'application/json',
+            },
+            body: JSON.stringify({
+              transactionID
+            })
+          })
+          .then(res => res.json())
+          .then(res => {
+            this.setState({
+              zoneData: res
+            })
+          })
 
-      fetch(`/well/pressureData`, {
-        method: 'POST',
-        headers: {
-          'content-type': 'application/json',
-        },
-        body: JSON.stringify({
-          transactionID
-        })
-      })
-      .then(res => res.json())
-      .then(res => {
-        this.setState({
-          pressureData: res
-        })
-      })
+          fetch(`/well/layerData`, {
+            method: 'POST',
+            headers: {
+              'content-type': 'application/json',
+            },
+            body: JSON.stringify({
+              transactionID
+            })
+          })
+          .then(res => res.json())
+          .then(res => {
+            this.setState({
+              layerData: res
+            })
+          })
 
+          fetch(`/well/productionData`, {
+            method: 'POST',
+            headers: {
+              'content-type': 'application/json',
+            },
+            body: JSON.stringify({
+              transactionID
+            })
+          })
+          .then(res => res.json())
+          .then(res => {
+            this.setState({
+              productionData: res
+            })
+          })
 
+          fetch(`/well/pressureData`, {
+            method: 'POST',
+            headers: {
+              'content-type': 'application/json',
+            },
+            body: JSON.stringify({
+              transactionID
+            })
+          })
+          .then(res => res.json())
+          .then(res => {
+            this.setState({
+              pressureData: res
+            })
+          })
 
-    })
+          fetch(`/well/aforosData`, {
+            method: 'POST',
+            headers: {
+              'content-type': 'application/json',
+            },
+            body: JSON.stringify({
+              transactionID
+            })
+          })
+          .then(res => res.json())
+          .then(res => {
+            this.setState({
+              aforosData: res
+            })
+          })
 
+        }
+      })     
+    }
   }
 
   componentDidMount() {
@@ -161,18 +188,23 @@ import WellSelect from '../Common/WellSelect'
   }
 
   render() {
-    let { fieldWellOptions, wellData, zoneData, layerData, productionData, pressureData } = this.state
+    let { fieldWellOptions, wellData, zoneData, layerData, productionData, pressureData , aforosData} = this.state
 
     console.log('well', wellData)
     console.log('zone', zoneData)
     console.log('layer', layerData)
     console.log('production', productionData)
     console.log('pressure', pressureData)
+    console.log('aforos', aforosData)
 
     return (
       <div className="home">
-      SOMETHING GOES HERE
         <WellSelect fieldWellOptions={fieldWellOptions}/>
+        <KPIGroup data={wellData} />
+        <ProductionGraph data={productionData} />
+        <PressureGraph data={pressureData} />
+        <AforosGraph data={aforosData} />
+        <Images data={[]} />
       </div>
     )
   }
