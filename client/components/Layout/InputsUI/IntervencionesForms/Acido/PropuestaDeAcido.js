@@ -13,6 +13,7 @@ import { setHasErrorsPropuestaAcido, setCedulaData, setModuloYoungArena, setModu
     setVolumenDesplazamientoLiquido, setVolumenDesplazamientoGelLineal, setPropuestaCompany } from '../../../../../redux/actions/intervencionesAcido'
 import { round, calculateVolumes, getSistemaOptions, getDisabledColumnForGeneralCedula } from '../../../../../lib/helpers'
 import { checkEmpty, checkDate } from '../../../../../lib/errorCheckers'
+import { calculateValuesGeneralCedula } from '../../../../../lib/formatters';
 
 @autobind class PropuestaDeAcido extends Component {
   constructor(props) {
@@ -320,24 +321,7 @@ import { checkEmpty, checkDate } from '../../../../../lib/errorCheckers'
 
   setAllData(data) {
     const { setCedulaData } = this.props
-    const cedulaData = data.map((row, i) => {
-      let { sistema, relN2Liq, gastoLiqudo, volLiquid } = row
-      if (sistema === 'desplazamientoN2' || sistema === 'pre-colchon') {
-        row.volLiquid = 0
-        row.gastoLiqudo = 0
-        row.relN2Liq = 0
-        row.tiempo = round(row.volN2 / row.gastoN2)
-      } else {
-        row.gastoN2 = round(relN2Liq / 6.291 * gastoLiqudo)
-        row.volN2 = round((6.291 * volLiquid / gastoLiqudo) * row.gastoN2)
-        row.tiempo = round((volLiquid * 6.291) / gastoLiqudo)
-      }
-      const prev = data[i - 1]
-      row.volLiquidoAcum = prev ? round(parseFloat(prev.volLiquidoAcum) + parseFloat(row.volLiquid)) : row.volLiquid
-      row.volN2Acum = prev ? round(parseFloat(prev.volN2Acum) + parseFloat(row.volN2)) : row.volN2
-      return row
-    })
-
+    const cedulaData = calculateValuesGeneralCedula(data)
     const volumes = {
       volumenSistemaReactivo: calculateVolumes(cedulaData, 'volLiquid', 'reactivo'),
       volumenSistemaNoReativo: calculateVolumes(cedulaData, 'volLiquid', ['no-reactivo']),

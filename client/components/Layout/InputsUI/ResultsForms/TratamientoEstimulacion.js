@@ -5,8 +5,9 @@ import { connect } from 'react-redux'
 import InputTable from '../../Common/InputTable'
 import { InputRow, InputRowSelectUnitless, CalculatedValue } from '../../Common/InputRow'
 import { setMergeTratamientoEstimulacion, setCedulaTratamientoEstimulacion } from '../../../../redux/actions/results'
-import { round, calculateVolumes, getSistemaOptions } from '../../../../lib/helpers'
+import { round, calculateVolumes, getSistemaOptions, getDisabledColumnForGeneralCedula } from '../../../../lib/helpers'
 import { checkEmpty, checkDate } from '../../../../lib/errorCheckers'
+import { calculateValuesGeneralCedula } from '../../../../lib/formatters';
 
 @autobind class TratamientoEstimulacion extends Component {
   constructor(props) {
@@ -113,38 +114,9 @@ import { checkEmpty, checkDate } from '../../../../lib/errorCheckers'
     })
   }
 
-  // handleSelectTipoDeEstimulacion(val) {
-  //   let { setTipoDeEstimulacion, setTipoDeColocacion, setTiempoDeContacto, setHasErrorsResultadosSimulacionEstimulacion, resultsData } = this.props
-  //   resultsData = resultsData.toJS()
-
-  //   let { penetracionRadial, longitudDeAgujeroDeGusano } = resultsData
-
-
-
-  //   if (val === 'limpieza') {
-  //     setHasErrorsResultadosSimulacionEstimulacion(false)
-  //   }
-  //   else {
-  //     if (penetracionRadial.length > 0 && longitudDeAgujeroDeGusano.length > 0) {
-  //       setHasErrorsResultadosSimulacionEstimulacion(false)
-  //     }
-  //     else {
-  //       setHasErrorsResultadosSimulacionEstimulacion(true)
-  //     }
-  //   }
-
-  //   setTipoDeEstimulacion(val)
-  //   setTipoDeColocacion(null)
-  //   setTiempoDeContacto(null)
-
-  // }
-
-
   makeGeneralForm() {
     let { formData, setMergeTratamientoEstimulacion, intervals, stimulationType } = this.props
-    // formData = formData.toJS()
-    // intervalos = intervalos.toJS()
-    let { tratamientoCompany, tipoDeEstimulacion } = formData
+    let { tratamientoCompany } = formData
     const companyOptions = [
       { label: 'Halliburton', value: 'Halliburton' },
       { label: 'Schlumberger', value: 'Schlumberger' },
@@ -154,15 +126,7 @@ import { checkEmpty, checkDate } from '../../../../lib/errorCheckers'
       { label: 'Weatherford',
       value: 'Weatherford' }
     ]
-
-    // const estimulacionOptions = [
-    //   { label: 'Limpieza', value: 'limpieza'},
-    //   { label: 'Matricial', value: 'matricial'}
-    // ]
-
     const intervalsDiv = intervals.map(elem => <div key={`intervalo_${elem}`}>{elem}</div>)
-
-
     return (
       <div className='general-form' >
         <div className='header'>
@@ -277,27 +241,8 @@ import { checkEmpty, checkDate } from '../../../../lib/errorCheckers'
   }
 
   setAllData(data) {
-    const { setCedulaTratamientoEstimulacion, setMergeTratamientoEstimulacion } = this.props
-    console.log('what s the data', data)
-    const cedulaData = data.map((row, i) => {
-      let { sistema, relN2Liq, gastoLiqudo, volLiquid } = row
-      if (sistema === 'desplazamientoN2' || sistema === 'pre-colchon') {
-        row.volLiquid = 0
-        row.gastoLiqudo = 0
-        row.relN2Liq = 0
-        row.tiempo = round(row.volN2 / row.gastoN2)
-      } else {
-        row.gastoN2 = round(relN2Liq / 6.291 * gastoLiqudo)
-        row.volN2 = round((6.291 * volLiquid / gastoLiqudo) * row.gastoN2)
-        row.tiempo = round((volLiquid * 6.291) / gastoLiqudo)
-      }
-      const prev = data[i - 1]
-      row.volLiquidoAcum = prev ? round(parseFloat(prev.volLiquidoAcum) + parseFloat(row.volLiquid)) : row.volLiquid
-      row.volN2Acum = prev ? round(parseFloat(prev.volN2Acum) + parseFloat(row.volN2)) : row.volN2
-      row.etapa = row.index + 1
-      return row
-    })
-
+    const { setCedulaTratamientoEstimulacion } = this.props
+    const cedulaData = calculateValuesGeneralCedula(data)
     const volumes = {
       volumenSistemaReactivo: calculateVolumes(cedulaData, 'volLiquid', 'reactivo'),
       volumenSistemaNoReativo: calculateVolumes(cedulaData, 'volLiquid', 'no-reactivo'),
@@ -311,16 +256,8 @@ import { checkEmpty, checkDate } from '../../../../lib/errorCheckers'
   }
 
   makeCedulaTable() {
-    let { formData, setCedulaData, setMergeTratamientoEstimulacion, intervalos } = this.props
-    // formData = formData.toJS()
-    // intervalos = intervalos.toJS()
+    let { formData } = this.props
     let { cedulaData } = formData
-
-    // const intervaloOptions = intervalos.map(elem =>({
-    //   value: `${elem.cimaMD}-${elem.baseMD}`,
-    //   label: `${elem.cimaMD}-${elem.baseMD}`,
-    // }))
-
     const sistemaOptions = getSistemaOptions()
     const rowObj = {
       error: true,
@@ -433,6 +370,7 @@ import { checkEmpty, checkDate } from '../../../../lib/errorCheckers'
           <InputTable
             className="-striped"
             data={cedulaData}
+            disabledColumns={getDisabledColumnForGeneralCedula}
             selectOptions={sistemaOptions}
             setData={this.setAllData}
             columns={columns}

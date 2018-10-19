@@ -13,6 +13,7 @@ import { setHasErrorsPropuestaApuntalado, setCedulaData, setModuloYoungArena, se
   setPropuestaCompany } from '../../../../../redux/actions/intervencionesApuntalado'
 import { round, calculateVolumes, getSistemaApuntaladoOptions, getDisabledColumnForApuntaladoCeluda } from '../../../../../lib/helpers'
 import { checkEmpty, checkDate } from '../../../../../lib/errorCheckers'
+import { calculateValuesApuntaladoCedula } from '../../../../../lib/formatters';
 
 @autobind class PropuestaDeApuntalado extends Component {
   constructor(props) {
@@ -301,26 +302,7 @@ import { checkEmpty, checkDate } from '../../../../../lib/errorCheckers'
 
   setAllData(data) {
     const { setCedulaData } = this.props
-    const cedulaData = data.map((row, i) => {
-      let { apuntalanteAcumulado, volLechada, gastoSuperficie, volEspumaFondo, concentracionApuntalanteFondo } = row
-      const prev = data[i - 1]
-      const apuntalante = parseFloat(volEspumaFondo) * parseFloat(concentracionApuntalanteFondo)
-      if (!apuntalanteAcumulado || i === 0) {
-        row.apuntalanteAcumulado = apuntalante
-      } else if (prev) {
-        row.apuntalanteAcumulado = round(parseFloat(prev.apuntalanteAcumulado) + apuntalante)
-      } else {
-        row.apuntalanteAcumulado = apuntalanteAcumulado
-      }
-      if (isNaN(row.apuntalanteAcumulado)) {
-        row.apuntalanteAcumulado = 0
-      }
-      if (row.sistema !== 'shut-in') {
-        row.tiempo = round(parseFloat(volLechada) / parseFloat(gastoSuperficie))
-      }
-      return row
-    })
-
+    const cedulaData = calculateValuesApuntaladoCedula(data)
     const volumes = {
       volumenPrecolchonN2: calculateVolumes(cedulaData, 'volLiquido', ['pre-pad']),
       volumenGelFractura: calculateVolumes(cedulaData, 'volLiquido', ['pad', 'pad-proppant']),
@@ -328,7 +310,6 @@ import { checkEmpty, checkDate } from '../../../../../lib/errorCheckers'
       volumenTotalDeLiquido: calculateVolumes(cedulaData, 'volLiquido'),
       volumenApuntalante: cedulaData[cedulaData.length - 1].apuntalanteAcumulado / 100
     }
-
     setCedulaData(cedulaData, volumes)
   }
 
