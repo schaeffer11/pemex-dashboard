@@ -11,7 +11,7 @@ import { setHasErrorsPropuestaAcido, setCedulaData, setModuloYoungArena, setModu
    setLongitudDeIntervalo, setVolAparejo, setCapacidadTotalDelPozo, setVolumenPrecolchonN2,
     setVolumenSistemaNoReativo, setVolumenSistemaReactivo, setVolumenSistemaDivergente, 
     setVolumenDesplazamientoLiquido, setVolumenDesplazamientoGelLineal, setPropuestaCompany } from '../../../../../redux/actions/intervencionesAcido'
-import { round, calculateVolumes, getSistemaOptions } from '../../../../../lib/helpers'
+import { round, calculateVolumes, getSistemaOptions, getDisabledColumnForGeneralCedula } from '../../../../../lib/helpers'
 import { checkEmpty, checkDate } from '../../../../../lib/errorCheckers'
 
 @autobind class PropuestaDeAcido extends Component {
@@ -340,11 +340,11 @@ import { checkEmpty, checkDate } from '../../../../../lib/errorCheckers'
 
     const volumes = {
       volumenSistemaReactivo: calculateVolumes(cedulaData, 'volLiquid', 'reactivo'),
-      volumenSistemaNoReativo: calculateVolumes(cedulaData, 'volLiquid', 'no-reactivo'),
-      volumenSistemaDivergente: calculateVolumes(cedulaData, 'volLiquid', 'divergente'),
-      volumenDesplazamientoLiquido: calculateVolumes(cedulaData, 'volLiquid', 'desplazamiento'),
-      volumenDesplazamientoN2: calculateVolumes(cedulaData, 'volN2', 'desplazamiento'),
-      volumenPrecolchonN2: calculateVolumes(cedulaData, 'volN2', 'pre-colchon'),
+      volumenSistemaNoReativo: calculateVolumes(cedulaData, 'volLiquid', ['no-reactivo']),
+      volumenSistemaDivergente: calculateVolumes(cedulaData, 'volLiquid', ['divergente']),
+      volumenDesplazamientoLiquido: calculateVolumes(cedulaData, 'volLiquid', ['desplazamiento']),
+      volumenDesplazamientoN2: calculateVolumes(cedulaData, 'volN2', ['desplazamiento']),
+      volumenPrecolchonN2: calculateVolumes(cedulaData, 'volN2', ['pre-colchon']),
       volumenTotalDeLiquido: calculateVolumes(cedulaData, 'volLiquid'),
     }
     setCedulaData(cedulaData, volumes)
@@ -487,6 +487,7 @@ import { checkEmpty, checkDate } from '../../../../../lib/errorCheckers'
           <InputTable
             className="-striped"
             data={cedulaData}
+            disabledColumns={getDisabledColumnForGeneralCedula}
             selectOptions={sistemaOptions}
             setData={this.setAllData}
             columns={columns}

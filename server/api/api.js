@@ -46,7 +46,6 @@ async function handleImageResponse(data) {
     return 0;
   })
   const final = {}
-  const finalArray = {}
   for (let well of filteredData) {
     const imgName = well.IMG_URL
     const imgInformation = well.IMG_URL.split('.')
@@ -68,7 +67,7 @@ async function handleImageResponse(data) {
       objectPath.set(final, parent, innerObj)
     }
   }
-  return Object.assign(final, finalArray)
+  return final
 }
 
 // We do not want to check authorization for templates so we put above middleware!

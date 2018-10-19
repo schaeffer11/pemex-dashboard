@@ -11,7 +11,7 @@ import { setHasErrorsResultadosSimulacionEstimulacion, setHasErrorsPropuestaEsti
   setVolumenSistemaDivergente, setVolumenDesplazamientoLiquido, setVolumenDesplazamientoN2, setVolumenTotalDeLiquido, 
   setPropuestaCompany, setTipoDeEstimulacion, setTipoDeColocacion, setTiempoDeContacto } from '../../../../../redux/actions/intervencionesEstimulacion'
 import { setEspesorBruto } from '../../../../../redux/actions/pozo'
-import { round, calculateVolumes, getSistemaOptions } from '../../../../../lib/helpers'
+import { round, calculateVolumes, getSistemaOptions, getDisabledColumnForGeneralCedula } from '../../../../../lib/helpers'
 import { setPenetracionRadial, setLongitudDeAgujeroDeGusano } from '../../../../../redux/actions/intervencionesEstimulacion'
 import { checkEmpty, checkDate } from '../../../../../lib/errorCheckers'
 
@@ -351,12 +351,12 @@ import { checkEmpty, checkDate } from '../../../../../lib/errorCheckers'
     })
 
     const volumes = {
-      volumenSistemaReactivo: calculateVolumes(cedulaData, 'volLiquid', 'reactivo'),
-      volumenSistemaNoReativo: calculateVolumes(cedulaData, 'volLiquid', 'no-reactivo'),
-      volumenSistemaDivergente: calculateVolumes(cedulaData, 'volLiquid', 'divergente'),
-      volumenDesplazamientoLiquido: calculateVolumes(cedulaData, 'volLiquid', 'desplazamiento'),
-      volumenDesplazamientoN2: calculateVolumes(cedulaData, 'volN2', 'desplazamiento'),
-      volumenPrecolchonN2: calculateVolumes(cedulaData, 'volN2', 'pre-colchon'),
+      volumenSistemaReactivo: calculateVolumes(cedulaData, 'volLiquid', ['reactivo']),
+      volumenSistemaNoReativo: calculateVolumes(cedulaData, 'volLiquid', ['no-reactivo']),
+      volumenSistemaDivergente: calculateVolumes(cedulaData, 'volLiquid', ['divergente']),
+      volumenDesplazamientoLiquido: calculateVolumes(cedulaData, 'volLiquid', ['desplazamiento']),
+      volumenDesplazamientoN2: calculateVolumes(cedulaData, 'volN2', ['desplazamiento']),
+      volumenPrecolchonN2: calculateVolumes(cedulaData, 'volN2', ['pre-colchon']),
       volumenTotalDeLiquido: calculateVolumes(cedulaData, 'volLiquid'),
     }
 
@@ -416,27 +416,6 @@ import { checkEmpty, checkDate } from '../../../../../lib/errorCheckers'
         Header: 'Etapa',
         accessor: 'etapa',
       }, 
-      // {
-      //   Header: 'Sistema',
-      //   accessor: 'sistema',
-      //   width: 200,
-      //   resizable: false,
-      //   style: {overflow: 'visible'},
-      //   Cell: row => {
-      //     return (
-      //       <div>
-      //         <Select
-      //           placeholder='sistema'
-      //           className='input'
-      //           simpleValue={true}
-      //           options={sistemaOptions}
-      //           value={sistemaOptions.find(i=>i.value === row.original.sistema) || null}
-      //           onChange={(e) => this.handleSelect(row, e.value)}
-      //         />
-      //       </div>
-      //     )
-      //   }
-      // },
       {
         Header: 'Sistema',
         accessor: 'sistema',
@@ -505,6 +484,7 @@ import { checkEmpty, checkDate } from '../../../../../lib/errorCheckers'
         <div className='table-select'>
           <InputTable
             className="-striped"
+            disabledColumns={getDisabledColumnForGeneralCedula}
             data={cedulaData}
             selectOptions={sistemaOptions}
             setData={this.setAllData}
