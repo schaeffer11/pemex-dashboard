@@ -33,6 +33,15 @@ button {
     color: white;
     min-width: 100px;
   }
+  &.cancel {
+    border-radius: 4px;
+    border: none;
+    background: $primary-red;
+    padding: 6px 30px;
+    font-size: 1.2em;
+    color: white;
+    min-width: 100px;
+  }
   &.bug-button{
     float: left;
     margin-top: .5em;

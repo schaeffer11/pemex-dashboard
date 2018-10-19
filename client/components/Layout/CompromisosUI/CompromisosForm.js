@@ -13,12 +13,46 @@ import { setIsLoading, setShowForms } from '../../../redux/actions/global'
 @autobind class CompromisosForm extends Component {
     constructor(props) {
         super(props)
+
+        this.state = {
+            editMode: false
+        }
+
         this.initialValues = {
             descripcion: "",
             activo: "",
             fechaRevision: "",
+            fechaCumplimiento: "",
             responsable: "",
-            minuta: ""
+            minuta: "",
+            notas: ""
+        }
+
+    }
+
+    componentDidMount() {
+        const { token, id } = this.props
+        const headers = {
+            headers: {
+                'Authorization': `Bearer ${token}`,
+                'content-type': 'application/json',
+            },
+        }
+
+
+        if(id){
+            fetch('/api/compromiso/'+id, {
+                headers,
+                method: 'GET'
+            })
+                .then(r => r.json())
+                .then((res) => {
+                    this.initialValues = res;
+
+                    this.setState({
+                        editMode: true
+                    })
+                })
         }
     }
 
@@ -38,8 +72,10 @@ import { setIsLoading, setShowForms } from '../../../redux/actions/global'
         return errors;
     }
 
+
+
     onSubmit(values, actions ){
-        let { setLoading, updateData } = this.props
+        let { setLoading, onUpdateData, id } = this.props
         setTimeout(() => {
             const { token, user } = this.props
 
@@ -50,34 +86,64 @@ import { setIsLoading, setShowForms } from '../../../redux/actions/global'
             const formData = new FormData()
 
             Object.entries(values).forEach(([key,value]) => {
+                if(key == 'fechaRevision' || key == 'fechaCumplimiento'){
+                    value = moment(value).format('YYYY-MM-DD');
+                }
                 formData.append(key, value);
             })
 
-            fetch('/api/compromiso', {
-                headers,
-                method: 'POST',
-                body: formData,
-            })
-                .then(r => r.json())
-                .then((res) => {
-                    if (res.success) {
-                        setLoading({
-                            isLoading: false,
-                            showNotification: true,
-                            notificationType: 'success',
-                            notificationText: `Su información se ha guardado exitosamente`
-                        })
-                    } else {
-                        setLoading({
-                            isLoading: false,
-                            showNotification: true,
-                            notificationType: 'error',
-                            notificationText: `Su información no se ha podido guardar`
-                        })
-                    }
+            if(id){
+                fetch('/api/compromiso/' + id, {
+                    headers,
+                    method: 'PUT',
+                    body: formData,
                 })
+                    .then(r => r.json())
+                    .then((res) => {
+                        if (res.success) {
+                            setLoading({
+                                isLoading: false,
+                                showNotification: true,
+                                notificationType: 'success',
+                                notificationText: `Su información se ha guardado exitosamente`
+                            })
+                        } else {
+                            setLoading({
+                                isLoading: false,
+                                showNotification: true,
+                                notificationType: 'error',
+                                notificationText: `Su información no se ha podido guardar`
+                            })
+                        }
+                    })
+            }else {
+                fetch('/api/compromiso', {
+                    headers,
+                    method: 'POST',
+                    body: formData,
+                })
+                    .then(r => r.json())
+                    .then((res) => {
+                        if (res.success) {
+                            setLoading({
+                                isLoading: false,
+                                showNotification: true,
+                                notificationType: 'success',
+                                notificationText: `Su información se ha guardado exitosamente`
+                            })
+                        } else {
+                            setLoading({
+                                isLoading: false,
+                                showNotification: true,
+                                notificationType: 'error',
+                                notificationText: `Su información no se ha podido guardar`
+                            })
+                        }
+                    })
+            }
 
-            updateData()
+
+            onUpdateData()
             actions.setSubmitting(false);
         }, 400);
     }
@@ -87,13 +153,13 @@ import { setIsLoading, setShowForms } from '../../../redux/actions/global'
         return(
             <div>
                 <Formik
+                    enableReinitialize
                     initialValues={this.initialValues}
                     validate={this.validate}
                     onSubmit={this.onSubmit}
                 >
-                    { ({touched, isSubmitting, errors}) => (
+                    { ({touched, isSubmitting, errors, values}) => (
                         <Form>
-                            <div className="title">Nuevo Compromiso</div>
 
                             <div className="responsable field">
                                 <label>Responsable</label>
@@ -113,25 +179,41 @@ import { setIsLoading, setShowForms } from '../../../redux/actions/global'
                                 </Field>
                                 {errors.activo && touched.activo && <div class="error">{errors.activo}</div>}
                             </div>
-                            <div className="compromiso field">
-                                <label>Compromiso</label>
-                                <Field component="textarea" name="descripcion" />
-                                {errors.descripcion && touched.descripcion && <div class="error">{errors.descripcion}</div>}
-                            </div>
+
                             <div className="fecha field">
-                                <label>Fecha</label>
+                                <label>Fecha De Revision</label>
                                 <DateInput name="fechaRevision"/>
                                 {errors.fechaRevision && touched.fechaRevision && <div class="error">{errors.fechaRevision}</div>}
                             </div>
+
+                            <div className="fecha field">
+                                <label>Fecha De Cumplimiento</label>
+                                <DateInput name="fechaCumplimiento"/>
+                                {errors.fechaCumplimiento && touched.fechaCumplimiento && <div class="error">{errors.fechaCumplimiento}</div>}
+                            </div>
+
                             <div className="minuta field">
                                 <label>No. De Minuta</label>
                                 <Field type="text" name="minuta" />
                                 {errors.minuta && touched.minuta && <div class="error">{errors.minuta}</div>}
                             </div>
 
-                            <button className="submit button" type="submit">
-                                Enviar
-                            </button>
+                            <div className="compromiso field">
+                                <label>Compromiso</label>
+                                <Field component="textarea" name="descripcion" />
+                                {errors.descripcion && touched.descripcion && <div class="error">{errors.descripcion}</div>}
+                            </div>
+
+                            <div className="notas field">
+                                <label>Notas</label>
+                                <Field component="textarea" name="notas" />
+                                {errors.notas && touched.notas && <div class="error">{errors.notas}</div>}
+                            </div>
+
+                            <div className="buttons-group">
+                                <button className="cancel button" onClick={this.props.handleClose}>Cancelar</button>
+                                <button className="submit button" type="submit">{this.state.editMode ? 'Editar' : 'Crear'}</button>
+                            </div>
 
                             {Object.entries(errors).length > 0 && <div class="error">Esta forma contiene errores.</div>}
                         </Form>
