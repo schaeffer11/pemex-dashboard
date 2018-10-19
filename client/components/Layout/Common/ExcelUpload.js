@@ -70,9 +70,9 @@ const getErrors = (data, headers) => {
     const { headers, setData } = this.props
     const file = e.target.files[0]
     // First we must empty the table
-    const initialValues = {}
+    const initialValues = { error: true }
     headers.forEach(elem => {
-      initialValues[elem.name] = ''
+      initialValues[elem.name] = elem.type === 'date' ? null : ''
     })
     console.log('what is this initial values', initialValues)
     setData([initialValues])
@@ -104,8 +104,9 @@ const getErrors = (data, headers) => {
       console.log('parsedData',parsedData)
       if (errors.length > 0) {
         return this.setState({ errors, isAccepted: false, modalIsOpen: true })
+      } else {
+        setData(parsedData)
       }
-      setData(parsedData)
       return this.setState({ isAccepted: true })
     }
 

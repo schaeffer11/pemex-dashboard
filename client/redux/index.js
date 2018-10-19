@@ -37,6 +37,7 @@ import resultsMeta from './reducers/resultsMeta'
 import graficaTratamiento from './reducers/graficaTratamiento'
 import forms from './reducers/forms'
 import global from './reducers/global'
+import { handleImagesFromServer } from '../lib/formatters';
 import globalAnalysis from './reducers/globalAnalysis'
 
 const appReducer = combineReducers({
@@ -92,6 +93,10 @@ const rootReducer = (state, action) => {
     if (action.type === 'LOAD_SAVE') {
       const { saved } = action
       const newState = { ...saved, user, app, global, router, forms }
+      return state = fromJS(newState)
+    }
+    if (action.type === 'set_imagesInState') {
+      const newState = handleImagesFromServer(action.images, state.toJS())
       return state = fromJS(newState)
     }
     if (action.type === 'RESET_APP') {

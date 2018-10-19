@@ -1,4 +1,4 @@
-import { setIsSaved, setIsLoading } from '../../redux/actions/global'
+import { setIsSaved, setIsLoading, setImagesInState } from '../../redux/actions/global'
 import Immutable from 'immutable'
 
 function bufferToBase64(buf) {
@@ -70,7 +70,7 @@ export function submitForm(action, token, saveName) {
         // look for immediate images
         if (innerObj.hasOwnProperty('imgURL')) {
           if (innerObj.imgURL) {
-            const img = await getBase64FromURL(innerObj.imgURL)
+            const img = innerObj.imgSource === 'local' ? await getBase64FromURL(innerObj.imgURL) : 'exists in s3'
             innerObj.img = img
             // innerObj.imgName = [pozo, k, utc].join('.')
           }
@@ -84,7 +84,9 @@ export function submitForm(action, token, saveName) {
             for (let j of property) {
               if (j.hasOwnProperty('imgURL')) {
                 if (j.imgURL) {
-                  const img = await getBase64FromURL(j.imgURL)
+                  console.log('converting some array img', property)
+                  const img = j.imgSource === 'local' ? await getBase64FromURL(j.imgURL) : 'exists in s3'
+                  // const img = await getBase64FromURL(j.imgURL)
                   j.img = img
                   // j.imgName = [pozo, k, j.type, index, utc].join('.')
                   index += 1
@@ -112,12 +114,14 @@ export function submitForm(action, token, saveName) {
         body: formData,
       })
         .then(r => r.json())
-        .then(({ isSaved }) => {
+        .then(({ isSaved, images }) => {
+          console.log('i got back images?', isSaved, images)
           let notificationType = ''
           let notificationText = ''
           if (isSaved) {
             notificationType = 'success'
             notificationText = 'Su información se ha guardado'
+            dispatch(setImagesInState(images))
           } else {
             notificationType = 'error'
             notificationText = 'Su información no se guardó'

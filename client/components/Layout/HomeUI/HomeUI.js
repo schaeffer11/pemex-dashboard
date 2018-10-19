@@ -72,7 +72,7 @@ const LinkButton = ({ text, disabled , width, height, src, to}) => {
               <LinkButton to="/carga_datos" text={'inserción de datos'} src={'./images/inputNew.png'}/>
               <LinkButton to="/tablero_control" text={'tablero de control'} height='90px' src={'./images/checklistNew.png'} />
               <LinkButton to="/diagnosticos" text={'diagnóstico de productividad'} width='85px' src={'./images/analysisNew.png'}/>
-              <LinkButton to="/" text={'seguimiento de compromisos'} width='105px' src={'./images/diagnosticsNew.png'} disabled />
+              <LinkButton to="/compromisos" text={'seguimiento de compromisos'} width='105px' src={'./images/diagnosticsNew.png'} />
             </div>
             <div className="text-inner">
               Homologación de Procesos de Estimulación y Fracturamiento

@@ -10,11 +10,13 @@ import { create as createWell, getFields, getWell, getSurveys,
             getHistIntervenciones, getHistIntervencionesNew, getLayer, getMudLoss, getMecanico, 
             getAnalisisAgua, getEmboloViajero, getBombeoNeumatico, getBombeoHidraulico, 
             getBombeoCavidades, getBombeoElectrocentrifugo, getBombeoMecanico, 
-            getFieldPressure, getWellPressure, 
+            getFieldPressure, getWellPressure,
             getWellAforos, getWellProduccion, getWellImages, getInterventionBase, 
             getInterventionEsimulacion, getInterventionAcido, getInterventionApuntalado, 
             getLabTest, getCedulaEstimulacion, getCedulaAcido, getCedulaApuntalado, 
-            getCosts, getInterventionImage } from './pozo'
+            getCosts, getInterventionImages } from './pozo'
+
+import { create as createCompromiso, mine as myCompromisos, get as getCompromisos } from './compromisos';
 import { createResults } from './results'
 
 // import { create as createDiagnostico } from './diagnosticos';
@@ -24,6 +26,50 @@ const connection = db.getConnection(appConfig.users.database)
 const env = process.env.NODE_ENV || 'dev'
 const isProduction = env === 'production'
 const router = Router()
+
+const getImagesForClient = async (transactionID, action) => new Promise((resolve, reject) => {
+  getWellImages(transactionID, action, async (wellImages) => {
+    const formattedWellImages = await handleImageResponse(wellImages)
+    console.log('format well img', formattedWellImages)
+    getInterventionImages(transactionID, action, async (interventionImages) => {
+      const formattedInterventionImages = await handleImageResponse(interventionImages)
+      console.log('format intervention img', formattedInterventionImages)
+      resolve({ ...formattedWellImages, ...formattedInterventionImages })
+    })
+  })
+})
+
+async function handleImageResponse(data) {
+  const filteredData = data.filter(well => well.IMG_URL !== null && well.IMG_URL !== '').sort((a, b) => {
+    if(a.label < b.label) return -1;
+    if(a.label > b.label) return 1;
+    return 0;
+  })
+  const final = {}
+  const finalArray = {}
+  for (let well of filteredData) {
+    const imgName = well.IMG_URL
+    const imgInformation = well.IMG_URL.split('.')
+    const parent = imgInformation[1]
+    const index = imgInformation[imgInformation.length - 1]
+    const isNumber = /^[0-9]*$/.test(index)
+    // get img url from s3
+    const imgURL = await signedURL(imgName)
+    const innerObj = {
+      imgName,
+      imgURL,
+      imgSource: 's3',
+    }
+    // determine if we need to store in array
+    if (isNumber) {
+      // this is naive assumes everything is in order
+      objectPath.push(final, parent, innerObj)
+    } else {
+      objectPath.set(final, parent, innerObj)
+    }
+  }
+  return Object.assign(final, finalArray)
+}
 
 // We do not want to check authorization for templates so we put above middleware!
 router.get('/get_template/:template', (req, res) => {
@@ -97,6 +143,34 @@ router.post('/comment', (req, res) => {
     })
 })
 
+router.get('/users', (req, res) => {
+    let table = appConfig.users.table
+    connection.query(`SELECT username, id FROM ??`, [table], (err, results) => {
+        if (err) {
+            res.json([])
+        }
+
+        res.json({ results })
+    })
+})
+
+router.get('/activo', (req, res) => {
+    connection.query(`SELECT DISTINCT ACTIVO_NAME, ACTIVO_ID FROM FieldWellMapping`, (err, results) => {
+        res.json(results)
+    })
+})
+
+router.post('/compromiso', (req, res) => {
+  createCompromiso(req, res)
+})
+
+router.get('/compromiso/mine', (req, res) => {
+    myCompromisos(req, res)
+})
+
+router.get('/compromiso', (req, res) => {
+    getCompromisos(req, res)
+})
 
 router.post('/diagnostico', (req, res) => {
     createDiagnostico(req, res)
@@ -245,13 +319,14 @@ router.post('/well', async (req, res) => {
 router.post('/wellSave', async (req, res) => {
 
   // TODO: Find a way to clean up callbacks from createWell
-  createWell(req.body, 'save', err => {
+  createWell(req.body, 'save', async (err, transactionID) => {
     if (err) {
       console.log('we got an error saving', err)
       res.json({ isSaved: false })
     } else {
       console.log('all good in the saving neighborhood')
-      res.json({ isSaved: true })
+      const images = await getImagesForClient(transactionID, 'loadSave')
+      res.json({ isSaved: true, images })
     }
   })
 })
@@ -808,7 +883,6 @@ router.get('/getMecanico', async (req, res) => {
 
   let action = saved ? 'loadSave' : 'loadTransaction'
 
-
   const map = {
     TIPO_DE_TERMINACION: { parent: 'mecanicoYAparejoDeProduccion', child: 'tipoDeTerminacion'},
     H_INTERVALO_PRODUCTOR: { parent: 'mecanicoYAparejoDeProduccion', child: 'hIntervaloProductor'},
@@ -830,7 +904,6 @@ router.get('/getMecanico', async (req, res) => {
   }
 
   getMecanico(transactionID, action, (data) => {
-    
     if (data && data.length > 0) {const finalObj = {}
       Object.keys(data[0]).forEach(key => {
         if (map[key]) {
@@ -1385,14 +1458,30 @@ router.get('/getWellProduccion', async (req, res) => {
   })
 })
 
+
+
+router.get('/getImages', async (req, res) => {
+  const { transactionID, saved } = req.query
+  const action = saved ? 'loadSave' : 'loadTransaction'
+  const imagesForClient = await getImagesForClient(transactionID, action).catch(r => console.log('something went wrong getting images'))
+  console.log('da images from client', imagesForClient)
+  res.json(imagesForClient)
+})
 router.get('/getWellImages', async (req, res) => {
   let { transactionID, saved } = req.query
-
   let action = saved ? 'loadSave' : 'loadTransaction'
+  getWellImages(transactionID, action, async (data) => {
+    const final = await handleImageResponse(data)
+    res.json(final)
+  })
+})
 
-
-  getWellImages(transactionID, action, (data) => {
-    res.json(data)
+router.get('/getInterventionImages', async (req, res) => {
+  let { transactionID, saved } = req.query
+  let action = saved ? 'loadSave' : 'loadTransaction'
+  getInterventionImages(transactionID, action, async (data) => {
+    const final = await handleImageResponse(data)
+    res.json(final)
   })
 })
 
@@ -2072,18 +2161,6 @@ router.get('/getCosts', async (req, res) => {
     res.json(finalObj)
   })
 })
-
-router.get('/getInterventionImage', async (req, res) => {
-  let { transactionID, saved } = req.query
-
-  let action = saved ? 'loadSave' : 'loadTransaction'
-
-
-  getInterventionImage(transactionID, action, (data) => {
-    res.json(data)
-  })
-})
-
 
 router.get('*', (req, res) => {
   res.status(404).send(`No API endpoint found for "${req.url}"`)

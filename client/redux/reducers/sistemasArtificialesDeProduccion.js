@@ -46,8 +46,6 @@ const initialState = Map({
     CuantaConAnclaBM: '',
     nivelDinamico: '',
     nivelEstatico: '',
-    imgURL: null,
-    imgName: '',
 })
 
 

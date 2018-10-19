@@ -6,9 +6,11 @@ AWS.config.s3 = config
 
 const s3 = new AWS.S3()
 export const signedURL = Key => new Promise((resolve, reject) => {
+  // expires in two hours (seconds)
   const params = {
     Key,
     Bucket: 'pemex-prod-01',
+    Expires: 60 * 60 * 2
   }
   s3.getSignedUrl('getObject', params, (err, url) => {
     if (err) {
@@ -55,6 +57,21 @@ export const addObject = (buf, Key) => new Promise((resolve, reject) => {
       reject(err)
     } else {
       resolve({ Key, data })
+    }
+  })
+})
+
+export const copyObject = (oldKey, newKey) => new Promise((resolve, reject) => {
+  const params = {
+    Bucket: 'pemex-prod-01',
+    CopySource: `/pemex-prod-01/${oldKey}`, 
+    Key: newKey,
+  }
+  s3.copyObject(params, (err, data) => {
+    if (err) {
+      reject(err)
+    } else {
+      resolve({ Key: newKey, data })
     }
   })
 })

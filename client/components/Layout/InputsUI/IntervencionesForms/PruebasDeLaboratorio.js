@@ -69,7 +69,7 @@ const companyOptions = [
     let copy = pruebasDeLaboratorioData
     copy[0].length = 2
 
-    setPruebasDeLaboratorioData([...copy, {index: pruebasDeLaboratorioData.length, type: '', fechaMuestreo: '', fechaPrueba: '', compania: '', superviso: '', length: pruebasDeLaboratorioData.length + 1}])
+    setPruebasDeLaboratorioData([...copy, {index: pruebasDeLaboratorioData.length, type: '', fechaMuestreo: null, fechaPrueba: null, compania: '', superviso: '', length: pruebasDeLaboratorioData.length + 1}])
   }
 
 
@@ -189,7 +189,7 @@ const companyOptions = [
       },
     ]
 
-    const objectTemplate = {type: '', fechaMuestreo: '', fechaPrueba: '', compania: '', superviso: ''}
+    const objectTemplate = {type: '', fechaMuestreo: null, fechaPrueba: null, compania: '', superviso: ''}
 
 
 

@@ -1,0 +1,76 @@
+.compromisos {
+  padding: 20px 40px;
+
+  .title {
+    font-size: 1.5em;
+    font-weight: bold;
+    padding-bottom: 1em;
+    margin-bottom: 1em;
+    color: #585858;
+    border-bottom: 1px solid #585858;
+  }
+
+  button.submit {
+    display: block;
+    margin: 2rem auto;
+    text-align: center;
+  }
+}
+
+.compromisos-table {
+  .rt-thead {
+    background: #21658C;
+    color: white;
+
+    .rt-th {
+      padding: 10px !important;
+    }
+  }
+
+  &.-striped {
+    .rt-tr.-odd{
+      background: #CADEF5;
+    }
+  }
+}
+
+.compromisosModal {
+  background: #fff;
+  outline: 0;
+  min-width: 250px;
+  border-radius: 4px;
+  padding: 15px;
+  width: 500px;
+
+  form {
+
+    .title {
+      font-size: 1.2rem;
+      font-weight: bold;
+      text-transform: uppercase;
+    }
+
+    .field {
+      margin: .5rem 0;
+      text-align: left;
+    }
+
+    label {
+      display: block;
+      text-align: left;
+    }
+
+    input {
+      font-size: .825em;
+      display: block;
+      clear: both;
+      text-align: left
+    }
+
+    button {
+      margin-top: 2rem;
+    }
+
+  }
+}
+
