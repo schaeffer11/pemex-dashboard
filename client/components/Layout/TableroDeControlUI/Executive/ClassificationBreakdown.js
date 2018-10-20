@@ -51,10 +51,12 @@ import ReactHighcharts from 'react-highcharts'
 
     return (
       <div className="classification-breakdown test">
-      	<ReactHighcharts
-      		className='chart'
-      		config={config}
-      	/>
+        <div className='chart'>
+        	<ReactHighcharts
+        		className='chart'
+        		config={config}
+        	/>
+        </div>
       </div>
     )
   }

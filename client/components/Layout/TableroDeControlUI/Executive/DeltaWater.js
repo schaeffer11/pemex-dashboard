@@ -55,6 +55,9 @@ import ReactHighcharts from 'react-highcharts'
 	    title: {
 	        text: 'Delta Water'
 	    },
+      legend: {
+        enabled: false
+      },
 	    xAxis: {
 	    	title: {
 	    		text: 'Pre-Water'
@@ -73,10 +76,12 @@ import ReactHighcharts from 'react-highcharts'
 
     return (
       <div className="delta-water test">
-      	<ReactHighcharts
-      		className='chart'
-      		config={config}
-      	/>
+        <div className='chart'>
+        	<ReactHighcharts
+        		className='chart'
+        		config={config}
+        	/>
+        </div>
       </div>
     )
   }

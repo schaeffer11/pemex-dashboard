@@ -5,7 +5,7 @@ import Select from 'react-select'
 import { connect } from 'react-redux'
 
 import { InputRowSelectUnitless } from '../../Common/InputRow'
-import { setActivo, setField, setWell, setFormation } from '../../../../redux/actions/global'
+import { setActivo, setField, setWell, setJob, setFormation } from '../../../../redux/actions/global'
 import { sortLabels } from '../../../../lib/formatters'
 
 @autobind class filters extends Component {
@@ -50,7 +50,7 @@ import { sortLabels } from '../../../../lib/formatters'
   }
 
   handleSelectWell(val) {
-  	let { setWell, setField, setActivo, fieldWellOptions, globalAnalysis } = this.props
+  	let { setWell, setField, setActivo, setJob, fieldWellOptions, globalAnalysis } = this.props
     globalAnalysis = globalAnalysis.toJS()
     let { field, activo } = globalAnalysis
   	let value = val ? val.value : null
@@ -64,7 +64,7 @@ import { sortLabels } from '../../../../lib/formatters'
     if (!activo) {
       setActivo(row.ACTIVO_ID)
     }
-
+    setJob(null)
   	setWell(value)
   }
 
@@ -231,6 +231,7 @@ const mapDispatchToProps = dispatch => ({
 	setActivo: val => dispatch(setActivo(val)),
 	setField: val => dispatch(setField(val)),
 	setWell: val => dispatch(setWell(val)),
+  setJob: val => dispatch(setJob(val)),
 	setFormation: val => dispatch(setFormation(val)),
 })
 

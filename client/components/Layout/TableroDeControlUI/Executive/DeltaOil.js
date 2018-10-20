@@ -52,6 +52,9 @@ import ReactHighcharts from 'react-highcharts'
 	    		}
 	    	}
 	    },
+      legend: {
+        enabled: false
+      },
 	    title: {
 	        text: 'Delta Oil'
 	    },
@@ -73,10 +76,12 @@ import ReactHighcharts from 'react-highcharts'
 
     return (
       <div className="delta-oil test">
-      	<ReactHighcharts
-      		className='chart'
-      		config={config}
-      	/>
+        <div className='chart'>
+        	<ReactHighcharts
+        		className='chart'
+        		config={config}
+        	/>
+        </div>
       </div>
     )
   }
