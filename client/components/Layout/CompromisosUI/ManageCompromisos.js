@@ -5,6 +5,7 @@ import CompromisosForm from './CompromisosForm'
 import ReactTable from "react-table";
 import moment from 'moment'
 import ReactHighCharts from 'react-highcharts'
+import Select from 'react-select'
 
 moment.locale('es-mx');
 
@@ -268,16 +269,33 @@ const CompromisosTable = (props) => {
                 },
                 Filter: ({filter, onChange}) => {
                     return (
-                    <select
-                        onChange={event => onChange(event.target.value)}
-                        style={{width: "100%"}}
-                        value={filter ? filter.value : "all"}
-                    >
-                        <option value="todos">Mostrar Todos</option>
-                        <option value="semana">Próxima Semana</option>
-                        <option value="mes">Próximo Mes</option>
-                        <option value="meses">Próximo 3 Meses</option>
-                    </select>
+                        <Select
+                            simpleValue
+                            placeholder="Seleccionar"
+                            className='input'
+                            options={[
+                                {value: 'todos' , 'label': 'Mostrar Todos'},
+                                {value: 'semana', 'label': 'Próxima Semana'},
+                                {value: 'mes'   , 'label': 'Próximo Mes'},
+                                {value: 'meses' , 'label': 'Próximo 3 Meses'},
+                            ]}
+                            value={ filter ? filter.index : 'todos' }
+                            onChange={selectedOption => {
+                                onChange(selectedOption.value)
+                            }}
+                        />
+                        /*
+                        <select
+                            onChange={event => onChange(event.target.value)}
+                            style={{width: "100%"}}
+                            value={filter ? filter.value : "all"}
+                        >
+                            <option value="todos">Mostrar Todos</option>
+                            <option value="semana">Próxima Semana</option>
+                            <option value="mes">Próximo Mes</option>
+                            <option value="meses">Próximo 3 Meses</option>
+                        </select>
+                        */
                     )}
             },
             {

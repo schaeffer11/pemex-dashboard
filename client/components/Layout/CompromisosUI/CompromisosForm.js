@@ -7,6 +7,7 @@ import { connect } from 'react-redux'
 import Notification from '../Common/Notification'
 import Loading from '../Common/Loading'
 import { Formik, Form, Field, ErrorMessage } from 'formik';
+import Select from 'react-select'
 import { setIsLoading, setShowForms } from '../../../redux/actions/global'
 
 
@@ -163,20 +164,18 @@ import { setIsLoading, setShowForms } from '../../../redux/actions/global'
 
                             <div className="responsable field">
                                 <label>Responsable</label>
-                                <Field component="select" name="responsable">
-                                    {this.props.users.map(user => {
-                                        return <option value={user.id}>{user.username}</option>
-                                    })}
-                                </Field>
+                                <Dropdown
+                                    name="responsable"
+                                    options={this.props.users.map( a => {return {value: a.id , label: a.username}} )}
+                                />
                                 {errors.responsable && touched.responsable && <div class="error">{errors.responsable}</div>}
                             </div>
                             <div className="activo field">
                                 <label>Activo</label>
-                                <Field component="select" name="activo">
-                                    {this.props.activos.map(activo => {
-                                        return <option value={activo.ACTIVO_ID}>{activo.ACTIVO_NAME}</option>
-                                    })}
-                                </Field>
+                                <Dropdown
+                                    name="activo"
+                                    options={this.props.activos.map( a => {return {value: a.ACTIVO_ID , label: a.ACTIVO_NAME}} )}
+                                />
                                 {errors.activo && touched.activo && <div class="error">{errors.activo}</div>}
                             </div>
 
@@ -226,6 +225,26 @@ import { setIsLoading, setShowForms } from '../../../redux/actions/global'
     }
 }
 
+const Dropdown = (props) => {
+    return (
+        <Field name={props.name}>
+            {({ field, form }) => (
+                <Select
+                    simpleValue
+                    placeholder="Seleccionar"
+                    className='input'
+                    options={props.options}
+                    name={props.name}
+                    value={ props.options.find(i => i.value  === field.value) }
+                    onChange={selectedOption => {
+                        form.setFieldValue(props.name, selectedOption.value)
+                    }}
+                />
+            )}
+        </Field>
+    )
+}
+
 const DateInput = (props) => {
     return (
         <Field name={props.name}>
@@ -252,7 +271,6 @@ const DateInput = (props) => {
     )
 
 }
-
 
 const mapDispatchToProps = dispatch => ({
     setLoading: values => {dispatch(setIsLoading(values))},

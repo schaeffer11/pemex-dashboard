@@ -35,6 +35,23 @@
 
     .rt-th {
       padding: 10px !important;
+      overflow: visible;
+
+      .input {
+        font-size: .8rem;
+        color: black;
+        height: 30px;
+        text-align: left;
+
+        & > div {
+          min-height: 30px;
+        }
+
+
+        div[aria-hidden] {
+          padding: 4px;
+        }
+      }
     }
   }
 
