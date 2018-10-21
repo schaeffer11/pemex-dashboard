@@ -140,10 +140,22 @@ const MyCompromisos = (props) => {
                 Header: "Minuta",
                 accessor: "minuta",
                 width: 200,
+            },
+            {
+                Header: "Estado",
+                accessor: "estado",
+                width: 150,
+                Cell: ({ row, original }) => (
+                    <span class={original.fechaCumplimiento ? 'complete' : 'incomplete'}>
+                        {original.fechaCumplimiento ? 'Completo' : 'Abierto' }
+                    </span>)
             },{
                 Header: '',
                 maxWidth: 150,
-                Cell: ({ row, original }) => (<button className="completar" id={original.id} onClick={() => props.viewDetails(original.id)}>Ver Detalles</button>)
+                Cell: ({ row, original }) => (
+                    <button className="completar" id={original.id} onClick={() => props.viewDetails(original.id)}>
+                        Ver Detalles
+                    </button>)
             }
 
         ]}

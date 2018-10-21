@@ -78,13 +78,31 @@ import { setIsLoading, setShowForms } from '../../../redux/actions/global'
                 >
                     { ({touched, isSubmitting, errors}) => (
                         <Form>
-
-                            <div>No.{this.state.compromiso.id}</div>
-                            <div>Fecha de Revision: {moment(this.state.compromiso.fechaRevision).format('DD-MM-YYYY')}</div>
-                            <div>Descripcion: {this.state.compromiso.descripcion}</div>
-                            <div>Activo: {this.state.compromiso.nombreActivo}</div>
-                            <div>Minuta: {this.state.compromiso.minuta} </div>
-                            <div>Notas: {this.state.compromiso.notas} </div>
+                            <h2>Compromiso No.{this.state.compromiso.id}</h2>
+                            <div className="field">
+                                <div className="label">Fecha de Revision:</div>
+                                <div>{moment(this.state.compromiso.fechaRevision).format('DD-MM-YYYY')}</div>
+                            </div>
+                            <div className="field">
+                                <div className="label">Fecha de Cumplimiento:</div>
+                                <div>{this.state.compromiso.fechaCumplimiento ? moment(this.state.compromiso.fechaCumplimiento).format('DD-MM-YYYY') : 'No disponible'}</div>
+                            </div>
+                            <div className="field">
+                                <div className="label">Descripcion:</div>
+                                <div>{this.state.compromiso.descripcion}</div>
+                            </div>
+                            <div className="field">
+                                <div className="label">Activo:</div>
+                                <div>{this.state.compromiso.nombreActivo}</div>
+                            </div>
+                            <div className="field">
+                                <div className="label">Minuta: </div>
+                                <div>{this.state.compromiso.minuta} </div>
+                            </div>
+                            <div className="field">
+                                <div className="label">Notas: </div>
+                                <div>{this.state.compromiso.notas} </div>
+                            </div>
 
                             {/*
                             <div className="aciones field">
