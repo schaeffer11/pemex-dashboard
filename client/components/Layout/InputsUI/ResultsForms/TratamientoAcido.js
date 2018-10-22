@@ -422,6 +422,9 @@ import { calculateValuesGeneralCedula } from '../../../../lib/formatters';
     return (
       <div className="form propuesta-de-acido">
         <div className='top'>
+          { this.makeCedulaTable() }
+        </div>
+        <div className='bot'>
           <div className="left">
             { this.makeGeneralForm() }
             { this.makeDetallesForm() }
@@ -430,9 +433,6 @@ import { calculateValuesGeneralCedula } from '../../../../lib/formatters';
           <div className="right">
             <div className='image'/>
           </div>
-        </div>
-        <div className='bot'>
-          { this.makeCedulaTable() }
         </div>
       </div>
     )

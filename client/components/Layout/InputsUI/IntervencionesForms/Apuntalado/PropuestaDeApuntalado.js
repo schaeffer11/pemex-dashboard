@@ -475,6 +475,9 @@ import { calculateValuesApuntaladoCedula } from '../../../../../lib/formatters';
     return (
       <div className="form propuesta-de-apuntalado">
         <div className='top'>
+          { this.makeCedulaTable() }
+        </div>
+        <div className='bot'>
           <div className="left">
             { this.makeGeneralForm() }
             { this.makeDetallesForm() }
@@ -484,9 +487,7 @@ import { calculateValuesApuntaladoCedula } from '../../../../../lib/formatters';
             <div className='image'/>
           </div>
         </div>
-        <div className='bot'>
-          { this.makeCedulaTable() }       
-        </div>
+        
       </div>
     )
   }
