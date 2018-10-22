@@ -25,7 +25,7 @@ const history = createBrowserHistory()
 const composeEnhancer = window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__ || compose
 const store = createStore(
   connectRouter(history)(rootReducer),
-  // persistedState,
+  persistedState,
   composeEnhancer(
     applyMiddleware( 
       thunk,
@@ -62,6 +62,17 @@ store.subscribe(() => {
 })
 
 ReactHighCharts.Highcharts.setOptions({
+    colors: [
+      '#56B3D8',
+      '#C3E4CC',
+      '#E4CE5E',
+      '#C26A1B',
+      '#5D2311',
+      '#141551',
+      '#355695',
+      '#90D2CE',
+      '#F4F296',
+    ],
     lang: {
         loading: 'Cargando...',
         months: ['Enero', 'Febrero', 'Marzo', 'Abril', 'Mayo', 'Junio', 'Julio', 'Agosto', 'Septiembre', 'Octubre', 'Noviembre', 'Diciembre'],

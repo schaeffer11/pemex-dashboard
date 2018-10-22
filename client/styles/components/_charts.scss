@@ -1,0 +1,9 @@
+.chart {
+  position: relative;
+  height: 100%
+}
+
+.chart > div, .highcharts-container {
+  width: 100% !important;
+  height: 100% !important;
+}

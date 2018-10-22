@@ -183,9 +183,28 @@ router.get('/getSubmittedFieldWellMapping', (req, res) => {
     })
 })
 
+router.post('/getJobs', (req, res) => {
+    let { well } = req.body
+    console.log('here i am')
+    connection.query(`SELECT * FROM Intervenciones WHERE WELL_FORMACION_ID = ?`, well, (err, results) => {
+      console.log('results me like a ', results)
+      res.json(results)
+    })
+})
+
 
 router.get('/getFieldWellMapping', (req, res) => {
     connection.query(`SELECT * FROM FieldWellMapping`, (err, results) => {
+      res.json(results)
+    })
+})
+
+router.get('/getFieldWellMappingHasData', (req, res) => {
+    connection.query(`
+      SELECT * FROM FieldWellMapping 
+      WHERE WELL_FORMACION_ID IN 
+        (SELECT DISTINCT(WELL_FORMACION_ID) FROM Transactions)
+        `, (err, results) => {
       res.json(results)
     })
 })
