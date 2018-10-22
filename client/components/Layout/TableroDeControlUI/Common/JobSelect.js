@@ -5,7 +5,7 @@ import AsyncSelect from 'react-select/lib/Async'
 import Select from 'react-select'
 import { connect } from 'react-redux'
 
-import { setJob } from '../../../../redux/actions/global'
+import { setJob, setJobType } from '../../../../redux/actions/global'
 import { sortLabels } from '../../../../lib/formatters'
 
 @autobind class JobSelect extends Component {
@@ -17,10 +17,12 @@ import { sortLabels } from '../../../../lib/formatters'
 
 
   handleSelectJob(val) {
-  	let { setJob } = this.props
+  	let { setJob, setJobType } = this.props
   	let value = val ? val.value : null
+    let type = val ? val.type : null
 
   	setJob(value)
+    setJobType(type)
   }
 
   render() {
@@ -51,6 +53,7 @@ const mapStateToProps = state => ({
 
 const mapDispatchToProps = dispatch => ({
 	setJob: val => dispatch(setJob(val)),
+  setJobType: val => dispatch(setJobType(val)),
 })
 
 export default connect(mapStateToProps, mapDispatchToProps)(JobSelect)

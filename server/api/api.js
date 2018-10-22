@@ -185,9 +185,9 @@ router.get('/getSubmittedFieldWellMapping', (req, res) => {
 
 router.post('/getJobs', (req, res) => {
     let { well } = req.body
-    console.log('here i am')
+
     connection.query(`SELECT * FROM Intervenciones WHERE WELL_FORMACION_ID = ?`, well, (err, results) => {
-      console.log('results me like a ', results)
+
       res.json(results)
     })
 })

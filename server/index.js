@@ -74,6 +74,9 @@ app.use('/statistics', statisticsRoutes)
 import wellRoutes from './api/tableroDeControl/well'
 app.use('/well', wellRoutes)
 
+import jobRoutes from './api/tableroDeControl/job'
+app.use('/job', jobRoutes)
+
 
 // ENABLE LOGGING AND CACHE CONTROL
 app.use(logger)

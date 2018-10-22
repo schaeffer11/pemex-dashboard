@@ -6,6 +6,8 @@ import { connect } from 'react-redux'
 import WellSelect from '../Common/WellSelect'
 import JobSelect from '../Common/JobSelect'
 import Images from './Images'
+import CostBar from './CostBar'
+import CostKPIs from './CostKPIs'
 
 @autobind class jobViewUI extends Component {
   constructor(props) {
@@ -13,7 +15,11 @@ import Images from './Images'
     this.state = { 
       fieldWellOptions: [],
       jobOptions: [],
-      imageData: []
+      imageData: [],
+      costData: [],
+      estCostData: [],
+      cedulaResultData: [],
+      cedulaData: []
     }
   }
 
@@ -55,7 +61,7 @@ import Images from './Images'
         })
         
         jobs = jobs.map(i => ({
-          label: `${i.type} ${i.date}`, value: i.transID
+          label: `${i.type} ${i.date}`, value: i.transID, type: i.type
         }))
 
         this.setState({
@@ -68,8 +74,16 @@ import Images from './Images'
   	console.log('fetching')
     let { globalAnalysis } = this.props
     globalAnalysis = globalAnalysis.toJS()
-    let { job } = globalAnalysis
+    let { job, jobType } = globalAnalysis
 
+    this.setState({
+      estCostData: [],
+      costData: [],
+      imageData: [],
+      cedulaData: [],
+      cedulaResultData: []
+    })
+    
     //TODO MAKE PARALLEL
     const { token } = this.props
     const headers = {
@@ -90,6 +104,31 @@ import Images from './Images'
 
     if (job) {
 
+      fetch(`/job/getEstCostData?transactionID=${job}`, {
+        headers: {
+          'content-type': 'application/json',
+        },
+      })
+      .then(res => res.json())
+      .then(res => {
+        this.setState({
+          estCostData: res
+        })
+      })
+
+      fetch(`/job/getCostData?transactionID=${job}`, {
+        headers: {
+          'content-type': 'application/json',
+        },
+      })
+      .then(res => res.json())
+      .then(res => {
+        this.setState({
+          costData: res
+        })
+      })
+
+
       fetch(`/api/getInterventionImages?transactionID=${job}`, {
         headers: {
           'content-type': 'application/json',
@@ -102,6 +141,29 @@ import Images from './Images'
         })
       })
 
+      fetch(`/job/getCedula?transactionID=${job}&type=${jobType}`, {
+        headers: {
+          'content-type': 'application/json',
+        },
+      })
+      .then(res => res.json())
+      .then(res => {
+        this.setState({
+          cedulaData: res
+        })
+      })
+
+      fetch(`/job/getCedulaResults?transactionID=${job}&type=${jobType}`, {
+        headers: {
+          'content-type': 'application/json',
+        },
+      })
+      .then(res => res.json())
+      .then(res => {
+        this.setState({
+          cedulaResultData: res
+        })
+      })
 
     }
 
@@ -132,13 +194,17 @@ import Images from './Images'
   }
 
   render() {
-    let { fieldWellOptions, jobOptions, imageData } = this.state
+    let { fieldWellOptions, jobOptions, imageData, costData, estCostData, cedulaData, cedulaResultData } = this.state
     let { globalAnalysis } = this.props
 
     globalAnalysis = globalAnalysis.toJS()
     let { job } = globalAnalysis
 
     console.log('images', imageData)
+    console.log('costs', costData)
+    console.log('est costs', estCostData)
+    console.log('cedula', cedulaData)
+    console.log('cedula results', cedulaResultData)
 
     return (
       <div className="data job-view">
@@ -148,6 +214,8 @@ import Images from './Images'
         </div>
         <div className='content'>
           {job}
+          <CostBar estData={estCostData} data={costData} />
+          <CostKPIs estData={estCostData} data={costData} />
           <Images data={imageData} />
         </div>
       </div>

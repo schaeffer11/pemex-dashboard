@@ -6,6 +6,7 @@ const initialState = Map({
     well: null,
     job: null,
     formation: null,
+    jobType: null
 })
 
 
@@ -21,6 +22,9 @@ const global = (state = initialState, action) => {
       return state.set('job', fromJS(action.value))
     case 'set_formation':
       return state.set('formation', fromJS(action.value))
+    case 'set_jobType':
+      return state.set('jobType', fromJS(action.value))
+
     default:
    		return state
   }

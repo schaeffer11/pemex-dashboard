@@ -7,6 +7,10 @@ import AvgCostBar from './AvgCostBar'
 import AvgCostCompanyBar from './AvgCostCompanyBar'
 import CostBar from './CostBar'
 import CostCompanyBar from './CostCompanyBar'
+import DeltaCostBar from './DeltaCostBar'
+import AvgDeltaCostBar from './AvgDeltaCostBar'
+import AvgDeltaCostCompanyBar from './AvgDeltaCostCompanyBar'
+import DeltaCostCompanyBar from './DeltaCostCompanyBar'
 
 @autobind class statisticsUI extends Component {
   constructor(props) {
@@ -127,6 +131,11 @@ import CostCompanyBar from './CostCompanyBar'
   render() {
     let { fieldWellOptions, avgCostDataType, avgCostDataCompany, costData } = this.state
 
+    console.log('cost', costData)
+    console.log('avgCostType', avgCostDataType)
+    console.log('avgCostCompany', avgCostDataCompany)
+
+
     return (
       <div className="data statistics">
         <div className='header'>
@@ -137,6 +146,10 @@ import CostCompanyBar from './CostCompanyBar'
           <AvgCostBar data={avgCostDataType} />
           <CostCompanyBar data={costData} />
           <AvgCostCompanyBar data={avgCostDataCompany} />
+          <DeltaCostBar data={costData} />
+          <AvgDeltaCostBar data={avgCostDataType} />
+          <DeltaCostCompanyBar data={costData} />
+          <AvgDeltaCostCompanyBar data={avgCostDataCompany} />
         </div>
       </div>
     )
