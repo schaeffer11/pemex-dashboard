@@ -3,8 +3,8 @@ import appConfig from '../../app-config.js'
 const connection = db.getConnection(appConfig.users.database)
 
 exports.create = function(req, res){
-    let { fechaRevision, descripcion, activo, responsable, minuta } = req.body
-    connection.query(`INSERT INTO Compromisos (ID, FECHA_REVISON, DESCRIPCION, ACTIVO, RESPONSABLE, MINUTA) VALUES (null, ?, ?, ?, ?, ?)`, [fechaRevision, descripcion, activo, responsable, minuta], (err, results) => {
+    let { fechaRevision, fechaCumplimiento, descripcion, activo, responsable, minuta, notas } = req.body
+    connection.query(`INSERT INTO Compromisos (ID, FECHA_REVISON, FECHA_CUMPLIMIENTO, DESCRIPCION, ACTIVO, RESPONSABLE, MINUTA, NOTAS) VALUES (null, ?, ?, ?, ?, ?, ?, ?)`, [fechaRevision, fechaCumplimiento, descripcion, activo, responsable, minuta, notas], (err, results) => {
         if (err) {
             res.json({ success: false})
         }
