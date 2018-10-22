@@ -96,10 +96,6 @@ export const InputRowSelectMulti = ({ header, name, value, options, callback, on
       onBlur(e)
     }
   }
-  {/* value={options.find(i=>i.value === value) || null}
-        onChange={callback}
-        onBlur={handleBlur} */}
-  console.log('i should display', errors[name])
   return (
     <div className='input-row input-row-unitless'>
       <div className='label'>
@@ -116,7 +112,6 @@ export const InputRowSelectMulti = ({ header, name, value, options, callback, on
         onBlur={handleBlur}
       />
       {errors[name] !== null && <div className="error">{errors[name].value}</div>}
-      {/* { errorElements } */}
     </div>
     )
 }

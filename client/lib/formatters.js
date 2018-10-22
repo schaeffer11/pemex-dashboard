@@ -2,6 +2,7 @@
 // Library Variables //
 ///////////////////////
 import objectPath from 'object-path'
+import { round } from './helpers';
 
 const si = [
   { value: 1E12, symbol: 'T' },
@@ -45,4 +46,56 @@ export function handleImagesFromServer(images, state) {
   }
   console.log('shallow state copy', shallowStateCopy)
   return shallowStateCopy
+}
+
+export const calculateValuesGeneralCedula = (data) => {
+  return data.map((row, i) => {
+    let { sistema, relN2Liq, gastoLiqudo, volLiquid } = row
+    if (sistema === 'desplazamientoN2' || sistema === 'pre-colchon') {
+      row.volLiquid = 0
+      row.gastoLiqudo = 0
+      row.relN2Liq = 0
+      row.tiempo = round(row.volN2 / row.gastoN2)
+      if (row.tiempo === Infinity || isNaN(row.tiempo)) {
+        row.tiempo = 0
+      }
+    } else {
+      row.gastoN2 = round(relN2Liq / 6.291 * gastoLiqudo) || 0
+      row.volN2 = round((6.291 * volLiquid / gastoLiqudo) * row.gastoN2) || 0
+      row.tiempo = round((volLiquid * 6.291) / gastoLiqudo) || 0
+      if (row.tiempo === Infinity || isNaN(row.tiempo)) {
+        row.tiempo = 0
+      }
+    }
+    const prev = data[i - 1]
+    row.volLiquidoAcum = prev ? round(parseFloat(prev.volLiquidoAcum) + parseFloat(row.volLiquid)) : row.volLiquid
+    row.volN2Acum = prev ? round(parseFloat(prev.volN2Acum) + parseFloat(row.volN2)) : row.volN2
+    row.etapa = row.index + 1
+    return row
+  })
+}
+
+export const calculateValuesApuntaladoCedula = (data) => {
+  return data.map((row, i) => {
+    let { apuntalanteAcumulado, volLechada, gastoSuperficie, volEspumaFondo, concentracionApuntalanteFondo } = row
+    const prev = data[i - 1]
+    const apuntalante = parseFloat(volEspumaFondo) * parseFloat(concentracionApuntalanteFondo)
+    if (!apuntalanteAcumulado || i === 0) {
+      row.apuntalanteAcumulado = apuntalante
+    } else if (prev) {
+      row.apuntalanteAcumulado = round(parseFloat(prev.apuntalanteAcumulado) + apuntalante)
+    } else {
+      row.apuntalanteAcumulado = apuntalanteAcumulado
+    }
+    if (isNaN(row.apuntalanteAcumulado)) {
+      row.apuntalanteAcumulado = 0
+    }
+    if (row.sistema !== 'shut-in') {
+      row.tiempo = round(parseFloat(volLechada) / parseFloat(gastoSuperficie))
+      if (row.tiempo === Infinity || isNaN(row.tiempo)) {
+        row.tiempo = 0
+      }
+    }
+    return row
+  })
 }
