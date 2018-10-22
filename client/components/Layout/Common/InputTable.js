@@ -96,7 +96,6 @@ import { checkDate, checkEmpty, checkEmptySingular, checkDateSingular } from '..
       }
       rowError[key].value = error
     })
-
     this.updateErrors(rowError, index, errors)
   }
 
@@ -151,21 +150,12 @@ import { checkDate, checkEmpty, checkEmptySingular, checkDateSingular } from '..
   }
 
   renderNumberDisable(cellInfo) {
-    let {data, setData} = this.props
-    let isDisabled = false
+    let {data, disabledColumns} = this.props
     const { id } = cellInfo.column
     const { sistema } = cellInfo.row
-    const disabled = []
-    if (sistema === 'desplazamientoN2' || sistema === 'pre-colchon') {
-      isDisabled = id === 'gastoLiqudo' || id === 'volLiquid' || id === 'relN2Liq'
-      disabled.push('gastoLiqudo', 'volLiquid', 'relN2Liq')
-    } else {
-      isDisabled = id === 'gastoN2' || id === 'volN2'
-      disabled.push('gastoN2', 'volN2')
-    }
+    const isDisabled = disabledColumns(sistema, id)
     const name = cellInfo.column.id
     const { rowError } = this.getErrors(cellInfo.index)
-  
     let style = {}
     if (rowError && rowError[name] !== undefined && rowError[name].value !== null) {
       style.border = 'solid 2px red'
@@ -238,10 +228,9 @@ import { checkDate, checkEmpty, checkEmptySingular, checkDateSingular } from '..
           suppressContentEditableWarning
           value={value}
           onChange={e => {
-            data[cellInfo.index][cellInfo.column.id] = e.target.value;
-            setData(data)
+            data[cellInfo.index][cellInfo.column.id] = e.target.value
+            this.setDataPromise(data).then(() => this.checkAllRow(cellInfo.index))
           }}
-          onBlur={(e) => checkEmpty(e.target.value, name, rowError, (e) => this.updateErrors(e, cellInfo.index, errors))}
         />
       </div>
     )

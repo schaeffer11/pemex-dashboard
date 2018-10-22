@@ -229,32 +229,33 @@ export const setAforosData = value => ({ type: 'set_aforosData', value})
 export const setHistoricoDeAforos = value => ({ type: 'set_historicoDeAforos', value})
 export const setHasErrorsHistoricoDeAforos = value => ({ type: 'set_hasErrorsHistoricoDeAforos', value})
 export const setFromSaveHistoricoDeAforos = value => ({ type: 'set_fromSaveHistoricoDeAforos', value})
-
+const dealWithNaN =(calc) => {
+  if (isNaN(calc)) {
+    console.log('dis is nan', calc)
+    return 0
+  }
+  return calc
+}
 //HistoricoDeProduccion
 export const setProduccionData = value => ({ 
 	type: 'set_produccionData',
 	value: value.map((row, i) => {
-        row.qo = (parseFloat(row.qo_vol) / parseFloat(row.dias) ).toFixed(2)
-        row.qw = (parseFloat(row.qw_vol) / parseFloat(row.dias) ).toFixed(2)
-        row.qg = (parseFloat(row.qg_vol) / parseFloat(row.dias)).toFixed(2)
-        row.qgi = (parseFloat(row.qgi_vol) / parseFloat(row.dias)).toFixed(2)
-        row.rga = (parseFloat(row.qg) / parseFloat(row.qo) / 5.615).toFixed(2)
-        row.fw = (parseFloat(row.qw) / (parseFloat(row.qw) + parseFloat(row.qo))).toFixed(2)
+        row.qo = dealWithNaN((parseFloat(row.qo_vol) / parseFloat(row.dias)).toFixed(2))
+        row.qw = dealWithNaN((parseFloat(row.qw_vol) / parseFloat(row.dias)).toFixed(2))
+        row.qg = dealWithNaN((parseFloat(row.qg_vol) / parseFloat(row.dias)).toFixed(2))
+        row.qgi = dealWithNaN((parseFloat(row.qgi_vol) / parseFloat(row.dias)).toFixed(2))
+        row.rga = dealWithNaN((parseFloat(row.qg) * 1000000 / parseFloat(row.qo) / 5.615).toFixed(2))
+        row.fw = dealWithNaN((parseFloat(row.qw) / (parseFloat(row.qw) + parseFloat(row.qo))).toFixed(2))
 
         let prev = value[i - 1]
 
-        row.np = prev ? (parseFloat(prev.np) + parseFloat(row.qo_vol)).toFixed(2) : (parseFloat(row.qo_vol)).toFixed(2)
-        row.wp = prev ? (parseFloat(prev.wp) + parseFloat(row.qw_vol)).toFixed(2) : (parseFloat(row.qw_vol)).toFixed(2)
-        row.gp = prev ? (parseFloat(prev.gp) + parseFloat(row.qg_vol)).toFixed(2) : (parseFloat(row.qg_vol)).toFixed(2)
-        row.gi = prev ? (parseFloat(prev.gi) + parseFloat(row.qgi_vol)).toFixed(2) : (parseFloat(row.qgi_vol)).toFixed(2)
-
+        row.np = prev ? dealWithNaN((parseFloat(prev.np) + parseFloat(row.qo_vol)).toFixed(2)) : dealWithNaN((parseFloat(row.qo_vol)).toFixed(2))
+        row.wp = prev ? dealWithNaN((parseFloat(prev.wp) + parseFloat(row.qw_vol)).toFixed(2)) : dealWithNaN((parseFloat(row.qw_vol)).toFixed(2))
+        row.gp = prev ? dealWithNaN((parseFloat(prev.gp) + parseFloat(row.qg_vol)).toFixed(2)) : dealWithNaN((parseFloat(row.qg_vol)).toFixed(2))
+        row.gi = prev ? dealWithNaN((parseFloat(prev.gi) + parseFloat(row.qgi_vol)).toFixed(2)) : dealWithNaN((parseFloat(row.qgi_vol)).toFixed(2))
         return row
       })
     })
 export const setHistoricoProduccion = value => ({ type: 'set_historicoProduccion', value})
 export const setHasErrorsHistoricoDeProduccion = value => ({ type: 'set_hasErrorsHistoricoDeProduccion', value })
 export const setFromSaveHistoricoDeProduccion = value => ({ type: 'set_fromSaveHistoricoDeProduccion', value })
-
-
-
-

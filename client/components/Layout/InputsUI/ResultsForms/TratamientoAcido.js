@@ -5,8 +5,9 @@ import { connect } from 'react-redux'
 import InputTable from '../../Common/InputTable'
 import { CalculatedValue, InputRow, InputRowSelectUnitless } from '../../Common/InputRow'
 import { setMergeTratamientoAcido, setCedulaTratamientoAcido } from '../../../../redux/actions/results'
-import { round, calculateVolumes, getSistemaOptions } from '../../../../lib/helpers'
+import { round, calculateVolumes, getSistemaOptions, getDisabledColumnForGeneralCedula } from '../../../../lib/helpers'
 import { checkEmpty, checkDate } from '../../../../lib/errorCheckers'
+import { calculateValuesGeneralCedula } from '../../../../lib/formatters';
 
 @autobind class TratamientoAcido extends Component {
   constructor(props) {
@@ -256,27 +257,10 @@ import { checkEmpty, checkDate } from '../../../../lib/errorCheckers'
       >{cedulaData[cellInfo.index][cellInfo.column.id]}</div>
     );
   }
+
   setAllData(data) {
     const { setCedulaTratamientoAcido } = this.props
-    const cedulaData = data.map((row, i) => {
-      let { sistema, relN2Liq, gastoLiqudo, volLiquid } = row
-      if (sistema === 'desplazamientoN2' || sistema === 'pre-colchon') {
-        row.volLiquid = 0
-        row.gastoLiqudo = 0
-        row.relN2Liq = 0
-        row.tiempo = round(row.volN2 / row.gastoN2)
-      } else {
-        row.gastoN2 = round(relN2Liq / 6.291 * gastoLiqudo)
-        row.volN2 = round((6.291 * volLiquid / gastoLiqudo) * row.gastoN2)
-        row.tiempo = round((volLiquid * 6.291) / gastoLiqudo)
-      }
-      const prev = data[i - 1]
-      row.volLiquidoAcum = prev ? round(parseFloat(prev.volLiquidoAcum) + parseFloat(row.volLiquid)) : row.volLiquid
-      row.volN2Acum = prev ? round(parseFloat(prev.volN2Acum) + parseFloat(row.volN2)) : row.volN2
-      row.etapa = row.index + 1
-      return row
-    })
-
+    const cedulaData = calculateValuesGeneralCedula(data)
     const volumes = {
       volumenSistemaReactivo: calculateVolumes(cedulaData, 'volLiquid', 'reactivo'),
       volumenSistemaNoReativo: calculateVolumes(cedulaData, 'volLiquid', 'no-reactivo'),
@@ -415,6 +399,7 @@ import { checkEmpty, checkDate } from '../../../../lib/errorCheckers'
           <InputTable
             className="-striped"
             data={cedulaData}
+            disabledColumns={getDisabledColumnForGeneralCedula}
             selectOptions={sistemaOptions}
             setData={this.setAllData}
             columns={columns}
@@ -437,6 +422,9 @@ import { checkEmpty, checkDate } from '../../../../lib/errorCheckers'
     return (
       <div className="form propuesta-de-acido">
         <div className='top'>
+          { this.makeCedulaTable() }
+        </div>
+        <div className='bot'>
           <div className="left">
             { this.makeGeneralForm() }
             { this.makeDetallesForm() }
@@ -445,9 +433,6 @@ import { checkEmpty, checkDate } from '../../../../lib/errorCheckers'
           <div className="right">
             <div className='image'/>
           </div>
-        </div>
-        <div className='bot'>
-          { this.makeCedulaTable() }
         </div>
       </div>
     )

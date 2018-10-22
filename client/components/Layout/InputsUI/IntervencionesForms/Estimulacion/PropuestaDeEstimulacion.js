@@ -11,9 +11,10 @@ import { setHasErrorsResultadosSimulacionEstimulacion, setHasErrorsPropuestaEsti
   setVolumenSistemaDivergente, setVolumenDesplazamientoLiquido, setVolumenDesplazamientoN2, setVolumenTotalDeLiquido, 
   setPropuestaCompany, setTipoDeEstimulacion, setTipoDeColocacion, setTiempoDeContacto } from '../../../../../redux/actions/intervencionesEstimulacion'
 import { setEspesorBruto } from '../../../../../redux/actions/pozo'
-import { round, calculateVolumes, getSistemaOptions } from '../../../../../lib/helpers'
+import { round, calculateVolumes, getSistemaOptions, getDisabledColumnForGeneralCedula } from '../../../../../lib/helpers'
 import { setPenetracionRadial, setLongitudDeAgujeroDeGusano } from '../../../../../redux/actions/intervencionesEstimulacion'
 import { checkEmpty, checkDate } from '../../../../../lib/errorCheckers'
+import { calculateValuesGeneralCedula } from '../../../../../lib/formatters';
 
 @autobind class PropuestaDeEstimulacion extends Component {
   constructor(props) {
@@ -332,31 +333,14 @@ import { checkEmpty, checkDate } from '../../../../../lib/errorCheckers'
 
   setAllData(data) {
     const { setCedulaData } = this.props
-    const cedulaData = data.map((row, i) => {
-      let { sistema, relN2Liq, gastoLiqudo, volLiquid } = row
-      if (sistema === 'desplazamientoN2' || sistema === 'pre-colchon') {
-        row.volLiquid = 0
-        row.gastoLiqudo = 0
-        row.relN2Liq = 0
-        row.tiempo = round(row.volN2 / row.gastoN2)
-      } else {
-        row.gastoN2 = round(relN2Liq / 6.291 * gastoLiqudo)
-        row.volN2 = round((6.291 * volLiquid / gastoLiqudo) * row.gastoN2)
-        row.tiempo = round((volLiquid * 6.291) / gastoLiqudo)
-      }
-      const prev = data[i - 1]
-      row.volLiquidoAcum = prev ? round(parseFloat(prev.volLiquidoAcum) + parseFloat(row.volLiquid)) : row.volLiquid
-      row.volN2Acum = prev ? round(parseFloat(prev.volN2Acum) + parseFloat(row.volN2)) : row.volN2
-      return row
-    })
-
+    const cedulaData = calculateValuesGeneralCedula(data)
     const volumes = {
-      volumenSistemaReactivo: calculateVolumes(cedulaData, 'volLiquid', 'reactivo'),
-      volumenSistemaNoReativo: calculateVolumes(cedulaData, 'volLiquid', 'no-reactivo'),
-      volumenSistemaDivergente: calculateVolumes(cedulaData, 'volLiquid', 'divergente'),
-      volumenDesplazamientoLiquido: calculateVolumes(cedulaData, 'volLiquid', 'desplazamiento'),
-      volumenDesplazamientoN2: calculateVolumes(cedulaData, 'volN2', 'desplazamiento'),
-      volumenPrecolchonN2: calculateVolumes(cedulaData, 'volN2', 'pre-colchon'),
+      volumenSistemaReactivo: calculateVolumes(cedulaData, 'volLiquid', ['reactivo']),
+      volumenSistemaNoReativo: calculateVolumes(cedulaData, 'volLiquid', ['no-reactivo']),
+      volumenSistemaDivergente: calculateVolumes(cedulaData, 'volLiquid', ['divergente']),
+      volumenDesplazamientoLiquido: calculateVolumes(cedulaData, 'volLiquid', ['desplazamiento']),
+      volumenDesplazamientoN2: calculateVolumes(cedulaData, 'volN2', ['desplazamiento']),
+      volumenPrecolchonN2: calculateVolumes(cedulaData, 'volN2', ['pre-colchon']),
       volumenTotalDeLiquido: calculateVolumes(cedulaData, 'volLiquid'),
     }
 
@@ -416,27 +400,6 @@ import { checkEmpty, checkDate } from '../../../../../lib/errorCheckers'
         Header: 'Etapa',
         accessor: 'etapa',
       }, 
-      // {
-      //   Header: 'Sistema',
-      //   accessor: 'sistema',
-      //   width: 200,
-      //   resizable: false,
-      //   style: {overflow: 'visible'},
-      //   Cell: row => {
-      //     return (
-      //       <div>
-      //         <Select
-      //           placeholder='sistema'
-      //           className='input'
-      //           simpleValue={true}
-      //           options={sistemaOptions}
-      //           value={sistemaOptions.find(i=>i.value === row.original.sistema) || null}
-      //           onChange={(e) => this.handleSelect(row, e.value)}
-      //         />
-      //       </div>
-      //     )
-      //   }
-      // },
       {
         Header: 'Sistema',
         accessor: 'sistema',
@@ -505,6 +468,7 @@ import { checkEmpty, checkDate } from '../../../../../lib/errorCheckers'
         <div className='table-select'>
           <InputTable
             className="-striped"
+            disabledColumns={getDisabledColumnForGeneralCedula}
             data={cedulaData}
             selectOptions={sistemaOptions}
             setData={this.setAllData}
@@ -530,7 +494,10 @@ import { checkEmpty, checkDate } from '../../../../../lib/errorCheckers'
 
     return (
       <div className="form propuesta-de-estimulacion">
-        <div className='top'>
+      <div className='top'>
+          { this.makeCedulaTable() }
+        </div>
+        <div className='bot'>
           <div className="left">
             { this.makeGeneralForm() }
             { tipoDeEstimulacion === 'limpieza' ? this.makeLimpiezaForm() : null}
@@ -539,9 +506,6 @@ import { checkEmpty, checkDate } from '../../../../../lib/errorCheckers'
           <div className="right">
             <div className='image'/>
           </div>
-        </div>
-        <div className='bot'>
-          { this.makeCedulaTable() }
         </div>
       </div>
     )
