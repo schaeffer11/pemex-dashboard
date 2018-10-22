@@ -238,10 +238,12 @@ const CompromisosTable = (props) => {
             },{
                 Header: "Responsable",
                 accessor: "nombreResponable",
+                width: 200,
             },{
                 Header: "Fecha De Revision",
                 id: 'fechaRevision',
-                width: 150,
+                className: 'center',
+                width: 200,
                 accessor: d => {
                     return moment(d.fechaRevision)
                         .local()
@@ -289,7 +291,8 @@ const CompromisosTable = (props) => {
             {
                 Header: "Minuta",
                 accessor: "minuta",
-                width: 150,
+                className: 'center',
+                width: 120,
             }, {
                 Header: '',
                 maxWidth: 150,

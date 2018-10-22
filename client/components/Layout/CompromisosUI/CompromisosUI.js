@@ -124,7 +124,8 @@ const MyCompromisos = (props) => {
             },{
                 Header: "Fecha De Revision",
                 id: 'fechaRevision',
-                width: 150,
+                className: 'center',
+                width: 200,
                 accessor: d => {
                     return moment(d.fechaRevision)
                         .local()
@@ -139,12 +140,14 @@ const MyCompromisos = (props) => {
             {
                 Header: "Minuta",
                 accessor: "minuta",
-                width: 200,
+                width: 120,
+                className: 'center'
             },
             {
                 Header: "Estado",
                 accessor: "estado",
-                width: 150,
+                className: 'center',
+                width: 120,
                 Cell: ({ row, original }) => (
                     <span class={original.fechaCumplimiento ? 'complete' : 'incomplete'}>
                         {original.fechaCumplimiento ? 'Completo' : 'Abierto' }
