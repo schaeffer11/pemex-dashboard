@@ -87,10 +87,14 @@ import { setIsLoading, setShowForms } from '../../../redux/actions/global'
             const formData = new FormData()
 
             Object.entries(values).forEach(([key,value]) => {
-                if(key == 'fechaRevision' || key == 'fechaCumplimiento'){
+                // Handle untouched date values loaded from the database
+                if(value && (key == 'fechaRevision' || key == 'fechaCumplimiento' ) ){
                     value = moment(value).format('YYYY-MM-DD');
                 }
-                formData.append(key, value);
+
+                if(value !== null) {
+                    formData.append(key, value);
+                }
             })
 
             if(id){
