@@ -36,6 +36,7 @@ import ReactHighcharts from 'react-highcharts'
 
     let config = {
 	    chart: {
+          zoomType: 'y',
 	        type: 'column'
 	    },
 	    title: {

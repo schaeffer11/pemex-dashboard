@@ -12,6 +12,7 @@ import ReactHighcharts from 'react-highcharts'
     data = data.map(i => {
       let row
       let color
+      let borderColor
 
       let val = ((i.TOTAL_COST / i.TOTAL_ESTIMATED_COST) - 1) * 100
 
@@ -19,21 +20,25 @@ import ReactHighcharts from 'react-highcharts'
       if (i.TIPO_DE_INTERVENCIONES === 'acido'){
         val > 200 ? val = 100 : null
         row = [0, val, 0]
-        color = val < 0 ? '#56B3D8' : 'red'
-
+        color = '#56B3D8'
+        // borderColor = val < 0 ? 'green' : 'red'
+        
       }
       else if (i.TIPO_DE_INTERVENCIONES === 'apuntalado') {
         row = [0, 0, val]
-        color = val < 0 ? '#C3E4CC' : 'red'
+        color =  '#C3E4CC' 
+        // borderColor = val < 0 ? 'green' : 'red'
       }
       else {
         row = [val, 0, 0]
-        color = val < 0 ? '#E4CE5E' : 'red'
+        color =  '#E4CE5E' 
+        // borderColor = val < 0 ? 'green' : 'red'
       }
 
       return {
         name: `${i.WELL_NAME} ${i.FECHA}`,
         color: color,
+        borderColor: 'black',
         data: row,
       }
     })
@@ -42,7 +47,8 @@ import ReactHighcharts from 'react-highcharts'
 
     let config = {
 	    chart: {
-	        type: 'column'
+	        type: 'column',
+          zoomType: 'y',
 	    },
 	    title: {
 	        text: 'Deviation From Expected Cost'
@@ -54,9 +60,24 @@ import ReactHighcharts from 'react-highcharts'
         categories: ['Estimulacion', 'Acido', 'Apuntalado']
       },
       yAxis: {
+        reversed: true,
         title: {
           text: 'Percentage'
-        }
+        },
+        plotLines: [{
+          value: 0,
+          color: 'black',
+          width: 5,
+        }],
+        plotBands: [{
+          color: '#ecb4b4',
+          from: 0,
+          to: 1000
+        }, {
+          color: '#b4ecb4',
+          from: 0,
+          to: -1000
+        }]
       },
 	    credits: {
 	    	enabled: false

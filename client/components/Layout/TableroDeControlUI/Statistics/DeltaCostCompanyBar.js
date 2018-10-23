@@ -29,27 +29,27 @@ import ReactHighcharts from 'react-highcharts'
 
       if (i.COMPANY === 'Halliburton'){
         row = [val, 0, 0, 0, 0, 0]
-        color = val < 0 ? colors[0] : 'red'
+        color = colors[0]
       }
       else if (i.COMPANY === 'Schlumberger') {
         row = [0, val, 0, 0, 0, 0]
-        color = val < 0 ? colors[1] : 'red'
+        color = colors[1]
       }
       else if (i.COMPANY === 'PFM') {
         row = [0, 0, val, 0, 0, 0]
-        color = val < 0 ? colors[2] : 'red'
+        color = colors[2]
       }
       else if (i.COMPANY === 'Chemiservices') {
         row = [0, 0, 0, val, 0, 0]
-        color = val < 0 ? colors[3] : 'red'
+        color = colors[3]
       }
       else if (i.COMPANY === 'BJ') {
         row = [0, 0, 0, 0, val, 0]
-        color = val < 0 ? colors[4] : 'red'
+        color = colors[4]
       }
       else {
         row = [0, 0, 0, 0, 0, val]
-        color = val < 0 ? colors[5] : 'red'
+        color = colors[5]
       }
 
       row = row.map(i => {
@@ -60,13 +60,15 @@ import ReactHighcharts from 'react-highcharts'
       return {
         name: `${i.WELL_NAME} ${i.FECHA}`,
         data: row,
+        borderColor: 'black',
         color: color
       }
     })
 
     let config = {
 	    chart: {
-	        type: 'column'
+	        type: 'column',
+          zoomType: 'y',
 	    },
 	    title: {
 	        text: 'Deviation From Expected Costs'
@@ -78,9 +80,19 @@ import ReactHighcharts from 'react-highcharts'
         categories: ['Halliburton', 'Schlumberger', 'PFM', 'Chemiservices', 'BJ', 'Weatherford']
       },
       yAxis: {
+        reversed: true,
         title: {
           text: 'Percentage'
-        }
+        },
+        plotBands: [{
+          color: '#ecb4b4',
+          from: 0,
+          to: 1000
+        }, {
+          color: '#b4ecb4',
+          from: 0,
+          to: -1000
+        }]
       },
 	    credits: {
 	    	enabled: false

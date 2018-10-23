@@ -116,6 +116,73 @@ router.get('/getCedulaResults', (req, res) => {
     })
 })
 
+router.get('/getInterventionData', (req, res) => {
+  let { transactionID, type } = req.query
+  
+  let query 
+
+  if (type === 'Estimulacion') {
+    query = `
+      SELECT * FROM IntervencionesEstimulacions
+      WHERE TRANSACTION_ID = ?`
+  }
+  else if (type === 'Acido') {
+    query = `
+      SELECT * FROM IntervencionesAcido
+      WHERE TRANSACTION_ID = ?`
+  }
+  else {
+    query = `
+      SELECT * FROM IntervencinoesApuntalado
+      WHERE TRANSACTION_ID = ?`
+  }
+
+  connection.query(query, transactionID, (err, results) => {
+      console.log('comment err', err)
+
+     if (err) {
+        res.json({ success: false})
+      }
+      else {
+        res.json(results)
+      }
+    })
+})
+
+
+router.get('/getInterventionResultsData', (req, res) => {
+  let { transactionID, type } = req.query
+  
+  let query 
+
+  if (type === 'Estimulacion') {
+    query = `
+      SELECT * FROM ResultsEstimulacions
+      WHERE PROPUESTA_ID = ?`
+  }
+  else if (type === 'Acido') {
+    query = `
+      SELECT * FROM Results Acido
+      WHERE PROPUESTA_ID = ?`
+  }
+  else {
+    query = `
+      SELECT * FROM ResultsApuntalado
+      WHERE PROPUESTA_ID = ?`
+  }
+
+  connection.query(query, transactionID, (err, results) => {
+      console.log('comment err', err)
+
+     if (err) {
+        res.json({ success: false})
+      }
+      else {
+        res.json(results)
+      }
+    })
+})
+
 
 
 export default router

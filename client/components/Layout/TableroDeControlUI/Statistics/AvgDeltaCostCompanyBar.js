@@ -47,18 +47,30 @@ import ReactHighcharts from 'react-highcharts'
       return {
         name: i.name,
         color: color,
+        borderColor: 'black',
         data: [((i.avgCost / i.avgEstCost) - 1) * 100]
       }
     })
 
     let config = {
 	    chart: {
-	        type: 'column'
+	        type: 'column',
+          zoomType: 'y',
 	    },
       yAxis: {
+        reversed: true,
         title: {
           text: 'Percentage'
-        }
+        },
+        plotBands: [{
+          color: '#ecb4b4',
+          from: 0,
+          to: 1000
+        }, {
+          color: '#b4ecb4',
+          from: 0,
+          to: -1000
+        }]
       },
 	    title: {
 	        text: 'Avg Deviation From Expected Cost Per Job'

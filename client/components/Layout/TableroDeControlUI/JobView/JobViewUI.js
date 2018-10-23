@@ -8,6 +8,7 @@ import JobSelect from '../Common/JobSelect'
 import Images from './Images'
 import CostBar from './CostBar'
 import CostKPIs from './CostKPIs'
+import SimulationTreatmentTable from './SimulationTreatmentTable'
 
 @autobind class jobViewUI extends Component {
   constructor(props) {
@@ -19,7 +20,9 @@ import CostKPIs from './CostKPIs'
       costData: [],
       estCostData: [],
       cedulaResultData: [],
-      cedulaData: []
+      cedulaData: [],
+      interventionData: [],
+      interventionResultsData: []
     }
   }
 
@@ -81,7 +84,9 @@ import CostKPIs from './CostKPIs'
       costData: [],
       imageData: [],
       cedulaData: [],
-      cedulaResultData: []
+      cedulaResultData: [],
+      interventionData: [],
+      interventionResultsData: []
     })
     
     //TODO MAKE PARALLEL
@@ -165,6 +170,30 @@ import CostKPIs from './CostKPIs'
         })
       })
 
+      fetch(`/job/getInterventionData?transactionID=${job}&type=${jobType}`, {
+        headers: {
+          'content-type': 'application/json',
+        },
+      })
+      .then(res => res.json())
+      .then(res => {
+        this.setState({
+          interventionData: res
+        })
+      })
+
+      fetch(`/job/getInterventionResultsData?transactionID=${job}&type=${jobType}`, {
+        headers: {
+          'content-type': 'application/json',
+        },
+      })
+      .then(res => res.json())
+      .then(res => {
+        this.setState({
+          interventionResultsData: res
+        })
+      })
+
     }
 
   }
@@ -194,7 +223,7 @@ import CostKPIs from './CostKPIs'
   }
 
   render() {
-    let { fieldWellOptions, jobOptions, imageData, costData, estCostData, cedulaData, cedulaResultData } = this.state
+    let { fieldWellOptions, jobOptions, imageData, costData, estCostData, cedulaData, cedulaResultData, interventionData, interventionResultsData } = this.state
     let { globalAnalysis } = this.props
 
     globalAnalysis = globalAnalysis.toJS()
@@ -205,6 +234,8 @@ import CostKPIs from './CostKPIs'
     console.log('est costs', estCostData)
     console.log('cedula', cedulaData)
     console.log('cedula results', cedulaResultData)
+    console.log('intervention', interventionData)
+    console.log('intervention results', interventionResultsData)
 
     return (
       <div className="data job-view">
@@ -216,6 +247,7 @@ import CostKPIs from './CostKPIs'
           {job}
           <CostBar estData={estCostData} data={costData} />
           <CostKPIs estData={estCostData} data={costData} />
+          <SimulationTreatmentTable interventionData={interventionData} interventionResultsData={interventionResultsData} />
           <Images data={imageData} />
         </div>
       </div>
