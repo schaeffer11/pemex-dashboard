@@ -35,10 +35,6 @@ import ReactTable from 'react-table'
 
     let data
 
-    console.log(interventionData)
-    console.log(interventionResultsData)
-
-
     if (interventionData && interventionResultsData)  {
       if (type === 'Estimulacion') {
         if (!interventionData.LONGITUD_DE_AGUJERO_DE_GUSANO || !interventionData.PENETRACION_RADIAL) {
