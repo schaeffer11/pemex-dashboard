@@ -133,7 +133,7 @@ router.get('/getInterventionData', (req, res) => {
   }
   else {
     query = `
-      SELECT * FROM IntervencinoesApuntalado
+      SELECT * FROM IntervencionesApuntalado
       WHERE TRANSACTION_ID = ?`
   }
 
@@ -162,7 +162,7 @@ router.get('/getInterventionResultsData', (req, res) => {
   }
   else if (type === 'Acido') {
     query = `
-      SELECT * FROM Results Acido
+      SELECT * FROM ResultsAcido
       WHERE PROPUESTA_ID = ?`
   }
   else {

@@ -227,7 +227,7 @@ import SimulationTreatmentTable from './SimulationTreatmentTable'
     let { globalAnalysis } = this.props
 
     globalAnalysis = globalAnalysis.toJS()
-    let { job } = globalAnalysis
+    let { job, jobType } = globalAnalysis
 
     console.log('images', imageData)
     console.log('costs', costData)
@@ -244,10 +244,9 @@ import SimulationTreatmentTable from './SimulationTreatmentTable'
           <JobSelect options={jobOptions}/>
         </div>
         <div className='content'>
-          {job}
           <CostBar estData={estCostData} data={costData} />
           <CostKPIs estData={estCostData} data={costData} />
-          <SimulationTreatmentTable interventionData={interventionData} interventionResultsData={interventionResultsData} />
+          <SimulationTreatmentTable type={jobType} interventionData={interventionData} interventionResultsData={interventionResultsData} />
           <Images data={imageData} />
         </div>
       </div>
