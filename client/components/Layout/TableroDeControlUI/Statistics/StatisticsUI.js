@@ -11,6 +11,8 @@ import DeltaCostBar from './DeltaCostBar'
 import AvgDeltaCostBar from './AvgDeltaCostBar'
 import AvgDeltaCostCompanyBar from './AvgDeltaCostCompanyBar'
 import DeltaCostCompanyBar from './DeltaCostCompanyBar'
+import Card from '../Common/Card'
+import { CardDeck } from 'reactstrap';
 
 @autobind class statisticsUI extends Component {
   constructor(props) {
@@ -20,6 +22,10 @@ import DeltaCostCompanyBar from './DeltaCostCompanyBar'
       avgCostDataType: [],
       avgCostDataCompany: [],
       costData: []
+    }
+    this.cards = []
+    for (let i = 0; i < 2; i += 1) {
+      this.cards.push(React.createRef())
     }
   }
 
@@ -142,14 +148,28 @@ import DeltaCostCompanyBar from './DeltaCostCompanyBar'
           <Filters fieldWellOptions={fieldWellOptions} />
         </div>
         <div className='content'>
-          <CostBar data={costData} />
-          <AvgCostBar data={avgCostDataType} />
-          <CostCompanyBar data={costData} />
-          <AvgCostCompanyBar data={avgCostDataCompany} />
-          <DeltaCostBar data={costData} />
-          <AvgDeltaCostBar data={avgCostDataType} />
-          <DeltaCostCompanyBar data={costData} />
-          <AvgDeltaCostCompanyBar data={avgCostDataCompany} />
+          <CardDeck className="content-deck">
+            <Card
+                id="costs"
+                title="Costs"
+                ref={this.cards[0]}
+              >
+              <CostBar label={'Total Type'} data={costData} />
+              <AvgCostBar label={'Avg Type'} data={avgCostDataType} />
+              <CostCompanyBar label={'Total Company'} data={costData} />
+              <AvgCostCompanyBar label={'Avg Company'} data={avgCostDataCompany} />
+            </Card>
+            <Card
+                id="costDeviations"
+                title="Cost Deviations"
+                ref={this.cards[1]}
+              >         
+              <DeltaCostBar label={'Type'} data={costData} />
+              <AvgDeltaCostBar label={'Avg Type'} data={avgCostDataType} />
+              <DeltaCostCompanyBar label={'Company'} data={costData} />
+              <AvgDeltaCostCompanyBar label={'Avg Company'} data={avgCostDataCompany} />
+            </Card>
+          </CardDeck>
         </div>
       </div>
     )

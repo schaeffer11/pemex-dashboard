@@ -55,17 +55,24 @@ import { sortLabels } from '../../../../lib/formatters'
     let { field, activo } = globalAnalysis
   	let value = val ? val.value : null
 
-
-    let row = fieldWellOptions.find(i => i.WELL_FORMACION_ID === val.value)
-
-    if (!field) {
-      setField(row.FIELD_FORMACION_ID)
+    if (val === null) {
+      setField(null)
+      setActivo(null)
+      setJob(null)
+      setWell(null)
     }
-    if (!activo) {
-      setActivo(row.ACTIVO_ID)
+    else {
+      let row = fieldWellOptions.find(i => i.WELL_FORMACION_ID === val.value)
+
+      if (!field) {
+        setField(row.FIELD_FORMACION_ID)
+      }
+      if (!activo) {
+        setActivo(row.ACTIVO_ID)
+      }
+      setJob(null)
+      setWell(value)
     }
-    setJob(null)
-  	setWell(value)
   }
 
   handleSelectFormation(val) {

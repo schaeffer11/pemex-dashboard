@@ -56,7 +56,7 @@ import ReactHighcharts from 'react-highcharts'
         enabled: false
       },
 	    title: {
-	        text: 'Delta Oil'
+	        text: ''
 	    },
 	    xAxis: {
 	    	title: {
@@ -75,14 +75,11 @@ import ReactHighcharts from 'react-highcharts'
 	}
 
     return (
-      <div className="delta-oil test">
-        <div className='chart'>
-        	<ReactHighcharts
-        		className='chart'
-        		config={config}
-        	/>
-        </div>
-      </div>
+    	<ReactHighcharts
+    		className='chart'
+    		config={config}
+            ref={(ref) => { this.chart = ref }}
+    	/>
     )
   }
 }

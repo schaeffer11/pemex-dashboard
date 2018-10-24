@@ -99,12 +99,11 @@ import ReactHighCharts from 'react-highcharts'
     config.series[2].data = qwData.sort((a, b) => { return a[0] - b[0]})
 
     return (        
-      <div className="graph">
-        <ReactHighCharts 
-          className="chart" 
-          config= {config} 
-        />
-      </div>
+      <ReactHighCharts 
+        className="chart" 
+        config= {config} 
+        ref={(ref) => { this.chart = ref }}
+      />
     )
   }
 }

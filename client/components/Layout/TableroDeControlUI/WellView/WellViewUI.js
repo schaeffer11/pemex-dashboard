@@ -6,8 +6,11 @@ import WellSelect from '../Common/WellSelect'
 import ProductionGraph from './ProductionGraph'
 import PressureGraph from './PressureGraph'
 import AforosGraph from './AforosGraph'
-import KPIGroup from './KPIGroup'
+import KPIFichaTecnica from './KPIFichaTecnica'
+import KPIMecanico from './KPIMecanico'
 import Images from './Images'
+import Card from '../Common/Card'
+import { CardDeck } from 'reactstrap';
 
 @autobind class wellViewUI extends Component {
   constructor(props) {
@@ -21,6 +24,10 @@ import Images from './Images'
       pressureData: [],
       aforosData: [],
       imageData: []
+    }
+    this.cards = []
+    for (let i = 0; i < 5; i += 1) {
+      this.cards.push(React.createRef())
     }
   }
 
@@ -217,11 +224,44 @@ import Images from './Images'
           <WellSelect fieldWellOptions={fieldWellOptions}/>
         </div>
         <div className='content'>
-          <KPIGroup data={wellData} />
-          <ProductionGraph data={productionData} />
-          <PressureGraph data={pressureData} />
-          <AforosGraph data={aforosData} />
-          <Images data={imageData} />
+          <CardDeck className="content-deck">
+            <Card
+                id="kpis"
+                title="KPIs"
+                ref={this.cards[0]}
+              >
+                <KPIFichaTecnica label='Ficha Tecnica' data={wellData} />
+                <KPIMecanico label='Mecanico Data' data={wellData} />
+            </Card>
+            <Card
+                id="production"
+                title="Productions"
+                ref={this.cards[1]}
+              >
+               <ProductionGraph data={productionData} />
+            </Card>
+            <Card
+                id="pressure"
+                title="Pressure"
+                ref={this.cards[2]}
+              >
+               <PressureGraph data={pressureData} />
+            </Card>
+            <Card
+                id="aforos"
+                title="Aforos"
+                ref={this.cards[3]}
+              >
+               <AforosGraph data={aforosData} />
+            </Card>
+            <Card
+                id="images"
+                title="Images"
+                ref={this.cards[4]}
+              >
+               <Images data={imageData} />
+            </Card>
+          </CardDeck>
         </div>
       </div>
     )

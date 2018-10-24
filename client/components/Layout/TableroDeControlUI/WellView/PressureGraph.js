@@ -92,12 +92,11 @@ import ReactHighCharts from 'react-highcharts'
     config.series[1].data = pwfData.sort((a, b) => { return a[0] - b[0]})
 
     return (        
-      <div className="graph">
-        <ReactHighCharts 
-          className="chart" 
-          config= {config} 
-        />
-      </div>
+      <ReactHighCharts 
+        className="chart" 
+        config= {config} 
+        ref={(ref) => { this.chart = ref }}
+      />
     )
   }
 }

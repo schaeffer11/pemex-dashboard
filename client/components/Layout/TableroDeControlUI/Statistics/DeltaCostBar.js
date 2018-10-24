@@ -19,18 +19,18 @@ import ReactHighcharts from 'react-highcharts'
 
       if (i.TIPO_DE_INTERVENCIONES === 'acido'){
         val > 200 ? val = 100 : null
-        row = [0, val, 0]
+        row = {x: 0, y: val}
         color = '#56B3D8'
         // borderColor = val < 0 ? 'green' : 'red'
         
       }
       else if (i.TIPO_DE_INTERVENCIONES === 'apuntalado') {
-        row = [0, 0, val]
+        row = {x: 1, y: val}
         color =  '#C3E4CC' 
         // borderColor = val < 0 ? 'green' : 'red'
       }
       else {
-        row = [val, 0, 0]
+        row = {x: 2, y: val}
         color =  '#E4CE5E' 
         // borderColor = val < 0 ? 'green' : 'red'
       }
@@ -39,7 +39,7 @@ import ReactHighcharts from 'react-highcharts'
         name: `${i.WELL_NAME} ${i.FECHA}`,
         color: color,
         borderColor: 'black',
-        data: row,
+        data: [row],
       }
     })
 
@@ -47,17 +47,17 @@ import ReactHighcharts from 'react-highcharts'
 
     let config = {
 	    chart: {
-	        type: 'column',
-          zoomType: 'y',
+	        type: 'scatter',
+          zoomType: 'xy',
 	    },
 	    title: {
-	        text: 'Deviation From Expected Cost'
+	        text: ''
 	    },
       legend: {
         enabled: false
       },
       xAxis: {
-        categories: ['Estimulacion', 'Acido', 'Apuntalado']
+        categories: ['Acido', 'Apuntalado', 'Estimulacion']
       },
       yAxis: {
         reversed: true,
@@ -83,22 +83,24 @@ import ReactHighcharts from 'react-highcharts'
 	    	enabled: false
 	    },
       plotOptions: {
-        column: {
-          stacking: 'normal'
+        series: {
+          marker: {
+            lineColor: 'black',
+            radius: 4,
+            lineWidth: 1,
+            symbol: 'square',
+          }
         }
       },
 	    series: data
 		}
 
     return (
-      <div className="classification-breakdown test">
-        <div className='chart'>
-        	<ReactHighcharts
-        		className='chart'
-        		config={config}
-        	/>
-        </div>
-      </div>
+    	<ReactHighcharts
+    		className='chart'
+    		config={config}
+        ref={(ref) => { this.chart = ref }}
+    	/>
     )
   }
 }

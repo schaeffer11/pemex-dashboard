@@ -22,7 +22,7 @@ import ReactHighcharts from 'react-highcharts'
           zoomType: 'y',
 	    },
 	    title: {
-	        text: 'Avg Deviation From Expected Cost Per Job'
+	        text: ''
 	    },
       yAxis: {
         reversed: true,
@@ -45,19 +45,12 @@ import ReactHighcharts from 'react-highcharts'
 	    series: data
 		}
 
-    console.log(data)
-    
     return (
-      <div className="classification-breakdown test">
-        <div className='chart'>
-          <div className='chart'>
-          	<ReactHighcharts
-          		className='chart'
-          		config={config}
-          	/>
-          </div> 
-        </div>
-      </div>
+    	<ReactHighcharts
+    		className='chart'
+    		config={config}
+        ref={(ref) => { this.chart = ref }}
+    	/>
     )
   }
 }

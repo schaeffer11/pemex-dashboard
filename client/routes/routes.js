@@ -1,6 +1,7 @@
 import React from 'react'
 import ExecutiveUI from '../components/Layout/TableroDeControlUI/Executive/ExecutiveUI'
 import StatisticsUI from '../components/Layout/TableroDeControlUI/Statistics/StatisticsUI'
+import TimeSeriesUI from '../components/Layout/TableroDeControlUI/TimeSeries/TimeSeriesUI'
 import WellViewUI from '../components/Layout/TableroDeControlUI/WellView/WellViewUI'
 import JobViewUI from '../components/Layout/TableroDeControlUI/JobView/JobViewUI'
 
@@ -12,12 +13,19 @@ const routes = () => [
     class: 'tablero_control',
     component: () => <ExecutiveUI />,
   },
+  // {
+  //   path: '/tablero_control/statistics',
+  //   exact: true,
+  //   name: 'Statistics',
+  //   class: 'tablero_control',
+  //   component: () => <StatisticsUI />,
+  // },
   {
-    path: '/tablero_control/statistics',
+    path: '/tablero_control/timeSeries',
     exact: true,
-    name: 'Statistics',
+    name: 'Time Series',
     class: 'tablero_control',
-    component: () => <StatisticsUI />,
+    component: () => <TimeSeriesUI />,
   },
   {
     path: '/tablero_control/wellView',

@@ -53,7 +53,7 @@ import ReactHighcharts from 'react-highcharts'
 	    	}
 	    },
 	    title: {
-	        text: 'Delta Water'
+	        text: ''
 	    },
       legend: {
         enabled: false
@@ -75,14 +75,11 @@ import ReactHighcharts from 'react-highcharts'
 	}
 
     return (
-      <div className="delta-water test">
-        <div className='chart'>
-        	<ReactHighcharts
-        		className='chart'
-        		config={config}
-        	/>
-        </div>
-      </div>
+    	<ReactHighcharts
+    		className='chart'
+    		config={config}
+            ref={(ref) => { this.chart = ref }}
+    	/>
     )
   }
 }
