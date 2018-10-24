@@ -6,7 +6,6 @@ import TratamientoAcido from './TratamientoAcido'
 import TratamientoTermico from './TratamientoTermico'
 
 const Tratamientos = ({ interventionType }) => {
-  interventionType = 'termico'
   switch (interventionType) {
     case 'estimulacion':
       return <TratamientoEstimulacion />
