@@ -2,7 +2,7 @@
 // Library Variables //
 ///////////////////////
 import objectPath from 'object-path'
-import { round } from './helpers';
+import { round, dealWithNaN } from './helpers'
 
 const si = [
   { value: 1E12, symbol: 'T' },
@@ -55,21 +55,18 @@ export const calculateValuesGeneralCedula = (data) => {
       row.volLiquid = 0
       row.gastoLiqudo = 0
       row.relN2Liq = 0
-      row.tiempo = round(row.volN2 / row.gastoN2)
-      if (row.tiempo === Infinity || isNaN(row.tiempo)) {
-        row.tiempo = 0
-      }
+      row.tiempo = dealWithNaN(round(row.volN2 / row.gastoN2))
+      // if (row.tiempo === Infinity || isNaN(row.tiempo)) {
+      //   row.tiempo = 0
+      // }
     } else {
-      row.gastoN2 = round(relN2Liq / 6.291 * gastoLiqudo) || 0
-      row.volN2 = round((6.291 * volLiquid / gastoLiqudo) * row.gastoN2) || 0
-      row.tiempo = round((volLiquid * 6.291) / gastoLiqudo) || 0
-      if (row.tiempo === Infinity || isNaN(row.tiempo)) {
-        row.tiempo = 0
-      }
+      row.gastoN2 = dealWithNaN(round(relN2Liq / 6.291 * gastoLiqudo) || 0)
+      row.volN2 = dealWithNaN(round((6.291 * volLiquid / gastoLiqudo) * row.gastoN2) || 0)
+      row.tiempo = dealWithNaN(round((volLiquid * 6.291) / gastoLiqudo) || 0)
     }
     const prev = data[i - 1]
-    row.volLiquidoAcum = prev ? round(parseFloat(prev.volLiquidoAcum) + parseFloat(row.volLiquid)) : row.volLiquid
-    row.volN2Acum = prev ? round(parseFloat(prev.volN2Acum) + parseFloat(row.volN2)) : row.volN2
+    row.volLiquidoAcum = prev ? dealWithNaN(round(parseFloat(prev.volLiquidoAcum) + parseFloat(row.volLiquid))) : row.volLiquid
+    row.volN2Acum = prev ? dealWithNaN(round(parseFloat(prev.volN2Acum) + parseFloat(row.volN2))) : row.volN2
     row.etapa = row.index + 1
     return row
   })
@@ -83,7 +80,7 @@ export const calculateValuesApuntaladoCedula = (data) => {
     if (!apuntalanteAcumulado || i === 0) {
       row.apuntalanteAcumulado = apuntalante
     } else if (prev) {
-      row.apuntalanteAcumulado = round(parseFloat(prev.apuntalanteAcumulado) + apuntalante)
+      row.apuntalanteAcumulado = dealWithNaN(round(parseFloat(prev.apuntalanteAcumulado) + apuntalante))
     } else {
       row.apuntalanteAcumulado = apuntalanteAcumulado
     }
@@ -91,11 +88,16 @@ export const calculateValuesApuntaladoCedula = (data) => {
       row.apuntalanteAcumulado = 0
     }
     if (row.sistema !== 'shut-in') {
-      row.tiempo = round(parseFloat(volLechada) / parseFloat(gastoSuperficie))
-      if (row.tiempo === Infinity || isNaN(row.tiempo)) {
-        row.tiempo = 0
-      }
+      row.tiempo = dealWithNaN(round(parseFloat(volLechada) / parseFloat(gastoSuperficie)))
     }
+    row.etapa = row.index + 1
+    return row
+  })
+}
+
+export const calculateValuesTermicaCedula = (data) => {
+  return data.map((row, i) => {
+    row.etapa = row.index + 1
     return row
   })
 }

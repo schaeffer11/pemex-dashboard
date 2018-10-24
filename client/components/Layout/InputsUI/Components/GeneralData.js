@@ -181,6 +181,7 @@ import ButtonGroup from './ButtonGroup'
   }
 
   checkIncomplete() {
+    return false
     let { interventionFormData, formData } = this.props
 
     interventionFormData = interventionFormData.toJS()
@@ -267,6 +268,7 @@ import ButtonGroup from './ButtonGroup'
       {label: 'Tratamiento de Estimulación', value: 'estimulacion'},
       {label: 'Fracturamiento Ácido', value: 'acido'},
       {label: 'Fracturamiento Apuntalado', value: 'apuntalado'},
+      {label: 'Tratamiento Térmico', value: 'termico'},
     ]
     return (
       <div className='intervention-form'>

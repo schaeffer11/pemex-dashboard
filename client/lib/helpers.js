@@ -40,3 +40,10 @@ export const getDisabledColumnForGeneralCedula = (sistema, id) => {
 }
 
 export const getDisabledColumnForApuntaladoCeluda = (sistema, id) => sistema !== 'shut-in' && id === 'tiempo'
+
+export const dealWithNaN =(calc) => {
+  if (isNaN(calc) || calc === Infinity) {
+    return 0
+  }
+  return calc
+}

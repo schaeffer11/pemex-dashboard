@@ -22,10 +22,7 @@ export const setPropuestaCompany = value => ({ type: 'set_propuestaCompany', val
 export const setCedulaData = (cedula, volumes) => ({
   type: 'set_cedulaDataApuntalado',
   volumes,
-  cedula: cedula.map((row) => {
-    row.etapa = row.index + 1
-    return row
-  }),
+  cedula,
 })
 
 export const setContenidoDeAceite = value => ({ type: 'set_contenidoDeAceite', value})

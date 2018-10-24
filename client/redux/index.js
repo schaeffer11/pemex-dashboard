@@ -12,6 +12,7 @@ import objetivoYAlcancesIntervencion from './reducers/objetivoYAlcancesIntervenc
 import propuestaEstimulacion from './reducers/propuestaEstimulacion'
 import propuestaAcido from './reducers/propuestaAcido'
 import propuestaApuntalado from './reducers/propuestaApuntalado'
+import propuestaTermica from './reducers/propuestaTermica'
 import pruebasDeLaboratorio from './reducers/pruebasDeLaboratorio'
 import resultadosSimulacionEstimulacion from './reducers/resultadosSimulacionEstimulacion'
 import resultadosSimulacionAcido from './reducers/resultadosSimulacionAcido'
@@ -54,6 +55,7 @@ const appReducer = combineReducers({
   propuestaEstimulacion,
   propuestaAcido,
   propuestaApuntalado,
+  propuestaTermica,
   pruebasDeLaboratorio,
   resultadosSimulacionEstimulacion,
   resultadosSimulacionAcido,

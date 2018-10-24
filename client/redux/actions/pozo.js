@@ -1,3 +1,5 @@
+import { dealWithNaN } from "../../lib/helpers";
+
 //FichaTecnicaDelPozoHighLevel
 export const setSubdireccion = value => ({ type: 'set_subdireccion', value})
 export const setBloque = value => ({ type: 'set_bloque', value})
@@ -229,13 +231,6 @@ export const setAforosData = value => ({ type: 'set_aforosData', value})
 export const setHistoricoDeAforos = value => ({ type: 'set_historicoDeAforos', value})
 export const setHasErrorsHistoricoDeAforos = value => ({ type: 'set_hasErrorsHistoricoDeAforos', value})
 export const setFromSaveHistoricoDeAforos = value => ({ type: 'set_fromSaveHistoricoDeAforos', value})
-const dealWithNaN =(calc) => {
-  if (isNaN(calc)) {
-    console.log('dis is nan', calc)
-    return 0
-  }
-  return calc
-}
 //HistoricoDeProduccion
 export const setProduccionData = value => ({ 
 	type: 'set_produccionData',
