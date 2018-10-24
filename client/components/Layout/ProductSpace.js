@@ -6,7 +6,7 @@ import DiagnosticosUI from './DiagnosticosUI/DiagnosticosUI'
 import CompromisosUI from './CompromisosUI/CompromisosUI'
 import TableroDeControlUI from './TableroDeControlUI/TableroDeControlUI'
 import HomeUI from './HomeUI/HomeUI'
-import { BrowserRouter, Route, Redirect } from 'react-router-dom'
+import { Route, Redirect } from 'react-router-dom'
 import LoginForm from '../User/LoginForm'
 
 
@@ -26,9 +26,8 @@ import LoginForm from '../User/LoginForm'
   render() {
     const onPage = this.props.onPage || 'sample_page'
     const { isLoading } = this.state
-
+    console.log('something happened?')
     return (
-      <BrowserRouter>
         <div className="productspace">
           <PrivateRoute exact path="/carga_datos" component={InputsUI} user={this.props.user} />
           <PrivateRoute exact path="/diagnosticos" component={DiagnosticosUI} user={this.props.user} />
@@ -43,7 +42,6 @@ import LoginForm from '../User/LoginForm'
             </div>
           )}
         </div>
-      </BrowserRouter>
     )
   }
 }
