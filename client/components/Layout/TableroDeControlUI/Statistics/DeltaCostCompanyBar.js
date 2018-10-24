@@ -28,38 +28,37 @@ import ReactHighcharts from 'react-highcharts'
       let val = ((i.TOTAL_COST / i.TOTAL_ESTIMATED_COST) - 1) * 100
 
       if (i.COMPANY === 'Halliburton'){
-        row = [val, 0, 0, 0, 0, 0]
+        row = {x: 0, y: val}
         color = colors[0]
       }
       else if (i.COMPANY === 'Schlumberger') {
-        row = [0, val, 0, 0, 0, 0]
+        row = {x: 1, y: val}
         color = colors[1]
       }
       else if (i.COMPANY === 'PFM') {
-        row = [0, 0, val, 0, 0, 0]
+        row = {x: 2, y: val}
         color = colors[2]
       }
       else if (i.COMPANY === 'Chemiservices') {
-        row = [0, 0, 0, val, 0, 0]
+        row = {x: 3, y: val}
         color = colors[3]
       }
       else if (i.COMPANY === 'BJ') {
-        row = [0, 0, 0, 0, val, 0]
+        row = {x: 4, y: val}
         color = colors[4]
       }
       else {
-        row = [0, 0, 0, 0, 0, val]
+        row = {x: 5, y: val}
         color = colors[5]
       }
 
-      row = row.map(i => {
-        i > 100 ? i = 100 : null
-        return i
+      Object.keys(row).forEach(key => {
+        row[key] > 100 ? row[key] = 100 : null
       })
 
       return {
         name: `${i.WELL_NAME} ${i.FECHA}`,
-        data: row,
+        data: [row],
         borderColor: 'black',
         color: color
       }
@@ -67,11 +66,11 @@ import ReactHighcharts from 'react-highcharts'
 
     let config = {
 	    chart: {
-	        type: 'column',
-          zoomType: 'y',
+	        type: 'scatter',
+          zoomType: 'xy',
 	    },
 	    title: {
-	        text: 'Deviation From Expected Costs'
+	        text: ''
 	    },
       legend: {
         enabled: false
@@ -98,22 +97,24 @@ import ReactHighcharts from 'react-highcharts'
 	    	enabled: false
 	    },
       plotOptions: {
-        column: {
-          stacking: 'normal'
+        series: {
+          marker: {
+            lineColor: 'black',
+            radius: 4,
+            lineWidth: 1,
+            symbol: 'square',
+          }
         }
       },
 	    series: data
 		}
 
     return (
-      <div className="classification-breakdown test">
-        <div className='chart'>
-        	<ReactHighcharts
-        		className='chart'
-        		config={config}
-        	/>
-        </div>
-      </div>
+    	<ReactHighcharts
+    		className='chart'
+    		config={config}
+        ref={(ref) => { this.chart = ref }}
+    	/>
     )
   }
 }

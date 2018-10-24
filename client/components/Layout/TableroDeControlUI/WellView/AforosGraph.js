@@ -97,12 +97,11 @@ import ReactHighCharts from 'react-highcharts'
 
 
     return (        
-      <div className="graph">
-        <ReactHighCharts 
-          className="chart" 
-          config= {config} 
-        />
-      </div>
+    <ReactHighCharts 
+      className="chart" 
+      config= {config} 
+      ref={(ref) => { this.chart = ref }}
+    />
     )
   }
 }

@@ -40,6 +40,7 @@ import forms from './reducers/forms'
 import global from './reducers/global'
 import { handleImagesFromServer } from '../lib/formatters';
 import globalAnalysis from './reducers/globalAnalysis'
+import chartOptions from './reducers/chartOptions'
 
 const appReducer = combineReducers({
   app,
@@ -81,6 +82,7 @@ const appReducer = combineReducers({
   evaluacionEstimulacion,
   graficaTratamiento,
   resultsMeta,
+  chartOptions
 })
 
 const rootReducer = (state, action) => {

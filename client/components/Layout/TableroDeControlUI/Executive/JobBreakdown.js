@@ -13,7 +13,7 @@ import ReactHighcharts from 'react-highcharts'
 	        type: 'pie'
 	    },
 	    title: {
-	        text: 'Job Breakdown'
+	        text: ''
 	    },
 	    credits: {
 	    	enabled: false
@@ -25,14 +25,11 @@ import ReactHighcharts from 'react-highcharts'
 		}
 
     return (
-      <div className="job-breakdown test">
-      	<div className='chart'>
-	      	<ReactHighcharts
-	      		className='chart'
-	      		config={config}
-	      	/>
-      	</div>
-      </div>
+      	<ReactHighcharts
+      		className='chart'
+      		config={config}
+      		ref={(ref) => { this.chart = ref }}
+      	/>
     )
   }
 }

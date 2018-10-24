@@ -40,7 +40,7 @@ import ReactHighcharts from 'react-highcharts'
 	        type: 'column'
 	    },
 	    title: {
-	        text: 'Costs'
+	        text: ''
 	    },
       legend: {
         enabled: false
@@ -60,14 +60,11 @@ import ReactHighcharts from 'react-highcharts'
 		}
 
     return (
-      <div className="classification-breakdown test">
-        <div className='chart'>
-        	<ReactHighcharts
-        		className='chart'
-        		config={config}
-        	/>
-        </div>
-      </div>
+    	<ReactHighcharts
+    		className='chart'
+    		config={config}
+        ref={(ref) => { this.chart = ref }}
+    	/>
     )
   }
 }

@@ -7,6 +7,16 @@ import DeltaOil from './DeltaOil'
 import DeltaWater from './DeltaWater'
 import ClassificationBreakdown from './ClassificationBreakdown'
 import Filters from '../Common/Filters'
+import Card from '../Common/Card'
+import { CardDeck } from 'reactstrap';
+import AvgCostBar from '../Statistics/AvgCostBar'
+import AvgCostCompanyBar from '../Statistics/AvgCostCompanyBar'
+import CostBar from '../Statistics/CostBar'
+import CostCompanyBar from '../Statistics/CostCompanyBar'
+import DeltaCostBar from '../Statistics/DeltaCostBar'
+import AvgDeltaCostBar from '../Statistics/AvgDeltaCostBar'
+import AvgDeltaCostCompanyBar from '../Statistics/AvgDeltaCostCompanyBar'
+import DeltaCostCompanyBar from '../Statistics/DeltaCostCompanyBar'
 
 @autobind class executiveUI extends Component {
   constructor(props) {
@@ -14,7 +24,14 @@ import Filters from '../Common/Filters'
     this.state = { 
       fieldWellOptions: [],
     	jobBreakdownData: [],
-      aforosData: []
+      aforosData: [],
+      avgCostDataType: [],
+      avgCostDataCompany: [],
+      costData: []
+    }
+    this.cards = []
+    for (let i = 0; i < 4; i += 1) {
+      this.cards.push(React.createRef())
     }
   }
 
@@ -81,7 +98,62 @@ import Filters from '../Common/Filters'
         })
     })
 
+    fetch(`/statistics/avgCostByType`, {
+      method: 'POST',
+      headers: {
+        'content-type': 'application/json',
+      },
+      body: JSON.stringify({
+        activo,
+        field,
+        well,
+        formation
+      })
+    })
+    .then(res => res.json())
+    .then(res => {
+      this.setState({
+        avgCostDataType: res
+      })
+    })
 
+    fetch(`/statistics/avgCostByCompany`, {
+      method: 'POST',
+      headers: {
+        'content-type': 'application/json',
+      },
+      body: JSON.stringify({
+        activo,
+        field,
+        well,
+        formation
+      })
+    })
+    .then(res => res.json())
+    .then(res => {
+      this.setState({
+        avgCostDataCompany: res
+      })
+    })
+
+    fetch(`/statistics/costData`, {
+      method: 'POST',
+      headers: {
+        'content-type': 'application/json',
+      },
+      body: JSON.stringify({
+        activo,
+        field,
+        well,
+        formation
+      })
+    })
+    .then(res => res.json())
+    .then(res => {
+      this.setState({
+        costData: res
+      })
+    })
 
   }
 
@@ -109,7 +181,7 @@ import Filters from '../Common/Filters'
   }
 
   render() {
-    let { jobBreakdownData, aforosData, fieldWellOptions } = this.state
+    let { jobBreakdownData, aforosData, fieldWellOptions, avgCostDataType, avgCostDataCompany, costData } = this.state
 
     return (
       <div className="data executive">
@@ -117,10 +189,44 @@ import Filters from '../Common/Filters'
           <Filters fieldWellOptions={fieldWellOptions} />
         </div>
         <div className='content'>
-        	<JobBreakdown data={jobBreakdownData} />
-          <ClassificationBreakdown data={aforosData} />
-          <DeltaOil data={aforosData} />
-          <DeltaWater data={aforosData} />
+          <CardDeck className="content-deck">
+            <Card
+                id="productionGraphs"
+                title="Delta Production Graphs"
+                ref={this.cards[0]}
+              >
+              <DeltaOil label='Oil' data={aforosData} />
+              <DeltaWater label='Water' data={aforosData} />
+            </Card>
+            <Card
+                id="classifications"
+                title="Classification"
+                ref={this.cards[1]}
+              >
+              <JobBreakdown label='Job Type' data={jobBreakdownData} />
+              <ClassificationBreakdown label='Success' data={aforosData} />
+            </Card>
+            <Card
+                id="costs"
+                title="Costs"
+                ref={this.cards[2]}
+              >
+              <CostBar label={'Total Type'} data={costData} />
+              <AvgCostBar label={'Avg Type'} data={avgCostDataType} />
+              <CostCompanyBar label={'Total Company'} data={costData} />
+              <AvgCostCompanyBar label={'Avg Company'} data={avgCostDataCompany} />
+            </Card>
+            <Card
+                id="costDeviations"
+                title="Cost Deviations"
+                ref={this.cards[3]}
+              >         
+              <DeltaCostBar label={'Type'} data={costData} />
+              <AvgDeltaCostBar label={'Avg Type'} data={avgCostDataType} />
+              <DeltaCostCompanyBar label={'Company'} data={costData} />
+              <AvgDeltaCostCompanyBar label={'Avg Company'} data={avgCostDataCompany} />
+            </Card>
+          </CardDeck>
         </div>
       </div>
     )

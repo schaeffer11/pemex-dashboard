@@ -57,7 +57,7 @@ import ReactHighcharts from 'react-highcharts'
 	        type: 'column'
 	    },
 	    title: {
-	        text: 'Avg Cost Per Job'
+	        text: ''
 	    },
 	    credits: {
 	    	enabled: false
@@ -66,14 +66,11 @@ import ReactHighcharts from 'react-highcharts'
 		}
 
     return (
-      <div className="classification-breakdown test">
-        <div className='chart'>
-        	<ReactHighcharts
-        		className='chart'
-        		config={config}
-        	/>
-        </div>
-      </div>
+    	<ReactHighcharts
+    		className='chart'
+    		config={config}
+        ref={(ref) => { this.chart = ref }}
+    	/>
     )
   }
 }

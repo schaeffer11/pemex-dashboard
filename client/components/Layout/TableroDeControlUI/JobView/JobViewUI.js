@@ -2,13 +2,14 @@ import React, { Component } from 'react'
 import autobind from 'autobind-decorator'
 import { connect } from 'react-redux'
 
-
 import WellSelect from '../Common/WellSelect'
 import JobSelect from '../Common/JobSelect'
 import Images from './Images'
 import CostBar from './CostBar'
 import CostKPIs from './CostKPIs'
 import SimulationTreatmentTable from './SimulationTreatmentTable'
+import Card from '../Common/Card'
+import { CardDeck } from 'reactstrap';
 
 @autobind class jobViewUI extends Component {
   constructor(props) {
@@ -23,6 +24,10 @@ import SimulationTreatmentTable from './SimulationTreatmentTable'
       cedulaData: [],
       interventionData: [],
       interventionResultsData: []
+    }    
+    this.cards = []
+    for (let i = 0; i < 3; i += 1) {
+      this.cards.push(React.createRef())
     }
   }
 
@@ -244,10 +249,30 @@ import SimulationTreatmentTable from './SimulationTreatmentTable'
           <JobSelect options={jobOptions}/>
         </div>
         <div className='content'>
-          <CostBar estData={estCostData} data={costData} />
           <CostKPIs estData={estCostData} data={costData} />
-          <SimulationTreatmentTable type={jobType} interventionData={interventionData} interventionResultsData={interventionResultsData} />
-          <Images data={imageData} />
+          <CardDeck className="content-deck">
+            <Card
+                id="costs"
+                title="Estimated Vs Actual Costs"
+                ref={this.cards[0]}
+              >          
+              <CostBar estData={estCostData} data={costData} />
+            </Card>
+            <Card
+                id="simulationResults"
+                title="Simulation Results"
+                ref={this.cards[1]}
+              >          
+              <SimulationTreatmentTable type={jobType} interventionData={interventionData} interventionResultsData={interventionResultsData} />
+            </Card>            
+            <Card
+                id="images"
+                title="Images"
+                ref={this.cards[2]}
+              >          
+              <Images data={imageData} />    
+            </Card>
+          </CardDeck>
         </div>
       </div>
     )
