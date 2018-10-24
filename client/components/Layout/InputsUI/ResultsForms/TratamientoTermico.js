@@ -1,13 +1,13 @@
 import React, { Component } from 'react'
 import autobind from 'autobind-decorator'
 import { connect } from 'react-redux'
-import InputTable from '../../../Common/InputTable'
-import { InputRow, InputRowSelectUnitless, CalculatedValue } from '../../../Common/InputRow'
-import { setMergePropuestaTermica, setCedulaPropuestaTermica } from '../../../../../redux/actions/intervencionesTermica'
-import { checkEmpty, checkDate } from '../../../../../lib/errorCheckers'
-import { calculateValuesTermicaCedula } from '../../../../../lib/formatters';
+import InputTable from '../../Common/InputTable'
+import { InputRow, InputRowSelectUnitless, CalculatedValue } from '../../Common/InputRow'
+import { setMergeTratamientoTermico, setCedulaTratamientoTermico } from '../../../../redux/actions/results'
+import { checkEmpty, checkDate } from '../../../../lib/errorCheckers'
+import { calculateValuesTermicaCedula } from '../../../../lib/formatters';
 
-@autobind class PropuestaTermica extends Component {
+@autobind class TratamientoTermico extends Component {
   constructor(props) {
     super(props)
     this.state = {
@@ -46,9 +46,9 @@ import { calculateValuesTermicaCedula } from '../../../../../lib/formatters';
 
 
   async componentDidMount(){
-    let { setMergePropuestaTermica, hasSubmitted } = this.props
+    let { setMergeTratamientoTermico, hasSubmitted } = this.props
     let hasErrors = this.checkAllInputs(hasSubmitted)
-    setMergePropuestaTermica({ hasErrors })
+    setMergeTratamientoTermico({ hasErrors })
   }
 
   componentDidUpdate(prevProps) {
@@ -97,7 +97,7 @@ import { calculateValuesTermicaCedula } from '../../../../../lib/formatters';
   }
 
   updateErrors(errors) {
-    let { hasErrors, setMergePropuestaTermica } = this.props
+    let { hasErrors, setMergeTratamientoTermico } = this.props
 
     let hasErrorNew = false
     let items = Object.keys(errors)
@@ -107,7 +107,7 @@ import { calculateValuesTermicaCedula } from '../../../../../lib/formatters';
       } 
     })
     if (hasErrorNew != hasErrors) {
-      setMergePropuestaTermica({ hasErrors: hasErrorNew })
+      setMergeTratamientoTermico({ hasErrors: hasErrorNew })
     }
     this.setState({ errors })
   }
@@ -116,14 +116,14 @@ import { calculateValuesTermicaCedula } from '../../../../../lib/formatters';
     const errorsCopy = {...this.state.errors}
     errorsCopy[table].value = value
     this.setState({ errors: errorsCopy }, () => {
-      const { setMergePropuestaTermica } = this.props
+      const { setMergeTratamientoTermico } = this.props
       const hasErrors = this.checkAllInputs()
-      setMergePropuestaTermica({ hasErrors })
+      setMergeTratamientoTermico({ hasErrors })
     })
   }
 
   makeGeneralForm() {
-    let { formData, setMergePropuestaTermica, intervals } = this.props
+    let { formData, setMergeTratamientoTermico, intervals } = this.props
     let { propuestaCompany, volumenVapor, calidad, gastoInyeccion, presionMaximaSalidaGenerador, temperaturaMaximaGenerador } = formData
     const companyOptions = [
       { label: 'Halliburton', value: 'Halliburton' },
@@ -134,12 +134,7 @@ import { calculateValuesTermicaCedula } from '../../../../../lib/formatters';
       { label: 'Weatherford',
       value: 'Weatherford' }
     ]
-    const intervalsDiv = intervals.map(elem => (
-      <div key={`intervalo_${elem.cimaMD}-${elem.baseMD}`}>
-        {`${elem.cimaMD}-${elem.baseMD}`}
-      </div>
-    ))
-
+    const intervalsDiv = intervals.map(elem => <div key={`intervalo_${elem}`}>{elem}</div>)
     return (
       <div className='general-form' >
         <div className='header'>
@@ -151,7 +146,7 @@ import { calculateValuesTermicaCedula } from '../../../../../lib/formatters';
           options={companyOptions}
           onBlur={this.updateErrors}
           value={propuestaCompany}
-          callback={e => setMergePropuestaTermica({ propuestaCompany: e.value })}
+          callback={e => setMergeTratamientoTermico({ propuestaCompany: e.value })}
           errors={this.state.errors}
         />
         <CalculatedValue
@@ -163,7 +158,7 @@ import { calculateValuesTermicaCedula } from '../../../../../lib/formatters';
           name='volumenVapor'
           unit="ton"
           value={volumenVapor}
-          onChange={(e) => setMergePropuestaTermica({ volumenVapor: e })}
+          onChange={(e) => setMergeTratamientoTermico({ volumenVapor: e })}
           errors={this.state.errors}
           onBlur={this.updateErrors}
         />
@@ -172,7 +167,7 @@ import { calculateValuesTermicaCedula } from '../../../../../lib/formatters';
           name='calidad'
           unit="%"
           value={calidad}
-          onChange={(e) => setMergePropuestaTermica({ calidad: e })}
+          onChange={(e) => setMergeTratamientoTermico({ calidad: e })}
           errors={this.state.errors}
           onBlur={this.updateErrors}
         />
@@ -181,7 +176,7 @@ import { calculateValuesTermicaCedula } from '../../../../../lib/formatters';
           name='gastoInyeccion'
           unit="GPM"
           value={gastoInyeccion}
-          onChange={(e) => setMergePropuestaTermica({ gastoInyeccion: e })}
+          onChange={(e) => setMergeTratamientoTermico({ gastoInyeccion: e })}
           errors={this.state.errors}
           onBlur={this.updateErrors}
         />
@@ -190,7 +185,7 @@ import { calculateValuesTermicaCedula } from '../../../../../lib/formatters';
           name='presionMaximaSalidaGenerador'
           unit="psi"
           value={presionMaximaSalidaGenerador}
-          onChange={(e) => setMergePropuestaTermica({ presionMaximaSalidaGenerador: e })}
+          onChange={(e) => setMergeTratamientoTermico({ presionMaximaSalidaGenerador: e })}
           errors={this.state.errors}
           onBlur={this.updateErrors}
         />
@@ -199,7 +194,7 @@ import { calculateValuesTermicaCedula } from '../../../../../lib/formatters';
           name='temperaturaMaximaGenerador'
           unit="psi"
           value={temperaturaMaximaGenerador}
-          onChange={(e) => setMergePropuestaTermica({ temperaturaMaximaGenerador: e })}
+          onChange={(e) => setMergeTratamientoTermico({ temperaturaMaximaGenerador: e })}
           errors={this.state.errors}
           onBlur={this.updateErrors}
         />
@@ -208,9 +203,9 @@ import { calculateValuesTermicaCedula } from '../../../../../lib/formatters';
   }
   
   setAllData(data) {
-    const { setCedulaPropuestaTermica } = this.props
+    const { setCedulaTratamientoTermico } = this.props
     const cedulaData = calculateValuesTermicaCedula(data)
-    setCedulaPropuestaTermica(cedulaData)
+    setCedulaTratamientoTermico(cedulaData)
   }
 
   makeCedulaTable() {
@@ -307,19 +302,19 @@ import { calculateValuesTermicaCedula } from '../../../../../lib/formatters';
 }
 
 const mapStateToProps = state => ({
-  formData: state.get('propuestaTermica').toJS(),
-  hasErrors: state.getIn(['propuestaTermica', 'hasErrors']),
+  formData: state.get('tratamientoTermico').toJS(),
+  hasErrors: state.getIn(['tratamientoTermico', 'hasErrors']),
   hasSubmitted: state.getIn(['global', 'hasSubmitted']),
-  intervals: state.getIn(['evaluacionPetrofisica', 'layerData']).toJS(),
+  intervals: state.getIn(['resultsMeta', 'intervals']).toJS(),
 })
 
 const mapDispatchToProps = dispatch => ({
-  setMergePropuestaTermica: (value) => {
-    dispatch(setMergePropuestaTermica(value))
+  setMergeTratamientoTermico: (value) => {
+    dispatch(setMergeTratamientoTermico(value))
   },
-  setCedulaPropuestaTermica: (cedula, volumes) => {
-    dispatch(setCedulaPropuestaTermica(cedula, volumes))
+  setCedulaTratamientoTermico: (cedula, volumes) => {
+    dispatch(setCedulaTratamientoTermico(cedula, volumes))
   }
 })
 
-export default connect(mapStateToProps, mapDispatchToProps)(PropuestaTermica) 
+export default connect(mapStateToProps, mapDispatchToProps)(TratamientoTermico) 

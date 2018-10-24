@@ -414,10 +414,8 @@ const mapStateToProps = state => ({
   formData: state.get('tratamientoEstimulacion').toJS(),
   hasErrors: state.getIn(['tratamientoEstimulacion', 'hasErrors']),
   hasSubmitted: state.getIn(['global', 'hasSubmitted']),
-  propuestaId: state.getIn(['global', 'transactionID']),
-  intervals: state.getIn(['resultsMeta', 'intervals']),
+  intervals: state.getIn(['resultsMeta', 'intervals']).toJS(),
   stimulationType: state.getIn(['resultsMeta', 'stimulationType']),
-  token: state.getIn(['user', 'token']),
 })
 
 const mapDispatchToProps = dispatch => ({

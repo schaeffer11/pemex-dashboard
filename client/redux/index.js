@@ -31,6 +31,7 @@ import historicoDeAforosResults from './reducers/historicoDeAforosResults'
 import tratamientoEstimulacion from './reducers/tratamientoEstimulacion'
 import tratamientoAcido from './reducers/tratamientoAcido'
 import tratamientoApuntalado from './reducers/tratamientoApuntalado'
+import tratamientoTermico from './reducers/tratamientoTermico'
 import evaluacionAcido from './reducers/evaluacionAcido'
 import evaluacionApuntalado from './reducers/evaluacionApuntalado'
 import evaluacionEstimulacion from './reducers/evaluacionEstimulacion'
@@ -77,6 +78,7 @@ const appReducer = combineReducers({
   tratamientoEstimulacion,
   tratamientoAcido,
   tratamientoApuntalado,
+  tratamientoTermico,
   evaluacionAcido,
   evaluacionApuntalado,
   evaluacionEstimulacion,

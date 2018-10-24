@@ -2,6 +2,17 @@ import { setIsSaved, setIsLoading } from '../../redux/actions/global'
 import Immutable from 'immutable'
 
 
+export const setMergeTratamientoTermico = (value) => ({
+  value,
+  type: 'set_mergeTratamientoTermico',
+})
+
+export const setCedulaTratamientoTermico = (cedula, volumes) => ({
+  cedula,
+  volumes,
+  type: 'set_cedulaTratamientoTermico',
+})
+
 
 export const setGeneralGraficaTratamiento = (location, value) => ({
   location,
