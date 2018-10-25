@@ -163,6 +163,30 @@ import { setHasErrorsFichaTecnicaDelPozo, setTipoDeSistemo, setHistorialInterven
           type: 'number',
           value: '',
         },
+        pruebaDePresion: {
+          type: 'text',
+          value: '',
+        },
+        modelo: {
+          type: 'text',
+          value: '',
+        },
+        kh: {
+          type: 'number',
+          value: '',
+        },
+        k: {
+          type: 'number',
+          value: '',
+        },
+        s: {
+          type: 'number',
+          value: '',
+        },
+        piEnNivelSonda: {
+          type: 'number',
+          value: '',
+        },
       },
     }
   }
@@ -456,6 +480,79 @@ import { setHasErrorsFichaTecnicaDelPozo, setTipoDeSistemo, setHistorialInterven
     )
   }
 
+  makePresionForm() {
+    let { setGeneralFichaTecnicaPozo, formData } = this.props
+    formData = formData.toJS()
+    const { 
+      pruebaDePresion,
+      modelo,
+      kh,
+      k,
+      s,
+      piEnNivelSonda, 
+    } = formData
+
+    return (
+      <div className='presion-form' >
+        <div className='header'>
+          Pruebas de presión
+        </div>
+        <InputRowUnitless
+          header="Prueba de presión"
+          name='pruebaDePresion'
+          value={pruebaDePresion}
+          onChange={e => setGeneralFichaTecnicaPozo(['pruebaDePresion'], e)}
+          onBlur={this.updateErrors}
+          errors={this.state.errors}
+        />
+        <InputRowUnitless
+          header="Modelo"
+          name='modelo'
+          value={modelo}
+          onChange={e => setGeneralFichaTecnicaPozo(['modelo'], e)}
+          onBlur={this.updateErrors}
+          errors={this.state.errors}
+        />
+        <InputRow
+          header="Kh"
+          name='kh'
+          value={kh}
+          unit="mD*ft"
+          onChange={e => setGeneralFichaTecnicaPozo(['kh'], e)}
+          onBlur={this.updateErrors}
+          errors={this.state.errors}
+        />
+        <InputRow
+          header="K"
+          name='k'
+          value={k}
+          unit="mD"
+          onChange={e => setGeneralFichaTecnicaPozo(['k'], e)}
+          onBlur={this.updateErrors}
+          errors={this.state.errors}
+        />
+        <InputRow
+          header="S"
+          name='s'
+          value={s}
+          unit="unidades"
+          onChange={e => setGeneralFichaTecnicaPozo(['s'], e)}
+          onBlur={this.updateErrors}
+          errors={this.state.errors}
+        />
+        <InputRow
+          header="Pi @ nivel sonda"
+          name='piEnNivelSonda'
+          value={piEnNivelSonda}
+          unit={<div>Kg/cm<sup>2</sup></div>}
+          onChange={e => setGeneralFichaTecnicaPozo(['piEnNivelSonda'], e)}
+          onBlur={this.updateErrors}
+          errors={this.state.errors}
+        />
+      </div>
+    )
+  }
+
   makePozoForm() {
     let { fieldWellOptions } = this.state
     let { tipoDeSistemo, setTipoDePozo, setPws, setPwf, setPwsFecha, setPwfFecha, setDeltaPPerMes, setTyac, setPvt, setAparejoDeProduccion, setProfEmpacador, setProfSensorPYT, setTipoDeSistemo, formData, generalData } = this.props
@@ -583,6 +680,7 @@ import { setHasErrorsFichaTecnicaDelPozo, setTipoDeSistemo, setHistorialInterven
           { this.makeFormacionForm() }
           { this.makeHistoricalInterventionsInput() }
           {this.makeFluidosForm()}
+          {this.makePresionForm()}
       </div>
     )
   }

@@ -40,6 +40,12 @@ const initialState = fromJS({
   ph: '',
   indiceEstAgua: '',
   contenidoEmulsion: '',
+  pruebaDePresion: '',
+  modelo: '',
+  kh: '',
+  k: '',
+  s: '',
+  piEnNivelSonda: '',
   historialIntervencionesData: [{
     fecha: null,
     intervenciones: '',
