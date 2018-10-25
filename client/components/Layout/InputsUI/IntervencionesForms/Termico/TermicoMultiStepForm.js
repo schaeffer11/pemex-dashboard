@@ -63,12 +63,12 @@ import EstimacionCostos from '../EstimacionCostos'
 
 
   render() {
-    let { setShowForms, hasSubmitted, propuestaHasErrors, resultadosSimulacionHasErrors, estIncProduccionHasErrors, estCostsHasErrors } = this.props
+    let { setShowForms, hasSubmitted, propuestaHasErrors, estCostsHasErrors } = this.props
      let className = 'subtab'
 
 
 
-   let errors = [propuestaHasErrors, false, false, resultadosSimulacionHasErrors, estIncProduccionHasErrors, estCostsHasErrors]
+   let errors = [propuestaHasErrors, estCostsHasErrors]
 
      let title = forms[this.state.currentStep].title
 
@@ -107,9 +107,9 @@ const mapDispatchToProps = dispatch => ({
 
 const mapStateToProps = state => ({
   hasSubmitted: state.getIn(['global', 'hasSubmitted']),
-  propuestaHasErrors: state.getIn(['propuestaEstimulacion', 'hasErrors']),
-  resultadosSimulacionHasErrors: state.getIn(['resultadosSimulacionEstimulacion', 'hasErrors']),
-  estIncProduccionHasErrors: state.getIn(['estIncProduccionEstimulacion', 'hasErrors']),
+  propuestaHasErrors: state.getIn(['propuestaTermica', 'hasErrors']),
+  // resultadosSimulacionHasErrors: state.getIn(['resultadosSimulacionEstimulacion', 'hasErrors']),
+  // estIncProduccionHasErrors: state.getIn(['estIncProduccionEstimulacion', 'hasErrors']),
   estCostsHasErrors: state.getIn(['estCost', 'hasErrors']),
 })
 
