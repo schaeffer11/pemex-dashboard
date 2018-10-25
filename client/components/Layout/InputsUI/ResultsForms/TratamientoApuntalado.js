@@ -324,7 +324,7 @@ import { calculateValuesApuntaladoCedula } from '../../../../lib/formatters';
         cell: 'renderNumber',
       },
       {
-        Header: <div>Gasto en Superficie<br/>(bbl)</div>,
+        Header: <div>Gasto en Superficie<br/>(bpm)</div>,
         accessor: 'gastoSuperficie',
         cell: 'renderNumber',
       },
@@ -334,7 +334,7 @@ import { calculateValuesApuntaladoCedula } from '../../../../lib/formatters';
         cell: 'renderNumber',
       },
       {
-        Header: <div>Gasto Total Fondo<br/>(m<sup>3</sup>)</div>,
+        Header: <div>Gasto Total Fondo<br/>(bpm)</div>,
         accessor: 'gastoEnFondo',
         cell: 'renderNumber',
       },
@@ -359,7 +359,7 @@ import { calculateValuesApuntaladoCedula } from '../../../../lib/formatters';
         cell: 'renderNumber',
       },
       {
-        Header: <div>Apuntalante Acumulado<br/>(lbm/gal)</div>,
+        Header: <div>Apuntalante Acumulado<br/>(lbm)</div>,
         accessor: 'apuntalanteAcumulado',
       },
       { 

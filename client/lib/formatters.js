@@ -44,7 +44,6 @@ export function handleImagesFromServer(images, state) {
       }
     })
   }
-  console.log('shallow state copy', shallowStateCopy)
   return shallowStateCopy
 }
 
@@ -56,9 +55,6 @@ export const calculateValuesGeneralCedula = (data) => {
       row.gastoLiqudo = 0
       row.relN2Liq = 0
       row.tiempo = dealWithNaN(round(row.volN2 / row.gastoN2))
-      // if (row.tiempo === Infinity || isNaN(row.tiempo)) {
-      //   row.tiempo = 0
-      // }
     } else {
       row.gastoN2 = dealWithNaN(round(relN2Liq / 6.291 * gastoLiqudo) || 0)
       row.volN2 = dealWithNaN(round((6.291 * volLiquid / gastoLiqudo) * row.gastoN2) || 0)

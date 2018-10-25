@@ -62,6 +62,11 @@ export const setHasErrorsHistorialDeIntervenciones = value => ({ type: 'set_hasE
 export const setFromSaveHistorialDeIntervenciones = value => ({ type: 'set_fromSaveHistorialDeIntervenciones', value})
 
 //FichaTecnicaDelPozo
+export const setGeneralFichaTecnicaPozo = (location, value) => ({
+  type: 'set_generalFichaTecnicaDelPozo',
+  location,
+  value,
+})
 export const setIntervaloProductor = value => ({ type: 'set_intervaloProductor', value})
 export const setEspesorBruto = value => ({ type: 'set_espesorBruto', value})
 export const setEspesorNeto = value => ({ type: 'set_espesorNeto', value})
