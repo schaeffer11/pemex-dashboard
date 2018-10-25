@@ -2032,7 +2032,7 @@ router.get('/getCedulaEstimulacion', async (req, res) => {
         'propuestaEstimulacion': {
           "propuestaCompany": '',
           "cedulaData": [
-            {}
+            {etapa: 1}
           ]
         }
       }
@@ -2096,7 +2096,7 @@ router.get('/getCedulaAcido', async (req, res) => {
         'propuestaAcido': {
           "propuestaCompany": '',
           "cedulaData": [
-            {}
+            {etapa: 1}
           ]
         }
       }
@@ -2161,7 +2161,7 @@ router.get('/getCedulaApuntalado', async (req, res) => {
         'propuestaApuntalado': {
           "propuestaCompany": '',
           "cedulaData": [
-            {}
+            {etapa: 1}
           ]
         }
       }
@@ -2215,7 +2215,7 @@ router.get('/getCedulaTermico', async (req, res) => {
         'propuestaTermica': {
           "propuestaCompany": '',
           "cedulaData": [
-            {}
+            {etapa: 1}
           ]
         }
       }
