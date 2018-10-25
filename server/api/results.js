@@ -57,10 +57,10 @@ const INSERT_CEDULA_ACIDO_QUERY = {
 
 const INSERT_CEDULA_APUNTALADO_QUERY = {
     save: ``   ,
-    submit: `INSERT INTO ResultsCedulaApuntalado (
-        CEDULA_ID, INTERVENTION_ID, WELL_FORMACION_ID, ETAPA, SISTEMA, NOMBRE_COMERCIAL, TIPO_DE_APUNTALANTE, CONCENTRACION_DE_APUNTALANTE, 
-        VOL_LIQUID, GASTO_N2, GASTO_LIQUIDO, GASTO_EN_FONDO, CALIDAD, VOL_N2, VOL_LIQUIDO_ACUM, 
-        VOL_N2_ACUM, REL_N2_LIQ, TIEMPO, COMPANIA, PROPUESTA_ID, TRANSACTION_ID) VALUES ?`        ,
+    submit: `INSERT INTO ResultsCedulaApuntalado_testtest (
+        CEDULA_ID, INTERVENTION_ID, WELL_FORMACION_ID, ETAPA, SISTEMA, NOMBRE_COMERCIAL, TIPO_DE_FLUIDO, TIPO_DE_APUNTALANTE, VOL_LIQUIDO, 
+        VOL_LECHADA, GASTO_EN_SUPERFICIE, GASTO_N2_SUPERFICIE, GASTO_TOTAL_FONDO, CALIDAD_N2, VOL_ESPUMA_FONDO, CONCENTRACION_APUNTALANTE_SUPERFICIE, 
+        CONCENTRACION_APUNTALANTE_FONDO, APUNTALANTE_ACUMULADO, TIEMPO, COMPANIA, TRANSACTION_ID) VALUES ?`        ,
     loadSave: ``,
     loadTransaction: ``    
 }
@@ -293,11 +293,21 @@ export const createResults = async (body, action, cb) => {
                 })  
               }
             } 
-            else {
+            else if (interventionType === 'acido') {
               if (cedulaData) {
                 cedulaData.forEach(i => {
                   let cedulaID = Math.floor(Math.random() * 1000000000)
                   let newRow = [cedulaID, interventionID, wellFormacionID, i.etapa, i.sistema, i.nombreComercial, i.tipoDeApuntalante, i.concentraciDeApuntalante, i.volLiquid, i.gastoN2, i.gastoLiqudo, i.gastoEnFondo, i.calidad, i.volN2, i.volLiquidoAcum, i.volN2Acum, i.relN2Liq, i.tiempo, propuestaCompany, propuestaID, transactionID]
+                  values.push(newRow)
+
+                })   
+              }
+            }
+            else if (interventionType === 'apuntalado') {
+              if (cedulaData) {
+                cedulaData.forEach(i => {
+                  let cedulaID = Math.floor(Math.random() * 1000000000)
+                  let newRow = [cedulaID, interventionID, wellFormacionID, i.etapa, i.sistema, i.nombreComercial, i.tipoDeFluido, i.tipoDeApuntalante, i.volLiquido, i.volLechada, i.gastoSuperficie, i.gastoN2Superficie, i.gastoEnFondo, i.calidadN2Fondo, i.volEspumaFondo, i.concentracionApuntalanteSuperficie, i.concentracionApuntalanteFondo, i.apuntalanteAcumulado, i.tiempo, propuestaCompany, transactionID]
                   values.push(newRow)
 
                 })   

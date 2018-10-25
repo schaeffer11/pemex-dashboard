@@ -206,6 +206,41 @@ import { CardDeck } from 'reactstrap';
 			this.fetchData()	
 		}
   }
+    makeImages(data) {
+      return Object.keys(data).map(i => {
+        let src = data[i].imgURL
+
+        if (true) {
+
+        }
+
+        return (<div style={{width: '100%'}}>
+              <ReactImageMagnify {...{
+                smallImage: {
+                    src,
+                    width: 200,
+                    height: 200, 
+                },
+                largeImage: {
+                    src,
+                    width: 1000,
+                    height: 1000,
+                },
+                enlargedImageContainerDimensions: {
+                  width: '200%',
+                  height: '100%'
+                }
+              }} />
+            </div>)
+      })
+    }
+    makeImages() {
+      let { imageData } = this.state
+
+
+      return <div label='loading'>boo</div>
+
+    } 
 
   render() {
     let { fieldWellOptions, wellData, zoneData, layerData, productionData, pressureData , aforosData, imageData } = this.state
@@ -216,7 +251,7 @@ import { CardDeck } from 'reactstrap';
     console.log('production', productionData)
     console.log('pressure', pressureData)
     console.log('aforos', aforosData)
-    console.log('images', imageData)
+    console.log('images', imageData, imageData)
 
     return (
       <div className="data well-view">
@@ -259,7 +294,7 @@ import { CardDeck } from 'reactstrap';
                 title="Images"
                 ref={this.cards[4]}
               >
-               <Images data={imageData} />
+              {this.makeImages()}
             </Card>
           </CardDeck>
         </div>

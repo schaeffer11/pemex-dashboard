@@ -54,13 +54,16 @@ export function submitForm(action, token, saveName) {
     let filteredKeys
 
     if (tipoDeIntervencion === 'estimulacion') {
-      filteredKeys = allKeys.filter(i => !((i.includes('Acido')) || i.includes('Apuntalado')))
+      filteredKeys = allKeys.filter(i => !((i.includes('Acido')) || i.includes('Apuntalado') || i.includes('Termica')))
     }
     else if (tipoDeIntervencion === 'acido') {
-      filteredKeys = allKeys.filter(i => !((i.includes('Estimulacion')) || i.includes('Apuntalado')))
+      filteredKeys = allKeys.filter(i => !((i.includes('Estimulacion')) || i.includes('Apuntalado') || i.includes('Termica')))
     }
     else if (tipoDeIntervencion === 'apuntalado') {
-      filteredKeys = allKeys.filter(i => !((i.includes('Estimulacion')) || i.includes('Acido')))
+      filteredKeys = allKeys.filter(i => !((i.includes('Estimulacion')) || i.includes('Acido') || i.includes('Termica')))
+    }
+    else if (tipoDeIntervencion === 'termico') {
+      filteredKeys = allKeys.filter(i => !((i.includes('Estimulacion')) || i.includes('Acido') || i.includes('Apuntalado')))
     }
 
 
