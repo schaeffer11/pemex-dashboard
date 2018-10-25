@@ -308,7 +308,7 @@ import { setHasSubmitted, setIsLoading, setCurrentPage, setSaveName } from '../.
       >
       <div className="modalTest" >
         <div className="modal-title">
-            Comentarios sobre pagina
+            Comentarios sobre página
         </div>
         <div className="modal-info"> 
           Cualquier error o comentario que tenga acerca de la página en turno, hacerlo aquí y enviar.

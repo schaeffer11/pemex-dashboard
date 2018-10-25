@@ -23,15 +23,20 @@ import { setGeneralEvaluacionEstimulacion, setMergeEvaluacionEstimulacion } from
     }
   }
 
-  componentDidMount(){
-    let { hasSubmitted, intervals, setMergeEvaluacionEstimulacion } = this.props
-    // Notice we add an immutable map to allow for setIn in handleFileUpload
-    const geometria = intervals.map(intervalo => Map({
-      intervalo,
-      imgURL: ''
-    }))
+  componentDidMount() {
+    let { hasSubmitted, intervals, setMergeEvaluacionEstimulacion, formData } = this.props
     let hasErrors = this.checkAllInputs(hasSubmitted)
-    setMergeEvaluacionEstimulacion({ hasErrors, geometria })
+    const newState = { hasErrors }
+    const { geometria } = formData
+    // Notice we add an immutable map to allow for setIn in handleFileUpload
+    if (geometria.length === 1 && geometria[0].imgURL === '') {
+      const geometria = intervals.map(intervalo => Map({
+        intervalo,
+        imgURL: ''
+      }))
+      newState.geometria = geometria
+    }
+    setMergeEvaluacionEstimulacion(newState)
   }
 
   componentDidUpdate(prevProps) {

@@ -32,7 +32,8 @@ export const InputRow = ({ header, type='number', name, unit, value, onChange, o
         className="input"
         options={{
           numeral: true,
-          numeralThousandsGroupStyle: 'thousand'
+          numeralThousandsGroupStyle: 'thousand',
+          numeralDecimalScale: 10,
         }}
         value={value}
         onChange={handleChange}
@@ -239,26 +240,26 @@ export const InputDate = ({ name, onChange, value, header, onBlur, errors }) => 
   return (
      <div className='input-row input-row-unitless'>
       <div className='label'>
-        {header}
+        {header} (dd/mm/aaaa)
       </div>
-      <DatePicker
-        customInput={
-          <MaskedTextInput
-            type="text"
-            mask={[/\d/, /\d/, "/", /\d/, /\d/, "/", /\d/, /\d/, /\d/, /\d/]}
-          />
-        }
-        isClearable={true}
-        dateFormat="L"
-        name={name}
-        onChange={handleSelect}
-        onBlur={handleBlur}
-        selected={objValue}
-        locale="es-mx"
-        showMonthDropdown
-        showYearDropdown
-      />
-      {errors[name] && errors[name].value !== null && <div className="error">{errors[name].value}</div>}      
+        <DatePicker
+          customInput={
+            <MaskedTextInput
+              type="text"
+              mask={[/\d/, /\d/, "/", /\d/, /\d/, "/", /\d/, /\d/, /\d/, /\d/]}
+            />
+          }
+          isClearable={true}
+          dateFormat="L"
+          name={name}
+          onChange={handleSelect}
+          onBlur={handleBlur}
+          selected={objValue}
+          locale="es-mx"
+          showMonthDropdown
+          showYearDropdown
+        />
+        {errors[name] && errors[name].value !== null && <div className="error">{errors[name].value}</div>}
     </div>
     
   )

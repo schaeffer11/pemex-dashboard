@@ -51,15 +51,20 @@ import { setGeneralEvaluacionAcido, setMergeEvaluacionAcido } from '../../../../
     }
   }
 
-  componentDidMount(){
-    let { hasSubmitted, intervals, setMergeEvaluacionAcido } = this.props
-    // Notice we add an immutable map to allow for setIn in handleFileUpload
-    const geometria = intervals.map(intervalo => Map({
-      intervalo,
-      imgURL: ''
-    }))
+  componentDidMount() {
+    let { hasSubmitted, intervals, setMergeEvaluacionAcido, formData } = this.props
     let hasErrors = this.checkAllInputs(hasSubmitted)
-    setMergeEvaluacionAcido({ hasErrors, geometria })
+    const newState = { hasErrors }
+    const { geometria } = formData
+    // Notice we add an immutable map to allow for setIn in handleFileUpload
+    if (geometria.length === 1 && geometria[0].imgURL === '') {
+      const geometria = intervals.map(intervalo => Map({
+        intervalo,
+        imgURL: ''
+      }))
+      newState.geometria = geometria
+    }
+    setMergeEvaluacionAcido(newState)
   }
 
   componentDidUpdate(prevProps) {
@@ -77,18 +82,14 @@ import { setGeneralEvaluacionAcido, setMergeEvaluacionAcido } from '../../../../
     let error
     Object.keys(errors).forEach(elem => {
       const errObj = errors[elem]
-
       if (errObj.type === 'text' || errObj.type === 'number') {
         error = checkEmpty(formData[elem], elem, errors, this.setErrors, showErrors)
-        
-      } 
+      }
       else if (errObj.type === 'date') {
         error = checkDate(moment(formData[elem]).format('DD/MM/YYYY'), elem, errors, this.setErrors, showErrors)
       }
-
       error === true ? hasErrors = true : null
     })
-
     return hasErrors
   }
 

@@ -15,6 +15,9 @@ export const options = [
   { label: 'Pruebas para apuntalante', value: 'pruebasParaApuntalante' },
   { label: 'Pruebas gel de fractura', value: 'pruebasGelDeFractura' },
   { label: 'Pruebas de grabado', value: 'pruebasDeGrabado' },
+  { label: 'Cromatografía del gas', value: 'cromatografiaDelGas' },
+  { label: 'Prueba de dureza', value: 'pruebaDeDureza' },
+  { label: 'Determinación de la calidad método de los cloruros', value: 'determinacionDeLaCalidad' },
 ]
 
 const companyOptions = [
