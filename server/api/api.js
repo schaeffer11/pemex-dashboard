@@ -1982,6 +1982,45 @@ router.get('/getLabTest', async (req, res) => {
             solubilidad: i.SOLUBILIDAD_APUNTALANTE
           })
         }
+        else if (type === 'cromatografiaDelGas') {
+          outData.push({
+            edited: true,
+            index: index,
+            length: labIDs.length,
+            type: type,
+            fechaMuestreo: (i.FECHA_DE_MUESTREO ? i.FECHA_DE_MUESTREO = i.FECHA_DE_MUESTREO.toJSON().slice(0, 10) : null),
+            fechaPrueba : (i.FECHA_DE_PRUEBA ? i.FECHA_DE_PRUEBA = i.FECHA_DE_PRUEBA.toJSON().slice(0, 10) : null),
+            compania: i.COMPANIA,
+            superviso: i.PERSONAL_DE_PEMEX_QUE_SUPERVISO,
+            obervaciones: i.OBSERVACIONES,
+          })
+        }
+        else if (type === 'pruebaDeDureza') {
+          outData.push({
+            edited: true,
+            index: index,
+            length: labIDs.length,
+            type: type,
+            fechaMuestreo: (i.FECHA_DE_MUESTREO ? i.FECHA_DE_MUESTREO = i.FECHA_DE_MUESTREO.toJSON().slice(0, 10) : null),
+            fechaPrueba : (i.FECHA_DE_PRUEBA ? i.FECHA_DE_PRUEBA = i.FECHA_DE_PRUEBA.toJSON().slice(0, 10) : null),
+            compania: i.COMPANIA,
+            superviso: i.PERSONAL_DE_PEMEX_QUE_SUPERVISO,
+            obervaciones: i.OBSERVACIONES,
+          })
+        }
+        else if (type === 'determinacionDeLaCalidad') {
+          outData.push({
+            edited: true,
+            index: index,
+            length: labIDs.length,
+            type: type,
+            fechaMuestreo: (i.FECHA_DE_MUESTREO ? i.FECHA_DE_MUESTREO = i.FECHA_DE_MUESTREO.toJSON().slice(0, 10) : null),
+            fechaPrueba : (i.FECHA_DE_PRUEBA ? i.FECHA_DE_PRUEBA = i.FECHA_DE_PRUEBA.toJSON().slice(0, 10) : null),
+            compania: i.COMPANIA,
+            superviso: i.PERSONAL_DE_PEMEX_QUE_SUPERVISO,
+            obervaciones: i.OBSERVACIONES,
+          })
+        }
       }
     })
 
