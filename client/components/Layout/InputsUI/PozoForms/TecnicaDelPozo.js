@@ -10,8 +10,8 @@ import InputTable from '../../Common/InputTable'
 import { InputRow, InputRowUnitless, InputRowSelectUnitless, InputDate } from '../../Common/InputRow'
 import { setHasErrorsFichaTecnicaDelPozo, setTipoDeSistemo, setHistorialIntervencionesData, setEspesorBruto, 
   setCaliza, setDolomia, setArcilla, setPorosidad, setPermeabilidad, setSw, setCaa, setCga, setTipoDePozo, 
-  setPws, setPwf, setPwsFecha, setPwfFecha, setDeltaPPerMes, setTyac, setPvt, setAparejoDeProduccion, 
-  setProfEmpacador, setProfSensorPYT, setTipoDeSap, setFromSaveFichaTecnicaDelPozo } from '../../../../redux/actions/pozo'
+  setPws, setPwf, setPwsFecha, setPwfFecha, setDeltaPPerMes, setTyac, setPvt, setAparejoDeProduccion,
+  setProfEmpacador, setProfSensorPYT, setTipoDeSap, setFromSaveFichaTecnicaDelPozo, setGeneralFichaTecnicaPozo } from '../../../../redux/actions/pozo'
 
 @autobind class TechnicaDelPozo extends Component {
   constructor(props) {
@@ -97,6 +97,70 @@ import { setHasErrorsFichaTecnicaDelPozo, setTipoDeSistemo, setHistorialInterven
         },
         historialDeIntervenciones: {
           type: 'table',
+          value: '',
+        },
+        densidadAceite: {
+          type: 'number',
+          value: '',
+        },
+        bo: {
+          type: 'number',
+          value: '',
+        },
+        viscosidadAceite: {
+          type: 'number',
+          value: '',
+        },
+        gravedadEspecificaGas: {
+          type: 'number',
+          value: '',
+        },
+        bg: {
+          type: 'number',
+          value: '',
+        },
+        rga: {
+          type: 'number',
+          value: '',
+        },
+        asfaltenos: {
+          type: 'number',
+          value: '',
+        },
+        parafinas: {
+          type: 'number',
+          value: '',
+        },
+        resinasAsfalticas: {
+          type: 'number',
+          value: '',
+        },
+        indiceEstColoidal: {
+          type: 'number',
+          value: '',
+        },
+        densidadAgua: {
+          type: 'number',
+          value: '',
+        },
+        contenidoAgua: {
+          type: 'number',
+          value: '',
+        },
+        salinidad: {
+          type: 'number',
+          value: '',
+        },
+        ph: {
+          type: 'number',
+          value: '',
+        },
+        indiceEstAgua: {
+          type: 'number',
+          value: '',
+        },
+        contenidoEmulsion: {
+          type: 'number',
           value: '',
         },
       },
@@ -213,6 +277,181 @@ import { setHasErrorsFichaTecnicaDelPozo, setTipoDeSistemo, setHistorialInterven
         <InputRow header="Sw" name='sw' value={sw} onChange={setSw} unit='%' onBlur={this.updateErrors} errors={this.state.errors} />
         <InputRow header="CAA" title="Contacto agua-aceite" name='caa' value={caa} onChange={setCaa} unit='mvbnm' onBlur={this.updateErrors} errors={this.state.errors} />
         <InputRow header="CGA" title="Contacto gas-aceite" name='cga' value={cga} onChange={setCga} unit='mvbnm' onBlur={this.updateErrors} errors={this.state.errors} />
+      </div>
+    )
+  }
+
+  makeFluidosForm() {
+    let { setGeneralFichaTecnicaPozo, formData } = this.props
+    formData = formData.toJS()
+    const { 
+      densidadAceite,
+      bo,
+      viscosidadAceite,
+      gravedadEspecificaGas,
+      bg,
+      rga,
+      asfaltenos,
+      parafinas,
+      resinasAsfalticas,
+      indiceEstColoidal,
+      densidadAgua,
+      contenidoAgua,
+      salinidad,
+      ph,
+      indiceEstAgua,
+      contenidoEmulsion, 
+    } = formData
+
+    return (
+      <div className='fluido-form' >
+        <div className='header'>
+          Fluidos
+        </div>
+        <InputRow
+          header="Densidad del aceite"
+          name='densidadAceite'
+          value={densidadAceite}
+          unit='°API'
+          onChange={e => setGeneralFichaTecnicaPozo(['densidadAceite'], e)}
+          onBlur={this.updateErrors}
+          errors={this.state.errors}
+        />
+        <InputRow
+          header="Bo"
+          name='bo'
+          value={bo}
+          unit={<div>m<sup>3</sup>/m<sup>3</sup></div>}
+          onChange={e => setGeneralFichaTecnicaPozo(['bo'], e)}
+          onBlur={this.updateErrors}
+          errors={this.state.errors}
+        />
+        <InputRow
+          header="Viscosidad del aceite"
+          name='viscosidadAceite'
+          value={viscosidadAceite}
+          unit='cp'
+          onChange={e => setGeneralFichaTecnicaPozo(['viscosidadAceite'], e)}
+          onBlur={this.updateErrors}
+          errors={this.state.errors}
+        />
+        <InputRow
+          header="Gravedad específica del gas"
+          name='gravedadEspecificaGas'
+          value={gravedadEspecificaGas}
+          unit='Adim.'
+          onChange={e => setGeneralFichaTecnicaPozo(['gravedadEspecificaGas'], e)}
+          onBlur={this.updateErrors}
+          errors={this.state.errors}
+        />
+        <InputRow
+          header="Bg"
+          name='bg'
+          value={bg}
+          unit={<div>m<sup>3</sup>/m<sup>3</sup></div>}
+          onChange={e => setGeneralFichaTecnicaPozo(['bg'], e)}
+          onBlur={this.updateErrors}
+          errors={this.state.errors}
+        />
+        <InputRow
+          header="RGA"
+          name='rga'
+          value={rga}
+          unit={<div>m<sup>3</sup>/m<sup>3</sup></div>}
+          onChange={e => setGeneralFichaTecnicaPozo(['rga'], e)}
+          onBlur={this.updateErrors}
+          errors={this.state.errors}
+        />
+        <InputRow
+          header="RGA"
+          name='asfaltenos'
+          value={asfaltenos}
+          unit="%"
+          onChange={e => setGeneralFichaTecnicaPozo(['asfaltenos'], e)}
+          onBlur={this.updateErrors}
+          errors={this.state.errors}
+        />
+        <InputRow
+          header="Parafinas"
+          name='parafinas'
+          value={parafinas}
+          unit="%"
+          onChange={e => setGeneralFichaTecnicaPozo(['parafinas'], e)}
+          onBlur={this.updateErrors}
+          errors={this.state.errors}
+        />
+        <InputRow
+          header="Resinas asfalticas"
+          name='resinasAsfalticas'
+          value={resinasAsfalticas}
+          unit="%"
+          onChange={e => setGeneralFichaTecnicaPozo(['resinasAsfalticas'], e)}
+          onBlur={this.updateErrors}
+          errors={this.state.errors}
+        />
+        <InputRow
+          header="Índice de est. coloidal"
+          name='indiceEstColoidal'
+          value={indiceEstColoidal}
+          unit="Adim."
+          onChange={e => setGeneralFichaTecnicaPozo(['indiceEstColoidal'], e)}
+          onBlur={this.updateErrors}
+          errors={this.state.errors}
+        />
+        <InputRow
+          header="Densidad del agua"
+          name='densidadAgua'
+          value={densidadAgua}
+          unit={<div>gr/cm<sup>3</sup></div>}
+          onChange={e => setGeneralFichaTecnicaPozo(['densidadAgua'], e)}
+          onBlur={this.updateErrors}
+          errors={this.state.errors}
+        />
+        <InputRow
+          header="Contenido de agua"
+          name='contenidoAgua'
+          value={contenidoAgua}
+          unit="%"
+          onChange={e => setGeneralFichaTecnicaPozo(['contenidoAgua'], e)}
+          onBlur={this.updateErrors}
+          errors={this.state.errors}
+        />
+        <InputRow
+          header="Salinidad"
+          name='salinidad'
+          value={salinidad}
+          unit="ppm"
+          onChange={e => setGeneralFichaTecnicaPozo(['salinidad'], e)}
+          onBlur={this.updateErrors}
+          errors={this.state.errors}
+        />
+        <InputRow
+          header="pH"
+          name='ph'
+          value={ph}
+          unit=""
+          onChange={e => setGeneralFichaTecnicaPozo(['ph'], e)}
+          onBlur={this.updateErrors}
+          errors={this.state.errors}
+        />
+        <InputRow
+          header="Índice de est. del agua"
+          name='indiceEstAgua'
+          value={indiceEstAgua}
+          unit="Adim."
+          onChange={e => setGeneralFichaTecnicaPozo(['indiceEstAgua'], e)}
+          onBlur={this.updateErrors}
+          errors={this.state.errors}
+        />
+        <InputRow
+          header="Contenido de emulsión"
+          name='contenidoEmulsion'
+          value={contenidoEmulsion}
+          unit="%"
+          onChange={e => setGeneralFichaTecnicaPozo(['contenidoEmulsion'], e)}
+          onBlur={this.updateErrors}
+          errors={this.state.errors}
+        />
       </div>
     )
   }
@@ -343,6 +582,7 @@ import { setHasErrorsFichaTecnicaDelPozo, setTipoDeSistemo, setHistorialInterven
           { this.makePozoForm() }
           { this.makeFormacionForm() }
           { this.makeHistoricalInterventionsInput() }
+          {this.makeFluidosForm()}
       </div>
     )
   }
@@ -382,6 +622,9 @@ const mapDispatchToProps = dispatch => ({
   setHistorialIntervencionesData: val => dispatch(setHistorialIntervencionesData(val)),
   setHasErrorsFichaTecnicaDelPozo: val => dispatch(setHasErrorsFichaTecnicaDelPozo(val)),
   setFromSaveFichaTecnicaDelPozo: val => dispatch(setFromSaveFichaTecnicaDelPozo(val)),
+  setGeneralFichaTecnicaPozo: (location, value) => {
+    dispatch(setGeneralFichaTecnicaPozo(location, value))
+  }
 })
 
 export default connect(mapStateToProps, mapDispatchToProps)(TechnicaDelPozo)
