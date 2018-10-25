@@ -51,22 +51,30 @@ const INSERT_WELL_QUERY = {
         WELL_FORMACION_ID, SUBDIRECCION, ACTIVO,
         FORMACION,
         CALIZA, DOLOMIA, ARCILLA, POROSIDAD,
-        PERMEABILIDAD, SW, CAA, CGA, TIPO_DE_POZO,
-        PWS, PWS_FECHA, PWF, PWF_FECHA, DELTA_P_PER_MES, TYAC, PVT,
+        PERMEABILIDAD, SW, CAA, CGA, DENSIDAD_ACEITE, BO, VISCOSIDAD_ACEITE, GRAVEDAD_ESPECIFICA_GAS, 
+        BG, RGA, ASFALTENOS, PARAFINAS, RESINAS_ASFALTICAS, INDICE_EST_COLOIDAL, DENSIDAD_AGUA, CONTENIDO_AGUA, 
+        SALINIDAD, PH, INDICE_EST_AGUA, CONENIDO_EMULSION, PRUEBA_DE_PRESION, MODELO, KH, K, S, PI_EN_NIVEL_SONDA,
+        TIPO_DE_POZO, PWS, PWS_FECHA, PWF, PWF_FECHA, DELTA_P_PER_MES, TYAC, PVT,
         APAREJO_DE_PRODUCCION, PROF_EMPACADOR, PROF_SENSOR_PYT, TIPO_DE_SISTEMA, TRANSACTION_ID, HAS_ERRORS) VALUES
         (?, ?, ?, ?, ?, ?, ?, ?, ?, ?,
          ?, ?, ?, ?, ?, ?, ?, ?, ?, ?,
-         ?, ?, ?, ?, ?, ?)`,
+         ?, ?, ?, ?, ?, ?, ?, ?, ?, ?,
+         ?, ?, ?, ?, ?, ?, ?, ?, ?, ?,
+         ?, ?, ?, ?, ?, ?, ?, ?)`,
     submit: `INSERT INTO WellsData (
         WELL_FORMACION_ID, SUBDIRECCION, ACTIVO,
         FORMACION,
         CALIZA, DOLOMIA, ARCILLA, POROSIDAD,
-        PERMEABILIDAD, SW, CAA, CGA, TIPO_DE_POZO,
-        PWS, PWS_FECHA, PWF, PWF_FECHA, DELTA_P_PER_MES, TYAC, PVT,
+        PERMEABILIDAD, SW, CAA, CGA, DENSIDAD_ACEITE, BO, VISCOSIDAD_ACEITE, GRAVEDAD_ESPECIFICA_GAS, 
+        BG, RGA, ASFALTENOS, PARAFINAS, RESINAS_ASFALTICAS, INDICE_EST_COLOIDAL, DENSIDAD_AGUA, CONTENIDO_AGUA, 
+        SALINIDAD, PH, INDICE_EST_AGUA, CONENIDO_EMULSION, PRUEBA_DE_PRESION, MODELO, KH, K, S, PI_EN_NIVEL_SONDA,
+        TIPO_DE_POZO, PWS, PWS_FECHA, PWF, PWF_FECHA, DELTA_P_PER_MES, TYAC, PVT,
         APAREJO_DE_PRODUCCION, PROF_EMPACADOR, PROF_SENSOR_PYT, TIPO_DE_SISTEMA, TRANSACTION_ID) VALUES
         (?, ?, ?, ?, ?, ?, ?, ?, ?, ?,
          ?, ?, ?, ?, ?, ?, ?, ?, ?, ?,
-         ?, ?, ?, ?, ?)`,
+         ?, ?, ?, ?, ?, ?, ?, ?, ?, ?,
+         ?, ?, ?, ?, ?, ?, ?, ?, ?, ?,
+         ?, ?, ?, ?, ?, ?, ?)`,
     loadSave: `SELECT * FROM _WellsDataSave WHERE TRANSACTION_ID = ?`,
     loadTransaction: `SELECT * FROM WellsData WHERE TRANSACTION_ID = ?`    
 }
@@ -964,9 +972,11 @@ export const create = async (body, action, cb) => {
     gpField, wpField, rraField, rrgField, rrpceField,
     h2sField, co2Field, n2Field } = finalObj.fichaTecnicaDelCampo
 
-  let { caliza,
-    dolomia, arcilla, porosidad, permeabilidad, sw, caa, cga, tipoDePozo, pws, pwsFecha, pwf, pwfFecha,
-    deltaPPerMes, tyac, pvt, aparejoDeProduccion, profEmpacador, profSensorPYT, tipoDeSap, historialIntervencionesData } = finalObj.fichaTecnicaDelPozo
+  let { caliza, dolomia, arcilla, porosidad, permeabilidad, sw, caa, cga, densidadAceite, bo, viscosidadAceite, 
+    gravedadEspecificaGas, bg, rga, asfaltenos, parafinas, resinasAsfalticas, indiceEstColoidal, densidadAgua, 
+    contenidoAgua, salinidad, ph, indiceEstAgua, contenidoEmulsion, pruebaDePresion, modelo, kh, k, s, piEnNivelSonda, 
+    tipoDePozo, pws, pwsFecha, pwf, pwfFecha, deltaPPerMes, tyac, pvt, aparejoDeProduccion, 
+    profEmpacador, profSensorPYT, tipoDeSap, historialIntervencionesData } = finalObj.fichaTecnicaDelPozo
   
   let { layerData, mudLossData } = finalObj.evaluacionPetrofisica
 
@@ -1140,7 +1150,10 @@ export const create = async (body, action, cb) => {
         values = [wellFormacionID, subdireccion, activo,
         formacion, caliza,
         dolomia, arcilla, porosidad, permeabilidad, sw,
-        caa, cga, tipoDePozo, pws, pwsFecha, pwf, pwfFecha,
+        caa, cga, densidadAceite, bo, viscosidadAceite, gravedadEspecificaGas, bg, rga, 
+        asfaltenos, parafinas, resinasAsfalticas, indiceEstColoidal, densidadAgua, contenidoAgua, 
+        salinidad, ph, indiceEstAgua, contenidoEmulsion, pruebaDePresion, modelo, kh, k, s, piEnNivelSonda,
+        tipoDePozo, pws, pwsFecha, pwf, pwfFecha,
         deltaPPerMes, tyac, pvt, aparejoDeProduccion, profEmpacador,
         profSensorPYT, tipoDeSistemo, transactionID]
 

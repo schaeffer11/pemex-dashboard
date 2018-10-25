@@ -60,7 +60,16 @@ const INSERT_CEDULA_APUNTALADO_QUERY = {
     submit: `INSERT INTO ResultsCedulaApuntalado_testtest (
         CEDULA_ID, INTERVENTION_ID, WELL_FORMACION_ID, ETAPA, SISTEMA, NOMBRE_COMERCIAL, TIPO_DE_FLUIDO, TIPO_DE_APUNTALANTE, VOL_LIQUIDO, 
         VOL_LECHADA, GASTO_EN_SUPERFICIE, GASTO_N2_SUPERFICIE, GASTO_TOTAL_FONDO, CALIDAD_N2, VOL_ESPUMA_FONDO, CONCENTRACION_APUNTALANTE_SUPERFICIE, 
-        CONCENTRACION_APUNTALANTE_FONDO, APUNTALANTE_ACUMULADO, TIEMPO, COMPANIA, TRANSACTION_ID) VALUES ?`        ,
+        CONCENTRACION_APUNTALANTE_FONDO, APUNTALANTE_ACUMULADO, TIEMPO, COMPANIA, PROPUESTA_ID, TRANSACTION_ID) VALUES ?`        ,
+    loadSave: ``,
+    loadTransaction: ``    
+}
+
+const INSERT_CEDULA_TERMICO_QUERY = {
+    save: ``,
+    submit: `INSERT INTO ResultsCedulaTermico (
+        CEDULA_ID, INTERVENTION_ID, WELL_FORMACION_ID, ETAPA, ACTIVIDAD, DESCRIPCION,
+        JUSTIFICACION, COMPANIA, PROPUESTA_ID, TRANSACTION_ID) VALUES ?`        ,
     loadSave: ``,
     loadTransaction: ``    
 }
@@ -261,11 +270,13 @@ export const createResults = async (body, action, cb) => {
           }
 
           values = []
-          geometria.forEach(i => {
-              let name = 'geometry ' + i.intervalo
-              let newRow = [wellFormacionID, name, i.imgUrl, propuestaID, transactionID]
-              values.push(newRow)
-          })
+          if (interventionType !== 'termico') {
+            geometria.forEach(i => {
+                let name = 'geometry ' + i.intervalo
+                let newRow = [wellFormacionID, name, i.imgUrl, propuestaID, transactionID]
+                values.push(newRow)
+            })
+          }
 
           values.push([wellFormacionID, 'Treatment Graph', treatmentGraphImg, propuestaID, transactionID])
 
@@ -279,7 +290,14 @@ export const createResults = async (body, action, cb) => {
               })
             }
 
-            let query = interventionType === 'estimulacion' ? INSERT_CEDULA_ESTIMULACION_QUERY.submit : interventionType === 'acido' ? INSERT_CEDULA_ACIDO_QUERY.submit : INSERT_CEDULA_APUNTALADO_QUERY.submit
+            let query = 
+              interventionType === 'estimulacion' 
+                ? INSERT_CEDULA_ESTIMULACION_QUERY.submit 
+                : interventionType === 'acido' 
+                  ? INSERT_CEDULA_ACIDO_QUERY.submit 
+                  : interventionType === 'apuntalado'
+                    ? INSERT_CEDULA_APUNTALADO_QUERY.submit
+                    : INSERT_CEDULA_TERMICO_QUERY.submit
 
             values = []
 
@@ -307,7 +325,17 @@ export const createResults = async (body, action, cb) => {
               if (cedulaData) {
                 cedulaData.forEach(i => {
                   let cedulaID = Math.floor(Math.random() * 1000000000)
-                  let newRow = [cedulaID, interventionID, wellFormacionID, i.etapa, i.sistema, i.nombreComercial, i.tipoDeFluido, i.tipoDeApuntalante, i.volLiquido, i.volLechada, i.gastoSuperficie, i.gastoN2Superficie, i.gastoEnFondo, i.calidadN2Fondo, i.volEspumaFondo, i.concentracionApuntalanteSuperficie, i.concentracionApuntalanteFondo, i.apuntalanteAcumulado, i.tiempo, propuestaCompany, transactionID]
+                  let newRow = [cedulaID, interventionID, wellFormacionID, i.etapa, i.sistema, i.nombreComercial, i.tipoDeFluido, i.tipoDeApuntalante, i.volLiquido, i.volLechada, i.gastoSuperficie, i.gastoN2Superficie, i.gastoEnFondo, i.calidadN2Fondo, i.volEspumaFondo, i.concentracionApuntalanteSuperficie, i.concentracionApuntalanteFondo, i.apuntalanteAcumulado, i.tiempo, propuestaCompany, propuestaID, transactionID]
+                  values.push(newRow)
+
+                })   
+              }
+            }
+            else if (interventionType === 'termico') {
+              if (cedulaData) {
+                cedulaData.forEach(i => {
+                  let cedulaID = Math.floor(Math.random() * 1000000000)
+                  let newRow = [cedulaID, interventionID, wellFormacionID, i.etapa, i.actividad, i.descripcion, i.justificacion, propuestaCompany, propuestaID, transactionID]
                   values.push(newRow)
 
                 })   
@@ -324,7 +352,14 @@ export const createResults = async (body, action, cb) => {
                 })
               }
 
-              query = interventionType === 'estimulacion' ? INSERT_RESULTS_ESIMULACION_QUERY.submit : interventionType === 'acido' ? INSERT_RESULTS_ACIDO_QUERY.submit : INSERT_RESULTS_APUNTALADO_QUERY.submit
+              query = 
+                interventionType === 'estimulacion' 
+                  ? INSERT_RESULTS_ESIMULACION_QUERY.submit 
+                  : interventionType === 'acido' 
+                    ? INSERT_RESULTS_ACIDO_QUERY.submit 
+                    : interventionType === 'apuntalado'
+                      ? INSERT_RESULTS_APUNTALADO_QUERY.submit
+                      : DUMMY_QUERY
 
               if (interventionType === 'estimulacion') {
                 values = [

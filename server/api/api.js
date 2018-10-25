@@ -639,6 +639,28 @@ router.get('/getWell', async (req, res) => {
     SW: { parent: 'fichaTecnicaDelPozo', child: 'sw'},
     CAA: { parent: 'fichaTecnicaDelPozo', child: 'caa'},
     CGA: { parent: 'fichaTecnicaDelPozo', child: 'cga'},
+    DENSIDAD_ACEITE : { parent: 'fichaTecnicaDelPozo', child: 'densidadAceite'},
+    BO : { parent: 'fichaTecnicaDelPozo', child: 'bo'},
+    VISCOSIDAD_ACEITE : { parent: 'fichaTecnicaDelPozo', child: 'viscosidadAceite'},
+    GRAVEDAD_ESPECIFICA_GAS : { parent: 'fichaTecnicaDelPozo', child: 'gravedadEspecificaGas'},
+    BG : { parent: 'fichaTecnicaDelPozo', child: 'bg'},
+    RGA : { parent: 'fichaTecnicaDelPozo', child: 'rga'},
+    ASFALTENOS : { parent: 'fichaTecnicaDelPozo', child: 'asfaltenos'},
+    PARAFINAS : { parent: 'fichaTecnicaDelPozo', child: 'parafinas'},
+    RESINAS_ASFALTICAS : { parent: 'fichaTecnicaDelPozo', child: 'resinasAsfalticas'},
+    INDICE_EST_COLOIDAL : { parent: 'fichaTecnicaDelPozo', child: 'indiceEstColoidal'},
+    DENSIDAD_AGUA : { parent: 'fichaTecnicaDelPozo', child: 'densidadAgua'},
+    CONTENIDO_AGUA : { parent: 'fichaTecnicaDelPozo', child: 'contenidoAgua'},
+    SALINIDAD : { parent: 'fichaTecnicaDelPozo', child: 'salinidad'},
+    PH : { parent: 'fichaTecnicaDelPozo', child: 'ph'},
+    INDICE_EST_AGUA : { parent: 'fichaTecnicaDelPozo', child: 'indiceEstAgua'},
+    CONENIDO_EMULSION : { parent: 'fichaTecnicaDelPozo', child: 'contenidoEmulsion'},
+    PRUEBA_DE_PRESION : { parent: 'fichaTecnicaDelPozo', child: 'pruebaDePresion'},
+    MODELO : { parent: 'fichaTecnicaDelPozo', child: 'modelo'},
+    KH : { parent: 'fichaTecnicaDelPozo', child: 'kh'},
+    K : { parent: 'fichaTecnicaDelPozo', child: 'k'},
+    S : { parent: 'fichaTecnicaDelPozo', child: 's'},
+    PI_EN_NIVEL_SONDA : { parent: 'fichaTecnicaDelPozo', child: 'piEnNivelSonda'},
     TIPO_DE_POZO: { parent: 'fichaTecnicaDelPozo', child: 'tipoDePozo'},
     PWS_FECHA: { parent: 'fichaTecnicaDelPozo', child: 'pwsFecha'},
     PWF_FECHA: { parent: 'fichaTecnicaDelPozo', child: 'pwfFecha'},
@@ -2251,6 +2273,7 @@ router.get('/getCosts', async (req, res) => {
       data.forEach((d, index) => {
         d.HAS_ERRORS = d.HAS_ERRORS === 0 || d.HAS_ERRORS === undefined ? false : true
         d.HAS_ERRORS === true ? error = true : null
+        d.ITEM = d.ITEM ? parseInt(d.ITEM) : null
         const innerObj = {}
         Object.keys(d).forEach(k => {
           if (map[k]) {
