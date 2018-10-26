@@ -156,9 +156,6 @@ import { sortLabels } from '../../../../lib/formatters'
       }
     }
 
-
-
-
     let formationOptions = [
       {label: 'JSO', value: 'JSO'},
       {label: 'JSK', value: 'JSK'},

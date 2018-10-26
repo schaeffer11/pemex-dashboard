@@ -1,12 +1,17 @@
 import React from 'react'
 import { Route, NavLink } from 'react-router-dom'
 import routes from '../../../routes/routes'
+import Sidebar from './Common/Sidebar'
 // import Navigation from '../../Layout/Navigation'
 
 const Reservoir = (props) => {
   return (
     <div className="analysis-content">
       <div className='menu'>
+        <div>
+          test
+        </div>
+        <Sidebar />
         {
           routes().map(route => (
             <div className='menu-item'>

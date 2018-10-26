@@ -17,7 +17,7 @@ const App = ({ children, user, username, loginAction, logoutAction, userActions,
 
   return (
     <BrowserRouter>
-      <div className={classnames('pemex-app', { 'logged-in': !!user }, { 'logged-out': !user })}>
+      <div id="page-wrap" className={classnames('pemex-app', { 'logged-in': !!user }, { 'logged-out': !user })}>
         <Productbar app={app} user={user} logoutAction={logoutAction} />
         <Productspace app={app} user={user} loginAction={loginAction} />
       </div>
