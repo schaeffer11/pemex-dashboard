@@ -92,7 +92,7 @@ import { setIsLoading, setShowForms } from '../../../redux/actions/global'
                     value = moment(value).format('YYYY-MM-DD');
                 }
 
-                if(value !== null) {
+                if(value !== null && value !== "") {
                     formData.append(key, value);
                 }
             })
