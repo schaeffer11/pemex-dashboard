@@ -6,6 +6,7 @@ import ReactTable from "react-table";
 import moment from 'moment'
 import ReactHighCharts from 'react-highcharts'
 import Select from 'react-select'
+import Fuse from 'fuse.js'
 
 moment.locale('es-mx');
 
@@ -220,6 +221,23 @@ const isWithinThreeMonth = function(date) {
     return !momentDate.isBefore(today) && momentDate.isBefore(A_WEEK_OLD);
 }
 
+
+var fuzzyFilterOptions = {
+    shouldSort: true,
+    threshold: 0.6,
+    location: 0,
+    distance: 100,
+    maxPatternLength: 32,
+    minMatchCharLength: 1,
+    keys: []
+}
+
+const fuzzyFilterMethod = (filter, rows) => {
+    let options = Object.assign({}, fuzzyFilterOptions, {keys: [filter.id]});
+    let fuse = new Fuse(rows, options);
+    return fuse.search(filter.value);
+}
+
 const CompromisosTable = (props) => {
     return (<ReactTable
         filterable
@@ -228,17 +246,25 @@ const CompromisosTable = (props) => {
             {
                 Header: "No.",
                 accessor: "id",
-                width: 100
+                width: 100,
+                filterAll: true,
+                filterMethod: fuzzyFilterMethod
             },{
                 Header: "Compromiso",
-                accessor: "descripcion"
+                accessor: "descripcion",
+                filterAll: true,
+                filterMethod: fuzzyFilterMethod
             },{
                 Header: "Activo",
-                accessor: "nombreActivo"
+                accessor: "nombreActivo",
+                filterAll: true,
+                filterMethod: fuzzyFilterMethod
             },{
                 Header: "Responsable",
                 accessor: "nombreResponable",
                 width: 200,
+                filterAll: true,
+                filterMethod: fuzzyFilterMethod
             },{
                 Header: "Fecha De Revision",
                 id: 'fechaRevision',
@@ -279,7 +305,7 @@ const CompromisosTable = (props) => {
                                 {value: 'todos' , 'label': 'Mostrar Todos'},
                                 {value: 'semana', 'label': 'Próxima Semana'},
                                 {value: 'mes'   , 'label': 'Próximo Mes'},
-                                {value: 'meses' , 'label': 'Próximo 3 Meses'},
+                                {value: 'meses' , 'label': 'Próximos 3 Meses'},
                             ]}
                             value={ filter ? filter.index : 'todos' }
                             onChange={selectedOption => {
@@ -293,9 +319,12 @@ const CompromisosTable = (props) => {
                 accessor: "minuta",
                 className: 'center',
                 width: 120,
+                filterAll: true,
+                filterMethod: fuzzyFilterMethod
             }, {
                 Header: '',
                 maxWidth: 150,
+                filterable: false,
                 Cell: ({row, original}) => (<button className="completar" id={original.id} onClick={() => props.editCompromiso(original.id)}>Editar</button>),
             }
         ]}
