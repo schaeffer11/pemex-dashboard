@@ -2,11 +2,12 @@ import db from '../lib/db'
 import appConfig from '../../app-config.js'
 const connection = db.getConnection(appConfig.users.database)
 
-exports.create = function(req, res){
+export const create = function(req, res){
     let { fechaRevision, fechaCumplimiento, descripcion, activo, responsable, minuta, notas } = req.body
     connection.query(`INSERT INTO Compromisos (ID, FECHA_REVISON, FECHA_CUMPLIMIENTO, DESCRIPCION, ACTIVO, RESPONSABLE, MINUTA, NOTAS) VALUES (null, ?, ?, ?, ?, ?, ?, ?)`, [fechaRevision, fechaCumplimiento, descripcion, activo, responsable, minuta, notas], (err, results) => {
         if (err) {
-            res.json({ success: false})
+            res.status(400)
+            res.send({})
         }
         else {
             res.json({ success: true})
@@ -14,7 +15,7 @@ exports.create = function(req, res){
     })
 }
 
-exports.put = function(req, res){
+export const put = function(req, res){
     let id = req.params.id
     let { fechaRevision, fechaCumplimiento, descripcion, activo, responsable, minuta, notas } = req.body
     connection.query(`UPDATE Compromisos SET FECHA_REVISON = ?, DESCRIPCION = ?, ACTIVO = ?, RESPONSABLE = ?, MINUTA = ?, FECHA_CUMPLIMIENTO = ?, NOTAS = ? WHERE id = ? `, [fechaRevision, descripcion, activo, responsable, minuta, fechaCumplimiento, notas, id], (err, results) => {
@@ -27,7 +28,7 @@ exports.put = function(req, res){
     })
 }
 
-exports.mine = function(req, res) {
+export const mine = function(req, res) {
     const { user } = req.session
 
     if(user === undefined){
@@ -62,7 +63,7 @@ exports.mine = function(req, res) {
     })
 }
 
-exports.collection = function(req, res) {
+export const collection = function(req, res) {
     connection.query(`SELECT 
       c.ID as id, 
       c.FECHA_REVISON as fechaRevision, 
@@ -85,7 +86,7 @@ exports.collection = function(req, res) {
     })
 }
 
-exports.get = function(req, res) {
+export const get = function(req, res) {
     if (req.params.id) {
         connection.query(`SELECT 
           c.ID as id, 
@@ -109,7 +110,7 @@ exports.get = function(req, res) {
             res.json(results[0])
         })
     }else {
-        res.status(500)
-        res.render('error', { error: err })
+        res.status(400)
+        res.send({})
     }
 }
