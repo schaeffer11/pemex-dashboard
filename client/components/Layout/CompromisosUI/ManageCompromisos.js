@@ -327,9 +327,10 @@ const CompromisosTable = (props) => {
                 className: 'center',
                 width: 200,
                 accessor: d => {
-                    return moment(d.fechaCumplimiento)
-                        .local()
-                        .format("DD/MM/YYYY")
+                    return d.fechaCumplimiento ?
+                        moment(d.fechaCumplimiento)
+                         .local()
+                         .format("DD/MM/YYYY") : "";
                 },
                 sortMethod: (a, b) => {
                     a = new Date(a).getTime();
@@ -346,6 +347,12 @@ const CompromisosTable = (props) => {
                 filterAll: true,
                 filterMethod: fuzzyFilterMethod
             }, {
+                Header: "Estado",
+                accessor: "estado",
+                className: 'center',
+                width: 120,
+                Cell: ({ row, original }) => (<Status row={row} original={original}/>)
+            }, {
                 Header: '',
                 maxWidth: 150,
                 filterable: false,
@@ -357,6 +364,19 @@ const CompromisosTable = (props) => {
     />)
 
 
+}
+
+const Status = ({ row, original }) => {
+    if(original.fechaCumplimiento){
+        return (<span className="complete">Completo</span>)
+    }
+
+    const pastDue = moment(new Date()) > moment(original.fechaCompromiso);
+    return (
+        <span class={pastDue ? 'incomplete' : 'open'}>
+            {pastDue ? 'Vencido' : 'Abierto' }
+        </span>
+    )
 }
 
 const Modal = (props) => {
