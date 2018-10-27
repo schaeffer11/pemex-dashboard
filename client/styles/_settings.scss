@@ -11,3 +11,26 @@ $table-row-font-color: #6b6b6b;
 $table-row-color:#f2f2f2;
 $table-row-alt-color: #e6e6e6;
 
+// QRI Colors
+$qriLogoBlue: #0076C0;
+$qriLogoGray: #A7A9AC;
+$qriIconGray: #646464;
+$speedWiseBlue: #0D547B;
+$reservoir: #E3A143;
+$geology: #D46A50;
+$drilling: #A18067;
+$production: #60A145;
+$cool-grey: #D3D3D3;
+$white-two: #ffffff;
+$black: #363636;
+$brownish-grey: #646464;
+// Highcharts Plotting
+$color-gas: #CC3D3D;
+$color-oil: #35b06d;
+$color-water: #3a88c0;
+:export {
+  colorGas: $color-gas;
+  colorOil: $color-oil;
+  colorWater: $color-water;
+  speedWiseBlue: $speedWiseBlue;
+}

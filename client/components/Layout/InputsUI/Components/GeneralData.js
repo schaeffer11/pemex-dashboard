@@ -181,6 +181,7 @@ import ButtonGroup from './ButtonGroup'
   }
 
   checkIncomplete() {
+    return false
     let { interventionFormData, formData } = this.props
 
     interventionFormData = interventionFormData.toJS()
@@ -267,6 +268,7 @@ import ButtonGroup from './ButtonGroup'
       {label: 'Tratamiento de Estimulación', value: 'estimulacion'},
       {label: 'Fracturamiento Ácido', value: 'acido'},
       {label: 'Fracturamiento Apuntalado', value: 'apuntalado'},
+      {label: 'Tratamiento Térmico', value: 'termico'},
     ]
     return (
       <div className='intervention-form'>
@@ -483,10 +485,12 @@ import ButtonGroup from './ButtonGroup'
       fetch(`api/getInterventionEstimulacion?transactionID=${transactionID}&saved=1`, headers).then(r => r.json()),
       fetch(`api/getInterventionAcido?transactionID=${transactionID}&saved=1`, headers).then(r => r.json()),
       fetch(`api/getInterventionApuntalado?transactionID=${transactionID}&saved=1`, headers).then(r => r.json()),
+      fetch(`api/getInterventionTermico?transactionID=${transactionID}&saved=1`, headers).then(r => r.json()),
       fetch(`api/getLabTest?transactionID=${transactionID}&saved=1`, headers).then(r => r.json()),
       fetch(`api/getCedulaEstimulacion?transactionID=${transactionID}&saved=1`, headers).then(r => r.json()),   
       fetch(`api/getCedulaAcido?transactionID=${transactionID}&saved=1`, headers).then(r => r.json()),   
-      fetch(`api/getCedulaApuntalado?transactionID=${transactionID}&saved=1`, headers).then(r => r.json()),      
+      fetch(`api/getCedulaApuntalado?transactionID=${transactionID}&saved=1`, headers).then(r => r.json()), 
+      fetch(`api/getCedulaTermico?transactionID=${transactionID}&saved=1`, headers).then(r => r.json()),      
       fetch(`api/getCosts?transactionID=${transactionID}&saved=1`, headers).then(r => r.json()),
     ])
       .catch(error => {

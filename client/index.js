@@ -11,11 +11,17 @@ import ReactDOM from 'react-dom'
 import App from './components/Layout/App'
 import rootReducer from './redux/index'
 import { loadState, saveState } from './lib/local-storage'
-import ReactHighCharts from 'react-highcharts'
+import ReactHighcharts from 'react-highcharts'
+import OfflineExporting from 'highcharts/modules/offline-exporting'
+import Exporting from 'highcharts/modules/exporting'
+
 
 import 'bootstrap/dist/css/bootstrap.min.css';
 import './styles/app.scss'
 import API from './lib/api-store';
+
+Exporting(ReactHighcharts.Highcharts)
+OfflineExporting(ReactHighcharts.Highcharts)
 
 const localStorageKey = 'welcomeToTheMachine'
 const persistedState = loadState(localStorageKey, Map())
@@ -61,7 +67,26 @@ store.subscribe(() => {
   saveState(localStorageKey, store.getState())
 })
 
-ReactHighCharts.Highcharts.setOptions({
+ReactHighcharts.Highcharts.setOptions({
+    exporting: {
+      fallbackToExportServer: false,
+    },
+    navigation: {
+      buttonOptions: {
+        enabled: false,
+      },
+    },
+    colors: [
+      '#56B3D8',
+      '#C3E4CC',
+      '#E4CE5E',
+      '#C26A1B',
+      '#5D2311',
+      '#141551',
+      '#355695',
+      '#90D2CE',
+      '#F4F296',
+    ],
     lang: {
         loading: 'Cargando...',
         months: ['Enero', 'Febrero', 'Marzo', 'Abril', 'Mayo', 'Junio', 'Julio', 'Agosto', 'Septiembre', 'Octubre', 'Noviembre', 'Diciembre'],
@@ -83,6 +108,7 @@ ReactHighCharts.Highcharts.setOptions({
         decimalPoint: '.'
     }
 });
+
 
 
 const bootstrap = () => {

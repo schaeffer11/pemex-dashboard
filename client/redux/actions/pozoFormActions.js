@@ -37,6 +37,11 @@ export function submitForm(action, token, saveName) {
       app: true,
       router: true,
       historicoDeAforosResults: true,
+      estCostResults: true,
+      historicoDeAforosResults: true,
+      graficaTratamiento: true,
+      resultsMeta: true,
+      globalAnalysis: true,
     }
     const errors = []
     const convertedFields = getState().toJS()
@@ -49,13 +54,16 @@ export function submitForm(action, token, saveName) {
     let filteredKeys
 
     if (tipoDeIntervencion === 'estimulacion') {
-      filteredKeys = allKeys.filter(i => !((i.includes('Acido')) || i.includes('Apuntalado')))
+      filteredKeys = allKeys.filter(i => !((i.includes('Acido')) || i.includes('Apuntalado') || i.includes('Termica')))
     }
     else if (tipoDeIntervencion === 'acido') {
-      filteredKeys = allKeys.filter(i => !((i.includes('Estimulacion')) || i.includes('Apuntalado')))
+      filteredKeys = allKeys.filter(i => !((i.includes('Estimulacion')) || i.includes('Apuntalado') || i.includes('Termica')))
     }
     else if (tipoDeIntervencion === 'apuntalado') {
-      filteredKeys = allKeys.filter(i => !((i.includes('Estimulacion')) || i.includes('Acido')))
+      filteredKeys = allKeys.filter(i => !((i.includes('Estimulacion')) || i.includes('Acido') || i.includes('Termica')))
+    }
+    else if (tipoDeIntervencion === 'termico') {
+      filteredKeys = allKeys.filter(i => !((i.includes('Estimulacion')) || i.includes('Acido') || i.includes('Apuntalado')))
     }
 
 
@@ -137,6 +145,43 @@ export function submitForm(action, token, saveName) {
         })
     }
     else if (action === 'submit') {
+    // //TODO apply this change and make it work in database
+    // //changes all -999 to null
+    // for (let k of filteredKeys) {
+    //   if(!ignore[k]) {
+    //     let innerObj = convertedFields[k]
+    //     let innerKeys = Object.keys(innerObj)
+
+    //     innerKeys.forEach(key => {
+    //       if (innerObj[key] === '-999' || innerObj[key] === '-999.00') {
+    //         innerObj[key] = null
+    //       }
+    //     })
+    //     // Look for images inside arrays and get base64
+    //     for(let aKeys of innerKeys) {
+    //       let property = innerObj[aKeys]
+    //       if (Array.isArray(property)) {
+    //         for (let j of property) {
+    //           Object.keys(j).forEach(key => {
+    //             if (j[key] === '-999' || j[key] === '-999.00') {
+    //               j[key] = null
+    //             }
+    //           })
+    //         }
+    //       }
+    //     }
+    //     console.log(convertedFields[k])
+    //   }
+    // }
+
+         // dispatch(setIsLoading({
+         //    notificationType: 'success',
+         //    notificationText: 'fuck',
+         //    isLoading: false,
+         //    showNotification: true,
+         //  }))
+
+
       fetch('/api/well', {
         headers,
         method: 'POST',

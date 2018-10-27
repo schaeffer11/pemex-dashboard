@@ -6,6 +6,7 @@ import { connect } from 'react-redux'
 import AcidoMultiStepForm from './Acido/AcidoMultiStepForm'
 import ApuntaladoMultiStepForm from './Apuntalado/ApuntaladoMultiStepForm'
 import EstimulacionMultiStepForm from './Estimulacion/EstimulacionMultiStepForm'
+import TermicoMultiStepForm from './Termico/TermicoMultiStepForm'
 import { InputRow, InputRowUnitless, InputRowSelectUnitless, TextAreaUnitless } from '../../Common/InputRow'
 
 @autobind class BaseIntervenciones extends Component {
@@ -20,18 +21,21 @@ import { InputRow, InputRowUnitless, InputRowSelectUnitless, TextAreaUnitless } 
     formData = formData.toJS()
 
     let { tipoDeIntervenciones } = formData
-
+    console.log('tipo de intervenciones?', tipoDeIntervenciones)
     let form;
     switch(tipoDeIntervenciones){
-            case 'estimulacion': 
-              form = <EstimulacionMultiStepForm />
-              break;
-            case 'acido':
-              form = <AcidoMultiStepForm />
-              break;
-            case 'apuntalado':
-              form = <ApuntaladoMultiStepForm />
-              break; 
+      case 'estimulacion': 
+        form = <EstimulacionMultiStepForm />
+        break;
+      case 'acido':
+        form = <AcidoMultiStepForm />
+        break;
+      case 'apuntalado':
+        form = <ApuntaladoMultiStepForm />
+        break;
+      case 'termico':
+        form = <TermicoMultiStepForm />
+        break;
     }
 
     return (

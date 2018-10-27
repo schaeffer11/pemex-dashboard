@@ -12,6 +12,7 @@ import objetivoYAlcancesIntervencion from './reducers/objetivoYAlcancesIntervenc
 import propuestaEstimulacion from './reducers/propuestaEstimulacion'
 import propuestaAcido from './reducers/propuestaAcido'
 import propuestaApuntalado from './reducers/propuestaApuntalado'
+import propuestaTermica from './reducers/propuestaTermica'
 import pruebasDeLaboratorio from './reducers/pruebasDeLaboratorio'
 import resultadosSimulacionEstimulacion from './reducers/resultadosSimulacionEstimulacion'
 import resultadosSimulacionAcido from './reducers/resultadosSimulacionAcido'
@@ -30,6 +31,7 @@ import historicoDeAforosResults from './reducers/historicoDeAforosResults'
 import tratamientoEstimulacion from './reducers/tratamientoEstimulacion'
 import tratamientoAcido from './reducers/tratamientoAcido'
 import tratamientoApuntalado from './reducers/tratamientoApuntalado'
+import tratamientoTermico from './reducers/tratamientoTermico'
 import evaluacionAcido from './reducers/evaluacionAcido'
 import evaluacionApuntalado from './reducers/evaluacionApuntalado'
 import evaluacionEstimulacion from './reducers/evaluacionEstimulacion'
@@ -38,6 +40,8 @@ import graficaTratamiento from './reducers/graficaTratamiento'
 import forms from './reducers/forms'
 import global from './reducers/global'
 import { handleImagesFromServer } from '../lib/formatters';
+import globalAnalysis from './reducers/globalAnalysis'
+import chartOptions from './reducers/chartOptions'
 
 const appReducer = combineReducers({
   app,
@@ -53,6 +57,7 @@ const appReducer = combineReducers({
   propuestaEstimulacion,
   propuestaAcido,
   propuestaApuntalado,
+  propuestaTermica,
   pruebasDeLaboratorio,
   resultadosSimulacionEstimulacion,
   resultadosSimulacionAcido,
@@ -68,15 +73,18 @@ const appReducer = combineReducers({
   historialDeIntervenciones,
   historicoDeAforos,
   global,
+  globalAnalysis,
   historicoDeAforosResults,
   tratamientoEstimulacion,
   tratamientoAcido,
   tratamientoApuntalado,
+  tratamientoTermico,
   evaluacionAcido,
   evaluacionApuntalado,
   evaluacionEstimulacion,
   graficaTratamiento,
   resultsMeta,
+  chartOptions
 })
 
 const rootReducer = (state, action) => {

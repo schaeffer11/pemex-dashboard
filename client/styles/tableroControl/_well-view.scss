@@ -1,0 +1,17 @@
+.well-view {
+	display: grid;
+	grid-template-rows: 77px calc(100vh - 77px);
+	grid-template-areas: 	'header' 
+							'content';
+
+	.header {
+		grid-area: header;
+	}
+
+	.content {
+		grid-area: content;
+		overflow-y: auto;
+		padding-left: 20px;
+		padding-right:20px;
+	}
+}

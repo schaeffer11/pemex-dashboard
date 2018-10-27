@@ -79,7 +79,13 @@ import { setHasSubmitted, setIsLoading, setCurrentPage, setSaveName } from '../.
 
     console.log(val)
     if (val === 'Intervenciones') {
-      let name = tipoDeIntervenciones === 'estimulacion' ? 'propuestaEstimulacion' : tipoDeIntervenciones === 'acido' ? 'propuestaAcido' : 'propuestaApuntalado'
+      let name = tipoDeIntervenciones === 'estimulacion' 
+                ? 'propuestaEstimulacion' 
+                : tipoDeIntervenciones === 'acido' 
+                      ? 'propuestaAcido' 
+                      : tipoDeIntervenciones === 'apuntalado' 
+                          ? 'propuestaApuntalado'
+                          : 'propuestaTermica'
       setCurrentPage(name)
     }
     else {
@@ -99,7 +105,7 @@ import { setHasSubmitted, setIsLoading, setCurrentPage, setSaveName } from '../.
       hasErrorsPropuestaEstimulacion, hasErrorsPropuestaApuntalado, hasErrorsPropuestaAcido, hasErrorsResultadosSimulacionAcido, 
       hasErrorsResultadosSimulacionEstimulacion, hasErrorsResultadosSimulacionApuntalado, hasErrorsEstIncProduccionAcido,
       hasErrorsEstIncProduccionEstimulacion, hasErrorsEstIncProduccionApuntalado, hasErrorsEstCosts, hasErrorsHistoricoDeProduccion,
-      setHasSubmitted, hasErrorsHistoricoDeAforos, hasErrorsSistemasArtificialesDeProduccion, setIsLoading, setSaveName } = this.props
+      setHasSubmitted, hasErrorsHistoricoDeAforos, hasErrorsSistemasArtificialesDeProduccion, hasErrorsPropuestaTermica, setIsLoading, setSaveName } = this.props
 
 
     if (action === 'submit') {
@@ -119,6 +125,10 @@ import { setHasSubmitted, setIsLoading, setCurrentPage, setSaveName } from '../.
       else if (tipoDeIntervenciones === 'apuntalado' && (hasErrorsPropuestaApuntalado || hasErrorsResultadosSimulacionApuntalado || hasErrorsEstIncProduccionApuntalado)) {
         hasErrors = true
       }
+      else if (tipoDeIntervenciones === 'termico' && (hasErrorsPropuestaTermica)) {
+        hasErrors = true
+      }
+
       if (hasErrorsEstCosts) {
         hasErrors = true
       }
@@ -308,7 +318,7 @@ import { setHasSubmitted, setIsLoading, setCurrentPage, setSaveName } from '../.
       >
       <div className="modalTest" >
         <div className="modal-title">
-            Comentarios sobre pagina
+            Comentarios sobre página
         </div>
         <div className="modal-info"> 
           Cualquier error o comentario que tenga acerca de la página en turno, hacerlo aquí y enviar.
@@ -416,6 +426,7 @@ const mapStateToProps = state => ({
   hasErrorsPropuestaEstimulacion: state.getIn(['propuestaEstimulacion', 'hasErrors']),
   hasErrorsPropuestaApuntalado: state.getIn(['propuestaApuntalado', 'hasErrors']),
   hasErrorsPropuestaAcido: state.getIn(['propuestaAcido', 'hasErrors']),
+  hasErrorsPropuestaTermica: state.getIn(['propuestaTermica', 'hasErrors']),
   hasErrorsResultadosSimulacionAcido: state.getIn(['resultadosSimulacionAcido', 'hasErrors']),
   hasErrorsResultadosSimulacionEstimulacion: state.getIn(['resultadosSimulacionEstimulacion', 'hasErrors']),
   hasErrorsResultadosSimulacionApuntalado: state.getIn(['resultadosSimulacionApuntalado', 'hasErrors']),

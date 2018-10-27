@@ -12,7 +12,8 @@ import { create as createWell, getFields, getWell, getSurveys,
             getBombeoCavidades, getBombeoElectrocentrifugo, getBombeoMecanico, 
             getFieldPressure, getWellPressure,
             getWellAforos, getWellProduccion, getWellImages, getInterventionBase, 
-            getInterventionEsimulacion, getInterventionAcido, getInterventionApuntalado, 
+            getInterventionEsimulacion, getInterventionAcido, getInterventionApuntalado,
+            getInterventionTermico, getCedulaTermico, 
             getLabTest, getCedulaEstimulacion, getCedulaAcido, getCedulaApuntalado, 
             getCosts, getInterventionImages } from './pozo'
 
@@ -46,7 +47,6 @@ async function handleImageResponse(data) {
     return 0;
   })
   const final = {}
-  const finalArray = {}
   for (let well of filteredData) {
     const imgName = well.IMG_URL
     const imgInformation = well.IMG_URL.split('.')
@@ -68,7 +68,7 @@ async function handleImageResponse(data) {
       objectPath.set(final, parent, innerObj)
     }
   }
-  return Object.assign(final, finalArray)
+  return final
 }
 
 // We do not want to check authorization for templates so we put above middleware!
@@ -191,9 +191,28 @@ router.get('/getSubmittedFieldWellMapping', (req, res) => {
     })
 })
 
+router.post('/getJobs', (req, res) => {
+    let { well } = req.body
+
+    connection.query(`SELECT * FROM Intervenciones WHERE WELL_FORMACION_ID = ?`, well, (err, results) => {
+
+      res.json(results)
+    })
+})
+
 
 router.get('/getFieldWellMapping', (req, res) => {
     connection.query(`SELECT * FROM FieldWellMapping`, (err, results) => {
+      res.json(results)
+    })
+})
+
+router.get('/getFieldWellMappingHasData', (req, res) => {
+    connection.query(`
+      SELECT * FROM FieldWellMapping 
+      WHERE WELL_FORMACION_ID IN 
+        (SELECT DISTINCT(WELL_FORMACION_ID) FROM Transactions)
+        `, (err, results) => {
       res.json(results)
     })
 })
@@ -628,6 +647,28 @@ router.get('/getWell', async (req, res) => {
     SW: { parent: 'fichaTecnicaDelPozo', child: 'sw'},
     CAA: { parent: 'fichaTecnicaDelPozo', child: 'caa'},
     CGA: { parent: 'fichaTecnicaDelPozo', child: 'cga'},
+    DENSIDAD_ACEITE : { parent: 'fichaTecnicaDelPozo', child: 'densidadAceite'},
+    BO : { parent: 'fichaTecnicaDelPozo', child: 'bo'},
+    VISCOSIDAD_ACEITE : { parent: 'fichaTecnicaDelPozo', child: 'viscosidadAceite'},
+    GRAVEDAD_ESPECIFICA_GAS : { parent: 'fichaTecnicaDelPozo', child: 'gravedadEspecificaGas'},
+    BG : { parent: 'fichaTecnicaDelPozo', child: 'bg'},
+    RGA : { parent: 'fichaTecnicaDelPozo', child: 'rga'},
+    ASFALTENOS : { parent: 'fichaTecnicaDelPozo', child: 'asfaltenos'},
+    PARAFINAS : { parent: 'fichaTecnicaDelPozo', child: 'parafinas'},
+    RESINAS_ASFALTICAS : { parent: 'fichaTecnicaDelPozo', child: 'resinasAsfalticas'},
+    INDICE_EST_COLOIDAL : { parent: 'fichaTecnicaDelPozo', child: 'indiceEstColoidal'},
+    DENSIDAD_AGUA : { parent: 'fichaTecnicaDelPozo', child: 'densidadAgua'},
+    CONTENIDO_AGUA : { parent: 'fichaTecnicaDelPozo', child: 'contenidoAgua'},
+    SALINIDAD : { parent: 'fichaTecnicaDelPozo', child: 'salinidad'},
+    PH : { parent: 'fichaTecnicaDelPozo', child: 'ph'},
+    INDICE_EST_AGUA : { parent: 'fichaTecnicaDelPozo', child: 'indiceEstAgua'},
+    CONENIDO_EMULSION : { parent: 'fichaTecnicaDelPozo', child: 'contenidoEmulsion'},
+    PRUEBA_DE_PRESION : { parent: 'fichaTecnicaDelPozo', child: 'pruebaDePresion'},
+    MODELO : { parent: 'fichaTecnicaDelPozo', child: 'modelo'},
+    KH : { parent: 'fichaTecnicaDelPozo', child: 'kh'},
+    K : { parent: 'fichaTecnicaDelPozo', child: 'k'},
+    S : { parent: 'fichaTecnicaDelPozo', child: 's'},
+    PI_EN_NIVEL_SONDA : { parent: 'fichaTecnicaDelPozo', child: 'piEnNivelSonda'},
     TIPO_DE_POZO: { parent: 'fichaTecnicaDelPozo', child: 'tipoDePozo'},
     PWS_FECHA: { parent: 'fichaTecnicaDelPozo', child: 'pwsFecha'},
     PWF_FECHA: { parent: 'fichaTecnicaDelPozo', child: 'pwfFecha'},
@@ -1748,6 +1789,48 @@ router.get('/getInterventionApuntalado', async (req, res) => {
     res.json(finalObj)
   })
 })
+
+
+router.get('/getInterventionTermico', async (req, res) => {
+  let { transactionID, saved } = req.query
+
+  let action = saved ? 'loadSave' : 'loadTransaction'
+
+
+  const map = {
+    VOLUMEN_VAPOR_INYECTAR: { parent: 'propuestaTermica', child: 'volumenVapor' },
+    CALIDAD: { parent: 'propuestaTermica', child: 'calidad' }, 
+    GASTO_INYECCION: { parent: 'propuestaTermica', child: 'gastoInyeccion' },     
+    PRESION_MAXIMA_SALIDA_GENERADOR: { parent: 'propuestaTermica', child: 'presionMaximaSalidaGenerador' },
+    TEMPERATURA_MAXIMA_GENERADOR: { parent: 'propuestaTermica', child: 'temperaturaMaximaGenerador' }, 
+  } 
+
+  getInterventionTermico(transactionID, action, (data) => {
+    const finalObj = {}
+
+    if (data[0]) {
+      Object.keys(data[0]).forEach(key => {
+        if (map[key]) {
+          const { parent, child } = map[key]
+          objectPath.set(finalObj, `${parent}.${child}`, data[0][key])
+        }
+      })   
+      finalObj.propuestaTermica.hasErrors = data[0].HAS_ERRORS_PROPUESTA === 0 ? false : true
+    }
+    else {
+      Object.keys(map).forEach(key => {
+        const { parent, child } = map[key]
+        objectPath.set(finalObj, `${parent}.${child}`, '')
+      })
+      finalObj.propuestaTermica.hasErrors = true
+    }
+    res.json(finalObj)
+  })
+})
+
+
+
+
 router.get('/getLabTest', async (req, res) => {
   let { transactionID, saved } = req.query
 
@@ -1907,6 +1990,45 @@ router.get('/getLabTest', async (req, res) => {
             solubilidad: i.SOLUBILIDAD_APUNTALANTE
           })
         }
+        else if (type === 'cromatografiaDelGas') {
+          outData.push({
+            edited: true,
+            index: index,
+            length: labIDs.length,
+            type: type,
+            fechaMuestreo: (i.FECHA_DE_MUESTREO ? i.FECHA_DE_MUESTREO = i.FECHA_DE_MUESTREO.toJSON().slice(0, 10) : null),
+            fechaPrueba : (i.FECHA_DE_PRUEBA ? i.FECHA_DE_PRUEBA = i.FECHA_DE_PRUEBA.toJSON().slice(0, 10) : null),
+            compania: i.COMPANIA,
+            superviso: i.PERSONAL_DE_PEMEX_QUE_SUPERVISO,
+            obervaciones: i.OBSERVACIONES,
+          })
+        }
+        else if (type === 'pruebaDeDureza') {
+          outData.push({
+            edited: true,
+            index: index,
+            length: labIDs.length,
+            type: type,
+            fechaMuestreo: (i.FECHA_DE_MUESTREO ? i.FECHA_DE_MUESTREO = i.FECHA_DE_MUESTREO.toJSON().slice(0, 10) : null),
+            fechaPrueba : (i.FECHA_DE_PRUEBA ? i.FECHA_DE_PRUEBA = i.FECHA_DE_PRUEBA.toJSON().slice(0, 10) : null),
+            compania: i.COMPANIA,
+            superviso: i.PERSONAL_DE_PEMEX_QUE_SUPERVISO,
+            obervaciones: i.OBSERVACIONES,
+          })
+        }
+        else if (type === 'determinacionDeLaCalidad') {
+          outData.push({
+            edited: true,
+            index: index,
+            length: labIDs.length,
+            type: type,
+            fechaMuestreo: (i.FECHA_DE_MUESTREO ? i.FECHA_DE_MUESTREO = i.FECHA_DE_MUESTREO.toJSON().slice(0, 10) : null),
+            fechaPrueba : (i.FECHA_DE_PRUEBA ? i.FECHA_DE_PRUEBA = i.FECHA_DE_PRUEBA.toJSON().slice(0, 10) : null),
+            compania: i.COMPANIA,
+            superviso: i.PERSONAL_DE_PEMEX_QUE_SUPERVISO,
+            obervaciones: i.OBSERVACIONES,
+          })
+        }
       }
     })
 
@@ -1979,7 +2101,7 @@ router.get('/getCedulaEstimulacion', async (req, res) => {
         'propuestaEstimulacion': {
           "propuestaCompany": '',
           "cedulaData": [
-            {}
+            {etapa: 1}
           ]
         }
       }
@@ -2043,7 +2165,7 @@ router.get('/getCedulaAcido', async (req, res) => {
         'propuestaAcido': {
           "propuestaCompany": '',
           "cedulaData": [
-            {}
+            {etapa: 1}
           ]
         }
       }
@@ -2063,17 +2185,18 @@ router.get('/getCedulaApuntalado', async (req, res) => {
     ETAPA: { child: 'etapa' }, 
     SISTEMA: { child: 'sistema' }, 
     NOMBRE_COMERCIAL: { child: 'nombreComercial' },
+    TIPO_DE_FLUIDO: { child: 'tipoDeFluido'},
     TIPO_DE_APUNTALANTE: { child: 'tipoDeApuntalante' }, 
-    CONCENTRACION_DE_APUNTALANTE: { child: 'concentraciDeApuntalante' }, 
-    VOL_LIQUID: { child: 'volLiquid' }, 
-    GASTO_N2: { child: 'gastoN2' }, 
-    GASTO_LIQUIDO: { child: 'gastoLiqudo' }, 
-    GASTO_EN_FONDO: { child: 'gastoEnFondo' }, 
-    CALIDAD: { child: 'calidad' }, 
-    VOL_N2: { child: 'volN2' }, 
-    VOL_LIQUIDO_ACUM: { child: 'volLiquidoAcum' }, 
-    VOL_N2_ACUM: { child: 'volN2Acum' }, 
-    REL_N2_LIQ: { child: 'relN2Liq' }, 
+    VOL_LIQUIDO: { child: 'volLiquido' }, 
+    VOL_LECHADA: { child: 'volLechada' }, 
+    GASTO_EN_SUPERFICIE: { child: 'gastoSuperficie' }, 
+    GASTO_N2_SUPERFICIE: { child: 'gastoN2Superficie' }, 
+    GASTO_TOTAL_FONDO: {child: 'gastoEnFondo'},
+    CALIDAD_N2: { child: 'calidadN2Fondo' }, 
+    VOL_ESPUMA_FONDO: { child: 'volEspumaFondo' }, 
+    CONCENTRACION_APUNTALANTE_SUPERFICIE: { child: 'concentracionApuntalanteSuperficie' }, 
+    CONCENTRACION_APUNTALANTE_FONDO: { child: 'concentracionApuntalanteFondo' }, 
+    APUNTALANTE_ACUMULADO: { child: 'apuntalanteAcumulado' }, 
     TIEMPO: { child: 'tiempo' },
     HAS_ERRORS: { child: 'error' },
   }
@@ -2107,7 +2230,7 @@ router.get('/getCedulaApuntalado', async (req, res) => {
         'propuestaApuntalado': {
           "propuestaCompany": '',
           "cedulaData": [
-            {}
+            {etapa: 1}
           ]
         }
       }
@@ -2117,6 +2240,60 @@ router.get('/getCedulaApuntalado', async (req, res) => {
   })
 })
 
+
+router.get('/getCedulaTermico', async (req, res) => {
+  let { transactionID, saved } = req.query
+
+  let action = saved ? 'loadSave' : 'loadTransaction'
+
+  const map = {
+    ETAPA: { child: 'etapa' }, 
+    ACTIVIDAD: { child: 'actividad' }, 
+    DESCRIPCION: { child: 'descripcion' },
+    JUSTIFICACION: { child: 'justificacion'},
+    HAS_ERRORS: { child: 'error' },
+  }
+
+  const mainParent = 'propuestaTermica'
+  const innerParent = 'cedulaData'
+
+  getCedulaTermico(transactionID, action, (data) => {
+    let finalObj = {}
+    let error = false
+
+    if (data && data.length > 0) {
+      data.forEach((d, index) => {
+        d.HAS_ERRORS = d.HAS_ERRORS === 0 || d.HAS_ERRORS === undefined ? false : true
+        d.HAS_ERRORS === true ? error = true : null
+        const innerObj = {}
+        Object.keys(d).forEach(k => {
+          if (map[k]) {
+            const { child } = map[k]
+            objectPath.set(innerObj, child, d[k])
+          }
+        })
+        objectPath.set(innerObj, 'length', data.length)
+        objectPath.set(innerObj, 'index', index)
+        objectPath.push(finalObj, `${mainParent}.${innerParent}`, innerObj)
+      })
+      finalObj.propuestaTermica.propuestaCompany = data[0].COMPANIA
+      finalObj.propuestaTermica.hasErrors = error
+    }
+    else {
+      finalObj = {
+        'propuestaTermica': {
+          "propuestaCompany": '',
+          "cedulaData": [
+            {etapa: 1}
+          ]
+        }
+      }
+    }
+
+    console.log(finalObj)
+    res.json(finalObj)
+  })
+})
 
 router.get('/getCosts', async (req, res) => {
   let { transactionID, saved } = req.query
@@ -2143,6 +2320,7 @@ router.get('/getCosts', async (req, res) => {
       data.forEach((d, index) => {
         d.HAS_ERRORS = d.HAS_ERRORS === 0 || d.HAS_ERRORS === undefined ? false : true
         d.HAS_ERRORS === true ? error = true : null
+        d.ITEM = d.ITEM ? parseInt(d.ITEM) : null
         const innerObj = {}
         Object.keys(d).forEach(k => {
           if (map[k]) {

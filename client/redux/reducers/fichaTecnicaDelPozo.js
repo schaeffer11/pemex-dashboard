@@ -24,6 +24,28 @@ const initialState = fromJS({
   profEmpacador: '',
   profSensorPYT: '',
   tipoDeSap: '',
+  densidadAceite: '',
+  bo: '',
+  viscosidadAceite: '',
+  gravedadEspecificaGas: '',
+  bg: '',
+  rga: '',
+  asfaltenos: '',
+  parafinas: '',
+  resinasAsfalticas: '',
+  indiceEstColoidal: '',
+  densidadAgua: '',
+  contenidoAgua: '',
+  salinidad: '',
+  ph: '',
+  indiceEstAgua: '',
+  contenidoEmulsion: '',
+  pruebaDePresion: '',
+  modelo: '',
+  kh: '',
+  k: '',
+  s: '',
+  piEnNivelSonda: '',
   historialIntervencionesData: [{
     fecha: null,
     intervenciones: '',
@@ -91,6 +113,8 @@ const fichaTecnicaDelPozo = (state = initialState, action) => {
       return state.set('checked', fromJS(action.value))
     case 'set_fichaTecnicaDelPozo':
       return state = fromJS(action.value)
+    case 'set_generalFichaTecnicaDelPozo':
+      return state.setIn(action.location, action.value)
     default:
       return state
   }

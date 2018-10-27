@@ -51,22 +51,30 @@ const INSERT_WELL_QUERY = {
         WELL_FORMACION_ID, SUBDIRECCION, ACTIVO,
         FORMACION,
         CALIZA, DOLOMIA, ARCILLA, POROSIDAD,
-        PERMEABILIDAD, SW, CAA, CGA, TIPO_DE_POZO,
-        PWS, PWS_FECHA, PWF, PWF_FECHA, DELTA_P_PER_MES, TYAC, PVT,
+        PERMEABILIDAD, SW, CAA, CGA, DENSIDAD_ACEITE, BO, VISCOSIDAD_ACEITE, GRAVEDAD_ESPECIFICA_GAS, 
+        BG, RGA, ASFALTENOS, PARAFINAS, RESINAS_ASFALTICAS, INDICE_EST_COLOIDAL, DENSIDAD_AGUA, CONTENIDO_AGUA, 
+        SALINIDAD, PH, INDICE_EST_AGUA, CONENIDO_EMULSION, PRUEBA_DE_PRESION, MODELO, KH, K, S, PI_EN_NIVEL_SONDA,
+        TIPO_DE_POZO, PWS, PWS_FECHA, PWF, PWF_FECHA, DELTA_P_PER_MES, TYAC, PVT,
         APAREJO_DE_PRODUCCION, PROF_EMPACADOR, PROF_SENSOR_PYT, TIPO_DE_SISTEMA, TRANSACTION_ID, HAS_ERRORS) VALUES
         (?, ?, ?, ?, ?, ?, ?, ?, ?, ?,
          ?, ?, ?, ?, ?, ?, ?, ?, ?, ?,
-         ?, ?, ?, ?, ?, ?)`,
+         ?, ?, ?, ?, ?, ?, ?, ?, ?, ?,
+         ?, ?, ?, ?, ?, ?, ?, ?, ?, ?,
+         ?, ?, ?, ?, ?, ?, ?, ?)`,
     submit: `INSERT INTO WellsData (
         WELL_FORMACION_ID, SUBDIRECCION, ACTIVO,
         FORMACION,
         CALIZA, DOLOMIA, ARCILLA, POROSIDAD,
-        PERMEABILIDAD, SW, CAA, CGA, TIPO_DE_POZO,
-        PWS, PWS_FECHA, PWF, PWF_FECHA, DELTA_P_PER_MES, TYAC, PVT,
+        PERMEABILIDAD, SW, CAA, CGA, DENSIDAD_ACEITE, BO, VISCOSIDAD_ACEITE, GRAVEDAD_ESPECIFICA_GAS, 
+        BG, RGA, ASFALTENOS, PARAFINAS, RESINAS_ASFALTICAS, INDICE_EST_COLOIDAL, DENSIDAD_AGUA, CONTENIDO_AGUA, 
+        SALINIDAD, PH, INDICE_EST_AGUA, CONENIDO_EMULSION, PRUEBA_DE_PRESION, MODELO, KH, K, S, PI_EN_NIVEL_SONDA,
+        TIPO_DE_POZO, PWS, PWS_FECHA, PWF, PWF_FECHA, DELTA_P_PER_MES, TYAC, PVT,
         APAREJO_DE_PRODUCCION, PROF_EMPACADOR, PROF_SENSOR_PYT, TIPO_DE_SISTEMA, TRANSACTION_ID) VALUES
         (?, ?, ?, ?, ?, ?, ?, ?, ?, ?,
          ?, ?, ?, ?, ?, ?, ?, ?, ?, ?,
-         ?, ?, ?, ?, ?)`,
+         ?, ?, ?, ?, ?, ?, ?, ?, ?, ?,
+         ?, ?, ?, ?, ?, ?, ?, ?, ?, ?,
+         ?, ?, ?, ?, ?, ?, ?)`,
     loadSave: `SELECT * FROM _WellsDataSave WHERE TRANSACTION_ID = ?`,
     loadTransaction: `SELECT * FROM WellsData WHERE TRANSACTION_ID = ?`    
 }
@@ -432,6 +440,24 @@ const INSERT_INTERVENTION_APUNTALADO_QUERY = {
     loadTransaction: `SELECT * FROM IntervencionesApuntalado WHERE TRANSACTION_ID = ?`    
 }
 
+const INSERT_INTERVENTION_TERMICO_QUERY = {
+    save: `INSERT INTO _IntervencionesTermicoSave (
+        INTERVENTION_ID, WELL_FORMACION_ID, 
+        VOLUMEN_VAPOR_INYECTAR, CALIDAD, GASTO_INYECCION, PRESION_MAXIMA_SALIDA_GENERADOR,
+        TEMPERATURA_MAXIMA_GENERADOR, TRANSACTION_ID, HAS_ERRORS_PROPUESTA) VALUES
+        (?, ?, ?, ?, ?, ?, ?, ?, ?)`,
+    submit: `INSERT INTO IntervencionesTermico (
+       INTERVENTION_ID, WELL_FORMACION_ID, 
+        VOLUMEN_VAPOR_INYECTAR, CALIDAD, GASTO_INYECCION, PRESION_MAXIMA_SALIDA_GENERADOR,
+        TEMPERATURA_MAXIMA_GENERADOR, TRANSACTION_ID) VALUES
+        (?, ?, ?, ?, ?, ?, ?, ?)`,     
+    loadSave: `SELECT * FROM _IntervencionesTermicoSave WHERE TRANSACTION_ID = ?`,
+    loadTransaction: `SELECT * FROM IntervencionesTermico WHERE TRANSACTION_ID = ?`    
+}
+
+
+
+
 const INSERT_LAB_TEST_QUERY = {
     save: `INSERT INTO _IntervencionesLabTestsSave (
         LAB_ID, INTERVENTION_ID, WELL_FORMACION_ID, TIPO_DE_ANALISIS, FECHA_DE_MUESTREO, FECHA_DE_PRUEBA, COMPANIA, PERSONAL_DE_PEMEX_QUE_SUPERVISO, OBSERVACIONES, TRANSACTION_ID)
@@ -488,16 +514,27 @@ const INSERT_CEDULA_ACIDO_QUERY = {
 }
 
 const INSERT_CEDULA_APUNTALADO_QUERY = {
-    save: `INSERT INTO _IntervencionesCedulaApuntaladoSave (
-        CEDULA_ID, INTERVENTION_ID, WELL_FORMACION_ID, ETAPA, SISTEMA, NOMBRE_COMERCIAL, TIPO_DE_APUNTALANTE, CONCENTRACION_DE_APUNTALANTE, 
-        VOL_LIQUID, GASTO_N2, GASTO_LIQUIDO, GASTO_EN_FONDO, CALIDAD, VOL_N2, VOL_LIQUIDO_ACUM, 
-        VOL_N2_ACUM, REL_N2_LIQ, TIEMPO, COMPANIA, TRANSACTION_ID, HAS_ERRORS) VALUES ?`   ,
-    submit: `INSERT INTO IntervencionesCedulaApuntalado (
-        CEDULA_ID, INTERVENTION_ID, WELL_FORMACION_ID, ETAPA, SISTEMA, NOMBRE_COMERCIAL, TIPO_DE_APUNTALANTE, CONCENTRACION_DE_APUNTALANTE, 
-        VOL_LIQUID, GASTO_N2, GASTO_LIQUIDO, GASTO_EN_FONDO, CALIDAD, VOL_N2, VOL_LIQUIDO_ACUM, 
-        VOL_N2_ACUM, REL_N2_LIQ, TIEMPO, COMPANIA, TRANSACTION_ID) VALUES ?`        ,
-    loadSave: `SELECT * FROM _IntervencionesCedulaApuntaladoSave WHERE TRANSACTION_ID = ?`,
-    loadTransaction: `SELECT * FROM IntervencionesCedulaApuntalado WHERE TRANSACTION_ID = ?`    
+    save: `INSERT INTO _IntervencionesCedulaApuntaladoSave_testtest (
+        CEDULA_ID, INTERVENTION_ID, WELL_FORMACION_ID, ETAPA, SISTEMA, NOMBRE_COMERCIAL, TIPO_DE_FLUIDO, TIPO_DE_APUNTALANTE, VOL_LIQUIDO, 
+        VOL_LECHADA, GASTO_EN_SUPERFICIE, GASTO_N2_SUPERFICIE, GASTO_TOTAL_FONDO, CALIDAD_N2, VOL_ESPUMA_FONDO, CONCENTRACION_APUNTALANTE_SUPERFICIE, 
+        CONCENTRACION_APUNTALANTE_FONDO, APUNTALANTE_ACUMULADO, TIEMPO, COMPANIA, TRANSACTION_ID, HAS_ERRORS) VALUES ?`   ,
+    submit: `INSERT INTO IntervencionesCedulaApuntalado_testtest (
+        CEDULA_ID, INTERVENTION_ID, WELL_FORMACION_ID, ETAPA, SISTEMA, NOMBRE_COMERCIAL, TIPO_DE_FLUIDO, TIPO_DE_APUNTALANTE, VOL_LIQUIDO, 
+        VOL_LECHADA, GASTO_EN_SUPERFICIE, GASTO_N2_SUPERFICIE, GASTO_TOTAL_FONDO, CALIDAD_N2, VOL_ESPUMA_FONDO, CONCENTRACION_APUNTALANTE_SUPERFICIE, 
+        CONCENTRACION_APUNTALANTE_FONDO, APUNTALANTE_ACUMULADO, TIEMPO, COMPANIA, TRANSACTION_ID) VALUES ?`        ,
+    loadSave: `SELECT * FROM _IntervencionesCedulaApuntaladoSave_testtest WHERE TRANSACTION_ID = ?`,
+    loadTransaction: `SELECT * FROM IntervencionesCedulaApuntalado_testtest WHERE TRANSACTION_ID = ?`    
+}
+
+const INSERT_CEDULA_TERMICO_QUERY = {
+    save: `INSERT INTO _IntervencionesCedulaTermicoSave (
+        CEDULA_ID, INTERVENTION_ID, WELL_FORMACION_ID, ETAPA, ACTIVIDAD, DESCRIPCION,
+        JUSTIFICACION, COMPANIA, TRANSACTION_ID, HAS_ERRORS) VALUES ?`   ,
+    submit: `INSERT INTO IntervencionesCedulaTermico (
+        CEDULA_ID, INTERVENTION_ID, WELL_FORMACION_ID, ETAPA, ACTIVIDAD, DESCRIPCION,
+        JUSTIFICACION, COMPANIA, TRANSACTION_ID) VALUES ?`        ,
+    loadSave: `SELECT * FROM _IntervencionesCedulaTermicoSave WHERE TRANSACTION_ID = ?`,
+    loadTransaction: `SELECT * FROM IntervencionesCedulaTermico WHERE TRANSACTION_ID = ?`    
 }
 
 
@@ -611,8 +648,10 @@ const DELETE_QUERY =
 `DELETE FROM _FieldHistoricalPressureSave WHERE TRANSACTION_ID = ?;
 DELETE FROM _FieldsDataSave WHERE TRANSACTION_ID = ?;
 DELETE FROM _IntervencionesAcidoSave WHERE TRANSACTION_ID = ?;
+DELETE FROM _IntervencionesTermicoSave WHERE TRANSACTION_ID = ?;
 DELETE FROM _IntervencionesApuntaladoSave WHERE TRANSACTION_ID = ?;
 DELETE FROM _IntervencionesCedulaAcidoSave WHERE TRANSACTION_ID = ?;
+DELETE FROM _IntervencionesCedulaTermicoSave WHERE TRANSACTION_ID = ?;
 DELETE FROM _IntervencionesCedulaApuntaladoSave WHERE TRANSACTION_ID = ?;
 DELETE FROM _IntervencionesCedulaEstimulacionSave WHERE TRANSACTION_ID = ?;
 DELETE FROM _IntervencionesEstimatedCostsSave WHERE TRANSACTION_ID = ?;
@@ -797,6 +836,13 @@ export const getInterventionApuntalado = async (transID, action, cb) => {
         cb(results)
     })
 }
+
+export const getInterventionTermico = async (transID, action, cb) => {
+    connection.query(INSERT_INTERVENTION_TERMICO_QUERY[action], [transID], (err, results) => {
+        cb(results)
+    })
+}
+
 export const getLabTest = async (transID, action, cb) => {
     connection.query(INSERT_LAB_TEST_QUERY[action], [transID], (err, results) => {
         cb(results)
@@ -814,6 +860,12 @@ export const getCedulaAcido = async (transID, action, cb) => {
 }
 export const getCedulaApuntalado = async (transID, action, cb) => {
     connection.query(INSERT_CEDULA_APUNTALADO_QUERY[action], [transID], (err, results) => {
+        cb(results)
+    })
+}
+
+export const getCedulaTermico = async (transID, action, cb) => {
+    connection.query(INSERT_CEDULA_TERMICO_QUERY[action], [transID], (err, results) => {
         cb(results)
     })
 }
@@ -905,7 +957,6 @@ export const create = async (body, action, cb) => {
   }
 
   let userID = finalObj.user.id
-
   let saveName = finalObj.saveName
 
 
@@ -921,9 +972,11 @@ export const create = async (body, action, cb) => {
     gpField, wpField, rraField, rrgField, rrpceField,
     h2sField, co2Field, n2Field } = finalObj.fichaTecnicaDelCampo
 
-  let { caliza,
-    dolomia, arcilla, porosidad, permeabilidad, sw, caa, cga, tipoDePozo, pws, pwsFecha, pwf, pwfFecha,
-    deltaPPerMes, tyac, pvt, aparejoDeProduccion, profEmpacador, profSensorPYT, tipoDeSap, historialIntervencionesData } = finalObj.fichaTecnicaDelPozo
+  let { caliza, dolomia, arcilla, porosidad, permeabilidad, sw, caa, cga, densidadAceite, bo, viscosidadAceite, 
+    gravedadEspecificaGas, bg, rga, asfaltenos, parafinas, resinasAsfalticas, indiceEstColoidal, densidadAgua, 
+    contenidoAgua, salinidad, ph, indiceEstAgua, contenidoEmulsion, pruebaDePresion, modelo, kh, k, s, piEnNivelSonda, 
+    tipoDePozo, pws, pwsFecha, pwf, pwfFecha, deltaPPerMes, tyac, pvt, aparejoDeProduccion, 
+    profEmpacador, profSensorPYT, tipoDeSap, historialIntervencionesData } = finalObj.fichaTecnicaDelPozo
   
   let { layerData, mudLossData } = finalObj.evaluacionPetrofisica
 
@@ -1036,6 +1089,10 @@ export const create = async (body, action, cb) => {
       incProdFile = finalObj.estIncProduccionApuntalado.imgName
       simResultsFile = finalObj.resultadosSimulacionApuntalado.imgName
   }
+  else if (tipoDeIntervenciones === 'termico') {
+      var { volumenVapor, calidad, gastoInyeccion, presionMaximaSalidaGenerador, 
+        temperaturaMaximaGenerador, cedulaData, propuestaCompany } = finalObj.propuestaTermica
+  }
 
   // write to db
   
@@ -1093,7 +1150,10 @@ export const create = async (body, action, cb) => {
         values = [wellFormacionID, subdireccion, activo,
         formacion, caliza,
         dolomia, arcilla, porosidad, permeabilidad, sw,
-        caa, cga, tipoDePozo, pws, pwsFecha, pwf, pwfFecha,
+        caa, cga, densidadAceite, bo, viscosidadAceite, gravedadEspecificaGas, bg, rga, 
+        asfaltenos, parafinas, resinasAsfalticas, indiceEstColoidal, densidadAgua, contenidoAgua, 
+        salinidad, ph, indiceEstAgua, contenidoEmulsion, pruebaDePresion, modelo, kh, k, s, piEnNivelSonda,
+        tipoDePozo, pws, pwsFecha, pwf, pwfFecha,
         deltaPPerMes, tyac, pvt, aparejoDeProduccion, profEmpacador,
         profSensorPYT, tipoDeSistemo, transactionID]
 
@@ -1435,9 +1495,14 @@ export const create = async (body, action, cb) => {
                                     })
                                   }
 
-
-
-                                  query = tipoDeIntervenciones === 'estimulacion' ? (action === 'save' ? INSERT_INTERVENTION_ESIMULACION_QUERY.save : INSERT_INTERVENTION_ESIMULACION_QUERY.submit) : tipoDeIntervenciones === 'acido' ? (action === 'save' ? INSERT_INTERVENTION_ACIDO_QUERY.save : INSERT_INTERVENTION_ACIDO_QUERY.submit) : (action === 'save' ? INSERT_INTERVENTION_APUNTALADO_QUERY.save : INSERT_INTERVENTION_APUNTALADO_QUERY.submit)
+                                  query = 
+                                  tipoDeIntervenciones === 'estimulacion' ? 
+                                    (action === 'save' ? INSERT_INTERVENTION_ESIMULACION_QUERY.save : INSERT_INTERVENTION_ESIMULACION_QUERY.submit) 
+                                  : tipoDeIntervenciones === 'acido' ? 
+                                    (action === 'save' ? INSERT_INTERVENTION_ACIDO_QUERY.save : INSERT_INTERVENTION_ACIDO_QUERY.submit) 
+                                  : tipoDeIntervenciones === 'apuntalado' ?
+                                    (action === 'save' ? INSERT_INTERVENTION_APUNTALADO_QUERY.save : INSERT_INTERVENTION_APUNTALADO_QUERY.submit)
+                                  : (action === 'save' ? INSERT_INTERVENTION_TERMICO_QUERY.save : INSERT_INTERVENTION_TERMICO_QUERY.submit)
 
                                   if (tipoDeIntervenciones === 'estimulacion') {
                                     values = [
@@ -1498,6 +1563,16 @@ export const create = async (body, action, cb) => {
                                       values.push(finalObj.estIncProduccionApuntalado.hasErrors === true ? 1 : 0)
                                     }    
                                   } 
+                                  else if (tipoDeIntervenciones === 'termico') {
+                                    values = [
+                                        interventionID, wellFormacionID, volumenVapor, calidad, gastoInyeccion, 
+                                        presionMaximaSalidaGenerador, temperaturaMaximaGenerador, transactionID
+                                      ]
+                                    
+                                    if (action === 'save') {
+                                      values.push(finalObj.propuestaTermica.hasErrors === true ? 1 : 0)
+                                    }    
+                                  } 
 
                                   connection.query(query, values, (err, results) => {
                                     console.log('intervention', err)
@@ -1525,7 +1600,11 @@ export const create = async (body, action, cb) => {
                                       INSERT_LAB_TEST_QUERY.save = `SELECT(1) FROM Users LIMIT 1`
                                     }
 
-                                    connection.query((action === 'save' ? INSERT_LAB_TEST_QUERY.save : INSERT_LAB_TEST_QUERY.submit), [values], (err, results) => {
+                                    query = 
+                                      tipoDeIntervenciones === 'termico' ? DUMMY_QUERY :
+                                        (action === 'save' ? INSERT_LAB_TEST_QUERY.save : INSERT_LAB_TEST_QUERY.submit)
+                                    
+                                    connection.query(query, [values], (err, results) => {
                                       console.log('lab tests', err)
                                       console.log('lab tests', results)
                                       if (err) {
@@ -1536,7 +1615,14 @@ export const create = async (body, action, cb) => {
                                         })
                                       }
 
-                                      query = tipoDeIntervenciones === 'estimulacion' ? (action === 'save' ? INSERT_CEDULA_ESTIMULACION_QUERY.save : INSERT_CEDULA_ESTIMULACION_QUERY.submit) : tipoDeIntervenciones === 'acido' ? (action === 'save' ? INSERT_CEDULA_ACIDO_QUERY.save : INSERT_CEDULA_ACIDO_QUERY.submit) : (action === 'save' ? INSERT_CEDULA_APUNTALADO_QUERY.save : INSERT_CEDULA_APUNTALADO_QUERY.submit)
+                                      query = 
+                                        tipoDeIntervenciones === 'estimulacion' ? 
+                                          (action === 'save' ? INSERT_CEDULA_ESTIMULACION_QUERY.save : INSERT_CEDULA_ESTIMULACION_QUERY.submit) 
+                                        : tipoDeIntervenciones === 'acido' ? 
+                                          (action === 'save' ? INSERT_CEDULA_ACIDO_QUERY.save : INSERT_CEDULA_ACIDO_QUERY.submit) 
+                                        : tipoDeIntervenciones === 'apuntalado' ?
+                                          (action === 'save' ? INSERT_CEDULA_APUNTALADO_QUERY.save : INSERT_CEDULA_APUNTALADO_QUERY.submit)
+                                        : (action === 'save' ? INSERT_CEDULA_TERMICO_QUERY.save : INSERT_CEDULA_TERMICO_QUERY.submit)
 
                                       values = []
 
@@ -1558,7 +1644,7 @@ export const create = async (body, action, cb) => {
                                           }
                                         } 
                                       } 
-                                      else {
+                                      else if (tipoDeIntervenciones === 'acido') {
                                         if (cedulaData) {
                                           cedulaData.forEach(i => {
                                             let cedulaID = Math.floor(Math.random() * 1000000000)
@@ -1575,8 +1661,44 @@ export const create = async (body, action, cb) => {
                                             query = 'SELECT(1) FROM Users LIMIT 1'
                                           }
                                         }
-
                                       }
+                                      else if (tipoDeIntervenciones === 'apuntalado') {
+                                          if (cedulaData) {
+                                            cedulaData.forEach(i => {
+                                              let cedulaID = Math.floor(Math.random() * 1000000000)
+                                              let newRow = [cedulaID, interventionID, wellFormacionID, i.etapa, i.sistema, i.nombreComercial, i.tipoDeFluido, i.tipoDeApuntalante, i.volLiquido, i.volLechada, i.gastoSuperficie, i.gastoN2Superficie, i.gastoEnFondo, i.calidadN2Fondo, i.volEspumaFondo, i.concentracionApuntalanteSuperficie, i.concentracionApuntalanteFondo, i.apuntalanteAcumulado, i.tiempo, propuestaCompany, transactionID]
+                                              if (action === 'save') {
+                                                newRow.push(i.error)
+                                              }
+                                              values.push(newRow)
+
+                                            })   
+                                          }
+                                          else {
+                                            if (action === 'save') {
+                                              query = 'SELECT(1) FROM Users LIMIT 1'
+                                            }
+                                          }
+                                        }
+                                        else if (tipoDeIntervenciones === 'termico') {
+                                            if (cedulaData) {
+                                              cedulaData.forEach(i => {
+                                                let cedulaID = Math.floor(Math.random() * 1000000000)
+                                                let newRow = [cedulaID, interventionID, wellFormacionID, i.etapa, i.actividad, i.descripcion, i.justificacion, propuestaCompany, transactionID]
+                                                if (action === 'save') {
+                                                  newRow.push(i.error)
+                                                }
+                                                values.push(newRow)
+
+                                              })   
+                                            }
+                                            else {
+                                              if (action === 'save') {
+                                                query = 'SELECT(1) FROM Users LIMIT 1'
+                                              }
+                                            }
+                                          }
+
 
                                       connection.query(query, [values], (err, results) => {
                                         console.log('cedula', err)
@@ -1599,7 +1721,12 @@ export const create = async (body, action, cb) => {
                                               values.push(newRow)
                                             })
 
-                                            connection.query((action === 'save' ? INSERT_COSTS_QUERY.save : INSERT_COSTS_QUERY.submit), [values], (err, results) => {
+                                        query = 
+                                          tipoDeIntervenciones === 'termico' ? DUMMY_QUERY :
+                                            (action === 'save' ? INSERT_COSTS_QUERY.save : INSERT_COSTS_QUERY.submit)
+                                        
+
+                                            connection.query(query, [values], (err, results) => {
                                               console.log('costs', err)
                                               console.log('costs', results)
                                               if (err) {
@@ -1620,7 +1747,12 @@ export const create = async (body, action, cb) => {
                                               values.push([interventionID, 'Lab Data', i.imgName, transactionID])
                                             })
 
-                                              connection.query((action === 'save' ? INSERT_INTERVENTION_IMAGE_QUERY.save : INSERT_INTERVENTION_IMAGE_QUERY.submit), [values], (err, results) => {
+                                              query = 
+                                                tipoDeIntervenciones === 'termico' ? DUMMY_QUERY :
+                                                  (action === 'save' ? INSERT_INTERVENTION_IMAGE_QUERY.save : INSERT_INTERVENTION_IMAGE_QUERY.submit)
+                                        
+
+                                              connection.query(query, [values], (err, results) => {
                                                 console.log('intervention img', err)
                                                 console.log('intervention img', results)
                                                 if (err) {
@@ -1652,7 +1784,7 @@ export const create = async (body, action, cb) => {
                                                       i.phDelAgua, i.salinidadDelAgua, i.salinidadDelAceite, transactionID])
                                                   })
 
-                                                  connection.query(values.length === 0 ? DUMMY_QUERY : action === 'save' ? INSERT_LAB_TEST_CARACTERIZACION_FISICO.save : INSERT_LAB_TEST_CARACTERIZACION_FISICO.submit, [values], (err, results) => {
+                                                  connection.query( tipoDeIntervenciones === 'termico' || values.length === 0 ? DUMMY_QUERY : action === 'save' ? INSERT_LAB_TEST_CARACTERIZACION_FISICO.save : INSERT_LAB_TEST_CARACTERIZACION_FISICO.submit, [values], (err, results) => {
                                                     console.log('lab test caracterizacionFisico', err)
                                                     console.log('lab test caracterizacionFisico', results)
                                                     if (err) {
@@ -1671,7 +1803,7 @@ export const create = async (body, action, cb) => {
                                                         i.pesoDeLaMuestraFinal, i.solubilidad, transactionID])
                                                     })
 
-                                                    connection.query(values.length === 0 ? DUMMY_QUERY : action === 'save' ? INSERT_LAB_TEST_PRUEBAS_DE_SOLUBILIDAD.save : INSERT_LAB_TEST_PRUEBAS_DE_SOLUBILIDAD.submit, [values], (err, results) => {
+                                                    connection.query( tipoDeIntervenciones === 'termico'  || values.length === 0 ? DUMMY_QUERY : action === 'save' ? INSERT_LAB_TEST_PRUEBAS_DE_SOLUBILIDAD.save : INSERT_LAB_TEST_PRUEBAS_DE_SOLUBILIDAD.submit, [values], (err, results) => {
                                                       console.log('lab test solubildad', err)
                                                       console.log('lab test solubildad', results)
                                                       if (err) {
@@ -1695,7 +1827,7 @@ export const create = async (body, action, cb) => {
                                                         }
                                                       })
 
-                                                      connection.query(values.length === 0 ? DUMMY_QUERY : action === 'save' ? INSERT_LAB_TEST_PRUEBAS_DE_COMPATIBILIDAD.save : INSERT_LAB_TEST_PRUEBAS_DE_COMPATIBILIDAD.submit, [values], (err, results) => {
+                                                      connection.query( tipoDeIntervenciones === 'termico'  || values.length === 0 ? DUMMY_QUERY : action === 'save' ? INSERT_LAB_TEST_PRUEBAS_DE_COMPATIBILIDAD.save : INSERT_LAB_TEST_PRUEBAS_DE_COMPATIBILIDAD.submit, [values], (err, results) => {
                                                         console.log('lab test compatibilidad', err)
                                                         console.log('lab test compatibilidad', results)
 
@@ -1717,7 +1849,7 @@ export const create = async (body, action, cb) => {
                                                             i.malla, i.aglutinamiento, i.turbidez, i.solubilidad, transactionID])
                                                         })
 
-                                                        connection.query(values.length === 0 ? DUMMY_QUERY : action === 'save' ? INSERT_LAB_TEST_PRUEBAS_PARA_APUNTALANTE.save : INSERT_LAB_TEST_PRUEBAS_PARA_APUNTALANTE.submit, [values], (err, results) => {
+                                                        connection.query( tipoDeIntervenciones === 'termico'  || values.length === 0 ? DUMMY_QUERY : action === 'save' ? INSERT_LAB_TEST_PRUEBAS_PARA_APUNTALANTE.save : INSERT_LAB_TEST_PRUEBAS_PARA_APUNTALANTE.submit, [values], (err, results) => {
                                                           console.log('lab test apuntalante', err)
                                                           console.log('lab test apuntalante', results)
 
@@ -1738,7 +1870,7 @@ export const create = async (body, action, cb) => {
                                                               i.tiempoDeRompimiento, i.dosificacionDeQuebradors, i.viscosidadDelGelDeFractura, transactionID])
                                                           })
 
-                                                          connection.query(values.length === 0 ? DUMMY_QUERY : action === 'save' ? INSERT_LAB_TEST_PRUEBAS_GEL_DE_FRACTURA.save : INSERT_LAB_TEST_PRUEBAS_GEL_DE_FRACTURA.submit, [values], (err, results) => {
+                                                          connection.query( tipoDeIntervenciones === 'termico'  || values.length === 0 ? DUMMY_QUERY : action === 'save' ? INSERT_LAB_TEST_PRUEBAS_GEL_DE_FRACTURA.save : INSERT_LAB_TEST_PRUEBAS_GEL_DE_FRACTURA.submit, [values], (err, results) => {
                                                             console.log('lab test fractura', err)
                                                             console.log('lab test fractura', results)
 
@@ -1764,7 +1896,7 @@ export const create = async (body, action, cb) => {
                                                               }
                                                             })
 
-                                                            connection.query(values.length === 0 ? DUMMY_QUERY : action === 'save' ? INSERT_LAB_TEST_PRUEBAS_DE_GRABADO.save : INSERT_LAB_TEST_PRUEBAS_DE_GRABADO.submit, [values], (err, results) => {
+                                                            connection.query( tipoDeIntervenciones === 'termico'  || values.length === 0 ? DUMMY_QUERY : action === 'save' ? INSERT_LAB_TEST_PRUEBAS_DE_GRABADO.save : INSERT_LAB_TEST_PRUEBAS_DE_GRABADO.submit, [values], (err, results) => {
                                                               console.log('lab test grabado', err)
                                                               console.log('lab test grabado', results)
 
@@ -1844,7 +1976,7 @@ export const create = async (body, action, cb) => {
                                                                         }
 
                                                                         values = []
-                                                                        for (let i = 0; i < 46; i++) {
+                                                                        for (let i = 0; i < 48; i++) {
                                                                           values.push(deleteID)
                                                                         }
 

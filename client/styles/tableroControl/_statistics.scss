@@ -1,0 +1,41 @@
+.statistics {
+	display: grid;
+	grid-template-rows: 138px calc(100% - 138px);
+	grid-template-areas: 	'header' 
+							'content';
+
+	.header {
+		grid-area: header;
+
+		.filters {
+			.activo-selector {
+				width: 49%;
+				display: inline-block;	
+				margin-right: 2%;
+			}
+
+			.field-selector {
+				width: 49%;
+				display: inline-block;	
+			}
+
+			.well-selector {
+				width: 49%;
+				display: inline-block;	
+				margin-right: 2%;
+			}
+
+			.formation-selector {
+				width: 49%;
+				display: inline-block;				
+			}
+		}
+	}
+
+	.content {
+		grid-area: content;
+		overflow-y: auto;
+		padding-left: 20px;
+		padding-right:20px;
+	}
+}

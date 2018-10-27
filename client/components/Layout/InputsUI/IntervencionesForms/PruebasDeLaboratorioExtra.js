@@ -101,7 +101,19 @@ const grabadoOptions = [
   }
 
   validate() {
-    
+
+  }
+
+  makeCromatografiaDelGas(index) {
+    return this.makeImageInput(index, 'cromatografiaDelGas')
+  }
+
+  makePruebaDeDureza(index) {
+    return this.makeImageInput(index, 'pruebaDeDureza')
+  }
+
+  makeDeterminacionDeLaCalidad(index) {
+    return this.makeImageInput(index, 'determinacionDeLaCalidad')
   }
 
 
@@ -625,7 +637,10 @@ const grabadoOptions = [
         pruebasDeCompatibilidad: this.makeCompatibilidadTable(i),
         pruebasParaApuntalante: this.makePruebasApuntalante(i),
         pruebasGelDeFractura: this.makePruebasFractura(i),
-        pruebasDeGrabado: this.makeGrabadoTable(i)
+        pruebasDeGrabado: this.makeGrabadoTable(i),
+        cromatografiaDelGas: this.makeCromatografiaDelGas(i),
+        pruebaDeDureza: this.makePruebaDeDureza(i),
+        determinacionDeLaCalidad: this.makeDeterminacionDeLaCalidad(i),
       }
 
       return (
