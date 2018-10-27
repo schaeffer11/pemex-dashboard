@@ -80,8 +80,8 @@ import { setIsLoading, setShowForms } from '../../../redux/actions/global'
                         <Form>
                             <h2>Compromiso No.{this.state.compromiso.id}</h2>
                             <div className="field">
-                                <div className="label">Fecha de Revision:</div>
-                                <div>{moment(this.state.compromiso.fechaRevision).format('DD-MM-YYYY')}</div>
+                                <div className="label">Fecha de Compromiso:</div>
+                                <div>{moment(this.state.compromiso.fechaCompromiso).format('DD-MM-YYYY')}</div>
                             </div>
                             <div className="field">
                                 <div className="label">Fecha de Cumplimiento:</div>

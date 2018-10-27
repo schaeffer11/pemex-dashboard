@@ -22,7 +22,7 @@ import { setIsLoading, setShowForms } from '../../../redux/actions/global'
         this.initialValues = {
             descripcion: "",
             activo: "",
-            fechaRevision: "",
+            fechaCompromiso: "",
             fechaCumplimiento: "",
             responsable: "",
             minuta: "",
@@ -88,7 +88,7 @@ import { setIsLoading, setShowForms } from '../../../redux/actions/global'
 
             Object.entries(values).forEach(([key,value]) => {
                 // Handle untouched date values loaded from the database
-                if(value && (key == 'fechaRevision' || key == 'fechaCumplimiento' ) ){
+                if(value && (key == 'fechaCompromiso' || key == 'fechaCumplimiento' ) ){
                     value = moment(value).format('YYYY-MM-DD');
                 }
 
@@ -185,8 +185,8 @@ import { setIsLoading, setShowForms } from '../../../redux/actions/global'
 
                             <div className="fecha field">
                                 <label>Fecha De Revision</label>
-                                <DateInput name="fechaRevision"/>
-                                {errors.fechaRevision && touched.fechaRevision && <div class="error">{errors.fechaRevision}</div>}
+                                <DateInput name="fechaCompromiso"/>
+                                {errors.fechaCompromiso && touched.fechaCompromiso && <div class="error">{errors.fechaCompromiso}</div>}
                             </div>
 
                             <div className="fecha field">

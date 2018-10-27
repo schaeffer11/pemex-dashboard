@@ -3,8 +3,8 @@ import appConfig from '../../app-config.js'
 const connection = db.getConnection(appConfig.users.database)
 
 export const create = function(req, res){
-    let { fechaRevision, fechaCumplimiento, descripcion, activo, responsable, minuta, notas } = req.body
-    connection.query(`INSERT INTO Compromisos (ID, FECHA_REVISON, FECHA_CUMPLIMIENTO, DESCRIPCION, ACTIVO, RESPONSABLE, MINUTA, NOTAS) VALUES (null, ?, ?, ?, ?, ?, ?, ?)`, [fechaRevision, fechaCumplimiento, descripcion, activo, responsable, minuta, notas], (err, results) => {
+    let { fechaCompromiso, fechaCumplimiento, descripcion, activo, responsable, minuta, notas } = req.body
+    connection.query(`INSERT INTO Compromisos (ID, FECHA_COMPROMISO, FECHA_CUMPLIMIENTO, DESCRIPCION, ACTIVO, RESPONSABLE, MINUTA, NOTAS) VALUES (null, ?, ?, ?, ?, ?, ?, ?)`, [fechaCompromiso, fechaCumplimiento, descripcion, activo, responsable, minuta, notas], (err, results) => {
         if (err) {
             res.status(400)
             res.send({})
@@ -17,8 +17,8 @@ export const create = function(req, res){
 
 export const put = function(req, res){
     let id = req.params.id
-    let { fechaRevision, fechaCumplimiento, descripcion, activo, responsable, minuta, notas } = req.body
-    connection.query(`UPDATE Compromisos SET FECHA_REVISON = ?, DESCRIPCION = ?, ACTIVO = ?, RESPONSABLE = ?, MINUTA = ?, FECHA_CUMPLIMIENTO = ?, NOTAS = ? WHERE id = ? `, [fechaRevision, descripcion, activo, responsable, minuta, fechaCumplimiento, notas, id], (err, results) => {
+    let { fechaCompromiso, fechaCumplimiento, descripcion, activo, responsable, minuta, notas } = req.body
+    connection.query(`UPDATE Compromisos SET FECHA_COMPROMISO = ?, DESCRIPCION = ?, ACTIVO = ?, RESPONSABLE = ?, MINUTA = ?, FECHA_CUMPLIMIENTO = ?, NOTAS = ? WHERE id = ? `, [fechaCompromiso, descripcion, activo, responsable, minuta, fechaCumplimiento, notas, id], (err, results) => {
         if (err) {
             res.json({err})
         }
@@ -36,10 +36,10 @@ export const mine = function(req, res) {
     }
 
     const currentUser = user.id;
-    let { fechaRevision, descripcion, activo, responsable, minuta } = req.body
+    let { fechaCompromiso, descripcion, activo, responsable, minuta } = req.body
     connection.query(`SELECT 
         c.ID as id, 
-        c.FECHA_REVISON as fechaRevision, 
+        c.FECHA_COMPROMISO as fechaCompromiso, 
         c.FECHA_CUMPLIMIENTO as fechaCumplimiento,
         c.DESCRIPCION as descripcion,
         c.ACTIVO as activo, 
@@ -66,7 +66,7 @@ export const mine = function(req, res) {
 export const collection = function(req, res) {
     connection.query(`SELECT 
       c.ID as id, 
-      c.FECHA_REVISON as fechaRevision, 
+      c.FECHA_COMPROMISO as fechaCompromiso, 
       c.FECHA_CUMPLIMIENTO as fechaCumplimiento, 
       c.DESCRIPCION as descripcion,
       c.ACTIVO as activo, 
@@ -90,7 +90,7 @@ export const get = function(req, res) {
     if (req.params.id) {
         connection.query(`SELECT 
           c.ID as id, 
-          c.FECHA_REVISON as fechaRevision, 
+          c.FECHA_COMPROMISO as fechaCompromiso, 
           c.FECHA_CUMPLIMIENTO as fechaCumplimiento, 
           c.DESCRIPCION as descripcion,
           c.ACTIVO as activo, 

@@ -122,12 +122,12 @@ const MyCompromisos = (props) => {
                 Header: "Activo",
                 accessor: "nombreActivo"
             },{
-                Header: "Fecha De Revision",
-                id: 'fechaRevision',
+                Header: "Fecha De Compromiso",
+                id: 'fechaCompromiso',
                 className: 'center',
                 width: 200,
                 accessor: d => {
-                    return moment(d.fechaRevision)
+                    return moment(d.fechaCompromiso)
                         .local()
                         .format("DD/MM/YYYY")
                 },
