@@ -200,6 +200,27 @@ const groupRecords = function(rec, key) {
     }, {});
 }
 
+
+const FutureDateFilter = ({filter, onChange}) => {
+    return (
+        <Select
+            simpleValue
+            placeholder="Seleccionar"
+            className='input'
+            options={[
+                {value: 'todos' , 'label': 'Mostrar Todos'},
+                {value: 'semana', 'label': 'Próxima Semana'},
+                {value: 'mes'   , 'label': 'Próximo Mes'},
+                {value: 'meses' , 'label': 'Próximos 3 Meses'},
+            ]}
+            value={ filter ? filter.index : 'todos' }
+            onChange={selectedOption => {
+                onChange(selectedOption.value)
+            }}
+        />
+    )
+}
+
 const isWithinAWeek = function(date) {
     var today = moment(new Date());
     var momentDate = moment(date, "DD-MM-YYYY");
@@ -237,6 +258,24 @@ const fuzzyFilterMethod = (filter, rows) => {
     let fuse = new Fuse(rows, options);
     return fuse.search(filter.value);
 }
+
+const futureDateFilterMethod = (filter, row) => {
+    if (filter.value === "todos") {
+        return true;
+    }
+    if (filter.value === "semana") {
+        return isWithinAWeek(row[filter.id]);
+    }
+    if (filter.value === "mes") {
+        return isWithinAMonth(row[filter.id]);
+    }
+    if (filter.value === "meses") {
+        return isWithinThreeMonth(row[filter.id]);
+    }
+    return true;
+}
+
+
 
 const CompromisosTable = (props) => {
     return (<ReactTable
@@ -280,41 +319,26 @@ const CompromisosTable = (props) => {
                     b = new Date(b).getTime();
                     return b > a ? 1 : -1;
                 },
-                filterMethod: (filter, row) => {
-                    if (filter.value === "todos") {
-                        return true;
-                    }
-                    if (filter.value === "semana") {
-                        return isWithinAWeek(row[filter.id]);
-                    }
-                    if (filter.value === "mes") {
-                        return isWithinAMonth(row[filter.id]);
-                    }
-                    if (filter.value === "meses") {
-                        return isWithinThreeMonth(row[filter.id]);
-                    }
-                    return true;
+                filterMethod: futureDateFilterMethod,
+                Filter: FutureDateFilter
+            },{
+                Header: "Fecha De Cumplimiento",
+                id: 'fechaCumplimiento',
+                className: 'center',
+                width: 200,
+                accessor: d => {
+                    return moment(d.fechaCumplimiento)
+                        .local()
+                        .format("DD/MM/YYYY")
                 },
-                Filter: ({filter, onChange}) => {
-                    return (
-                        <Select
-                            simpleValue
-                            placeholder="Seleccionar"
-                            className='input'
-                            options={[
-                                {value: 'todos' , 'label': 'Mostrar Todos'},
-                                {value: 'semana', 'label': 'Próxima Semana'},
-                                {value: 'mes'   , 'label': 'Próximo Mes'},
-                                {value: 'meses' , 'label': 'Próximos 3 Meses'},
-                            ]}
-                            value={ filter ? filter.index : 'todos' }
-                            onChange={selectedOption => {
-                                onChange(selectedOption.value)
-                            }}
-                        />
-                    )}
-            },
-            {
+                sortMethod: (a, b) => {
+                    a = new Date(a).getTime();
+                    b = new Date(b).getTime();
+                    return b > a ? 1 : -1;
+                },
+                filterMethod: futureDateFilterMethod,
+                Filter: FutureDateFilter
+            }, {
                 Header: "Minuta",
                 accessor: "minuta",
                 className: 'center',
