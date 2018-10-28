@@ -50,6 +50,36 @@ let config = {
     }],
 }
 
+let pieChart = {
+    chart: {
+        plotBackgroundColor: null,
+        plotBorderWidth: null,
+        plotShadow: false,
+        type: 'pie'
+    },
+    title: {
+        text: 'Compromisos por Estado'
+    },
+    tooltip: {
+        pointFormat: '{series.name}: <b> {point.y} ({point.percentage:.1f}%)</b>'
+    },
+    plotOptions: {
+        pie: {
+            allowPointSelect: true,
+            cursor: 'pointer',
+            dataLabels: {
+                enabled: false
+            },
+            showInLegend: true
+        }
+    },
+    series: [{
+        name: 'Compromisos',
+        colorByPoint: true,
+        data: []
+    }]
+}
+
 
 @autobind class ManageCompromisos extends Component {
     constructor(props) {
@@ -170,7 +200,43 @@ let config = {
                 <ReactHighCharts className="chart" ref={(ref) => this.chart = ref} config= {config} />
             </div>
         )
+    }
 
+    makeCompromisosChart() {
+        const compromisos = this.state.compromisos
+
+        if (compromisos.length > 1) {
+            let completedInTime = 0,
+                completedLate = 0,
+                incompleteInTime = 0,
+                overdue = 0;
+
+            compromisos.forEach(c => {
+                let today = moment(new Date())
+
+                if( c.fechaCumplimiento  && moment(c.fechaCumplimiento) <= moment(c.fechaCompromiso) )
+                    completedInTime++;
+                else if( c.fechaCumplimiento  && moment(c.fechaCumplimiento) > moment(c.fechaCompromiso))
+                    completedLate++;
+                else if( !c.fechaCumplimiento && today <= moment(c.fechaCompromiso) )
+                    incompleteInTime++;
+                else if( !c.fechaCumplimiento && today > moment(c.fechaCompromiso) )
+                    overdue++;
+            })
+
+            pieChart.series[0].data = [
+                {name: "Completado a Tiempo", color: '#35b06d',  y: completedInTime},
+                {name: "Completado Tarde", color: '#6c757d', y: completedLate },
+                {name: "Pendiente", color: '#efd23b', y: incompleteInTime },
+                {name: "Vencido", color: '#d03c28', y: overdue  }
+            ]
+        }
+
+        return (
+            <div className="graph">
+                <ReactHighCharts className="compromisosChart" ref={(ref) => this.chart = ref} config={pieChart} />
+            </div>
+        )
     }
 
 
@@ -188,6 +254,7 @@ let config = {
 
 
                 {this.makeCompletedGraph()}
+                {this.makeCompromisosChart()}
             </div>
         )
     }
