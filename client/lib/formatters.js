@@ -3,6 +3,7 @@
 ///////////////////////
 import objectPath from 'object-path'
 import { round, dealWithNaN } from './helpers'
+import React from 'react'
 
 const si = [
   { value: 1E12, symbol: 'T' },
@@ -97,3 +98,31 @@ export const calculateValuesTermicaCedula = (data) => {
     return row
   })
 }
+
+export const CategoryDist = (row) => (
+  <div style={{width: '100%', height: '100%', borderRadius: '2px'}}>
+    <div style={{width: `${row.original.percAcido}%`, height: '90%', display: 'inline-block', position: 'relative', backgroundColor: '#56B3D8', top: '5%', transition: 'all .5s ease-out'}}></div>
+    <div style={{width: `${row.original.percApuntalado}%`, height: '90%', display: 'inline-block', position: 'relative', backgroundColor: '#C3E4CC', top: '5%', transition: 'all .5s ease-out'}}></div>
+    <div style={{width: `${row.original.percEstimulacion}%`, height: '90%', display: 'inline-block', position: 'relative', backgroundColor: '#E4CE5E', top: '5%', transition: 'all .5s ease-out'}}></div>
+    <div style={{width: `${row.original.percTermico}%`, height: '90%', display: 'inline-block', position: 'relative', backgroundColor: '#C26A1B', top: '5%', transition: 'all .5s ease-out'}}></div>
+  </div>
+  )
+
+export const TrafficLight = (row) => {
+  let color = row.original.light > 1 ? 'green' : row.original.light > .8 ? 'yellow' : 'red'
+  return (
+  <div style={{width: '100%', height: '100%', borderRadius: '2px'}}>
+    <div style={{width: `30px`, height: '30px', borderRadius: '30px', left: 'calc(50% - 15px)', display: 'inline-block', position: 'relative', backgroundColor: color}}></div>
+  
+  </div>
+  )
+}
+
+
+
+
+
+
+
+
+

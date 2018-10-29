@@ -18,6 +18,8 @@ import AvgDeltaCostBar from '../Statistics/AvgDeltaCostBar'
 import AvgDeltaCostCompanyBar from '../Statistics/AvgDeltaCostCompanyBar'
 import DeltaCostCompanyBar from '../Statistics/DeltaCostCompanyBar'
 import ExecutiveTable from './ExecutiveTable'
+import ExecutiveTable2Well from './ExecutiveTable2Well'
+import ExecutiveTable3Well from './ExecutiveTable3Well'
 
 @autobind class executiveUI extends Component {
   constructor(props) {
@@ -30,7 +32,11 @@ import ExecutiveTable from './ExecutiveTable'
       avgCostDataCompany: [],
       costData: [],
       countData: [],
-      estIncData: []
+      estIncData: [],
+      estIncWellData: [],
+      estIncFieldData: [],
+      execTableFieldData: [],
+      execTableWellData: []
     }
     this.cards = []
     for (let i = 0; i < 4; i += 1) {
@@ -186,7 +192,8 @@ import ExecutiveTable from './ExecutiveTable'
         activo,
         field,
         well,
-        formation
+        formation,
+        groupBy: 'type'
       })
     })
     .then(res => res.json())
@@ -195,7 +202,91 @@ import ExecutiveTable from './ExecutiveTable'
         estIncData: res
       })
     })
+
+    fetch(`/executive/estimatedIncreaseData`, {
+      method: 'POST',
+      headers: {
+        'content-type': 'application/json',
+      },
+      body: JSON.stringify({
+        activo,
+        field,
+        well,
+        formation,
+        groupBy: 'well'
+      })
+    })
+    .then(res => res.json())
+    .then(res => {
+      this.setState({
+        estIncWellData: res
+      })
+    })
+
+
+    fetch(`/executive/estimatedIncreaseData`, {
+      method: 'POST',
+      headers: {
+        'content-type': 'application/json',
+      },
+      body: JSON.stringify({
+        activo,
+        field,
+        well,
+        formation,
+        groupBy: 'field'
+      })
+    })
+    .then(res => res.json())
+    .then(res => {
+      this.setState({
+        estIncFieldData: res
+      })
+    })
+
+    fetch(`/executive/execTableData`, {
+      method: 'POST',
+      headers: {
+        'content-type': 'application/json',
+      },
+      body: JSON.stringify({
+        activo,
+        field,
+        well,
+        formation,
+        groupBy: 'well'
+      })
+    })
+    .then(res => res.json())
+    .then(res => {
+      this.setState({
+        execTableWellData: res
+      })
+    })
+
+    fetch(`/executive/execTableData`, {
+      method: 'POST',
+      headers: {
+        'content-type': 'application/json',
+      },
+      body: JSON.stringify({
+        activo,
+        field,
+        well,
+        formation,
+        groupBy: 'field'
+      })
+    })
+    .then(res => res.json())
+    .then(res => {
+      this.setState({
+        execTableFieldData: res
+      })
+    })
+
+
   }
+
 
   componentDidMount() {
   	this.fetchData()
@@ -221,7 +312,8 @@ import ExecutiveTable from './ExecutiveTable'
   }
 
   render() {
-    let { jobBreakdownData, aforosData, fieldWellOptions, avgCostDataType, avgCostDataCompany, costData, countData, estIncData } = this.state
+    let { jobBreakdownData, aforosData, fieldWellOptions, avgCostDataType, avgCostDataCompany, costData, countData, estIncData, 
+      estIncWellData, estIncFieldData, execTableWellData, execTableFieldData } = this.state
 
     return (
       <div className="data executive">
@@ -268,6 +360,9 @@ import ExecutiveTable from './ExecutiveTable'
             </Card>
           </CardDeck>
           <ExecutiveTable aforosData={aforosData} costData={costData} countData={countData} estIncData={estIncData} />
+          <ExecutiveTable2Well data={execTableWellData} estIncData={estIncWellData} aforosData={aforosData}/>
+         {/* <ExecutiveTable2Field data={execTableFieldData} estIncData={estIncWellData} /> */}
+          <ExecutiveTable3Well data={execTableWellData} estIncData={estIncWellData} aforosData={aforosData}/>
         </div>
       </div>
     )

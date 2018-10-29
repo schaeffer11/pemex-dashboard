@@ -105,7 +105,7 @@ WHERE aforos.TRANSACTION_ID = aforo_results.PROPUESTA_ID`
 router.post('/countData', (req, res) => {
   let { activo, field, well, formation } = req.body
   
-  let level = well ? 'WellAforos.WELL_FORMACION_ID' : field ? 'FIELD_FORMACION_ID' : activo ? 'ACTIVO_ID' : null
+  let level = well ? 'i.WELL_FORMACION_ID' : field ? 'FieldWellMapping.FIELD_FORMACION_ID' : activo ? 'ACTIVO_ID' : null
   let value = well ? well : field ? field : activo ? activo : null
   let whereClause = ''
   if (level) {
@@ -114,7 +114,9 @@ router.post('/countData', (req, res) => {
 
   let query = `
 select TIPO_DE_INTERVENCIONES, SUM(HAS_RESULTS) as COUNT_RESULTS, COUNT(1)  AS COUNT  from Transactions t 
-JOIN Intervenciones i ON t.TRANSACTION_ID = i.TRANSACTION_ID ${whereClause} GROUP BY TIPO_DE_INTERVENCIONES
+JOIN Intervenciones i ON t.TRANSACTION_ID = i.TRANSACTION_ID 
+JOIN FieldWellMapping ON i.WELL_FORMACION_ID = FieldWellMapping.WELL_FORMACION_ID
+ ${whereClause} GROUP BY TIPO_DE_INTERVENCIONES
 `
 
   connection.query(query, value, (err, results) => {
@@ -130,32 +132,76 @@ JOIN Intervenciones i ON t.TRANSACTION_ID = i.TRANSACTION_ID ${whereClause} GROU
 })
 
 router.post('/estimatedIncreaseData', (req, res) => {
-  let { activo, field, well, formation } = req.body
+  let { activo, field, well, formation, groupBy } = req.body
   
-  let level = well ? 'WellAforos.WELL_FORMACION_ID' : field ? 'FIELD_FORMACION_ID' : activo ? 'ACTIVO_ID' : null
+  let level = well ? 'FieldWellMapping.WELL_FORMACION_ID' : field ? 'FieldWellMapping.FIELD_FORMACION_ID' : activo ? 'ACTIVO_ID' : null
+  let value = well ? well : field ? field : activo ? activo : null
+  let whereClause = ''
+  if (level) {
+    whereClause = `WHERE ${level} = ?`
+  }
+  groupBy = groupBy === 'type' ? 'TYPE' : groupBy === 'well' ? 'WELL_FORMACION_ID' : 'FIELD_FORMACION_ID'
+
+  let query = `
+select TYPE, FIELD_NAME, WELL_NAME, WELL_FORMACION_ID, FIELD_FORMACION_ID, SUM(EST_INC_Qo) as EST_INC_Qo from
+(select FIELD_NAME, WELL_NAME, ia.WELL_FORMACION_ID, FIELD_FORMACION_ID, EST_INC_Qo, 'acido' AS TYPE FROM IntervencionesAcido ia
+ JOIN FieldWellMapping ON ia.WELL_FORMACION_ID = FieldWellMapping.WELL_FORMACION_ID
+${whereClause}
+ UNION
+select FIELD_NAME, WELL_NAME, ie.WELL_FORMACION_ID, FIELD_FORMACION_ID, EST_INC_Qo, 'estimulacion' AS TYPE FROM IntervencionesEstimulacions ie
+ JOIN FieldWellMapping ON ie.WELL_FORMACION_ID = FieldWellMapping.WELL_FORMACION_ID
+${whereClause}
+  UNION
+select FIELD_NAME, WELL_NAME, iap.WELL_FORMACION_ID, FIELD_FORMACION_ID, EST_INC_Qo, 'apuntalado' AS TYPE FROM IntervencionesApuntalado iap
+ JOIN FieldWellMapping ON iap.WELL_FORMACION_ID = FieldWellMapping.WELL_FORMACION_ID
+ ${whereClause}) as a
+ GROUP BY ${groupBy}
+`
+
+  connection.query(query, [value, value, value], (err, results) => {
+      console.log('comment err', err)
+      console.log('herhehrehrehr', results)
+      
+     if (err) {
+        res.json({ success: false})
+      }
+      else {
+        res.json(results)
+      }
+    })
+})
+
+router.post('/execTableData', (req, res) => {
+  let { activo, field, well, formation, groupBy } = req.body
+  
+  let level = well ? 'i.WELL_FORMACION_ID' : field ? 'FIELD_FORMACION_ID' : activo ? 'ACTIVO_ID' : null
   let value = well ? well : field ? field : activo ? activo : null
   let whereClause = ''
   if (level) {
     whereClause = `WHERE ${level} = ?`
   }
 
-  let query = `
-select TYPE, SUM(EST_INC_Qo) as EST_INC_Qo from
-(select EST_INC_Qo, 'acido' AS TYPE FROM IntervencionesAcido ia
- JOIN FieldWellMapping ON ia.WELL_FORMACION_ID = FieldWellMapping.WELL_FORMACION_ID
- ${whereClause}
- UNION
-select EST_INC_Qo, 'estimulacion' AS TYPE FROM IntervencionesEstimulacions ie
- JOIN FieldWellMapping ON ie.WELL_FORMACION_ID = FieldWellMapping.WELL_FORMACION_ID
-  ${whereClause}
-  UNION
-select EST_INC_Qo, 'apuntalado' AS TYPE FROM IntervencionesApuntalado iap
- JOIN FieldWellMapping ON iap.WELL_FORMACION_ID = FieldWellMapping.WELL_FORMACION_ID
- ${whereClause}) as a
- GROUP BY TYPE
+  groupBy = groupBy === 'well' ? 'FieldWellMapping.WELL_FORMACION_ID' : 'FieldWellMapping.FIELD_FORMACION_ID'
 
- 
+  let query = `
+select 
+FIELD_NAME, 
+WELL_NAME,
+FieldWellMapping.WELL_FORMACION_ID,
+FieldWellMapping.FIELD_FORMACION_ID,
+COUNT(1) as NUM_TREATMENTS,  
+SUM(TIPO_DE_INTERVENCIONES = 'estimulacion') as NUM_ESTIMULACION,
+SUM(TIPO_DE_INTERVENCIONES = 'acido') as NUM_ACIDO, 
+SUM(TIPO_DE_INTERVENCIONES = 'apuntalado') as NUM_APUNTALADO, 
+SUM(TIPO_DE_INTERVENCIONES = 'termico') as NUM_TERMICO,
+COST
+from Intervenciones i 
+JOIN FieldWellMapping ON i.WELL_FORMACION_ID = FieldWellMapping.WELL_FORMACION_ID 
+LEFT JOIN (select PROPUESTA_ID, SUM(COST_MNX + COST_DLS * MNXtoDLS) as COST FROM ResultsCosts GROUP BY TRANSACTION_ID) costs  ON i.TRANSACTION_ID = costs.PROPUESTA_ID
+${whereClause}
+GROUP BY ${groupBy}
 `
+
 
   connection.query(query, value, (err, results) => {
       console.log('comment err', err)
@@ -169,6 +215,12 @@ select EST_INC_Qo, 'apuntalado' AS TYPE FROM IntervencionesApuntalado iap
       }
     })
 })
+
+
+
+
+
+
 
 
 export default router
