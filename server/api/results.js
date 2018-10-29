@@ -413,7 +413,7 @@ export const createResults = async (body, action, cb) => {
                     })
                   }
 
-                  connection.query(`UPDATE Transactions SET HAS_RESULTS = 0 WHERE TRANSACTION_ID = ?`, [propuestaID], (err, results) => {
+                  connection.query(`UPDATE Transactions SET HAS_RESULTS = 1 WHERE TRANSACTION_ID = ?`, [propuestaID], (err, results) => {
                     console.log('update old trans', err)
                     console.log('update old trans', results)
                     if (err) {

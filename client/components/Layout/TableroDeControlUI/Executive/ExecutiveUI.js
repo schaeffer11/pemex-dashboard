@@ -17,6 +17,7 @@ import DeltaCostBar from '../Statistics/DeltaCostBar'
 import AvgDeltaCostBar from '../Statistics/AvgDeltaCostBar'
 import AvgDeltaCostCompanyBar from '../Statistics/AvgDeltaCostCompanyBar'
 import DeltaCostCompanyBar from '../Statistics/DeltaCostCompanyBar'
+import ExecutiveTable from './ExecutiveTable'
 
 @autobind class executiveUI extends Component {
   constructor(props) {
@@ -27,7 +28,9 @@ import DeltaCostCompanyBar from '../Statistics/DeltaCostCompanyBar'
       aforosData: [],
       avgCostDataType: [],
       avgCostDataCompany: [],
-      costData: []
+      costData: [],
+      countData: [],
+      estIncData: []
     }
     this.cards = []
     for (let i = 0; i < 4; i += 1) {
@@ -155,6 +158,43 @@ import DeltaCostCompanyBar from '../Statistics/DeltaCostCompanyBar'
       })
     })
 
+    fetch(`/executive/countData`, {
+      method: 'POST',
+      headers: {
+        'content-type': 'application/json',
+      },
+      body: JSON.stringify({
+        activo,
+        field,
+        well,
+        formation
+      })
+    })
+    .then(res => res.json())
+    .then(res => {
+      this.setState({
+        countData: res
+      })
+    })
+
+    fetch(`/executive/estimatedIncreaseData`, {
+      method: 'POST',
+      headers: {
+        'content-type': 'application/json',
+      },
+      body: JSON.stringify({
+        activo,
+        field,
+        well,
+        formation
+      })
+    })
+    .then(res => res.json())
+    .then(res => {
+      this.setState({
+        estIncData: res
+      })
+    })
   }
 
   componentDidMount() {
@@ -181,7 +221,7 @@ import DeltaCostCompanyBar from '../Statistics/DeltaCostCompanyBar'
   }
 
   render() {
-    let { jobBreakdownData, aforosData, fieldWellOptions, avgCostDataType, avgCostDataCompany, costData } = this.state
+    let { jobBreakdownData, aforosData, fieldWellOptions, avgCostDataType, avgCostDataCompany, costData, countData, estIncData } = this.state
 
     return (
       <div className="data executive">
@@ -227,6 +267,7 @@ import DeltaCostCompanyBar from '../Statistics/DeltaCostCompanyBar'
               <AvgDeltaCostCompanyBar label={'Avg Company'} data={avgCostDataCompany} />
             </Card>
           </CardDeck>
+          <ExecutiveTable aforosData={aforosData} costData={costData} countData={countData} estIncData={estIncData} />
         </div>
       </div>
     )

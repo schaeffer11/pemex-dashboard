@@ -61,12 +61,13 @@ router.post('/aforosData', (req, res) => {
 
 SELECT * FROM 
 
-(SELECT A.WELL_FORMACION_ID, FORMACION, WELL_NAME, TRANSACTION_ID, FECHA, QO, QW FROM
+(SELECT A.WELL_FORMACION_ID, FORMACION, WELL_NAME, TRANSACTION_ID, FECHA, QO, QW, TIPO_DE_INTERVENCIONES FROM
 (
-  select WellAforos.WELL_FORMACION_ID, FORMACION, WELL_NAME, WellAforos.TRANSACTION_ID, MAX(FECHA) FECHA
+  select WellAforos.WELL_FORMACION_ID, FORMACION, WELL_NAME, WellAforos.TRANSACTION_ID, MAX(FECHA) FECHA, TIPO_DE_INTERVENCIONES
   FROM WellAforos 
   JOIN FieldWellMapping ON WellAforos.WELL_FORMACION_ID = FieldWellMapping.WELL_FORMACION_ID 
   JOIN WellsData ON WellAforos.TRANSACTION_ID = WellsData.TRANSACTION_ID
+  JOIN Intervenciones ON WellAforos.TRANSACTION_ID = Intervenciones.TRANSACTION_ID
   WHERE QO != '-999'${whereClause} GROUP BY TRANSACTION_ID
 ) A INNER JOIN WellAforos B USING(TRANSACTION_ID, FECHA)) as aforos,
 
@@ -88,7 +89,8 @@ WHERE aforos.TRANSACTION_ID = aforo_results.PROPUESTA_ID`
         qo: i.QO,
         qw: i.QW,
         qoResult: i.QO_RESULT,
-        qwResult: i.QW_RESULT
+        qwResult: i.QW_RESULT,
+        type: i.TIPO_DE_INTERVENCIONES
       }))
 
      if (err) {
@@ -100,7 +102,73 @@ WHERE aforos.TRANSACTION_ID = aforo_results.PROPUESTA_ID`
     })
 })
 
+router.post('/countData', (req, res) => {
+  let { activo, field, well, formation } = req.body
+  
+  let level = well ? 'WellAforos.WELL_FORMACION_ID' : field ? 'FIELD_FORMACION_ID' : activo ? 'ACTIVO_ID' : null
+  let value = well ? well : field ? field : activo ? activo : null
+  let whereClause = ''
+  if (level) {
+    whereClause = `WHERE ${level} = ?`
+  }
 
+  let query = `
+select TIPO_DE_INTERVENCIONES, SUM(HAS_RESULTS) as COUNT_RESULTS, COUNT(1)  AS COUNT  from Transactions t 
+JOIN Intervenciones i ON t.TRANSACTION_ID = i.TRANSACTION_ID ${whereClause} GROUP BY TIPO_DE_INTERVENCIONES
+`
+
+  connection.query(query, value, (err, results) => {
+      console.log('comment err', err)
+
+     if (err) {
+        res.json({ success: false})
+      }
+      else {
+        res.json(results)
+      }
+    })
+})
+
+router.post('/estimatedIncreaseData', (req, res) => {
+  let { activo, field, well, formation } = req.body
+  
+  let level = well ? 'WellAforos.WELL_FORMACION_ID' : field ? 'FIELD_FORMACION_ID' : activo ? 'ACTIVO_ID' : null
+  let value = well ? well : field ? field : activo ? activo : null
+  let whereClause = ''
+  if (level) {
+    whereClause = `WHERE ${level} = ?`
+  }
+
+  let query = `
+select TYPE, SUM(EST_INC_Qo) as EST_INC_Qo from
+(select EST_INC_Qo, 'acido' AS TYPE FROM IntervencionesAcido ia
+ JOIN FieldWellMapping ON ia.WELL_FORMACION_ID = FieldWellMapping.WELL_FORMACION_ID
+ ${whereClause}
+ UNION
+select EST_INC_Qo, 'estimulacion' AS TYPE FROM IntervencionesEstimulacions ie
+ JOIN FieldWellMapping ON ie.WELL_FORMACION_ID = FieldWellMapping.WELL_FORMACION_ID
+  ${whereClause}
+  UNION
+select EST_INC_Qo, 'apuntalado' AS TYPE FROM IntervencionesApuntalado iap
+ JOIN FieldWellMapping ON iap.WELL_FORMACION_ID = FieldWellMapping.WELL_FORMACION_ID
+ ${whereClause}) as a
+ GROUP BY TYPE
+
+ 
+`
+
+  connection.query(query, value, (err, results) => {
+      console.log('comment err', err)
+      console.log('herhehrehrehr', results)
+      
+     if (err) {
+        res.json({ success: false})
+      }
+      else {
+        res.json(results)
+      }
+    })
+})
 
 
 export default router
