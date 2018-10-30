@@ -95,7 +95,7 @@ import { getJustificacionesOptions } from '../../../../lib/helpers';
           errors={this.state.errors}
         />
         <InputRowSelectUnitless
-          header="Tipo de pozo"
+          header="Justificación"
           value={justificacionIntervencion}
           callback={(e) => setGeneralResultadosGenerales(['justificacionIntervencion'], e.value)}
           name='tipoDePozo'

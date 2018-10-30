@@ -2,7 +2,7 @@ import React, { Component } from 'react'
 import { Map } from 'immutable'
 import { connect } from 'react-redux'
 import autobind from 'autobind-decorator'
-import { InputRow } from '../../Common/InputRow'
+import { InputRow, InputRowUnitless } from '../../Common/InputRow'
 import { checkEmpty, checkDate } from '../../../../lib/errorCheckers'
 import { setGeneralEvaluacionApuntalado, setMergeEvaluacionApuntalado } from '../../../../redux/actions/results'
 
@@ -40,6 +40,62 @@ import { setGeneralEvaluacionApuntalado, setMergeEvaluacionApuntalado } from '..
           value: '',
         },
         eficienciaDeFluidoDeFractura: {
+          type: 'number',
+          value: '',
+        },
+        tipoDeFluido: {
+          type: 'text',
+          value: '',
+        },
+        volumen: {
+          type: 'number',
+          value: '',
+        },
+        gastoPromedio: {
+          type: 'number',
+          value: '',
+        },
+        presionRuptura: {
+          type: 'number',
+          value: '',
+        },
+        presionPromedio: {
+          type: 'number',
+          value: '',
+        },
+        isip: {
+          type: 'number',
+          value: '',
+        },
+        gradienteFractura: {
+          type: 'number',
+          value: '',
+        },
+        presionCierreSuperior: {
+          type: 'number',
+          value: '',
+        },
+        gradienteCierre: {
+          type: 'number',
+          value: '',
+        },
+        tiempoCierre: {
+          type: 'number',
+          value: '',
+        },
+        presionYacimiento: {
+          type: 'number',
+          value: '',
+        },
+        gradientePoro: {
+          type: 'number',
+          value: '',
+        },
+        perdidaFiltrado: {
+          type: 'number',
+          value: '',
+        },
+        eficienciaFluido: {
           type: 'number',
           value: '',
         },
@@ -193,6 +249,159 @@ import { setGeneralEvaluacionApuntalado, setMergeEvaluacionApuntalado } from '..
     )
   }
 
+  makePrecolchonForm() {
+    let { formData, setGeneralEvaluacionApuntalado } = this.props
+    const {
+      tipoDeFluido,
+      volumen,
+      gastoPromedio,
+      presionRuptura,
+      presionPromedio,
+      isip,
+      gradienteFractura,
+      presionCierreSuperior,
+      gradienteCierre,
+      tiempoCierre,
+      presionYacimiento,
+      gradientePoro,
+      perdidaFiltrado,
+      eficienciaFluido, 
+    } = formData
+    return (
+      <div className='result-form' >
+        <div className='header'>
+          Precolchón
+        </div>
+        <InputRowUnitless
+          header="Tipo de Fluido"
+          name='tipoDeFluido'
+          unit=""
+          value={tipoDeFluido}
+          onChange={e => setGeneralEvaluacionApuntalado(['tipoDeFluido'], e)}
+          errors={this.state.errors}
+          onBlur={this.updateErrors}
+        />
+        <InputRow
+          header="Volumen"
+          name='volumen'
+          unit="U.S. Gal"
+          value={volumen}
+          onChange={e => setGeneralEvaluacionApuntalado(['volumen'], e)}
+          errors={this.state.errors}
+          onBlur={this.updateErrors}
+        />
+        <InputRow
+          header="Gasto promedio"
+          name='gastoPromedio'
+          unit="bpm"
+          value={gastoPromedio}
+          onChange={e => setGeneralEvaluacionApuntalado(['gastoPromedio'], e)}
+          errors={this.state.errors}
+          onBlur={this.updateErrors}
+        />
+        <InputRow
+          header="Presión de ruptura"
+          name='presionRuptura'
+          unit="psi"
+          value={presionRuptura}
+          onChange={e => setGeneralEvaluacionApuntalado(['presionRuptura'], e)}
+          errors={this.state.errors}
+          onBlur={this.updateErrors}
+        />
+        <InputRow
+          header="Presión promedio"
+          name='presionPromedio'
+          unit="psi"
+          value={presionPromedio}
+          onChange={e => setGeneralEvaluacionApuntalado(['presionPromedio'], e)}
+          errors={this.state.errors}
+          onBlur={this.updateErrors}
+        />
+        <InputRow
+          header="ISIP"
+          name='isip'
+          unit="psi"
+          value={isip}
+          onChange={e => setGeneralEvaluacionApuntalado(['isip'], e)}
+          errors={this.state.errors}
+          onBlur={this.updateErrors}
+        />
+        <InputRow
+          header="Gradiente de fractura"
+          name='gradienteFractura'
+          unit="psi/pie"
+          value={gradienteFractura}
+          onChange={e => setGeneralEvaluacionApuntalado(['gradienteFractura'], e)}
+          errors={this.state.errors}
+          onBlur={this.updateErrors}
+        />
+        <InputRow
+          header="Presión de cierre sup."
+          name='presionCierreSuperior'
+          unit="psi"
+          value={presionCierreSuperior}
+          onChange={e => setGeneralEvaluacionApuntalado(['presionCierreSuperior'], e)}
+          errors={this.state.errors}
+          onBlur={this.updateErrors}
+        />
+        <InputRow
+          header="Gradiente de cierre"
+          name='gradienteCierre'
+          unit="psi/pie"
+          value={gradienteCierre}
+          onChange={e => setGeneralEvaluacionApuntalado(['gradienteCierre'], e)}
+          errors={this.state.errors}
+          onBlur={this.updateErrors}
+        />
+        <InputRow
+          header="Tiempo de cierre"
+          name='tiempoCierre'
+          unit="min"
+          value={tiempoCierre}
+          onChange={e => setGeneralEvaluacionApuntalado(['tiempoCierre'], e)}
+          errors={this.state.errors}
+          onBlur={this.updateErrors}
+        />
+        <InputRow
+          header="Presión de yacimiento"
+          name='presionYacimiento'
+          unit="psi"
+          value={presionYacimiento}
+          onChange={e => setGeneralEvaluacionApuntalado(['presionYacimiento'], e)}
+          errors={this.state.errors}
+          onBlur={this.updateErrors}
+        />
+        <InputRow
+          header="Gradiente de poro"
+          name='gradientePoro'
+          unit="psi/pie"
+          value={gradientePoro}
+          onChange={e => setGeneralEvaluacionApuntalado(['gradientePoro'], e)}
+          errors={this.state.errors}
+          onBlur={this.updateErrors}
+        />
+        <InputRow
+          header="Pérdida por filtrado"
+          name='perdidaFiltrado'
+          unit="pie/min 0.5"
+          value={perdidaFiltrado}
+          onChange={e => setGeneralEvaluacionApuntalado(['perdidaFiltrado'], e)}
+          errors={this.state.errors}
+          onBlur={this.updateErrors}
+        />
+        <InputRow
+          header="Eficiencia de fluido"
+          name='eficienciaFluido'
+          unit="%"
+          value={eficienciaFluido}
+          onChange={e => setGeneralEvaluacionApuntalado(['eficienciaFluido'], e)}
+          errors={this.state.errors}
+          onBlur={this.updateErrors}
+        />
+      </div>
+    )
+  }
+
   handleFileUpload(e, index, intervalo) {
     console.log('da index', index)
     const { setGeneralEvaluacionApuntalado } = this.props
@@ -231,6 +440,7 @@ import { setGeneralEvaluacionApuntalado, setMergeEvaluacionApuntalado } from '..
         <div className='image' />
         <div className='left'>
           { this.makeResultForm() }
+          { this.makePrecolchonForm() }
           { this.makeGeometryInput() }
         </div>
       </div>
