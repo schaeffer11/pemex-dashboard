@@ -1,7 +1,7 @@
 import React, { PureComponent } from 'react'
 import autobind from 'autobind-decorator'
 import ReactTable from 'react-table' 
-import { CategoryDist, TrafficLight } from '../../../../lib/formatters'
+import { CategoryDist, TrafficLight, Currency, Integer } from '../../../../lib/formatters'
 
 @autobind class ExecutiveTable2Well extends PureComponent {
   render() {
@@ -9,37 +9,41 @@ import { CategoryDist, TrafficLight } from '../../../../lib/formatters'
       let columns = [{
         Header: 'Well Name',
         accessor: 'name', 
-        width: 250,
+        minWidth: 150,
       },{
-        Header: 'Total de Tratamientos',
+        Header: <div>Total de<br/>Tratamientos</div>,
         accessor: 'numTreatments',
-        width: 70,
+        minWidth: 150,
+        Cell: Integer,
       },{
         Header: '% Category',
         accessor: 'bar', 
-        width: 150,
+        minWidth: 150,
         Cell: CategoryDist
       },{
         Header: 'Costo Total',
         accessor: 'cost', 
-        width: 150
+        minWidth: 150,
+        Cell: Currency,
       },{
         Header: 'Produccion Estimada',
         accessor: 'estProd', 
-        width: 150
+        minWidth: 150,
+        Cell: Integer
       },{
         Header: 'Produccion Real',
         accessor: 'realProd', 
-        width: 150
+        minWidth: 150,
+        Cell: Integer
       },{
         Header: 'Traffic Light',
         accessor: 'light', 
-        width: 150,
+        minWidth: 150,
         Cell: TrafficLight
       },{
-        Header: 'Date / Type of Last Treatment',
+        Header: <div>Date / Type of<br/>Last Treatment</div>,
         accessor: 'dateType', 
-        width: 150
+        minWidth: 150
       }]
 
    

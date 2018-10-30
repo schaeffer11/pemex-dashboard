@@ -1,7 +1,7 @@
 import React, { PureComponent } from 'react'
 import autobind from 'autobind-decorator'
 import ReactTable from 'react-table' 
-import { CategoryDist, TrafficLight } from '../../../../lib/formatters'
+import { CategoryDist, TrafficLight, Currency, Integer } from '../../../../lib/formatters'
 
 @autobind class ExecutiveTable2Well extends PureComponent {
   render() {
@@ -9,56 +9,57 @@ import { CategoryDist, TrafficLight } from '../../../../lib/formatters'
       let columns = [{
         Header: 'Well Name',
         accessor: 'name', 
-        width: 250,
+        minWidth: 150,
       },{
         Header: 'Formacion',
         accessor: 'formacion',
-        width: 70,
+        minWidth: 150,
       },{
         Header: '% Category',
         accessor: 'bar', 
-        width: 150,
+        minWidth: 150,
         Cell: CategoryDist
       },{
         Header: 'Costo Total',
         accessor: 'cost', 
-        width: 150
+        minWidth: 150,
+        Cell: Currency
       },{
         Header: 'Desviacion De Produccion',
         accessor: 'desviacion', 
-        width: 150
+        minWidth: 150
       },{
         Header: 'Produccion Acumulad a Puntual',
         accessor: 'acumuladPuntual', 
-        width: 150
+        minWidth: 150
       },{
         Header: 'Total Volumen de Lodo Perdido',
         accessor: 'lodoPerdido', 
-        width: 150,
+        minWidth: 150,
       },{
         Header: 'Total Sistema No Reactivo',
         accessor: 'sistemaNoReactivo', 
-        width: 150
+        minWidth: 150
       },{
         Header: 'Total Sistema Reactivo',
         accessor: 'sistemaReactivo', 
-        width: 150
+        minWidth: 150
       },{
         Header: 'Total Sistema Divergente',
         accessor: 'sistemaDivergente', 
-        width: 150
+        minWidth: 150
       },{
         Header: 'Total Desplazamiento Liquido',
         accessor: 'desplazamientoLiquido', 
-        width: 150
+        minWidth: 150
       },{
         Header: 'Total Desplazamiento N2',
         accessor: 'desplazamientoN2', 
-        width: 150
+        minWidth: 150
       },{
         Header: 'Total Precolchon N2',
         accessor: 'precolchonN2', 
-        width: 150
+        minWidth: 150
       }]
 
     data = data.map(i => {

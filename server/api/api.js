@@ -1850,6 +1850,7 @@ router.get('/getLabTest', async (req, res) => {
         if (type === 'caracterizacionFisico') {
           outData.push({
             edited: true,
+            labID: i.LAB_ID,
             index: index,
             length: labIDs.length,
             type: type,
@@ -1892,6 +1893,7 @@ router.get('/getLabTest', async (req, res) => {
 
           outData.push({
             edited: true,
+            labID: i.LAB_ID,
             index: index,
             length: labIDs.length,
             type: type,
@@ -1914,6 +1916,7 @@ router.get('/getLabTest', async (req, res) => {
           })
           outData.push({
             edited: true,
+            labID: i.LAB_ID,
             index: index,
             length: labIDs.length,
             type: type,
@@ -1928,6 +1931,7 @@ router.get('/getLabTest', async (req, res) => {
         else if (type === 'pruebasDeSolubilidad') {
           outData.push({
             edited: true,
+            labID: i.LAB_ID,
             index: index,
             length: labIDs.length,
             type: type,
@@ -1946,6 +1950,7 @@ router.get('/getLabTest', async (req, res) => {
         else if (type === 'pruebasGelDeFractura') {
           outData.push({
             edited: true,
+            labID: i.LAB_ID,
             index: index,
             length: labIDs.length,
             type: type,
@@ -1965,6 +1970,7 @@ router.get('/getLabTest', async (req, res) => {
         else if (type === 'pruebasParaApuntalante') {
           outData.push({
             edited: true,
+            labID: i.LAB_ID,
             index: index,
             length: labIDs.length,
             type: type,
@@ -1985,6 +1991,7 @@ router.get('/getLabTest', async (req, res) => {
         else if (type === 'cromatografiaDelGas') {
           outData.push({
             edited: true,
+            labID: i.LAB_ID,
             index: index,
             length: labIDs.length,
             type: type,
@@ -1998,6 +2005,7 @@ router.get('/getLabTest', async (req, res) => {
         else if (type === 'pruebaDeDureza') {
           outData.push({
             edited: true,
+            labID: i.LAB_ID,
             index: index,
             length: labIDs.length,
             type: type,
@@ -2011,6 +2019,7 @@ router.get('/getLabTest', async (req, res) => {
         else if (type === 'determinacionDeLaCalidad') {
           outData.push({
             edited: true,
+            labID: i.LAB_ID,
             index: index,
             length: labIDs.length,
             type: type,

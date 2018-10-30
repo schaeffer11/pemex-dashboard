@@ -99,6 +99,20 @@ export const calculateValuesTermicaCedula = (data) => {
   })
 }
 
+export const numWithCommas = (x) => {
+  if (x === 0) {
+    return 0
+  }
+  if (!x) {
+    return null
+  }
+  return x.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+}
+
+//CELL TYPES 
+export const Currency = (row) => (<span>{row.value ? '$' + numWithCommas(row.value) : '-'}</span>)
+export const Percent = (row) => (<span>{row.value ? (row.value.toFixed(1)) + '%': '-'}</span>)
+export const Integer = (row) => (<span>{row.value ? numWithCommas(row.value.toFixed(0)) : '-'}</span>)
 export const CategoryDist = (row) => (
   <div style={{width: '100%', height: '100%', borderRadius: '2px'}}>
     <div style={{width: `${row.original.percAcido}%`, height: '90%', display: 'inline-block', position: 'relative', backgroundColor: '#56B3D8', top: '5%', transition: 'all .5s ease-out'}}></div>

@@ -1585,14 +1585,23 @@ export const create = async (body, action, cb) => {
                                       })
                                     }
 
+
+
+                                                pruebasDeLaboratorioData.forEach(i => {
+                                                  
+                                                })
+
+                                    let imageValues = []
                                     values = []
                                     const labResultValues = []
 
                                     if (pruebasDeLaboratorioData && pruebasDeLaboratorioData[0]) {
+
                                       pruebasDeLaboratorioData.forEach(i => {
                                       const labID = Math.floor(Math.random() * 1000000000)
                                       i.labID = labID
                                       values.push([labID, interventionID, wellFormacionID, i.type, i.fechaMuestreo, i.fechaPrueba, i.compania, i.superviso, i.obervaciones, transactionID])
+                                      imageValues.push([interventionID, labID, i.imgName, transactionID])
                                     })
                                     
                                     }
@@ -1737,22 +1746,19 @@ export const create = async (body, action, cb) => {
                                                 })
                                               }
 
-                                              values = [
-                                                [interventionID, 'Lab Results', labResultsFile, transactionID],
+                                              imageValues = imageValues.concat([
                                                 [interventionID, 'Est Inc Prod', incProdFile, transactionID],
                                                 [interventionID, 'Simulation Results', simResultsFile, transactionID]
-                                              ]
+                                              ])
 
-                                              pruebasDeLaboratorioData.forEach(i => {
-                                              values.push([interventionID, 'Lab Data', i.imgName, transactionID])
-                                            })
+
 
                                               query = 
                                                 tipoDeIntervenciones === 'termico' ? DUMMY_QUERY :
                                                   (action === 'save' ? INSERT_INTERVENTION_IMAGE_QUERY.save : INSERT_INTERVENTION_IMAGE_QUERY.submit)
                                         
 
-                                              connection.query(query, [values], (err, results) => {
+                                              connection.query(query, [imageValues], (err, results) => {
                                                 console.log('intervention img', err)
                                                 console.log('intervention img', results)
                                                 if (err) {
