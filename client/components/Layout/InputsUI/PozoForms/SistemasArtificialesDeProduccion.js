@@ -528,7 +528,6 @@ import { setFromSaveSistemas, setHasErrorsSistemas, setSistemasArtificialesImgUR
             <InputRowSelectUnitless header='Tipo de sistema' name='tipoDeSistemo' value={tipoDeSistemo} options={options} callback={this.handleSelectSistema} errors={this.state.errors} />
           </div>
           { forms[tipoDeSistemo]}
-          { this.makeImgInput() }
           </div>
         <div className='right'>
           <div className={className}/>

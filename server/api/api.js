@@ -49,6 +49,8 @@ async function handleImageResponse(data) {
   const final = {}
   for (let well of filteredData) {
     const imgName = well.IMG_URL
+    // makes no sense but we had to do this so we didn't need to add a new column
+    const labID = well.IMAGE_NAME
     const imgInformation = well.IMG_URL.split('.')
     const parent = imgInformation[1]
     const index = imgInformation[imgInformation.length - 1]
@@ -63,6 +65,7 @@ async function handleImageResponse(data) {
     // determine if we need to store in array
     if (isNumber) {
       // this is naive assumes everything is in order
+      innerObj.labID = labID
       objectPath.push(final, parent, innerObj)
     } else {
       objectPath.set(final, parent, innerObj)

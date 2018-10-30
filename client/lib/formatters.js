@@ -32,10 +32,14 @@ export function handleImagesFromServer(images, state) {
     imagesKeys.forEach(parent => {
       if (parent === 'pruebasDeLaboratorio') {
         images[parent].forEach((elem, index) => {
-          const { imgURL, imgName, imgSource } = elem
-          objectPath.set(shallowStateCopy, `pruebasDeLaboratorio.pruebasDeLaboratorioData.${index}.imgURL`, imgURL)
-          objectPath.set(shallowStateCopy, `pruebasDeLaboratorio.pruebasDeLaboratorioData.${index}.imgName`, imgName)
-          objectPath.set(shallowStateCopy, `pruebasDeLaboratorio.pruebasDeLaboratorioData.${index}.imgSource`, imgSource)
+          const { imgURL, imgName, imgSource, labID } = elem
+          for (let lab of shallowStateCopy.pruebasDeLaboratorio.pruebasDeLaboratorioData) {
+            if (lab.labID.toString() === labID) {
+              lab.imgURL = imgURL
+              lab.imgName = imgName
+              lab.imgSource = imgSource
+            }
+          }
         })
       } else {
         const { imgURL, imgName, imgSource } = images[parent]
@@ -131,12 +135,3 @@ export const TrafficLight = (row) => {
   </div>
   )
 }
-
-
-
-
-
-
-
-
-
