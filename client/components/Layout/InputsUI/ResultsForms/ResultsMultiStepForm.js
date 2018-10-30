@@ -7,9 +7,11 @@ import Evaluaciones from './Evaluaciones'
 import GraficaTratamiento from './GraficaTratamiento'
 import { setMergeResultsMeta } from '../../../../redux/actions/results'
 import EstimacionCostosResults from './EstimacionCostosResults'
+import ResultadosGenerales from './ResultadosGenerales'
 
 import { setIsLoading, setShowForms } from '../../../../redux/actions/global'
 const forms = [
+  {'title' : 'Datos generales', 'content': <ResultadosGenerales /> },
   {'title' : 'Gráfica de tratamiento', 'content': <GraficaTratamiento /> },
   {'title' : 'Aforos', 'content': <HistoricoDeAforosResults /> },
   {'title' : 'Tratamiento', 'content': <Tratamientos /> },

@@ -20,6 +20,12 @@ export const setGeneralGraficaTratamiento = (location, value) => ({
   type: 'set_generalGraficaTratamiento',
 })
 
+export const setGeneralResultadosGenerales = (location, value) => ({
+  location,
+  value,
+  type: 'set_generalResultadosGenerales',
+})
+
 export const setGeneralHistoricoDeAforosResults = (location, value) => ({
   location,
   value,
