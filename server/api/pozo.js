@@ -404,8 +404,7 @@ const INSERT_INTERVENTION_ACIDO_QUERY = {
 const INSERT_INTERVENTION_APUNTALADO_QUERY = {
     save: `INSERT INTO _IntervencionesApuntaladoSave (
         INTERVENTION_ID, WELL_FORMACION_ID, 
-        VOLUMEN_PRECOLCHON_N2,
-        VOLUMEN_SISTEMA_NO_REACTIVO, VOLUMEN_SISTEMA_REACTIVO, VOLUMEN_SISTEMA_DIVERGENTE, VOLUMEN_DISPLAZAMIENTO_LIQUIDO, VOLUMEN_DESPLAZAMIENTO_N2,
+        VOLUMEN_DISPLAZAMIENTO_LIQUIDO,
         VOLUMEN_TOTAL_DE_LIQUIDO, MODULO_YOUNG_ARENA,
         MODULO_YOUNG_LUTITAS, RELAC_POISSON_ARENA, RELAC_POISSON_LUTITAS, GRADIENTE_DE_FRACTURA, DENSIDAD_DE_DISPAROS,
         DIAMETRO_DE_DISPAROS, LONGITUD_APUNTALADA, ALTURA_TOTAL_DE_FRACTURA, ANCHO_PROMEDIO,
@@ -417,12 +416,10 @@ const INSERT_INTERVENTION_APUNTALADO_QUERY = {
         (?, ?, ?, ?, ?, ?, ?, ?, ?, ?,
          ?, ?, ?, ?, ?, ?, ?, ?, ?, ?,
          ?, ?, ?, ?, ?, ?, ?, ?, ?, ?,
-         ?, ?, ?, ?, ?, ?, ?, ?, ?, ?,
-         ?, ?, ?, ?, ?)`,
+         ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`,
     submit: `INSERT INTO IntervencionesApuntalado (
         INTERVENTION_ID, WELL_FORMACION_ID, 
-        VOLUMEN_PRECOLCHON_N2,
-        VOLUMEN_SISTEMA_NO_REACTIVO, VOLUMEN_SISTEMA_REACTIVO, VOLUMEN_SISTEMA_DIVERGENTE, VOLUMEN_DESPLAZAMIENTO_LIQUIDO, VOLUMEN_DESPLAZAMIENTO_N2,
+        VOLUMEN_DESPLAZAMIENTO_LIQUIDO,
         VOLUMEN_TOTAL_DE_LIQUIDO, MODULO_YOUNG_ARENA,
         MODULO_YOUNG_LUTITAS, RELAC_POISSON_ARENA, RELAC_POISSON_LUTITAS, GRADIENTE_DE_FRACTURA, DENSIDAD_DE_DISPAROS,
         DIAMETRO_DE_DISPAROS, LONGITUD_APUNTALADA, ALTURA_TOTAL_DE_FRACTURA, ANCHO_PROMEDIO,
@@ -434,8 +431,7 @@ const INSERT_INTERVENTION_APUNTALADO_QUERY = {
         (?, ?, ?, ?, ?, ?, ?, ?, ?, ?,
          ?, ?, ?, ?, ?, ?, ?, ?, ?, ?,
          ?, ?, ?, ?, ?, ?, ?, ?, ?, ?,
-         ?, ?, ?, ?, ?, ?, ?, ?, ?, ?,
-         ?, ?)`,     
+         ?, ?, ?, ?, ?, ?, ?)`,     
     loadSave: `SELECT * FROM _IntervencionesApuntaladoSave WHERE TRANSACTION_ID = ?`,
     loadTransaction: `SELECT * FROM IntervencionesApuntalado WHERE TRANSACTION_ID = ?`    
 }
@@ -1545,9 +1541,8 @@ export const create = async (body, action, cb) => {
                                   else if (tipoDeIntervenciones === 'apuntalado') {
                                     values = [
                                         interventionID, wellFormacionID, 
-                                        volumenPrecolchonN2, volumenSistemaNoReativo, volumenSistemaReactivo, volumenSistemaDivergente,
-                                          volumenDesplazamientoLiquido, volumenDesplazamientoN2, volumenTotalDeLiquido, 
-                                          moduloYoungArena, moduloYoungLutitas, relacPoissonArena,
+                                        volumenDesplazamientoLiquido, volumenTotalDeLiquido, 
+                                        moduloYoungArena, moduloYoungLutitas, relacPoissonArena,
                                         relacPoissonLutatas, gradienteDeFractura, densidadDeDisparos, diametroDeDisparos,
                                         longitudApuntalada, alturaTotalDeFractura, anchoPromedio, concentractionAreal, conductividad,
                                         fcd, presionNeta, eficienciaDeFluidoDeFractura,

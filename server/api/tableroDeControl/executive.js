@@ -216,6 +216,52 @@ GROUP BY ${groupBy}
     })
 })
 
+router.post('/volumenData', (req, res) => {
+  let { activo, field, well, formation, groupBy } = req.body
+  
+  let level = well ? 'i.WELL_FORMACION_ID' : field ? 'FIELD_FORMACION_ID' : activo ? 'ACTIVO_ID' : null
+  let value = well ? well : field ? field : activo ? activo : null
+  let whereClause = ''
+  if (level) {
+    whereClause = `WHERE ${level} = ?`
+  }
+
+  let query = `
+select i.WELL_FORMACION_ID, WELL_NAME, 
+SUM(ia.VOLUMEN_SISTEMA_NO_REACTIVO + ie.VOLUMEN_SISTEMA_NO_REACTIVO) as TOTAL_SISTEMA_NO_REACTIVO,
+SUM(ia.VOLUMEN_SISTEMA_REACTIVO + ie.VOLUMEN_SISTEMA_REACTIVO) as TOTAL_SISTEMA_REACTIVO,
+SUM(ia.VOLUMEN_SISTEMA_DIVERGENTE + ie.VOLUMEN_SISTEMA_DIVERGENTE) as TOTAL_SISTEMA_DIVERGENTE,
+SUM(ia.VOLUMEN_DESPLAZAMIENTO_LIQUIDO + (iap.VOLUMEN_DESPLAZAMIENTO_LIQUIDO / 264.172) + ie.VOLUMEN_DISPLAZAMIENTO_LIQUIDO) as TOTAL_DESPLAZAMIENTO_LIQUIDO,
+SUM(ia.VOLUMEN_DESPLAZAMIENTO_N2 + ie.VOLUMEN_DESPLAZAMIENTO_N2) as TOTAL_DESPLAZAMIENTO_N2,
+SUM(ia.VOLUMEN_PRECOLCHON_N2 + ie.VOLUMEN_PRECOLCHON_N2) as TOTAL_PRECOLCHON_N2,
+SUM(ia.VOLUMEN_TOTAL_DE_LIQUIDO + (iap.VOLUMEN_TOTAL_DE_LIQUIDO / 264.172) + ie.VOLUMEN_TOTAL_DE_LIQUIDO) as TOTAL_LIQUIDO,
+SUM(iap.VOLUMEN_APUNTALANTE) as TOTAL_APUNTALANTE,
+SUM(iap.VOLUMEN_GEL_DE_FRACTURA) as TOTAL_GEL_DE_FRACTURA,
+SUM(iap.VOLUMEN_PRECOLCHON_APUNTALANTE) as TOTAL_PRECOLCHON_APUNTALANTE,
+SUM(it.VOLUMEN_VAPOR_INYECTAR) as TOTAL_VAPOR_INJECTED
+FROM Intervenciones i 
+JOIN FieldWellMapping fwm ON i.WELL_FORMACION_ID = fwm.WELL_FORMACION_ID
+LEFT JOIN IntervencionesAcido ia ON i.WELL_FORMACION_ID = ia.WELL_FORMACION_ID
+LEFT JOIN IntervencionesApuntalado iap ON i.WELL_FORMACION_ID = iap.WELL_FORMACION_ID
+LEFT JOIN IntervencionesEstimulacions ie ON i.WELL_FORMACION_ID = ie.WELL_FORMACION_ID
+LEFT JOIN IntervencionesTermico it ON i.WELL_FORMACION_ID = it.WELL_FORMACION_ID
+${whereClause}
+GROUP BY i.WELL_FORMACION_ID`
+
+
+  connection.query(query, value, (err, results) => {
+      console.log('comment err', err)
+      console.log('herhehrehrehr', results)
+      
+     if (err) {
+        res.json({ success: false})
+      }
+      else {
+        res.json(results)
+      }
+    })
+})
+
 
 
 
