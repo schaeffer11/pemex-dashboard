@@ -6,7 +6,7 @@ export default {
   	table: 'Users'
   },
   ports: {
-    http: 3012,
+    http: 3011,
     io: 8090
   }
  }
