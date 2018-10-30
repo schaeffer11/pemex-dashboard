@@ -160,8 +160,7 @@ select FIELD_NAME, WELL_NAME, iap.WELL_FORMACION_ID, FIELD_FORMACION_ID, EST_INC
 
   connection.query(query, [value, value, value], (err, results) => {
       console.log('comment err', err)
-      console.log('herhehrehrehr', results)
-      
+
      if (err) {
         res.json({ success: false})
       }
@@ -205,7 +204,6 @@ GROUP BY ${groupBy}
 
   connection.query(query, value, (err, results) => {
       console.log('comment err', err)
-      console.log('herhehrehrehr', results)
       
      if (err) {
         res.json({ success: false})
@@ -251,7 +249,6 @@ GROUP BY i.WELL_FORMACION_ID`
 
   connection.query(query, value, (err, results) => {
       console.log('comment err', err)
-      console.log('herhehrehrehr', results)
       
      if (err) {
         res.json({ success: false})

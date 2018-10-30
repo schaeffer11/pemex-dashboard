@@ -5,12 +5,14 @@ import { connect } from 'react-redux'
 import Filters from '../Common/Filters'
 import Card from '../Common/Card'
 import { CardDeck } from 'reactstrap';
+import CostBar from './CostBar'
 
 @autobind class timeSeriesUI extends Component {
   constructor(props) {
     super(props)
     this.state = { 
       fieldWellOptions: [],
+      costData: [],
     }
     this.cards = []
     for (let i = 0; i < 2; i += 1) {
@@ -42,6 +44,19 @@ import { CardDeck } from 'reactstrap';
         })
     })
 
+    fetch(`/timeSeries/costData`, {
+      headers: {
+        'content-type': 'application/json',
+      },
+    })
+    .then(res => res.json())
+    .then(res => {
+      this.setState({
+        costData: res
+      })
+    })
+
+
   }
 
   componentDidMount() {
@@ -68,7 +83,7 @@ import { CardDeck } from 'reactstrap';
   }
 
   render() {
-    let { fieldWellOptions } = this.state
+    let { fieldWellOptions, costData } = this.state
 
 
     return (
@@ -84,6 +99,7 @@ import { CardDeck } from 'reactstrap';
                 ref={this.cards[0]}
               >
               <div label='test'>Insert Cost/Production Increase?/Volume Use over time</div>
+              <CostBar data={costData} />
             </Card>
           </CardDeck>
         </div>
