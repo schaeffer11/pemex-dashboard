@@ -36,7 +36,8 @@ import ExecutiveTable3Well from './ExecutiveTable3Well'
       estIncWellData: [],
       estIncFieldData: [],
       execTableFieldData: [],
-      execTableWellData: []
+      execTableWellData: [],
+      volumenData: []
     }
     this.cards = []
     for (let i = 0; i < 4; i += 1) {
@@ -284,6 +285,26 @@ import ExecutiveTable3Well from './ExecutiveTable3Well'
       })
     })
 
+    fetch(`/executive/volumenData`, {
+      method: 'POST',
+      headers: {
+        'content-type': 'application/json',
+      },
+      body: JSON.stringify({
+        activo,
+        field,
+        well,
+        formation,
+      })
+    })
+    .then(res => res.json())
+    .then(res => {
+      this.setState({
+        volumenData: res
+      })
+    })
+
+
 
   }
 
@@ -313,7 +334,7 @@ import ExecutiveTable3Well from './ExecutiveTable3Well'
 
   render() {
     let { jobBreakdownData, aforosData, fieldWellOptions, avgCostDataType, avgCostDataCompany, costData, countData, estIncData, 
-      estIncWellData, estIncFieldData, execTableWellData, execTableFieldData } = this.state
+      estIncWellData, estIncFieldData, execTableWellData, execTableFieldData, volumenData } = this.state
 
     return (
       <div className="data executive">
@@ -362,7 +383,7 @@ import ExecutiveTable3Well from './ExecutiveTable3Well'
           <ExecutiveTable aforosData={aforosData} costData={costData} countData={countData} estIncData={estIncData} />
           <ExecutiveTable2Well data={execTableWellData} estIncData={estIncWellData} aforosData={aforosData}/>
          {/* <ExecutiveTable2Field data={execTableFieldData} estIncData={estIncWellData} /> */}
-          <ExecutiveTable3Well data={execTableWellData} estIncData={estIncWellData} aforosData={aforosData}/>
+          <ExecutiveTable3Well data={execTableWellData} estIncData={estIncWellData} aforosData={aforosData} volumenData={volumenData}/>
         </div>
       </div>
     )

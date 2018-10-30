@@ -5,7 +5,7 @@ import { CategoryDist, TrafficLight, Currency, Integer } from '../../../../lib/f
 
 @autobind class ExecutiveTable2Well extends PureComponent {
   render() {
-    let { data, estIncData, aforosData } = this.props
+    let { data, estIncData, aforosData, volumenData } = this.props
       let columns = [{
         Header: 'Well Name',
         accessor: 'name', 
@@ -20,45 +20,78 @@ import { CategoryDist, TrafficLight, Currency, Integer } from '../../../../lib/f
         minWidth: 150,
         Cell: CategoryDist
       },{
-        Header: 'Costo Total',
+        Header: <div>Costo Total<br/>($MNX)</div>,
         accessor: 'cost', 
         minWidth: 150,
         Cell: Currency
       },{
-        Header: 'Desviacion De Produccion',
+        Header: <div>Desviacion De Produccion<br/>(bbl/d)</div>,
         accessor: 'desviacion', 
-        minWidth: 150
+        minWidth: 150,
+        Cell: Integer
       },{
-        Header: 'Produccion Acumulad a Puntual',
+        Header: <div>Produccion Acumulad<br/>a Puntual<br/>(bbl/d)</div>,
         accessor: 'acumuladPuntual', 
-        minWidth: 150
+        minWidth: 150,
+        Cell: Integer,
       },{
-        Header: 'Total Volumen de Lodo Perdido',
+        Header: <div>Total Volumen<br/>de Lodo Perdido</div>,
         accessor: 'lodoPerdido', 
         minWidth: 150,
       },{
-        Header: 'Total Sistema No Reactivo',
+        Header: <div>Total Sistema<br/>No Reactivo<br/>(m<sup>3</sup>)</div>,
         accessor: 'sistemaNoReactivo', 
+        Cell: Integer,
         minWidth: 150
       },{
-        Header: 'Total Sistema Reactivo',
+        Header: <div>Total Sistema<br/>Reactivo<br/>(m<sup>3</sup>)</div>,
         accessor: 'sistemaReactivo', 
+        Cell: Integer,
         minWidth: 150
       },{
-        Header: 'Total Sistema Divergente',
+        Header: <div>Total Sistema<br/>Divergente<br/>(m<sup>3</sup>)</div>,
         accessor: 'sistemaDivergente', 
+        Cell: Integer,
         minWidth: 150
       },{
-        Header: 'Total Desplazamiento Liquido',
+        Header: <div>Total Desplazamiento<br/>Liquido<br/>(m<sup>3</sup>)</div>,
         accessor: 'desplazamientoLiquido', 
+        Cell: Integer,
         minWidth: 150
       },{
-        Header: 'Total Desplazamiento N2',
+        Header: <div>Total Desplazamiento<br/>N2<br/>(m<sup>3</sup>)</div>,
         accessor: 'desplazamientoN2', 
+        Cell: Integer,
         minWidth: 150
       },{
-        Header: 'Total Precolchon N2',
+        Header: <div>Total Precolchon<br/>N2<br/>(m<sup>3</sup>)</div>,
         accessor: 'precolchonN2', 
+        Cell: Integer,
+        minWidth: 150
+      },{
+        Header: <div>Total Liquido<br/>(m<sup>3</sup>)</div>,
+        accessor: 'liquido', 
+        Cell: Integer,
+        minWidth: 150
+      },{
+        Header: <div>Total Apuntalante<br/>(sacos)</div>,
+        accessor: 'apuntalante', 
+        Cell: Integer,
+        minWidth: 150
+      },{
+        Header: <div>Total Gel de<br/>Fractura<br/>(U.S. gal)</div>,
+        accessor: 'gelDeFractura', 
+        Cell: Integer,
+        minWidth: 150
+      },{
+        Header: <div>Total Precolchon<br/>apuntalante<br/>(U.S. gal)</div>,
+        accessor: 'precolchonApuntalante', 
+        Cell: Integer,
+        minWidth: 150
+      },{
+        Header: <div>Total Vapor<br/>Injected<br/>(ton)</div>,
+        accessor: 'vapor', 
+        Cell: Integer,
         minWidth: 150
       }]
 
@@ -66,6 +99,7 @@ import { CategoryDist, TrafficLight, Currency, Integer } from '../../../../lib/f
 
         let estProd = estIncData.find(j => j.WELL_FORMACION_ID === i.WELL_FORMACION_ID) ? estIncData.find(j => j.WELL_FORMACION_ID === i.WELL_FORMACION_ID).EST_INC_Qo : undefined
         let realProd = aforosData.filter(j => j.id === i.WELL_FORMACION_ID).length > 0 ? aforosData.filter(j => j.id === i.WELL_FORMACION_ID).reduce((sum, cur) => sum + cur.qoResult, 0) : null
+        let volumen = volumenData.find(j => j.WELL_FORMACION_ID === i.WELL_FORMACION_ID)
 
         return {
             name: i.WELL_NAME,
@@ -80,19 +114,21 @@ import { CategoryDist, TrafficLight, Currency, Integer } from '../../../../lib/f
             percTermico: i.NUM_TERMICO / i.NUM_TREATMENTS * 100,
             desviacion: realProd - estProd,
             cost: i.COST,
-            desviacion: '-',
-            acumuladPuntual: '-',
+            acumuladPuntual: realProd,
             lodoPerdido: '-',
-            sistemaNoReactivo: '-',
-            sistemaReactivo: '-',
-            sistemaDivergente: '-',
-            desplazamientoLiquido: '-',
-            desplazamientoN2: '-',
-            precolchonN2: '-',
+            sistemaNoReactivo: volumen ? volumen.TOTAL_SISTEMA_NO_REACTIVO : undefined,
+            sistemaReactivo: volumen ? volumen.TOTAL_SISTEMA_REACTIVO : undefined,
+            sistemaDivergente: volumen ? volumen.TOTAL_SISTEMA_DIVERGENTE : undefined,
+            desplazamientoLiquido: volumen ? volumen.TOTAL_DESPLAZAMIENTO_LIQUIDO : undefined,
+            desplazamientoN2: volumen ? volumen.TOTAL_DESPLAZAMIENTO_N2 : undefined,
+            precolchonN2: volumen ? volumen.TOTAL_PRECOLCHON_N2 : undefined,
+            liquido: volumen ? volumen.TOTAL_LIQUIDO : undefined,
+            apuntalante: volumen ? volumen.TOTAL_APUNTALANTE : undefined,
+            gelDeFractura: volumen ? volumen.TOTAL_GEL_DE_FRACTURA : undefined,
+            precolchonApuntalante: volumen ? volumen.TOTAL_PRECOLCHON_APUNTALANTE : undefined,
+            vapor: volumen ? volumen.TOTAL_VAPOR_INJECTED : undefined,
         }
     })
-
-    console.log(data)
 
     return (
       <ReactTable 
