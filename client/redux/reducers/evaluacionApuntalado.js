@@ -11,7 +11,7 @@ const initialState = fromJS({
     presionNeta: '',
     eficienciaDeFluidoDeFractura: '',
     tipoDeFluido: '',
-    volumen: '',
+    volumenPrecolchon: '',
     gastoPromedio: '',
     presionRuptura: '',
     presionPromedio: '',

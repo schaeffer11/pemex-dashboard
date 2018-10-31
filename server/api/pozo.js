@@ -510,16 +510,16 @@ const INSERT_CEDULA_ACIDO_QUERY = {
 }
 
 const INSERT_CEDULA_APUNTALADO_QUERY = {
-    save: `INSERT INTO _IntervencionesCedulaApuntaladoSave_testtest (
+    save: `INSERT INTO _IntervencionesCedulaApuntaladoSave (
         CEDULA_ID, INTERVENTION_ID, WELL_FORMACION_ID, ETAPA, SISTEMA, NOMBRE_COMERCIAL, TIPO_DE_FLUIDO, TIPO_DE_APUNTALANTE, VOL_LIQUIDO, 
         VOL_LECHADA, GASTO_EN_SUPERFICIE, GASTO_N2_SUPERFICIE, GASTO_TOTAL_FONDO, CALIDAD_N2, VOL_ESPUMA_FONDO, CONCENTRACION_APUNTALANTE_SUPERFICIE, 
         CONCENTRACION_APUNTALANTE_FONDO, APUNTALANTE_ACUMULADO, TIEMPO, COMPANIA, TRANSACTION_ID, HAS_ERRORS) VALUES ?`   ,
-    submit: `INSERT INTO IntervencionesCedulaApuntalado_testtest (
+    submit: `INSERT INTO IntervencionesCedulaApuntalado (
         CEDULA_ID, INTERVENTION_ID, WELL_FORMACION_ID, ETAPA, SISTEMA, NOMBRE_COMERCIAL, TIPO_DE_FLUIDO, TIPO_DE_APUNTALANTE, VOL_LIQUIDO, 
         VOL_LECHADA, GASTO_EN_SUPERFICIE, GASTO_N2_SUPERFICIE, GASTO_TOTAL_FONDO, CALIDAD_N2, VOL_ESPUMA_FONDO, CONCENTRACION_APUNTALANTE_SUPERFICIE, 
         CONCENTRACION_APUNTALANTE_FONDO, APUNTALANTE_ACUMULADO, TIEMPO, COMPANIA, TRANSACTION_ID) VALUES ?`        ,
-    loadSave: `SELECT * FROM _IntervencionesCedulaApuntaladoSave_testtest WHERE TRANSACTION_ID = ?`,
-    loadTransaction: `SELECT * FROM IntervencionesCedulaApuntalado_testtest WHERE TRANSACTION_ID = ?`    
+    loadSave: `SELECT * FROM _IntervencionesCedulaApuntaladoSave WHERE TRANSACTION_ID = ?`,
+    loadTransaction: `SELECT * FROM IntervencionesCedulaApuntalado WHERE TRANSACTION_ID = ?`    
 }
 
 const INSERT_CEDULA_TERMICO_QUERY = {
@@ -1725,10 +1725,7 @@ export const create = async (body, action, cb) => {
                                               values.push(newRow)
                                             })
 
-                                        query = 
-                                          tipoDeIntervenciones === 'termico' ? DUMMY_QUERY :
-                                            (action === 'save' ? INSERT_COSTS_QUERY.save : INSERT_COSTS_QUERY.submit)
-                                        
+                                        query = action === 'save' ? INSERT_COSTS_QUERY.save : INSERT_COSTS_QUERY.submit
 
                                             connection.query(query, [values], (err, results) => {
                                               console.log('costs', err)

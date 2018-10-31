@@ -47,7 +47,7 @@ import { setGeneralEvaluacionApuntalado, setMergeEvaluacionApuntalado } from '..
           type: 'text',
           value: '',
         },
-        volumen: {
+        volumenPrecolchon: {
           type: 'number',
           value: '',
         },
@@ -253,7 +253,7 @@ import { setGeneralEvaluacionApuntalado, setMergeEvaluacionApuntalado } from '..
     let { formData, setGeneralEvaluacionApuntalado } = this.props
     const {
       tipoDeFluido,
-      volumen,
+      volumenPrecolchon,
       gastoPromedio,
       presionRuptura,
       presionPromedio,
@@ -283,10 +283,10 @@ import { setGeneralEvaluacionApuntalado, setMergeEvaluacionApuntalado } from '..
         />
         <InputRow
           header="Volumen"
-          name='volumen'
+          name='volumenPrecolchon'
           unit="U.S. Gal"
-          value={volumen}
-          onChange={e => setGeneralEvaluacionApuntalado(['volumen'], e)}
+          value={volumenPrecolchon}
+          onChange={e => setGeneralEvaluacionApuntalado(['volumenPrecolchon'], e)}
           errors={this.state.errors}
           onBlur={this.updateErrors}
         />
