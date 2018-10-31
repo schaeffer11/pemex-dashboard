@@ -98,7 +98,7 @@ import CostBar from './CostBar'
                 title="Stuff Over Time"
                 ref={this.cards[0]}
               >
-              <div label='test'>Insert Cost/Production Increase?/Volume Use over time</div>
+              <div label='test'>Insert Production Increase?/Volume Use over time</div>
               <CostBar data={costData} />
             </Card>
           </CardDeck>
