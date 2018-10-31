@@ -15,3 +15,9 @@ export const setWell = value => ({ type: 'set_well', value})
 export const setJob = value => ({ type: 'set_job', value})
 export const setFormation = value => ({ type: 'set_formation', value})
 export const setJobType = value => ({ type: 'set_jobType', value})
+
+export const setGeneralGlobalAnalysis = (location, value) => ({
+  type: 'set_generalGlobalAnalysis',
+  location,
+  value,
+})
