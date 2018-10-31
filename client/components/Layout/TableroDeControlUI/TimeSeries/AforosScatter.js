@@ -4,7 +4,7 @@ import ReactHighcharts from 'react-highcharts'
 
 import { KPI } from '../Common/KPIs'
 
-@autobind class CostBar extends PureComponent {
+@autobind class AforosScatter extends PureComponent {
 
   render() {
     let { data } = this.props
@@ -17,14 +17,14 @@ import { KPI } from '../Common/KPIs'
       
       return {
         x: utc,
-        y: i.COST
+        y: i.DELTA_QO
       }
     })
     console.log(data)
 
     let config = {
       chart: {
-          type: 'column',
+          type: 'scatter',
           zoomType: 'x',
       },
       title: {
@@ -38,7 +38,7 @@ import { KPI } from '../Common/KPIs'
       },
       yAxis: {
         title: {
-          text: 'Costs'
+          text: 'Delta Qo'
         }
       },
       credits: {
@@ -51,7 +51,7 @@ import { KPI } from '../Common/KPIs'
   }
 
     return (
-      <div className="cost-bar test">
+      <div className="aforos-scatter test">
         <div className='chart'>
           <ReactHighcharts
             className='chart'
@@ -65,4 +65,4 @@ import { KPI } from '../Common/KPIs'
 
 
 
-export default CostBar
+export default AforosScatter

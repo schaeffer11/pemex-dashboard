@@ -110,9 +110,8 @@ const INSERT_RESULTS_APUNTALADO_QUERY = {
     save: ``,
     submit: `INSERT INTO ResultsApuntalado (
         INTERVENTION_ID, WELL_FORMACION_ID, 
-        VOLUMEN_PRECOLCHON_N2,
-        VOLUMEN_SISTEMA_NO_REACTIVO, VOLUMEN_SISTEMA_REACTIVO, VOLUMEN_SISTEMA_DIVERGENTE, VOLUMEN_DESPLAZAMIENTO_LIQUIDO, VOLUMEN_DESPLAZAMIENTO_N2,
-        VOLUMEN_TOTAL_DE_LIQUIDO, MODULO_YOUNG_ARENA,
+        VOLUMEN_DESPLAZAMIENTO_LIQUIDO, VOLUMEN_TOTAL_DE_LIQUIDO, VOLUMEN_TOTAL_DE_LIQUIDO, 
+        VOLUMEN_APUNTALANTE, VOLUMEN_PRECOLCHON_APUNTALANTE, MODULO_YOUNG_ARENA,
         MODULO_YOUNG_LUTITAS, RELAC_POISSON_ARENA, RELAC_POISSON_LUTITAS, GRADIENTE_DE_FRACTURA, DENSIDAD_DE_DISPAROS,
         DIAMETRO_DE_DISPAROS, LONGITUD_APUNTALADA, ALTURA_TOTAL_DE_FRACTURA, ANCHO_PROMEDIO,
         CONCENTRACION_AREAL, CONDUCTIVIDAD, FCD, PRESION_NETA, EFICIENCIA_DE_FLUIDO_DE_FRACTURA,
@@ -122,7 +121,18 @@ const INSERT_RESULTS_APUNTALADO_QUERY = {
         (?, ?, ?, ?, ?, ?, ?, ?, ?, ?,
          ?, ?, ?, ?, ?, ?, ?, ?, ?, ?,
          ?, ?, ?, ?, ?, ?, ?, ?, ?, ?,
-         ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`,     
+         ?, ?, ?, ?, ?, ?, ?, ?)`,     
+    loadSave: ``,
+    loadTransaction: ``    
+}
+
+const INSERT_RESULTS_TERMICO_QUERY = {
+    save: ``,
+    submit: `INSERT INTO ResultsApuntalado (
+        INTERVENTION_ID, WELL_FORMACION_ID, VOLUMEN_VAPOR_INYECTAR, CALIDAD, 
+        GASTO_INYECCION, PRESION_MAXIMA_SALIDA_GENERADOR, 
+        TEMPERATURA_MAXIMA_GENERADORPROPUESTA_ID, TRANSACTION_ID) VALUES
+        (?, ?, ?, ?, ?, ?, ?, ?)`,     
     loadSave: ``,
     loadTransaction: ``    
 }
@@ -237,6 +247,9 @@ export const createResults = async (body, action, cb) => {
         presionRuptura, presionPromedio, isip, gradienteFractura, presionCierreSuperior, gradienteCierre, 
         tiempoCierre, presionYacimiento, gradientePoro, perdidaFiltrado, eficienciaFluido } = finalObj.evaluacionApuntalado
 
+  }
+  else if (interventionType === 'termico') {
+      var { volumenVapor, calidad, gastoIneyccion, presionMaximaSalidaGenerador, temperaturaMaximaGenerador } = finalObj.tratamientoTermico
   }
 
 // write to db
@@ -376,7 +389,7 @@ export const createResults = async (body, action, cb) => {
                     ? INSERT_RESULTS_ACIDO_QUERY.submit 
                     : interventionType === 'apuntalado'
                       ? INSERT_RESULTS_APUNTALADO_QUERY.submit
-                      : DUMMY_QUERY
+                      : INSERT_RESULTS_TERMICO_QUERY.submit
 
               if (interventionType === 'estimulacion') {
                 values = [
@@ -411,6 +424,13 @@ export const createResults = async (body, action, cb) => {
                     fcd, presionNeta, eficienciaDeFluidoDeFractura, propuestaID, transactionID
                   ]
               } 
+              else if (interventionType === 'termico') {
+                values = [
+                    interventionID, wellFormacionID, volumenVapor, calidad, gastoIneyccion, 
+                    presionMaximaSalidaGenerador, temperaturaMaximaGenerador, propuestaID, transactionID
+                  ]
+              } 
+
 
               connection.query(query, values, (err, results) => {
                 console.log('intervention', err)

@@ -6,6 +6,8 @@ import Filters from '../Common/Filters'
 import Card from '../Common/Card'
 import { CardDeck } from 'reactstrap';
 import CostBar from './CostBar'
+import AforosScatter from './AforosScatter'
+import VolumeLine from './VolumeLine'
 
 @autobind class timeSeriesUI extends Component {
   constructor(props) {
@@ -13,6 +15,8 @@ import CostBar from './CostBar'
     this.state = { 
       fieldWellOptions: [],
       costData: [],
+      aforosData: [],
+      volumeData: []
     }
     this.cards = []
     for (let i = 0; i < 2; i += 1) {
@@ -56,6 +60,31 @@ import CostBar from './CostBar'
       })
     })
 
+    fetch(`/timeSeries/aforosData`, {
+      headers: {
+        'content-type': 'application/json',
+      },
+    })
+    .then(res => res.json())
+    .then(res => {
+      this.setState({
+        aforosData: res
+      })
+    })
+
+
+    fetch(`/timeSeries/volumeData`, {
+      headers: {
+        'content-type': 'application/json',
+      },
+    })
+    .then(res => res.json())
+    .then(res => {
+      this.setState({
+        volumeData: res
+      })
+    })
+
 
   }
 
@@ -83,9 +112,9 @@ import CostBar from './CostBar'
   }
 
   render() {
-    let { fieldWellOptions, costData } = this.state
+    let { fieldWellOptions, costData, aforosData, volumeData } = this.state
 
-
+    console.log('herherhehr', volumeData)
     return (
       <div className="data statistics">
         <div className='header'>
@@ -95,11 +124,12 @@ import CostBar from './CostBar'
           <CardDeck className="content-deck">
             <Card
                 id="something"
-                title="Stuff Over Time"
+                title="Time Series Data"
                 ref={this.cards[0]}
               >
-              <div label='test'>Insert Production Increase?/Volume Use over time</div>
-              <CostBar data={costData} />
+              <CostBar label='Costs' data={costData} />
+              <AforosScatter label='Production' data={aforosData} />
+              <VolumeLine label='Volume Usage' data={volumeData} />
             </Card>
           </CardDeck>
         </div>
