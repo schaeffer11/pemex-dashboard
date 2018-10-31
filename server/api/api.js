@@ -186,6 +186,39 @@ router.get('/getSubmittedFieldWellMapping', (req, res) => {
     })
 })
 
+router.get('/getTreatmentCompanies', (req, res) => {
+  const query = `
+    SELECT DISTINCT(COMPANIA) FROM
+      (SELECT COMPANIA FROM
+      ResultsCedulaApuntalado_testtest
+      UNION
+      SELECT COMPANIA FROM
+      ResultsCedulaEstimulacion
+      UNION
+      SELECT COMPANIA FROM
+      ResultsCedulaTermico
+      UNION
+      SELECT COMPANIA FROM
+      ResultsCedulaAcido) companies
+  `
+  connection.query(query, (err, results) => {
+    if (err) {
+      console.log('there was an error', err)
+    }
+    res.json(results)
+  })
+})
+
+router.get('/getInterventionTypes', (req, res) => {
+  const query = `SELECT DISTINCT(TIPO_DE_INTERVENCIONES) FROM Intervenciones`
+  connection.query(query, (err, results) => {
+    if (err) {
+      console.log('there was an error', err)
+    }
+    res.json(results)
+  })
+})
+
 router.post('/getJobs', (req, res) => {
     let { well } = req.body
 

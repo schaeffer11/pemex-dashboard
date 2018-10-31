@@ -5,7 +5,7 @@ import Select from 'react-select'
 import { connect } from 'react-redux'
 
 import { InputRowSelectUnitless } from '../../Common/InputRow'
-import { setActivo, setField, setWell, setJob, setFormation } from '../../../../redux/actions/global'
+import { setGeneralGlobalAnalysis } from '../../../../redux/actions/global'
 import { sortLabels } from '../../../../lib/formatters'
 
 @autobind class filters extends Component {
@@ -27,59 +27,71 @@ import { sortLabels } from '../../../../lib/formatters'
   }
 
   handleSelectActivo(val) {
-  	let { setActivo, setField, setWell } = this.props
-  	let value = val ? val.value : null
-  	setActivo(value)
-  	setField(null)
-  	setWell(null)
+  	let { setActivo, setField, setWell,setGeneral } = this.props
+    const value = val ? val.value : null
+    setGeneral(['activo'], value)
+    setGeneral(['field'], null)
+    setGeneral(['well'], null)
+  	// setActivo(value)
+  	// setField(null)
+  	// setWell(null)
   }
 
   handleSelectField(val) {
-  	let { setField, setWell, fieldWellOptions, globalAnalysis } = this.props
+  	let { setField, setWell, fieldWellOptions, globalAnalysis, setGeneral } = this.props
     globalAnalysis = globalAnalysis.toJS()
     let { activo } = globalAnalysis
 
   	let value = val ? val.value : null
     let row = fieldWellOptions.find(i => i.FIELD_FORMACION_ID === val.value)
     if (!activo) {
+      setGeneral(['activo'], val)
       setActivo(val)
     }
-
-  	setField(value)
-  	setWell(null)
+    setGeneral(['field'], value)
+    setGeneral(['well'], null)
+  	// setField(value)
+  	// setWell(null)
   }
 
   handleSelectWell(val) {
-  	let { setWell, setField, setActivo, setJob, fieldWellOptions, globalAnalysis } = this.props
+  	let { setWell, setField, setActivo, setJob, fieldWellOptions, globalAnalysis, setGeneral } = this.props
     globalAnalysis = globalAnalysis.toJS()
     let { field, activo } = globalAnalysis
   	let value = val ? val.value : null
 
     if (val === null) {
-      setField(null)
-      setActivo(null)
-      setJob(null)
-      setWell(null)
+      setGeneral(['field'], null)
+      setGeneral(['activo'], null)
+      setGeneral(['job'], null)
+      setGeneral(['well'], null)
+      // setField(null)
+      // setActivo(null)
+      // setJob(null)
+      // setWell(null)
     }
     else {
       let row = fieldWellOptions.find(i => i.WELL_FORMACION_ID === val.value)
-
       if (!field) {
-        setField(row.FIELD_FORMACION_ID)
+        setGeneral(['field'], row.FIELD_FORMACION_ID)
+        // setField(row.FIELD_FORMACION_ID)
       }
       if (!activo) {
-        setActivo(row.ACTIVO_ID)
+        setGeneral(['activo'], row.ACTIVO_ID)
+        // setActivo(row.ACTIVO_ID)
       }
-      setJob(null)
-      setWell(value)
+      setGeneral(['job'], null)
+      // setJob(null)
+      setGeneral(['well'], value)
+      // setWell(value)
     }
   }
 
   handleSelectFormation(val) {
   	let { setFormation } = this.props
-  	let value = val ? val.value : null
-
-  	setFormation(value)
+    let value = val ? val.value : null
+    setGeneral(['formation'], value)
+  	// setFormation(value)
   }
 
 
@@ -212,7 +224,7 @@ import { sortLabels } from '../../../../lib/formatters'
 	          isClearable = {true}
 	        />
 	      </div>
-	      <div className='formation-selector' >
+	      <div className='formation-selector'>
 	        Formation
 	        <Select
             isDisabled
@@ -232,11 +244,7 @@ const mapStateToProps = state => ({
 })
 
 const mapDispatchToProps = dispatch => ({
-	setActivo: val => dispatch(setActivo(val)),
-	setField: val => dispatch(setField(val)),
-	setWell: val => dispatch(setWell(val)),
-  setJob: val => dispatch(setJob(val)),
-	setFormation: val => dispatch(setFormation(val)),
+  setGeneral: (location, value) => dispatch(setGeneralGlobalAnalysis(location, value)),
 })
 
 export default connect(mapStateToProps, mapDispatchToProps)(filters)

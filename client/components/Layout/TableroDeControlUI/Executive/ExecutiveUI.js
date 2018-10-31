@@ -25,7 +25,6 @@ import ExecutiveTable3Well from './ExecutiveTable3Well'
   constructor(props) {
     super(props)
     this.state = { 
-      fieldWellOptions: [],
     	jobBreakdownData: [],
       aforosData: [],
       avgCostDataType: [],
@@ -52,7 +51,7 @@ import ExecutiveTable3Well from './ExecutiveTable3Well'
     let { activo, field, well, formation } = globalAnalysis
 
     console.log(activo, field, well, formation)
-    //TODO MAKE PARALLEL
+    //TODO: MAKE PARALLEL
   	fetch(`/executive/jobBreakdown`, {
       method: 'POST',
       headers: {
@@ -98,15 +97,6 @@ import ExecutiveTable3Well from './ExecutiveTable3Well'
         'content-type': 'application/json',
       },
     }
-
-    fetch('/api/getFieldWellMappingHasData', headers)
-      .then(r => r.json())
-      .then(r => {
-
-        this.setState({
-          fieldWellOptions: r
-        })
-    })
 
     fetch(`/statistics/avgCostByType`, {
       method: 'POST',
@@ -338,9 +328,6 @@ import ExecutiveTable3Well from './ExecutiveTable3Well'
 
     return (
       <div className="data executive">
-        <div className='header'>
-          <Filters fieldWellOptions={fieldWellOptions} />
-        </div>
         <div className='content'>
           <CardDeck className="content-deck">
             <Card

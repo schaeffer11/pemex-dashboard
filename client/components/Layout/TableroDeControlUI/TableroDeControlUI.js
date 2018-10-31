@@ -4,13 +4,10 @@ import routes from '../../../routes/routes'
 import Sidebar from './Common/Sidebar'
 // import Navigation from '../../Layout/Navigation'
 
-const Reservoir = (props) => {
+const TableroDeControlUI = (props) => {
   return (
     <div className="analysis-content">
       <div className='menu'>
-        <div>
-          test
-        </div>
         <Sidebar />
         {
           routes().map(route => (
@@ -38,4 +35,4 @@ const Reservoir = (props) => {
   )
 }
 
-export default Reservoir
+export default TableroDeControlUI
