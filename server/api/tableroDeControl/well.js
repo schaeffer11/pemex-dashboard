@@ -121,9 +121,33 @@ router.post('/pressureData', (req, res) => {
 router.post('/aforosData', (req, res) => {
   let { transactionID } = req.body
 
-  let query = `SELECT * FROM WellAforos WHERE TRANSACTION_ID = ?`
+  let query = `
+select FECHA, QO, QW, QG from WellAforos WHERE TRANSACTION_ID = ? AND Qo != -999
+UNION
+select FECHA, QO, QW, QG from ResultsAforos WHERE PROPUESTA_ID = ? AND Qo != -999
+`
 
-  connection.query(query, transactionID, (err, results) => {
+
+
+
+  connection.query(query, [transactionID, transactionID], (err, results) => {
+      console.log('comment err', err)
+
+     if (err) {
+        res.json({ success: false})
+      }
+      else {
+        res.json(results)
+      }
+    })
+})
+
+router.get('/getInterventionDates', (req, res) => {
+  let { wellID } = req.query
+
+  let query = `SELECT FECHA_INTERVENCION FROM Results WHERE WELL_FORMACION_ID = ?`
+
+  connection.query(query, wellID, (err, results) => {
       console.log('comment err', err)
 
      if (err) {

@@ -157,18 +157,21 @@ router.get('/getInterventionResultsData', (req, res) => {
 
   if (type === 'Estimulacion') {
     query = `
-      SELECT * FROM ResultsEstimulacions
-      WHERE PROPUESTA_ID = ?`
+      SELECT * FROM ResultsEstimulacions re
+      JOIN Results r ON re.INTERVENTION_ID = r.INTERVENCIONES_ID
+      WHERE re.PROPUESTA_ID = ?`
   }
   else if (type === 'Acido') {
     query = `
-      SELECT * FROM ResultsAcido
-      WHERE PROPUESTA_ID = ?`
+      SELECT * FROM ResultsAcido ra
+      JOIN Results r ON ra.INTERVENTION_ID = r.INTERVENCIONES_ID
+      WHERE ra.PROPUESTA_ID = ?`
   }
   else {
     query = `
-      SELECT * FROM ResultsApuntalado
-      WHERE PROPUESTA_ID = ?`
+      SELECT * FROM ResultsApuntalado rap
+      JOIN Results r ON rap.INTERVENTION_ID = r.INTERVENCIONES_ID
+      WHERE rap.PROPUESTA_ID = ?`
   }
 
   connection.query(query, transactionID, (err, results) => {
@@ -182,6 +185,30 @@ router.get('/getInterventionResultsData', (req, res) => {
       }
     })
 })
+
+router.get('/getAforoData', (req, res) => {
+  let { transactionID, type } = req.query
+  
+  let query =
+`select FECHA, QO, QW, QG from WellAforos WHERE TRANSACTION_ID = ? AND Qo != -999
+UNION
+select FECHA, QO, QW, QG from ResultsAforos WHERE PROPUESTA_ID = ? AND Qo != -999
+`
+
+  connection.query(query, [transactionID, transactionID], (err, results) => {
+      console.log('comment err', err)
+
+     if (err) {
+        res.json({ success: false})
+      }
+      else {
+        res.json(results)
+      }
+    })
+})
+
+
+
 
 
 

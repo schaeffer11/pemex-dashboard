@@ -10,6 +10,7 @@ import CostKPIs from './CostKPIs'
 import SimulationTreatmentTable from './SimulationTreatmentTable'
 import Card from '../Common/Card'
 import { CardDeck } from 'reactstrap';
+import AforoScatter from './AforoScatter'
 
 @autobind class jobViewUI extends Component {
   constructor(props) {
@@ -23,10 +24,12 @@ import { CardDeck } from 'reactstrap';
       cedulaResultData: [],
       cedulaData: [],
       interventionData: [],
-      interventionResultsData: []
+      interventionResultsData: [],
+      aforoData: [],
+      date: null
     }    
     this.cards = []
-    for (let i = 0; i < 3; i += 1) {
+    for (let i = 0; i < 4; i += 1) {
       this.cards.push(React.createRef())
     }
   }
@@ -195,7 +198,20 @@ import { CardDeck } from 'reactstrap';
       .then(res => res.json())
       .then(res => {
         this.setState({
-          interventionResultsData: res
+          interventionResultsData: res,
+          date: res ? res[0].FECHA_INTERVENCION : null
+        })
+      })
+
+      fetch(`/job/getAforoData?transactionID=${job}`, {
+        headers: {
+          'content-type': 'application/json',
+        },
+      })
+      .then(res => res.json())
+      .then(res => {
+        this.setState({
+          aforoData: res
         })
       })
 
@@ -228,7 +244,7 @@ import { CardDeck } from 'reactstrap';
   }
 
   render() {
-    let { fieldWellOptions, jobOptions, imageData, costData, estCostData, cedulaData, cedulaResultData, interventionData, interventionResultsData } = this.state
+    let { fieldWellOptions, jobOptions, imageData, costData, estCostData, cedulaData, cedulaResultData, date, aforoData, interventionData, interventionResultsData } = this.state
     let { globalAnalysis } = this.props
 
     globalAnalysis = globalAnalysis.toJS()
@@ -241,6 +257,8 @@ import { CardDeck } from 'reactstrap';
     console.log('cedula results', cedulaResultData)
     console.log('intervention', interventionData)
     console.log('intervention results', interventionResultsData)
+    console.log('aforo data', aforoData)
+    console.log('date', date)
 
     return (
       <div className="data job-view">
@@ -266,11 +284,19 @@ import { CardDeck } from 'reactstrap';
               <SimulationTreatmentTable type={jobType} interventionData={interventionData} interventionResultsData={interventionResultsData} />
             </Card>            
             <Card
-                id="images"
-                title="Images"
+                id="aforos"
+                title="Aforos"
                 ref={this.cards[2]}
               >          
-              <Images data={imageData} />    
+              <AforoScatter data={aforoData} interventionDate={date}/>   
+            </Card>
+            <Card
+                id="images"
+                title="Images"
+                ref={this.cards[3]}
+              >          
+              <Images data={imageData} />  
+ 
             </Card>
           </CardDeck>
         </div>
