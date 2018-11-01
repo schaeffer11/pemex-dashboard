@@ -559,8 +559,9 @@ const INSERT_TRANSACTION = {
         TRANSACTION_ID, USER_ID, WELL_FORMACION_ID, TIPO_DE_INTERVENCIONES, SAVE_NAME) VALUES
         (?, ?, ?, ?, ?)`,
     submit: `INSERT INTO Transactions (
-        TRANSACTION_ID, USER_ID, FIELD_FORMACION_ID, WELL_FORMACION_ID) VALUES
-        (?, ?, ?, ?)`, 
+        TRANSACTION_ID, USER_ID, SUBDIRECCION_ID, ACTIVO_ID, FIELD_FORMACION_ID, WELL_FORMACION_ID, 
+        FORMACION, PROPUESTA_COMPANIA, TIPO_DE_INTERVENCIONES, TIPO_DE_TERMINACION) VALUES
+        (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`, 
 }
 
 
@@ -1760,7 +1761,7 @@ export const create = async (body, action, cb) => {
                                                   })
                                                 }
 
-                                                values = action === 'save' ? [transactionID, userID, wellFormacionID, tipoDeIntervenciones, saveName] : [transactionID, userID, fieldFormacionID, wellFormacionID]
+                                                values = action === 'save' ? [transactionID, userID, wellFormacionID, tipoDeIntervenciones, saveName] : [transactionID, userID, subdireccion, activo, fieldFormacionID, wellFormacionID, formacion, propuestaCompany, tipoDeIntervenciones, tipoDeTerminacion]
                                                 connection.query((action === 'save' ? INSERT_TRANSACTION.save : INSERT_TRANSACTION.submit), values, (err, results) => {
                                                   console.log('transaction', err)
                                                   console.log('transaction', results)
