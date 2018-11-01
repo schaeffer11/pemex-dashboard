@@ -72,7 +72,6 @@ import ExecutiveTable3Well from './ExecutiveTable3Well'
   	})
 
     fetch(`/executive/aforosData`, {
-      method: 'POST',
       headers: {
         'content-type': 'application/json',
       },

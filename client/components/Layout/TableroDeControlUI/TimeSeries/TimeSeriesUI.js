@@ -19,7 +19,7 @@ import VolumeLine from './VolumeLine'
       volumeData: []
     }
     this.cards = []
-    for (let i = 0; i < 2; i += 1) {
+    for (let i = 0; i < 3; i += 1) {
       this.cards.push(React.createRef())
     }
   }
@@ -117,19 +117,28 @@ import VolumeLine from './VolumeLine'
     console.log('herherhehr', volumeData)
     return (
       <div className="data statistics">
-        <div className='header'>
-          <Filters fieldWellOptions={fieldWellOptions} />
-        </div>
         <div className='content'>
           <CardDeck className="content-deck">
             <Card
-                id="something"
-                title="Time Series Data"
+                id="costs"
+                title="Costs"
                 ref={this.cards[0]}
               >
-              <CostBar label='Costs' data={costData} />
-              <AforosScatter label='Production' data={aforosData} />
-              <VolumeLine label='Volume Usage' data={volumeData} />
+              <CostBar data={costData} />
+            </Card>
+              <Card
+                id="aforos"
+                title="Production"
+                ref={this.cards[1]}
+              >
+              <AforosScatter  data={aforosData} />
+            </Card>
+              <Card
+                id="volume"
+                title="Volume Usage"
+                ref={this.cards[2]}
+              >
+              <VolumeLine data={volumeData} />
             </Card>
           </CardDeck>
         </div>

@@ -47,28 +47,41 @@ router.post('/jobBreakdown', (req, res) => {
 })
 
 
-router.post('/aforosData', (req, res) => {
-  let { activo, field, well, formation } = req.body
+router.get('/aforosData', (req, res) => {
+  let { activo, field, well, formation, company, tipoDeIntervencion, tipoDeTerminacion } = req.query
   
   let level = well ? 'WellAforos.WELL_FORMACION_ID' : field ? 'FIELD_FORMACION_ID' : activo ? 'ACTIVO_ID' : null
-  let value = well ? well : field ? field : activo ? activo : null
+  let values = []
+
+
   let whereClause = ''
   if (level) {
     whereClause = `AND ${level} = ?`
+    values.push(well ? well : field ? field : activo ? activo : null)
+  }
+  if (company) {
+    whereClause += ' AND PROPUESTA_COMPANIA = ?'
+    values.push(company)
+  }
+  if (tipoDeIntervencion) {
+    whereClause += ' AND TIPO_DE_INTERVENCIONES = ?'
+    values.push(tipoDeIntervencion)
+  }
+  if (tipoDeTerminacion) {
+    whereClause += ' AND TIPO_DE_TERMINACION = ?'
+    values.push(tipoDeTerminacion)
   }
 
   let query = `
-
 SELECT * FROM 
 
-(SELECT A.WELL_FORMACION_ID, FORMACION, WELL_NAME, TRANSACTION_ID, FECHA, QO, QW, TIPO_DE_INTERVENCIONES FROM
+(SELECT SUBDIRECCION_ID, ACTIVO_ID, FIELD_FORMACION_ID, A.WELL_FORMACION_ID, WELL_NAME, FORMACION, PROPUESTA_COMPANIA, TIPO_DE_INTERVENCIONES, TIPO_DE_TERMINACION, TRANSACTION_ID, FECHA, QO, QW  FROM
 (
-  select WellAforos.WELL_FORMACION_ID, FORMACION, WELL_NAME, WellAforos.TRANSACTION_ID, MAX(FECHA) FECHA, TIPO_DE_INTERVENCIONES
+  select t.SUBDIRECCION_ID, t.ACTIVO_ID, t.FIELD_FORMACION_ID, WellAforos.WELL_FORMACION_ID, FORMACION, PROPUESTA_COMPANIA, WELL_NAME, WellAforos.TRANSACTION_ID, MAX(FECHA) FECHA, TIPO_DE_TERMINACION, TIPO_DE_INTERVENCIONES
   FROM WellAforos 
   JOIN FieldWellMapping ON WellAforos.WELL_FORMACION_ID = FieldWellMapping.WELL_FORMACION_ID 
-  JOIN WellsData ON WellAforos.TRANSACTION_ID = WellsData.TRANSACTION_ID
-  JOIN Intervenciones ON WellAforos.TRANSACTION_ID = Intervenciones.TRANSACTION_ID
-  WHERE QO != '-999'${whereClause} GROUP BY TRANSACTION_ID
+  JOIN Transactions t ON WellAforos.TRANSACTION_ID = t.TRANSACTION_ID 
+  WHERE QO != '-999' ${whereClause} GROUP BY TRANSACTION_ID
 ) A INNER JOIN WellAforos B USING(TRANSACTION_ID, FECHA)) as aforos,
 
 (SELECT A.PROPUESTA_ID, QO as QO_RESULT, QW as QW_RESULT FROM
@@ -76,13 +89,22 @@ SELECT * FROM
   select WELL_FORMACION_ID, PROPUESTA_ID, TRANSACTION_ID, MAX(FECHA) FECHA
   FROM ResultsAforos WHERE QO != '-999' GROUP BY TRANSACTION_ID
 ) A INNER JOIN ResultsAforos B USING(TRANSACTION_ID, FECHA)) as aforo_results 
-WHERE aforos.TRANSACTION_ID = aforo_results.PROPUESTA_ID`
+WHERE aforos.TRANSACTION_ID = aforo_results.PROPUESTA_ID
+`
 
-  connection.query(query, value, (err, results) => {
+console.log('this is the queryyyyyyyyy', query)
+console.log('these are the valuessssss', values)
+
+  connection.query(query, values, (err, results) => {
       console.log('comment err', err)
 
       results = results.map(i => ({
         id: i.WELL_FORMACION_ID,
+        subdireccion: i.SUBDIRECCION_ID,
+        activo: i.ACTIVO_ID,
+        field: i.FIELD_FORMACION_ID,
+        propuestaCompany: i.PROPUESTA_COMPANIA,
+        terminationType: i.TIPO_DE_TERMINACION,
         name: i.WELL_NAME,
         formation: i.FORMACION,
         date: i.FECHA,
@@ -114,8 +136,7 @@ router.post('/countData', (req, res) => {
 
   let query = `
 select TIPO_DE_INTERVENCIONES, SUM(HAS_RESULTS) as COUNT_RESULTS, COUNT(1)  AS COUNT  from Transactions t 
-JOIN Intervenciones i ON t.TRANSACTION_ID = i.TRANSACTION_ID 
-JOIN FieldWellMapping ON i.WELL_FORMACION_ID = FieldWellMapping.WELL_FORMACION_ID
+JOIN FieldWellMapping ON t.WELL_FORMACION_ID = FieldWellMapping.WELL_FORMACION_ID
  ${whereClause} GROUP BY TIPO_DE_INTERVENCIONES
 `
 
