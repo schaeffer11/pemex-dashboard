@@ -92,9 +92,6 @@ SELECT * FROM
 WHERE aforos.TRANSACTION_ID = aforo_results.PROPUESTA_ID
 `
 
-console.log('this is the queryyyyyyyyy', query)
-console.log('these are the valuessssss', values)
-
   connection.query(query, values, (err, results) => {
       console.log('comment err', err)
 
@@ -103,20 +100,20 @@ console.log('these are the valuessssss', values)
       }
       else {
         results = results.map(i => ({
-          well: i.WELL_NAME,
-          wellID: i.WELL_FORMACION_ID,
           subdireccion: i.SUBDIRECCION_NAME,
           activo: i.ACTIVO_NAME,
           field: i.FIELD_NAME,
-          propuestaCompany: i.PROPUESTA_COMPANIA,
-          termination: i.TIPO_DE_TERMINACION,
+          well: i.WELL_NAME,
+          wellID: i.WELL_FORMACION_ID,
           formation: i.FORMACION,
+          company: i.PROPUESTA_COMPANIA,
+          interventionType: i.TIPO_DE_INTERVENCIONES,
+          terminationType: i.TIPO_DE_TERMINACION,
           date: i.FECHA,
           qo: i.QO,
           qw: i.QW,
           qoResult: i.QO_RESULT,
           qwResult: i.QW_RESULT,
-          type: i.TIPO_DE_INTERVENCIONES
         }))
 
 
@@ -128,7 +125,7 @@ console.log('these are the valuessssss', values)
 router.post('/countData', (req, res) => {
   let { activo, field, well, formation } = req.body
   
-  let level = well ? 't.WELL_FORMACION_ID' : field ? 'FieldWellMapping.FIELD_FORMACION_ID' : activo ? 'ACTIVO_ID' : null
+  let level = well ? 't.WELL_FORMACION_ID' : field ? 't.FIELD_FORMACION_ID' : activo ? 't.ACTIVO_ID' : null
   let value = well ? well : field ? field : activo ? activo : null
   let whereClause = ''
   if (level) {
@@ -156,7 +153,7 @@ JOIN FieldWellMapping ON t.WELL_FORMACION_ID = FieldWellMapping.WELL_FORMACION_I
 router.post('/estimatedIncreaseData', (req, res) => {
   let { activo, field, well, formation, groupBy } = req.body
   
-  let level = well ? 'FieldWellMapping.WELL_FORMACION_ID' : field ? 'FieldWellMapping.FIELD_FORMACION_ID' : activo ? 'ACTIVO_ID' : null
+  let level = well ? 'FieldWellMapping.WELL_FORMACION_ID' : field ? 'FieldWellMapping.FIELD_FORMACION_ID' : activo ? 'FieldWellMapping.ACTIVO_ID' : null
   let value = well ? well : field ? field : activo ? activo : null
   let whereClause = ''
   if (level) {
@@ -281,6 +278,96 @@ GROUP BY i.WELL_FORMACION_ID`
     })
 })
 
+
+router.get('/realCostData', (req, res) => {
+  let { subdir, activo, field, well, formation, company, tipoDeIntervencion, tipoDeTerminacion, groupBy } = req.query
+  
+  let level = well ? 'WellAforos.WELL_FORMACION_ID' : field ? 'fwm.FIELD_FORMACION_ID' : activo ? 'fwm.ACTIVO_ID' : subdir ? 'fwm.SUBDIRECCION_ID' : null
+  let values = []
+
+
+  let whereClause = ''
+  let groupByClause = ''
+
+  if (level) {
+    whereClause = `AND ${level} = ?`
+    values.push(well ? well : field ? field : activo ? activo : subdir ? subdir : null)
+  }
+  if (company) {
+    whereClause += ' AND PROPUESTA_COMPANIA = ?'
+    values.push(company)
+  }
+  if (tipoDeIntervencion) {
+    whereClause += ' AND TIPO_DE_INTERVENCIONES = ?'
+    values.push(tipoDeIntervencion)
+  }
+  if (tipoDeTerminacion) {
+    whereClause += ' AND TIPO_DE_TERMINACION = ?'
+    values.push(tipoDeTerminacion)
+  }
+
+  switch(groupBy) {
+    case 'subdireccion':
+      groupByClause = `GROUP BY SUBDIRECCION_NAME`
+      break
+    case 'activo':
+      groupByClause = `GROUP BY ACTIVO_NAME`
+      break
+    case 'field':
+      groupByClause = `GROUP BY FIELD_NAME`
+      break
+    case 'well':
+      groupByClause = `GROUP BY WELL_FORMACION_ID`
+      break
+    case 'formation':
+      groupByClause = `GROUP BY FORMACION`
+      break
+    case 'company':
+      groupByClause = `GROUP BY COMPANY`
+      break
+    case 'interventionType':
+      groupByClause = `GROUP BY TIPO_DE_INTERVENCIONES`
+      break
+    case 'terminationType':
+      groupByClause = `GROUP BY TIPO_DE_TERMINACION`
+      break
+  }
+
+
+
+  let query = `
+    select SUBDIRECCION_NAME, ACTIVO_NAME, FIELD_NAME, fwm.WELL_FORMACION_ID, WELL_NAME, FORMACION, rc.COMPANY AS COMPANY, TIPO_DE_INTERVENCIONES, TIPO_DE_TERMINACION, SUM(rc.COST_MNX + rc.COST_DLS * rc.MNXtoDLS) as TOTAL_COST from ResultsCosts rc
+    JOIN Transactions t ON rc.PROPUESTA_ID = t.TRANSACTION_ID
+    JOIN FieldWellMapping fwm ON t.WELL_FORMACION_ID = fwm.WELL_FORMACION_ID
+    ${whereClause}
+    ${groupByClause}`
+
+  connection.query(query, values, (err, results) => {
+      console.log('err', err)
+
+     if (err) {
+        res.json({ success: false})
+      }
+      else {
+
+        results = results.map(i => ({
+          subdireccion: i.SUBDIRECCION_NAME,
+          activo: i.ACTIVO_NAME,
+          field: i.FIELD_NAME,
+          well: i.WELL_NAME,
+          wellID: i.WELL_FORMACION_ID,
+          formation: i.FORMACION,
+          company: i.COMPANY,
+          interventionType: i.TIPO_DE_INTERVENCIONES,
+          terminationType: i.TIPO_DE_TERMINACION,
+          totalCost: i.TOTAL_COST 
+
+        }))
+
+        res.json(results)
+      }
+    })
+})
 
 
 

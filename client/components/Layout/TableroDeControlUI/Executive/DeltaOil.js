@@ -73,8 +73,6 @@ let tipoDeInterventionSeries = [{
     })
 
 
-    console.log('this', data)
-
     let series = []
 
     if (!groupBy) {
@@ -85,7 +83,7 @@ let tipoDeInterventionSeries = [{
     }
     else if (groupBy === 'company') {
       series = companySeries.map(i => {
-        i.data = data.filter(j => j.propuestaCompany === i.name)
+        i.data = data.filter(j => j.company === i.name)
         return i
       })
     }
@@ -96,7 +94,6 @@ let tipoDeInterventionSeries = [{
       })  
     }
     else {
-      console.log(groupByList)
       series = groupByList.map(i => {
         return {
           name: i,
@@ -104,8 +101,6 @@ let tipoDeInterventionSeries = [{
         }
       })
     }
-
-    console.log(series)
 
 
     series.push({

@@ -11,7 +11,7 @@ import Card from '../Common/Card'
 import { CardDeck } from 'reactstrap';
 import AvgCostBar from '../Statistics/AvgCostBar'
 import AvgCostCompanyBar from '../Statistics/AvgCostCompanyBar'
-import CostBar from '../Statistics/CostBar'
+import CostBar from './CostBar'
 import CostCompanyBar from '../Statistics/CostCompanyBar'
 import DeltaCostBar from '../Statistics/DeltaCostBar'
 import AvgDeltaCostBar from '../Statistics/AvgDeltaCostBar'
@@ -48,9 +48,22 @@ import ExecutiveTable3Well from './ExecutiveTable3Well'
   	console.log('fetching')
     let { globalAnalysis } = this.props
     globalAnalysis = globalAnalysis.toJS()
-    let { subdir, activo, field, well, formation, company, tipoDeIntervencion, tipoDeTerminacion } = globalAnalysis
+    let { subdir, activo, field, well, formation, company, tipoDeIntervencion, tipoDeTerminacion, groupBy } = globalAnalysis
 
-    console.log(activo, field, well, formation)
+
+    let params = []
+    let query
+
+    subdir ? params.push(`subdir=${subdir}`) : null
+    activo ? params.push(`activo=${activo}`) : null
+    field ? params.push(`field=${field}`) : null
+    well ? params.push(`activo=${activo}`) : null
+    formation ? params.push(`formation=${formation}`) : null
+    company ? params.push(`company=${company}`) : null
+    tipoDeIntervencion ? params.push(`tipoDeIntervencion=${tipoDeIntervencion}`) : null
+    tipoDeTerminacion ? params.push(`tipoDeTerminacion=${tipoDeTerminacion}`) : null
+    groupBy ? params.push(`groupBy=${groupBy}`) : null
+
     //TODO: MAKE PARALLEL
   	fetch(`/executive/jobBreakdown`, {
       method: 'POST',
@@ -71,21 +84,8 @@ import ExecutiveTable3Well from './ExecutiveTable3Well'
 	  	})
   	})
 
-    let query = `/executive/aforosData?`
-    let params = []
-
-    subdir ? params.push(`subdir=${subdir}`) : null
-    activo ? params.push(`activo=${activo}`) : null
-    field ? params.push(`field=${field}`) : null
-    well ? params.push(`activo=${activo}`) : null
-    formation ? params.push(`formation=${formation}`) : null
-    company ? params.push(`company=${company}`) : null
-    tipoDeIntervencion ? params.push(`tipoDeIntervencion=${tipoDeIntervencion}`) : null
-    tipoDeTerminacion ? params.push(`tipoDeTerminacion=${tipoDeTerminacion}`) : null
-
+    query = `/executive/aforosData?`
     query += params.join('&')
-    console.log(query)
-
     fetch(query, {
       headers: {
         'content-type': 'application/json',
@@ -93,7 +93,6 @@ import ExecutiveTable3Well from './ExecutiveTable3Well'
     })
     .then(res => res.json())
     .then(res => {
-      console.log(res)
       this.setState({
         aforosData: res
       })
@@ -107,55 +106,52 @@ import ExecutiveTable3Well from './ExecutiveTable3Well'
       },
     }
 
-    fetch(`/statistics/avgCostByType`, {
-      method: 'POST',
-      headers: {
-        'content-type': 'application/json',
-      },
-      body: JSON.stringify({
-        activo,
-        field,
-        well,
-        formation
-      })
-    })
-    .then(res => res.json())
-    .then(res => {
-      this.setState({
-        avgCostDataType: res
-      })
-    })
+    // fetch(`/statistics/avgCostByType`, {
+    //   method: 'POST',
+    //   headers: {
+    //     'content-type': 'application/json',
+    //   },
+    //   body: JSON.stringify({
+    //     activo,
+    //     field,
+    //     well,
+    //     formation
+    //   })
+    // })
+    // .then(res => res.json())
+    // .then(res => {
+    //   this.setState({
+    //     avgCostDataType: res
+    //   })
+    // })
 
-    fetch(`/statistics/avgCostByCompany`, {
-      method: 'POST',
-      headers: {
-        'content-type': 'application/json',
-      },
-      body: JSON.stringify({
-        activo,
-        field,
-        well,
-        formation
-      })
-    })
-    .then(res => res.json())
-    .then(res => {
-      this.setState({
-        avgCostDataCompany: res
-      })
-    })
+    // fetch(`/statistics/avgCostByCompany`, {
+    //   method: 'POST',
+    //   headers: {
+    //     'content-type': 'application/json',
+    //   },
+    //   body: JSON.stringify({
+    //     activo,
+    //     field,
+    //     well,
+    //     formation
+    //   })
+    // })
+    // .then(res => res.json())
+    // .then(res => {
+    //   this.setState({
+    //     avgCostDataCompany: res
+    //   })
+    // })
 
-    fetch(`/statistics/costData`, {
-      method: 'POST',
+    query = `/executive/realCostData?`
+    query += params.join('&')
+    console.log(query, params)
+
+    fetch(query, {
       headers: {
         'content-type': 'application/json',
       },
-      body: JSON.stringify({
-        activo,
-        field,
-        well,
-        formation
-      })
     })
     .then(res => res.json())
     .then(res => {
@@ -183,125 +179,125 @@ import ExecutiveTable3Well from './ExecutiveTable3Well'
       })
     })
 
-    fetch(`/executive/estimatedIncreaseData`, {
-      method: 'POST',
-      headers: {
-        'content-type': 'application/json',
-      },
-      body: JSON.stringify({
-        activo,
-        field,
-        well,
-        formation,
-        groupBy: 'type'
-      })
-    })
-    .then(res => res.json())
-    .then(res => {
-      this.setState({
-        estIncData: res
-      })
-    })
+    // fetch(`/executive/estimatedIncreaseData`, {
+    //   method: 'POST',
+    //   headers: {
+    //     'content-type': 'application/json',
+    //   },
+    //   body: JSON.stringify({
+    //     activo,
+    //     field,
+    //     well,
+    //     formation,
+    //     groupBy: 'type'
+    //   })
+    // })
+    // .then(res => res.json())
+    // .then(res => {
+    //   this.setState({
+    //     estIncData: res
+    //   })
+    // })
 
-    fetch(`/executive/estimatedIncreaseData`, {
-      method: 'POST',
-      headers: {
-        'content-type': 'application/json',
-      },
-      body: JSON.stringify({
-        activo,
-        field,
-        well,
-        formation,
-        groupBy: 'well'
-      })
-    })
-    .then(res => res.json())
-    .then(res => {
-      this.setState({
-        estIncWellData: res
-      })
-    })
+    // fetch(`/executive/estimatedIncreaseData`, {
+    //   method: 'POST',
+    //   headers: {
+    //     'content-type': 'application/json',
+    //   },
+    //   body: JSON.stringify({
+    //     activo,
+    //     field,
+    //     well,
+    //     formation,
+    //     groupBy: 'well'
+    //   })
+    // })
+    // .then(res => res.json())
+    // .then(res => {
+    //   this.setState({
+    //     estIncWellData: res
+    //   })
+    // })
 
 
-    fetch(`/executive/estimatedIncreaseData`, {
-      method: 'POST',
-      headers: {
-        'content-type': 'application/json',
-      },
-      body: JSON.stringify({
-        activo,
-        field,
-        well,
-        formation,
-        groupBy: 'field'
-      })
-    })
-    .then(res => res.json())
-    .then(res => {
-      this.setState({
-        estIncFieldData: res
-      })
-    })
+    // fetch(`/executive/estimatedIncreaseData`, {
+    //   method: 'POST',
+    //   headers: {
+    //     'content-type': 'application/json',
+    //   },
+    //   body: JSON.stringify({
+    //     activo,
+    //     field,
+    //     well,
+    //     formation,
+    //     groupBy: 'field'
+    //   })
+    // })
+    // .then(res => res.json())
+    // .then(res => {
+    //   this.setState({
+    //     estIncFieldData: res
+    //   })
+    // })
 
-    fetch(`/executive/execTableData`, {
-      method: 'POST',
-      headers: {
-        'content-type': 'application/json',
-      },
-      body: JSON.stringify({
-        activo,
-        field,
-        well,
-        formation,
-        groupBy: 'well'
-      })
-    })
-    .then(res => res.json())
-    .then(res => {
-      this.setState({
-        execTableWellData: res
-      })
-    })
+    // fetch(`/executive/execTableData`, {
+    //   method: 'POST',
+    //   headers: {
+    //     'content-type': 'application/json',
+    //   },
+    //   body: JSON.stringify({
+    //     activo,
+    //     field,
+    //     well,
+    //     formation,
+    //     groupBy: 'well'
+    //   })
+    // })
+    // .then(res => res.json())
+    // .then(res => {
+    //   this.setState({
+    //     execTableWellData: res
+    //   })
+    // })
 
-    fetch(`/executive/execTableData`, {
-      method: 'POST',
-      headers: {
-        'content-type': 'application/json',
-      },
-      body: JSON.stringify({
-        activo,
-        field,
-        well,
-        formation,
-        groupBy: 'field'
-      })
-    })
-    .then(res => res.json())
-    .then(res => {
-      this.setState({
-        execTableFieldData: res
-      })
-    })
+    // fetch(`/executive/execTableData`, {
+    //   method: 'POST',
+    //   headers: {
+    //     'content-type': 'application/json',
+    //   },
+    //   body: JSON.stringify({
+    //     activo,
+    //     field,
+    //     well,
+    //     formation,
+    //     groupBy: 'field'
+    //   })
+    // })
+    // .then(res => res.json())
+    // .then(res => {
+    //   this.setState({
+    //     execTableFieldData: res
+    //   })
+    // })
 
-    fetch(`/executive/volumenData`, {
-      method: 'POST',
-      headers: {
-        'content-type': 'application/json',
-      },
-      body: JSON.stringify({
-        activo,
-        field,
-        well,
-        formation,
-      })
-    })
-    .then(res => res.json())
-    .then(res => {
-      this.setState({
-        volumenData: res
-      })
-    })
+    // fetch(`/executive/volumenData`, {
+    //   method: 'POST',
+    //   headers: {
+    //     'content-type': 'application/json',
+    //   },
+    //   body: JSON.stringify({
+    //     activo,
+    //     field,
+    //     well,
+    //     formation,
+    //   })
+    // })
+    // .then(res => res.json())
+    // .then(res => {
+    //   this.setState({
+    //     volumenData: res
+    //   })
+    // })
 
 
 
@@ -314,19 +310,16 @@ import ExecutiveTable3Well from './ExecutiveTable3Well'
 
   componentDidUpdate(prevProps) {
     let { globalAnalysis } = this.props
-    let prevGlobalAnalysis = prevProps.globalAnalysis
+    let prev = prevProps.globalAnalysis
 
     globalAnalysis = globalAnalysis.toJS()
-    prevGlobalAnalysis = prevGlobalAnalysis.toJS()
+    prev = prev.toJS()
 
+    let { subdir, activo, field, well, formation, company, tipoDeIntervencion, tipoDeTerminacion, groupBy } = globalAnalysis
 
-		let { activo, field, well, formation } = globalAnalysis
-    let activoPrev = prevGlobalAnalysis.activo
-    let fieldPrev = prevGlobalAnalysis.field
-    let wellPrev = prevGlobalAnalysis.well
-    let formationPrev = prevGlobalAnalysis.formation
-
-    if (activo !== activoPrev || field !== fieldPrev || well !== wellPrev || formation !== formationPrev) {
+    if (activo !== prev.activo || field !== prev.field || well !== prev.well || formation !== prev.formation ||
+      company !== prev.company || tipoDeIntervencion !== prev.tipoDeIntervencion || tipoDeTerminacion !== prev.tipoDeTerminacion ||
+      groupBy !== prev.groupBy) {
 			this.fetchData()	
 		}
   }
@@ -334,6 +327,11 @@ import ExecutiveTable3Well from './ExecutiveTable3Well'
   render() {
     let { jobBreakdownData, aforosData, fieldWellOptions, avgCostDataType, avgCostDataCompany, costData, countData, estIncData, 
       estIncWellData, estIncFieldData, execTableWellData, execTableFieldData, volumenData } = this.state
+    let { globalAnalysis } = this.props
+
+    globalAnalysis = globalAnalysis.toJS()
+
+    let { groupBy } = globalAnalysis
 
     return (
       <div className="data executive">
@@ -344,24 +342,8 @@ import ExecutiveTable3Well from './ExecutiveTable3Well'
                 title="Delta Production Graphs"
                 ref={this.cards[0]}
               >
-              <DeltaOil label='Oil' data={aforosData} />
-              <DeltaOil label='Oil (subdireccion)' data={aforosData} groupBy='subdireccion'/>
-              <DeltaOil label='Oil (activo)' data={aforosData} groupBy='activo'/>
-              <DeltaOil label='Oil (field)' data={aforosData} groupBy='field'/>
-              <DeltaOil label='Oil (well)' data={aforosData} groupBy='well'/>
-              <DeltaOil label='Oil (formation)' data={aforosData} groupBy='formation'/>
-              <DeltaOil label='Oil (company)' data={aforosData} groupBy='company'/>
-              <DeltaOil label='Oil (type)' data={aforosData} groupBy='type'/>
-              <DeltaOil label='Oil (termination)' data={aforosData} groupBy='termination'/>
-              <DeltaWater label='Water' data={aforosData} />
-              <DeltaWater label='Water (subdireccion)' data={aforosData} groupBy='subdireccion'/>
-              <DeltaWater label='Water (activo)' data={aforosData} groupBy='activo'/>
-              <DeltaWater label='Water (field)' data={aforosData} groupBy='field'/>
-              <DeltaWater label='Water (well)' data={aforosData} groupBy='well'/>
-              <DeltaWater label='Water (formation)' data={aforosData} groupBy='formation'/>
-              <DeltaWater label='Water (company)' data={aforosData} groupBy='company'/>
-              <DeltaWater label='Water (type)' data={aforosData} groupBy='type'/>
-              <DeltaWater label='Water (termination)' data={aforosData} groupBy='termination'/>
+              <DeltaOil label='Oil' data={aforosData} groupBy={groupBy}/>
+              <DeltaWater label='Water' data={aforosData} groupBy={groupBy} />
             </Card>
             <Card
                 id="classifications"
@@ -376,26 +358,24 @@ import ExecutiveTable3Well from './ExecutiveTable3Well'
                 title="Costs"
                 ref={this.cards[2]}
               >
-              <CostBar label={'Total Type'} data={costData} />
-              <AvgCostBar label={'Avg Type'} data={avgCostDataType} />
-              <CostCompanyBar label={'Total Company'} data={costData} />
-              <AvgCostCompanyBar label={'Avg Company'} data={avgCostDataCompany} />
+              <CostBar label={'Total'} data={costData} groupBy={groupBy}/>  
             </Card>
             <Card
                 id="costDeviations"
                 title="Cost Deviations"
                 ref={this.cards[3]}
-              >         
-              <DeltaCostBar label={'Type'} data={costData} />
+              >      
+                <div>hi</div>   
+{/*              <DeltaCostBar label={'Type'} data={costData} />
               <AvgDeltaCostBar label={'Avg Type'} data={avgCostDataType} />
               <DeltaCostCompanyBar label={'Company'} data={costData} />
-              <AvgDeltaCostCompanyBar label={'Avg Company'} data={avgCostDataCompany} />
+              <AvgDeltaCostCompanyBar label={'Avg Company'} data={avgCostDataCompany} />*/}
             </Card>
           </CardDeck>
-          <ExecutiveTable aforosData={aforosData} costData={costData} countData={countData} estIncData={estIncData} />
-          <ExecutiveTable2Well data={execTableWellData} estIncData={estIncWellData} aforosData={aforosData}/>
+{/*          <ExecutiveTable aforosData={aforosData} costData={costData} countData={countData} estIncData={estIncData} />
+          <ExecutiveTable2Well data={execTableWellData} estIncData={estIncWellData} aforosData={aforosData}/>*/}
          {/* <ExecutiveTable2Field data={execTableFieldData} estIncData={estIncWellData} /> */}
-          <ExecutiveTable3Well data={execTableWellData} estIncData={estIncWellData} aforosData={aforosData} volumenData={volumenData}/>
+         {/* <ExecutiveTable3Well data={execTableWellData} estIncData={estIncWellData} aforosData={aforosData} volumenData={volumenData}/>*/}
         </div>
       </div>
     )

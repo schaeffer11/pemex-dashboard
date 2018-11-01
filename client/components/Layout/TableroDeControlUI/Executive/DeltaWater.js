@@ -85,7 +85,7 @@ let tipoDeInterventionSeries = [{
     }
     else if (groupBy === 'company') {
       series = companySeries.map(i => {
-        i.data = data.filter(j => j.propuestaCompany === i.name)
+        i.data = data.filter(j => j.company === i.name)
         return i
       })
     }
