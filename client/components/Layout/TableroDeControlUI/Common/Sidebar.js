@@ -1,10 +1,12 @@
 import React, { Component } from 'react'
 import { connect } from 'react-redux'
+import objectPath from 'object-path'
 import { slide as Menu } from 'react-burger-menu'
 import Select from 'react-select'
 import autobind from 'autobind-decorator'
 import Filters from './Filters'
 import { setGeneralGlobalAnalysis } from '../../../../redux/actions/global'
+import { selectSimpleValue } from '../../../../lib/formatters';
 
 
 const getOptions = (key, arr) => arr.map((elem) => {
@@ -43,10 +45,6 @@ const getOptions = (key, arr) => arr.map((elem) => {
     fetch('/api/getTreatmentCompanies', headers)
       .then(r => r.json())
       .then(r => {
-        // const companyOptions = r.map(({ COMPANIA }) => ({
-        //   label: COMPANIA,
-        //   value: COMPANIA
-        // }))
         const companyOptions = getOptions('COMPANIA', r)
         this.setState({ companyOptions })
       })
@@ -54,14 +52,34 @@ const getOptions = (key, arr) => arr.map((elem) => {
     fetch('/api/getInterventionTypes', headers)
       .then(r => r.json())
       .then(r => {
-        // const interventionTypes = getOptions('TIPO_DE_INTERVENCIONES', r)
         this.setState({ interventionOptions: getOptions('TIPO_DE_INTERVENCIONES', r) })
+      })
+    
+    fetch('/api/getTerminationTypes', headers)
+      .then(r => r.json())
+      .then(r => {
+        this.setState({ terminationOptions: getOptions('TIPO_DE_TERMINACION', r) })
       })
   }
 
+  handleSelect(selection, location) {
+    const { setGeneral } = this.props
+    const value = objectPath.has(selection, 'value') ? selection.value : null
+    setGeneral([location], value)
+  }
+
   render() {
-    const { isOpen, fieldWellOptions, companyOptions, interventionOptions } = this.state
-    const { company, setGeneral, interventionType } = this.props
+    const { isOpen, fieldWellOptions, companyOptions, interventionOptions, terminationOptions } = this.state
+    const { company, interventionType, terminationType, groupBy } = this.props
+    const groupByOptions = [
+      { value: 'activo', label: 'Activo' },
+      { value: 'field', label: 'Campo' },
+      { value: 'well', label: 'Pozo' },
+      { value: 'formation', label: 'Formacion' },
+      { value: 'activo', label: 'Activo' },
+      { value: 'activo', label: 'Activo' },
+    ]
+
     return (
       <div>
         <button className="bm-burger-button" onClick={() => this.setState({ isOpen: true })}><i className="fa fa-bars" /></button>
@@ -72,18 +90,42 @@ const getOptions = (key, arr) => arr.map((elem) => {
           onStateChange={(state) => !state.isOpen ? this.setState({ isOpen: false }) : null}
         >
           <Filters fieldWellOptions={fieldWellOptions} />
-          <Select
-	          value={company}
-	          options={companyOptions}
-	          onChange={c => setGeneral(['company'], c)}
-	          isClearable = {true}
-	        />
-          <Select
-	          value={interventionType}
-	          options={interventionOptions}
-	          onChange={c => setGeneral(['interventionType'], c)}
-	          isClearable = {true}
-	        />
+          <div className='formation-selector'>
+            Company
+            <Select
+              value={selectSimpleValue(company, companyOptions)}
+              options={companyOptions}
+              onChange={c => this.handleSelect(c, 'company')}
+              isClearable={true}
+            />
+          </div>
+          <div className='formation-selector'>
+            Intervention
+            <Select
+              value={selectSimpleValue(interventionType, interventionOptions)}
+              options={interventionOptions}
+              onChange={c => this.handleSelect(c, 'interventionType')}
+              isClearable = {true}
+            />
+          </div>
+          <div className='formation-selector'>
+            Termination
+            <Select
+              value={selectSimpleValue(terminationType, terminationOptions)}
+              options={terminationOptions}
+              onChange={c => this.handleSelect(c, 'terminationType')}
+              isClearable={true}
+            />
+          </div>
+          <div className='formation-selector'>
+            Group By
+            <Select
+              value={selectSimpleValue(groupBy, groupByOptions)}
+              options={groupByOptions}
+              onChange={c => this.handleSelect(c, 'groupBy')}
+              isClearable={true}
+            />
+          </div>
         </Menu>
       </div>
     )
@@ -94,6 +136,8 @@ const mapStateToProps = state => ({
   token: state.getIn(['user', 'token']),
   company: state.getIn(['globalAnalysis', 'company']),
   interventionType: state.getIn(['globalAnalysis', 'interventionType']),
+  terminationType: state.getIn(['globalAnalysis', 'terminationType']),
+  groupBy: state.getIn(['globalAnalysis', 'groupBy']),
 })
 
 const mapDispatchToProps = dispatch => ({
