@@ -26,6 +26,9 @@ export const sortLabels = (a, b) => {
 }
 
 export const selectSimpleValue = (val, options) => {
+  if (val === null) {
+    return null
+  }
   const simpleValue = options ? options.find(i=>i.value === val) : null
   return simpleValue
 }

@@ -35,18 +35,26 @@ const cleanseValue = val => objectPath.has(val, 'value') ? val.value : null
     setGeneral(['subdireccion'], value)
   }
   handleSelectActivo(val) {
-  	let { setActivo, setField, setWell,setGeneral } = this.props
-    const value = val ? val.value : null
+    let { setGeneral, fieldWellOptions, globalAnalysis } = this.props
+    globalAnalysis = globalAnalysis.toJS()
+    let { subdireccion } = globalAnalysis
+    const value = cleanseValue(val)
     setGeneral(['activo'], value)
-    setGeneral(['field'], null)
-    setGeneral(['well'], null)
+    if (value === null) {
+      setGeneral(['field'], null)
+      setGeneral(['well'], null)
+    } else {
+      let row = fieldWellOptions.find(i => i.ACTIVO_ID === value)
+      if (!subdireccion) {
+        setGeneral(['subdireccion'], row.SUBDIRECCION_ID)
+      }
+    }
   }
 
   handleSelectField(val) {
   	let { fieldWellOptions, globalAnalysis, setGeneral } = this.props
     globalAnalysis = globalAnalysis.toJS()
     let { activo, subdireccion } = globalAnalysis
-    
     let value = cleanseValue(val)
     setGeneral(['field'], value)
     if (value === null) {
@@ -65,12 +73,10 @@ const cleanseValue = val => objectPath.has(val, 'value') ? val.value : null
   handleSelectWell(val) {
   	let { fieldWellOptions, globalAnalysis, setGeneral } = this.props
     globalAnalysis = globalAnalysis.toJS()
-    let { field, activo } = globalAnalysis
+    let { field, activo, subdireccion } = globalAnalysis
   	let value = val ? val.value : null
 
     if (val === null) {
-      setGeneral(['field'], null)
-      setGeneral(['activo'], null)
       setGeneral(['well'], null)
     }
     else {
@@ -80,6 +86,9 @@ const cleanseValue = val => objectPath.has(val, 'value') ? val.value : null
       }
       if (!activo) {
         setGeneral(['activo'], row.ACTIVO_ID)
+      }
+      if (!subdireccion) {
+        setGeneral(['subdireccion'], row.SUBDIRECCION_ID)
       }
       setGeneral(['well'], value)
     }
