@@ -9,6 +9,8 @@ const initialState = Map({
   jobType: null,
   company: null,
   interventionType: null,
+  terminationType: null,
+  groupBy: null,
 })
 
 
