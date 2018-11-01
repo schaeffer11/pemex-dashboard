@@ -44,7 +44,6 @@ import ExecutiveTable3Well from './ExecutiveTable3Well'
   }
 
   fetchData() {
-  	console.log('fetching')
     let { globalAnalysis } = this.props
     globalAnalysis = globalAnalysis.toJS()
     let { subdir, activo, field, well, formation, company, tipoDeIntervencion, tipoDeTerminacion, groupBy } = globalAnalysis
@@ -145,7 +144,6 @@ import ExecutiveTable3Well from './ExecutiveTable3Well'
 
     query = `/executive/realCostData?`
     query += params.join('&')
-    console.log(query, params)
 
     fetch(query, {
       headers: {
@@ -162,7 +160,6 @@ import ExecutiveTable3Well from './ExecutiveTable3Well'
     query = `/executive/realCostData?`
     query += params.join('&')
     query += `&avg=1`
-    console.log(query, params)
 
     fetch(query, {
       headers: {

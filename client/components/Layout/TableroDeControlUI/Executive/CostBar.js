@@ -17,13 +17,9 @@ let colorWheel = [
 @autobind class CostBar extends PureComponent {
   render() {
     let { data, groupBy } = this.props
-
-    console.log(data)
-    console.log(groupBy)
     let dataPoints = []
     let series
     let categories = []
-
     if (data.length > 0) {
       if (!groupBy) {
         categories.push('Total Cost')
@@ -47,8 +43,6 @@ let colorWheel = [
       }   
     }
 
-    console.log(series)
-    console.log(categories)
 
     let config = {
 	    chart: {

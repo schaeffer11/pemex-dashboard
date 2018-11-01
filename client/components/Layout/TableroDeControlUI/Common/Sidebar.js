@@ -72,12 +72,14 @@ const getOptions = (key, arr) => arr.map((elem) => {
     const { isOpen, fieldWellOptions, companyOptions, interventionOptions, terminationOptions } = this.state
     const { company, interventionType, terminationType, groupBy } = this.props
     const groupByOptions = [
+      { value: 'subdireccion', label: 'Subdirección' },
       { value: 'activo', label: 'Activo' },
       { value: 'field', label: 'Campo' },
       { value: 'well', label: 'Pozo' },
-      { value: 'formation', label: 'Formacion' },
-      { value: 'activo', label: 'Activo' },
-      { value: 'activo', label: 'Activo' },
+      { value: 'formation', label: 'Formación' },
+      { value: 'company', label: 'Compañia' },
+      { value: 'interventionType', label: 'Tipo de Intervención' },
+      { value: 'terminationType', label: 'Tipo de Terminación' },
     ]
 
     return (
