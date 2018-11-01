@@ -74,6 +74,9 @@ export const calculateValuesGeneralCedula = (data) => {
     row.volLiquidoAcum = prev ? dealWithNaN(round(parseFloat(prev.volLiquidoAcum) + parseFloat(row.volLiquid))) : row.volLiquid
     row.volN2Acum = prev ? dealWithNaN(round(parseFloat(prev.volN2Acum) + parseFloat(row.volN2))) : row.volN2
     row.etapa = row.index + 1
+    if (isNaN(row.etapa)) {
+      row.etapa = 1
+    }
     return row
   })
 }
@@ -83,12 +86,10 @@ export const calculateValuesApuntaladoCedula = (data) => {
     let { apuntalanteAcumulado, volLechada, gastoSuperficie, volEspumaFondo, concentracionApuntalanteFondo } = row
     const prev = data[i - 1]
     const apuntalante = parseFloat(volEspumaFondo) * parseFloat(concentracionApuntalanteFondo)
-    if (!apuntalanteAcumulado || i === 0) {
+    if (i === 0) {
       row.apuntalanteAcumulado = apuntalante
-    } else if (prev) {
-      row.apuntalanteAcumulado = dealWithNaN(round(parseFloat(prev.apuntalanteAcumulado) + apuntalante))
     } else {
-      row.apuntalanteAcumulado = apuntalanteAcumulado
+      row.apuntalanteAcumulado = dealWithNaN(round(parseFloat(prev.apuntalanteAcumulado) + apuntalante))
     }
     if (isNaN(row.apuntalanteAcumulado)) {
       row.apuntalanteAcumulado = 0
@@ -97,6 +98,9 @@ export const calculateValuesApuntaladoCedula = (data) => {
       row.tiempo = dealWithNaN(round(parseFloat(volLechada) / parseFloat(gastoSuperficie)))
     }
     row.etapa = row.index + 1
+    if (isNaN(row.etapa)) {
+      row.etapa = 1
+    }
     return row
   })
 }
@@ -104,6 +108,9 @@ export const calculateValuesApuntaladoCedula = (data) => {
 export const calculateValuesTermicaCedula = (data) => {
   return data.map((row, i) => {
     row.etapa = row.index + 1
+    if (isNaN(row.etapa)) {
+      row.etapa = 1
+    }
     return row
   })
 }
