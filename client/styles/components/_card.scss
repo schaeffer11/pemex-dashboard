@@ -6,6 +6,7 @@
   .card {
     height: 100%;
     min-width: 500px;
+    max-width: 500px;
     border-radius: 4px;
     background-color: $white-two;
     border: solid 1px $cool-grey;
@@ -16,7 +17,7 @@
       justify-content: flex-end;
       padding: 0;
       .btn-group {
-        display: flex;
+        display: inline-block !important;
         justify-content: center;
         margin: 10px 0;
       }

@@ -48,7 +48,7 @@ import ExecutiveTable3Well from './ExecutiveTable3Well'
   	console.log('fetching')
     let { globalAnalysis } = this.props
     globalAnalysis = globalAnalysis.toJS()
-    let { activo, field, well, formation } = globalAnalysis
+    let { subdir, activo, field, well, formation, company, tipoDeIntervencion, tipoDeTerminacion } = globalAnalysis
 
     console.log(activo, field, well, formation)
     //TODO: MAKE PARALLEL
@@ -71,19 +71,29 @@ import ExecutiveTable3Well from './ExecutiveTable3Well'
 	  	})
   	})
 
-    fetch(`/executive/aforosData`, {
+    let query = `/executive/aforosData?`
+    let params = []
+
+    subdir ? params.push(`subdir=${subdir}`) : null
+    activo ? params.push(`activo=${activo}`) : null
+    field ? params.push(`field=${field}`) : null
+    well ? params.push(`activo=${activo}`) : null
+    formation ? params.push(`formation=${formation}`) : null
+    company ? params.push(`company=${company}`) : null
+    tipoDeIntervencion ? params.push(`tipoDeIntervencion=${tipoDeIntervencion}`) : null
+    tipoDeTerminacion ? params.push(`tipoDeTerminacion=${tipoDeTerminacion}`) : null
+
+    query += params.join('&')
+    console.log(query)
+
+    fetch(query, {
       headers: {
         'content-type': 'application/json',
       },
-      body: JSON.stringify({
-        activo,
-        field,
-        well,
-        formation
-      })
     })
     .then(res => res.json())
     .then(res => {
+      console.log(res)
       this.setState({
         aforosData: res
       })
@@ -335,7 +345,23 @@ import ExecutiveTable3Well from './ExecutiveTable3Well'
                 ref={this.cards[0]}
               >
               <DeltaOil label='Oil' data={aforosData} />
+              <DeltaOil label='Oil (subdireccion)' data={aforosData} groupBy='subdireccion'/>
+              <DeltaOil label='Oil (activo)' data={aforosData} groupBy='activo'/>
+              <DeltaOil label='Oil (field)' data={aforosData} groupBy='field'/>
+              <DeltaOil label='Oil (well)' data={aforosData} groupBy='well'/>
+              <DeltaOil label='Oil (formation)' data={aforosData} groupBy='formation'/>
+              <DeltaOil label='Oil (company)' data={aforosData} groupBy='company'/>
+              <DeltaOil label='Oil (type)' data={aforosData} groupBy='type'/>
+              <DeltaOil label='Oil (termination)' data={aforosData} groupBy='termination'/>
               <DeltaWater label='Water' data={aforosData} />
+              <DeltaWater label='Water (subdireccion)' data={aforosData} groupBy='subdireccion'/>
+              <DeltaWater label='Water (activo)' data={aforosData} groupBy='activo'/>
+              <DeltaWater label='Water (field)' data={aforosData} groupBy='field'/>
+              <DeltaWater label='Water (well)' data={aforosData} groupBy='well'/>
+              <DeltaWater label='Water (formation)' data={aforosData} groupBy='formation'/>
+              <DeltaWater label='Water (company)' data={aforosData} groupBy='company'/>
+              <DeltaWater label='Water (type)' data={aforosData} groupBy='type'/>
+              <DeltaWater label='Water (termination)' data={aforosData} groupBy='termination'/>
             </Card>
             <Card
                 id="classifications"

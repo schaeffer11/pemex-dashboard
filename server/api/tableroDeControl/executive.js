@@ -48,16 +48,16 @@ router.post('/jobBreakdown', (req, res) => {
 
 
 router.get('/aforosData', (req, res) => {
-  let { activo, field, well, formation, company, tipoDeIntervencion, tipoDeTerminacion } = req.query
+  let { subdir, activo, field, well, formation, company, tipoDeIntervencion, tipoDeTerminacion } = req.query
   
-  let level = well ? 'WellAforos.WELL_FORMACION_ID' : field ? 'FIELD_FORMACION_ID' : activo ? 'ACTIVO_ID' : null
+  let level = well ? 'WellAforos.WELL_FORMACION_ID' : field ? 'fwm.FIELD_FORMACION_ID' : activo ? 'fwm.ACTIVO_ID' : subdir ? 'fwm.SUBDIRECCION_ID' : null
   let values = []
 
 
   let whereClause = ''
   if (level) {
     whereClause = `AND ${level} = ?`
-    values.push(well ? well : field ? field : activo ? activo : null)
+    values.push(well ? well : field ? field : activo ? activo : subdir ? subdir : null)
   }
   if (company) {
     whereClause += ' AND PROPUESTA_COMPANIA = ?'
@@ -75,11 +75,11 @@ router.get('/aforosData', (req, res) => {
   let query = `
 SELECT * FROM 
 
-(SELECT SUBDIRECCION_ID, ACTIVO_ID, FIELD_FORMACION_ID, A.WELL_FORMACION_ID, WELL_NAME, FORMACION, PROPUESTA_COMPANIA, TIPO_DE_INTERVENCIONES, TIPO_DE_TERMINACION, TRANSACTION_ID, FECHA, QO, QW  FROM
+(SELECT SUBDIRECCION_NAME, ACTIVO_NAME, FIELD_NAME, A.WELL_FORMACION_ID, WELL_NAME, FORMACION, PROPUESTA_COMPANIA, TIPO_DE_INTERVENCIONES, TIPO_DE_TERMINACION, TRANSACTION_ID, FECHA, QO, QW  FROM
 (
-  select t.SUBDIRECCION_ID, t.ACTIVO_ID, t.FIELD_FORMACION_ID, WellAforos.WELL_FORMACION_ID, FORMACION, PROPUESTA_COMPANIA, WELL_NAME, WellAforos.TRANSACTION_ID, MAX(FECHA) FECHA, TIPO_DE_TERMINACION, TIPO_DE_INTERVENCIONES
+  select fwm.SUBDIRECCION_NAME, fwm.ACTIVO_NAME, fwm.FIELD_NAME, WellAforos.WELL_FORMACION_ID, FORMACION, PROPUESTA_COMPANIA, WELL_NAME, WellAforos.TRANSACTION_ID, MAX(FECHA) FECHA, TIPO_DE_TERMINACION, TIPO_DE_INTERVENCIONES
   FROM WellAforos 
-  JOIN FieldWellMapping ON WellAforos.WELL_FORMACION_ID = FieldWellMapping.WELL_FORMACION_ID 
+  JOIN FieldWellMapping fwm ON WellAforos.WELL_FORMACION_ID = fwm.WELL_FORMACION_ID 
   JOIN Transactions t ON WellAforos.TRANSACTION_ID = t.TRANSACTION_ID 
   WHERE QO != '-999' ${whereClause} GROUP BY TRANSACTION_ID
 ) A INNER JOIN WellAforos B USING(TRANSACTION_ID, FECHA)) as aforos,
@@ -98,27 +98,28 @@ console.log('these are the valuessssss', values)
   connection.query(query, values, (err, results) => {
       console.log('comment err', err)
 
-      results = results.map(i => ({
-        id: i.WELL_FORMACION_ID,
-        subdireccion: i.SUBDIRECCION_ID,
-        activo: i.ACTIVO_ID,
-        field: i.FIELD_FORMACION_ID,
-        propuestaCompany: i.PROPUESTA_COMPANIA,
-        terminationType: i.TIPO_DE_TERMINACION,
-        name: i.WELL_NAME,
-        formation: i.FORMACION,
-        date: i.FECHA,
-        qo: i.QO,
-        qw: i.QW,
-        qoResult: i.QO_RESULT,
-        qwResult: i.QW_RESULT,
-        type: i.TIPO_DE_INTERVENCIONES
-      }))
-
-     if (err) {
+      if (err) {
         res.json({ success: false})
       }
       else {
+        results = results.map(i => ({
+          well: i.WELL_NAME,
+          wellID: i.WELL_FORMACION_ID,
+          subdireccion: i.SUBDIRECCION_NAME,
+          activo: i.ACTIVO_NAME,
+          field: i.FIELD_NAME,
+          propuestaCompany: i.PROPUESTA_COMPANIA,
+          termination: i.TIPO_DE_TERMINACION,
+          formation: i.FORMACION,
+          date: i.FECHA,
+          qo: i.QO,
+          qw: i.QW,
+          qoResult: i.QO_RESULT,
+          qwResult: i.QW_RESULT,
+          type: i.TIPO_DE_INTERVENCIONES
+        }))
+
+
         res.json(results)
       }
     })
@@ -127,7 +128,7 @@ console.log('these are the valuessssss', values)
 router.post('/countData', (req, res) => {
   let { activo, field, well, formation } = req.body
   
-  let level = well ? 'i.WELL_FORMACION_ID' : field ? 'FieldWellMapping.FIELD_FORMACION_ID' : activo ? 'ACTIVO_ID' : null
+  let level = well ? 't.WELL_FORMACION_ID' : field ? 'FieldWellMapping.FIELD_FORMACION_ID' : activo ? 'ACTIVO_ID' : null
   let value = well ? well : field ? field : activo ? activo : null
   let whereClause = ''
   if (level) {
