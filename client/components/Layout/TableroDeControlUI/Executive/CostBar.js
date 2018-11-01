@@ -2,7 +2,17 @@ import React, { PureComponent } from 'react'
 import autobind from 'autobind-decorator'
 import ReactHighcharts from 'react-highcharts'
 
-
+let colorWheel = [
+      '#56B3D8',
+      '#C3E4CC',
+      '#E4CE5E',
+      '#C26A1B',
+      '#5D2311',
+      '#141551',
+      '#355695',
+      '#90D2CE',
+      '#F4F296',
+    ]
 
 @autobind class CostBar extends PureComponent {
   render() {
@@ -10,25 +20,35 @@ import ReactHighcharts from 'react-highcharts'
 
     console.log(data)
     console.log(groupBy)
-
-    let series = []
+    let dataPoints = []
+    let series
+    let categories = []
 
     if (data.length > 0) {
       if (!groupBy) {
-        series.push({
-          name: 'Total Cost',
+        categories.push('Total Cost')
+        series = [{
+          name: ' ',
           data: [data[0].totalCost]
-        })
+        }]
       }
       else {
-        series = data.map(i => {
-          return {
-            name: i[groupBy],
-            data: i.totalCost
-          }
+        data.forEach((i, index) => {
+          let colorIndex = index % colorWheel.length
+
+          dataPoints.push({y: i.totalCost, color: colorWheel[colorIndex]})
+          categories.push(i[groupBy])
         })
+
+        series = [{
+          name: ' ',
+          data: dataPoints
+        }]
       }   
     }
+
+    console.log(series)
+    console.log(categories)
 
     let config = {
 	    chart: {
@@ -38,8 +58,12 @@ import ReactHighcharts from 'react-highcharts'
 	    title: {
 	        text: ''
 	    },
+
       legend: {
         enabled: false
+      },
+      xAxis: {
+        categories: categories,
       },
 	    credits: {
 	    	enabled: false
