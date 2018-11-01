@@ -108,7 +108,7 @@ import { sortLabels, selectSimpleValue } from '../../../../lib/formatters'
       let fields = []
       let usedWells = []
       let wells = []
-      console.log('field well options?', fieldWellOptions)
+      // console.log('field well options?', fieldWellOptions)
       fieldWellOptions.forEach(i => {
         if (!usedSubdirecciones.includes(i.SUBDIRECCION_ID)) {
           usedSubdirecciones.push(i.SUBDIRECCION_ID)
@@ -132,7 +132,7 @@ import { sortLabels, selectSimpleValue } from '../../../../lib/formatters'
       })).sort(sortLabels)
       activoOptions = activos.map(i => ({label: i.ACTIVO_NAME, value: i.ACTIVO_ID})).sort(sortLabels)
 
-      console.log('activo', activoOptions, 'subdireccion', subdireccionOptions)
+      // console.log('activo', activoOptions, 'subdireccion', subdireccionOptions)
       fieldOptions = fields.map(i => ({label: i.FIELD_NAME, value: i.FIELD_FORMACION_ID})).sort(sortLabels)
       wellOptions = wells.map(i => ({ label: i.WELL_NAME, value: i.WELL_FORMACION_ID})).sort(sortLabels)
 

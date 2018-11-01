@@ -27,9 +27,8 @@ import ExecutiveTable3Well from './ExecutiveTable3Well'
     this.state = { 
     	jobBreakdownData: [],
       aforosData: [],
-      avgCostDataType: [],
-      avgCostDataCompany: [],
       costData: [],
+      costDataAverage: [],
       countData: [],
       estIncData: [],
       estIncWellData: [],
@@ -159,6 +158,24 @@ import ExecutiveTable3Well from './ExecutiveTable3Well'
         costData: res
       })
     })
+
+    query = `/executive/realCostData?`
+    query += params.join('&')
+    query += `&avg=1`
+    console.log(query, params)
+
+    fetch(query, {
+      headers: {
+        'content-type': 'application/json',
+      },
+    })
+    .then(res => res.json())
+    .then(res => {
+      this.setState({
+        costDataAverage: res
+      })
+    })
+
 
     fetch(`/executive/countData`, {
       method: 'POST',
@@ -325,7 +342,7 @@ import ExecutiveTable3Well from './ExecutiveTable3Well'
   }
 
   render() {
-    let { jobBreakdownData, aforosData, fieldWellOptions, avgCostDataType, avgCostDataCompany, costData, countData, estIncData, 
+    let { jobBreakdownData, aforosData, fieldWellOptions, costData, costDataAverage, countData, estIncData, 
       estIncWellData, estIncFieldData, execTableWellData, execTableFieldData, volumenData } = this.state
     let { globalAnalysis } = this.props
 
@@ -359,6 +376,7 @@ import ExecutiveTable3Well from './ExecutiveTable3Well'
                 ref={this.cards[2]}
               >
               <CostBar label={'Total'} data={costData} groupBy={groupBy}/>  
+              <CostBar label={'Average'} data={costDataAverage} groupBy={groupBy}/>  
             </Card>
             <Card
                 id="costDeviations"
