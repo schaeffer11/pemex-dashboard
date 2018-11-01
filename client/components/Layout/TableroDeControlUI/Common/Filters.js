@@ -6,7 +6,7 @@ import { connect } from 'react-redux'
 
 import { InputRowSelectUnitless } from '../../Common/InputRow'
 import { setGeneralGlobalAnalysis } from '../../../../redux/actions/global'
-import { sortLabels } from '../../../../lib/formatters'
+import { sortLabels, selectSimpleValue } from '../../../../lib/formatters'
 
 @autobind class filters extends Component {
   constructor(props) {
@@ -26,15 +26,20 @@ import { sortLabels } from '../../../../lib/formatters'
 
   }
 
+  handleSelectSubdireccion(val) {
+  	let { setActivo, setField, setWell,setGeneral } = this.props
+    const value = val ? val.value : null
+    setGeneral(['subdireccion'], value)
+    setGeneral(['activo'], null)
+    setGeneral(['field'], null)
+    setGeneral(['well'], null)
+  }
   handleSelectActivo(val) {
   	let { setActivo, setField, setWell,setGeneral } = this.props
     const value = val ? val.value : null
     setGeneral(['activo'], value)
     setGeneral(['field'], null)
     setGeneral(['well'], null)
-  	// setActivo(value)
-  	// setField(null)
-  	// setWell(null)
   }
 
   handleSelectField(val) {
@@ -50,8 +55,6 @@ import { sortLabels } from '../../../../lib/formatters'
     }
     setGeneral(['field'], value)
     setGeneral(['well'], null)
-  	// setField(value)
-  	// setWell(null)
   }
 
   handleSelectWell(val) {
@@ -65,25 +68,17 @@ import { sortLabels } from '../../../../lib/formatters'
       setGeneral(['activo'], null)
       setGeneral(['job'], null)
       setGeneral(['well'], null)
-      // setField(null)
-      // setActivo(null)
-      // setJob(null)
-      // setWell(null)
     }
     else {
       let row = fieldWellOptions.find(i => i.WELL_FORMACION_ID === val.value)
       if (!field) {
         setGeneral(['field'], row.FIELD_FORMACION_ID)
-        // setField(row.FIELD_FORMACION_ID)
       }
       if (!activo) {
         setGeneral(['activo'], row.ACTIVO_ID)
-        // setActivo(row.ACTIVO_ID)
       }
       setGeneral(['job'], null)
-      // setJob(null)
       setGeneral(['well'], value)
-      // setWell(value)
     }
   }
 
@@ -91,28 +86,34 @@ import { sortLabels } from '../../../../lib/formatters'
   	let { setFormation, setGeneral } = this.props
     let value = val ? val.value : null
     setGeneral(['formation'], value)
-  	// setFormation(value)
   }
 
 
   render() {
     let { fieldWellOptions, globalAnalysis } = this.props
     globalAnalysis = globalAnalysis.toJS()
-    let { activo, field, well, formation } = globalAnalysis
+    let { activo, subdireccion, field, well, formation } = globalAnalysis
 
+    let subdireccionOptions = []
     let activoOptions = []
     let fieldOptions = []
     let wellOptions = []
 
     if (fieldWellOptions.length > 0) {
+      let usedSubdirecciones = []
+      let subdirecciones = []
       let usedActivos = []
       let activos = []
       let usedFields = []
       let fields = []
       let usedWells = []
       let wells = []
-
+      console.log('field well options?', fieldWellOptions)
       fieldWellOptions.forEach(i => {
+        if (!usedSubdirecciones.includes(i.SUBDIRECCION_ID)) {
+          usedSubdirecciones.push(i.SUBDIRECCION_ID)
+          subdirecciones.push(i)
+        }
         if (!usedActivos.includes(i.ACTIVO_ID)) {
           usedActivos.push(i.ACTIVO_ID)
           activos.push(i)
@@ -127,9 +128,40 @@ import { sortLabels } from '../../../../lib/formatters'
         }
       })
 
+      subdireccionOptions = subdirecciones.map(i => ({label: i.SUBDIRECCION_NAME, value: i.SUBDIRECCION_ID
+      })).sort(sortLabels)
       activoOptions = activos.map(i => ({label: i.ACTIVO_NAME, value: i.ACTIVO_ID})).sort(sortLabels)
+
+      console.log('activo', activoOptions, 'subdireccion', subdireccionOptions)
       fieldOptions = fields.map(i => ({label: i.FIELD_NAME, value: i.FIELD_FORMACION_ID})).sort(sortLabels)
       wellOptions = wells.map(i => ({ label: i.WELL_NAME, value: i.WELL_FORMACION_ID})).sort(sortLabels)
+
+      if (subdireccion) {
+        let fieldSubset = fieldWellOptions.filter(i => i.SUBDIRECCION_ID === parseInt(subdireccion))
+        usedActivos = []
+        activos = []
+        usedFields = []
+        fields = []
+        usedWells = []
+        wells = []
+        fieldSubset.forEach(i => {
+          if (!usedActivos.includes(i.ACTIVO_ID)) {
+            usedActivos.push(i.ACTIVO_ID)
+            activos.push(i)
+          }
+          if (!usedFields.includes(i.FIELD_FORMACION_ID)) {
+            usedFields.push(i.FIELD_FORMACION_ID)
+            fields.push(i)
+          }
+          if (!usedWells.includes(i.WELL_FORMACION_ID)) {
+            usedWells.push(i.WELL_FORMACION_ID)
+            wells.push(i)
+          }
+        })
+
+        fieldOptions = fields.map(i => ({label: i.FIELD_NAME, value: i.FIELD_FORMACION_ID})).sort(sortLabels)
+        wellOptions = wells.map(i => ({ label: i.WELL_NAME, value: i.WELL_FORMACION_ID})).sort(sortLabels)
+      }
 
       if (activo) {
         let fieldSubset = fieldWellOptions.filter(i => i.ACTIVO_ID === parseInt(activo))
@@ -190,17 +222,25 @@ import { sortLabels } from '../../../../lib/formatters'
       {label: 'KM-KI', value: 'KM-KI'},
     ]
 
-  	const realActivo = activoOptions.find(i=>i.value === activo) || null
-  	const realField = fieldOptions.find(i=>i.value === field) || null
-  	const realWell = wellOptions.find(i=>i.value === well) || null
-  	const realFormation = formationOptions.find(i=>i.value === formation) || null
-
+  	// const realActivo = activoOptions.find(i=>i.value === activo) || null
+  	// const realField = fieldOptions.find(i=>i.value === field) || null
+  	// const realWell = wellOptions.find(i=>i.value === well) || null
+    // const realFormation = formationOptions.find(i=>i.value === formation) || null
     return (
       <div className="filters">
 	      <div className='activo-selector' >
+	        Subdireccion
+	        <Select
+	          value={selectSimpleValue(subdireccion, subdireccionOptions)}
+	          options={subdireccionOptions}
+	          onChange={this.handleSelectSubdireccion}
+	          isClearable = {true}
+	        />
+	      </div>
+	      <div className='activo-selector' >
 	        Activo
 	        <Select
-	          value={realActivo}
+	          value={selectSimpleValue(activo, activoOptions)}
 	          options={activoOptions}
 	          onChange={this.handleSelectActivo}
 	          isClearable = {true}
@@ -209,7 +249,7 @@ import { sortLabels } from '../../../../lib/formatters'
 	      <div className='field-selector' >
 	        Field
 	        <Select
-	          value={realField}
+	          value={selectSimpleValue(field, fieldOptions)}
 	          options={fieldOptions}
 	          onChange={this.handleSelectField}
 	          isClearable = {true}
@@ -218,7 +258,7 @@ import { sortLabels } from '../../../../lib/formatters'
 	      <div className='well-selector' >
 	        Well
 	        <Select
-	          value={realWell}
+	          value={selectSimpleValue(well, wellOptions)}
 	          options={wellOptions}
 	          onChange={this.handleSelectWell}
 	          isClearable = {true}
@@ -227,7 +267,7 @@ import { sortLabels } from '../../../../lib/formatters'
 	      <div className='formation-selector'>
 	        Formation
 	        <Select
-	          value={realFormation}
+	          value={selectSimpleValue(formation, formationOptions)}
 	          options={formationOptions}
 	          onChange={this.handleSelectFormation}
 	          isClearable = {true}
