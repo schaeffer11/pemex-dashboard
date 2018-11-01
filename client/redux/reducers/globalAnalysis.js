@@ -1,6 +1,7 @@
 import { Map, fromJS } from 'immutable'
 
 const initialState = Map({
+  subdireccion: null,
   activo: null,
   field: null,
   well: null,
