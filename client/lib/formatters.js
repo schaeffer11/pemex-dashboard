@@ -25,6 +25,11 @@ export const sortLabels = (a, b) => {
   return 0;
 }
 
+export const selectSimpleValue = (val, options) => {
+  const simpleValue = options ? options.find(i=>i.value === val) : null
+  return simpleValue
+}
+
 export function handleImagesFromServer(images, state) {
   const shallowStateCopy = {...state}
   const imagesKeys = Object.keys(images)

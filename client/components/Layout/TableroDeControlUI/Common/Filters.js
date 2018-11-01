@@ -88,7 +88,7 @@ import { sortLabels } from '../../../../lib/formatters'
   }
 
   handleSelectFormation(val) {
-  	let { setFormation } = this.props
+  	let { setFormation, setGeneral } = this.props
     let value = val ? val.value : null
     setGeneral(['formation'], value)
   	// setFormation(value)
@@ -194,7 +194,7 @@ import { sortLabels } from '../../../../lib/formatters'
   	const realField = fieldOptions.find(i=>i.value === field) || null
   	const realWell = wellOptions.find(i=>i.value === well) || null
   	const realFormation = formationOptions.find(i=>i.value === formation) || null
-
+    console.log('formation options', formationOptions, realFormation)
     return (
       <div className="filters">
 	      <div className='activo-selector' >
@@ -227,7 +227,6 @@ import { sortLabels } from '../../../../lib/formatters'
 	      <div className='formation-selector'>
 	        Formation
 	        <Select
-            isDisabled
 	          value={realFormation}
 	          options={formationOptions}
 	          onChange={this.handleSelectFormation}

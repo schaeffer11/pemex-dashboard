@@ -186,6 +186,13 @@ router.get('/getSubmittedFieldWellMapping', (req, res) => {
     })
 })
 
+router.get('/getTerminationTypes', (req, res) => {
+  const query = `SELECT DISTINCT(TIPO_DE_TERMINACION) FROM WellMecanico`
+  connection.query(query, (err, results) => {
+    res.json(results)
+  })
+})
+
 router.get('/getTreatmentCompanies', (req, res) => {
   const query = `
     SELECT DISTINCT(COMPANIA) FROM
@@ -1877,12 +1884,10 @@ router.get('/getLabTest', async (req, res) => {
 
     labIDs.forEach((id, index) => {
       let subset = data.filter(i => i.LAB_ID === id)
-
       let type
       if (subset.length > 0) {
         type = subset[0].TIPO_DE_ANALISIS
         let i = subset[0]
-
         if (type === 'caracterizacionFisico') {
           outData.push({
             edited: true,

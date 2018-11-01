@@ -71,23 +71,24 @@ import ExecutiveTable3Well from './ExecutiveTable3Well'
 	  	})
   	})
 
-    fetch(`/executive/aforosData`, {
-      headers: {
-        'content-type': 'application/json',
-      },
-      body: JSON.stringify({
-        activo,
-        field,
-        well,
-        formation
-      })
-    })
-    .then(res => res.json())
-    .then(res => {
-      this.setState({
-        aforosData: res
-      })
-    })
+    // fetch(`/executive/aforosData`, {
+    //   method: 'POST',
+    //   headers: {
+    //     'content-type': 'application/json',
+    //   },
+    //   body: JSON.stringify({
+    //     activo,
+    //     field,
+    //     well,
+    //     formation
+    //   })
+    // })
+    // .then(res => res.json())
+    // .then(res => {
+    //   this.setState({
+    //     aforosData: res
+    //   })
+    // })
 
     const { token } = this.props
     const headers = {
