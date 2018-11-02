@@ -189,7 +189,8 @@ router.get('/getSubmittedFieldWellMapping', (req, res) => {
 router.get('/getTerminationTypes', (req, res) => {
   const query = `SELECT DISTINCT(TIPO_DE_TERMINACION) FROM WellMecanico`
   connection.query(query, (err, results) => {
-    res.json(results)
+    results = results.map(i => i.TIPO_DE_TERMINACION)
+    res.send(results)
   })
 })
 
@@ -212,6 +213,7 @@ router.get('/getTreatmentCompanies', (req, res) => {
     if (err) {
       console.log('there was an error', err)
     }
+    results = results.map(i => i.COMPANIA)
     res.json(results)
   })
 })
@@ -222,9 +224,23 @@ router.get('/getInterventionTypes', (req, res) => {
     if (err) {
       console.log('there was an error', err)
     }
+    results = results.map(i => i.TIPO_DE_INTERVENCIONES)
     res.json(results)
   })
 })
+
+router.get('/getFormationTypes', (req, res) => {
+  const query = `SELECT DISTINCT(FORMACION) FROM WellsData`
+  connection.query(query, (err, results) => {
+    if (err) {
+      console.log('there was an error', err)
+    }
+    results = results.map(i => i.FORMACION)
+    res.json(results)
+  })
+})
+
+
 
 router.post('/getJobs', (req, res) => {
     let { well } = req.body
