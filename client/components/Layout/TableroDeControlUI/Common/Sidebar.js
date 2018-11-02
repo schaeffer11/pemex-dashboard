@@ -63,23 +63,77 @@ const getOptions = (key, arr) => arr.map((elem) => {
   }
 
   handleSelect(selection, location) {
-    const { setGeneral } = this.props
+ const { fieldWellOptions, companyOptions, interventionOptions, terminationOptions } = this.state
+    const { setGeneral, groupBy } = this.props
     const value = objectPath.has(selection, 'value') ? selection.value : null
     setGeneral([location], value)
-  }
 
-  handleSelectGroups(selection) {
-    const { setGeneral } = this.props
-    const { fieldWellOptions, companyOptions, interventionOptions, terminationOptions } = this.state
-    const value = objectPath.has(selection, 'value') ? selection.value : null
-
-    switch(selection.value) {
+    switch(groupBy) {
+     // case 'subdireccion':
+      //   setGeneral(['groups'], )
+      //   break
+      // case 'activo':
+      //   setGeneral(['groups'], )
+      //   break
+      // case 'field':
+      //   setGeneral(['groups'], )
+      //   break
+      // case 'well':
+      //   setGeneral(['groups'], )
+      //   break
+      // case 'formation':
+      //   setGeneral(['groups'], )
+      //   break
       case 'company':
-        setGeneral(['groups'], companyOptions.map(i => i.label))        
+        console.log(value, companyOptions.find(i => i.value === value))
+        setGeneral(['groups'], value ? [companyOptions.find(i => i.value === value).label] : companyOptions.map(i => i.label))
+        break
+      case 'interventionType':
+        setGeneral(['groups'], interventionOptions.map(i => i.label))
+        break
+      case 'terminationType':
+        setGeneral(['groups'], terminationOptions.map(i => i.label)) 
         break
       default:
         break
     }
+  }
+
+  handleSelectGroups(selection) {
+    const { fieldWellOptions, companyOptions, interventionOptions, terminationOptions } = this.state
+    const { company, interventionType, terminationType, setGeneral } = this.props
+    const value = objectPath.has(selection, 'value') ? selection.value : null
+
+    switch(value) {
+      // case 'subdireccion':
+      //   setGeneral(['groups'], )
+      //   break
+      // case 'activo':
+      //   setGeneral(['groups'], )
+      //   break
+      // case 'field':
+      //   setGeneral(['groups'], )
+      //   break
+      // case 'well':
+      //   setGeneral(['groups'], )
+      //   break
+      // case 'formation':
+      //   setGeneral(['groups'], )
+      //   break
+      case 'company':
+        console.log(company, companyOptions.find(i => i.value === company))
+        setGeneral(['groups'], company ? [companyOptions.find(i => i.value === company).label] : companyOptions.map(i => i.label))
+        break
+      case 'interventionType':
+        setGeneral(['groups'], interventionOptions.map(i => i.label))
+        break
+      case 'terminationType':
+        setGeneral(['groups'], terminationOptions.map(i => i.label)) 
+        break
+      default:
+        break
+    }
+
     setGeneral(['groupBy'], value)
   }
 

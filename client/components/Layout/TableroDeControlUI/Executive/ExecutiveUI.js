@@ -22,6 +22,7 @@ import ExecutiveTable3Well from './ExecutiveTable3Well'
     this.state = { 
     	jobBreakdownData: [],
       aforosData: [],
+      aforosCarouselData: [],
       costData: [],
       costDataAverage: [],
       singularCostData: [],
@@ -61,8 +62,9 @@ import ExecutiveTable3Well from './ExecutiveTable3Well'
     groupBy ? params.push(`groupBy=${groupBy}`) : null
 
     //TODO: MAKE PARALLEL
-    let jobQuery = `/executive/jobBreakdown?`
+    let jobQuery = `/executive/jobBreakdown?` + params.join('&')
   	let aforosQuery = `/executive/aforosData?` + params.join('&')
+    let aforosCarouselQuery = `/executive/aforosData?` + params.join('&') + `&carousel=1`
     let costQuery = `/executive/costData?` + params.join('&')
     let avgCostQuery = `/executive/costData?` + params.join('&') + `&avg=1`
     let singularCostQuery = `/executive/costData?` + params.join('&') + `&noGroup=1`
@@ -70,6 +72,7 @@ import ExecutiveTable3Well from './ExecutiveTable3Well'
     const data = await Promise.all([
       fetch(jobQuery, headers).then(r => r.json()),
       fetch(aforosQuery, headers).then(r => r.json()),
+      fetch(aforosCarouselQuery, headers).then(r => r.json()),
       fetch(costQuery, headers).then(r => r.json()),
       fetch(avgCostQuery, headers).then(r => r.json()),
       fetch(singularCostQuery, headers).then(r => r.json())
@@ -83,9 +86,10 @@ import ExecutiveTable3Well from './ExecutiveTable3Well'
     let newState = {
       jobBreakdownData: data[0],
       aforosData: data[1],
-      costData: data[2],
-      costDataAverage: data[3],
-      singularCostData: data[4], 
+      aforosCarouselData: data[2],
+      costData: data[3],
+      costDataAverage: data[4],
+      singularCostData: data[5], 
     }
 
     this.setState(newState)
@@ -114,7 +118,7 @@ import ExecutiveTable3Well from './ExecutiveTable3Well'
   }
 
   render() {
-    let { jobBreakdownData, aforosData, costData, costDataAverage, singularCostData } = this.state
+    let { jobBreakdownData, aforosData, aforosCarouselData, costData, costDataAverage, singularCostData } = this.state
     let { globalAnalysis } = this.props
 
     globalAnalysis = globalAnalysis.toJS()
@@ -141,7 +145,7 @@ import ExecutiveTable3Well from './ExecutiveTable3Well'
                 multiplyChartsOnGrouping
               >
               <JobBreakdown label='Job Type' data={jobBreakdownData} />
-              <ClassificationBreakdown label='Success' data={aforosData} />
+              <JobBreakdown label='Success' data={aforosCarouselData} />
             </Card>
             <Card
                 id="costs"

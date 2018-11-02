@@ -213,6 +213,7 @@ const arraysAreEqual = (arr1, arr2) => {
         <div className="groupby_carousel">
           <button className="left" type="button" onClick={() => this.handleGroupChangeChevron('left')}>
 {/*            <FontAwesomeIcon icon="chevron-left" />*/}
+            <i className='fa fa-chevron-left'/>
           </button>
           <div className="center">
             {groups.map((group) => {
@@ -234,6 +235,7 @@ const arraysAreEqual = (arr1, arr2) => {
           </div>
           <button className="right" type="button" onClick={() => this.handleGroupChangeChevron('right')}>
 {/*            <FontAwesomeIcon icon="chevron-right" />*/}
+            <i className='fa fa-chevron-right'/>
           </button>
         </div>
       )
@@ -248,31 +250,31 @@ const arraysAreEqual = (arr1, arr2) => {
       ...viewing.props,
       ref: this.selectedChild,
     }
-    // if (objectPath.has(childProps, 'data')) {
-    //   if (childProps.data !== undefined) {
-    //     if (multiplyChartsOnGrouping) {
-    //       // FIXME: Hack - The below alternative bypasses the state of the component to render
-    //       // data properly. This is probably not good practice.
-    //       if (multipleData) {
-    //         childProps.data = { ...viewing.props.data }
-    //         // This means data is holding more than just one array
-    //         Object.keys(childProps.data).forEach((dataKey) => {
-    //           const innerObj = childProps.data[dataKey]
-    //           if (typeof innerObj === 'undefined') { return }
-    //           if (Object.keys(innerObj).indexOf(groupProps) > 0) {
-    //             childProps.data[dataKey] = innerObj[groupProps]
-    //           } else {
-    //             childProps.data[dataKey] = innerObj[Object.keys(childProps.data[dataKey])[0]]
-    //           }
-    //         })
-    //       } else if (Object.keys(childProps.data).indexOf(groupProps) > 0) {
-    //         childProps.data = childProps.data[groupProps]
-    //       } else {
-    //         childProps.data = childProps.data[Object.keys(childProps.data)[0]]
-    //       }
-    //     }
-    //   }
-    // }
+    if (objectPath.has(childProps, 'data')) {
+      if (childProps.data !== undefined) {
+        if (multiplyChartsOnGrouping) {
+          // FIXME: Hack - The below alternative bypasses the state of the component to render
+          // data properly. This is probably not good practice.
+          if (multipleData) {
+            childProps.data = { ...viewing.props.data }
+            // This means data is holding more than just one array
+            Object.keys(childProps.data).forEach((dataKey) => {
+              const innerObj = childProps.data[dataKey]
+              if (typeof innerObj === 'undefined') { return }
+              if (Object.keys(innerObj).indexOf(groupProps) > 0) {
+                childProps.data[dataKey] = innerObj[groupProps]
+              } else {
+                childProps.data[dataKey] = innerObj[Object.keys(childProps.data[dataKey])[0]]
+              }
+            })
+          } else if (Object.keys(childProps.data).indexOf(groupProps) > 0) {
+            childProps.data = childProps.data[groupProps]
+          } else {
+            childProps.data = childProps.data[Object.keys(childProps.data)[0]]
+          }
+        }
+      }
+    }
     return React.cloneElement(viewing, childProps)
   }
 
