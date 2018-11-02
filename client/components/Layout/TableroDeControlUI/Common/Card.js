@@ -50,7 +50,7 @@ const arraysAreEqual = (arr1, arr2) => {
     const { groups, selectedGrouping } = this.props
     const { groupProps } = this.state
 
-    const hasGroups = groups && groups.length > 0 && selectedGrouping.value !== 'all'
+    const hasGroups = groups && groups.length > 0 && selectedGrouping
     const groupsAreDifferent = !arraysAreEqual(prevGroups, groups)
     const groupPropsIsDefined = groupProps !== undefined
     if (hasGroups && (groupsAreDifferent || !groupPropsIsDefined)) {
@@ -208,7 +208,7 @@ const arraysAreEqual = (arr1, arr2) => {
   renderCarousel() {
     const { selectedGrouping, multiplyChartsOnGrouping, id, groups } = this.props
     const { groupProps } = this.state
-    if (multiplyChartsOnGrouping && groups.length > 0 && selectedGrouping.value !== 'all') {
+    if (multiplyChartsOnGrouping && groups.length > 0 && selectedGrouping) {
       return (
         <div className="groupby_carousel">
           <button className="left" type="button" onClick={() => this.handleGroupChangeChevron('left')}>
@@ -229,7 +229,7 @@ const arraysAreEqual = (arr1, arr2) => {
               )
             })}
             <h6>
-              {`${selectedGrouping.label}: ${groupProps}`}
+              {`${selectedGrouping}: ${groupProps}`}
             </h6>
           </div>
           <button className="right" type="button" onClick={() => this.handleGroupChangeChevron('right')}>
@@ -248,31 +248,31 @@ const arraysAreEqual = (arr1, arr2) => {
       ...viewing.props,
       ref: this.selectedChild,
     }
-    if (objectPath.has(childProps, 'data')) {
-      if (childProps.data !== undefined) {
-        if (multiplyChartsOnGrouping) {
-          // FIXME: Hack - The below alternative bypasses the state of the component to render
-          // data properly. This is probably not good practice.
-          if (multipleData) {
-            childProps.data = { ...viewing.props.data }
-            // This means data is holding more than just one array
-            Object.keys(childProps.data).forEach((dataKey) => {
-              const innerObj = childProps.data[dataKey]
-              if (typeof innerObj === 'undefined') { return }
-              if (Object.keys(innerObj).indexOf(groupProps) > 0) {
-                childProps.data[dataKey] = innerObj[groupProps]
-              } else {
-                childProps.data[dataKey] = innerObj[Object.keys(childProps.data[dataKey])[0]]
-              }
-            })
-          } else if (Object.keys(childProps.data).indexOf(groupProps) > 0) {
-            childProps.data = childProps.data[groupProps]
-          } else {
-            childProps.data = childProps.data[Object.keys(childProps.data)[0]]
-          }
-        }
-      }
-    }
+    // if (objectPath.has(childProps, 'data')) {
+    //   if (childProps.data !== undefined) {
+    //     if (multiplyChartsOnGrouping) {
+    //       // FIXME: Hack - The below alternative bypasses the state of the component to render
+    //       // data properly. This is probably not good practice.
+    //       if (multipleData) {
+    //         childProps.data = { ...viewing.props.data }
+    //         // This means data is holding more than just one array
+    //         Object.keys(childProps.data).forEach((dataKey) => {
+    //           const innerObj = childProps.data[dataKey]
+    //           if (typeof innerObj === 'undefined') { return }
+    //           if (Object.keys(innerObj).indexOf(groupProps) > 0) {
+    //             childProps.data[dataKey] = innerObj[groupProps]
+    //           } else {
+    //             childProps.data[dataKey] = innerObj[Object.keys(childProps.data[dataKey])[0]]
+    //           }
+    //         })
+    //       } else if (Object.keys(childProps.data).indexOf(groupProps) > 0) {
+    //         childProps.data = childProps.data[groupProps]
+    //       } else {
+    //         childProps.data = childProps.data[Object.keys(childProps.data)[0]]
+    //       }
+    //     }
+    //   }
+    // }
     return React.cloneElement(viewing, childProps)
   }
 
@@ -404,14 +404,14 @@ const arraysAreEqual = (arr1, arr2) => {
 
 const mapStateToProps = state => ({
   chartOptionsValues: state.get('chartOptions'),
-  // selectedGrouping: state.getIn(['settings', 'selectedGrouping']).toJS(),
-  // groups: state.getIn(['settings', 'groups']).toJS().sort((a, b) => {
-  //   if (b.toLowerCase() === 'undefined') { return -1 }
-  //   if (a.toLowerCase() === 'undefined') { return 1 }
-  //   if (a < b) { return -1 }
-  //   if (a > b) { return 1 }
-  //   return 0
-  // }),
+  selectedGrouping: state.getIn(['globalAnalysis', 'groupBy']),
+  groups: state.getIn(['globalAnalysis', 'groups']).toJS().sort((a, b) => {
+    if (b.toLowerCase() === 'undefined') { return -1 }
+    if (a.toLowerCase() === 'undefined') { return 1 }
+    if (a < b) { return -1 }
+    if (a > b) { return 1 }
+    return 0
+  }),
 })
 
 const mapDispatchToProps = dispatch => ({

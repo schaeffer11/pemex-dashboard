@@ -10,13 +10,15 @@ const connection = db.getConnection(appConfig.users.database)
 const router = Router()
 
 
-router.post('/jobBreakdown', (req, res) => {
-  let { activo, field, well, formation } = req.body
+router.get('/jobBreakdown', (req, res) => {
+  let { activo, field, well, formation } = req.query
 
   let level = well ? 'i.WELL_FORMACION_ID' : field ? 'FIELD_FORMACION_ID' : activo ? 'ACTIVO_ID' : null
   let value = well ? well : field ? field : activo ? activo : null
 
-  let query = `SELECT TIPO_DE_INTERVENCIONES as name, COUNT(1) AS y FROM Intervenciones i`
+  let query = `SELECT i.TIPO_DE_INTERVENCIONES as name, COUNT(1) AS y, PROPUESTA_COMPANIA 
+  FROM Intervenciones i
+  JOIN Transactions t ON i.TRANSACTION_ID = t.TRANSACTION_ID`
   
   if (level) {
     query += ` JOIN FieldWellMapping f ON i.WELL_FORMACION_ID = f.WELL_FORMACION_ID`
@@ -28,7 +30,7 @@ router.post('/jobBreakdown', (req, res) => {
   //   query += ' WHERE FORMACION = ?'
   // }
 
-  query += ` GROUP BY TIPO_DE_INTERVENCIONES`
+  query += ` GROUP BY PROPUESTA_COMPANIA`
 
 
   // console.log(query)
@@ -38,10 +40,16 @@ router.post('/jobBreakdown', (req, res) => {
       // console.log('comment results', results)
 
      if (err) {
+      console.log(err)
         res.json({ success: false})
       }
       else {
-        res.json(results)
+        let out = {}
+        results.forEach(i => {
+          out[i.PROPUESTA_COMPANIA] = i.y
+        })
+
+        res.json(out)
       }
     })
 })
@@ -279,8 +287,8 @@ GROUP BY i.WELL_FORMACION_ID`
 })
 
 
-router.get('/realCostData', (req, res) => {
-  let { subdir, activo, field, well, formation, company, tipoDeIntervencion, tipoDeTerminacion, groupBy, avg } = req.query
+router.get('/costData', (req, res) => {
+  let { subdir, activo, field, well, formation, company, tipoDeIntervencion, tipoDeTerminacion, groupBy, avg, noGroup } = req.query
   
   let level = well ? 'WellAforos.WELL_FORMACION_ID' : field ? 'fwm.FIELD_FORMACION_ID' : activo ? 'fwm.ACTIVO_ID' : subdir ? 'fwm.SUBDIRECCION_ID' : null
   let values = []
@@ -333,12 +341,18 @@ router.get('/realCostData', (req, res) => {
       break
   }
 
+  if (noGroup) {
+    groupByClause = 'GROUP BY rc.TRANSACTION_ID'
+  }
+
   let agg = avg ? 'AVG' : 'SUM'
 
 
   let query = `
-    select SUBDIRECCION_NAME, ACTIVO_NAME, FIELD_NAME, fwm.WELL_FORMACION_ID, WELL_NAME, FORMACION, rc.COMPANY AS COMPANY, TIPO_DE_INTERVENCIONES, TIPO_DE_TERMINACION, ${agg}(rc.COST_MNX + rc.COST_DLS * rc.MNXtoDLS) as TOTAL_COST from ResultsCosts rc
+    select SUBDIRECCION_NAME, ACTIVO_NAME, FIELD_NAME, fwm.WELL_FORMACION_ID, WELL_NAME, FORMACION, rc.COMPANY AS COMPANY, TIPO_DE_INTERVENCIONES, TIPO_DE_TERMINACION, ${agg}(rc.COST_MNX + rc.COST_DLS * rc.MNXtoDLS) as TOTAL_COST, ${agg}(iec.COST_MNX + iec.COST_DLS * iec.MNXtoDLS) as TOTAL_ESTIMATED_COST 
+    FROM ResultsCosts rc
     JOIN Transactions t ON rc.PROPUESTA_ID = t.TRANSACTION_ID
+    JOIN IntervencionesEstimatedCosts iec ON rc.PROPUESTA_ID = iec.TRANSACTION_ID
     JOIN FieldWellMapping fwm ON t.WELL_FORMACION_ID = fwm.WELL_FORMACION_ID
     ${whereClause}
     ${groupByClause}`
@@ -361,7 +375,8 @@ router.get('/realCostData', (req, res) => {
           company: i.COMPANY,
           interventionType: i.TIPO_DE_INTERVENCIONES,
           terminationType: i.TIPO_DE_TERMINACION,
-          totalCost: i.TOTAL_COST 
+          totalCost: i.TOTAL_COST,
+          totalEstimatedCost: i.TOTAL_ESTIMATED_COST
 
         }))
 

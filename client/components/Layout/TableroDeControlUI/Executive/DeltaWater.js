@@ -45,6 +45,15 @@ let tipoDeInterventionSeries = [{
   }]
 
 @autobind class DeltaWater extends PureComponent {
+
+  shouldComponentUpdate(nextProps) {
+    if (this.props.groupBy !== nextProps.groupBy) {
+      return false
+    }
+    
+    return true
+  }
+  
   render() {
     let { data, groupBy } = this.props
     let max = 0

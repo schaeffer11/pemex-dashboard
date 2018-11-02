@@ -2,6 +2,7 @@ import React, { PureComponent } from 'react'
 import autobind from 'autobind-decorator'
 import ReactHighcharts from 'react-highcharts'
 
+
 let colorWheel = [
       '#56B3D8',
       '#C3E4CC',
@@ -14,7 +15,7 @@ let colorWheel = [
       '#F4F296',
     ]
 
-@autobind class CostBar extends PureComponent {
+@autobind class DeltaCostBar extends PureComponent {
 
   shouldComponentUpdate(nextProps) {
     if (this.props.groupBy !== nextProps.groupBy) {
@@ -29,20 +30,35 @@ let colorWheel = [
     let dataPoints = []
     let series
     let categories = []
+
     if (data.length > 0) {
       if (!groupBy) {
         categories.push('Total Cost')
         series = [{
           name: ' ',
-          data: [data[0].totalCost]
+          data: [((data[0].totalCost / (data[0].totalEstimatedCost)) - 1) * 100]
         }]
       }
       else {
-        data.forEach((i, index) => {
-          let colorIndex = index % colorWheel.length
+        data.forEach(i => {
 
-          dataPoints.push({y: i.totalCost, color: colorWheel[colorIndex]})
-          categories.push(i[groupBy])
+          if (!categories.includes(i[groupBy])) {
+            categories.push(i[groupBy])      
+          }
+
+        })
+
+        categories.forEach((i, index) => {
+          let colorIndex = index % colorWheel.length
+          let subData = data.filter(j => j[groupBy] === i)
+
+          subData.forEach(j => {
+            let val = ((j.totalCost / j.totalEstimatedCost) - 1) * 100
+            dataPoints.push({
+              x: index, 
+              y: val, 
+              color: colorWheel[colorIndex]})
+          })
         })
 
         series = [{
@@ -54,23 +70,50 @@ let colorWheel = [
 
     let config = {
 	    chart: {
-          zoomType: 'y',
-	        type: 'column'
+	        type: 'scatter',
+          zoomType: 'xy',
 	    },
 	    title: {
 	        text: ''
 	    },
-
       legend: {
         enabled: false
       },
       xAxis: {
-        categories: categories,
+        categories: categories
+      },
+      yAxis: {
+        reversed: true,
+        title: {
+          text: 'Percentage'
+        },
+        plotLines: [{
+          value: 0,
+          color: 'black',
+          width: 5,
+        }],
+        plotBands: [{
+          color: '#ecb4b4',
+          from: 0,
+          to: 1000
+        }, {
+          color: '#b4ecb4',
+          from: 0,
+          to: -1000
+        }]
       },
 	    credits: {
 	    	enabled: false
 	    },
       plotOptions: {
+        series: {
+          marker: {
+            lineColor: 'black',
+            radius: 4,
+            lineWidth: 1,
+            symbol: 'square',
+          }
+        }
       },
 	    series: series
 		}
@@ -86,4 +129,4 @@ let colorWheel = [
 }
 
 
-export default CostBar
+export default DeltaCostBar

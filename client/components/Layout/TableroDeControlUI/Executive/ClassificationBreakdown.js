@@ -5,6 +5,15 @@ import ReactHighcharts from 'react-highcharts'
 
 
 @autobind class ClassificationBreakdown extends PureComponent {
+
+  shouldComponentUpdate(nextProps) {
+    if (this.props.groupBy !== nextProps.groupBy) {
+      return false
+    }
+    
+    return true
+  }
+  
   render() {
     let { data } = this.props
     let successful = 0

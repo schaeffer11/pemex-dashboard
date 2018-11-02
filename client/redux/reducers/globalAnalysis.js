@@ -1,6 +1,6 @@
 import { Map, fromJS } from 'immutable'
 
-const initialState = Map({
+const initialState = fromJS({
   subdireccion: null,
   activo: null,
   field: null,
@@ -12,6 +12,7 @@ const initialState = Map({
   interventionType: null,
   terminationType: null,
   groupBy: null,
+  groups: []
 })
 
 
@@ -31,7 +32,6 @@ const global = (state = initialState, action) => {
       return state.set('formation', fromJS(action.value))
     case 'set_jobType':
       return state.set('jobType', fromJS(action.value))
-
     default:
    		return state
   }

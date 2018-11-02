@@ -68,6 +68,23 @@ const getOptions = (key, arr) => arr.map((elem) => {
     setGeneral([location], value)
   }
 
+  handleSelectGroups(selection) {
+    const { setGeneral } = this.props
+    const { fieldWellOptions, companyOptions, interventionOptions, terminationOptions } = this.state
+    const value = objectPath.has(selection, 'value') ? selection.value : null
+
+    switch(selection.value) {
+      case 'company':
+        setGeneral(['groups'], companyOptions.map(i => i.label))        
+        break
+      default:
+        break
+    }
+    setGeneral(['groupBy'], value)
+  }
+
+
+
   render() {
     const { isOpen, fieldWellOptions, companyOptions, interventionOptions, terminationOptions } = this.state
     const { company, interventionType, terminationType, groupBy } = this.props
@@ -124,7 +141,7 @@ const getOptions = (key, arr) => arr.map((elem) => {
             <Select
               value={selectSimpleValue(groupBy, groupByOptions)}
               options={groupByOptions}
-              onChange={c => this.handleSelect(c, 'groupBy')}
+              onChange={this.handleSelectGroups}
               isClearable={true}
             />
           </div>
