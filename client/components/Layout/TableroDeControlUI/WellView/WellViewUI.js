@@ -11,6 +11,7 @@ import KPIMecanico from './KPIMecanico'
 import Images from './Images'
 import Card from '../Common/Card'
 import { CardDeck } from 'reactstrap';
+import { generatePowerPoint } from '../../../../pptx';
 
 @autobind class wellViewUI extends Component {
   constructor(props) {
@@ -24,7 +25,7 @@ import { CardDeck } from 'reactstrap';
       pressureData: [],
       aforosData: [],
       imageData: [],
-      interventionDates: []
+      interventionDates: [],
     }
     this.cards = []
     for (let i = 0; i < 5; i += 1) {
@@ -272,6 +273,7 @@ import { CardDeck } from 'reactstrap';
       <div className="data well-view">
         <div className='header'>
           <WellSelect fieldWellOptions={fieldWellOptions}/>
+          <button onClick={() => generatePowerPoint(this.state)}>generar presentacion</button>
         </div>
         <div className='content'>
           <CardDeck className="content-deck">
