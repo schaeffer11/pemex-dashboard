@@ -10,6 +10,51 @@ export const calculateVolumes = (data, fluid, sistemas = []) => {
     }, 0)
 }
 
+export const getJustificacionesOptions = () => {
+  const options = [
+    'Limitaciones contractuales',
+    'Disponibilidad de contratos',
+    'Falta de vehículos de transporte',
+    'Oportunidad de ejecución',
+    'Disponibilidad presupuestal',
+    'Fallas en los equipos',
+    'Disponibilidad de equipos y materiales',
+    'Disponibilidad de equipos',
+    'Condiciones climatológicas',
+    'Equipo y personal de compañía limitado',
+    'Asignación de compañías de disparos (Permisos de SEDENA)',
+    'Opera con horario restringido por inseguridad en el área',
+    'Cierre de accesos',
+    'Disponibilidad de personal',
+    'Los pozos están zona urbana',
+    'Conflictos sociales ',
+    'Retraso de atención en el apoyo del equipo de contraincendios',
+    'Falta de personal especializado para el diseño y seguimiento de estimulaciones',
+    'Falta de personal de supervisión de CIP',
+    'Limitación en la red de BN por baja presión y volumen',
+    'Problemas generados por sindicatos locales',
+    'Limitación contractuales disponibles en productos químicos',
+    'Afectación social',
+    'Inseguridad',
+    'Suministro de agua',
+    'Limitaciones por SAP',
+    'Limitaciones en Batería (para recepción de fluidos de tratamiento)',
+    'Falta de atención oportuna para tener libre acceso a localizaciones, mantenimiento a caminos, instalación y/o retiro de bajantes.',
+    'Falta de permisos',
+    'Limitaciones contractuales (Pase en las válvulas)',
+    'Disponibilidad de equipos (Xileno, N2, TF,      equipos de separación, unidades de alta)',
+    'Afectaciones',
+    'Capacidad de Ejecución (Disponibilidad de N2, TF, Unidades de Bombeo, etc.)',
+    'Presupuesto',
+    'Cambios de programa (Pozos emergentes)',
+    'Afectaciones, sindicatos con altas pretensiones monetarias, propietarios, actos vandálicos y falta de atención oportuna para tener libre acceso a localizaciones',
+  ]
+  return options.map(option => ({
+    value: option,
+    label: option,
+  }))
+}
+
 export const getSistemaOptions = () => [
   { value: 'reactivo', label: 'Reactivo' },
   { value: 'no-reactivo', label: 'No Reactivo' },

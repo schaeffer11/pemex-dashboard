@@ -49,6 +49,8 @@ async function handleImageResponse(data) {
   const final = {}
   for (let well of filteredData) {
     const imgName = well.IMG_URL
+    // makes no sense but we had to do this so we didn't need to add a new column
+    const labID = well.IMAGE_NAME
     const imgInformation = well.IMG_URL.split('.')
     const parent = imgInformation[1]
     const index = imgInformation[imgInformation.length - 1]
@@ -63,6 +65,7 @@ async function handleImageResponse(data) {
     // determine if we need to store in array
     if (isNumber) {
       // this is naive assumes everything is in order
+      innerObj.labID = labID
       objectPath.push(final, parent, innerObj)
     } else {
       objectPath.set(final, parent, innerObj)
@@ -189,6 +192,46 @@ router.get('/getSubmittedFieldWellMapping', (req, res) => {
     connection.query(`SELECT * FROM FieldWellMapping WHERE HAS_DATA = 1`, (err, results) => {
       res.json(results)
     })
+})
+
+router.get('/getTerminationTypes', (req, res) => {
+  const query = `SELECT DISTINCT(TIPO_DE_TERMINACION) FROM WellMecanico`
+  connection.query(query, (err, results) => {
+    res.json(results)
+  })
+})
+
+router.get('/getTreatmentCompanies', (req, res) => {
+  const query = `
+    SELECT DISTINCT(COMPANIA) FROM
+      (SELECT COMPANIA FROM
+      ResultsCedulaApuntalado_testtest
+      UNION
+      SELECT COMPANIA FROM
+      ResultsCedulaEstimulacion
+      UNION
+      SELECT COMPANIA FROM
+      ResultsCedulaTermico
+      UNION
+      SELECT COMPANIA FROM
+      ResultsCedulaAcido) companies
+  `
+  connection.query(query, (err, results) => {
+    if (err) {
+      console.log('there was an error', err)
+    }
+    res.json(results)
+  })
+})
+
+router.get('/getInterventionTypes', (req, res) => {
+  const query = `SELECT DISTINCT(TIPO_DE_INTERVENCIONES) FROM Intervenciones`
+  connection.query(query, (err, results) => {
+    if (err) {
+      console.log('there was an error', err)
+    }
+    res.json(results)
+  })
 })
 
 router.post('/getJobs', (req, res) => {
@@ -1849,15 +1892,14 @@ router.get('/getLabTest', async (req, res) => {
 
     labIDs.forEach((id, index) => {
       let subset = data.filter(i => i.LAB_ID === id)
-
       let type
       if (subset.length > 0) {
         type = subset[0].TIPO_DE_ANALISIS
         let i = subset[0]
-
         if (type === 'caracterizacionFisico') {
           outData.push({
             edited: true,
+            labID: i.LAB_ID,
             index: index,
             length: labIDs.length,
             type: type,
@@ -1900,6 +1942,7 @@ router.get('/getLabTest', async (req, res) => {
 
           outData.push({
             edited: true,
+            labID: i.LAB_ID,
             index: index,
             length: labIDs.length,
             type: type,
@@ -1922,6 +1965,7 @@ router.get('/getLabTest', async (req, res) => {
           })
           outData.push({
             edited: true,
+            labID: i.LAB_ID,
             index: index,
             length: labIDs.length,
             type: type,
@@ -1936,6 +1980,7 @@ router.get('/getLabTest', async (req, res) => {
         else if (type === 'pruebasDeSolubilidad') {
           outData.push({
             edited: true,
+            labID: i.LAB_ID,
             index: index,
             length: labIDs.length,
             type: type,
@@ -1954,6 +1999,7 @@ router.get('/getLabTest', async (req, res) => {
         else if (type === 'pruebasGelDeFractura') {
           outData.push({
             edited: true,
+            labID: i.LAB_ID,
             index: index,
             length: labIDs.length,
             type: type,
@@ -1973,6 +2019,7 @@ router.get('/getLabTest', async (req, res) => {
         else if (type === 'pruebasParaApuntalante') {
           outData.push({
             edited: true,
+            labID: i.LAB_ID,
             index: index,
             length: labIDs.length,
             type: type,
@@ -1993,6 +2040,7 @@ router.get('/getLabTest', async (req, res) => {
         else if (type === 'cromatografiaDelGas') {
           outData.push({
             edited: true,
+            labID: i.LAB_ID,
             index: index,
             length: labIDs.length,
             type: type,
@@ -2006,6 +2054,7 @@ router.get('/getLabTest', async (req, res) => {
         else if (type === 'pruebaDeDureza') {
           outData.push({
             edited: true,
+            labID: i.LAB_ID,
             index: index,
             length: labIDs.length,
             type: type,
@@ -2019,6 +2068,7 @@ router.get('/getLabTest', async (req, res) => {
         else if (type === 'determinacionDeLaCalidad') {
           outData.push({
             edited: true,
+            labID: i.LAB_ID,
             index: index,
             length: labIDs.length,
             type: type,

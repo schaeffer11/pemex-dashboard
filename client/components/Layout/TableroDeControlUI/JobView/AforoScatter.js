@@ -3,28 +3,13 @@ import autobind from 'autobind-decorator'
 import ReactHighCharts from 'react-highcharts'
 
 
-@autobind class AforosGraph extends PureComponent {
+@autobind class AforoScatter extends PureComponent {
 
   render() {
-    let { data, dates } = this.props
-   
+    let { data, interventionDate } = this.props
 
-    let plotLines = []
-
-    dates.forEach(i => {
-        i = new Date(i.FECHA_INTERVENCION)
-        i = Date.UTC(i.getFullYear(), i.getMonth(), i.getDate())
-
-        plotLines.push({
-            color: 'black',
-            value: i,
-            width: 2,
-            label: {
-                text: 'Intervention Date'
-            }
-        })
-    })
-
+    interventionDate = new Date(interventionDate)
+    interventionDate = Date.UTC(interventionDate.getFullYear(), interventionDate.getMonth(), interventionDate.getDate())
 
     let config = {
        chart: {
@@ -53,7 +38,14 @@ import ReactHighCharts from 'react-highcharts'
                 text: 'Fecha'
             },
             type: 'datetime',
-            plotLines: plotLines
+            plotLines: [{
+                color: 'black',
+                value: interventionDate,
+                width: 2,
+                label: {
+                    text: 'Intervention Date'
+                }
+            }]
         },
         yAxis: [{
             title: {
@@ -94,6 +86,8 @@ import ReactHighCharts from 'react-highcharts'
 
 
 
+    console.log(data)
+
     let qoData = []
     let qwData = []
     let qgData = []
@@ -113,8 +107,6 @@ import ReactHighCharts from 'react-highcharts'
     config.series[2].data = qwData
 
 
-    console.log(qoData)
-    console.log(plotLines)
     return (        
     <ReactHighCharts 
       className="chart" 
@@ -125,5 +117,5 @@ import ReactHighCharts from 'react-highcharts'
   }
 }
 
-export default AforosGraph
+export default AforoScatter
 

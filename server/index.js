@@ -77,6 +77,8 @@ app.use('/well', wellRoutes)
 import jobRoutes from './api/tableroDeControl/job'
 app.use('/job', jobRoutes)
 
+import timeSeries from './api/tableroDeControl/timeSeries'
+app.use('/timeSeries', timeSeries)
 
 // ENABLE LOGGING AND CACHE CONTROL
 app.use(logger)

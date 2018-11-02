@@ -110,16 +110,39 @@ const INSERT_RESULTS_APUNTALADO_QUERY = {
     save: ``,
     submit: `INSERT INTO ResultsApuntalado (
         INTERVENTION_ID, WELL_FORMACION_ID, 
-        VOLUMEN_PRECOLCHON_N2,
-        VOLUMEN_SISTEMA_NO_REACTIVO, VOLUMEN_SISTEMA_REACTIVO, VOLUMEN_SISTEMA_DIVERGENTE, VOLUMEN_DESPLAZAMIENTO_LIQUIDO, VOLUMEN_DESPLAZAMIENTO_N2,
-        VOLUMEN_TOTAL_DE_LIQUIDO, MODULO_YOUNG_ARENA,
+        VOLUMEN_DESPLAZAMIENTO_LIQUIDO, VOLUMEN_TOTAL_DE_LIQUIDO, 
+        VOLUMEN_APUNTALANTE, VOLUMEN_GEL_DE_FRACTURA, VOLUMEN_PRECOLCHON_APUNTALANTE, MODULO_YOUNG_ARENA,
         MODULO_YOUNG_LUTITAS, RELAC_POISSON_ARENA, RELAC_POISSON_LUTITAS, GRADIENTE_DE_FRACTURA, DENSIDAD_DE_DISPAROS,
         DIAMETRO_DE_DISPAROS, LONGITUD_APUNTALADA, ALTURA_TOTAL_DE_FRACTURA, ANCHO_PROMEDIO,
         CONCENTRACION_AREAL, CONDUCTIVIDAD, FCD, PRESION_NETA, EFICIENCIA_DE_FLUIDO_DE_FRACTURA,
-        PROPUESTA_ID, TRANSACTION_ID) VALUES
+        TIPO_DE_FLUIDO, GASTO_PROMEDIO, PRESION_RUPTURA, PRESION_PROMEDIO, ISIP, GRADIENTE_FRACTURA,
+        PRESION_CIERRE_SUPERIOR, GRADIENTE_CIERRE, TIEMPO_CIERRE, PRESION_YACIMIENTO, GRADIENTE_PORO, 
+        PERDIDA_FILTRADO, EFICIENCIA_FLUIDO, PROPUESTA_ID, TRANSACTION_ID) VALUES
         (?, ?, ?, ?, ?, ?, ?, ?, ?, ?,
          ?, ?, ?, ?, ?, ?, ?, ?, ?, ?,
-         ?, ?, ?, ?, ?, ?)`,     
+         ?, ?, ?, ?, ?, ?, ?, ?, ?, ?,
+         ?, ?, ?, ?, ?, ?, ?)`,     
+    loadSave: ``,
+    loadTransaction: ``    
+}
+
+const INSERT_RESULTS_TERMICO_QUERY = {
+    save: ``,
+    submit: `INSERT INTO ResultsTermico (
+        INTERVENTION_ID, WELL_FORMACION_ID, VOLUMEN_VAPOR_INYECTAR, CALIDAD, 
+        GASTO_INYECCION, PRESION_MAXIMA_SALIDA_GENERADOR, 
+        TEMPERATURA_MAXIMA_GENERADOR, PROPUESTA_ID, TRANSACTION_ID) VALUES
+        (?, ?, ?, ?, ?, ?, ?, ?, ?)`,     
+    loadSave: ``,
+    loadTransaction: ``    
+}
+
+const INSERT_RESULTS_QUERY = {
+    save: ``,
+    submit: `INSERT INTO Results (
+        INTERVENCIONES_ID, WELL_FORMACION_ID, FECHA_INTERVENCION, 
+        JUSTIFICACION_INTERVENCION, COMENTARIOS_INTERVENCION, PROPUESTA_ID, TRANSACTION_ID) VALUES
+        (?, ?, ?, ?, ?, ?, ?)`,     
     loadSave: ``,
     loadTransaction: ``    
 }
@@ -187,6 +210,8 @@ export const createResults = async (body, action, cb) => {
 
   let { aforosData } = finalObj.historicoDeAforosResults
 
+  let { fechaIntervencion, justificacionIntervencion, comentariosIntervencion } = finalObj.resultadosGenerales
+
   let treatmentGraphImg = finalObj.graficaTratamiento.imgUrl
 
   if (interventionType === 'estimulacion') {
@@ -213,13 +238,18 @@ export const createResults = async (body, action, cb) => {
   }
 
   else if (interventionType === 'apuntalado') {
-      var { volumenPrecolchonN2, volumenSistemaNoReativo, volumenSistemaReactivo, volumenSistemaDivergente,
-        volumenDesplazamientoLiquido, volumenDesplazamientoN2, volumenTotalDeLiquido, moduloYoungArena, moduloYoungLutitas, relacPoissonArena,
+      var { volumenPrecolchonN2, volumenApuntalante, volumenGelFractura,
+        volumenDesplazamientoLiquido, volumenTotalDeLiquido, moduloYoungArena, moduloYoungLutitas, relacPoissonArena,
         relacPoissonLutatas, gradienteDeFractura, densidadDeDisparos, diametroDeDisparos, cedulaData } = finalObj.tratamientoApuntalado
 
       var { longitudApuntalada, alturaTotalDeFractura, anchoPromedio, concentracionAreal, conductividad,
-        fcd, presionNeta, eficienciaDeFluidoDeFractura, geometria } = finalObj.evaluacionApuntalado
+        fcd, presionNeta, eficienciaDeFluidoDeFractura, geometria,  tipoDeFluido, gastoPromedio, 
+        presionRuptura, presionPromedio, isip, gradienteFractura, presionCierreSuperior, gradienteCierre, 
+        tiempoCierre, presionYacimiento, gradientePoro, perdidaFiltrado, eficienciaFluido } = finalObj.evaluacionApuntalado
 
+  }
+  else if (interventionType === 'termico') {
+      var { volumenVapor, calidad, gastoInyeccion, presionMaximaSalidaGenerador, temperaturaMaximaGenerador } = finalObj.tratamientoTermico
   }
 
 // write to db
@@ -359,7 +389,7 @@ export const createResults = async (body, action, cb) => {
                     ? INSERT_RESULTS_ACIDO_QUERY.submit 
                     : interventionType === 'apuntalado'
                       ? INSERT_RESULTS_APUNTALADO_QUERY.submit
-                      : DUMMY_QUERY
+                      : INSERT_RESULTS_TERMICO_QUERY.submit
 
               if (interventionType === 'estimulacion') {
                 values = [
@@ -377,20 +407,30 @@ export const createResults = async (body, action, cb) => {
                 moduloYoungArena, moduloYoungLutitas, relacPoissonArena,
                   relacPoissonLutatas, gradienteDeFractura, densidadDeDisparos, diametroDeDisparos, 
                   longitudTotal, longitudEfectivaGrabada, alturaGrabada, anchoPromedio, concentracionDelAcido,
-                  conductividad, fcd, presionNeta, eficienciaDeFluidoDeFractura, propuestaID, transactionID
+                  conductividad, fcd, presionNeta, eficienciaDeFluidoDeFractura, 
+                  propuestaID, transactionID
                 ]
               }
               else if (interventionType === 'apuntalado') {
                 values = [
-                    interventionID, wellFormacionID,  
-                    volumenPrecolchonN2, volumenSistemaNoReativo, volumenSistemaReactivo, volumenSistemaDivergente,
-                      volumenDesplazamientoLiquido, volumenDesplazamientoN2, volumenTotalDeLiquido, 
-                      moduloYoungArena, moduloYoungLutitas, relacPoissonArena,
+                    interventionID, wellFormacionID, volumenDesplazamientoLiquido, volumenTotalDeLiquido, 
+                    volumenApuntalante, volumenGelFractura, volumenPrecolchonN2,
+                    moduloYoungArena, moduloYoungLutitas, relacPoissonArena,
                     relacPoissonLutatas, gradienteDeFractura, densidadDeDisparos, diametroDeDisparos,
                     longitudApuntalada, alturaTotalDeFractura, anchoPromedio, concentracionAreal, conductividad,
-                    fcd, presionNeta, eficienciaDeFluidoDeFractura, propuestaID, transactionID
+                    fcd, presionNeta, eficienciaDeFluidoDeFractura,  tipoDeFluido, gastoPromedio, 
+                    presionRuptura, presionPromedio, isip, gradienteFractura,
+                  presionCierreSuperior, gradienteCierre, tiempoCierre, presionYacimiento, gradientePoro,
+                  perdidaFiltrado, eficienciaFluido, propuestaID, transactionID
                   ]
               } 
+              else if (interventionType === 'termico') {
+                values = [
+                    interventionID, wellFormacionID, volumenVapor, calidad, gastoInyeccion, 
+                    presionMaximaSalidaGenerador, temperaturaMaximaGenerador, propuestaID, transactionID
+                  ]
+              } 
+
 
               connection.query(query, values, (err, results) => {
                 console.log('intervention', err)
@@ -413,9 +453,12 @@ export const createResults = async (body, action, cb) => {
                     })
                   }
 
-                  connection.query(`UPDATE Transactions SET HAS_RESULTS = 0 WHERE TRANSACTION_ID = ?`, [propuestaID], (err, results) => {
-                    console.log('update old trans', err)
-                    console.log('update old trans', results)
+                  values = [interventionID, wellFormacionID, fechaIntervencion, justificacionIntervencion, 
+                  comentariosIntervencion, propuestaID, transactionID]
+
+                  connection.query(INSERT_RESULTS_QUERY.submit, values, (err, results) => {
+                    console.log('results', err)
+                    console.log('results', results)
                     if (err) {
                       return connection.rollback(function() {
                         console.log('rolling back!!! 2')
@@ -424,16 +467,28 @@ export const createResults = async (body, action, cb) => {
                     }
 
 
-                    connection.commit(function(err) {
-                        if (err) {
+                    connection.query(`UPDATE Transactions SET HAS_RESULTS = 1 WHERE TRANSACTION_ID = ?`, [propuestaID], (err, results) => {
+                      console.log('update old trans', err)
+                      console.log('update old trans', results)
+                      if (err) {
+                        return connection.rollback(function() {
+                          console.log('rolling back!!! 2')
                           cb(err)
-                          return connection.rollback(function() {
-                            console.log('something went terrible')
-                            throw err;
-                          });
-                        }
-                        console.log('success!');
-                        cb(null)
+                        })
+                      }
+
+
+                      connection.commit(function(err) {
+                          if (err) {
+                            cb(err)
+                            return connection.rollback(function() {
+                              console.log('something went terrible')
+                              throw err;
+                            });
+                          }
+                          console.log('success!');
+                          cb(null)
+                      })
                     })
                   })
                 })

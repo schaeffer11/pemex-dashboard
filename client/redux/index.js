@@ -37,6 +37,7 @@ import evaluacionApuntalado from './reducers/evaluacionApuntalado'
 import evaluacionEstimulacion from './reducers/evaluacionEstimulacion'
 import resultsMeta from './reducers/resultsMeta'
 import graficaTratamiento from './reducers/graficaTratamiento'
+import resultadosGenerales from './reducers/resultadosGenerales'
 import forms from './reducers/forms'
 import global from './reducers/global'
 import { handleImagesFromServer } from '../lib/formatters';
@@ -83,6 +84,7 @@ const appReducer = combineReducers({
   evaluacionApuntalado,
   evaluacionEstimulacion,
   graficaTratamiento,
+  resultadosGenerales,
   resultsMeta,
   chartOptions
 })
