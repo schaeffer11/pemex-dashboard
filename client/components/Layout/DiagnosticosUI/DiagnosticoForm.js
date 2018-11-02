@@ -80,6 +80,7 @@ import { setIsLoading, setShowForms } from '../../../redux/actions/global'
         }
 
         this.state = {
+            id: 0,
             activos: [{}],
             update: false
         }
@@ -108,6 +109,14 @@ import { setIsLoading, setShowForms } from '../../../redux/actions/global'
 
     }
 
+    componentDidUpdate(){
+        if(this.props.id != this.state.id){
+            this.setState({
+                id: this.props.id,
+                update: true
+            })
+        }
+    }
 
 
     isEmpty(val){
@@ -382,6 +391,11 @@ import { setIsLoading, setShowForms } from '../../../redux/actions/global'
             const formData = new FormData()
 
             Object.entries(values).forEach(([key,value]) => {
+                // Handle untouched date values loaded from the database
+                if(value && key == 'fechaRevision'){
+                    value = moment(value).format('YYYY-MM-DD');
+                }
+
                 formData.append(key, value);
             })
 
@@ -413,11 +427,13 @@ import { setIsLoading, setShowForms } from '../../../redux/actions/global'
         }, 400);
     }
 
-    confirmEdit(){
-        this.values.id = null;
+    confirmEdit(e){
         this.setState({
-            update: true
+            update: false
         })
+
+        e.preventDefault()
+        return false;
     }
 
     render(){
@@ -430,7 +446,8 @@ import { setIsLoading, setShowForms } from '../../../redux/actions/global'
                 onSubmit={this.onSubmit}
             >
                 { ({touched, isSubmitting, errors}) => (
-                    <Form>
+                    <Form className={this.state.update ? 'disable': ''}>
+                        <button className="import submit" onClick={this.props.openImportModal}>Importar</button>
                         <div className="title">Diagnóstico de Productividad</div>
 
                         <div className="heading">
@@ -873,16 +890,19 @@ import { setIsLoading, setShowForms } from '../../../redux/actions/global'
                             </div>
                         </div>
 
-                        { this.state.editar &&
-                            <button className="submit button" onClick={this.confirmEdit}>
-                                Editar
-                            </button>
-                        }
+                        <div className="button-group">
+                            { this.state.update &&
+                                <button className="submit button" type="submit" onClick={this.confirmEdit}>
+                                    Editar
+                                </button>
+                            }
 
-
-                        <button className="submit button" type="submit">
-                            Enviar
-                        </button>
+                            {!this.state.update &&
+                                <button className="submit button" type="submit">
+                                    Enviar
+                                </button>
+                            }
+                        </div>
 
                         {Object.entries(errors).length > 0 && <div class="error">Esta forma contiene errores.</div>}
                     </Form>

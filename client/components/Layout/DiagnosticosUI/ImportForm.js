@@ -10,7 +10,7 @@ import { Formik, Form, Field, ErrorMessage } from 'formik';
 import { setIsLoading, setShowForms } from '../../../redux/actions/global'
 
 
-@autobind class CompromisosForm extends Component {
+@autobind class ImportForm extends Component {
     constructor(props) {
         super(props)
         this.initialValues = {
@@ -35,6 +35,12 @@ import { setIsLoading, setShowForms } from '../../../redux/actions/global'
         }, 400);
     }
 
+    cancel(e){
+        let { cancel } = this.props
+        cancel()
+        e.preventDefault()
+        return false
+    }
 
     render(){
         return(
@@ -63,7 +69,7 @@ import { setIsLoading, setShowForms } from '../../../redux/actions/global'
                                                             if (e.target.checked) form.setFieldValue('diagnostico', diagnostico.ID);
                                                         }}
                                                     />{" "}
-                                                    <span>{diagnostico.asignacion} - {moment(diagnostico.fechaRevision).format('DD-MM-YYYY')}</span>
+                                                    <span>{diagnostico.asignacion} - {moment(diagnostico.fechaRevision).format('DD/MM/YYYY')}</span>
                                                 </label>
                                             </div>
                                         )}
@@ -71,10 +77,15 @@ import { setIsLoading, setShowForms } from '../../../redux/actions/global'
                                 ))}
                             </div>
 
+                            <div className="button-group">
+                                <button className="cancel button" type="submit" onClick={this.cancel}>
+                                    Cancelar
+                                </button>
 
-                            <button className="submit button" type="submit">
-                                Importar
-                            </button>
+                                <button className="submit button" type="submit">
+                                    Importar
+                                </button>
+                            </div>
 
                         </Form>
                     )}
@@ -96,4 +107,4 @@ const mapStateToProps = state => ({
 })
 
 
-export default connect(mapStateToProps, mapDispatchToProps)(CompromisosForm);
+export default connect(mapStateToProps, mapDispatchToProps)(ImportForm);

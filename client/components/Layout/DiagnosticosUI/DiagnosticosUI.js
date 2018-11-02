@@ -82,11 +82,15 @@ import ImportForm from './ImportForm'
     render() {
         return (
             <div>
-                { this.state.openModal && <ImportModal diagnosticos={this.state.diagnosticos} select={this.select} /> }
+                { this.state.openModal &&
+                    <ImportModal
+                        diagnosticos={this.state.diagnosticos}
+                        select={this.select}
+                        closeImportModal={this.closeImportModal} />
+                }
                 <div className="diagnostico">
-                    <DiagnosticoForm values={this.state.diagnostico} id={this.state.selectedDiagnostico}/>
+                    <DiagnosticoForm id={this.state.selectedDiagnostico} values={this.state.diagnostico} openImportModal={this.openImportModal}/>
                 </div>
-                <button className="submit" onClick={this.openImportModal}>Import</button>
             </div>
         )
     }
@@ -101,10 +105,10 @@ const ImportModal = (props) => {
             verticallyCenter={true}
             focusDialog={true}
             dialogClass="queryModalPartialReset"
-            dialogStyle={{verticalAlign: '', textAlign: 'center', maxHeight: '80%', marginTop: '2%'}}
+            dialogStyle={{verticalAlign: '', textAlign: 'center', maxHeight: '80%', marginTop: '10%'}}
         >
             <div className="compromisosModal" >
-                <ImportForm diagnosticos={props.diagnosticos} select={props.select} />
+                <ImportForm diagnosticos={props.diagnosticos} select={props.select} close={props.closeImportModal} />
             </div>
         </AriaModal>
     )
