@@ -431,6 +431,11 @@ const CompromisosTable = (props) => {
                 filterAll: true,
                 filterMethod: fuzzyFilterMethod
             },{
+                Header: "Subdireccion",
+                accessor: "subdireccion",
+                data: props.compromisos,
+                Filter: OptionsFilter
+            },{
                 Header: "Activo",
                 accessor: "nombreActivo",
                 data: props.compromisos,

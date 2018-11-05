@@ -45,13 +45,14 @@ export const mine = function(req, res) {
         c.DESCRIPCION as descripcion,
         c.ACTIVO as activo, 
         activos.ACTIVO_NAME as nombreActivo, 
+        activos.SUBDIRECCION_NAME as subdireccion,
         c.RESPONSABLE as responsable, 
         c.MINUTA as minuta,
         c.NOTAS as notas
       FROM Compromisos AS c 
       LEFT JOIN 
        ( 
-         SELECT DISTINCT ACTIVO_NAME, ACTIVO_ID FROM FieldWellMapping
+         SELECT DISTINCT ACTIVO_NAME, ACTIVO_ID, SUBDIRECCION_NAME FROM FieldWellMapping
        ) AS activos 
        ON c.ACTIVO = activos.ACTIVO_ID 
        WHERE c.RESPONSABLE = ?`, [currentUser], (err, results) => {
@@ -72,6 +73,7 @@ export const collection = function(req, res) {
       c.DESCRIPCION as descripcion,
       c.ACTIVO as activo, 
       activos.ACTIVO_NAME as nombreActivo, 
+      activos.SUBDIRECCION_NAME as subdireccion,
       c.RESPONSABLE as responsable, 
       Users.username as nombreResponable,
       c.MINUTA as minuta,
@@ -80,7 +82,7 @@ export const collection = function(req, res) {
     LEFT JOIN Users ON c.RESPONSABLE = Users.id 
     LEFT JOIN 
        ( 
-         SELECT DISTINCT ACTIVO_NAME, ACTIVO_ID FROM FieldWellMapping
+         SELECT DISTINCT ACTIVO_NAME, ACTIVO_ID, SUBDIRECCION_NAME FROM FieldWellMapping
        ) AS activos 
        ON c.ACTIVO = activos.ACTIVO_ID `, (err, results) => {
         res.json(results)
