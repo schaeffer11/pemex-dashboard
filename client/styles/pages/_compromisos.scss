@@ -48,6 +48,15 @@
           min-height: 30px;
         }
 
+        & > div:nth-child(3) {
+          position: absolute;
+          top: 0;
+
+          & > div {
+            width: auto;
+          }
+        }
+
 
         div[aria-hidden] {
           padding: 4px;

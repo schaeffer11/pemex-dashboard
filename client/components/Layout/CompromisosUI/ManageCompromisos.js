@@ -84,12 +84,14 @@ let pieChart = {
 @autobind class ManageCompromisos extends Component {
     constructor(props) {
         super(props)
+        this.compromisosTable = null;
         this.state = {
             openModal: false,
             compromisoId: 0,
             users: {},
             activos: [{}],
-            compromisos: [{}]
+            compromisos: [{}],
+            filteredCompromisos: [{}],
         }
     }
 
@@ -131,7 +133,8 @@ let pieChart = {
             .then(r => r.json())
             .then((res) => {
                 this.setState({
-                    compromisos: res
+                    compromisos: res,
+                    filteredCompromisos: res
                 })
             })
     }
@@ -170,12 +173,23 @@ let pieChart = {
                 this.setState({
                     openModal: false,
                     compromisos: res,
+                    filteredCompromisos: res
                 })
             })
     }
 
+    onFilterChange(){
+        if(this.compromisosTable){
+            let sortedData = this.compromisosTable.getResolvedState().sortedData
+            let filteredData = sortedData.flatMap(x => x._original)
+            this.setState({
+                filteredCompromisos: filteredData
+            })
+        }
+    }
+
     makeCompletedGraph() {
-        const compromisos = this.state.compromisos
+        const compromisos = this.state.filteredCompromisos
 
         if (compromisos.length > 1) {
             let completos = []
@@ -203,7 +217,7 @@ let pieChart = {
     }
 
     makeCompromisosChart() {
-        const compromisos = this.state.compromisos
+        const compromisos = this.state.filteredCompromisos
 
         if (compromisos.length > 1) {
             let completedInTime = 0,
@@ -249,7 +263,13 @@ let pieChart = {
                     <i className="far fa-caret-square-left" style={{position: 'relative', fontSize: '50px', left: '-20px', top: '7px', color: '#70AC46'}} onClick={(e) => this.props.history.push('/compromisos')}></i>
                     SISTEMA DE SEGUIMIENTO DE COMPROMISOS Y REUNIONES
                 </div>
-                { this.state.compromisos && <CompromisosTable editCompromiso={this.editCompromiso} compromisos={this.state.compromisos}/> }
+                { this.state.compromisos &&
+                    <CompromisosTable
+                        parent={this}
+                        editCompromiso={this.editCompromiso}
+                        compromisos={this.state.compromisos}
+                        onFilterChange={this.onFilterChange} />
+                }
                 <button className="submit button" onClick={this.createCompromiso}>Nuevo Compromiso</button>
 
 
@@ -267,6 +287,29 @@ const groupRecords = function(rec, key) {
     }, {});
 }
 
+var uniqueArray = function(arrArg) {
+    return arrArg.filter(function(elem, pos,arr) {
+        return arr.indexOf(elem) == pos;
+    });
+};
+
+const OptionsFilter = ({column, filter, onChange}) => {
+    let values = column.data.map(val => val[column.id])
+    let uniqueVals = uniqueArray(values).map(val => {return {'value': val, 'label': val}})
+
+    return(
+        <Select
+            simpleValue
+            placeholder="Seleccionar"
+            className='input'
+            options={uniqueVals}
+            value={ filter ? filter.index : 'All' }
+            onChange={selectedOption => {
+                onChange(selectedOption.value)
+            }}
+        />
+    )
+}
 
 const FutureDateFilter = ({filter, onChange}) => {
     return (
@@ -279,6 +322,26 @@ const FutureDateFilter = ({filter, onChange}) => {
                 {value: 'semana', 'label': 'Próxima Semana'},
                 {value: 'mes'   , 'label': 'Próximo Mes'},
                 {value: 'meses' , 'label': 'Próximos 3 Meses'},
+            ]}
+            value={ filter ? filter.index : 'todos' }
+            onChange={selectedOption => {
+                onChange(selectedOption.value)
+            }}
+        />
+    )
+}
+
+const StatusFilter = ({filter, onChange}) => {
+    return (
+        <Select
+            simpleValue
+            placeholder="Seleccionar"
+            className='input'
+            options={[
+                {value: 'todos'    , 'label': 'Mostrar Todos'},
+                {value: 'Vencido'  , 'label': 'Vencido'},
+                {value: 'Abierto'  , 'label': 'Abierto'},
+                {value: 'Completo' , 'label': 'Completo'},
             ]}
             value={ filter ? filter.index : 'todos' }
             onChange={selectedOption => {
@@ -309,6 +372,11 @@ const isWithinThreeMonth = function(date) {
     return !momentDate.isBefore(today) && momentDate.isBefore(A_WEEK_OLD);
 }
 
+const optionsFilterMethod = (filter, row) => {
+    if(filter.value === '') { return true }
+
+    return row[filter.id] === filter.value
+}
 
 var fuzzyFilterOptions = {
     shouldSort: true,
@@ -348,6 +416,8 @@ const CompromisosTable = (props) => {
     return (<ReactTable
         filterable
         data={props.compromisos}
+        ref={(r) => props.parent.compromisosTable = r}
+        onFilteredChange={props.onFilterChange}
         columns={[
             {
                 Header: "No.",
@@ -363,14 +433,15 @@ const CompromisosTable = (props) => {
             },{
                 Header: "Activo",
                 accessor: "nombreActivo",
-                filterAll: true,
-                filterMethod: fuzzyFilterMethod
+                data: props.compromisos,
+                Filter: OptionsFilter
             },{
                 Header: "Responsable",
                 accessor: "nombreResponable",
+                id: "nombreResponable",
                 width: 200,
-                filterAll: true,
-                filterMethod: fuzzyFilterMethod
+                data: props.compromisos,
+                Filter: OptionsFilter
             },{
                 Header: "Fecha De Compromiso",
                 id: 'fechaCompromiso',
@@ -415,9 +486,19 @@ const CompromisosTable = (props) => {
                 filterMethod: fuzzyFilterMethod
             }, {
                 Header: "Estado",
-                accessor: "estado",
+                id: 'estado',
                 className: 'center',
                 width: 120,
+                accessor: d => {
+                    if(d.fechaCumplimiento){
+                        return "Completo"
+                    }
+
+                    const pastDue = moment(new Date()) > moment(d.fechaCompromiso);
+                    return pastDue ? 'Vencido' : 'Abierto'
+                },
+                filterMethod:optionsFilterMethod,
+                Filter: StatusFilter,
                 Cell: ({ row, original }) => (<Status row={row} original={original}/>)
             }, {
                 Header: '',
@@ -440,7 +521,7 @@ const Status = ({ row, original }) => {
 
     const pastDue = moment(new Date()) > moment(original.fechaCompromiso);
     return (
-        <span class={pastDue ? 'incomplete' : 'open'}>
+        <span className={pastDue ? 'incomplete' : 'open'}>
             {pastDue ? 'Vencido' : 'Abierto' }
         </span>
     )
