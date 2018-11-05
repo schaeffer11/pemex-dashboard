@@ -153,7 +153,7 @@ const filterArr = arr => {
   }
 
   handleSelectGroups(selection) {
-    const { fieldWellOptions, companyOptions, interventionOptions, terminationOptions, 
+    const { subdireccionOptions, fieldWellOptions, companyOptions, interventionOptions, terminationOptions, 
       formationOptions, activoOptions, fieldOptions, wellOptions } = this.state
     const { company, interventionType, terminationType, setGeneral, formation, subdireccion, activo, field, well } = this.props
     const value = objectPath.has(selection, 'value') ? selection.value : null
@@ -206,9 +206,6 @@ const filterArr = arr => {
       { value: 'interventionType', label: 'Tipo de Intervención' },
       { value: 'terminationType', label: 'Tipo de Terminación' },
     ]
-
-    console.log(subdireccionOptions)
-    console.log(filterArr(subdireccionOptions))
 
     return (
       <div>

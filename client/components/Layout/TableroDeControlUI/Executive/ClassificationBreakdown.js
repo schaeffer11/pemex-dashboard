@@ -19,6 +19,9 @@ import ReactHighcharts from 'react-highcharts'
     let successful = 0
     let unsuccessful = 0
 
+
+    console.log(data)
+
     data.forEach(i => {
     	let oilInc = i.qoResult / i.qo
     	let waterInc = i.qwResult / i.qw

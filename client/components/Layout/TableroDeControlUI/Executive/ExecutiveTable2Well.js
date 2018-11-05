@@ -4,13 +4,51 @@ import ReactTable from 'react-table'
 import { CategoryDist, TrafficLight, Currency, Integer } from '../../../../lib/formatters'
 
 @autobind class ExecutiveTable2Well extends PureComponent {
+
+  shouldComponentUpdate(nextProps) {
+    if (this.props.groupBy !== nextProps.groupBy) {
+      return false
+    }
+    
+    return true
+  }
+  
+
+
   render() {
-    let { data, estIncData, aforosData } = this.props
+    let { data, estIncData, aforosData, groupBy } = this.props
+
+    let header = ''
+
+    switch(groupBy) {
+      case 'subdireccion':
+        header = 'Subdireccion Name'
+        break
+      case 'activo':
+        header = 'Activo Name'
+        break
+      case 'field':
+        header = 'Field Name'
+        break
+      case 'well':
+        header = 'Well Name'
+        break
+      case 'formation':
+        header = 'Formacion'
+        break
+      case 'company':
+        header = 'Propuesta Compania'
+        break
+      case 'interventionType':
+        header = 'Tipo De Intervenciones'
+        break
+      case 'terminationType':
+        header = 'Tipo De Terminacion'
+        break
+    }
+
+
       let columns = [{
-        Header: 'Well Name',
-        accessor: 'name', 
-        minWidth: 150,
-      },{
         Header: <div>Total de<br/>Tratamientos</div>,
         accessor: 'numTreatments',
         minWidth: 150,
@@ -46,15 +84,24 @@ import { CategoryDist, TrafficLight, Currency, Integer } from '../../../../lib/f
         minWidth: 150
       }]
 
-   
+      if (groupBy) {
+        columns.unshift({
+          Header: header,
+          accessor: 'name', 
+          minWidth: 150,
+        })
+      }
+      console.log(data, estIncData, aforosData, groupBy)
+
+
 
     data = data.map(i => {
 
-        let estProd = estIncData.find(j => j.WELL_FORMACION_ID === i.WELL_FORMACION_ID) ? estIncData.find(j => j.WELL_FORMACION_ID === i.WELL_FORMACION_ID).EST_INC_Qo : undefined
-        let realProd = aforosData.filter(j => j.id === i.WELL_FORMACION_ID).length > 0 ? aforosData.filter(j => j.id === i.WELL_FORMACION_ID).reduce((sum, cur) => sum + cur.qoResult, 0) : null
+        let estProd = estIncData.find(j => j.groupedName === i.groupedName) ? estIncData.find(j => j.groupedName === i.groupedName).EST_INC_Qo : undefined
+        let realProd = aforosData.filter(j => j.groupedName === i.groupedName).length > 0 ? aforosData.filter(j => j.groupedName === i.groupedName).reduce((sum, cur) => sum + cur.qoResult, 0) : null
 
         return {
-            name: i.WELL_NAME,
+            name: i.groupedName,
             numTreatments: i.NUM_TREATMENTS,
             numAcido: i.NUM_ACIDO,
             percAcido: i.NUM_ACIDO / i.NUM_TREATMENTS * 100,

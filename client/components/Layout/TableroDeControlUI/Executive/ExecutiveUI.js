@@ -26,6 +26,8 @@ import ExecutiveTable3Well from './ExecutiveTable3Well'
       costData: [],
       costDataAverage: [],
       singularCostData: [],
+      execTableData: [],
+      estIncData: []
     }
 
     this.cards = []
@@ -68,6 +70,8 @@ import ExecutiveTable3Well from './ExecutiveTable3Well'
     let costQuery = `/executive/costData?` + params.join('&')
     let avgCostQuery = `/executive/costData?` + params.join('&') + `&avg=1`
     let singularCostQuery = `/executive/costData?` + params.join('&') + `&noGroup=1`
+    let execTableQuery = `/executive/tableData?` + params.join('&')
+    let estIncQuery = `/executive/estIncData?` + params.join('&')
 
     const data = await Promise.all([
       fetch(jobQuery, headers).then(r => r.json()),
@@ -75,7 +79,9 @@ import ExecutiveTable3Well from './ExecutiveTable3Well'
       fetch(aforosCarouselQuery, headers).then(r => r.json()),
       fetch(costQuery, headers).then(r => r.json()),
       fetch(avgCostQuery, headers).then(r => r.json()),
-      fetch(singularCostQuery, headers).then(r => r.json())
+      fetch(singularCostQuery, headers).then(r => r.json()),
+      fetch(execTableQuery, headers).then(r => r.json()),
+      fetch(estIncQuery, headers).then(r => r.json())
     ])
       .catch(error => {
         console.log('err', error)
@@ -90,12 +96,13 @@ import ExecutiveTable3Well from './ExecutiveTable3Well'
       costData: data[3],
       costDataAverage: data[4],
       singularCostData: data[5], 
+      execTableData: data[6],
+      estIncData: data[7]
     }
 
     this.setState(newState)
 
   }
-
 
   componentDidMount() {
   	this.fetchData()
@@ -118,7 +125,7 @@ import ExecutiveTable3Well from './ExecutiveTable3Well'
   }
 
   render() {
-    let { jobBreakdownData, aforosData, aforosCarouselData, costData, costDataAverage, singularCostData } = this.state
+    let { jobBreakdownData, aforosData, aforosCarouselData, costData, costDataAverage, singularCostData, execTableData, estIncData } = this.state
     let { globalAnalysis } = this.props
 
     globalAnalysis = globalAnalysis.toJS()
@@ -164,6 +171,7 @@ import ExecutiveTable3Well from './ExecutiveTable3Well'
               <AvgDeltaCostBar label={'Avg'} data={costDataAverage} groupBy={groupBy} />
             </Card>
           </CardDeck>
+          <ExecutiveTable2Well data={execTableData} estIncData={estIncData} aforosData={aforosData} groupBy={groupBy} />
         </div>
       </div>
     )
@@ -183,8 +191,7 @@ export default connect(mapStateToProps, mapDispatchToProps)(executiveUI)
 
 
 {/*          <ExecutiveTable aforosData={aforosData} costData={costData} countData={countData} estIncData={estIncData} />
-          <ExecutiveTable2Well data={execTableWellData} estIncData={estIncWellData} aforosData={aforosData} />*/}
-         {/* <ExecutiveTable2Field data={execTableFieldData} estIncData={estIncWellData} /> */}
+
          {/* <ExecutiveTable3Well data={execTableWellData} estIncData={estIncWellData} aforosData={aforosData} volumenData={volumenData} />*/}
 
     // fetch(`/executive/countData`, {
@@ -226,26 +233,6 @@ export default connect(mapStateToProps, mapDispatchToProps)(executiveUI)
     //   })
     // })
 
-    // fetch(`/executive/estimatedIncreaseData`, {
-    //   method: 'POST',
-    //   headers: {
-    //     'content-type': 'application/json',
-    //   },
-    //   body: JSON.stringify({
-    //     activo,
-    //     field,
-    //     well,
-    //     formation,
-    //     groupBy: 'well'
-    //   })
-    // })
-    // .then(res => res.json())
-    // .then(res => {
-    //   this.setState({
-    //     estIncWellData: res
-    //   })
-    // })
-
 
     // fetch(`/executive/estimatedIncreaseData`, {
     //   method: 'POST',
@@ -267,25 +254,7 @@ export default connect(mapStateToProps, mapDispatchToProps)(executiveUI)
     //   })
     // })
 
-    // fetch(`/executive/execTableData`, {
-    //   method: 'POST',
-    //   headers: {
-    //     'content-type': 'application/json',
-    //   },
-    //   body: JSON.stringify({
-    //     activo,
-    //     field,
-    //     well,
-    //     formation,
-    //     groupBy: 'well'
-    //   })
-    // })
-    // .then(res => res.json())
-    // .then(res => {
-    //   this.setState({
-    //     execTableWellData: res
-    //   })
-    // })
+
 
     // fetch(`/executive/execTableData`, {
     //   method: 'POST',
