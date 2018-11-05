@@ -26,6 +26,10 @@ const units = {
   degreesText: 'Grados',
   disparosDensity: 'c/m',
   volume: 'm3',
+  power: 'HP',
+  volts: 'V',
+  amps: 'A',
+  mechanicalProductionSystemSpeed: 'EPM',
 }
 
 const field = {
@@ -157,8 +161,75 @@ const estadoMecanicoYAparejo = {
   }
 }
 
+const sistemasArtificialesDeProduccion = {
+  emboloViajero: {
+    presionDeCabeza: { text: 'Presión de cabeza', unit: units.pressure },
+    presionDeLineaODeSeparador: { text: 'Presión de línea o de separador', unit: units.pressure },
+    numeroDeDescargasOCiclosEV: { text: 'Número de descargas o ciclos', unit: '' },
+    volumenDesplazadoPorCircloEV: { text: 'Volumen desplazado por ciclo', unit: '' },
+  },
+  bombeoNeumatico: {
+    presionDeCabeza: { text: 'Presión de cabeza', unit: units.pressure },
+    presionDeLineaODeSeparador: { text: 'Presión de línea o de separador', unit: units.pressure },
+    presionDeInyeccionBN: { text: 'Presión de inyección', unit: units.pressure },
+    presionDeDescargaBN: { text: 'Presión de descarga', unit: units.pressure },
+    numeroDeValvulasBN: { text: 'Número de válvulas', unit: '' },
+    profundidadDeLaVulvulaOperanteBN: { text: 'Profundidad de la válvula operante', unit: units.length },
+    orificioBN: { text: 'Orificio', unit: units.pulgadas },
+    volumenDeGasInyectadoBN: { text: 'Volumen de gas', unit: units.volume },
+  },
+  bombeoHidraulico: {
+    presionDeCabeza: { text: 'Presión de cabeza', unit: units.pressure },
+    presionDeLineaODeSeparador: { text: 'Presión de línea o de separador', unit: units.pressure },
+    profundidadDeLaBombaBH: { text: 'Profundidad de la bomba', unit: units.length },
+    tipoYMarcaDeBombaBH: { text: 'Tipo y marca de bomba', unit: '' },
+    orificioBH: { text: 'Orificio', unit: units.pulgadas },
+    tipoDeCamisaBH: { text: 'Tipo de camisa', unit: units.pulgadas },
+    fluidoMotrizBH: { text: 'Fluido motriz', unit: '' },
+    equipoSuperficialBH: { text: 'Equipo superficial', unit: units.power },
+  },
+  bombeoCavidadesProgresivas: {
+    presionDeCabeza: { text: 'Presión de cabeza', unit: units.pressure },
+    presionDeLineaODeSeparador: { text: 'Presión de línea o de separador', unit: units.pressure },
+    motorYTipoDeMotorBCP: { text: 'Motor y tipo de motor', unit: '' },
+    profunidadDelMotorBCP: { text: 'Profundidad del motor', unit: '' },
+    velocidadBCP: { text: 'Velocidad', unit: '' },
+    hpBCP: { text: 'HP', unit: '' },
+    arregloDeVarillasBCP: { text: 'Arreglo de varillas', unit: '' },
+    tipoDeElastomeroBCP: { text: 'Tipo de elastómero (composición quimica)', unit: '' },
+    profundidadDelAnclaAntitorqueBCP: { text: 'Profundidad del ancla antitorque', unit: '' },
+  },
+  bombeoElectrocentrifugo: {
+    presionDeCabeza: { text: 'Presión de cabeza', unit: units.pressure },
+    presionDeLineaODeSeparador: { text: 'Presión de línea o de separador', unit: units.pressure },
+    profundidadDelMotorBE: { text: 'Profundidad del motor', unit: units.length },
+    diametroBE: { text: 'Diámetro', unit: units.pulgadas },
+    voltsBE: { text: 'Volts', unit: units.volts },
+    amparajeBE: { text: 'Amperaje', unit: units.amps },
+    armaduraBE: { text: 'Armadura (bomba)', unit: '' },
+    tipoDeCableBE: { text: 'Tipo de cable', unit: '' },
+    longitudDeCableBE: { text: 'Longitud de cable', unit: units.length },
+    rmpBE: { text: 'RPM', unit: '' },
+  },
+  bombeoMecanico: {
+    presionDeCabeza: { text: 'Presión de cabeza', unit: units.pressure },
+    presionDeLineaODeSeparador: { text: 'Presión de línea o de separador', unit: units.pressure },
+    tipoDeUnidadBM: { text: 'Tipo de unidad', unit: '' },
+    velocidadBM: { text: 'Velocidad', unit: units.mechanicalProductionSystemSpeed },
+    longitudDeCareraBM: { text: 'Longitud de carera', unit: units.pulgadas },
+    tipoDeBombaSubsuperficialBM: { text: 'Tipo de bomba subsuperficial', unit: '' },
+    tamanoDeBombaSubsuperficialBM: { text: 'Tamaño de bomba subsuperficial', unit: '' },
+    profundidadDeLaBombaBM: { text: 'Profundidad de la bomba', unit: units.length },
+    arregloDeVarillasBM: { text: 'Arreglo de varillas', unit: '' },
+    CuantaConAnclaBM: { text: 'Cuenta con ancla mecánica o empacador', unit: '' },
+    nivelDinamico: { text: 'Nivel dinámico', unit: units.length },
+    nivelEstatico: { text: 'Nivel estático', unit: units.length },
+  },
+}
+
 export const maps = {
   field,
   well,
   estadoMecanicoYAparejo,
+  sistemasArtificialesDeProduccion,
 }

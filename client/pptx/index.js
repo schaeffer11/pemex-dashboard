@@ -127,9 +127,10 @@ async function buildEstadoMecanicoYAparejo(pptx, token, id, image) {
   slide.addTable(disparosTable, { x: 4.0, y: 2.5, ...tableOptions } )
   slide.addTable(volumenTable, { x: 7.5, y: 1.0, ...tableOptions } )
 
-  // if (image) {
-  //   const base64 = await getBase64FromURL(image.imgURL)
-  // }
+  if (image) {
+    const base64 = await getBase64FromURL(image.imgURL)
+    console.log('base', base64)
+  }
   return slide
 }
 
@@ -137,23 +138,40 @@ async function buildSistemasArtificialesDeProduccion(pptx, token, id, image) {
   const slide = pptx.addNewSlide('MASTER_SLIDE')
   slide.addText('Información de Sistemas Artificiales de Producción', { placeholder: 'slide_title' })
   const wellData = await getData('getWell', token, id)
-  const tipoSistemaArtificial = wellData.tipoDeSistemo
-  let data
+  console.log('wellData', wellData)
+  const tipoSistemaArtificial = wellData.sistemasArtificialesDeProduccion.tipoDeSistemo
+  console.log('tipo siste', tipoSistemaArtificial)
+  const { sistemasArtificialesDeProduccion } = maps
+  let url
+  let map
   switch (tipoSistemaArtificial) {
     case 'none':
       return slide
     case 'emboloViajero':
-      data
+      url = 'getEmboloViajero'
+      break;
     case 'bombeoNeumatico':
+      url = 'getBombeoNeumatico'
+      break;
     case 'bombeoHidraulico':
+      url = 'getBombeoHidraulico'
+      break;
     case 'bombeoCavidadesProgresivas':
+      url = 'getBombeoCavidades'
+      break;
     case 'bombeoElectrocentrifugo':
+      url = 'getBombeoElectrocentrifugo'
+      break;
     case 'bombeoMecanico':
+      url = 'getBombeoMecanico'
+      break;
     default:
       break;
   }
-  // const { terminacion, liner, disparos, volumen } = maps.estadoMecanicoYAparejo
+  const data = await getData(url, token, id)
   console.log('data', data)
+  const sistemaTable = buildTable('test', sistemasArtificialesDeProduccion[tipoSistemaArtificial], data.sistemasArtificialesDeProduccion)
+  slide.addTable(sistemaTable, { x: 0.5, y: 1.0, ...tableOptions } )
   return slide
 }
 
