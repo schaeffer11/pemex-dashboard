@@ -1,17 +1,25 @@
 import { Map, fromJS } from 'immutable'
 
-const initialState = Map({
-    activo: null,
-    field: null,
-    well: null,
-    job: null,
-    formation: null,
-    jobType: null
+const initialState = fromJS({
+  subdireccion: null,
+  activo: null,
+  field: null,
+  well: null,
+  job: null,
+  formation: null,
+  jobType: null,
+  company: null,
+  interventionType: null,
+  terminationType: null,
+  groupBy: null,
+  groups: []
 })
 
 
 const global = (state = initialState, action) => {
   switch (action.type) {
+    case 'set_generalGlobalAnalysis': 
+      return state.setIn(action.location, fromJS(action.value))
     case 'set_activo':
       return state.set('activo', fromJS(action.value))
     case 'set_field':
@@ -24,7 +32,6 @@ const global = (state = initialState, action) => {
       return state.set('formation', fromJS(action.value))
     case 'set_jobType':
       return state.set('jobType', fromJS(action.value))
-
     default:
    		return state
   }

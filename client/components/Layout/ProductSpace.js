@@ -9,6 +9,7 @@ import TableroDeControlUI from './TableroDeControlUI/TableroDeControlUI'
 import HomeUI from './HomeUI/HomeUI'
 import { Route, Redirect } from 'react-router-dom'
 import LoginForm from '../User/LoginForm'
+import Sidebar from './TableroDeControlUI/Common/Sidebar'
 
 
 @autobind class Productspace extends Component {
@@ -29,7 +30,7 @@ import LoginForm from '../User/LoginForm'
     const { isLoading } = this.state
     console.log('something happened?')
     return (
-        <div className="productspace">
+        <div id="page-wrap" className="productspace">
           <PrivateRoute exact path="/carga_datos" component={InputsUI} user={this.props.user} />
           <PrivateRoute exact path="/diagnosticos" component={DiagnosticosUI} user={this.props.user} />
           <PrivateRoute exact path="/compromisos" component={CompromisosUI} user={this.props.user} />

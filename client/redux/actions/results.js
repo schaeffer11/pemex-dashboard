@@ -20,6 +20,12 @@ export const setGeneralGraficaTratamiento = (location, value) => ({
   type: 'set_generalGraficaTratamiento',
 })
 
+export const setGeneralResultadosGenerales = (location, value) => ({
+  location,
+  value,
+  type: 'set_generalResultadosGenerales',
+})
+
 export const setGeneralHistoricoDeAforosResults = (location, value) => ({
   location,
   value,
@@ -148,7 +154,7 @@ export function submitResultsForm(action, token) {
  
     let filteredKeys = ['user', 'global', 'graficaTratamiento', 'historicoDeAforosResults', 'estCostResults', 
     'tratamientoEstimulacion', 'tratamientoAcido', 'tratamientoApuntalado', 'tratamientoTermico',
-    'evaluacionApuntalado', 'evaluacionAcido', 'evaluacionEstimulacion', 'resultsMeta']
+    'evaluacionApuntalado', 'evaluacionAcido', 'evaluacionEstimulacion', 'resultsMeta', 'resultadosGenerales']
 
 
     // const { pozo } = convertedFields.global

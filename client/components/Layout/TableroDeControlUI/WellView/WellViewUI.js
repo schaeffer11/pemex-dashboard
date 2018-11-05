@@ -23,7 +23,8 @@ import { CardDeck } from 'reactstrap';
       productionData: [],
       pressureData: [],
       aforosData: [],
-      imageData: []
+      imageData: [],
+      interventionDates: []
     }
     this.cards = []
     for (let i = 0; i < 5; i += 1) {
@@ -183,6 +184,18 @@ import { CardDeck } from 'reactstrap';
             })
           })
 
+          fetch(`/well/getInterventionDates?wellID=${well}`, {
+            headers: {
+              'content-type': 'application/json',
+            },
+          })
+          .then(res => res.json())
+          .then(res => {
+            this.setState({
+              interventionDates: res
+            })
+          })
+
         }
       })     
     }
@@ -243,15 +256,17 @@ import { CardDeck } from 'reactstrap';
     } 
 
   render() {
-    let { fieldWellOptions, wellData, zoneData, layerData, productionData, pressureData , aforosData, imageData } = this.state
+    let { fieldWellOptions, wellData, zoneData, layerData, productionData, pressureData , aforosData, imageData, interventionDates } = this.state
 
-    console.log('well', wellData)
-    console.log('zone', zoneData)
-    console.log('layer', layerData)
-    console.log('production', productionData)
-    console.log('pressure', pressureData)
-    console.log('aforos', aforosData)
-    console.log('images', imageData, imageData)
+    // console.log('well', wellData)
+    // console.log('zone', zoneData)
+    // console.log('layer', layerData)
+    // console.log('production', productionData)
+    // console.log('pressure', pressureData)
+    // console.log('aforos', aforosData)
+    // console.log('images', imageData, imageData)
+    // console.log('interventionDates', interventionDates)
+
 
     return (
       <div className="data well-view">
@@ -287,7 +302,7 @@ import { CardDeck } from 'reactstrap';
                 title="Aforos"
                 ref={this.cards[3]}
               >
-               <AforosGraph data={aforosData} />
+               <AforosGraph data={aforosData} dates={interventionDates}/>
             </Card>
             <Card
                 id="images"

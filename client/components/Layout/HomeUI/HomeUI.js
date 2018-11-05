@@ -54,7 +54,7 @@ const LinkButton = ({ text, disabled , width, height, src, to}) => {
       <div className="home">
         <div className='title'>
         </div>
-        <div className="backdrop">
+        <div className="backdrop-title">
           <div className="background-image">
             <div className='head'>
               Pemex Exploración y Producción

@@ -5,15 +5,21 @@ import { connect } from 'react-redux'
 import Filters from '../Common/Filters'
 import Card from '../Common/Card'
 import { CardDeck } from 'reactstrap';
+import CostBar from './CostBar'
+import AforosScatter from './AforosScatter'
+import VolumeLine from './VolumeLine'
 
 @autobind class timeSeriesUI extends Component {
   constructor(props) {
     super(props)
     this.state = { 
       fieldWellOptions: [],
+      costData: [],
+      aforosData: [],
+      volumeData: []
     }
     this.cards = []
-    for (let i = 0; i < 2; i += 1) {
+    for (let i = 0; i < 3; i += 1) {
       this.cards.push(React.createRef())
     }
   }
@@ -42,6 +48,44 @@ import { CardDeck } from 'reactstrap';
         })
     })
 
+    fetch(`/timeSeries/costData`, {
+      headers: {
+        'content-type': 'application/json',
+      },
+    })
+    .then(res => res.json())
+    .then(res => {
+      this.setState({
+        costData: res
+      })
+    })
+
+    fetch(`/timeSeries/aforosData`, {
+      headers: {
+        'content-type': 'application/json',
+      },
+    })
+    .then(res => res.json())
+    .then(res => {
+      this.setState({
+        aforosData: res
+      })
+    })
+
+
+    fetch(`/timeSeries/volumeData`, {
+      headers: {
+        'content-type': 'application/json',
+      },
+    })
+    .then(res => res.json())
+    .then(res => {
+      this.setState({
+        volumeData: res
+      })
+    })
+
+
   }
 
   componentDidMount() {
@@ -68,22 +112,33 @@ import { CardDeck } from 'reactstrap';
   }
 
   render() {
-    let { fieldWellOptions } = this.state
+    let { fieldWellOptions, costData, aforosData, volumeData } = this.state
 
-
+    console.log('herherhehr', volumeData)
     return (
       <div className="data statistics">
-        <div className='header'>
-          <Filters fieldWellOptions={fieldWellOptions} />
-        </div>
         <div className='content'>
           <CardDeck className="content-deck">
             <Card
-                id="something"
-                title="Stuff Over Time"
+                id="costs"
+                title="Costs"
                 ref={this.cards[0]}
               >
-              <div label='test'>Insert Cost/Production Increase?/Volume Use over time</div>
+              <CostBar data={costData} />
+            </Card>
+              <Card
+                id="aforos"
+                title="Production"
+                ref={this.cards[1]}
+              >
+              <AforosScatter  data={aforosData} />
+            </Card>
+              <Card
+                id="volume"
+                title="Volume Usage"
+                ref={this.cards[2]}
+              >
+              <VolumeLine data={volumeData} />
             </Card>
           </CardDeck>
         </div>

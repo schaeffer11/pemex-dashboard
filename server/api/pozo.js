@@ -404,8 +404,7 @@ const INSERT_INTERVENTION_ACIDO_QUERY = {
 const INSERT_INTERVENTION_APUNTALADO_QUERY = {
     save: `INSERT INTO _IntervencionesApuntaladoSave (
         INTERVENTION_ID, WELL_FORMACION_ID, 
-        VOLUMEN_PRECOLCHON_N2,
-        VOLUMEN_SISTEMA_NO_REACTIVO, VOLUMEN_SISTEMA_REACTIVO, VOLUMEN_SISTEMA_DIVERGENTE, VOLUMEN_DISPLAZAMIENTO_LIQUIDO, VOLUMEN_DESPLAZAMIENTO_N2,
+        VOLUMEN_DISPLAZAMIENTO_LIQUIDO,
         VOLUMEN_TOTAL_DE_LIQUIDO, MODULO_YOUNG_ARENA,
         MODULO_YOUNG_LUTITAS, RELAC_POISSON_ARENA, RELAC_POISSON_LUTITAS, GRADIENTE_DE_FRACTURA, DENSIDAD_DE_DISPAROS,
         DIAMETRO_DE_DISPAROS, LONGITUD_APUNTALADA, ALTURA_TOTAL_DE_FRACTURA, ANCHO_PROMEDIO,
@@ -417,12 +416,10 @@ const INSERT_INTERVENTION_APUNTALADO_QUERY = {
         (?, ?, ?, ?, ?, ?, ?, ?, ?, ?,
          ?, ?, ?, ?, ?, ?, ?, ?, ?, ?,
          ?, ?, ?, ?, ?, ?, ?, ?, ?, ?,
-         ?, ?, ?, ?, ?, ?, ?, ?, ?, ?,
-         ?, ?, ?, ?, ?)`,
+         ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`,
     submit: `INSERT INTO IntervencionesApuntalado (
         INTERVENTION_ID, WELL_FORMACION_ID, 
-        VOLUMEN_PRECOLCHON_N2,
-        VOLUMEN_SISTEMA_NO_REACTIVO, VOLUMEN_SISTEMA_REACTIVO, VOLUMEN_SISTEMA_DIVERGENTE, VOLUMEN_DESPLAZAMIENTO_LIQUIDO, VOLUMEN_DESPLAZAMIENTO_N2,
+        VOLUMEN_DESPLAZAMIENTO_LIQUIDO,
         VOLUMEN_TOTAL_DE_LIQUIDO, MODULO_YOUNG_ARENA,
         MODULO_YOUNG_LUTITAS, RELAC_POISSON_ARENA, RELAC_POISSON_LUTITAS, GRADIENTE_DE_FRACTURA, DENSIDAD_DE_DISPAROS,
         DIAMETRO_DE_DISPAROS, LONGITUD_APUNTALADA, ALTURA_TOTAL_DE_FRACTURA, ANCHO_PROMEDIO,
@@ -434,8 +431,7 @@ const INSERT_INTERVENTION_APUNTALADO_QUERY = {
         (?, ?, ?, ?, ?, ?, ?, ?, ?, ?,
          ?, ?, ?, ?, ?, ?, ?, ?, ?, ?,
          ?, ?, ?, ?, ?, ?, ?, ?, ?, ?,
-         ?, ?, ?, ?, ?, ?, ?, ?, ?, ?,
-         ?, ?)`,     
+         ?, ?, ?, ?, ?, ?, ?)`,     
     loadSave: `SELECT * FROM _IntervencionesApuntaladoSave WHERE TRANSACTION_ID = ?`,
     loadTransaction: `SELECT * FROM IntervencionesApuntalado WHERE TRANSACTION_ID = ?`    
 }
@@ -514,16 +510,16 @@ const INSERT_CEDULA_ACIDO_QUERY = {
 }
 
 const INSERT_CEDULA_APUNTALADO_QUERY = {
-    save: `INSERT INTO _IntervencionesCedulaApuntaladoSave_testtest (
+    save: `INSERT INTO _IntervencionesCedulaApuntaladoSave (
         CEDULA_ID, INTERVENTION_ID, WELL_FORMACION_ID, ETAPA, SISTEMA, NOMBRE_COMERCIAL, TIPO_DE_FLUIDO, TIPO_DE_APUNTALANTE, VOL_LIQUIDO, 
         VOL_LECHADA, GASTO_EN_SUPERFICIE, GASTO_N2_SUPERFICIE, GASTO_TOTAL_FONDO, CALIDAD_N2, VOL_ESPUMA_FONDO, CONCENTRACION_APUNTALANTE_SUPERFICIE, 
         CONCENTRACION_APUNTALANTE_FONDO, APUNTALANTE_ACUMULADO, TIEMPO, COMPANIA, TRANSACTION_ID, HAS_ERRORS) VALUES ?`   ,
-    submit: `INSERT INTO IntervencionesCedulaApuntalado_testtest (
+    submit: `INSERT INTO IntervencionesCedulaApuntalado (
         CEDULA_ID, INTERVENTION_ID, WELL_FORMACION_ID, ETAPA, SISTEMA, NOMBRE_COMERCIAL, TIPO_DE_FLUIDO, TIPO_DE_APUNTALANTE, VOL_LIQUIDO, 
         VOL_LECHADA, GASTO_EN_SUPERFICIE, GASTO_N2_SUPERFICIE, GASTO_TOTAL_FONDO, CALIDAD_N2, VOL_ESPUMA_FONDO, CONCENTRACION_APUNTALANTE_SUPERFICIE, 
         CONCENTRACION_APUNTALANTE_FONDO, APUNTALANTE_ACUMULADO, TIEMPO, COMPANIA, TRANSACTION_ID) VALUES ?`        ,
-    loadSave: `SELECT * FROM _IntervencionesCedulaApuntaladoSave_testtest WHERE TRANSACTION_ID = ?`,
-    loadTransaction: `SELECT * FROM IntervencionesCedulaApuntalado_testtest WHERE TRANSACTION_ID = ?`    
+    loadSave: `SELECT * FROM _IntervencionesCedulaApuntaladoSave WHERE TRANSACTION_ID = ?`,
+    loadTransaction: `SELECT * FROM IntervencionesCedulaApuntalado WHERE TRANSACTION_ID = ?`    
 }
 
 const INSERT_CEDULA_TERMICO_QUERY = {
@@ -563,8 +559,9 @@ const INSERT_TRANSACTION = {
         TRANSACTION_ID, USER_ID, WELL_FORMACION_ID, TIPO_DE_INTERVENCIONES, SAVE_NAME) VALUES
         (?, ?, ?, ?, ?)`,
     submit: `INSERT INTO Transactions (
-        TRANSACTION_ID, USER_ID, FIELD_FORMACION_ID, WELL_FORMACION_ID) VALUES
-        (?, ?, ?, ?)`, 
+        TRANSACTION_ID, USER_ID, SUBDIRECCION_ID, ACTIVO_ID, FIELD_FORMACION_ID, WELL_FORMACION_ID, 
+        FORMACION, PROPUESTA_COMPANIA, TIPO_DE_INTERVENCIONES, TIPO_DE_TERMINACION) VALUES
+        (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`, 
 }
 
 
@@ -1545,9 +1542,8 @@ export const create = async (body, action, cb) => {
                                   else if (tipoDeIntervenciones === 'apuntalado') {
                                     values = [
                                         interventionID, wellFormacionID, 
-                                        volumenPrecolchonN2, volumenSistemaNoReativo, volumenSistemaReactivo, volumenSistemaDivergente,
-                                          volumenDesplazamientoLiquido, volumenDesplazamientoN2, volumenTotalDeLiquido, 
-                                          moduloYoungArena, moduloYoungLutitas, relacPoissonArena,
+                                        volumenDesplazamientoLiquido, volumenTotalDeLiquido, 
+                                        moduloYoungArena, moduloYoungLutitas, relacPoissonArena,
                                         relacPoissonLutatas, gradienteDeFractura, densidadDeDisparos, diametroDeDisparos,
                                         longitudApuntalada, alturaTotalDeFractura, anchoPromedio, concentractionAreal, conductividad,
                                         fcd, presionNeta, eficienciaDeFluidoDeFractura,
@@ -1585,14 +1581,23 @@ export const create = async (body, action, cb) => {
                                       })
                                     }
 
+
+
+                                                pruebasDeLaboratorioData.forEach(i => {
+                                                  
+                                                })
+
+                                    let imageValues = []
                                     values = []
                                     const labResultValues = []
 
                                     if (pruebasDeLaboratorioData && pruebasDeLaboratorioData[0]) {
+
                                       pruebasDeLaboratorioData.forEach(i => {
                                       const labID = Math.floor(Math.random() * 1000000000)
                                       i.labID = labID
                                       values.push([labID, interventionID, wellFormacionID, i.type, i.fechaMuestreo, i.fechaPrueba, i.compania, i.superviso, i.obervaciones, transactionID])
+                                      imageValues.push([interventionID, labID, i.imgName, transactionID])
                                     })
                                     
                                     }
@@ -1721,10 +1726,7 @@ export const create = async (body, action, cb) => {
                                               values.push(newRow)
                                             })
 
-                                        query = 
-                                          tipoDeIntervenciones === 'termico' ? DUMMY_QUERY :
-                                            (action === 'save' ? INSERT_COSTS_QUERY.save : INSERT_COSTS_QUERY.submit)
-                                        
+                                        query = action === 'save' ? INSERT_COSTS_QUERY.save : INSERT_COSTS_QUERY.submit
 
                                             connection.query(query, [values], (err, results) => {
                                               console.log('costs', err)
@@ -1737,22 +1739,19 @@ export const create = async (body, action, cb) => {
                                                 })
                                               }
 
-                                              values = [
-                                                [interventionID, 'Lab Results', labResultsFile, transactionID],
+                                              imageValues = imageValues.concat([
                                                 [interventionID, 'Est Inc Prod', incProdFile, transactionID],
                                                 [interventionID, 'Simulation Results', simResultsFile, transactionID]
-                                              ]
+                                              ])
 
-                                              pruebasDeLaboratorioData.forEach(i => {
-                                              values.push([interventionID, 'Lab Data', i.imgName, transactionID])
-                                            })
+
 
                                               query = 
                                                 tipoDeIntervenciones === 'termico' ? DUMMY_QUERY :
                                                   (action === 'save' ? INSERT_INTERVENTION_IMAGE_QUERY.save : INSERT_INTERVENTION_IMAGE_QUERY.submit)
                                         
 
-                                              connection.query(query, [values], (err, results) => {
+                                              connection.query(query, [imageValues], (err, results) => {
                                                 console.log('intervention img', err)
                                                 console.log('intervention img', results)
                                                 if (err) {
@@ -1762,7 +1761,7 @@ export const create = async (body, action, cb) => {
                                                   })
                                                 }
 
-                                                values = action === 'save' ? [transactionID, userID, wellFormacionID, tipoDeIntervenciones, saveName] : [transactionID, userID, fieldFormacionID, wellFormacionID]
+                                                values = action === 'save' ? [transactionID, userID, wellFormacionID, tipoDeIntervenciones, saveName] : [transactionID, userID, subdireccion, activo, fieldFormacionID, wellFormacionID, formacion, propuestaCompany, tipoDeIntervenciones, tipoDeTerminacion]
                                                 connection.query((action === 'save' ? INSERT_TRANSACTION.save : INSERT_TRANSACTION.submit), values, (err, results) => {
                                                   console.log('transaction', err)
                                                   console.log('transaction', results)

@@ -50,7 +50,7 @@ const arraysAreEqual = (arr1, arr2) => {
     const { groups, selectedGrouping } = this.props
     const { groupProps } = this.state
 
-    const hasGroups = groups && groups.length > 0 && selectedGrouping.value !== 'all'
+    const hasGroups = groups && groups.length > 0 && selectedGrouping
     const groupsAreDifferent = !arraysAreEqual(prevGroups, groups)
     const groupPropsIsDefined = groupProps !== undefined
     if (hasGroups && (groupsAreDifferent || !groupPropsIsDefined)) {
@@ -208,11 +208,12 @@ const arraysAreEqual = (arr1, arr2) => {
   renderCarousel() {
     const { selectedGrouping, multiplyChartsOnGrouping, id, groups } = this.props
     const { groupProps } = this.state
-    if (multiplyChartsOnGrouping && groups.length > 0 && selectedGrouping.value !== 'all') {
+    if (multiplyChartsOnGrouping && groups.length > 0 && selectedGrouping) {
       return (
         <div className="groupby_carousel">
           <button className="left" type="button" onClick={() => this.handleGroupChangeChevron('left')}>
 {/*            <FontAwesomeIcon icon="chevron-left" />*/}
+            <i className='fa fa-chevron-left'/>
           </button>
           <div className="center">
             {groups.map((group) => {
@@ -229,11 +230,12 @@ const arraysAreEqual = (arr1, arr2) => {
               )
             })}
             <h6>
-              {`${selectedGrouping.label}: ${groupProps}`}
+              {`${selectedGrouping}: ${groupProps}`}
             </h6>
           </div>
           <button className="right" type="button" onClick={() => this.handleGroupChangeChevron('right')}>
 {/*            <FontAwesomeIcon icon="chevron-right" />*/}
+            <i className='fa fa-chevron-right'/>
           </button>
         </div>
       )
@@ -404,14 +406,14 @@ const arraysAreEqual = (arr1, arr2) => {
 
 const mapStateToProps = state => ({
   chartOptionsValues: state.get('chartOptions'),
-  // selectedGrouping: state.getIn(['settings', 'selectedGrouping']).toJS(),
-  // groups: state.getIn(['settings', 'groups']).toJS().sort((a, b) => {
-  //   if (b.toLowerCase() === 'undefined') { return -1 }
-  //   if (a.toLowerCase() === 'undefined') { return 1 }
-  //   if (a < b) { return -1 }
-  //   if (a > b) { return 1 }
-  //   return 0
-  // }),
+  selectedGrouping: state.getIn(['globalAnalysis', 'groupBy']),
+  groups: state.getIn(['globalAnalysis', 'groups']).toJS().sort((a, b) => {
+    if (b.toLowerCase() === 'undefined') { return -1 }
+    if (a.toLowerCase() === 'undefined') { return 1 }
+    if (a < b) { return -1 }
+    if (a > b) { return 1 }
+    return 0
+  }),
 })
 
 const mapDispatchToProps = dispatch => ({
