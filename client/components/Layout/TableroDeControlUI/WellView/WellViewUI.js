@@ -36,7 +36,6 @@ import { generatePowerPoint } from '../../../../pptx';
   fetchData() {
   	console.log('fetching')
     let { globalAnalysis } = this.props
-    globalAnalysis = globalAnalysis.toJS()
     let { well } = globalAnalysis
 
     //TODO MAKE PARALLEL
@@ -210,8 +209,6 @@ import { generatePowerPoint } from '../../../../pptx';
     let { globalAnalysis } = this.props
     let prevGlobalAnalysis = prevProps.globalAnalysis
 
-    globalAnalysis = globalAnalysis.toJS()
-    prevGlobalAnalysis = prevGlobalAnalysis.toJS()
 
 		let { well } = globalAnalysis
     let wellPrev = prevGlobalAnalysis.well
@@ -258,7 +255,7 @@ import { generatePowerPoint } from '../../../../pptx';
 
   render() {
     let { fieldWellOptions, wellData, zoneData, layerData, productionData, pressureData , aforosData, imageData, interventionDates } = this.state
-
+    const { token, globalAnalysis } = this.props
     // console.log('well', wellData)
     // console.log('zone', zoneData)
     // console.log('layer', layerData)
@@ -273,7 +270,7 @@ import { generatePowerPoint } from '../../../../pptx';
       <div className="data well-view">
         <div className='header'>
           <WellSelect fieldWellOptions={fieldWellOptions}/>
-          <button onClick={() => generatePowerPoint(this.state)}>generar presentacion</button>
+          <button onClick={() => generatePowerPoint(token, globalAnalysis.job)}>generar presentacion</button>
         </div>
         <div className='content'>
           <CardDeck className="content-deck">
@@ -322,7 +319,7 @@ import { generatePowerPoint } from '../../../../pptx';
 
 const mapStateToProps = state => ({
   token: state.getIn(['user', 'token']),
-  globalAnalysis: state.get('globalAnalysis'),
+  globalAnalysis: state.get('globalAnalysis').toJS(),
 })
 
 const mapDispatchToProps = dispatch => ({
