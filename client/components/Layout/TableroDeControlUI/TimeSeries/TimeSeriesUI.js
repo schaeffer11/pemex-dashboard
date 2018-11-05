@@ -24,13 +24,11 @@ import VolumeLine from './VolumeLine'
     }
   }
 
-  fetchData() {
-  	console.log('fetching')
+  async fetchData() {
     let { globalAnalysis } = this.props
     globalAnalysis = globalAnalysis.toJS()
-    let { activo, field, well, formation } = globalAnalysis
+    let { subdir, activo, field, well, formation, company, tipoDeIntervencion, tipoDeTerminacion, groupBy } = globalAnalysis
 
-    //TODO MAKE PARALLEL
     const { token } = this.props
     const headers = {
       headers: {
@@ -39,53 +37,48 @@ import VolumeLine from './VolumeLine'
       },
     }
 
-    fetch('/api/getFieldWellMappingHasData', headers)
-      .then(r => r.json())
-      .then(r => {
 
-        this.setState({
-          fieldWellOptions: r
-        })
-    })
+    let params = []
+    let query
 
-    fetch(`/timeSeries/costData`, {
-      headers: {
-        'content-type': 'application/json',
-      },
-    })
-    .then(res => res.json())
-    .then(res => {
-      this.setState({
-        costData: res
+    subdir ? params.push(`subdir=${subdir}`) : null
+    activo ? params.push(`activo=${activo}`) : null
+    field ? params.push(`field=${field}`) : null
+    well ? params.push(`activo=${activo}`) : null
+    formation ? params.push(`formation=${formation}`) : null
+    company ? params.push(`company=${company}`) : null
+    tipoDeIntervencion ? params.push(`tipoDeIntervencion=${tipoDeIntervencion}`) : null
+    tipoDeTerminacion ? params.push(`tipoDeTerminacion=${tipoDeTerminacion}`) : null
+    groupBy ? params.push(`groupBy=${groupBy}`) : null
+
+
+
+    let fieldWellOptionsQuery = `/api/getFieldWellMappingHasData`
+    let costQuery = `/timeSeries/costData?` + params.join('&')
+    let aforosQuery = `/timeSeries/aforosData?` + params.join('&')
+    let volumesQuery = `/timeSeries/volumeData?` + params.join('&')
+
+
+    const data = await Promise.all([
+      fetch(fieldWellOptionsQuery, headers).then(r => r.json()),
+      fetch(costQuery, headers).then(r => r.json()),
+      fetch(aforosQuery, headers).then(r => r.json()),
+      fetch(volumesQuery, headers).then(r => r.json()),
+    ])
+      .catch(error => {
+        console.log('err', error)
       })
-    })
 
-    fetch(`/timeSeries/aforosData`, {
-      headers: {
-        'content-type': 'application/json',
-      },
-    })
-    .then(res => res.json())
-    .then(res => {
-      this.setState({
-        aforosData: res
-      })
-    })
+    console.log(data)
 
+    let newState = {
+      fieldWellOptions: data[0],
+      costData: data[1],
+      aforosData: data[2],
+      volumeData: data[3],
+    }
 
-    fetch(`/timeSeries/volumeData`, {
-      headers: {
-        'content-type': 'application/json',
-      },
-    })
-    .then(res => res.json())
-    .then(res => {
-      this.setState({
-        volumeData: res
-      })
-    })
-
-
+    this.setState(newState)
   }
 
   componentDidMount() {
@@ -94,27 +87,24 @@ import VolumeLine from './VolumeLine'
 
   componentDidUpdate(prevProps) {
     let { globalAnalysis } = this.props
-    let prevGlobalAnalysis = prevProps.globalAnalysis
+    let prev = prevProps.globalAnalysis
 
     globalAnalysis = globalAnalysis.toJS()
-    prevGlobalAnalysis = prevGlobalAnalysis.toJS()
+    prev = prev.toJS()
 
+    let { subdir, activo, field, well, formation, company, tipoDeIntervencion, tipoDeTerminacion, groupBy } = globalAnalysis
 
-		let { activo, field, well, formation } = globalAnalysis
-    let activoPrev = prevGlobalAnalysis.activo
-    let fieldPrev = prevGlobalAnalysis.field
-    let wellPrev = prevGlobalAnalysis.well
-    let formationPrev = prevGlobalAnalysis.formation
-
-    if (activo !== activoPrev || field !== fieldPrev || well !== wellPrev || formation !== formationPrev) {
-			this.fetchData()	
-		}
+    if (activo !== prev.activo || field !== prev.field || well !== prev.well || formation !== prev.formation ||
+      company !== prev.company || tipoDeIntervencion !== prev.tipoDeIntervencion || tipoDeTerminacion !== prev.tipoDeTerminacion ||
+      groupBy !== prev.groupBy) {
+      this.fetchData()  
+    }
   }
+
 
   render() {
     let { fieldWellOptions, costData, aforosData, volumeData } = this.state
 
-    console.log('herherhehr', volumeData)
     return (
       <div className="data statistics">
         <div className='content'>

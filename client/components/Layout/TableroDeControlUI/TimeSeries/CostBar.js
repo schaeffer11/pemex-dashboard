@@ -9,18 +9,37 @@ import { KPI } from '../Common/KPIs'
   render() {
     let { data } = this.props
 
+    let groups = []
+    let series = []
 
-
-    data = data.map(i => {
-      let utc = new Date(i.FECHA)
-      utc = Date.UTC(utc.getFullYear(), utc.getMonth(), utc.getDate())
-      
-      return {
-        x: utc,
-        y: i.COST
+    data.forEach(i => {
+      if (!groups.includes(i.groupedName)) {
+        groups.push(i.groupedName)
       }
     })
-    console.log(data)
+
+    groups.forEach(name => {
+      let filteredData = data.filter(i => i.groupedName === name).map(j => {
+        let utc = new Date(j.FECHA)
+        utc = Date.UTC(utc.getFullYear(), utc.getMonth(), utc.getDate())
+
+        return {
+          x: utc,
+          y: j.COST
+        }
+      })
+
+
+      series.push({
+        name: name,
+        data: filteredData
+      })
+    })
+
+
+
+
+    console.log(series)
 
     let config = {
       chart: {
@@ -44,10 +63,7 @@ import { KPI } from '../Common/KPIs'
       credits: {
         enabled: false
       },
-      series: [{
-        name: 'Cost Data',
-        data: data
-      }]
+      series: series
   }
 
     return (

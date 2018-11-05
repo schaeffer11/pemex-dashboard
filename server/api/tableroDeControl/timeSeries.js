@@ -11,25 +11,75 @@ const router = Router()
 
 
 router.get('/costData', (req, res) => {
-  let { activo, field, well, formation } = req.body
+  let { subdir, activo, field, well, formation, company, tipoDeIntervencion, tipoDeTerminacion, groupBy, avg, noGroup } = req.query
   
-  let level = well ? 'WellAforos.WELL_FORMACION_ID' : field ? 'FIELD_FORMACION_ID' : activo ? 'ACTIVO_ID' : null
-  let value = well ? well : field ? field : activo ? activo : null
+  let level = well ? 'WellAforos.WELL_FORMACION_ID' : field ? 'fwm.FIELD_FORMACION_ID' : activo ? 'fwm.ACTIVO_ID' : subdir ? 'fwm.SUBDIRECCION_ID' : null
+  let values = []
+
   let whereClause = ''
+
   if (level) {
     whereClause = `AND ${level} = ?`
+    values.push(well ? well : field ? field : activo ? activo : subdir ? subdir : null)
+  }
+  if (formation) {
+    wherClause = ` AND FORMACION = ?`
+    values.push(formation)
+  }
+  if (company) {
+    whereClause += ' AND PROPUESTA_COMPANIA = ?'
+    values.push(company)
+  }
+  if (tipoDeIntervencion) {
+    whereClause += ' AND TIPO_DE_INTERVENCIONES = ?'
+    values.push(tipoDeIntervencion)
+  }
+  if (tipoDeTerminacion) {
+    whereClause += ' AND TIPO_DE_TERMINACION = ?'
+    values.push(tipoDeTerminacion)
   }
 
+  let select = 1
+
+  switch(groupBy) {
+    case 'subdireccion':
+      select = 'SUBDIRECCION_NAME as groupedName'
+      break
+    case 'activo':
+      select = 'ACTIVO_NAME as groupedName'
+      break
+    case 'field':
+      select = 'FIELD_NAME as groupedName'
+      break
+    case 'well':
+      select = 'WELL_NAME as groupedName'
+      break
+    case 'formation':
+      select = 'FORMACION as groupedName'
+      break
+    case 'company':
+      select = 'COMPANY as groupedName'
+      break
+    case 'interventionType':
+      select = 'TIPO_DE_INTERVENCIONES as groupedName'
+      break
+    case 'terminationType':
+      select = 'TIPO_DE_TERMINACION as groupedName'
+      break
+  }
+
+  let groupByClause = select !== 1 ? `groupedName, ` : null
+
   let query = `
-select YEAR(FECHA), MONTH(FECHA), DAY(FECHA), FECHA, SUM(COST_MNX + COST_DLS * MNXtoDLS) as COST
+select ${select}, YEAR(FECHA), MONTH(FECHA), DAY(FECHA), FECHA, SUM(COST_MNX + COST_DLS * MNXtoDLS) as COST
 FROM ResultsCosts rc
 JOIN Intervenciones i ON rc.INTERVENTION_ID = i.INTERVENCIONES_ID
 JOIN FieldWellMapping fwm ON i.WELL_FORMACION_ID = fwm.WELL_FORMACION_ID
 ${whereClause}
-GROUP BY YEAR(FECHA), MONTH(FECHA), DAY(FECHA);
+GROUP BY ${groupByClause} YEAR(FECHA), MONTH(FECHA), DAY(FECHA);
   `
 
-  connection.query(query, value, (err, results) => {
+  connection.query(query, values, (err, results) => {
       console.log('comment err', err)
 
      if (err) {
