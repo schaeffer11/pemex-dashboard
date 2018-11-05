@@ -64,11 +64,18 @@ import { setIsLoading, setShowForms } from '../../../redux/actions/global'
     validate(values){
         let errors = {};
 
-        /*
-        if(!values.asignacion){
-            errors.asignacion = "Este campo no puede estar vacio"
+        if(!values.responsable){
+            errors.responsable = "Este campo no puede estar vacio"
         }
-        */
+
+        if(!values.activo){
+            errors.activo = "Este campo no puede estar vacio"
+        }
+
+        if(!values.fechaCompromiso){
+            errors.fechaCompromiso = "Este campo no puede estar vacio"
+        }
+
 
         return errors;
     }
