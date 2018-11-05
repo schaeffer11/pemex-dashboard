@@ -29,9 +29,8 @@ import { KPI } from '../Common/KPIs'
         }
       })
 
-
       series.push({
-        name: name,
+        name: name ? name : 'Cost Data',
         data: filteredData
       })
     })

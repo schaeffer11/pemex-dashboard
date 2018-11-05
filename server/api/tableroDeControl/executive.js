@@ -13,7 +13,7 @@ const router = Router()
 router.get('/jobBreakdown', (req, res) => {
   let { subdir, activo, field, well, formation, company, tipoDeIntervencion, tipoDeTerminacion, groupBy, avg, noGroup } = req.query
   
-  let level = well ? 'WellAforos.WELL_FORMACION_ID' : field ? 'fwm.FIELD_FORMACION_ID' : activo ? 'fwm.ACTIVO_ID' : subdir ? 'fwm.SUBDIRECCION_ID' : null
+  let level = well ? 'fwm.WELL_FORMACION_ID' : field ? 'fwm.FIELD_FORMACION_ID' : activo ? 'fwm.ACTIVO_ID' : subdir ? 'fwm.SUBDIRECCION_ID' : null
   let values = []
 
 
@@ -25,7 +25,7 @@ router.get('/jobBreakdown', (req, res) => {
     values.push(well ? well : field ? field : activo ? activo : subdir ? subdir : null)
   }
   if (formation) {
-    wherClause = ` AND FORMACION = ?`
+    whereClause = ` AND FORMACION = ?`
     values.push(formation)
   }
   if (company) {
@@ -118,7 +118,7 @@ router.get('/jobBreakdown', (req, res) => {
 router.get('/aforosData', (req, res) => {
   let { subdir, activo, field, well, formation, company, tipoDeIntervencion, tipoDeTerminacion, groupBy, carousel } = req.query
   
-  let level = well ? 'WellAforos.WELL_FORMACION_ID' : field ? 'fwm.FIELD_FORMACION_ID' : activo ? 'fwm.ACTIVO_ID' : subdir ? 'fwm.SUBDIRECCION_ID' : null
+  let level = well ? 'fwm.WELL_FORMACION_ID' : field ? 'fwm.FIELD_FORMACION_ID' : activo ? 'fwm.ACTIVO_ID' : subdir ? 'fwm.SUBDIRECCION_ID' : null
   let values = []
 
 
@@ -193,7 +193,7 @@ SELECT *, COUNT(1) AS y, 1, IF(QO_RESULT > QO, 'Successful', 'Unsuccessful') as 
 
 (SELECT SUBDIRECCION_NAME, ACTIVO_NAME, FIELD_NAME, A.WELL_FORMACION_ID, WELL_NAME, FORMACION, PROPUESTA_COMPANIA, TIPO_DE_INTERVENCIONES, TIPO_DE_TERMINACION, TRANSACTION_ID, FECHA, QO, QW  FROM
 (
-  select fwm.SUBDIRECCION_NAME, fwm.ACTIVO_NAME, fwm.FIELD_NAME, WellAforos.WELL_FORMACION_ID, FORMACION, PROPUESTA_COMPANIA, WELL_NAME, WellAforos.TRANSACTION_ID, MAX(FECHA) FECHA, TIPO_DE_TERMINACION, TIPO_DE_INTERVENCIONES
+  select fwm.SUBDIRECCION_NAME, fwm.ACTIVO_NAME, fwm.FIELD_NAME, fwm.WELL_FORMACION_ID, FORMACION, PROPUESTA_COMPANIA, WELL_NAME, WellAforos.TRANSACTION_ID, MAX(FECHA) FECHA, TIPO_DE_TERMINACION, TIPO_DE_INTERVENCIONES
   FROM WellAforos 
   JOIN FieldWellMapping fwm ON WellAforos.WELL_FORMACION_ID = fwm.WELL_FORMACION_ID 
   JOIN Transactions t ON WellAforos.TRANSACTION_ID = t.TRANSACTION_ID 
@@ -264,7 +264,7 @@ ${groupByClause}
 router.get('/costData', (req, res) => {
   let { subdir, activo, field, well, formation, company, tipoDeIntervencion, tipoDeTerminacion, groupBy, avg, noGroup } = req.query
   
-  let level = well ? 'WellAforos.WELL_FORMACION_ID' : field ? 'fwm.FIELD_FORMACION_ID' : activo ? 'fwm.ACTIVO_ID' : subdir ? 'fwm.SUBDIRECCION_ID' : null
+  let level = well ? 'fwm.WELL_FORMACION_ID' : field ? 'fwm.FIELD_FORMACION_ID' : activo ? 'fwm.ACTIVO_ID' : subdir ? 'fwm.SUBDIRECCION_ID' : null
   let values = []
 
 
@@ -363,7 +363,7 @@ router.get('/costData', (req, res) => {
 router.get('/tableData', (req, res) => {
   let { subdir, activo, field, well, formation, company, tipoDeIntervencion, tipoDeTerminacion, groupBy } = req.query
   
-  let level = well ? 'WellAforos.WELL_FORMACION_ID' : field ? 'fwm.FIELD_FORMACION_ID' : activo ? 'fwm.ACTIVO_ID' : subdir ? 'fwm.SUBDIRECCION_ID' : null
+  let level = well ? 'fwm.WELL_FORMACION_ID' : field ? 'fwm.FIELD_FORMACION_ID' : activo ? 'fwm.ACTIVO_ID' : subdir ? 'fwm.SUBDIRECCION_ID' : null
   let values = []
 
 
@@ -374,7 +374,7 @@ router.get('/tableData', (req, res) => {
     values.push(well ? well : field ? field : activo ? activo : subdir ? subdir : null)
   }
   if (formation) {
-    wherClause = ` AND FORMACION = ?`
+    whereClause = ` AND FORMACION = ?`
     values.push(formation)
   }
   if (company) {
@@ -456,30 +456,31 @@ GROUP BY groupedName
 router.get('/estIncData', (req, res) => {
   let { subdir, activo, field, well, formation, company, tipoDeIntervencion, tipoDeTerminacion, groupBy } = req.query
   
-  let level = well ? 'WellAforos.WELL_FORMACION_ID' : field ? 'fwm.FIELD_FORMACION_ID' : activo ? 'fwm.ACTIVO_ID' : subdir ? 'fwm.SUBDIRECCION_ID' : null
+  let level = well ? 'fwm.WELL_FORMACION_ID' : field ? 'fwm.FIELD_FORMACION_ID' : activo ? 'fwm.ACTIVO_ID' : subdir ? 'fwm.SUBDIRECCION_ID' : null
   let values = []
 
   let whereClause = ''
 
   if (level) {
     whereClause = `AND ${level} = ?`
-    values.push(well ? well : field ? field : activo ? activo : subdir ? subdir : null)
+    let val  = well ? well : field ? field : activo ? activo : subdir ? subdir : null
+    values = values.concat([val, val, val])
   }
   if (formation) {
-    wherClause = ` AND FORMACION = ?`
-    values.push(formation)
+    whereClause = ` AND FORMACION = ?`
+    values = values.concat([formation, formation, formation])
   }
   if (company) {
     whereClause += ' AND PROPUESTA_COMPANIA = ?'
-    values.push(company)
+    values = values.concat([company, company, company])
   }
   if (tipoDeIntervencion) {
     whereClause += ' AND TIPO_DE_INTERVENCIONES = ?'
-    values.push(tipoDeIntervencion)
+    values = values.concat([tipoDeIntervencion, tipoDeIntervencion, tipoDeIntervencion])
   }
   if (tipoDeTerminacion) {
     whereClause += ' AND TIPO_DE_TERMINACION = ?'
-    values.push(tipoDeTerminacion)
+    values = values.concat([tipoDeTerminacion, tipoDeTerminacion, tipoDeTerminacion])
   }
 
 

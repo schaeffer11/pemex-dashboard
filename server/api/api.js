@@ -198,7 +198,7 @@ router.get('/getTreatmentCompanies', (req, res) => {
   const query = `
     SELECT DISTINCT(COMPANIA) FROM
       (SELECT COMPANIA FROM
-      ResultsCedulaApuntalado_testtest
+      ResultsCedulaApuntalado
       UNION
       SELECT COMPANIA FROM
       ResultsCedulaEstimulacion
@@ -242,8 +242,8 @@ router.get('/getFormationTypes', (req, res) => {
 
 
 
-router.post('/getJobs', (req, res) => {
-    let { well } = req.body
+router.get('/getJobs', (req, res) => {
+    let { well } = req.query
 
     connection.query(`SELECT * FROM Intervenciones WHERE WELL_FORMACION_ID = ?`, well, (err, results) => {
 

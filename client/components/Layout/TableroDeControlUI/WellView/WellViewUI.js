@@ -23,7 +23,6 @@ import { CardDeck } from 'reactstrap';
       productionData: [],
       pressureData: [],
       aforosData: [],
-      imageData: [],
       interventionDates: []
     }
     this.cards = []
@@ -219,40 +218,20 @@ import { CardDeck } from 'reactstrap';
 			this.fetchData()	
 		}
   }
-    makeImages(data) {
-      return Object.keys(data).map(i => {
-        let src = data[i].imgURL
 
-        if (true) {
-
-        }
-
-        return (<div style={{width: '100%'}}>
-              <ReactImageMagnify {...{
-                smallImage: {
-                    src,
-                    width: 200,
-                    height: 200, 
-                },
-                largeImage: {
-                    src,
-                    width: 1000,
-                    height: 1000,
-                },
-                enlargedImageContainerDimensions: {
-                  width: '200%',
-                  height: '100%'
-                }
-              }} />
-            </div>)
-      })
-    }
     makeImages() {
       let { imageData } = this.state
 
-
-      return <div label='loading'>boo</div>
-
+      console.log('im hereeeeee', imageData)
+      if (imageData) {
+        return Object.keys(imageData).map(i => {
+          let obj = imageData[i]
+          return <img label={obj.imgName.split('.')[1]} src={obj.imgURL}></img> 
+        })
+      }
+      else {
+        return <div>hi</div>
+      }
     } 
 
   render() {
@@ -267,6 +246,7 @@ import { CardDeck } from 'reactstrap';
     // console.log('images', imageData, imageData)
     // console.log('interventionDates', interventionDates)
 
+    console.log('also here', imageData)
 
     return (
       <div className="data well-view">

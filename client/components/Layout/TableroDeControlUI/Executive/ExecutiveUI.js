@@ -56,7 +56,7 @@ import ExecutiveTable3Well from './ExecutiveTable3Well'
     subdir ? params.push(`subdir=${subdir}`) : null
     activo ? params.push(`activo=${activo}`) : null
     field ? params.push(`field=${field}`) : null
-    well ? params.push(`activo=${activo}`) : null
+    well ? params.push(`well=${well}`) : null
     formation ? params.push(`formation=${formation}`) : null
     company ? params.push(`company=${company}`) : null
     tipoDeIntervencion ? params.push(`tipoDeIntervencion=${tipoDeIntervencion}`) : null

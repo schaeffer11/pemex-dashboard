@@ -37,14 +37,12 @@ import VolumeLine from './VolumeLine'
       },
     }
 
-
     let params = []
-    let query
 
     subdir ? params.push(`subdir=${subdir}`) : null
     activo ? params.push(`activo=${activo}`) : null
     field ? params.push(`field=${field}`) : null
-    well ? params.push(`activo=${activo}`) : null
+    well ? params.push(`well=${well}`) : null
     formation ? params.push(`formation=${formation}`) : null
     company ? params.push(`company=${company}`) : null
     tipoDeIntervencion ? params.push(`tipoDeIntervencion=${tipoDeIntervencion}`) : null
@@ -69,7 +67,6 @@ import VolumeLine from './VolumeLine'
         console.log('err', error)
       })
 
-    console.log(data)
 
     let newState = {
       fieldWellOptions: data[0],
@@ -104,6 +101,13 @@ import VolumeLine from './VolumeLine'
 
   render() {
     let { fieldWellOptions, costData, aforosData, volumeData } = this.state
+    let { globalAnalysis } = this.props
+
+    console.log(volumeData)
+
+    globalAnalysis = globalAnalysis.toJS()
+
+    let { groupBy } = globalAnalysis
 
     return (
       <div className="data statistics">
@@ -121,12 +125,13 @@ import VolumeLine from './VolumeLine'
                 title="Production"
                 ref={this.cards[1]}
               >
-              <AforosScatter  data={aforosData} />
+              <AforosScatter data={aforosData} groupBy={groupBy} />
             </Card>
               <Card
                 id="volume"
                 title="Volume Usage"
                 ref={this.cards[2]}
+                multiplyChartsOnGrouping
               >
               <VolumeLine data={volumeData} />
             </Card>

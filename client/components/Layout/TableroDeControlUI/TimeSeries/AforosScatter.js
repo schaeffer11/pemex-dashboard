@@ -7,20 +7,37 @@ import { KPI } from '../Common/KPIs'
 @autobind class AforosScatter extends PureComponent {
 
   render() {
-    let { data } = this.props
+    let { data, groupBy } = this.props
 
+    let series = []
+    let groups = []
 
+    console.log(data, groupBy)
 
-    data = data.map(i => {
-      let utc = new Date(i.FECHA)
-      utc = Date.UTC(utc.getFullYear(), utc.getMonth(), utc.getDate())
-      
-      return {
-        x: utc,
-        y: i.DELTA_QO
+    data.forEach(i => {
+      if (!groups.includes(i[groupBy])) {
+        groups.push(i[groupBy])
       }
     })
-    console.log(data)
+
+    groups.forEach(name => {
+      let filteredData = data.filter(i => i[groupBy] === name).map(j => {
+        let utc = new Date(j.date)
+        utc = Date.UTC(utc.getFullYear(), utc.getMonth(), utc.getDate())
+
+        return {
+          x: utc,
+          y: j.deltaQo
+        }
+      })
+
+      series.push({
+        name: name ? name : 'Production Data',
+        data: filteredData
+      })
+    })
+
+    console.log(groups, series)
 
     let config = {
       chart: {
@@ -44,10 +61,7 @@ import { KPI } from '../Common/KPIs'
       credits: {
         enabled: false
       },
-      series: [{
-        name: 'Cost Data',
-        data: data
-      }]
+      series: series
   }
 
     return (
