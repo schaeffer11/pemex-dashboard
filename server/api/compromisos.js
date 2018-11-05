@@ -20,7 +20,8 @@ export const put = function(req, res){
     let { fechaCompromiso, fechaCumplimiento, descripcion, activo, responsable, minuta, notas } = req.body
     connection.query(`UPDATE Compromisos SET FECHA_COMPROMISO = ?, DESCRIPCION = ?, ACTIVO = ?, RESPONSABLE = ?, MINUTA = ?, FECHA_CUMPLIMIENTO = ?, NOTAS = ? WHERE id = ? `, [fechaCompromiso, descripcion, activo, responsable, minuta, fechaCumplimiento, notas, id], (err, results) => {
         if (err) {
-            res.json({err})
+            res.status(400)
+            res.json({})
         }
         else {
             res.json({ success: true})
