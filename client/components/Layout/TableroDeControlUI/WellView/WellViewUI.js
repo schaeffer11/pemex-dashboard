@@ -11,6 +11,7 @@ import KPIMecanico from './KPIMecanico'
 import Images from './Images'
 import Card from '../Common/Card'
 import { CardDeck } from 'reactstrap';
+import { generatePowerPoint } from '../../../../pptx';
 
 @autobind class wellViewUI extends Component {
   constructor(props) {
@@ -23,7 +24,8 @@ import { CardDeck } from 'reactstrap';
       productionData: [],
       pressureData: [],
       aforosData: [],
-      interventionDates: []
+      imageData: [],
+      interventionDates: [],
     }
     this.cards = []
     for (let i = 0; i < 5; i += 1) {
@@ -34,7 +36,6 @@ import { CardDeck } from 'reactstrap';
   fetchData() {
   	console.log('fetching')
     let { globalAnalysis } = this.props
-    globalAnalysis = globalAnalysis.toJS()
     let { well } = globalAnalysis
 
     //TODO MAKE PARALLEL
@@ -179,7 +180,9 @@ import { CardDeck } from 'reactstrap';
           .then(res => res.json())
           .then(res => {
             this.setState({
-              imageData: res
+              
+              
+              : res
             })
           })
 
@@ -208,8 +211,6 @@ import { CardDeck } from 'reactstrap';
     let { globalAnalysis } = this.props
     let prevGlobalAnalysis = prevProps.globalAnalysis
 
-    globalAnalysis = globalAnalysis.toJS()
-    prevGlobalAnalysis = prevGlobalAnalysis.toJS()
 
 		let { well } = globalAnalysis
     let wellPrev = prevGlobalAnalysis.well
@@ -236,7 +237,7 @@ import { CardDeck } from 'reactstrap';
 
   render() {
     let { fieldWellOptions, wellData, zoneData, layerData, productionData, pressureData , aforosData, imageData, interventionDates } = this.state
-
+    const { token, globalAnalysis } = this.props
     // console.log('well', wellData)
     // console.log('zone', zoneData)
     // console.log('layer', layerData)
@@ -252,6 +253,7 @@ import { CardDeck } from 'reactstrap';
       <div className="data well-view">
         <div className='header'>
           <WellSelect fieldWellOptions={fieldWellOptions}/>
+          <button onClick={() => generatePowerPoint(token, globalAnalysis.job)}>generar presentacion</button>
         </div>
         <div className='content'>
           <CardDeck className="content-deck">
@@ -300,7 +302,7 @@ import { CardDeck } from 'reactstrap';
 
 const mapStateToProps = state => ({
   token: state.getIn(['user', 'token']),
-  globalAnalysis: state.get('globalAnalysis'),
+  globalAnalysis: state.get('globalAnalysis').toJS(),
 })
 
 const mapDispatchToProps = dispatch => ({
