@@ -20,7 +20,7 @@ export const Gauge = ({ label, value, subLabel, className }) => {
       text: ''
     },
     pane: {
-      center: ['50%', '85%'],
+      center: ['50%', '70%'],
       size: '80%',
       startAngle: -90,
       endAngle: 90,
@@ -82,15 +82,17 @@ export const Gauge = ({ label, value, subLabel, className }) => {
     }
   }
 
+  console.log(subLabel)
+
   return (
-    <div className={classnames("Gauge", className)} >
+    <div className={classnames("Gauge")} style={{height: '100%'}}>
       <div className='chart gauge-chart'>
         <ReactHighCharts className="chart" config={config} />
       </div>
-      <div className="gaugeLabel" style={{color:'#505050', fontSize:'16px', textAlign: 'center', fontWeight: 'bold', padding: '5px'}}>
+      <div className="gaugeLabel" style={{color:'#505050', fontSize:'16px', textAlign: 'center', fontWeight: 'bold', position: 'relative', top: '-55px'}}>
         { label }
       </div>
-      <div className="gaugeSubLabel" style={{color:'#808080', fontSize:'12px', textAlign: 'center', fontWeight: 'normal'}}>
+      <div className="gaugeSubLabel" style={{color:'#808080', fontSize:'12px', textAlign: 'center', fontWeight: 'normal', position: 'relative', top: '-55px'}}>
         { subLabel }
       </div>
     </div>

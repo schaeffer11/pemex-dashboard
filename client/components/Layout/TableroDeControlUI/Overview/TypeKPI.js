@@ -2,6 +2,7 @@ import React, { PureComponent } from 'react'
 import autobind from 'autobind-decorator'
 import ReactHighcharts from 'react-highcharts'
 import Gauge from './Gauge'
+import Bar from './Bar'
 
 const numWithCommas = (x) => {
   if (x === 0) {
@@ -17,19 +18,24 @@ const numWithCommas = (x) => {
 @autobind class TypeKPI extends PureComponent {
   render() {
     let { data } = this.props
+    let { name, cost, numProposals, numResults, days, percEstimated, percResults } = data
 
+    percResults = percResults ? percResults : 0
 
     return (
-      <div className={`kpi-outer ${data.name}`}>
+      <div className={`kpi-outer ${name}`}>
         <div className='name'>
-            {data.name}
+            {name}
         </div>
-        <div className = 'gauge'>
-            <Gauge className="discretionary-score" subLabel='Duration and Active decision-making' label="Discretionary" value={80} />
+        <div className = 'gauge' style={{height: '200px', width: '50%', display: 'inline-block'}}>
+            <Gauge label={`${numResults}/${numProposals}`} subLabel={'% de Avance'} value={percResults} />
+         </div>
+        <div className = 'bar' style={{height: '200px', width: '50%', display: 'inline-block'}}>
+            <Bar estimated={5} actual={10} />
          </div>
         <div className='kpi'>
             <div className='value'>
-                {data.numProposals ? data.numProposals : '-'}
+                {numProposals ? numProposals : '-'}
             </div>
             <div className='header'>
                 # De Tratamientos
@@ -37,7 +43,7 @@ const numWithCommas = (x) => {
         </div>
         <div className='kpi'>
             <div className='value'>
-                {data.cost ? `$${numWithCommas(data.cost.toFixed(2))}` : '-' }
+                {cost ? `$${numWithCommas(cost.toFixed(2))}` : '-' }
             </div>
             <div className='header'>
                 Costo Tltal (MNX)
@@ -45,7 +51,7 @@ const numWithCommas = (x) => {
         </div>
         <div className='kpi'>
             <div className='value'>
-                {data.days ? data.days.toFixed(2) : '-'}
+                {days ? days.toFixed(2) : '-'}
             </div>
             <div className='header'>
                 Desviacion Promedio (days)
@@ -53,7 +59,7 @@ const numWithCommas = (x) => {
         </div>
         <div className='kpi'>
             <div className='value'>
-                {data.percEstimated ? `${data.percEstimated.toFixed(2)}%` : '-' } 
+                {percEstimated ? `${percEstimated.toFixed(2)}%` : '-' } 
             </div>
             <div className='header'>
                 % de Cumplimento
