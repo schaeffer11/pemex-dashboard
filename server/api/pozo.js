@@ -924,10 +924,10 @@ async function handleImageUploads(obj, transactionID) {
 export const create = async (body, action, cb) => {
   let transactionID = Math.floor(Math.random() * 1000000000)
   const allKeys = Object.keys(body)
-  const finalObj = {}
+  let finalObj = {}
 
   for(let k of allKeys) {
-    const innerObj = JSON.parse(body[k])
+    let innerObj = JSON.parse(body[k])
     const innerKeys = Object.keys(innerObj)
     // look for immediate images
     if (innerObj.img) {
