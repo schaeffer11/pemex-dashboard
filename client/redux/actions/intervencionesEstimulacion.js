@@ -24,10 +24,7 @@ export const setTiempoDeContacto = value => ({ type: 'set_tiempoDeContacto', val
 export const setCedulaData = (cedula, volumes) => ({
   type: 'set_cedulaDataEstimulacion',
   volumes,
-  cedula: cedula.map((row) => {
-    row.etapa = row.index + 1
-    return row
-  }),
+  cedula,
 })
 
 
