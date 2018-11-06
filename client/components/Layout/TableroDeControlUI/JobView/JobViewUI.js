@@ -193,10 +193,23 @@ import AforoScatter from './AforoScatter'
 
     console.log('im hereeeeee', imageData)
     if (imageData && Object.keys(imageData).length > 0) {
-      return Object.keys(imageData).map(i => {
+
+      let out = Object.keys(imageData).map(i => {
         let obj = imageData[i]
-        return <img label={obj.imgName.split('.')[1]} src={obj.imgURL}></img> 
+
+        if (Array.isArray(obj)) {
+          console.log(obj)
+          return obj.map(j => {
+            return <img label={`Lab - ${j.imgName.split('.')[2]}`} src={j.imgURL}></img> 
+          })
+        }
+        else {
+          return <img label={obj.imgName.split('.')[1]} src={obj.imgURL}></img>     
+        }
       })
+
+      return out.flat()
+
     }
     else {
       return <div>hi</div>
@@ -265,6 +278,7 @@ import AforoScatter from './AforoScatter'
               {this.makeImages()}
             </Card>
           </CardDeck>
+          <div style={{height: '500px'}}/>
         </div>
       </div>
     )
