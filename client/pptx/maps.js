@@ -14,7 +14,9 @@ const units = {
   length: 'm',
   percent: '%',
   barrelsPerDay: 'bpd',
+  barrelsPerMinute: 'bpm',
   cubicFeetPerDay: 'MMpcd',
+  cubicMetersPerMinute: 'm3/min',
   billionBarrels: 'MMb',
   trillionCubicFeetPerDay: 'MMMpc',
   temperature: '°C',
@@ -27,14 +29,23 @@ const units = {
   degreesText: 'Grados',
   disparosDensity: 'c/m',
   volume: 'm3',
+  volumeNitrogen: 'm3 std',
+  volumeUS: 'U.S. Gal.',
+  volumeBarrels: 'bbl',
   power: 'HP',
   volts: 'V',
   amps: 'A',
   resistivity: 'ohm',
   mechanicalProductionSystemSpeed: 'EPM',
+  gasLiquidRelation: 'm3*std/m3',
+  minutes: 'min',
+  concentration: 'lbm/gal',
+  massPunds: 'lbm',
 }
 
-const field = {
+export const maps = {}
+
+maps.field = {
   generales: {
     descubrimientoField: { text: 'Descubrimiento', unit: '' },
     fechaDeExplotacionField: { text: 'Fecha de explotación', unit: '' },
@@ -83,7 +94,7 @@ const field = {
   },
 }
 
-const well = {
+maps.well = {
   datos: {
     tipoDePozo: { text: 'Tipo de pozo', unit: '' },
     pws: { text: 'Pws', unit: units.pressure },
@@ -135,7 +146,7 @@ const well = {
   },
 }
 
-const estadoMecanicoYAparejo = {
+maps.estadoMecanicoYAparejo = {
   terminacion: {
     tipoDeTerminacion: { text: 'Tipo de terminación', unit: '' },
     hIntervaloProductor: { text: 'h (intervalo productor)', unit: units.verticalDepth },
@@ -163,7 +174,7 @@ const estadoMecanicoYAparejo = {
   }
 }
 
-const sistemasArtificialesDeProduccion = {
+maps.sistemasArtificialesDeProduccion = {
   emboloViajero: {
     tipoDeSistema: { text: 'Tipo de sistema', unit: '' },
     presionDeCabeza: { text: 'Presión de cabeza', unit: units.pressure },
@@ -235,7 +246,7 @@ const sistemasArtificialesDeProduccion = {
   },
 }
 
-const evaluacionPetrofisica = {
+maps.evaluacionPetrofisica = {
   layerData: {
     interval: { text: 'Intervalo', unit: '' },
     cimaMD: { text: 'Cima', unit: units.measuredDepth },
@@ -259,10 +270,63 @@ const evaluacionPetrofisica = {
   }
 }
 
-export const maps = {
-  field,
-  well,
-  estadoMecanicoYAparejo,
-  sistemasArtificialesDeProduccion,
-  evaluacionPetrofisica,
+maps.propuesta = {
+  cedulaData: {
+    estimulacion: {
+      etapa: { text: 'Etapa', unit: '' },
+      sistema: { text: 'Sistema', unit: '' },
+      nombreComercial: { text: 'Nombre comercial', unit: '' },
+      volLiquid: { text: 'Vol. liq.', unit: units.volume },
+      gastoLiqudo: { text: 'Gasto Líquido', unit: units.barrelsPerMinute },
+      relN2Liq: { text: 'Rel. N2/Liq', unit: units.gasLiquidRelation },
+      calidad: { text: 'Calidad', unit: units.percent },
+      gastoEnFondo: { text: 'Gasto en fondo', unit: units.barrelsPerMinute },
+      gastoN2: { text: 'Gasto N2', unit: units.cubicMetersPerMinute },
+      volN2: { text: 'Vol N2', unit: units.volumeNitrogen },
+      volLiquidoAcum: { text: 'Vol. liq. acum.', unit: units.volume },
+      volN2Acum: { text: 'Vol. N2 acum.', unit: units.volumeNitrogen },
+      tiempo: { text: 'Tiempo', unit: units.minutes },
+    },
+    acido: {
+      etapa: { text: 'Etapa', unit: '' },
+      sistema: { text: 'Sistema', unit: '' },
+      nombreComercial: { text: 'Nombre comercial', unit: '' },
+      tipoDeApuntalante: { text: 'Tipo de apuntalante', unit: '' },
+      concentraciDeApuntalante: { text: '', unit: units.concentration },
+      volLiquid: { text: 'Vol. liq.', unit: units.volume },
+      gastoLiqudo: { text: 'Gasto Líquido', unit: units.barrelsPerMinute },
+      relN2Liq: { text: 'Rel. N2/Liq', unit: units.gasLiquidRelation },
+      calidad: { text: 'Calidad', unit: units.percent },
+      gastoEnFondo: { text: 'Gasto en fondo', unit: units.barrelsPerMinute },
+      gastoN2: { text: 'Gasto N2', unit: units.cubicMetersPerMinute },
+      volN2: { text: 'Vol N2', unit: units.volumeNitrogen },
+      volLiquidoAcum: { text: 'Vol. liq. acum.', unit: units.volume },
+      volN2Acum: { text: 'Vol. N2 acum.', unit: units.volumeNitrogen },
+      tiempo: { text: 'Tiempo', unit: units.minutes },
+    },
+    apuntalado: {
+      etapa: { text: 'Etapa', unit: '' },
+      sistema: { text: 'Sistema', unit: '' },
+      nombreComercial: { text: 'Nombre comercial', unit: '' },
+      tipoDeFluido: { text: 'Tipo de fluido', unit: '' },
+      tipoDeApuntalante: { text: 'Tipo de Apuntalante', unit: '' },
+      volLiquido: { text: 'Vol. liq', unit: units.volumeUS },
+      volLechada: { text: 'Vol. lechada', unit: units.volumeBarrels },
+      gastoSuperficie: { text: 'Gasto en superficie', unit: units.barrelsPerMinute },
+      gastoN2Superficie: { text: 'Gasto N2 superficie', unit: units.cubicMetersPerMinute },
+      gastoEnFondo: { text: 'Gasto total fondo', unit: units.barrelsPerMinute },
+      calidadN2Fondo: { text: 'Calidad N2', unit: units.percent },
+      volEspumaFondo: { text: 'Vol. espuma fondo', unit: units.volumeUS },
+      concentracionApuntalanteSuperficie: { text: 'Concentración de apuntalante superficie', unit: units.concentration },
+      concentracionApuntalanteFondo: { text: 'Concentración de apuntalante fondo', unit: units.concentration },
+      apuntalanteAcumulado: { text: 'Apuntalante acumulado', unit: units.massPounds },
+      tiempo: { text: 'Tiempo', unit: units.minutes },
+    },
+    termico: {
+      etapa: { text: 'Etapa', unit: '' },
+      actividad: { text: 'Actividad', unit: '' },
+      descripcion: { text: 'Descripción', unit: '' },
+      justificacion: { text: 'Justificación', unit: '' },
+    }
+  },
 }

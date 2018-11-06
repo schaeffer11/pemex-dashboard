@@ -119,16 +119,60 @@ export async function buildEvaluacionPetrofisica(pptx, token, id, image) {
   let { mudLossData } = mud.evaluacionPetrofisica
   const layerTable = buildTable('Propiedades promedio', maps.evaluacionPetrofisica.layerData, layerData)
   const mudLossTable = buildTable('Zona de pérdida', maps.evaluacionPetrofisica.mudLossData, mudLossData)
-  if (image) {
-    const base64 = await getBase64FromURL(image.imgURL)
-    slide.addImage({
-      data: `image/png;base64,${base64}`, x: 7.5, y: 3, w:4, h:3,
-      sizing: { type: 'contain', h: 3.5, w: 3.5 }
-    })
-  }
 
   const tableOptionsCopy = {...tableOptions}
   delete tableOptionsCopy.colW
   slide.addTable(layerTable, { x: 0.5, y: 1.0, ...tableOptionsCopy })
   slide.addTable(mudLossTable, { x: 0.5, y: 5.0, ...tableOptionsCopy })
+  return slide
+}
+
+
+export async function buildEvaluacionPetrofisicaImage(pptx, image) {
+  if (image) {
+    const slide = pptx.addNewSlide('MASTER_SLIDE')
+    slide.addText('Evaluación Petrofísica', { placeholder: 'slide_title' })
+    slide.addText('Registro del pozo', { x: 0.5, y: 1.0, fontSize: 14 })
+    const base64 = await getBase64FromURL(image.imgURL)
+    slide.addImage({
+      data: `image/png;base64,${base64}`, x: (13.3 - 6.5) / 2, y: 1.0, w:4, h:3,
+      sizing: { type: 'contain', h: 6.5, w: 6.5 }
+    })
+  }
+  return
+}
+
+export async function buildProposalCedula(pptx, token, id) {
+  const interventionTypeData = await getData('getInterventionBase', token, id)
+  const interventionType = interventionTypeData.objetivoYAlcancesIntervencion.tipoDeIntervenciones
+  let url
+  switch (interventionType) {
+    case 'estimulacion':
+      url = 'getCedulaEstimulacion'
+      break;
+    case 'acido':
+      url = 'getCedulaAcido'
+      break;
+    case 'apuntalado':
+      url = 'getCedulaApuntalado'
+      break;
+    case 'termico':
+      url = 'getCedulaTermico'
+      break;
+    default:
+      return
+  }
+  console.log('interventionType', interventionType)
+
+  const slide = pptx.addNewSlide('MASTER_SLIDE')
+  slide.addText('Propuesta de tratamiento', { placeholder: 'slide_title' })
+  const data = await getData(url, token, id)
+  const { cedulaData } = data[Object.keys(data)[0]]
+  const cedulaTable = buildTable('Cedulas de tratamiento', maps.propuesta.cedulaData[interventionType], cedulaData)
+  const tableOptionsCopy = {...tableOptions}
+  delete tableOptionsCopy.colW
+  slide.addTable(cedulaTable, { x: 0.5, y: 1.0, ...tableOptionsCopy })
+
+  console.log('da data', data, cedulaData)
+  return
 }
