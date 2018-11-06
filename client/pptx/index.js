@@ -1,6 +1,5 @@
 import PptxGenJS from 'pptxgenjs'
-import { maps } from './maps'
-import { getBase64FromURL } from '../redux/actions/pozoFormActions';
+import { buildEstadoMecanicoYAparejo, buildFichaTecnicaDelCampo, buildFichaTecnicaDelPozo, buildSistemasArtificialesDeProduccion, buildEvaluacionPetrofisica } from './slides'
 
 function buildMasterSlide(slideWidth, slideHeight) {
   const logo = { x: 0.7, y: 0.15, w: 1.5, h: 0.5, path: '/images/pemex-logo-fpo.png' }
@@ -28,7 +27,8 @@ function buildMasterSlide(slideWidth, slideHeight) {
   }
 }
 
-async function getData(url, token, id) {
+export async function getData(url, token, id) {
+  console.log('url?', url)
   const headers = {
     headers: {
       'Authorization': `Bearer ${token}`,
@@ -39,7 +39,7 @@ async function getData(url, token, id) {
   return data
 }
 
-function buildTable(title, map, data) {
+export function buildTable(title, map, data) {
   const titleHeader =[{
     text: title,
     options: {
@@ -75,116 +75,9 @@ function buildTable(title, map, data) {
   return final
 }
 
-const tableOptions = {
+export const tableOptions = {
   fontSize: 8,
   colW: '2',
-}
-
-async function buildFichaTecnicaDelCampo(pptx, token, id) {
-  const slide = pptx.addNewSlide('MASTER_SLIDE')
-  slide.addText('Ficha Técnica del Campo', { placeholder: 'slide_title' })
-  const data = await getData('getFields', token, id)
-  const { generales, explotacion, fluido, formacion, produccion } = maps.field
-  const generalesTable = buildTable('Generales', generales, data.fichaTecnicaDelCampo)
-  const explotacionTable = buildTable('Explotación', explotacion, data.fichaTecnicaDelCampo)
-  const fluidoTable = buildTable('Fluido', fluido, data.fichaTecnicaDelCampo)
-  const formacionTable = buildTable('Formación', formacion, data.fichaTecnicaDelCampo)
-  const proudccionTable = buildTable('Producción @ formación', produccion, data.fichaTecnicaDelCampo)
-
-  slide.addTable(generalesTable, { x: 0.5, y: 1.0, ...tableOptions } )
-  slide.addTable(explotacionTable, { x: 0.5, y: 2.2, ...tableOptions } )
-  slide.addTable(fluidoTable, { x: 4.0, y: 1.0, ...tableOptions } )
-  slide.addTable(formacionTable, { x: 4.0, y: 3.0, ...tableOptions } )
-  slide.addTable(proudccionTable, { x: 7.5, y: 1.0, ...tableOptions } )
-  return slide
-}
-
-async function buildFichaTecnicaDelPozo(pptx, token, id) {
-  const slide = pptx.addNewSlide('MASTER_SLIDE')
-  slide.addText('Ficha Técnica del Pozo', { placeholder: 'slide_title' })
-  const data = await getData('getWell', token, id)
-  const { datos, fluido, formacion, presion } = maps.well
-  const datosTable = buildTable('Generales', datos, data.fichaTecnicaDelPozo)
-  const fluidoTable = buildTable('Fluido', fluido, data.fichaTecnicaDelPozo)
-  const presionTable = buildTable('Presión', presion, data.fichaTecnicaDelPozo)
-  const formacionTable = buildTable('Formación', formacion, data.fichaTecnicaDelPozo)
-
-  slide.addTable(datosTable, { x: 0.5, y: 1.0, ...tableOptions } )
-  slide.addTable(presionTable, { x: 4.0, y: 1.0, ...tableOptions } )
-  slide.addTable(formacionTable, { x: 4.0, y: 3.0, ...tableOptions } )
-  slide.addTable(fluidoTable, { x: 7.5, y: 1.0, ...tableOptions } )
-  return slide
-}
-
-async function buildEstadoMecanicoYAparejo(pptx, token, id, image) {
-  const slide = pptx.addNewSlide('MASTER_SLIDE')
-  slide.addText('Edo. Mecánico y Aparejo de Producción', { placeholder: 'slide_title' })
-  const data = await getData('getMecanico', token, id)
-  const { terminacion, liner, disparos, volumen } = maps.estadoMecanicoYAparejo
-  const terminacionTable = buildTable('Tipo de Terminación', terminacion, data.mecanicoYAparejoDeProduccion)
-  const linerTable = buildTable('Tipo de liner', liner, data.mecanicoYAparejoDeProduccion)
-  const disparosTable = buildTable('Disparos', disparos, data.mecanicoYAparejoDeProduccion)
-  const volumenTable = buildTable('Capacidad', volumen, data.mecanicoYAparejoDeProduccion)
-
-  slide.addTable(terminacionTable, { x: 0.5, y: 1.0, ...tableOptions } )
-  slide.addTable(linerTable, { x: 4.0, y: 1.0, ...tableOptions } )
-  slide.addTable(disparosTable, { x: 4.0, y: 2.5, ...tableOptions } )
-  slide.addTable(volumenTable, { x: 7.5, y: 1.0, ...tableOptions } )
-
-  if (image) {
-    const base64 = await getBase64FromURL(image.imgURL)
-    slide.addImage({
-      data: `image/png;base64,${base64}`, x: 7.5, y: 3, w:4, h:3,
-      sizing: { type: 'contain', h: 3.5, w: 3.5 }
-    })
-  }
-  return slide
-}
-
-async function buildSistemasArtificialesDeProduccion(pptx, token, id, image) {
-  const slide = pptx.addNewSlide('MASTER_SLIDE')
-  slide.addText('Información de Sistemas Artificiales de Producción', { placeholder: 'slide_title' })
-  const wellData = await getData('getWell', token, id)
-  const tipoSistemaArtificial = wellData.sistemasArtificialesDeProduccion.tipoDeSistemo
-  const { sistemasArtificialesDeProduccion } = maps
-  let url
-  let map
-  let title
-  switch (tipoSistemaArtificial) {
-    case 'none':
-      return slide
-    case 'emboloViajero':
-      title = 'Émbolo viajero'
-      url = 'getEmboloViajero'
-      break;
-    case 'bombeoNeumatico':
-      title = 'Bombeo neumático'
-      url = 'getBombeoNeumatico'
-      break;
-    case 'bombeoHidraulico':
-      title = 'Bombeo hidrálico'
-      url = 'getBombeoHidraulico'
-      break;
-    case 'bombeoCavidadesProgresivas':
-      title = 'Bombeo cavidades progresivas'
-      url = 'getBombeoCavidades'
-      break;
-    case 'bombeoElectrocentrifugo':
-      title = 'Bombeo electrocentrífugo'
-      url = 'getBombeoElectrocentrifugo'
-      break;
-    case 'bombeoMecanico':
-      title = 'Bombeo mecánico'
-      url = 'getBombeoMecanico'
-      break;
-    default:
-      break;
-  }
-  const data = await getData(url, token, id)
-  data.sistemasArtificialesDeProduccion.tipoDeSistema = title
-  const sistemaTable = buildTable(null, sistemasArtificialesDeProduccion[tipoSistemaArtificial], data.sistemasArtificialesDeProduccion)
-  slide.addTable(sistemaTable, { x: 0.5, y: 1.0, ...tableOptions } )
-  return slide
 }
 
 export async function generatePowerPoint(token, jobID) {
@@ -201,7 +94,8 @@ export async function generatePowerPoint(token, jobID) {
     buildFichaTecnicaDelCampo(pptx, token, jobID),
     buildFichaTecnicaDelPozo(pptx, token, jobID),
     buildEstadoMecanicoYAparejo(pptx, token, jobID, images.mecanicoYAparejoDeProduccion),
-    buildSistemasArtificialesDeProduccion(pptx, token, jobID)
+    buildSistemasArtificialesDeProduccion(pptx, token, jobID),
+    buildEvaluacionPetrofisica(pptx, token, jobID),
   ])
   pptx.save()
 }

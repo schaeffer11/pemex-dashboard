@@ -214,7 +214,7 @@ const sistemasArtificialesDeProduccion = {
     armaduraBE: { text: 'Armadura (bomba)', unit: '' },
     tipoDeCableBE: { text: 'Tipo de cable', unit: '' },
     longitudDeCableBE: { text: 'Longitud de cable', unit: units.length },
-    rmpBE: { text: 'RPM', unit: '' },
+    rpmBE: { text: 'RPM', unit: '' },
   },
   bombeoMecanico: {
     tipoDeSistema: { text: 'Tipo de sistema', unit: '' },

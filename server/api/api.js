@@ -944,6 +944,7 @@ router.get('/getMudLoss', async (req, res) => {
         objectPath.push(finalObj, `${mainParent}.${innerParent}`, innerObj)
       })
       finalObj.evaluacionPetrofisica.hasErrors = data[0].TABLE_HAS_ERRORS === 0 ? false : true
+      console.log('what is this?', finalObj)
       res.json(finalObj)
     }
     else if (action === 'loadTransaction'){
