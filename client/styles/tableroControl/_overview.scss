@@ -29,6 +29,21 @@
 
 		.name {
 			font-size: 30px;
+			height: 50px 
+		}
+
+		.kpi {
+			width: 50%;
+			display: inline-block;
+			height: 80px;
+
+			.value {
+				font-size: 30px;
+			}
+
+			.header {
+				font-size: 10px;
+			}
 		}
 	}
 

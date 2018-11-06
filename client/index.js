@@ -15,7 +15,6 @@ import ReactHighcharts from 'react-highcharts'
 import OfflineExporting from 'highcharts/modules/offline-exporting'
 import Exporting from 'highcharts/modules/exporting'
 
-
 import 'bootstrap/dist/css/bootstrap.min.css';
 import './styles/app.scss'
 import API from './lib/api-store';
@@ -108,7 +107,6 @@ ReactHighcharts.Highcharts.setOptions({
     //     decimalPoint: '.'
     // }
 });
-
 
 
 const bootstrap = () => {
