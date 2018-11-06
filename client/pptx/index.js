@@ -40,6 +40,45 @@ export async function getData(url, token, id) {
 }
 
 export function buildTable(title, map, data) {
+ 
+
+  const headerOptions = {
+    fill: '2c6c94',
+    color: 'ffffff',
+  }
+
+  const mapKeys = Object.keys(map)
+  const headers = mapKeys.map((header) => {
+    const obj = map[header]
+    let text = obj.text
+    if (obj.unit !== '') {
+      text += `\n (${obj.unit})`
+    }
+    return { text, options: headerOptions }
+  })
+
+  const body = data.map((elem, index) => mapKeys.map((header) => {
+    const options = {}
+    options.fill = index % 2 === 1 ? 'cdd4dc' : 'e8ebef'
+    return { text: elem[header], options }
+  }))
+  const final = [headers, ...body]
+  if (title) {
+    const titleHeader =[{
+      text: title,
+      options: {
+        fill: '2c6c94',
+        color: 'ffffff',
+        colspan: headers.length,
+        align: 'center'
+      }
+    }]
+    final.unshift(titleHeader)
+  }
+  return final
+}
+
+export function buildSimpleTable(title, map, data) {
   const titleHeader =[{
     text: title,
     options: {
@@ -95,7 +134,7 @@ export async function generatePowerPoint(token, jobID) {
     buildFichaTecnicaDelPozo(pptx, token, jobID),
     buildEstadoMecanicoYAparejo(pptx, token, jobID, images.mecanicoYAparejoDeProduccion),
     buildSistemasArtificialesDeProduccion(pptx, token, jobID),
-    buildEvaluacionPetrofisica(pptx, token, jobID),
+    buildEvaluacionPetrofisica(pptx, token, jobID, images.evaluacionPetrofisica),
   ])
   pptx.save()
 }

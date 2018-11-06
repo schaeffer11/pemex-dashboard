@@ -3,6 +3,7 @@ const units = {
   pressureEnglish: 'psi',
   densityApi: '°API',
   density: 'gr/cm3',
+  densityLayer: 'gr/cc',
   pressurePerYear: 'Kg/cm2/año',
   pressurePerMonth: 'Kg/cm2/mes',
   measuredDepth: 'md',
@@ -29,6 +30,7 @@ const units = {
   power: 'HP',
   volts: 'V',
   amps: 'A',
+  resistivity: 'ohm',
   mechanicalProductionSystemSpeed: 'EPM',
 }
 
@@ -233,9 +235,34 @@ const sistemasArtificialesDeProduccion = {
   },
 }
 
+const evaluacionPetrofisica = {
+  layerData: {
+    interval: { text: 'Intervalo', unit: '' },
+    cimaMD: { text: 'Cima', unit: units.measuredDepth },
+    baseMD: { text: 'Base', unit: units.measuredDepth },
+    espesorBruto: { text: 'Espesor bruto', unit: units.measuredDepth },
+    espesorNeto: { text: ' Espesor neto', unit: units.measuredDepth },
+    vArc: { text: 'V arc.', unit: units.percent },
+    vCal: { text: 'V cal.', unit: units.percent },
+    vDol: { text: 'V dol.', unit: units.percent },
+    porosity: { text: 'Porosidad', unit: units.percent },
+    sw: { text: 'Sw.', unit: units.percent },
+    dens: { text: 'Dens.', unit: units.densityLayer },
+    resis: { text: 'Resis.', unit: units.resistivity },
+    perm: { text: 'Perm.', unit: units.measuredDepth },
+  },
+  mudLossData: {
+    cimaMD: { text: 'Cima', unit: units.measuredDepth },
+    baseMD: { text: 'Base', unit: units.measuredDepth },
+    lodoPerdido: { text: 'Lodo perdido', unit: units.volume },
+    densidad: { text: 'Densidad', unit: units.densityLayer },
+  }
+}
+
 export const maps = {
   field,
   well,
   estadoMecanicoYAparejo,
   sistemasArtificialesDeProduccion,
+  evaluacionPetrofisica,
 }
