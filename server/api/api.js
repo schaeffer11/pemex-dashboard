@@ -17,7 +17,7 @@ import { create as createWell, getFields, getWell, getSurveys,
             getLabTest, getCedulaEstimulacion, getCedulaAcido, getCedulaApuntalado, 
             getCosts, getInterventionImages } from './pozo'
 
-import { create as createCompromiso, mine as myCompromisos, get as getCompromisos } from './compromisos';
+// import { create as createCompromiso, mine as myCompromisos, get as getCompromisos } from './compromisos';
 import { createResults } from './results'
 
 // import { create as createDiagnostico } from './diagnosticos';
