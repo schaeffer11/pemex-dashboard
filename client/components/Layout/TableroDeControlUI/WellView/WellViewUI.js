@@ -180,9 +180,7 @@ import { generatePowerPoint } from '../../../../pptx';
           .then(res => res.json())
           .then(res => {
             this.setState({
-              
-              
-              : res
+              imageData: res
             })
           })
 
