@@ -3,8 +3,16 @@ import ExecutiveUI from '../components/Layout/TableroDeControlUI/Executive/Execu
 import TimeSeriesUI from '../components/Layout/TableroDeControlUI/TimeSeries/TimeSeriesUI'
 import WellViewUI from '../components/Layout/TableroDeControlUI/WellView/WellViewUI'
 import JobViewUI from '../components/Layout/TableroDeControlUI/JobView/JobViewUI'
+import OverviewUI from '../components/Layout/TableroDeControlUI/Overview/OverviewUI'
 
 const routes = () => [
+  {
+    path: '/tablero_control/overview',
+    exact: true,
+    name: 'Overview',
+    class: 'tablero_control',
+    component: () => <OverviewUI />,
+  },
   {
     path: '/tablero_control/executive',
     exact: true,

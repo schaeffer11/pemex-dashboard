@@ -12,8 +12,6 @@ import { KPI } from '../Common/KPIs'
     let series = []
     let groups = []
 
-    console.log(data, groupBy)
-
     data.forEach(i => {
       if (!groups.includes(i[groupBy])) {
         groups.push(i[groupBy])
@@ -33,11 +31,13 @@ import { KPI } from '../Common/KPIs'
 
       series.push({
         name: name ? name : 'Production Data',
-        data: filteredData
+        data: filteredData,         
+        tooltip: {
+          headerFormat: '{point.key}\n'
+        } 
       })
     })
 
-    console.log(groups, series)
 
     let config = {
       chart: {
