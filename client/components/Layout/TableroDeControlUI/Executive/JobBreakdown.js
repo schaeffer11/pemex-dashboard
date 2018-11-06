@@ -5,9 +5,12 @@ import ReactHighcharts from 'react-highcharts'
 
 
 @autobind class JobBreakdown extends PureComponent {
+
   render() {
     let { data } = this.props
 
+    console.log(data)
+    
     let config = {
 	    chart: {
 	        type: 'pie'

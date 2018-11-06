@@ -4,21 +4,27 @@ import ReactHighcharts from 'react-highcharts'
 
 import { KPI } from '../Common/KPIs'
 
-@autobind class CostBar extends PureComponent {
+@autobind class VolumeBar extends PureComponent {
 
   render() {
     let { data, estData } = this.props
 
-
+    console.log(data, estData)
+    
     let categories = []
+    let series = []
 
-    data.forEach(i => {
-      categories.push(i.ITEM)
+    data = data.length > 0 ? data[0] : {}
+    estData = estData.length > 0 ? estData[0] : {}
+
+    Object.keys(data).forEach(i => {
+      if (data[i] && data[i] > 0)
+      categories.push(i)
     })
 
-    estData.forEach(i => {
-      if (!(categories.includes(i.ITEM))) {
-        categories.push(i.ITEM)
+    Object.keys(estData).forEach(i => {
+      if (estData[i] && estData[i] > 0 && !(categories.includes(i))) {
+        categories.push(i)
       }
     })
 
@@ -28,14 +34,14 @@ import { KPI } from '../Common/KPIs'
 
 
     categories.forEach(item => {
-      let realItem = data.find(i => i.ITEM === item)
-      let estItem = estData.find(i => i.ITEM === item)
+      let realItem = data[item]
+      let estItem = estData[item]
 
-      actualData.push(realItem ? realItem.COST_DLS * realItem.MNXtoDLS  + realItem.COST_MNX : 0)
-      estimatedData.push(estItem ? estItem.COST_DLS * estItem.MNXtoDLS  + estItem.COST_MNX : 0)
+      actualData.push(realItem ? realItem : 0)
+      estimatedData.push(estItem ? estItem : 0)
     })
 
-    let series = [{
+    series = [{
       name: 'Estimated',
       data: estimatedData
     }, {
@@ -43,13 +49,16 @@ import { KPI } from '../Common/KPIs'
       data: actualData
     }]
 
+    console.log(series, categories)
+
+
     let config = {
       chart: {
           type: 'column',
           zoomType: 'x',
       },
       title: {
-          text: 'Estimated Vs Actual Costs'
+          text: 'Estimated Vs Actual Volumes'
       },
       xAxis: {
         title: {
@@ -59,7 +68,7 @@ import { KPI } from '../Common/KPIs'
       },
       yAxis: {
         title: {
-          text: 'Costs ($MNX)'
+          text: 'Volumes (m3)'
         }
       },
       credits: {
@@ -83,4 +92,4 @@ import { KPI } from '../Common/KPIs'
 
 
 
-export default CostBar
+export default VolumeBar

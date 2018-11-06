@@ -8,6 +8,8 @@ import { CardDeck } from 'reactstrap';
 import CostBar from './CostBar'
 import AforosScatter from './AforosScatter'
 import VolumeLine from './VolumeLine'
+import TimeSlider from './TimeSlider'
+import { setGeneralGlobalAnalysis } from '../../../../redux/actions/global'
 
 @autobind class timeSeriesUI extends Component {
   constructor(props) {
@@ -24,13 +26,11 @@ import VolumeLine from './VolumeLine'
     }
   }
 
-  fetchData() {
-  	console.log('fetching')
-    let { globalAnalysis } = this.props
+  async fetchData(sequence) {
+    let { globalAnalysis, setGeneral } = this.props
     globalAnalysis = globalAnalysis.toJS()
-    let { activo, field, well, formation } = globalAnalysis
+    let { subdir, activo, field, well, formation, company, tipoDeIntervencion, tipoDeTerminacion, groupBy, lowDate, highDate } = globalAnalysis
 
-    //TODO MAKE PARALLEL
     const { token } = this.props
     const headers = {
       headers: {
@@ -39,85 +39,91 @@ import VolumeLine from './VolumeLine'
       },
     }
 
-    fetch('/api/getFieldWellMappingHasData', headers)
-      .then(r => r.json())
-      .then(r => {
+    let params = []
 
-        this.setState({
-          fieldWellOptions: r
-        })
-    })
+    subdir ? params.push(`subdir=${subdir}`) : null
+    activo ? params.push(`activo=${activo}`) : null
+    field ? params.push(`field=${field}`) : null
+    well ? params.push(`well=${well}`) : null
+    formation ? params.push(`formation=${formation}`) : null
+    company ? params.push(`company=${company}`) : null
+    tipoDeIntervencion ? params.push(`tipoDeIntervencion=${tipoDeIntervencion}`) : null
+    tipoDeTerminacion ? params.push(`tipoDeTerminacion=${tipoDeTerminacion}`) : null
+    groupBy ? params.push(`groupBy=${groupBy}`) : null
+    lowDate ? params.push(`lowDate=${lowDate}`) : null
+    highDate ? params.push(`highDate=${highDate}`) : null
 
-    fetch(`/timeSeries/costData`, {
-      headers: {
-        'content-type': 'application/json',
-      },
-    })
-    .then(res => res.json())
-    .then(res => {
-      this.setState({
-        costData: res
+
+
+    let fieldWellOptionsQuery = `/api/getFieldWellMappingHasData`
+    let costQuery = `/timeSeries/costData?` + params.join('&')
+    let aforosQuery = `/timeSeries/aforosData?` + params.join('&')
+    let volumesQuery = `/timeSeries/volumeData?` + params.join('&')
+     
+    const data = await Promise.all([
+      fetch(fieldWellOptionsQuery, headers).then(r => r.json()),
+      fetch(costQuery, headers).then(r => r.json()),
+      fetch(aforosQuery, headers).then(r => r.json()),
+      fetch(volumesQuery, headers).then(r => r.json()),
+      fetch(`/api/getDates`, headers).then(r => r.json())
+    ])
+      .catch(error => {
+        console.log('err', error)
       })
-    })
 
-    fetch(`/timeSeries/aforosData`, {
-      headers: {
-        'content-type': 'application/json',
-      },
-    })
-    .then(res => res.json())
-    .then(res => {
-      this.setState({
-        aforosData: res
-      })
-    })
+    console.log(data[4])
 
+    let newState = {
+      fieldWellOptions: data[0],
+      costData: data[1],
+      aforosData: data[2],
+      volumeData: data[3]
+    }
 
-    fetch(`/timeSeries/volumeData`, {
-      headers: {
-        'content-type': 'application/json',
-      },
-    })
-    .then(res => res.json())
-    .then(res => {
-      this.setState({
-        volumeData: res
-      })
-    })
+    if (sequence === 'initial') {
+      setGeneral(['minDate'], data[4][0].MIN)
+      setGeneral(['maxDate'], data[4][0].MAX) 
+      setGeneral(['lowDate'], data[4][0].MIN)
+      setGeneral(['highDate'], data[4][0].MAX) 
+    }
 
 
+    this.setState(newState)
   }
 
   componentDidMount() {
-  	this.fetchData()
+  	this.fetchData('initial')
   }
 
   componentDidUpdate(prevProps) {
     let { globalAnalysis } = this.props
-    let prevGlobalAnalysis = prevProps.globalAnalysis
+    let prev = prevProps.globalAnalysis
 
     globalAnalysis = globalAnalysis.toJS()
-    prevGlobalAnalysis = prevGlobalAnalysis.toJS()
+    prev = prev.toJS()
 
+    let { subdir, activo, field, well, formation, company, tipoDeIntervencion, tipoDeTerminacion, groupBy, lowDate, highDate } = globalAnalysis
 
-		let { activo, field, well, formation } = globalAnalysis
-    let activoPrev = prevGlobalAnalysis.activo
-    let fieldPrev = prevGlobalAnalysis.field
-    let wellPrev = prevGlobalAnalysis.well
-    let formationPrev = prevGlobalAnalysis.formation
-
-    if (activo !== activoPrev || field !== fieldPrev || well !== wellPrev || formation !== formationPrev) {
-			this.fetchData()	
-		}
+    if (activo !== prev.activo || field !== prev.field || well !== prev.well || formation !== prev.formation ||
+      company !== prev.company || tipoDeIntervencion !== prev.tipoDeIntervencion || tipoDeTerminacion !== prev.tipoDeTerminacion ||
+      groupBy !== prev.groupBy || lowDate !== prev.lowDate || highDate !== prev.highDate) {
+      this.fetchData('other')  
+    }
   }
+
 
   render() {
     let { fieldWellOptions, costData, aforosData, volumeData } = this.state
+    let { globalAnalysis } = this.props
 
-    console.log('herherhehr', volumeData)
+    globalAnalysis = globalAnalysis.toJS()
+
+    let { groupBy } = globalAnalysis
+
     return (
       <div className="data statistics">
         <div className='content'>
+          <TimeSlider />
           <CardDeck className="content-deck">
             <Card
                 id="costs"
@@ -131,12 +137,13 @@ import VolumeLine from './VolumeLine'
                 title="Production"
                 ref={this.cards[1]}
               >
-              <AforosScatter  data={aforosData} />
+              <AforosScatter data={aforosData} groupBy={groupBy} />
             </Card>
               <Card
                 id="volume"
                 title="Volume Usage"
                 ref={this.cards[2]}
+                multiplyChartsOnGrouping
               >
               <VolumeLine data={volumeData} />
             </Card>
@@ -153,7 +160,7 @@ const mapStateToProps = state => ({
 })
 
 const mapDispatchToProps = dispatch => ({
-
+  setGeneral: (location, value) => dispatch(setGeneralGlobalAnalysis(location, value)),
 })
 
 export default connect(mapStateToProps, mapDispatchToProps)(timeSeriesUI)

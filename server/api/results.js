@@ -151,8 +151,8 @@ const INSERT_RESULTS_QUERY = {
 const INSERT_TRANSACTION = {
     save: ``,
     submit: `INSERT INTO TransactionsResults (
-        TRANSACTION_ID, PROPUESTA_ID, USER_ID, WELL_FORMACION_ID) VALUES
-        (?, ?, ?, ?)`, 
+        TRANSACTION_ID, PROPUESTA_ID, USER_ID, WELL_FORMACION_ID, FECHA_INTERVENCION, COMPANY) VALUES
+        (?, ?, ?, ?, ?, ?)`, 
 }
 
 
@@ -206,7 +206,7 @@ export const createResults = async (body, action, cb) => {
 
   let { estimacionCostosData } = finalObj.estCostResults
 
-  let { propuestaCompany, stimulationType, interventionType } = finalObj.resultsMeta
+  let { stimulationType, interventionType } = finalObj.resultsMeta
 
   let { aforosData } = finalObj.historicoDeAforosResults
 
@@ -216,7 +216,7 @@ export const createResults = async (body, action, cb) => {
 
   if (interventionType === 'estimulacion') {
       var { tipoDeColocacion, tiempoDeContacto, volumenPrecolchonN2, volumenSistemaNoReativo, volumenSistemaReactivo, volumenSistemaDivergente,
-        volumenDesplazamientoLiquido, volumenDesplazamientoN2, volumenTotalDeLiquido, cedulaData } = finalObj.tratamientoEstimulacion
+        volumenDesplazamientoLiquido, volumenDesplazamientoN2, volumenTotalDeLiquido, cedulaData, tratamientoCompany } = finalObj.tratamientoEstimulacion
 
       var { penetracionRadial, longitudDeAgujeroDeGusano } = finalObj.evaluacionEstimulacion
 
@@ -231,7 +231,7 @@ export const createResults = async (body, action, cb) => {
   else if (interventionType === 'acido') {
       var { volumenPrecolchonN2, volumenSistemaNoReativo, volumenSistemaReactivo, volumenSistemaDivergente,
         volumenDesplazamientoLiquido, volumenDesplazamientoN2, volumenTotalDeLiquido, moduloYoungArena, moduloYoungLutitas, relacPoissonArena,
-        relacPoissonLutatas, gradienteDeFractura, densidadDeDisparos, diametroDeDisparos, cedulaData } = finalObj.tratamientoAcido
+        relacPoissonLutatas, gradienteDeFractura, densidadDeDisparos, diametroDeDisparos, cedulaData, tratamientoCompany } = finalObj.tratamientoAcido
 
       var { longitudTotal, longitudEfectivaGrabada, alturaGrabada, anchoPromedio, concentracionDelAcido,
         conductividad, fcd, presionNeta, eficienciaDeFluidoDeFractura, geometria } = finalObj.evaluacionAcido
@@ -240,7 +240,7 @@ export const createResults = async (body, action, cb) => {
   else if (interventionType === 'apuntalado') {
       var { volumenPrecolchonN2, volumenApuntalante, volumenGelFractura,
         volumenDesplazamientoLiquido, volumenTotalDeLiquido, moduloYoungArena, moduloYoungLutitas, relacPoissonArena,
-        relacPoissonLutatas, gradienteDeFractura, densidadDeDisparos, diametroDeDisparos, cedulaData } = finalObj.tratamientoApuntalado
+        relacPoissonLutatas, gradienteDeFractura, densidadDeDisparos, diametroDeDisparos, cedulaData, tratamientoCompany } = finalObj.tratamientoApuntalado
 
       var { longitudApuntalada, alturaTotalDeFractura, anchoPromedio, concentracionAreal, conductividad,
         fcd, presionNeta, eficienciaDeFluidoDeFractura, geometria,  tipoDeFluido, gastoPromedio, 
@@ -249,7 +249,7 @@ export const createResults = async (body, action, cb) => {
 
   }
   else if (interventionType === 'termico') {
-      var { volumenVapor, calidad, gastoInyeccion, presionMaximaSalidaGenerador, temperaturaMaximaGenerador } = finalObj.tratamientoTermico
+      var { volumenVapor, calidad, gastoInyeccion, presionMaximaSalidaGenerador, temperaturaMaximaGenerador, tratamientoCompany } = finalObj.tratamientoTermico
   }
 
 // write to db
@@ -268,7 +268,7 @@ export const createResults = async (body, action, cb) => {
       let values = []
 
       estimacionCostosData.forEach(i => {
-        let newRow = [i.item, interventionID, i.fecha, propuestaCompany, i.cost, i.costDLS, i.MNXtoDLS, propuestaID, transactionID]
+        let newRow = [i.item, interventionID, i.fecha, tratamientoCompany, i.cost, i.costDLS, i.MNXtoDLS, propuestaID, transactionID]
         values.push(newRow)
       })
 
@@ -335,7 +335,7 @@ export const createResults = async (body, action, cb) => {
               if (cedulaData) {
                 cedulaData.forEach(i => {
                   let cedulaID = Math.floor(Math.random() * 1000000000)
-                  let newRow = [cedulaID, interventionID, wellFormacionID, i.etapa, i.sistema, i.nombreComercial, i.volLiquid, i.gastoN2, i.gastoLiqudo, i.gastoEnFondo, i.calidad, i.volN2, i.volLiquidoAcum, i.volN2Acum, i.relN2Liq, i.tiempo, propuestaCompany, propuestaID, transactionID]
+                  let newRow = [cedulaID, interventionID, wellFormacionID, i.etapa, i.sistema, i.nombreComercial, i.volLiquid, i.gastoN2, i.gastoLiqudo, i.gastoEnFondo, i.calidad, i.volN2, i.volLiquidoAcum, i.volN2Acum, i.relN2Liq, i.tiempo, tratamientoCompany, propuestaID, transactionID]
                   values.push(newRow)
 
                 })  
@@ -345,7 +345,7 @@ export const createResults = async (body, action, cb) => {
               if (cedulaData) {
                 cedulaData.forEach(i => {
                   let cedulaID = Math.floor(Math.random() * 1000000000)
-                  let newRow = [cedulaID, interventionID, wellFormacionID, i.etapa, i.sistema, i.nombreComercial, i.tipoDeApuntalante, i.concentraciDeApuntalante, i.volLiquid, i.gastoN2, i.gastoLiqudo, i.gastoEnFondo, i.calidad, i.volN2, i.volLiquidoAcum, i.volN2Acum, i.relN2Liq, i.tiempo, propuestaCompany, propuestaID, transactionID]
+                  let newRow = [cedulaID, interventionID, wellFormacionID, i.etapa, i.sistema, i.nombreComercial, i.tipoDeApuntalante, i.concentraciDeApuntalante, i.volLiquid, i.gastoN2, i.gastoLiqudo, i.gastoEnFondo, i.calidad, i.volN2, i.volLiquidoAcum, i.volN2Acum, i.relN2Liq, i.tiempo, tratamientoCompany, propuestaID, transactionID]
                   values.push(newRow)
 
                 })   
@@ -355,7 +355,7 @@ export const createResults = async (body, action, cb) => {
               if (cedulaData) {
                 cedulaData.forEach(i => {
                   let cedulaID = Math.floor(Math.random() * 1000000000)
-                  let newRow = [cedulaID, interventionID, wellFormacionID, i.etapa, i.sistema, i.nombreComercial, i.tipoDeFluido, i.tipoDeApuntalante, i.volLiquido, i.volLechada, i.gastoSuperficie, i.gastoN2Superficie, i.gastoEnFondo, i.calidadN2Fondo, i.volEspumaFondo, i.concentracionApuntalanteSuperficie, i.concentracionApuntalanteFondo, i.apuntalanteAcumulado, i.tiempo, propuestaCompany, propuestaID, transactionID]
+                  let newRow = [cedulaID, interventionID, wellFormacionID, i.etapa, i.sistema, i.nombreComercial, i.tipoDeFluido, i.tipoDeApuntalante, i.volLiquido, i.volLechada, i.gastoSuperficie, i.gastoN2Superficie, i.gastoEnFondo, i.calidadN2Fondo, i.volEspumaFondo, i.concentracionApuntalanteSuperficie, i.concentracionApuntalanteFondo, i.apuntalanteAcumulado, i.tiempo, tratamientoCompany, propuestaID, transactionID]
                   values.push(newRow)
 
                 })   
@@ -365,7 +365,7 @@ export const createResults = async (body, action, cb) => {
               if (cedulaData) {
                 cedulaData.forEach(i => {
                   let cedulaID = Math.floor(Math.random() * 1000000000)
-                  let newRow = [cedulaID, interventionID, wellFormacionID, i.etapa, i.actividad, i.descripcion, i.justificacion, propuestaCompany, propuestaID, transactionID]
+                  let newRow = [cedulaID, interventionID, wellFormacionID, i.etapa, i.actividad, i.descripcion, i.justificacion, tratamientoCompany, propuestaID, transactionID]
                   values.push(newRow)
 
                 })   
@@ -442,7 +442,7 @@ export const createResults = async (body, action, cb) => {
                   })
                 }
 
-                values = [transactionID, propuestaID, userID, wellFormacionID]
+                values = [transactionID, propuestaID, userID, wellFormacionID, fechaIntervencion, tratamientoCompany]
                 connection.query((INSERT_TRANSACTION.submit), values, (err, results) => {
                   console.log('transaction', err)
                   console.log('transaction', results)

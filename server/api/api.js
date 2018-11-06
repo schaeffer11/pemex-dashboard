@@ -17,7 +17,7 @@ import { create as createWell, getFields, getWell, getSurveys,
             getLabTest, getCedulaEstimulacion, getCedulaAcido, getCedulaApuntalado, 
             getCosts, getInterventionImages } from './pozo'
 
-import { create as createCompromiso, mine as myCompromisos, get as getCompromisos } from './compromisos';
+// import { create as createCompromiso, mine as myCompromisos, get as getCompromisos } from './compromisos';
 import { createResults } from './results'
 
 // import { create as createDiagnostico } from './diagnosticos';
@@ -186,10 +186,22 @@ router.get('/getSubmittedFieldWellMapping', (req, res) => {
     })
 })
 
+router.get('/getDates', (req, res) => {
+  connection.query(`select 
+      YEAR(MIN(FECHA_INTERVENCION)) * 12 + MONTH(MIN(FECHA_INTERVENCION)) AS MIN, 
+      YEAR(MAX(FECHA_INTERVENCION)) * 12 + MONTH(MAX(FECHA_INTERVENCION)) + 1 AS MAX, 
+      MIN(FECHA_INTERVENCION) AS MIN_DATE, 
+      MAX(FECHA_INTERVENCION) AS MAX_DATE 
+      FROM TransactionsResults`, (err, results) => {
+        res.json(results)
+      })
+})
+
 router.get('/getTerminationTypes', (req, res) => {
   const query = `SELECT DISTINCT(TIPO_DE_TERMINACION) FROM WellMecanico`
   connection.query(query, (err, results) => {
-    res.json(results)
+    results = results.map(i => i.TIPO_DE_TERMINACION)
+    res.send(results)
   })
 })
 
@@ -197,7 +209,7 @@ router.get('/getTreatmentCompanies', (req, res) => {
   const query = `
     SELECT DISTINCT(COMPANIA) FROM
       (SELECT COMPANIA FROM
-      ResultsCedulaApuntalado_testtest
+      ResultsCedulaApuntalado
       UNION
       SELECT COMPANIA FROM
       ResultsCedulaEstimulacion
@@ -212,6 +224,7 @@ router.get('/getTreatmentCompanies', (req, res) => {
     if (err) {
       console.log('there was an error', err)
     }
+    results = results.map(i => i.COMPANIA)
     res.json(results)
   })
 })
@@ -222,12 +235,26 @@ router.get('/getInterventionTypes', (req, res) => {
     if (err) {
       console.log('there was an error', err)
     }
+    results = results.map(i => i.TIPO_DE_INTERVENCIONES)
     res.json(results)
   })
 })
 
-router.post('/getJobs', (req, res) => {
-    let { well } = req.body
+router.get('/getFormationTypes', (req, res) => {
+  const query = `SELECT DISTINCT(FORMACION) FROM WellsData`
+  connection.query(query, (err, results) => {
+    if (err) {
+      console.log('there was an error', err)
+    }
+    results = results.map(i => i.FORMACION)
+    res.json(results)
+  })
+})
+
+
+
+router.get('/getJobs', (req, res) => {
+    let { well } = req.query
 
     connection.query(`SELECT * FROM Intervenciones WHERE WELL_FORMACION_ID = ?`, well, (err, results) => {
 
