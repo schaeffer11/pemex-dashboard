@@ -163,12 +163,14 @@ const estadoMecanicoYAparejo = {
 
 const sistemasArtificialesDeProduccion = {
   emboloViajero: {
+    tipoDeSistema: { text: 'Tipo de sistema', unit: '' },
     presionDeCabeza: { text: 'Presión de cabeza', unit: units.pressure },
     presionDeLineaODeSeparador: { text: 'Presión de línea o de separador', unit: units.pressure },
     numeroDeDescargasOCiclosEV: { text: 'Número de descargas o ciclos', unit: '' },
     volumenDesplazadoPorCircloEV: { text: 'Volumen desplazado por ciclo', unit: '' },
   },
   bombeoNeumatico: {
+    tipoDeSistema: { text: 'Tipo de sistema', unit: '' },
     presionDeCabeza: { text: 'Presión de cabeza', unit: units.pressure },
     presionDeLineaODeSeparador: { text: 'Presión de línea o de separador', unit: units.pressure },
     presionDeInyeccionBN: { text: 'Presión de inyección', unit: units.pressure },
@@ -179,6 +181,7 @@ const sistemasArtificialesDeProduccion = {
     volumenDeGasInyectadoBN: { text: 'Volumen de gas', unit: units.volume },
   },
   bombeoHidraulico: {
+    tipoDeSistema: { text: 'Tipo de sistema', unit: '' },
     presionDeCabeza: { text: 'Presión de cabeza', unit: units.pressure },
     presionDeLineaODeSeparador: { text: 'Presión de línea o de separador', unit: units.pressure },
     profundidadDeLaBombaBH: { text: 'Profundidad de la bomba', unit: units.length },
@@ -189,6 +192,7 @@ const sistemasArtificialesDeProduccion = {
     equipoSuperficialBH: { text: 'Equipo superficial', unit: units.power },
   },
   bombeoCavidadesProgresivas: {
+    tipoDeSistema: { text: 'Tipo de sistema', unit: '' },
     presionDeCabeza: { text: 'Presión de cabeza', unit: units.pressure },
     presionDeLineaODeSeparador: { text: 'Presión de línea o de separador', unit: units.pressure },
     motorYTipoDeMotorBCP: { text: 'Motor y tipo de motor', unit: '' },
@@ -200,6 +204,7 @@ const sistemasArtificialesDeProduccion = {
     profundidadDelAnclaAntitorqueBCP: { text: 'Profundidad del ancla antitorque', unit: '' },
   },
   bombeoElectrocentrifugo: {
+    tipoDeSistema: { text: 'Tipo de sistema', unit: '' },
     presionDeCabeza: { text: 'Presión de cabeza', unit: units.pressure },
     presionDeLineaODeSeparador: { text: 'Presión de línea o de separador', unit: units.pressure },
     profundidadDelMotorBE: { text: 'Profundidad del motor', unit: units.length },
@@ -212,6 +217,7 @@ const sistemasArtificialesDeProduccion = {
     rmpBE: { text: 'RPM', unit: '' },
   },
   bombeoMecanico: {
+    tipoDeSistema: { text: 'Tipo de sistema', unit: '' },
     presionDeCabeza: { text: 'Presión de cabeza', unit: units.pressure },
     presionDeLineaODeSeparador: { text: 'Presión de línea o de separador', unit: units.pressure },
     tipoDeUnidadBM: { text: 'Tipo de unidad', unit: '' },

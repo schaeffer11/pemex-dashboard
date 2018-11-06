@@ -68,7 +68,11 @@ function buildTable(title, map, data) {
       { text: unit, options },
     ]
   })
-  return [titleHeader, headers, ...body]
+  const final = [headers, ...body]
+  if (title) {
+    final.unshift(titleHeader)
+  }
+  return final
 }
 
 const tableOptions = {
@@ -129,7 +133,10 @@ async function buildEstadoMecanicoYAparejo(pptx, token, id, image) {
 
   if (image) {
     const base64 = await getBase64FromURL(image.imgURL)
-    console.log('base', base64)
+    slide.addImage({
+      data: `image/png;base64,${base64}`, x: 7.5, y: 3, w:4, h:3,
+      sizing: { type: 'contain', h: 3.5, w: 3.5 }
+    })
   }
   return slide
 }
@@ -138,44 +145,47 @@ async function buildSistemasArtificialesDeProduccion(pptx, token, id, image) {
   const slide = pptx.addNewSlide('MASTER_SLIDE')
   slide.addText('Información de Sistemas Artificiales de Producción', { placeholder: 'slide_title' })
   const wellData = await getData('getWell', token, id)
-  console.log('wellData', wellData)
   const tipoSistemaArtificial = wellData.sistemasArtificialesDeProduccion.tipoDeSistemo
-  console.log('tipo siste', tipoSistemaArtificial)
   const { sistemasArtificialesDeProduccion } = maps
   let url
   let map
+  let title
   switch (tipoSistemaArtificial) {
     case 'none':
       return slide
     case 'emboloViajero':
+      title = 'Émbolo viajero'
       url = 'getEmboloViajero'
       break;
     case 'bombeoNeumatico':
+      title = 'Bombeo neumático'
       url = 'getBombeoNeumatico'
       break;
     case 'bombeoHidraulico':
+      title = 'Bombeo hidrálico'
       url = 'getBombeoHidraulico'
       break;
     case 'bombeoCavidadesProgresivas':
+      title = 'Bombeo cavidades progresivas'
       url = 'getBombeoCavidades'
       break;
     case 'bombeoElectrocentrifugo':
+      title = 'Bombeo electrocentrífugo'
       url = 'getBombeoElectrocentrifugo'
       break;
     case 'bombeoMecanico':
+      title = 'Bombeo mecánico'
       url = 'getBombeoMecanico'
       break;
     default:
       break;
   }
   const data = await getData(url, token, id)
-  console.log('data', data)
-  const sistemaTable = buildTable('test', sistemasArtificialesDeProduccion[tipoSistemaArtificial], data.sistemasArtificialesDeProduccion)
+  data.sistemasArtificialesDeProduccion.tipoDeSistema = title
+  const sistemaTable = buildTable(null, sistemasArtificialesDeProduccion[tipoSistemaArtificial], data.sistemasArtificialesDeProduccion)
   slide.addTable(sistemaTable, { x: 0.5, y: 1.0, ...tableOptions } )
   return slide
 }
-
-
 
 export async function generatePowerPoint(token, jobID) {
   const slideWidth = 13.3
@@ -186,10 +196,11 @@ export async function generatePowerPoint(token, jobID) {
   const masterSlide = buildMasterSlide(slideWidth, slideHeight)
   pptx.defineSlideMaster(masterSlide)
   const images = await getData('getImages', token, jobID)
+  console.log('images', images)
   const sections = await Promise.all([
     buildFichaTecnicaDelCampo(pptx, token, jobID),
     buildFichaTecnicaDelPozo(pptx, token, jobID),
-    buildEstadoMecanicoYAparejo(pptx, token, jobID, images.mecanicoYAparejo),
+    buildEstadoMecanicoYAparejo(pptx, token, jobID, images.mecanicoYAparejoDeProduccion),
     buildSistemasArtificialesDeProduccion(pptx, token, jobID)
   ])
   pptx.save()
