@@ -145,34 +145,58 @@ export async function buildEvaluacionPetrofisicaImage(pptx, image) {
 export async function buildProposalCedula(pptx, token, id) {
   const interventionTypeData = await getData('getInterventionBase', token, id)
   const interventionType = interventionTypeData.objetivoYAlcancesIntervencion.tipoDeIntervenciones
-  let url
+  let cedulaURL
   switch (interventionType) {
     case 'estimulacion':
-      url = 'getCedulaEstimulacion'
+      interventionURL = 'getInterventionEstimulacion'
       break;
     case 'acido':
-      url = 'getCedulaAcido'
+      cedulaURL = 'getCedulaAcido'
       break;
     case 'apuntalado':
-      url = 'getCedulaApuntalado'
+      cedulaURL = 'getCedulaApuntalado'
       break;
     case 'termico':
-      url = 'getCedulaTermico'
+      cedulaURL = 'getCedulaTermico'
       break;
     default:
       return
   }
-  console.log('interventionType', interventionType)
-
   const slide = pptx.addNewSlide('MASTER_SLIDE')
   slide.addText('Propuesta de tratamiento', { placeholder: 'slide_title' })
-  const data = await getData(url, token, id)
+  const data = await getData(cedulaURL, token, id)
   const { cedulaData } = data[Object.keys(data)[0]]
   const cedulaTable = buildTable('Cedulas de tratamiento', maps.propuesta.cedulaData[interventionType], cedulaData)
   const tableOptionsCopy = {...tableOptions}
   delete tableOptionsCopy.colW
   slide.addTable(cedulaTable, { x: 0.5, y: 1.0, ...tableOptionsCopy })
+  return slide
+}
 
-  console.log('da data', data, cedulaData)
-  return
+export async function buildGeneralProposal(pptx, token, id) {
+  const interventionTypeData = await getData('getInterventionBase', token, id)
+  const interventionType = interventionTypeData.objetivoYAlcancesIntervencion.tipoDeIntervenciones
+  let interventionURL
+  switch (interventionType) {
+    case 'estimulacion':
+      interventionURL = 'getInterventionEstimulacion'
+      break;
+    case 'acido':
+      interventionURL = 'getInterventionAcido'
+      break;
+    case 'apuntalado':
+      interventionURL = 'getInterventionApuntalado'
+      break;
+    case 'termico':
+      interventionURL = 'getInterventionTermico'
+      break;
+    default:
+      return
+  }
+
+  const slide = pptx.addNewSlide('MASTER_SLIDE')
+  slide.addText('Propuesta de tratamiento', { placeholder: 'slide_title' })
+  const data = await getData(interventionURL, token, id)
+  console.log('what data', data)
+  return slide
 }

@@ -12,7 +12,7 @@ import { calculateValuesTermicaCedula } from '../../../../lib/formatters';
     super(props)
     this.state = {
       errors: {
-        propuestaCompany: {
+        tratamientoCompany: {
           type: 'text',
           value: '',
         },
@@ -124,7 +124,7 @@ import { calculateValuesTermicaCedula } from '../../../../lib/formatters';
 
   makeGeneralForm() {
     let { formData, setMergeTratamientoTermico, intervals } = this.props
-    let { propuestaCompany, volumenVapor, calidad, gastoInyeccion, presionMaximaSalidaGenerador, temperaturaMaximaGenerador } = formData
+    let { tratamientoCompany, volumenVapor, calidad, gastoInyeccion, presionMaximaSalidaGenerador, temperaturaMaximaGenerador } = formData
     const companyOptions = [
       { label: 'Halliburton', value: 'Halliburton' },
       { label: 'Schlumberger', value: 'Schlumberger' },
@@ -142,11 +142,11 @@ import { calculateValuesTermicaCedula } from '../../../../lib/formatters';
         </div>
         <InputRowSelectUnitless
           header="Compañía Seleccionada para el Tratamiento"
-          name="propuestaCompany"
+          name="tratamientoCompany"
           options={companyOptions}
           onBlur={this.updateErrors}
-          value={propuestaCompany}
-          callback={e => setMergeTratamientoTermico({ propuestaCompany: e.value })}
+          value={tratamientoCompany}
+          callback={e => setMergeTratamientoTermico({ tratamientoCompany: e.value })}
           errors={this.state.errors}
         />
         <CalculatedValue
