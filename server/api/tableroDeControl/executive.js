@@ -559,53 +559,14 @@ console.log('query', query)
 
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-router.post('/countData', (req, res) => {
-  let { activo, field, well, formation } = req.body
-  
-  let level = well ? 't.WELL_FORMACION_ID' : field ? 't.FIELD_FORMACION_ID' : activo ? 't.ACTIVO_ID' : null
-  let value = well ? well : field ? field : activo ? activo : null
-  let whereClause = ''
-  if (level) {
-    whereClause = `WHERE ${level} = ?`
-  }
+router.get('/countData', (req, res) => {
 
   let query = `
 select TIPO_DE_INTERVENCIONES, SUM(HAS_RESULTS) as COUNT_RESULTS, COUNT(1)  AS COUNT  from Transactions t 
-JOIN FieldWellMapping ON t.WELL_FORMACION_ID = FieldWellMapping.WELL_FORMACION_ID
- ${whereClause} GROUP BY TIPO_DE_INTERVENCIONES
+JOIN FieldWellMapping ON t.WELL_FORMACION_ID = FieldWellMapping.WELL_FORMACION_ID GROUP BY TIPO_DE_INTERVENCIONES
 `
 
-  connection.query(query, value, (err, results) => {
+  connection.query(query, (err, results) => {
       console.log('comment err', err)
 
      if (err) {
@@ -616,6 +577,49 @@ JOIN FieldWellMapping ON t.WELL_FORMACION_ID = FieldWellMapping.WELL_FORMACION_I
       }
     })
 })
+
+router.get('/dateDiffData', (req, res) => {
+
+  let query = `
+select TIPO_DE_INTERVENCIONES as type, AVG(DATEDIFF(FECHA_INTERVENCION, FECHA_PROGRAMADA_INTERVENCION))  as avgDateDiff
+FROM Results r 
+JOIN Intervenciones i ON r.PROPUESTA_ID = i.TRANSACTION_ID 
+GROUP BY TIPO_DE_INTERVENCIONES`
+
+  connection.query(query, (err, results) => {
+      console.log('comment err', err)
+
+     if (err) {
+        res.json({ success: false})
+      }
+      else {
+        res.json(results)
+      }
+    })
+})
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 router.post('/volumenData', (req, res) => {

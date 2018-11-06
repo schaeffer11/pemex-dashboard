@@ -442,7 +442,7 @@ export const createResults = async (body, action, cb) => {
                   })
                 }
 
-                values = [transactionID, propuestaID, userID, wellFormacionID, tratamientoCompany, fechaIntervencion]
+                values = [transactionID, propuestaID, userID, wellFormacionID, fechaIntervencion, tratamientoCompany]
                 connection.query((INSERT_TRANSACTION.submit), values, (err, results) => {
                   console.log('transaction', err)
                   console.log('transaction', results)

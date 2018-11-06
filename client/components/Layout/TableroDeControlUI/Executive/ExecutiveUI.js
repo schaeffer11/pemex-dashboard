@@ -13,8 +13,6 @@ import CostBar from './CostBar'
 import DeltaCostBar from './DeltaCostBar'
 import AvgDeltaCostBar from './AvgDeltaCostBar'
 import ExecutiveTable from './ExecutiveTable'
-import ExecutiveTable2Well from './ExecutiveTable2Well'
-import ExecutiveTable3Well from './ExecutiveTable3Well'
 
 @autobind class executiveUI extends Component {
   constructor(props) {
@@ -100,6 +98,8 @@ import ExecutiveTable3Well from './ExecutiveTable3Well'
       estIncData: data[7]
     }
 
+
+
     this.setState(newState)
 
   }
@@ -171,7 +171,7 @@ import ExecutiveTable3Well from './ExecutiveTable3Well'
               <AvgDeltaCostBar label={'Avg'} data={costDataAverage} groupBy={groupBy} />
             </Card>
           </CardDeck>
-          <ExecutiveTable2Well data={execTableData} estIncData={estIncData} aforosData={aforosData} groupBy={groupBy} />
+          <ExecutiveTable data={execTableData} estIncData={estIncData} aforosData={aforosData} groupBy={groupBy} />
         </div>
       </div>
     )
@@ -190,9 +190,7 @@ const mapDispatchToProps = dispatch => ({
 export default connect(mapStateToProps, mapDispatchToProps)(executiveUI)
 
 
-{/*          <ExecutiveTable aforosData={aforosData} costData={costData} countData={countData} estIncData={estIncData} />
-
-         {/* <ExecutiveTable3Well data={execTableWellData} estIncData={estIncWellData} aforosData={aforosData} volumenData={volumenData} />*/}
+         {/* <VolumeTable data={execTableWellData} estIncData={estIncWellData} aforosData={aforosData} volumenData={volumenData} />*/}
 
     // fetch(`/executive/countData`, {
     //   method: 'POST',
@@ -213,86 +211,4 @@ export default connect(mapStateToProps, mapDispatchToProps)(executiveUI)
     //   })
     // })
 
-    // fetch(`/executive/estimatedIncreaseData`, {
-    //   method: 'POST',
-    //   headers: {
-    //     'content-type': 'application/json',
-    //   },
-    //   body: JSON.stringify({
-    //     activo,
-    //     field,
-    //     well,
-    //     formation,
-    //     groupBy: 'type'
-    //   })
-    // })
-    // .then(res => res.json())
-    // .then(res => {
-    //   this.setState({
-    //     estIncData: res
-    //   })
-    // })
-
-
-    // fetch(`/executive/estimatedIncreaseData`, {
-    //   method: 'POST',
-    //   headers: {
-    //     'content-type': 'application/json',
-    //   },
-    //   body: JSON.stringify({
-    //     activo,
-    //     field,
-    //     well,
-    //     formation,
-    //     groupBy: 'field'
-    //   })
-    // })
-    // .then(res => res.json())
-    // .then(res => {
-    //   this.setState({
-    //     estIncFieldData: res
-    //   })
-    // })
-
-
-
-    // fetch(`/executive/execTableData`, {
-    //   method: 'POST',
-    //   headers: {
-    //     'content-type': 'application/json',
-    //   },
-    //   body: JSON.stringify({
-    //     activo,
-    //     field,
-    //     well,
-    //     formation,
-    //     groupBy: 'field'
-    //   })
-    // })
-    // .then(res => res.json())
-    // .then(res => {
-    //   this.setState({
-    //     execTableFieldData: res
-    //   })
-    // })
-
-    // fetch(`/executive/volumenData`, {
-    //   method: 'POST',
-    //   headers: {
-    //     'content-type': 'application/json',
-    //   },
-    //   body: JSON.stringify({
-    //     activo,
-    //     field,
-    //     well,
-    //     formation,
-    //   })
-    // })
-    // .then(res => res.json())
-    // .then(res => {
-    //   this.setState({
-    //     volumenData: res
-    //   })
-    // })
-
-
+    

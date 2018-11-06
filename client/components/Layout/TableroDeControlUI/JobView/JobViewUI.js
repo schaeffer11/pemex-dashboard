@@ -192,7 +192,7 @@ import AforoScatter from './AforoScatter'
     let { imageData } = this.state
 
     console.log('im hereeeeee', imageData)
-    if (imageData) {
+    if (imageData && Object.keys(imageData).length > 0) {
       return Object.keys(imageData).map(i => {
         let obj = imageData[i]
         return <img label={obj.imgName.split('.')[1]} src={obj.imgURL}></img> 
