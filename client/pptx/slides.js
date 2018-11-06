@@ -148,7 +148,7 @@ export async function buildProposalCedula(pptx, token, id) {
   let cedulaURL
   switch (interventionType) {
     case 'estimulacion':
-      interventionURL = 'getInterventionEstimulacion'
+      cedulaURL = 'getCedulaEstimulacion'
       break;
     case 'acido':
       cedulaURL = 'getCedulaAcido'
@@ -166,7 +166,7 @@ export async function buildProposalCedula(pptx, token, id) {
   slide.addText('Propuesta de tratamiento', { placeholder: 'slide_title' })
   const data = await getData(cedulaURL, token, id)
   const { cedulaData } = data[Object.keys(data)[0]]
-  const cedulaTable = buildTable('Cedulas de tratamiento', maps.propuesta.cedulaData[interventionType], cedulaData)
+  const cedulaTable = buildTable('Cedula de tratamiento', maps.cedulaData[interventionType], cedulaData)
   const tableOptionsCopy = {...tableOptions}
   delete tableOptionsCopy.colW
   slide.addTable(cedulaTable, { x: 0.5, y: 1.0, ...tableOptionsCopy })
