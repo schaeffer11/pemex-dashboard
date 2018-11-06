@@ -186,6 +186,17 @@ router.get('/getSubmittedFieldWellMapping', (req, res) => {
     })
 })
 
+router.get('/getDates', (req, res) => {
+  connection.query(`select 
+      YEAR(MIN(FECHA_INTERVENCION)) * 12 + MONTH(MIN(FECHA_INTERVENCION)) AS MIN, 
+      YEAR(MAX(FECHA_INTERVENCION)) * 12 + MONTH(MAX(FECHA_INTERVENCION)) + 1 AS MAX, 
+      MIN(FECHA_INTERVENCION) AS MIN_DATE, 
+      MAX(FECHA_INTERVENCION) AS MAX_DATE 
+      FROM TransactionsResults`, (err, results) => {
+        res.json(results)
+      })
+})
+
 router.get('/getTerminationTypes', (req, res) => {
   const query = `SELECT DISTINCT(TIPO_DE_TERMINACION) FROM WellMecanico`
   connection.query(query, (err, results) => {

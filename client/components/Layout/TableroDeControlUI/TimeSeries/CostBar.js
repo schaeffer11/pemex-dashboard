@@ -37,9 +37,6 @@ import { KPI } from '../Common/KPIs'
 
 
 
-
-    console.log(series)
-
     let config = {
       chart: {
           type: 'column',

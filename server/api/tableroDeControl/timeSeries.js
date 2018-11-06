@@ -11,12 +11,12 @@ const router = Router()
 
 
 router.get('/costData', (req, res) => {
-  let { subdir, activo, field, well, formation, company, tipoDeIntervencion, tipoDeTerminacion, groupBy, avg, noGroup } = req.query
+  let { subdir, activo, field, well, formation, company, tipoDeIntervencion, tipoDeTerminacion, groupBy, avg, noGroup, lowDate, highDate } = req.query
   
   let level = well ? 'fwm.WELL_FORMACION_ID' : field ? 'fwm.FIELD_FORMACION_ID' : activo ? 'fwm.ACTIVO_ID' : subdir ? 'fwm.SUBDIRECCION_ID' : null
   let values = []
 
-  let whereClause = ''
+  let whereClause = 'WHERE TRUE'
 
   if (level) {
     whereClause = `AND ${level} = ?`
@@ -37,6 +37,22 @@ router.get('/costData', (req, res) => {
   if (tipoDeTerminacion) {
     whereClause += ' AND TIPO_DE_TERMINACION = ?'
     values.push(tipoDeTerminacion)
+  }
+  if (lowDate) {
+    whereClause += ' AND FECHA >= ?'
+    let year = Math.floor((lowDate - 1) / 12)
+    let month = lowDate % 12
+    month === 0 ? month = 12 : null
+    let lowDateString = `${year}-${month}-01`
+    values.push(lowDateString)
+  }
+  if (highDate) {
+    whereClause += ' AND FECHA <= ?'
+    let year = Math.floor((highDate - 1) / 12)
+    let month = highDate % 12
+    month === 0 ? month = 12 : null
+    let highDateString = `${year}-${month}-31`
+    values.push(highDateString)
   }
 
   let select = 1
@@ -92,7 +108,7 @@ GROUP BY ${groupByClause} YEAR(FECHA), MONTH(FECHA), DAY(FECHA);
 })
 
 router.get('/aforosData', (req, res) => {
-  let { subdir, activo, field, well, formation, company, tipoDeIntervencion, tipoDeTerminacion } = req.query
+  let { subdir, activo, field, well, formation, company, tipoDeIntervencion, tipoDeTerminacion, lowDate, highDate } = req.query
   
   let level = well ? 'fwm.WELL_FORMACION_ID' : field ? 'fwm.FIELD_FORMACION_ID' : activo ? 'fwm.ACTIVO_ID' : subdir ? 'fwm.SUBDIRECCION_ID' : null
   let values = []
@@ -119,29 +135,46 @@ router.get('/aforosData', (req, res) => {
     whereClause += ' AND TIPO_DE_TERMINACION = ?'
     values.push(tipoDeTerminacion)
   }
+  if (lowDate) {
+    whereClause += ' AND FECHA >= ?'
+    let year = Math.floor((lowDate - 1) / 12)
+    let month = lowDate % 12
+    month === 0 ? month = 12 : null
+    let lowDateString = `${year}-${month}-01`
+    values.push(lowDateString)
+  }
+  if (highDate) {
+    whereClause += ' AND FECHA <= ?'
+    let year = Math.floor((highDate - 1) / 12)
+    let month = highDate % 12
+    month === 0 ? month = 12 : null
+    let highDateString = `${year}-${month}-31`
+    values.push(highDateString)
+  }
 
   let query = 
-`SELECT *, FECHA, (QO_RESULT - QO) AS DELTA_QO FROM 
+`SELECT *, (QO_RESULT - QO) AS DELTA_QO FROM 
 
-(SELECT SUBDIRECCION_NAME, ACTIVO_NAME, FIELD_NAME, A.WELL_FORMACION_ID, WELL_NAME, FORMACION, PROPUESTA_COMPANIA, TIPO_DE_INTERVENCIONES, TIPO_DE_TERMINACION, TRANSACTION_ID, FECHA, QO, QW  FROM
+(SELECT SUBDIRECCION_NAME, ACTIVO_NAME, FIELD_NAME, A.WELL_FORMACION_ID, WELL_NAME, FORMACION, COMPANY, TIPO_DE_INTERVENCIONES, TIPO_DE_TERMINACION, A.PROPUESTA_ID, QO AS QO_RESULT, QW AS QW_RESULT, FECHA  
+FROM
 (
-  select fwm.SUBDIRECCION_NAME, fwm.ACTIVO_NAME, fwm.FIELD_NAME, fwm.WELL_FORMACION_ID, FORMACION, PROPUESTA_COMPANIA, WELL_NAME, WellAforos.TRANSACTION_ID, MAX(FECHA) FECHA, TIPO_DE_TERMINACION, TIPO_DE_INTERVENCIONES
-  FROM WellAforos 
-  JOIN FieldWellMapping fwm ON WellAforos.WELL_FORMACION_ID = fwm.WELL_FORMACION_ID 
-  JOIN Transactions t ON WellAforos.TRANSACTION_ID = t.TRANSACTION_ID
-  WHERE QO != '-999' ${whereClause} GROUP BY TRANSACTION_ID
-) A INNER JOIN WellAforos B USING(TRANSACTION_ID, FECHA)) as aforos,
+  select fwm.SUBDIRECCION_NAME, fwm.ACTIVO_NAME, fwm.FIELD_NAME, fwm.WELL_FORMACION_ID, FORMACION, COMPANY, WELL_NAME, ResultsAforos.PROPUESTA_ID, ResultsAforos.TRANSACTION_ID, MAX(FECHA) AS FECHA, TIPO_DE_TERMINACION, TIPO_DE_INTERVENCIONES
+  FROM ResultsAforos  
+  JOIN FieldWellMapping fwm ON ResultsAforos.WELL_FORMACION_ID = fwm.WELL_FORMACION_ID 
+  JOIN Transactions t ON ResultsAforos.PROPUESTA_ID = t.TRANSACTION_ID
+  JOIN TransactionsResults tr ON ResultsAforos.TRANSACTION_ID = tr.TRANSACTION_ID
+  WHERE QO != '-999'  ${whereClause} GROUP BY TRANSACTION_ID
+) A INNER JOIN ResultsAforos B USING(TRANSACTION_ID, FECHA)) as aforo_results, 
 
-(SELECT A.PROPUESTA_ID, QO as QO_RESULT, QW as QW_RESULT FROM
+(SELECT A.TRANSACTION_ID, QO, QW 
+FROM
 (
-  select WELL_FORMACION_ID, PROPUESTA_ID, TRANSACTION_ID, MAX(FECHA) FECHA
-  FROM ResultsAforos WHERE QO != '-999' GROUP BY TRANSACTION_ID
-) A INNER JOIN ResultsAforos B USING(TRANSACTION_ID, FECHA)) as aforo_results 
-WHERE aforos.TRANSACTION_ID = aforo_results.PROPUESTA_ID
-`
+  select WellAforos.TRANSACTION_ID, MAX(FECHA) AS FECHA
+  FROM WellAforos
+    WHERE QO != '-999' GROUP BY TRANSACTION_ID
+) A INNER JOIN WellAforos B USING(TRANSACTION_ID, FECHA)) as aforos
 
-
-  console.log(query)
+WHERE aforos.TRANSACTION_ID = aforo_results.PROPUESTA_ID`
 
   connection.query(query, values, (err, results) => {
       console.log('comment err', err)
@@ -172,12 +205,12 @@ WHERE aforos.TRANSACTION_ID = aforo_results.PROPUESTA_ID
 })
 
 router.get('/volumeData', (req, res) => {
-  let { subdir, activo, field, well, formation, company, tipoDeIntervencion, tipoDeTerminacion, groupBy } = req.query
+  let { subdir, activo, field, well, formation, company, tipoDeIntervencion, tipoDeTerminacion, groupBy, lowDate, highDate } = req.query
   
   let level = well ? 'fwm.WELL_FORMACION_ID' : field ? 'fwm.FIELD_FORMACION_ID' : activo ? 'fwm.ACTIVO_ID' : subdir ? 'fwm.SUBDIRECCION_ID' : null
   let values = []
 
-  let whereClause = ''
+  let whereClause = 'WHERE TRUE'
 
   if (level) {
     whereClause = `AND ${level} = ?`
@@ -198,6 +231,22 @@ router.get('/volumeData', (req, res) => {
   if (tipoDeTerminacion) {
     whereClause += ' AND TIPO_DE_TERMINACION = ?'
     values.push(tipoDeTerminacion)
+  }
+  if (lowDate) {
+    whereClause += ' AND FECHA_INTERVENCION >= ?'
+    let year = Math.floor((lowDate - 1) / 12)
+    let month = lowDate % 12
+    month === 0 ? month = 12 : null
+    let lowDateString = `${year}-${month}-01`
+    values.push(lowDateString)
+  }
+  if (highDate) {
+    whereClause += ' AND FECHA_INTERVENCION <= ?'
+    let year = Math.floor((highDate - 1) / 12)
+    let month = highDate % 12
+    month === 0 ? month = 12 : null
+    let highDateString = `${year}-${month}-31`
+    values.push(highDateString)
   }
 
   let select = 1
@@ -254,6 +303,9 @@ LEFT JOIN Transactions t ON i.PROPUESTA_ID = t.TRANSACTION_ID
 ${whereClause}
 GROUP BY ${groupByClause} YEAR(FECHA_INTERVENCION), MONTH(FECHA_INTERVENCION), DAY(FECHA_INTERVENCION)
 `
+
+  console.log(query)
+  console.log('values', values)
 
   connection.query(query, values, (err, results) => {
       console.log('comment err', err)

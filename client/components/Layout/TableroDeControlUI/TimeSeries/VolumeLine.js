@@ -88,8 +88,6 @@ import { KPI } from '../Common/KPIs'
 
     }
    
-    console.log(series)
-
     let config = {
       chart: {
           type: 'area',
@@ -114,6 +112,9 @@ import { KPI } from '../Common/KPIs'
         },
         opposite: true
       }],
+      tooltip: {
+        shared: true
+      },
       plotOptions: {
         area: {
           stacking: 'normal'
