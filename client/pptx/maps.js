@@ -13,6 +13,7 @@ const units = {
   ppm: 'ppm',
   length: 'm',
   percent: '%',
+  rateOverPressure: 'bpd/psi',
   barrelsPerDay: 'bpd',
   barrelsPerMinute: 'bpm',
   cubicFeetPerDay: 'MMpcd',
@@ -23,7 +24,7 @@ const units = {
   viscosity: 'cp',
   specificGravity: 'Adim.',
   milliDarcy: 'mD',
-  kh: 'mD*ft',
+  conductiviy: 'mD*ft',
   unidades: 'unidades',
   pulgadas: 'pg',
   degreesText: 'Grados',
@@ -139,7 +140,7 @@ maps.well = {
   presion: {
     pruebaDePresion: { text: "Prueba de presión", unit: '' },
     modelo: { text: "Modelo", unit: '' },
-    kh: { text: "Kh", unit: units.kh },
+    kh: { text: "Kh", unit: units.conductiviy },
     k: { text: "K", unit: units.milliDarcy },
     s: { text: "S", unit: units.unidades },
     piEnNivelSonda: { text: "Pi @ nivel sonda", unit: units.pressure } ,
@@ -327,4 +328,48 @@ maps.cedulaData = {
     descripcion: { text: 'Descripción', unit: '' },
     justificacion: { text: 'Justificación', unit: '' },
   },
+}
+
+maps.estimacionProduccion =  {
+  estIncEstrangulador: { text: 'Estrangulador', unit: units.pulgadas },
+  estIncPtp: { text: 'Ptp', unit: units.pressure },
+  estIncTtp: { text: 'Ttp', unit: units.temperature },
+  estIncPbaj: { text: 'Pbaj', unit: units.pressure },
+  estIncTbaj: { text: 'Tbaj', unit: units.temperature },
+  estIncPtr: { text: 'Ptr', unit: units.pressure },
+  estIncQl: { text: 'Ql', unit: units.barrelsPerDay },
+  estIncQo: { text: 'Qo', unit: units.barrelsPerDay },
+  estIncQg: { text: 'Qg', unit: units.cubicFeetPerDay },
+  estIncQw: { text: 'Qw', unit: units.barrelsPerDay },
+  estIncRGA: { text: 'RGA', unit: units.rga },
+  estIncSalinidad: { text: 'Salinidad', unit: units.ppm },
+  estIncIP: { text: 'IP estimado', unit: units.rateOverPressure },
+  estIncDeltaP: { text: 'ΔP', unit: units.pressure },
+  estIncGastoCompromisoQo: { text: 'Qo', unit: units.barrelsPerDay },
+  estIncGastoCompromisoQg: { text: 'Qg', unit: units.cubicFeetPerDay },
+  obervacionesEstIncEstim: { text: 'Observaciones', unit: '' },
+}
+
+maps.resultadosSimulacion = {
+  apuntalado: {
+    longitudApuntalada: { text: 'Longitud apuntalada', unit: units.length },
+    alturaTotalDeFractura: { text: 'Altura total de fractura', unit: units.length },
+    anchoPromedio: { text: 'Ancho promedio', unit: units.pulgadas },
+    concentractionAreal: { text: 'Concentración areal', unit: units.pressureEnglish },
+    conductividad: { text: 'Conductividad', unit: units.conductiviy },
+    fcd: { text: 'FCD', unit: units.specificGravity },
+    presionNeta: { text: 'Presión neta', unit: units.pressureEnglish },
+    eficienciaDeFluidoDeFractura: { text: 'Eficiencia de fluido de fractura', unit: units.percent },
+  },
+  acido: {
+    longitudTotal: { text: 'Longitud total', unit: units.length },
+    longitudEfectivaGrabada: { text: 'Longitud efectiva grabada', unit: units.length },
+    alturaGrabada: { text: 'Altura grabada', unit: units.length },
+    anchoPromedio: { text: 'Ancho promedio', unit: units.pulgadas },
+    concentracionDelAcido: { text: 'Concentración del ácido', unit: units.pressureEnglish },
+    conductividad: { text: 'Conductividad', unit: units.conductiviy },
+    fcd: { text: 'FCD', unit: units.specificGravity },
+    presionNeta: { text: 'Presión neta', unit: units.pressureEnglish },
+    eficienciaDeFluidoDeFractura: { text: 'Eficiencia de fluido de fractura', unit: units.percent },
+  }
 }
