@@ -144,6 +144,7 @@ export async function buildEvaluacionPetrofisicaImage(pptx, image) {
 
 export async function buildProposalCedula(pptx, token, id) {
   const interventionTypeData = await getData('getInterventionBase', token, id)
+  console.log('interventionData?', interventionTypeData)
   const interventionType = interventionTypeData.objetivoYAlcancesIntervencion.tipoDeIntervenciones
   let cedulaURL
   switch (interventionType) {
@@ -165,6 +166,7 @@ export async function buildProposalCedula(pptx, token, id) {
   const slide = pptx.addNewSlide('MASTER_SLIDE')
   slide.addText('Propuesta de tratamiento', { placeholder: 'slide_title' })
   const data = await getData(cedulaURL, token, id)
+  console.log('data', data)
   const { cedulaData } = data[Object.keys(data)[0]]
   const cedulaTable = buildTable('Cedula de tratamiento', maps.cedulaData[interventionType], cedulaData)
   const tableOptionsCopy = {...tableOptions}
