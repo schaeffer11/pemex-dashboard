@@ -238,5 +238,6 @@ export async function buildGeneralProposal(pptx, token, id) {
     const limpiezaTable = buildSimpleTable('Limpieza de Aparejo', map.general, data[propuestaData])
     slide.addTable(limpiezaTable, { x: 3.5, y: 1.0, ...tableOptionsCopy })
   }
+  console.log('for something')
   return slide
 }
