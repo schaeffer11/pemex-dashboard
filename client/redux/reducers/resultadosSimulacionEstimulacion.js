@@ -7,7 +7,6 @@ const initialState = Map({
     imgURL: null,
     imgName: '',
     imgSource: null,
-    evidenceSimulationImgURL: '',
 })
 
 

@@ -167,11 +167,13 @@ export async function buildProposalCedula(pptx, token, id) {
   slide.addText('Propuesta de tratamiento', { placeholder: 'slide_title' })
   const data = await getData(cedulaURL, token, id)
   console.log('data', data)
-  const { cedulaData } = data[Object.keys(data)[0]]
+  const { cedulaData, propuestaCompany } = data[Object.keys(data)[0]]
   const cedulaTable = buildTable('Cedula de tratamiento', maps.cedulaData[interventionType], cedulaData)
   const tableOptionsCopy = {...tableOptions}
   delete tableOptionsCopy.colW
-  slide.addTable(cedulaTable, { x: 0.5, y: 1.0, ...tableOptionsCopy })
+  const companyText = `Compañía Seleccionada para el Tratamiento: ${propuestaCompany}`
+  slide.addText(companyText, { x: 0.5, y: 1.0, fontSize: 12 })
+  slide.addTable(cedulaTable, { x: 0.5, y: 1.25, ...tableOptionsCopy })
   return slide
 }
 
