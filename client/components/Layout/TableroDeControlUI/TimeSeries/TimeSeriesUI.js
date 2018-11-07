@@ -8,6 +8,7 @@ import { CardDeck } from 'reactstrap';
 import CostBar from './CostBar'
 import AforosScatter from './AforosScatter'
 import VolumeLine from './VolumeLine'
+import VolumeGasLine from './VolumeGasLine'
 import TimeSlider from './TimeSlider'
 import { setGeneralGlobalAnalysis } from '../../../../redux/actions/global'
 
@@ -29,7 +30,7 @@ import { setGeneralGlobalAnalysis } from '../../../../redux/actions/global'
   async fetchData(sequence) {
     let { globalAnalysis, setGeneral } = this.props
     globalAnalysis = globalAnalysis.toJS()
-    let { subdir, activo, field, well, formation, company, tipoDeIntervencion, tipoDeTerminacion, groupBy, lowDate, highDate } = globalAnalysis
+    let { subdireccion, activo, field, well, formation, company, interventionType, terminationType, groupBy, lowDate, highDate } = globalAnalysis
 
     const { token } = this.props
     const headers = {
@@ -41,14 +42,14 @@ import { setGeneralGlobalAnalysis } from '../../../../redux/actions/global'
 
     let params = []
 
-    subdir ? params.push(`subdir=${subdir}`) : null
+    subdireccion ? params.push(`subdir=${subdireccion}`) : null
     activo ? params.push(`activo=${activo}`) : null
     field ? params.push(`field=${field}`) : null
     well ? params.push(`well=${well}`) : null
     formation ? params.push(`formation=${formation}`) : null
     company ? params.push(`company=${company}`) : null
-    tipoDeIntervencion ? params.push(`tipoDeIntervencion=${tipoDeIntervencion}`) : null
-    tipoDeTerminacion ? params.push(`tipoDeTerminacion=${tipoDeTerminacion}`) : null
+    interventionType ? params.push(`tipoDeIntervencion=${interventionType}`) : null
+    terminationType ? params.push(`tipoDeTerminacion=${terminationType}`) : null
     groupBy ? params.push(`groupBy=${groupBy}`) : null
     lowDate ? params.push(`lowDate=${lowDate}`) : null
     highDate ? params.push(`highDate=${highDate}`) : null
@@ -102,10 +103,10 @@ import { setGeneralGlobalAnalysis } from '../../../../redux/actions/global'
     globalAnalysis = globalAnalysis.toJS()
     prev = prev.toJS()
 
-    let { subdir, activo, field, well, formation, company, tipoDeIntervencion, tipoDeTerminacion, groupBy, lowDate, highDate } = globalAnalysis
+    let { subdireccion, activo, field, well, formation, company, interventionType, terminationType, groupBy, lowDate, highDate } = globalAnalysis
 
-    if (activo !== prev.activo || field !== prev.field || well !== prev.well || formation !== prev.formation ||
-      company !== prev.company || tipoDeIntervencion !== prev.tipoDeIntervencion || tipoDeTerminacion !== prev.tipoDeTerminacion ||
+    if (subdireccion !== prev.subdireccion || activo !== prev.activo || field !== prev.field || well !== prev.well || formation !== prev.formation ||
+      company !== prev.company || interventionType !== prev.interventionType || terminationType !== prev.terminationType ||
       groupBy !== prev.groupBy || lowDate !== prev.lowDate || highDate !== prev.highDate) {
       this.fetchData('other')  
     }
@@ -145,7 +146,8 @@ import { setGeneralGlobalAnalysis } from '../../../../redux/actions/global'
                 ref={this.cards[2]}
                 multiplyChartsOnGrouping
               >
-              <VolumeLine data={volumeData} />
+              <VolumeLine label='Liquids' data={volumeData} />
+              <VolumeGasLine label="Gases" data={volumeData} />
             </Card>
           </CardDeck>
         </div>

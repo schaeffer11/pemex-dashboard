@@ -31,7 +31,7 @@ let colorWheel = [
 
     if (data.length > 0) {
       if (!groupBy) {
-        series = [{
+        data = [{
           name: 'Average Cost',
           data: [data[0].totalCost / data[0].totalEstimatedCost]
         }]

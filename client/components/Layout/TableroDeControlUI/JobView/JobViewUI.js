@@ -12,6 +12,7 @@ import SimulationTreatmentTable from './SimulationTreatmentTable'
 import Card from '../Common/Card'
 import { CardDeck } from 'reactstrap';
 import AforoScatter from './AforoScatter'
+import CedulaTable from './CedulaTable'
 
 @autobind class jobViewUI extends Component {
   constructor(props) {
@@ -31,7 +32,7 @@ import AforoScatter from './AforoScatter'
       date: null
     }    
     this.cards = []
-    for (let i = 0; i < 5; i += 1) {
+    for (let i = 0; i < 6; i += 1) {
       this.cards.push(React.createRef())
     }
   }
@@ -270,13 +271,21 @@ import AforoScatter from './AforoScatter'
               >          
               <AforoScatter data={aforoData} interventionDate={date}/>   
             </Card>
-            {/* <Card
+{/*            <Card
+                id="cedula"
+                title="Cedulas"
+                ref={this.cards[4]}
+              >          
+              <CedulaTable label='Proposed' data={cedulaData} type={jobType} />
+              <CedulaTable label='Actual' data={cedulaResultData} type={jobType} />
+            </Card>   */}
+             <Card
                 id="images"
                 title="Images"
-                ref={this.cards[4]}
+                ref={this.cards[5]}
               >
               {this.makeImages()}
-            </Card> */}
+            </Card> 
           </CardDeck>
           <div style={{height: '500px'}}/>
         </div>

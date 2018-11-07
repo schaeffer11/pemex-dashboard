@@ -66,11 +66,17 @@ router.get('/getCedula', (req, res) => {
       SELECT * FROM IntervencionesCedulaAcido
       WHERE TRANSACTION_ID = ?`
   }
-  else {
+  else if (type === 'Apuntalado') {
     query = `
       SELECT * FROM IntervencionesCedulaApuntalado
       WHERE TRANSACTION_ID = ?`
   }
+  else {
+    query = `
+    SELECT * FROM IntervencionesCedulaTermico
+    WHERE TRANSACTION_ID = ?`
+  }
+
   connection.query(query, transactionID, (err, results) => {
       console.log('comment err', err)
 
@@ -78,6 +84,34 @@ router.get('/getCedula', (req, res) => {
         res.json({ success: false})
       }
       else {
+        if (type === 'Estimulacion') {
+          results = results.map(i => {
+            return {
+              etapa: i.ETAPA,
+              sistema: i.SISTEMA,
+              nombreComercial: i.NOMBRE_COMERCIAL,
+              volLiquid: i.VOL_LIQUID,
+              gastoLiqudo: i.GASTO_LIQUIDO,
+              relN2Liq: i. REL_N2_LIQ,
+              calidad: i.CALIDAD,
+              gastoEnFondo: i.GASTO_EN_FONDO,
+              gastoN2: i.GASTO_N2,
+              volN2: i.VOL_N2,
+              volLiquidoAcum: i.VOL_LIQUIDO_ACUM,
+              volN2Acum: i.VOL_N2_ACUM,
+              tiempo: i.TIEMPO
+            }
+          })
+        }
+        else if (type === 'Acido') {
+
+        }
+        else if (type === 'Apuntalado') {
+        }
+        else {
+          
+        }
+
         res.json(results)
       }
     })
@@ -98,10 +132,13 @@ router.get('/getCedulaResults', (req, res) => {
       SELECT * FROM ResultsCedulaAcido
       WHERE PROPUESTA_ID = ?`
   }
-  else {
+  else if (type === 'Apuntalado') {
     query = `
-      SELECT * FROM ResultsCedulaApuntalado
+      SELECT * FROM ResultsCedulaTermico
       WHERE PROPUESTA_ID = ?`
+  }
+  else { 
+    query =``
   }
 
   connection.query(query, transactionID, (err, results) => {
@@ -111,6 +148,35 @@ router.get('/getCedulaResults', (req, res) => {
         res.json({ success: false})
       }
       else {
+        if (type === 'Estimulacion') {
+          results = results.map(i => {
+            return {
+              etapa: i.ETAPA,
+              sistema: i.SISTEMA,
+              nombreComercial: i.NOMBRE_COMERCIAL,
+              volLiquid: i.VOL_LIQUID,
+              gastoLiqudo: i.GASTO_LIQUIDO,
+              relN2Liq: i. REL_N2_LIQ,
+              calidad: i.CALIDAD,
+              gastoEnFondo: i.GASTO_EN_FONDO,
+              gastoN2: i.GASTO_N2,
+              volN2: i.VOL_N2,
+              volLiquidoAcum: i.VOL_LIQUIDO_ACUM,
+              volN2Acum: i.VOL_N2_ACUM,
+              tiempo: i.TIEMPO
+            }
+          })
+        }
+        else if (type === 'Acido') {
+
+        }
+        else if (type === 'Apuntalado') {
+        }
+        else {
+
+        }
+
+
         res.json(results)
       }
     })

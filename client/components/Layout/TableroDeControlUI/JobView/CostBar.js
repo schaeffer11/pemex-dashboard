@@ -49,7 +49,7 @@ import { KPI } from '../Common/KPIs'
           zoomType: 'x',
       },
       title: {
-          text: 'Estimated Vs Actual Costs'
+          text: ' '
       },
       xAxis: {
         title: {

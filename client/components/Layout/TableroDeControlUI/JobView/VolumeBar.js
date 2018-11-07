@@ -58,7 +58,7 @@ import { KPI } from '../Common/KPIs'
           zoomType: 'x',
       },
       title: {
-          text: 'Estimated Vs Actual Volumes'
+          text: ' '
       },
       xAxis: {
         title: {
