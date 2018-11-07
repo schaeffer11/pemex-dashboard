@@ -17,7 +17,9 @@ import { create as createWell, getFields, getWell, getSurveys,
             getLabTest, getCedulaEstimulacion, getCedulaAcido, getCedulaApuntalado, 
             getCosts, getInterventionImages } from './pozo'
 
-// import { create as createCompromiso, mine as myCompromisos, get as getCompromisos } from './compromisos';
+
+import { create as createCompromiso, mine as myCompromisos, collection as getCompromisos, get as getCompromiso, put as updateCompromiso } from './compromisos';
+
 import { createResults } from './results'
 
 import { create as createDiagnostico, get as getDiagnostico, getAll as getDiagnosticos } from './diagnosticos';
@@ -167,12 +169,20 @@ router.post('/compromiso', (req, res) => {
   createCompromiso(req, res)
 })
 
+router.put('/compromiso/:id', (req, res) => {
+    updateCompromiso(req, res)
+})
+
 router.get('/compromiso/mine', (req, res) => {
     myCompromisos(req, res)
 })
 
 router.get('/compromiso', (req, res) => {
     getCompromisos(req, res)
+})
+
+router.get('/compromiso/:id', (req, res) => {
+    getCompromiso(req, res)
 })
 
 router.post('/diagnostico', (req, res) => {
