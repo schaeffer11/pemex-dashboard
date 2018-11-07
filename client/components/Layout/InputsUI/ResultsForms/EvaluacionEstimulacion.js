@@ -6,7 +6,7 @@ import { InputRow } from '../../Common/InputRow'
 import { checkEmpty, checkDate } from '../../../../lib/errorCheckers'
 import { setGeneralEvaluacionEstimulacion, setMergeEvaluacionEstimulacion } from '../../../../redux/actions/results'
 
-@autobind class EvaluacionApuntalado extends Component {
+@autobind class EvaluacionEstimulacion extends Component {
   constructor(props) {
     super(props)
     this.state = {
@@ -27,15 +27,6 @@ import { setGeneralEvaluacionEstimulacion, setMergeEvaluacionEstimulacion } from
     let { hasSubmitted, intervals, setMergeEvaluacionEstimulacion, formData } = this.props
     let hasErrors = this.checkAllInputs(hasSubmitted)
     const newState = { hasErrors }
-    const { geometria } = formData
-    // Notice we add an immutable map to allow for setIn in handleFileUpload
-    if (geometria.length === 1 && geometria[0].imgURL === '') {
-      const geometria = intervals.map(intervalo => Map({
-        intervalo,
-        imgURL: ''
-      }))
-      newState.geometria = geometria
-    }
     setMergeEvaluacionEstimulacion(newState)
   }
 
@@ -88,7 +79,7 @@ import { setGeneralEvaluacionEstimulacion, setMergeEvaluacionEstimulacion } from
   makeResultForm() {
     let { formData, setGeneralEvaluacionEstimulacion } = this.props
     let { penetracionRadial, longitudDeAgujeroDeGusano } = formData
-    
+    console.log('que es esto', penetracionRadial, longitudDeAgujeroDeGusano)
     return (
       <div className='result-form' >
         <div className='header'>
@@ -123,26 +114,26 @@ import { setGeneralEvaluacionEstimulacion, setMergeEvaluacionEstimulacion } from
     setGeneralEvaluacionEstimulacion(['geometria', index, 'imgURL'], localImgUrl)
   }
 
-  makeGeometryInput() {
-    const { formData } = this.props
-    const { geometria } = formData
-    return geometria.map((geo, index) => {
-      const { imgURL, intervalo } = geo
-      return (
-        <div key={`apuntaladoEvidence_${intervalo}`} style={{marginBot: '20px'}}>
-          <div className='header'>
-            Cargar geometría de intervalo {intervalo}
-          </div>
-          <input
-            type='file'
-            accept="image/*"
-            onChange={(e) => this.handleFileUpload(e, index)}
-          />
-          {imgURL ? <img className='img-preview' src={imgURL} /> : null }
-        </div>
-      )
-    })
-  }
+  // makeGeometryInput() {
+  //   const { formData } = this.props
+  //   const { geometria } = formData
+  //   return geometria.map((geo, index) => {
+  //     const { imgURL, intervalo } = geo
+  //     return (
+  //       <div key={`apuntaladoEvidence_${intervalo}`} style={{marginBot: '20px'}}>
+  //         <div className='header'>
+  //           Cargar geometría de intervalo {intervalo}
+  //         </div>
+  //         <input
+  //           type='file'
+  //           accept="image/*"
+  //           onChange={(e) => this.handleFileUpload(e, index)}
+  //         />
+  //         {imgURL ? <img className='img-preview' src={imgURL} /> : null }
+  //       </div>
+  //     )
+  //   })
+  // }
 
   render() {
     const { stimulationType } = this.props
@@ -158,8 +149,8 @@ import { setGeneralEvaluacionEstimulacion, setMergeEvaluacionEstimulacion } from
 }
 
 const mapStateToProps = state => ({
-  formData: state.get('evaluacionApuntalado').toJS(),
-  hasErrors: state.getIn(['evaluacionApuntalado', 'hasErrors']),
+  formData: state.get('evaluacionEstimulacion').toJS(),
+  hasErrors: state.getIn(['evaluacionEstimulacion', 'hasErrors']),
   hasSubmitted: state.getIn(['global', 'hasSubmitted']),
   intervals: state.getIn(['resultsMeta', 'intervals']),
   stimulationType: state.getIn(['resultsMeta', 'stimulationType']),
@@ -170,6 +161,6 @@ const mapDispatchToProps = dispatch => ({
   setMergeEvaluacionEstimulacion: (value) => dispatch(setMergeEvaluacionEstimulacion(value)),
 })
 
-export default connect(mapStateToProps, mapDispatchToProps)(EvaluacionApuntalado)
+export default connect(mapStateToProps, mapDispatchToProps)(EvaluacionEstimulacion)
 
 

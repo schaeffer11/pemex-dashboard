@@ -251,7 +251,6 @@ import { generatePowerPoint } from '../../../../pptx';
       <div className="data well-view">
         <div className='header'>
           <WellSelect fieldWellOptions={fieldWellOptions}/>
-          <button onClick={() => generatePowerPoint(token, globalAnalysis.job)}>generar presentacion</button>
         </div>
         <div className='content'>
           <CardDeck className="content-deck">
