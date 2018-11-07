@@ -18,13 +18,8 @@
 		.tab {
 			height: calc(100% + 1px);
 			display: inline-block;
-			border: solid 1px $primary-green;
-                        border-bottom: none;
-			border-radius: 10px 10px 0px 0px;
 			width: 200px;
 			padding: 10px;
-			color: $primary-font-color;
-			background: $white;
 			margin-right: 10px;
 			cursor: pointer;
                         text-align: center;
@@ -32,10 +27,7 @@
                         font-size: 1.1em;
 
                         &.active {
-                          color: $white;
-                          background: $primary-green;
-                          border-color: $primary-green;
-                          border-bottom: none;
+
                         }
 		}
 	}
@@ -61,12 +53,11 @@
 	}
 
 	.subtabs {
-                min-height: 50px;
-                background: $primary-green;
+        min-height: 50px;
 		grid-area: subtabs;
 		cursor: pointer;
-                text-align: center;
-                border-radius: 10px 10px 0px 0px;
+        text-align: center;
+        border-radius: 10px 10px 0px 0px;
 
 		.subtab {
                         position: relative;
@@ -79,60 +70,11 @@
                         font-size: .75rem;
                         font-weight: 100;
 
-                        &:before {
-                            display: block;
-                            content: "";
-                            height: 2px;
-                            width: 100%;
-                            background: white;
-                            top: 17px;
-                            position: absolute;
-                        }
 
-                        &:first-child {
-                            &:before {
-                                     width: 50%;
-                                     margin-left: 50%;
-                            }
-                        }
-
-                        &:last-child {
-                            &:before {
-                                     width: 50%;
-                                     margin-left: 0%;
-                            }
-                        }
-
-                        span {
-                          display: block;
-                          position: relative;
-                          height: 20px;
-                          width: 20px;
-                          background: $white;
-                          border-radius: 50%;
-                          margin: 8px auto 10px;
-                        }
 
                         &.active {
-                           font-size: 1.1em;
                            font-weight: 500;
 
-                           span {
-                             height: 30px;
-                             width: 30px;
-                             margin-top: 0;
-
-                             &:after {
-                               display: block;
-                               content: '';
-                               width: 20px;
-                               height: 20px;
-                               border-radius: 50%;
-                               position: absolute;
-                               margin: 5px;
-                               background: $active-green;
-                             }
-                           }
                         }
                         &.error {
                           color: red;
@@ -206,7 +148,7 @@
                 align-items: center;
 
                 .label {
-                    color: black;
+                    color: white;
                     font-weight: 500;
                     font-size: .9em;
                 }

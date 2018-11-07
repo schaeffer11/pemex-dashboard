@@ -2,12 +2,13 @@
 $primary-green: #028080;
 $active-green: #70AC46;
 
+$background-color: #393b41;
 $primary-font-color: #585858;
 $primary-border-color: #C0C0C0;
 
-$table-row-font-color: #6b6b6b;
-$table-row-color:#f2f2f2;
-$table-row-alt-color: #e6e6e6;
+$table-row-font-color: #fff;
+$table-row-color: $background-color;
+$table-row-alt-color: #272a2c;
 
 // QRI Colors
 $qriLogoBlue: #0076C0;

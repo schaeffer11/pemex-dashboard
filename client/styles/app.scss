@@ -1,3 +1,29 @@
+@import './settings';
+@import './mixins';
+@import 'components/forms';
+@import 'components/buttons';
+@import 'components/collapsableSections';
+@import './layout';
+@import './productbar';
+@import './productspace';
+@import './components/inputRows';
+@import './components/tables';
+@import './components/charts';
+@import './pages/inputs.scss';
+@import './pages/home.scss';
+@import './pages/diagnosticos.scss';
+@import './tableroControl/base.scss';
+@import './tableroControl/executive.scss';
+@import './tableroControl/overview.scss';
+@import './tableroControl/statistics.scss';
+@import './tableroControl/well-view.scss';
+@import './tableroControl/job-view.scss';
+@import './pages/compromisos.scss';
+@import './components/_loader.scss';
+@import './components/_excelUpload.scss';
+@import './components/card';
+@import './components/_sidebar.scss';
+
 // Local variables
 $baseTextColor: #222;
 $inverseTextColor: #fff;
@@ -5,6 +31,7 @@ $inverseTextColor: #fff;
 
 body {
   // font-family: $baseFontFamily;
+  background: $background-color;
   color: $baseTextColor;
   margin: 0;
   padding: 0;
@@ -111,29 +138,3 @@ li {
     opacity: 1;
   }
 }
-
-@import './settings';
-@import './mixins';
-@import 'components/forms';
-@import 'components/buttons';
-@import 'components/collapsableSections';
-@import './layout';
-@import './productbar';
-@import './productspace';
-@import './components/inputRows';
-@import './components/tables';
-@import './components/charts';
-@import './pages/inputs.scss';
-@import './pages/home.scss';
-@import './pages/diagnosticos.scss';
-@import './tableroControl/base.scss';
-@import './tableroControl/executive.scss';
-@import './tableroControl/overview.scss';
-@import './tableroControl/statistics.scss';
-@import './tableroControl/well-view.scss';
-@import './tableroControl/job-view.scss';
-@import './pages/compromisos.scss';
-@import './components/_loader.scss';
-@import './components/_excelUpload.scss';
-@import './components/card';
-@import './components/_sidebar.scss';
