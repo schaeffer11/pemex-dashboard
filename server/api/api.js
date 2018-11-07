@@ -20,7 +20,7 @@ import { create as createWell, getFields, getWell, getSurveys,
 // import { create as createCompromiso, mine as myCompromisos, get as getCompromisos } from './compromisos';
 import { createResults } from './results'
 
-// import { create as createDiagnostico } from './diagnosticos';
+import { create as createDiagnostico, get as getDiagnostico, getAll as getDiagnosticos } from './diagnosticos';
 import { getAuthorization } from '../middleware';
 
 const connection = db.getConnection(appConfig.users.database)
@@ -177,6 +177,14 @@ router.get('/compromiso', (req, res) => {
 
 router.post('/diagnostico', (req, res) => {
     createDiagnostico(req, res)
+})
+
+router.get('/diagnostico', (req, res) => {
+    getDiagnosticos(req, res)
+})
+
+router.get('/diagnostico/:id', (req, res) => {
+    getDiagnostico(req, res)
 })
 
 
