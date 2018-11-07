@@ -3,7 +3,7 @@ import autobind from 'autobind-decorator'
 import ReactTable from 'react-table' 
 import { CategoryDist, TrafficLight, Currency, Integer } from '../../../../lib/formatters'
 
-@autobind class ExecutiveTable2Well extends PureComponent {
+@autobind class Volume extends PureComponent {
   render() {
     let { data, estIncData, aforosData, volumenData } = this.props
       let columns = [{
@@ -148,4 +148,4 @@ import { CategoryDist, TrafficLight, Currency, Integer } from '../../../../lib/f
 }
 
 
-export default ExecutiveTable2Well
+export default Volume

@@ -11,6 +11,7 @@ import KPIMecanico from './KPIMecanico'
 import Images from './Images'
 import Card from '../Common/Card'
 import { CardDeck } from 'reactstrap';
+import { generatePowerPoint } from '../../../../pptx';
 
 @autobind class wellViewUI extends Component {
   constructor(props) {
@@ -24,7 +25,7 @@ import { CardDeck } from 'reactstrap';
       pressureData: [],
       aforosData: [],
       imageData: [],
-      interventionDates: []
+      interventionDates: [],
     }
     this.cards = []
     for (let i = 0; i < 5; i += 1) {
@@ -35,7 +36,6 @@ import { CardDeck } from 'reactstrap';
   fetchData() {
   	console.log('fetching')
     let { globalAnalysis } = this.props
-    globalAnalysis = globalAnalysis.toJS()
     let { well } = globalAnalysis
 
     //TODO MAKE PARALLEL
@@ -209,8 +209,6 @@ import { CardDeck } from 'reactstrap';
     let { globalAnalysis } = this.props
     let prevGlobalAnalysis = prevProps.globalAnalysis
 
-    globalAnalysis = globalAnalysis.toJS()
-    prevGlobalAnalysis = prevGlobalAnalysis.toJS()
 
 		let { well } = globalAnalysis
     let wellPrev = prevGlobalAnalysis.well
@@ -219,45 +217,25 @@ import { CardDeck } from 'reactstrap';
 			this.fetchData()	
 		}
   }
-    makeImages(data) {
-      return Object.keys(data).map(i => {
-        let src = data[i].imgURL
 
-        if (true) {
-
-        }
-
-        return (<div style={{width: '100%'}}>
-              <ReactImageMagnify {...{
-                smallImage: {
-                    src,
-                    width: 200,
-                    height: 200, 
-                },
-                largeImage: {
-                    src,
-                    width: 1000,
-                    height: 1000,
-                },
-                enlargedImageContainerDimensions: {
-                  width: '200%',
-                  height: '100%'
-                }
-              }} />
-            </div>)
-      })
-    }
     makeImages() {
       let { imageData } = this.state
 
-
-      return <div label='loading'>boo</div>
-
+      console.log('im hereeeeee', imageData)
+      if (imageData && Object.keys(imageData).length > 0) {
+        return Object.keys(imageData).map(i => {
+          let obj = imageData[i]
+          return <img label={obj.imgName.split('.')[1]} src={obj.imgURL}></img> 
+        })
+      }
+      else {
+        return <div>hi</div>
+      }
     } 
 
   render() {
     let { fieldWellOptions, wellData, zoneData, layerData, productionData, pressureData , aforosData, imageData, interventionDates } = this.state
-
+    const { token, globalAnalysis } = this.props
     // console.log('well', wellData)
     // console.log('zone', zoneData)
     // console.log('layer', layerData)
@@ -267,11 +245,13 @@ import { CardDeck } from 'reactstrap';
     // console.log('images', imageData, imageData)
     // console.log('interventionDates', interventionDates)
 
+    console.log('also here', imageData)
 
     return (
       <div className="data well-view">
         <div className='header'>
           <WellSelect fieldWellOptions={fieldWellOptions}/>
+          <button onClick={() => generatePowerPoint(token, globalAnalysis.job)}>generar presentacion</button>
         </div>
         <div className='content'>
           <CardDeck className="content-deck">
@@ -320,7 +300,7 @@ import { CardDeck } from 'reactstrap';
 
 const mapStateToProps = state => ({
   token: state.getIn(['user', 'token']),
-  globalAnalysis: state.get('globalAnalysis'),
+  globalAnalysis: state.get('globalAnalysis').toJS(),
 })
 
 const mapDispatchToProps = dispatch => ({

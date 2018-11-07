@@ -1,0 +1,50 @@
+.overview {
+	display: grid;
+	overflow: scroll;
+	grid-template-rows: 50% 50%;
+	grid-template-columns: 50% 50%;
+	grid-template-areas: 	'tl tr' 
+							'bl br';
+
+
+	.Acido {
+		grid-area: tl;
+	}
+
+	.Apuntalado {
+		grid-area: tr;
+	}
+	
+	.Estimulacion {
+		grid-area: bl;
+	}
+	
+	.Termico {
+		grid-area: br;
+	}
+
+	.kpi-outer {
+		text-align: center;
+		border: solid 1px;
+
+		.name {
+			font-size: 30px;
+			height: 50px 
+		}
+
+		.kpi {
+			width: 50%;
+			display: inline-block;
+			height: 80px;
+
+			.value {
+				font-size: 30px;
+			}
+
+			.header {
+				font-size: 10px;
+			}
+		}
+	}
+
+}

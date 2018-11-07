@@ -109,3 +109,43 @@
     max-width: 80% !important;
   }
 }
+
+
+.groupby_carousel {
+  text-align: center;
+  background-color: rgba(0,118,192, .1);
+  button {
+    display: inline-block;
+    font-size: 2em;
+    color: $speedWiseBlue;
+    padding: 0 15px;
+    cursor: pointer;
+    &.left {
+      float: left;
+    }
+    &.right {
+      float: right;
+    }
+  }
+  .center {
+    display: inline-block;
+    text-align: center;
+    padding: 0.2em 0;
+  }
+  h6 {
+    font-size: 14px;
+    color: $black;
+  }
+  .dot {
+    transition: background-color .2s linear;
+    height: .7em;
+    width: .7em;
+    background-color: #a7a9ac;
+    border-radius: 50%;
+    display: inline-block;
+    margin: .2em;
+    &.selected {
+      background-color: $speedWiseBlue;
+    }
+  }
+}

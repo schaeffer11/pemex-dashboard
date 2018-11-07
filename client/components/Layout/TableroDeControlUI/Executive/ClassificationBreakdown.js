@@ -5,10 +5,22 @@ import ReactHighcharts from 'react-highcharts'
 
 
 @autobind class ClassificationBreakdown extends PureComponent {
+
+  shouldComponentUpdate(nextProps) {
+    if (this.props.groupBy !== nextProps.groupBy) {
+      return false
+    }
+    
+    return true
+  }
+  
   render() {
     let { data } = this.props
     let successful = 0
     let unsuccessful = 0
+
+
+    console.log(data)
 
     data.forEach(i => {
     	let oilInc = i.qoResult / i.qo

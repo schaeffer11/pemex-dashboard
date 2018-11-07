@@ -2,7 +2,7 @@ import { fromJS } from 'immutable'
 
 const initialState = fromJS({
     hasErrors: true,
-    propuestaCompany: '',
+    tratamientoCompany: '',
     volumenVapor: '',
     calidad: '',
     gastoInyeccion: '',

@@ -235,7 +235,7 @@ const cleanseValue = val => objectPath.has(val, 'value') ? val.value : null
       {label: 'KM-KI', value: 'KM-KI'},
     ]
 
-    console.log('filterssss', subdireccion, activo, field, well)
+    // console.log('filterssss', subdireccion, activo, field, well)
 
     return (
       <div className="filters">

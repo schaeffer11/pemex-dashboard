@@ -8,14 +8,13 @@ function bufferToBase64(buf) {
   return btoa(binstr);
 }
 
-function getBase64FromURL(imgURL) {
+export function getBase64FromURL(imgURL) {
   return new Promise((resolve, reject) => {
     const xhr = new XMLHttpRequest()
     xhr.open('GET', imgURL, true)
     xhr.responseType = 'arraybuffer'
   
     xhr.onload = function(e) {
-
       if (this.status == 200) {
         var uInt8Array = new Uint8Array(this.response);
         var byte3 = uInt8Array[4]; 
