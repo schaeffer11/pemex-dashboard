@@ -273,66 +273,7 @@ maps.evaluacionPetrofisica = {
   }
 }
 
-maps.cedulaData = {
-  estimulacion: {
-    etapa: { text: 'Etapa', unit: '' },
-    sistema: { text: 'Sistema', unit: '' },
-    nombreComercial: { text: 'Nombre comercial', unit: '' },
-    volLiquid: { text: 'Vol. liq.', unit: units.volume },
-    gastoLiqudo: { text: 'Gasto Líquido', unit: units.barrelsPerMinute },
-    relN2Liq: { text: 'Rel. N2/Liq', unit: units.gasLiquidRelation },
-    calidad: { text: 'Calidad', unit: units.percent },
-    gastoEnFondo: { text: 'Gasto en fondo', unit: units.barrelsPerMinute },
-    gastoN2: { text: 'Gasto N2', unit: units.cubicMetersPerMinute },
-    volN2: { text: 'Vol N2', unit: units.volumeNitrogen },
-    volLiquidoAcum: { text: 'Vol. liq. acum.', unit: units.volume },
-    volN2Acum: { text: 'Vol. N2 acum.', unit: units.volumeNitrogen },
-    tiempo: { text: 'Tiempo', unit: units.minutes },
-  },
-  acido: {
-    etapa: { text: 'Etapa', unit: '' },
-    sistema: { text: 'Sistema', unit: '' },
-    nombreComercial: { text: 'Nombre comercial', unit: '' },
-    tipoDeApuntalante: { text: 'Tipo de apuntalante', unit: '' },
-    concentraciDeApuntalante: { text: '', unit: units.concentration },
-    volLiquid: { text: 'Vol. liq.', unit: units.volume },
-    gastoLiqudo: { text: 'Gasto Líquido', unit: units.barrelsPerMinute },
-    relN2Liq: { text: 'Rel. N2/Liq', unit: units.gasLiquidRelation },
-    calidad: { text: 'Calidad', unit: units.percent },
-    gastoEnFondo: { text: 'Gasto en fondo', unit: units.barrelsPerMinute },
-    gastoN2: { text: 'Gasto N2', unit: units.cubicMetersPerMinute },
-    volN2: { text: 'Vol N2', unit: units.volumeNitrogen },
-    volLiquidoAcum: { text: 'Vol. liq. acum.', unit: units.volume },
-    volN2Acum: { text: 'Vol. N2 acum.', unit: units.volumeNitrogen },
-    tiempo: { text: 'Tiempo', unit: units.minutes },
-  },
-  apuntalado: {
-    etapa: { text: 'Etapa', unit: '' },
-    sistema: { text: 'Sistema', unit: '' },
-    nombreComercial: { text: 'Nombre comercial', unit: '' },
-    tipoDeFluido: { text: 'Tipo de fluido', unit: '' },
-    tipoDeApuntalante: { text: 'Tipo de Apuntalante', unit: '' },
-    volLiquido: { text: 'Vol. liq', unit: units.volumeUS },
-    volLechada: { text: 'Vol. lechada', unit: units.volumeBarrels },
-    gastoSuperficie: { text: 'Gasto en superficie', unit: units.barrelsPerMinute },
-    gastoN2Superficie: { text: 'Gasto N2 superficie', unit: units.cubicMetersPerMinute },
-    gastoEnFondo: { text: 'Gasto total fondo', unit: units.barrelsPerMinute },
-    calidadN2Fondo: { text: 'Calidad N2', unit: units.percent },
-    volEspumaFondo: { text: 'Vol. espuma fondo', unit: units.volumeUS },
-    concentracionApuntalanteSuperficie: { text: 'Concentración de apuntalante superficie', unit: units.concentration },
-    concentracionApuntalanteFondo: { text: 'Concentración de apuntalante fondo', unit: units.concentration },
-    apuntalanteAcumulado: { text: 'Apuntalante acumulado', unit: units.massPounds },
-    tiempo: { text: 'Tiempo', unit: units.minutes },
-  },
-  termico: {
-    etapa: { text: 'Etapa', unit: '' },
-    actividad: { text: 'Actividad', unit: '' },
-    descripcion: { text: 'Descripción', unit: '' },
-    justificacion: { text: 'Justificación', unit: '' },
-  },
-}
-
-maps.estimacionProduccion =  {
+maps.estimacionProduccion = {
   estIncEstrangulador: { text: 'Estrangulador', unit: units.pulgadas },
   estIncPtp: { text: 'Ptp', unit: units.pressure },
   estIncTtp: { text: 'Ttp', unit: units.temperature },
@@ -352,69 +293,12 @@ maps.estimacionProduccion =  {
   obervacionesEstIncEstim: { text: 'Observaciones', unit: '' },
 }
 
-maps.resultadosSimulacion = {
-  apuntalado: {
-    longitudApuntalada: { text: 'Longitud apuntalada', unit: units.length },
-    alturaTotalDeFractura: { text: 'Altura total de fractura', unit: units.length },
-    anchoPromedio: { text: 'Ancho promedio', unit: units.pulgadas },
-    concentractionAreal: { text: 'Concentración areal', unit: units.pressureEnglish },
-    conductividad: { text: 'Conductividad', unit: units.conductiviy },
-    fcd: { text: 'FCD', unit: units.specificGravity },
-    presionNeta: { text: 'Presión neta', unit: units.pressureEnglish },
-    eficienciaDeFluidoDeFractura: { text: 'Eficiencia de fluido de fractura', unit: units.percent },
-  },
-  acido: {
-    longitudTotal: { text: 'Longitud total', unit: units.length },
-    longitudEfectivaGrabada: { text: 'Longitud efectiva grabada', unit: units.length },
-    alturaGrabada: { text: 'Altura grabada', unit: units.length },
-    anchoPromedio: { text: 'Ancho promedio', unit: units.pulgadas },
-    concentracionDelAcido: { text: 'Concentración del ácido', unit: units.pressureEnglish },
-    conductividad: { text: 'Conductividad', unit: units.conductiviy },
-    fcd: { text: 'FCD', unit: units.specificGravity },
-    presionNeta: { text: 'Presión neta', unit: units.pressureEnglish },
-    eficienciaDeFluidoDeFractura: { text: 'Eficiencia de fluido de fractura', unit: units.percent },
-  },
-  estimulacion: {
-    penetracionRadial: { text: 'Penetración radial', unit: units.pulgadas },
-    longitudDeAgujeroDeGusano: { text: 'Longitud de agujero de gusano', unit: units.pulgadas },
-  }
+maps.propuestaGeneral = {
+  propuestaCompany: { text: 'Compañía', unit: '' },
+  intervals: { text: 'Intervalos', unit: '' }
 }
 
-maps.volumes = {
-  apuntalado: {
-    volumenPrecolchonN2: { text: 'Precolchón', unit: units.volumeUS },
-    volumenApuntalante: { text: 'Apuntalante', unit: units.volumeSacks },
-    volumenGelFractura: { text: 'Gel de fractura', unit: units.volumeUS },
-    volumenDesplazamientoLiquido: { text: 'Desplazamiento líquido', unit: units.volumeUS },
-    volumenTotalDeLiquido: { text: 'Total de líquido', unit: units.volumeUS },
-  },
-  // acido and estimulacion are the same
-  acido: {
-    volumenPrecolchonN2: { text: 'Precolchón N2', unit: units.volume },
-    volumenSistemaNoReativo: { text: 'Sistema no reactivo', unit: units.volume },
-    volumenSistemaReactivo: { text: 'Sistema reactivo', unit: units.volume },
-    volumenSistemaDivergente: { text: 'Sistema divergente', unit: units.volume },
-    volumenDesplazamientoLiquido: { text: 'Desplazamiento líquido', unit: units.volume },
-    volumenDesplazamientoN2: { text: 'Desplazamiento N2', unit: units.volume },
-    volumenTotalDeLiquido: { text: 'Total de líquido', unit: units.volume },
-  },
-}
-
-// acido and apuntalado are the same
-maps.geoMechanicInformation = {
-  apuntalado: {
-    moduloYoungArena: { text: 'Módulo young arena', unit: units.pressureEnglish },
-    moduloYoungLutitas: { text: 'Módulo young lutitas', unit: units.pressureEnglish },
-    relacPoissonArena: { text: 'Relac. poisson arena', unit: units.specificGravity },
-    relacPoissonLutatas: { text: 'Relac. poisson lutatas', unit: units.specificGravity },
-    gradienteDeFractura: { text: 'Gradiente de fractura', unit: units.fractureGradient },
-    densidadDeDisparos: { text: 'Densidad de disparos', unit: units.disparosDensity },
-    diametroDeDisparos: { text: 'Diámetro de disparos', unit: units.pulgadas },
-  },
-}
-
-
-map.propuesta = {
+maps.propuesta = {
   estimulacion: {
     cedulaData: {
       etapa: { text: 'Etapa', unit: '' },
@@ -431,6 +315,10 @@ map.propuesta = {
       volN2Acum: { text: 'Vol. N2 acum.', unit: units.volumeNitrogen },
       tiempo: { text: 'Tiempo', unit: units.minutes },
     },
+    general: {
+      tipoDeColocacion: { text: 'Tipo de colocación', unit: units },
+      tiempoDeContacto: { text: 'Tiempo de contacto', unit: units.minutes },
+    },
     volumes: {
       volumenPrecolchonN2: { text: 'Precolchón N2', unit: units.volume },
       volumenSistemaNoReativo: { text: 'Sistema no reactivo', unit: units.volume },
@@ -439,6 +327,10 @@ map.propuesta = {
       volumenDesplazamientoLiquido: { text: 'Desplazamiento líquido', unit: units.volume },
       volumenDesplazamientoN2: { text: 'Desplazamiento N2', unit: units.volume },
       volumenTotalDeLiquido: { text: 'Total de líquido', unit: units.volume },
+    },
+    resultadosSimulacion: {
+      penetracionRadial: { text: 'Penetración radial', unit: units.pulgadas },
+      longitudDeAgujeroDeGusano: { text: 'Longitud de agujero de gusano', unit: units.pulgadas },
     }
   },
   acido: {
@@ -467,7 +359,27 @@ map.propuesta = {
       volumenDesplazamientoLiquido: { text: 'Desplazamiento líquido', unit: units.volume },
       volumenDesplazamientoN2: { text: 'Desplazamiento N2', unit: units.volume },
       volumenTotalDeLiquido: { text: 'Total de líquido', unit: units.volume },
-    }
+    },
+    resultadosSimulacion: {
+      longitudTotal: { text: 'Longitud total', unit: units.length },
+      longitudEfectivaGrabada: { text: 'Longitud efectiva grabada', unit: units.length },
+      alturaGrabada: { text: 'Altura grabada', unit: units.length },
+      anchoPromedio: { text: 'Ancho promedio', unit: units.pulgadas },
+      concentracionDelAcido: { text: 'Concentración del ácido', unit: units.pressureEnglish },
+      conductividad: { text: 'Conductividad', unit: units.conductiviy },
+      fcd: { text: 'FCD', unit: units.specificGravity },
+      presionNeta: { text: 'Presión neta', unit: units.pressureEnglish },
+      eficienciaDeFluidoDeFractura: { text: 'Eficiencia de fluido de fractura', unit: units.percent },
+    },
+    geoMechanicInformation: {
+      moduloYoungArena: { text: 'Módulo young arena', unit: units.pressureEnglish },
+      moduloYoungLutitas: { text: 'Módulo young lutitas', unit: units.pressureEnglish },
+      relacPoissonArena: { text: 'Relac. poisson arena', unit: units.specificGravity },
+      relacPoissonLutatas: { text: 'Relac. poisson lutatas', unit: units.specificGravity },
+      gradienteDeFractura: { text: 'Gradiente de fractura', unit: units.fractureGradient },
+      densidadDeDisparos: { text: 'Densidad de disparos', unit: units.disparosDensity },
+      diametroDeDisparos: { text: 'Diámetro de disparos', unit: units.pulgadas },
+    },
   },
   apuntalado: {
     cedulaData: {
@@ -487,6 +399,32 @@ map.propuesta = {
       concentracionApuntalanteFondo: { text: 'Concentración de apuntalante fondo', unit: units.concentration },
       apuntalanteAcumulado: { text: 'Apuntalante acumulado', unit: units.massPounds },
       tiempo: { text: 'Tiempo', unit: units.minutes },
+    },
+    volumes: {
+      volumenPrecolchonN2: { text: 'Precolchón', unit: units.volumeUS },
+      volumenApuntalante: { text: 'Apuntalante', unit: units.volumeSacks },
+      volumenGelFractura: { text: 'Gel de fractura', unit: units.volumeUS },
+      volumenDesplazamientoLiquido: { text: 'Desplazamiento líquido', unit: units.volumeUS },
+      volumenTotalDeLiquido: { text: 'Total de líquido', unit: units.volumeUS },
+    },
+    resultadosSimulacion: {
+      longitudApuntalada: { text: 'Longitud apuntalada', unit: units.length },
+      alturaTotalDeFractura: { text: 'Altura total de fractura', unit: units.length },
+      anchoPromedio: { text: 'Ancho promedio', unit: units.pulgadas },
+      concentractionAreal: { text: 'Concentración areal', unit: units.pressureEnglish },
+      conductividad: { text: 'Conductividad', unit: units.conductiviy },
+      fcd: { text: 'FCD', unit: units.specificGravity },
+      presionNeta: { text: 'Presión neta', unit: units.pressureEnglish },
+      eficienciaDeFluidoDeFractura: { text: 'Eficiencia de fluido de fractura', unit: units.percent },
+    },
+    geoMechanicInformation: {
+      moduloYoungArena: { text: 'Módulo young arena', unit: units.pressureEnglish },
+      moduloYoungLutitas: { text: 'Módulo young lutitas', unit: units.pressureEnglish },
+      relacPoissonArena: { text: 'Relac. poisson arena', unit: units.specificGravity },
+      relacPoissonLutatas: { text: 'Relac. poisson lutatas', unit: units.specificGravity },
+      gradienteDeFractura: { text: 'Gradiente de fractura', unit: units.fractureGradient },
+      densidadDeDisparos: { text: 'Densidad de disparos', unit: units.disparosDensity },
+      diametroDeDisparos: { text: 'Diámetro de disparos', unit: units.pulgadas },
     },
   },
   termico: {

@@ -144,7 +144,6 @@ export async function buildEvaluacionPetrofisicaImage(pptx, image) {
 
 export async function buildProposalCedula(pptx, token, id) {
   const interventionTypeData = await getData('getInterventionBase', token, id)
-  console.log('interventionData?', interventionTypeData)
   const interventionType = interventionTypeData.objetivoYAlcancesIntervencion.tipoDeIntervenciones
   let cedulaURL
   switch (interventionType) {
@@ -163,17 +162,26 @@ export async function buildProposalCedula(pptx, token, id) {
     default:
       return
   }
+
+  
   const slide = pptx.addNewSlide('MASTER_SLIDE')
   slide.addText('Propuesta de tratamiento', { placeholder: 'slide_title' })
   const data = await getData(cedulaURL, token, id)
-  console.log('data', data)
   const { cedulaData, propuestaCompany } = data[Object.keys(data)[0]]
-  const cedulaTable = buildTable('Cedula de tratamiento', maps.cedulaData[interventionType], cedulaData)
+  const layers = await getData('getLayer', token, id)
+  const { layerData } = layers.evaluacionPetrofisica
+  const intervals = layerData.map(elem => `${elem.cimaMD}-${elem.baseMD}`).join('\n')
+  const cedulaMap = maps.propuesta[interventionType].cedulaData
+  const cedulaTable = buildTable('Cedula de tratamiento', cedulaMap, cedulaData)
   const tableOptionsCopy = {...tableOptions}
+  
+  
+  const generalTable = buildSimpleTable('General', maps.propuestaGeneral, { propuestaCompany, intervals })
+  
+  slide.addTable(generalTable, { x: 0.5, y: 1.0, ...tableOptionsCopy })
   delete tableOptionsCopy.colW
-  const companyText = `Compañía Seleccionada para el Tratamiento: ${propuestaCompany}`
-  slide.addText(companyText, { x: 0.5, y: 1.0, fontSize: 12 })
-  slide.addTable(cedulaTable, { x: 0.5, y: 1.25, ...tableOptionsCopy })
+  slide.addTable(cedulaTable, { x: 0.5, y: 2.5, ...tableOptionsCopy })
+
   return slide
 }
 
@@ -181,15 +189,27 @@ export async function buildGeneralProposal(pptx, token, id) {
   const interventionTypeData = await getData('getInterventionBase', token, id)
   const interventionType = interventionTypeData.objetivoYAlcancesIntervencion.tipoDeIntervenciones
   let interventionURL
+  let propuestaData
+  let simulacionData
+  let estimacionProduccionData
   switch (interventionType) {
     case 'estimulacion':
       interventionURL = 'getInterventionEstimulacion'
+      simulacionData = 'resultadosSimulacionEstimulacion'
+      propuestaData = 'propuestaEstimulacion'
+      simulacionData = 'estIncProduccionEstimulacion'
       break;
     case 'acido':
       interventionURL = 'getInterventionAcido'
+      simulacionData = 'resultadosSimulacionAcido'
+      propuestaData = 'propuestaAcido'
+      simulacionData = 'estIncProduccionAcido'
       break;
     case 'apuntalado':
       interventionURL = 'getInterventionApuntalado'
+      simulacionData = 'resultadosSimulacionApuntalado'
+      propuestaData = 'propuestaApuntalado'
+      simulacionData = 'estIncProduccionApuntalado'
       break;
     case 'termico':
       interventionURL = 'getInterventionTermico'
@@ -198,9 +218,27 @@ export async function buildGeneralProposal(pptx, token, id) {
       return
   }
 
+
   const slide = pptx.addNewSlide('MASTER_SLIDE')
   slide.addText('Propuesta de tratamiento', { placeholder: 'slide_title' })
   const data = await getData(interventionURL, token, id)
-  console.log('what data', data)
+  console.log('!data', data, propuestaData, data[propuestaData])
+
+  
+  const tableOptionsCopy = {...tableOptions}
+  const map = maps.propuesta[interventionType]
+  const volumesTable = buildSimpleTable('Volúmenes', map.volumes, data[propuestaData])
+  slide.addTable(volumesTable, { x: 0.5, y: 1.0, ...tableOptionsCopy })
+
+  if (map.geoMechanicInformation) {
+    const geoMechanicTable = buildSimpleTable('Información de Geomecánica', map.geoMechanicInformation, data[propuestaData])
+    slide.addTable(geoMechanicTable, { x: 3.5, y: 1.0, ...tableOptionsCopy })
+  }
+
+  if (interventionType === 'estimulacion' && data[propuestaData].tipoDeEstimulacion === 'limpieza') {
+    const limpiezaTable = buildSimpleTable('Limpieza de Aparejo', map.general, data[propuestaData])
+    slide.addTable(limpiezaTable, { x: 3.5, y: 1.0, ...tableOptionsCopy })
+  }
+  console.log('for something')
   return slide
 }
