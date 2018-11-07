@@ -271,14 +271,14 @@ import CedulaTable from './CedulaTable'
               >          
               <AforoScatter data={aforoData} interventionDate={date}/>   
             </Card>
-{/*            <Card
+            <Card
                 id="cedula"
                 title="Cedulas"
                 ref={this.cards[4]}
               >          
               <CedulaTable label='Proposed' data={cedulaData} type={jobType} />
               <CedulaTable label='Actual' data={cedulaResultData} type={jobType} />
-            </Card>   */}
+            </Card>   
              <Card
                 id="images"
                 title="Images"

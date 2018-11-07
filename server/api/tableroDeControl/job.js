@@ -104,12 +104,58 @@ router.get('/getCedula', (req, res) => {
           })
         }
         else if (type === 'Acido') {
+          results = results.map(i => {
+            return {
+              etapa: i.ETAPA,
+              sistema: i.SISTEMA,
+              nombreComercial: i.NOMBRE_COMERCIAL,
+              tipoDeApuntalante: i.TIPO_DE_APUNTALANTE,
+              concentraciDeApuntalante: i.CONCENTRACION_DE_APUNTALANTE,
+              volLiquid: i.VOL_LIQUID,
+              gastoLiqudo: i.GASTO_LIQUIDO,
+              relN2Liq: i.REL_N2_LIQ,
+              calidad: i.CALIDAD,
+              gastoEnFondo: i.GASTO_EN_FONDO,
+              gastoN2: i.GASTO_N2,
+              volN2: i.VOL_N2,
+              volLiquidoAcum: i.VOL_LIQUIDO_ACUM,
+              volN2Acum: i.VOL_N2_ACUM,
+              tiempo: i.TIEMPO,      
+            }
+          })
 
         }
         else if (type === 'Apuntalado') {
+          results = results.map(i => {
+            return {
+              etapa: i.ETAPA,
+              sistema: i.SISTEMA,
+              nombreComercial: i.NOMBRE_COMERCIAL,
+              tipoDeFluido: i.TIPO_DE_FLUIDO,
+              tipoDeApuntalante: i.TIPO_DE_APUNTALANTE,
+              volLiquido: i.VOL_LIQUIDO,
+              volLechada: i.VOL_LECHADA,
+              gastoSuperficie: i.GASTO_EN_SUPERFICIE,
+              gastoN2Superficie: i.GASTO_N2_SUPERFICIE,
+              gastoEnFondo: i.GASTO_TOTAL_FONDO,
+              calidadN2Fondo: i.CALIDAD_N2,
+              volEspumaFondo: i.VOL_ESPUMA_FONDO,
+              concentracionApuntalanteSuperficie: i.CONCENTRACION_APUNTALANTE_SUPERFICIE,
+              concentracionApuntalanteFondo: i.CONCENTRACION_APUNTALANTE_FONDO,
+              apuntalanteAcumulado: i.APUNTALANTE_ACUMULADO,
+              tiempo: i.TIEMPO,
+            }
+          })
         }
         else {
-          
+          results = results.map(i => {
+            return {
+              etapa: i.ETAPA,
+              actividad: i.ACTIVIDAD,
+              descripcion: i.DESCRIPCION,
+              justificacion: i.JUSTIFICACION,    
+            }
+          })
         }
 
         res.json(results)
@@ -134,11 +180,13 @@ router.get('/getCedulaResults', (req, res) => {
   }
   else if (type === 'Apuntalado') {
     query = `
-      SELECT * FROM ResultsCedulaTermico
+      SELECT * FROM ResultsCedulaApuntalado
       WHERE PROPUESTA_ID = ?`
   }
   else { 
-    query =``
+    query =`
+      SELECT * FROM ResultsCedulaTermico
+      WHERE PROPUESTA_ID = ?`
   }
 
   connection.query(query, transactionID, (err, results) => {
@@ -168,12 +216,57 @@ router.get('/getCedulaResults', (req, res) => {
           })
         }
         else if (type === 'Acido') {
-
+          results = results.map(i => {
+            return {
+              etapa: i.ETAPA,
+              sistema: i.SISTEMA,
+              nombreComercial: i.NOMBRE_COMERCIAL,
+              tipoDeApuntalante: i.TIPO_DE_APUNTALANTE,
+              concentraciDeApuntalante: i.CONCENTRACION_DE_APUNTALANTE,
+              volLiquid: i.VOL_LIQUID,
+              gastoLiqudo: i.GASTO_LIQUIDO,
+              relN2Liq: i.REL_N2_LIQ,
+              calidad: i.CALIDAD,
+              gastoEnFondo: i.GASTO_EN_FONDO,
+              gastoN2: i.GASTO_N2,
+              volN2: i.VOL_N2,
+              volLiquidoAcum: i.VOL_LIQUIDO_ACUM,
+              volN2Acum: i.VOL_N2_ACUM,
+              tiempo: i.TIEMPO,      
+            }
+          })
         }
         else if (type === 'Apuntalado') {
+          results = results.map(i => {
+            return {
+              etapa: i.ETAPA,
+              sistema: i.SISTEMA,
+              nombreComercial: i.NOMBRE_COMERCIAL,
+              tipoDeFluido: i.TIPO_DE_FLUIDO,
+              tipoDeApuntalante: i.TIPO_DE_APUNTALANTE,
+              volLiquido: i.VOL_LIQUIDO,
+              volLechada: i.VOL_LECHADA,
+              gastoSuperficie: i.GASTO_EN_SUPERFICIE,
+              gastoN2Superficie: i.GASTO_N2_SUPERFICIE,
+              gastoEnFondo: i.GASTO_TOTAL_FONDO,
+              calidadN2Fondo: i.CALIDAD_N2,
+              volEspumaFondo: i.VOL_ESPUMA_FONDO,
+              concentracionApuntalanteSuperficie: i.CONCENTRACION_APUNTALANTE_SUPERFICIE,
+              concentracionApuntalanteFondo: i.CONCENTRACION_APUNTALANTE_FONDO,
+              apuntalanteAcumulado: i.APUNTALANTE_ACUMULADO,
+              tiempo: i.TIEMPO,
+            }
+          })
         }
         else {
-
+          results = results.map(i => {
+            return {
+              etapa: i.ETAPA,
+              actividad: i.ACTIVIDAD,
+              descripcion: i.DESCRIPCION,
+              justificacion: i.JUSTIFICACION,    
+            }
+          })
         }
 
 
