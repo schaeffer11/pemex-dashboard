@@ -12,7 +12,11 @@ const initialState = fromJS({
   interventionType: null,
   terminationType: null,
   groupBy: null,
-  groups: []
+  groups: [],
+  minDate: null,
+  maxDate: null,
+  lowDate: null,
+  highDate: null,
 })
 
 

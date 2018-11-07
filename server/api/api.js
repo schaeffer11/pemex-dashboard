@@ -17,10 +17,12 @@ import { create as createWell, getFields, getWell, getSurveys,
             getLabTest, getCedulaEstimulacion, getCedulaAcido, getCedulaApuntalado, 
             getCosts, getInterventionImages } from './pozo'
 
+
 import { create as createCompromiso, mine as myCompromisos, collection as getCompromisos, get as getCompromiso, put as updateCompromiso } from './compromisos';
+
 import { createResults } from './results'
 
-// import { create as createDiagnostico } from './diagnosticos';
+import { create as createDiagnostico, get as getDiagnostico, getAll as getDiagnosticos } from './diagnosticos';
 import { getAuthorization } from '../middleware';
 
 const connection = db.getConnection(appConfig.users.database)
@@ -187,11 +189,30 @@ router.post('/diagnostico', (req, res) => {
     createDiagnostico(req, res)
 })
 
+router.get('/diagnostico', (req, res) => {
+    getDiagnosticos(req, res)
+})
+
+router.get('/diagnostico/:id', (req, res) => {
+    getDiagnostico(req, res)
+})
+
 
 router.get('/getSubmittedFieldWellMapping', (req, res) => {
     connection.query(`SELECT * FROM FieldWellMapping WHERE HAS_DATA = 1`, (err, results) => {
       res.json(results)
     })
+})
+
+router.get('/getDates', (req, res) => {
+  connection.query(`select 
+      YEAR(MIN(FECHA_INTERVENCION)) * 12 + MONTH(MIN(FECHA_INTERVENCION)) AS MIN, 
+      YEAR(MAX(FECHA_INTERVENCION)) * 12 + MONTH(MAX(FECHA_INTERVENCION)) + 1 AS MAX, 
+      MIN(FECHA_INTERVENCION) AS MIN_DATE, 
+      MAX(FECHA_INTERVENCION) AS MAX_DATE 
+      FROM TransactionsResults`, (err, results) => {
+        res.json(results)
+      })
 })
 
 router.get('/getTerminationTypes', (req, res) => {
@@ -206,7 +227,7 @@ router.get('/getTreatmentCompanies', (req, res) => {
   const query = `
     SELECT DISTINCT(COMPANIA) FROM
       (SELECT COMPANIA FROM
-      ResultsCedulaApuntalado_testtest
+      ResultsCedulaApuntalado
       UNION
       SELECT COMPANIA FROM
       ResultsCedulaEstimulacion
@@ -250,8 +271,8 @@ router.get('/getFormationTypes', (req, res) => {
 
 
 
-router.post('/getJobs', (req, res) => {
-    let { well } = req.body
+router.get('/getJobs', (req, res) => {
+    let { well } = req.query
 
     connection.query(`SELECT * FROM Intervenciones WHERE WELL_FORMACION_ID = ?`, well, (err, results) => {
 
@@ -968,6 +989,7 @@ router.get('/getMudLoss', async (req, res) => {
         objectPath.push(finalObj, `${mainParent}.${innerParent}`, innerObj)
       })
       finalObj.evaluacionPetrofisica.hasErrors = data[0].TABLE_HAS_ERRORS === 0 ? false : true
+      console.log('what is this?', finalObj)
       res.json(finalObj)
     }
     else if (action === 'loadTransaction'){

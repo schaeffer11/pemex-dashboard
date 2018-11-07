@@ -1,5 +1,6 @@
 import React, { Component } from 'react'
 import autobind from 'autobind-decorator'
+import Select from 'react-select'
 import DatePicker from 'react-datepicker'
 import MaskedTextInput from "react-text-mask";
 import moment from 'moment'
@@ -13,7 +14,8 @@ import { setIsLoading, setShowForms } from '../../../redux/actions/global'
 @autobind class DiagnosticoForm extends Component {
     constructor(props) {
         super(props)
-        this.initialValues = {
+        this.initialValues =  {
+          activo: null,
           asignacion: "",
           fechaRevision: "",
           disenaYConstruye: null,
@@ -76,7 +78,46 @@ import { setIsLoading, setShowForms } from '../../../redux/actions/global'
           aforos: "",
           personalTomaInformacion: null
         }
+
+        this.state = {
+            id: 0,
+            activos: [{}],
+            update: false
+        }
+
     }
+
+    componentDidMount(){
+        const { token } = this.props
+        const headers = {
+            headers: {
+                'Authorization': `Bearer ${token}`,
+                'content-type': 'application/json',
+            },
+        }
+
+        fetch('/api/activo', {
+            headers,
+            method: 'GET'
+        })
+            .then(r => r.json())
+            .then((res) => {
+                this.setState({
+                    activos: res
+                })
+            })
+
+    }
+
+    componentDidUpdate(){
+        if(this.props.id != this.state.id){
+            this.setState({
+                id: this.props.id,
+                update: true
+            })
+        }
+    }
+
 
     isEmpty(val){
         return val === undefined || val === null || val === ""
@@ -84,6 +125,10 @@ import { setIsLoading, setShowForms } from '../../../redux/actions/global'
 
     validate(values){
         let errors = {};
+
+        if(!values.activo){
+            errors.activo = "Este campo no puede estar vacio"
+        }
 
         if(!values.asignacion){
             errors.asignacion = "Este campo no puede estar vacio"
@@ -346,6 +391,11 @@ import { setIsLoading, setShowForms } from '../../../redux/actions/global'
             const formData = new FormData()
 
             Object.entries(values).forEach(([key,value]) => {
+                // Handle untouched date values loaded from the database
+                if(value && key == 'fechaRevision'){
+                    value = moment(value).format('YYYY-MM-DD');
+                }
+
                 formData.append(key, value);
             })
 
@@ -377,17 +427,27 @@ import { setIsLoading, setShowForms } from '../../../redux/actions/global'
         }, 400);
     }
 
+    confirmEdit(e){
+        this.setState({
+            update: false
+        })
+
+        e.preventDefault()
+        return false;
+    }
 
     render(){
         return(
           <div>
             <Formik
-                initialValues={this.initialValues}
+                enableReinitialize={true}
+                initialValues={this.props.values ? this.props.values : this.initialValues }
                 validate={this.validate}
                 onSubmit={this.onSubmit}
             >
                 { ({touched, isSubmitting, errors}) => (
-                    <Form>
+                    <Form className={this.state.update ? 'disable': ''}>
+                        <button className="import submit" onClick={this.props.openImportModal}>Importar</button>
                         <div className="title">Diagnóstico de Productividad</div>
 
                         <div className="heading">
@@ -402,6 +462,15 @@ import { setIsLoading, setShowForms } from '../../../redux/actions/global'
                                 <DateInput name="fechaRevision"/>
                                 {errors.fechaRevision  && touched.fechaRevision && <div class="error">{errors.fechaRevision}</div>}
                             </div>
+                        </div>
+
+                        <div className="activo">
+                            <label>Activo</label>
+                            <Dropdown
+                                name="activo"
+                                options={this.state.activos.map( a => {return {value: a.ACTIVO_ID , label: a.ACTIVO_NAME}} )}
+                            />
+                            {errors.activo && touched.activo && <div class="error">{errors.activo}</div>}
                         </div>
 
                         <div className="table">
@@ -565,67 +634,67 @@ import { setIsLoading, setShowForms } from '../../../redux/actions/global'
                                 <div className="trow">
                                     <div className="indented description"> - Calibraciones.</div>
                                     <div className="bool"></div>
-                                    <div className="observations"><Field type="number" name="calibraciones" /></div>
+                                    <div className="observations"><Field type="text" name="calibraciones" /></div>
                                     {errors.calibraciones  && touched.calibraciones && <div class="error">{errors.calibraciones}</div>}
                                 </div>
                                 <div className="trow">
                                     <div className="indented description"> - Limpieza de aparejo</div>
                                     <div className="bool"></div>
-                                    <div className="observations"><Field type="number" name="limpiezaAparejo" /></div>
+                                    <div className="observations"><Field type="text" name="limpiezaAparejo" /></div>
                                     {errors.limpiezaAparejo  && touched.limpiezaAparejo && <div class="error">{errors.limpiezaAparejo}</div>}
                                 </div>
                                 <div className="trow">
                                     <div className="indented description"> - Estimulación matricial</div>
                                     <div className="bool"></div>
-                                    <div className="observations"><Field type="number" name="estimulacionMatricial" /></div>
+                                    <div className="observations"><Field type="text" name="estimulacionMatricial" /></div>
                                     {errors.estimulacionMatricial  && touched.estimulacionMatricial && <div class="error">{errors.estimulacionMatricial}</div>}
                                 </div>
                                 <div className="trow">
                                     <div className="indented description"> - Fracturamiento ácidos</div>
                                     <div className="bool"></div>
-                                    <div className="observations"><Field type="number" name="fracturamientoAcidos" /></div>
+                                    <div className="observations"><Field type="text" name="fracturamientoAcidos" /></div>
                                     {errors.fracturamientoAcidos  && touched.fracturamientoAcidos && <div class="error">{errors.fracturamientoAcidos}</div>}
                                 </div>
                                 <div className="trow">
                                     <div className="indented description"> - Fracturamiento apuntalados</div>
                                     <div className="bool"></div>
-                                    <div className="observations"><Field type="number" name="fracturamientoApuntalados" /></div>
+                                    <div className="observations"><Field type="text" name="fracturamientoApuntalados" /></div>
                                     {errors.fracturamientoApuntalados  && touched.fracturamientoAcidos && <div class="error">{errors.fracturamientoApuntalados}</div>}
                                 </div>
                                 <div className="trow">
                                     <div className="indented description"> - Refracturas</div>
                                     <div className="bool"></div>
-                                    <div className="observations"><Field type="number" name="refracturas" /></div>
+                                    <div className="observations"><Field type="text" name="refracturas" /></div>
                                     {errors.refracturas  && touched.refracturas && <div class="error">{errors.refracturas}</div>}
                                 </div>
                                 <div className="trow">
                                     <div className="indented description"> - Procesos de inhibición</div>
                                     <div className="bool"></div>
-                                    <div className="observations"><Field type="number" name="procesosInhibicion" /></div>
+                                    <div className="observations"><Field type="text" name="procesosInhibicion" /></div>
                                     {errors.procesosInhibicion  && touched.procesosInhibicion && <div class="error">{errors.procesosInhibicion}</div>}
                                 </div>
                                 <div className="trow">
                                     <div className="indented description"> - Mejoradores de flujo</div>
                                     <div className="bool"></div>
-                                    <div className="observations"><Field type="number" name="mejoradoresFlujo" /></div>
+                                    <div className="observations"><Field type="text" name="mejoradoresFlujo" /></div>
                                     {errors.mejoradoresFlujo  && touched.mejoradoresFlujo && <div class="error">{errors.mejoradoresFlujo}</div>}
                                 </div>
                                 <div className="trow">
                                     <div className="indented description"> - Control de agua</div>
                                     <div className="bool"></div>
-                                    <div className="observations"><Field type="number" name="controlAgua" /></div>
+                                    <div className="observations"><Field type="text" name="controlAgua" /></div>
                                     {errors.controlAgua  && touched.controlAgua && <div class="error">{errors.controlAgua}</div>}
                                 </div>
                                 <div className="trow">
                                     <div className="indented description"> - Control de gas</div>
                                     <div className="bool"></div>
-                                    <div className="observations"><Field type="number" name="controlGas" /></div>
+                                    <div className="observations"><Field type="text" name="controlGas" /></div>
                                     {errors.controlGas  && touched.controlGas && <div class="error">{errors.controlGas}</div>}
                                 </div>
                                 <div className="trow">
                                     <div className="indented description"> - Control de arena</div>
                                     <div className="bool"></div>
-                                    <div className="observations"><Field type="number" name="controlArena" /></div>
+                                    <div className="observations"><Field type="text" name="controlArena" /></div>
                                     {errors.controlArena  && touched.controlArena && <div class="error">{errors.controlArena}</div>}
                                 </div>
                             </div>
@@ -785,31 +854,31 @@ import { setIsLoading, setShowForms } from '../../../redux/actions/global'
                                 <div className="trow">
                                     <div className="description">Indique el numero de operaciones que realiza al mes de:</div>
                                     <div className="bool"></div>
-                                    <div className="observations"><Field type="number" name="numeroOperacionesMes" /></div>
+                                    <div className="observations"><Field type="text" name="numeroOperacionesMes" /></div>
                                     {errors.numeroOperacionesMes  && touched.numeroOperacionesMes && <div class="error">{errors.numeroOperacionesMes}</div>}
                                 </div>
                                 <div className="trow">
                                     <div className="indented description"> - Registros de presión de fondo cerrado</div>
                                     <div className="bool"></div>
-                                    <div className="observations"><Field type="number" name="registrosFondoCerrado" /></div>
+                                    <div className="observations"><Field type="text" name="registrosFondoCerrado" /></div>
                                     {errors.registrosFondoCerrado  && touched.registrosFondoCerrado && <div class="error">{errors.registrosFondoCerrado}</div>}
                                 </div>
                                 <div className="trow">
                                     <div className="indented description"> - Registros de presión de fondo fluyente</div>
                                     <div className="bool"></div>
-                                    <div className="observations"><Field type="number" name="registrosFondoFluyente" /></div>
+                                    <div className="observations"><Field type="text" name="registrosFondoFluyente" /></div>
                                     {errors.registrosFondoFluyente  && touched.registrosFondoFluyente && <div class="error">{errors.registrosFondoFluyente}</div>}
                                 </div>
                                 <div className="trow">
                                     <div className="indented description"> - Registros de producción (Presión - Temperatura, PLT)</div>
                                     <div className="bool"></div>
-                                    <div className="observations"><Field type="number" name="registrosProduccion" /></div>
+                                    <div className="observations"><Field type="text" name="registrosProduccion" /></div>
                                     {errors.registrosProduccion  && touched.registrosProduccion && <div class="error">{errors.registrosProduccion}</div>}
                                 </div>
                                 <div className="trow">
                                     <div className="indented description"> - Aforos</div>
                                     <div className="bool"></div>
-                                    <div className="observations"><Field type="number" name="aforos" /></div>
+                                    <div className="observations"><Field type="text" name="aforos" /></div>
                                     {errors.aforos  && touched.aforos && <div class="error">{errors.aforos}</div>}
                                 </div>
                                 <div className="trow">
@@ -821,9 +890,19 @@ import { setIsLoading, setShowForms } from '../../../redux/actions/global'
                             </div>
                         </div>
 
-                        <button className="submit button" type="submit">
-                            Enviar
-                        </button>
+                        <div className="button-group">
+                            { this.state.update &&
+                                <button className="submit button" type="submit" onClick={this.confirmEdit}>
+                                    Editar
+                                </button>
+                            }
+
+                            {!this.state.update &&
+                                <button className="submit button" type="submit">
+                                    Enviar
+                                </button>
+                            }
+                        </div>
 
                         {Object.entries(errors).length > 0 && <div class="error">Esta forma contiene errores.</div>}
                     </Form>
@@ -895,6 +974,26 @@ const BoolInput = (props) => {
         </Field>
     );
 };
+
+const Dropdown = (props) => {
+    return (
+        <Field name={props.name}>
+            {({ field, form }) => (
+                <Select
+                    simpleValue
+                    placeholder="Seleccionar"
+                    className='input'
+                    options={props.options}
+                    name={props.name}
+                    value={ props.options.find(i => i.value  === field.value) }
+                    onChange={selectedOption => {
+                        form.setFieldValue(props.name, selectedOption.value)
+                    }}
+                />
+            )}
+        </Field>
+    )
+}
 
 
 const mapDispatchToProps = dispatch => ({

@@ -6,7 +6,8 @@ import Select from 'react-select'
 import autobind from 'autobind-decorator'
 import Filters from './Filters'
 import { setGeneralGlobalAnalysis } from '../../../../redux/actions/global'
-import { selectSimpleValue } from '../../../../lib/formatters';
+import { selectSimpleValue } from '../../../../lib/formatters'
+import { generatePowerPoint } from '../../../../pptx/index'
 
 
 // const getOptions = (key, arr) => arr.map((elem) => {
@@ -153,7 +154,7 @@ const filterArr = arr => {
   }
 
   handleSelectGroups(selection) {
-    const { fieldWellOptions, companyOptions, interventionOptions, terminationOptions, 
+    const { subdireccionOptions, fieldWellOptions, companyOptions, interventionOptions, terminationOptions, 
       formationOptions, activoOptions, fieldOptions, wellOptions } = this.state
     const { company, interventionType, terminationType, setGeneral, formation, subdireccion, activo, field, well } = this.props
     const value = objectPath.has(selection, 'value') ? selection.value : null
@@ -195,7 +196,7 @@ const filterArr = arr => {
   render() {
     const { isOpen, fieldWellOptions, companyOptions, interventionOptions, terminationOptions, 
       formationOptions, subdireccionOptions, activoOptions, fieldOptions, wellOptions } = this.state
-    const { company, interventionType, terminationType, formation, groupBy, subdireccion, activo, field, well } = this.props
+    const { company, interventionType, terminationType, formation, groupBy, subdireccion, activo, field, well, job, token } = this.props
     const groupByOptions = [
       { value: 'subdireccion', label: 'Subdirección' },
       { value: 'activo', label: 'Activo' },
@@ -206,9 +207,6 @@ const filterArr = arr => {
       { value: 'interventionType', label: 'Tipo de Intervención' },
       { value: 'terminationType', label: 'Tipo de Terminación' },
     ]
-
-    console.log(subdireccionOptions)
-    console.log(filterArr(subdireccionOptions))
 
     return (
       <div>
@@ -300,6 +298,9 @@ const filterArr = arr => {
               isClearable={true}
             />
           </div>
+          <div>
+            <button disabled={!job} onClick={() => generatePowerPoint(token, job)}>generar presentacion</button>
+          </div>
         </Menu>
       </div>
     )
@@ -317,6 +318,7 @@ const mapStateToProps = state => ({
   terminationType: state.getIn(['globalAnalysis', 'terminationType']),
   formation: state.getIn(['globalAnalysis', 'formation']),
   groupBy: state.getIn(['globalAnalysis', 'groupBy']),
+  job: state.getIn(['globalAnalysis', 'job'])
 })
 
 const mapDispatchToProps = dispatch => ({
