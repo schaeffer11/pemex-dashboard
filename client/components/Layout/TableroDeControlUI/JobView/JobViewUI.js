@@ -257,13 +257,13 @@ import AforoScatter from './AforoScatter'
               >          
               <AforoScatter data={aforoData} interventionDate={date}/>   
             </Card>
-            <Card
+            {/* <Card
                 id="images"
                 title="Images"
                 ref={this.cards[4]}
               >
               {this.makeImages()}
-            </Card>
+            </Card> */}
           </CardDeck>
         </div>
       </div>
