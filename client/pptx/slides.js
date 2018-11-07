@@ -181,6 +181,7 @@ export async function buildProposalCedula(pptx, token, id) {
   slide.addTable(generalTable, { x: 0.5, y: 1.0, ...tableOptionsCopy })
   delete tableOptionsCopy.colW
   slide.addTable(cedulaTable, { x: 0.5, y: 2.5, ...tableOptionsCopy })
+
   return slide
 }
 
