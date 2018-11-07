@@ -57,6 +57,9 @@ let pieChart = {
         plotShadow: false,
         type: 'pie'
     },
+    credits: {
+        enabled: false,
+    },
     title: {
         text: 'Compromisos por Estado'
     },
@@ -191,7 +194,6 @@ let pieChart = {
     makeCompletedGraph() {
         const compromisos = this.state.filteredCompromisos
 
-        if (compromisos.length > 1) {
             let completos = []
             let sinCompletar = []
             let activos = groupRecords(compromisos, 'nombreActivo')
@@ -207,7 +209,6 @@ let pieChart = {
 
             config.series[0].data = sinCompletar
             config.series[1].data = completos
-        }
 
         return (
             <div className="graph">
@@ -218,34 +219,28 @@ let pieChart = {
 
     makeCompromisosChart() {
         const compromisos = this.state.filteredCompromisos
+        let completedInTime = 0,
+            completedLate = 0,
+            incompleteInTime = 0,
+            overdue = 0;
+        compromisos.forEach(c => {
+            let today = moment(new Date())
 
-        if (compromisos.length > 1) {
-            let completedInTime = 0,
-                completedLate = 0,
-                incompleteInTime = 0,
-                overdue = 0;
-
-            compromisos.forEach(c => {
-                let today = moment(new Date())
-
-                if( c.fechaCumplimiento  && moment(c.fechaCumplimiento) <= moment(c.fechaCompromiso) )
-                    completedInTime++;
-                else if( c.fechaCumplimiento  && moment(c.fechaCumplimiento) > moment(c.fechaCompromiso))
-                    completedLate++;
-                else if( !c.fechaCumplimiento && today <= moment(c.fechaCompromiso) )
-                    incompleteInTime++;
-                else if( !c.fechaCumplimiento && today > moment(c.fechaCompromiso) )
-                    overdue++;
-            })
-
-            pieChart.series[0].data = [
-                {name: "Completado a Tiempo", color: '#35b06d',  y: completedInTime},
-                {name: "Completado Tarde", color: '#6c757d', y: completedLate },
-                {name: "Pendiente", color: '#efd23b', y: incompleteInTime },
-                {name: "Vencido", color: '#d03c28', y: overdue  }
-            ]
-        }
-
+            if( c.fechaCumplimiento  && moment(c.fechaCumplimiento) <= moment(c.fechaCompromiso) )
+                completedInTime++;
+            else if( c.fechaCumplimiento  && moment(c.fechaCumplimiento) > moment(c.fechaCompromiso))
+                completedLate++;
+            else if( !c.fechaCumplimiento && today <= moment(c.fechaCompromiso) )
+                incompleteInTime++;
+            else if( !c.fechaCumplimiento && today > moment(c.fechaCompromiso) )
+                overdue++;
+        })
+        pieChart.series[0].data = [
+            {name: "Completado a Tiempo", color: '#35b06d',  y: completedInTime},
+            {name: "Completado Tarde", color: '#6c757d', y: completedLate },
+            {name: "Pendiente", color: '#efd23b', y: incompleteInTime },
+            {name: "Vencido", color: '#d03c28', y: overdue  }
+        ]
         return (
             <div className="graph">
                 <ReactHighCharts className="compromisosChart" ref={(ref) => this.chart = ref} config={pieChart} />
@@ -296,16 +291,19 @@ var uniqueArray = function(arrArg) {
 const OptionsFilter = ({column, filter, onChange}) => {
     let values = column.data.map(val => val[column.id])
     let uniqueVals = uniqueArray(values).map(val => {return {'value': val, 'label': val}})
-
+    console.log('values', values)
+    console.log('filter', filter)
     return(
         <Select
+            isClearable
             simpleValue
             placeholder="Seleccionar"
             className='input'
             options={uniqueVals}
             value={ filter ? filter.index : 'All' }
             onChange={selectedOption => {
-                onChange(selectedOption.value)
+                const val = selectedOption ? selectedOption.value : ''
+                onChange(val)
             }}
         />
     )
@@ -314,6 +312,7 @@ const OptionsFilter = ({column, filter, onChange}) => {
 const FutureDateFilter = ({filter, onChange}) => {
     return (
         <Select
+            isClearable
             simpleValue
             placeholder="Seleccionar"
             className='input'
@@ -325,7 +324,8 @@ const FutureDateFilter = ({filter, onChange}) => {
             ]}
             value={ filter ? filter.index : 'todos' }
             onChange={selectedOption => {
-                onChange(selectedOption.value)
+                const val = selectedOption ? selectedOption.value : ''
+                onChange(val)
             }}
         />
     )
@@ -334,6 +334,7 @@ const FutureDateFilter = ({filter, onChange}) => {
 const StatusFilter = ({filter, onChange}) => {
     return (
         <Select
+            isClearable
             simpleValue
             placeholder="Seleccionar"
             className='input'
@@ -345,7 +346,8 @@ const StatusFilter = ({filter, onChange}) => {
             ]}
             value={ filter ? filter.index : 'todos' }
             onChange={selectedOption => {
-                onChange(selectedOption.value)
+                const val = selectedOption ? selectedOption.value : ''
+                onChange(val)
             }}
         />
     )
