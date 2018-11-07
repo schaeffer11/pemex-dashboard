@@ -10,6 +10,18 @@
     border-bottom: 1px solid #585858;
   }
 
+  .cta {
+    float: right;
+    padding: 5px 10px;
+    font-size: 16px;
+    font-weight: normal;
+    background: #21658C;
+    color: #fff;
+    border-radius: 5px;
+    text-decoration: none;
+    margin: 18px 0;
+  }
+
   button.submit {
     display: block;
     margin: 2rem auto;
@@ -24,13 +36,71 @@
 
     .rt-th {
       padding: 10px !important;
+      overflow: visible;
+
+      .input {
+        font-size: .8rem;
+        color: black;
+        height: 30px;
+        text-align: left;
+
+        & > div {
+          min-height: 30px;
+        }
+
+        & > div:nth-child(3) {
+          position: absolute;
+          top: 0;
+
+          & > div {
+            width: auto;
+          }
+        }
+
+
+        div[aria-hidden] {
+          padding: 4px;
+        }
+      }
     }
+  }
+
+  .rt-thead.-filters {
+    background-color: lightgray;
   }
 
   &.-striped {
     .rt-tr.-odd{
       background: #CADEF5;
     }
+  }
+
+  .complete {
+    color:  $primary-green;
+  }
+
+  .incomplete {
+    color:  $primary-red;
+  }
+
+  .open {
+    color: $primary-yellow;
+  }
+
+  .center {
+    text-align: center;
+  }
+
+  textarea {
+    width: 100%;
+  }
+
+  button {
+    margin: auto;
+    display: block;
+    background: transparent;
+    color: #21658C;
+    border: none;
   }
 }
 
@@ -41,6 +111,17 @@
   border-radius: 4px;
   padding: 15px;
   width: 500px;
+  text-align: left;
+
+  h2 {
+    text-align: center;
+    margin-bottom: 1rem;
+    font-size: 1.5rem;
+  }
+
+  .label {
+    font-weight: 500;
+  }
 
   form {
 
@@ -48,6 +129,7 @@
       font-size: 1.2rem;
       font-weight: bold;
       text-transform: uppercase;
+      text-align: center;
     }
 
     .field {
@@ -67,8 +149,16 @@
       text-align: left
     }
 
+    textarea {
+      width: 100%;
+    }
+
+    .buttons-group {
+      text-align: center;
+    }
+
     button {
-      margin-top: 2rem;
+      margin: 2rem 5px 0;
     }
 
   }
