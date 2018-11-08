@@ -54,6 +54,7 @@ import { KPI } from '../Common/KPIs'
         title: {
           text: 'Item'
         },
+        tickInterval   : 24 * 3600 * 1000 *30,
         type: 'datetime'
       },
       yAxis: {
@@ -66,7 +67,9 @@ import { KPI } from '../Common/KPIs'
       },
       plotOptions: {
         column: {
-          stacking: 'normal'
+          pointRange: 1,
+          stacking: 'normal',
+          pointRange: 24 * 3600 * 1000*30
         }
       },
       credits: {

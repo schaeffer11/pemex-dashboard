@@ -49,10 +49,8 @@ import { KPI } from '../Common/KPIs'
         title: {
           text: 'Item'
         },
+        tickInterval   : 24 * 3600 * 1000*30,
         type: 'datetime',
-        dateTimeLabelFormats: {
-          year: '%Y'
-        }
       },
       yAxis: {
         title: {
@@ -61,7 +59,8 @@ import { KPI } from '../Common/KPIs'
       },
       plotOptions: {
         column: {
-          stacking: 'normal'
+          stacking: 'normal',
+          pointRange: 24 * 3600 * 1000*30
         }
       },
       credits: {
@@ -70,6 +69,8 @@ import { KPI } from '../Common/KPIs'
       series: series
   }
 
+
+  console.log(series)
     return (
       <div className="cost-bar test">
         <div className='chart'>
