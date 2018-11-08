@@ -1,8 +1,9 @@
 .content-deck {
-  justify-content: space-around;
+  justify-content: center;
   > div {
     margin-bottom: 30px;
   }
+  
   .card {
     height: 100%;
     min-width: 500px;
@@ -23,6 +24,7 @@
       .option {
         background-color: $white-two;
         border: 1px solid $speedWiseBlue;
+        color: $black;
         &.selected {
           background-color: $speedWiseBlue;
           color: $white-two;

@@ -18,7 +18,7 @@ import { KPI } from '../Common/KPIs'
     if (data) {
       data.forEach(i => {
         let utc = new Date(i.FECHA_INTERVENCION)
-        utc = Date.UTC(utc.getFullYear(), utc.getMonth(), utc.getDate())
+        utc = Date.UTC(utc.getFullYear(), utc.getMonth())
 
         i.TOTAL_DESPLAZAMIENTO_N2 ? desplazamientoN2.push({ x: utc, y: i.TOTAL_DESPLAZAMIENTO_N2}) : null
         i.TOTAL_PRECOLCHON_N2 ? totalPrecolchonN2.push({ x: utc, y: i.TOTAL_PRECOLCHON_N2}) : null
@@ -82,6 +82,7 @@ import { KPI } from '../Common/KPIs'
           <ReactHighcharts
             className='chart'
             config={config}
+            ref={(ref) => { this.chart = ref }}
           />
         </div>
       </div>

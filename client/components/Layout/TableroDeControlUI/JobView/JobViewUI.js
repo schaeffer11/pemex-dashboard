@@ -201,11 +201,11 @@ import CedulaTable from './CedulaTable'
         if (Array.isArray(obj)) {
           console.log(obj)
           return obj.map(j => {
-            return <img label={`Lab - ${j.imgName.split('.')[2]}`} src={j.imgURL}></img> 
+            return <img style={{objectFit: 'contain'}} label={`Lab - ${j.imgName.split('.')[2]}`} src={j.imgURL}></img> 
           })
         }
         else {
-          return <img label={obj.imgName.split('.')[1]} src={obj.imgURL}></img>     
+          return <img style={{objectFit: 'contain'}} label={obj.imgName.split('.')[1]} src={obj.imgURL}></img>     
         }
       })
 
@@ -261,6 +261,7 @@ import CedulaTable from './CedulaTable'
                 id="simulationResults"
                 title="Simulation Results"
                 ref={this.cards[2]}
+                isTable={true}
               >          
               <SimulationTreatmentTable type={jobType} interventionData={interventionData} interventionResultsData={interventionResultsData} />
             </Card>            
@@ -275,6 +276,7 @@ import CedulaTable from './CedulaTable'
                 id="cedula"
                 title="Cedulas"
                 ref={this.cards[4]}
+                isTable={true}
               >          
               <CedulaTable label='Proposed' data={cedulaData} type={jobType} />
               <CedulaTable label='Actual' data={cedulaResultData} type={jobType} />
@@ -283,6 +285,7 @@ import CedulaTable from './CedulaTable'
                 id="images"
                 title="Images"
                 ref={this.cards[5]}
+                isImage={true}
               >
               {this.makeImages()}
             </Card> 

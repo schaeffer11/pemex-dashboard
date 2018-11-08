@@ -23,7 +23,7 @@ import { KPI } from '../Common/KPIs'
     if (data) {
       data.forEach(i => {
         let utc = new Date(i.FECHA_INTERVENCION)
-        utc = Date.UTC(utc.getFullYear(), utc.getMonth(), utc.getDate())
+        utc = Date.UTC(utc.getFullYear(), utc.getMonth())
 
         i.TOTAL_SISTEMA_NO_REACTIVO ? sistemaNoReactivoData.push({ x: utc, y: i.TOTAL_SISTEMA_NO_REACTIVO}) : null
         i.TOTAL_SISTEMA_REACTIVO ? sistemaReactivo.push({ x: utc, y: i.TOTAL_SISTEMA_REACTIVO}) : null
@@ -105,7 +105,10 @@ import { KPI } from '../Common/KPIs'
         title: {
           text: 'Item'
         },
-        type: 'datetime'
+        type: 'datetime',
+        dateTimeLabelFormats: {
+          year: '%Y'
+        }
       },
       yAxis: {
         title: {
@@ -133,6 +136,7 @@ import { KPI } from '../Common/KPIs'
           <ReactHighcharts
             className='chart'
             config={config}
+            ref={(ref) => { this.chart = ref }}
           />
         </div>
       </div>
