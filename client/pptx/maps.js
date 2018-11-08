@@ -446,7 +446,7 @@ maps.pruebasDeLaboratorio = {
     fechaPrueba: { text: '', unit: units },
     obervaciones: { text: '', unit: units },
   },
-  caracterizacionFisicoQuimica: {
+  caracterizacionFisico: {
     percentAceite: { text: 'Determinación del porcentaje de aceite', unit: units },
     percentAgua: { text: 'Determinación del porcentaje de agua', unit: units },
     percentEmulsion: { text: 'Determinación del porcentaje de emulsión', unit: units },
@@ -463,5 +463,16 @@ maps.pruebasDeLaboratorio = {
     phDelAgua: { text: 'pH del agua', unit: units },
     salinidadDelAgua: { text: 'Salinidad del agua', unit: units },
     salinidadDelAceite: { text: 'Salinidad del aceite', unit: units },
-  }
+  },
+  pruebasDeCompatibilidad: {
+    compatibilidadTable: {
+      aceiteDelPozo: { text: '', unit: units },
+      condicion: { text: '', unit: units },
+      diseno: { text: '', unit: units },
+      separacionDeFases: { text: '', unit: units },
+      sistema: { text: '', unit: units },
+      solidos: { text: '', unit: units },
+      tiempoDeRompimiento: { text: '', unit: units },
+    },
+  },
 }

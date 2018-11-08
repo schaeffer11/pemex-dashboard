@@ -261,4 +261,9 @@ export async function buildLabReports(pptx, token, id) {
   slide.addText('Pruebas de laboratorio', { placeholder: 'slide_title' })
   const data = await getData('getLabTest', token, id)
   console.log('que me llego?', data)
+  const { pruebasDeLaboratorioData } = data.pruebasDeLaboratorio
+
+  pruebasDeLaboratorioData.forEach((lab) => {
+    const map = maps.pruebasDeLaboratorio[lab.type]
+  })
 }
