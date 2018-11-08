@@ -494,6 +494,35 @@ select FECHA, QO, QW, QG from ResultsAforos WHERE PROPUESTA_ID = ? AND Qo != -99
 
 
 
+router.get('/getLabs', (req, res) => {
+  let { transactionID } = req.query
+  
+  let query = `select * from IntervencionesLabTests where TRANSACTION_ID = ?`
+
+  connection.query(query, transactionID, (err, results) => {
+      console.log('comment err', err)
+
+     if (err) {
+        res.json({ success: false})
+      }
+      else {
+
+        results = results.map(i => {
+          return {
+            type: i.TIPO_DE_ANALISIS,
+            fechaMuestreo: i.FECHA_DE_MUESTREO,
+            fechaPrueba: i.FECHA_DE_PRUEBA,
+            compania: i.COMPANIA,
+            superviso: i.PERSONAL_DE_PEMEX_QUE_SUPERVISO,
+          }
+        })
+        res.json(results)
+      }
+    })
+})
+
+
+
 
 
 
