@@ -316,7 +316,7 @@ maps.propuesta = {
       tiempo: { text: 'Tiempo', unit: units.minutes },
     },
     general: {
-      tipoDeColocacion: { text: 'Tipo de colocación', unit: units },
+      tipoDeColocacion: { text: 'Tipo de colocación', unit: '' },
       tiempoDeContacto: { text: 'Tiempo de contacto', unit: units.minutes },
     },
     volumes: {
@@ -435,4 +435,33 @@ maps.propuesta = {
       justificacion: { text: 'Justificación', unit: '' },
     }
   },
+}
+
+maps.pruebasDeLaboratorio = {
+  general: {
+    type: { text: '', unit: units },
+    compania: { text: '', unit: units },
+    superviso: { text: '', unit: units },
+    fechaMuestreo: { text: '', unit: units },
+    fechaPrueba: { text: '', unit: units },
+    obervaciones: { text: '', unit: units },
+  },
+  caracterizacionFisicoQuimica: {
+    percentAceite: { text: 'Determinación del porcentaje de aceite', unit: units },
+    percentAgua: { text: 'Determinación del porcentaje de agua', unit: units },
+    percentEmulsion: { text: 'Determinación del porcentaje de emulsión', unit: units },
+    percentSolidos: { text: 'Determinación del porcentaje de sólidos', unit: units },
+    percentAsfaltenos: { text: 'Determinación del porcentaje de asfaltenos', unit: units },
+    percentParafinas: { text: 'Determinación del porcentaje de parafinas', unit: units },
+    percentResinasAsfalticas: { text: 'Determinación del porcentaje de resinas asfalticas', unit: units },
+    percentContenidoDeSolidos: { text: 'Determinación del porcentaje de contenido de sólidos', unit: units },
+    densityAceite: { text: 'Densidad del aceite', unit: units },
+    densityAgua: { text: 'Densidad del agua', unit: units },
+    densityEmulsion: { text: 'Densidad de la emulsión', unit: units },
+    viscosityAceite: { text: 'Viscosidad del aceite', unit: units },
+    viscosityEmulsion: { text: 'Viscosidad de la emulsión', unit: units },
+    phDelAgua: { text: 'pH del agua', unit: units },
+    salinidadDelAgua: { text: 'Salinidad del agua', unit: units },
+    salinidadDelAceite: { text: 'Salinidad del aceite', unit: units },
+  }
 }

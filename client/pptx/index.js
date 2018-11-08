@@ -1,5 +1,5 @@
 import PptxGenJS from 'pptxgenjs'
-import { buildEstadoMecanicoYAparejo, buildFichaTecnicaDelCampo, buildFichaTecnicaDelPozo, buildSistemasArtificialesDeProduccion, buildEvaluacionPetrofisica, buildEvaluacionPetrofisicaImage, buildProposalCedula, buildGeneralProposal } from './slides'
+import { buildEstadoMecanicoYAparejo, buildFichaTecnicaDelCampo, buildFichaTecnicaDelPozo, buildSistemasArtificialesDeProduccion, buildEvaluacionPetrofisica, buildEvaluacionPetrofisicaImage, buildProposalCedula, buildGeneralProposal, buildLabReports } from './slides'
 
 function buildMasterSlide(slideWidth, slideHeight) {
   const logo = { x: 0.7, y: 0.15, w: 1.5, h: 0.5, path: '/images/pemex-logo-fpo.png' }
@@ -133,10 +133,11 @@ export async function generatePowerPoint(token, jobID) {
     buildFichaTecnicaDelPozo(pptx, token, jobID),
     buildEstadoMecanicoYAparejo(pptx, token, jobID, images.mecanicoYAparejoDeProduccion),
     buildSistemasArtificialesDeProduccion(pptx, token, jobID),
-    buildEvaluacionPetrofisica(pptx, token, jobID),
-    buildEvaluacionPetrofisicaImage(pptx, images.evaluacionPetrofisica),
+    buildEvaluacionPetrofisica(pptx, token, jobID, images.buildEvaluacionPetrofisica),
+    // buildEvaluacionPetrofisicaImage(pptx, images.evaluacionPetrofisica),
     buildProposalCedula(pptx, token, jobID),
-    buildGeneralProposal(pptx, token, jobID)
+    buildGeneralProposal(pptx, token, jobID),
+    buildLabReports(pptx, token, jobID),
   ])
   pptx.save()
 }

@@ -15,14 +15,18 @@ export function getBase64FromURL(imgURL) {
     xhr.responseType = 'arraybuffer'
   
     xhr.onload = function(e) {
+      console.log('image status', this.status)
       if (this.status == 200) {
         var uInt8Array = new Uint8Array(this.response);
         var byte3 = uInt8Array[4]; 
         const base64 = bufferToBase64(uInt8Array)
         resolve(base64)
       } else {
-        reject('no image')
+        reject({ error: true, message: 'no image' })
       }
+    }
+    xhr.onerror = function (e) {
+      reject({ error: true, message: 'no image' })
     }
     xhr.send()
   })
