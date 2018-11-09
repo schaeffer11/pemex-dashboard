@@ -15,6 +15,9 @@ export const options = [
   { label: 'Pruebas para apuntalante', value: 'pruebasParaApuntalante' },
   { label: 'Pruebas gel de fractura', value: 'pruebasGelDeFractura' },
   { label: 'Pruebas de grabado', value: 'pruebasDeGrabado' },
+  { label: 'Cromatografía del gas', value: 'cromatografiaDelGas' },
+  { label: 'Prueba de dureza', value: 'pruebaDeDureza' },
+  { label: 'Determinación de la calidad método de los cloruros', value: 'determinacionDeLaCalidad' },
 ]
 
 const companyOptions = [
@@ -69,7 +72,7 @@ const companyOptions = [
     let copy = pruebasDeLaboratorioData
     copy[0].length = 2
 
-    setPruebasDeLaboratorioData([...copy, {index: pruebasDeLaboratorioData.length, type: '', fechaMuestreo: '', fechaPrueba: '', compania: '', superviso: '', length: pruebasDeLaboratorioData.length + 1}])
+    setPruebasDeLaboratorioData([...copy, {index: pruebasDeLaboratorioData.length, type: '', fechaMuestreo: null, fechaPrueba: null, compania: '', superviso: '', length: pruebasDeLaboratorioData.length + 1}])
   }
 
 
@@ -189,7 +192,7 @@ const companyOptions = [
       },
     ]
 
-    const objectTemplate = {type: '', fechaMuestreo: '', fechaPrueba: '', compania: '', superviso: ''}
+    const objectTemplate = {type: '', fechaMuestreo: null, fechaPrueba: null, compania: '', superviso: ''}
 
 
 

@@ -141,7 +141,7 @@ import { checkEmpty, checkDate } from '../../../../../lib/errorCheckers'
 
     let localImgUrl = window.URL.createObjectURL(files[0])
 
-    setURL(localImgUrl, 'simulacionAcido')
+    setURL(localImgUrl, 'resultadosSimulacionAcido')
   }
 
   makeEvidenceSimulationInput() {

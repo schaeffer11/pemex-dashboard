@@ -1,14 +1,10 @@
-import { Map, fromJS } from 'immutable'
+import { fromJS } from 'immutable'
 
 const initialState = fromJS({ 
-    intervalo: '',
-    longitudDeIntervalo: '',
-    volAparejo: '',
-    capacidadTotalDelPozo: '',
     volumenPrecolchonN2: '',
-    volumenDeApuntalante: '',
-    volumenDeGelDeFractura: '',
-    volumenDesplazamiento: '',
+    volumenApuntalante: '',
+    volumenGelFractura: '',
+    volumenDesplazamientoLiquido: '',
     volumenTotalDeLiquido: '',
     hasErrors: true,
     moduloYoungArena: '',
@@ -25,18 +21,19 @@ const initialState = fromJS({
         error: true,
         sistema: '',
         nombreComercial: '',
+        tipoDeFluido: '',
         tipoDeApuntalante: '',
-        concentraciDeApuntalante: '',
-        volLiquid: '',
-        gastoN2: '',
-        gastoLiqudo: '',
+        volLiquido: '',
+        volLechada: '',
+        gastoSuperficie: '',
+        gastoN2Superficie: '',
         gastoEnFondo: '',
-        calidad: '',
-        volN2: '',
-        volLiquidoAcum: '',
-        volN2Acum: '',
-        relN2Liq: '',
-        tiempo: '',
+        calidadN2Fondo: '',
+        volEspumaFondo: '',
+        concentracionApuntalanteSuperficie: '',
+        concentracionApuntalanteFondo: '',
+        apuntalanteAcumulado: '',
+        tiempo: ''
     }]
 })
 

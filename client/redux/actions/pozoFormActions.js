@@ -1,4 +1,4 @@
-import { setIsSaved, setIsLoading } from '../../redux/actions/global'
+import { setIsSaved, setIsLoading, setImagesInState } from '../../redux/actions/global'
 import Immutable from 'immutable'
 
 function bufferToBase64(buf) {
@@ -8,14 +8,13 @@ function bufferToBase64(buf) {
   return btoa(binstr);
 }
 
-function getBase64FromURL(imgURL) {
+export function getBase64FromURL(imgURL) {
   return new Promise((resolve, reject) => {
     const xhr = new XMLHttpRequest()
     xhr.open('GET', imgURL, true)
     xhr.responseType = 'arraybuffer'
   
     xhr.onload = function(e) {
-
       if (this.status == 200) {
         var uInt8Array = new Uint8Array(this.response);
         var byte3 = uInt8Array[4]; 
@@ -37,6 +36,11 @@ export function submitForm(action, token, saveName) {
       app: true,
       router: true,
       historicoDeAforosResults: true,
+      estCostResults: true,
+      historicoDeAforosResults: true,
+      graficaTratamiento: true,
+      resultsMeta: true,
+      globalAnalysis: true,
     }
     const errors = []
     const convertedFields = getState().toJS()
@@ -49,13 +53,16 @@ export function submitForm(action, token, saveName) {
     let filteredKeys
 
     if (tipoDeIntervencion === 'estimulacion') {
-      filteredKeys = allKeys.filter(i => !((i.includes('Acido')) || i.includes('Apuntalado')))
+      filteredKeys = allKeys.filter(i => !((i.includes('Acido')) || i.includes('Apuntalado') || i.includes('Termica')))
     }
     else if (tipoDeIntervencion === 'acido') {
-      filteredKeys = allKeys.filter(i => !((i.includes('Estimulacion')) || i.includes('Apuntalado')))
+      filteredKeys = allKeys.filter(i => !((i.includes('Estimulacion')) || i.includes('Apuntalado') || i.includes('Termica')))
     }
     else if (tipoDeIntervencion === 'apuntalado') {
-      filteredKeys = allKeys.filter(i => !((i.includes('Estimulacion')) || i.includes('Acido')))
+      filteredKeys = allKeys.filter(i => !((i.includes('Estimulacion')) || i.includes('Acido') || i.includes('Termica')))
+    }
+    else if (tipoDeIntervencion === 'termico') {
+      filteredKeys = allKeys.filter(i => !((i.includes('Estimulacion')) || i.includes('Acido') || i.includes('Apuntalado')))
     }
 
 
@@ -70,7 +77,7 @@ export function submitForm(action, token, saveName) {
         // look for immediate images
         if (innerObj.hasOwnProperty('imgURL')) {
           if (innerObj.imgURL) {
-            const img = await getBase64FromURL(innerObj.imgURL)
+            const img = innerObj.imgSource === 'local' ? await getBase64FromURL(innerObj.imgURL) : 'exists in s3'
             innerObj.img = img
             // innerObj.imgName = [pozo, k, utc].join('.')
           }
@@ -84,7 +91,9 @@ export function submitForm(action, token, saveName) {
             for (let j of property) {
               if (j.hasOwnProperty('imgURL')) {
                 if (j.imgURL) {
-                  const img = await getBase64FromURL(j.imgURL)
+                  console.log('converting some array img', property)
+                  const img = j.imgSource === 'local' ? await getBase64FromURL(j.imgURL) : 'exists in s3'
+                  // const img = await getBase64FromURL(j.imgURL)
                   j.img = img
                   // j.imgName = [pozo, k, j.type, index, utc].join('.')
                   index += 1
@@ -112,12 +121,14 @@ export function submitForm(action, token, saveName) {
         body: formData,
       })
         .then(r => r.json())
-        .then(({ isSaved }) => {
+        .then(({ isSaved, images }) => {
+          console.log('i got back images?', isSaved, images)
           let notificationType = ''
           let notificationText = ''
           if (isSaved) {
             notificationType = 'success'
             notificationText = 'Su información se ha guardado'
+            dispatch(setImagesInState(images))
           } else {
             notificationType = 'error'
             notificationText = 'Su información no se guardó'
@@ -133,6 +144,43 @@ export function submitForm(action, token, saveName) {
         })
     }
     else if (action === 'submit') {
+    // //TODO apply this change and make it work in database
+    // //changes all -999 to null
+    // for (let k of filteredKeys) {
+    //   if(!ignore[k]) {
+    //     let innerObj = convertedFields[k]
+    //     let innerKeys = Object.keys(innerObj)
+
+    //     innerKeys.forEach(key => {
+    //       if (innerObj[key] === '-999' || innerObj[key] === '-999.00') {
+    //         innerObj[key] = null
+    //       }
+    //     })
+    //     // Look for images inside arrays and get base64
+    //     for(let aKeys of innerKeys) {
+    //       let property = innerObj[aKeys]
+    //       if (Array.isArray(property)) {
+    //         for (let j of property) {
+    //           Object.keys(j).forEach(key => {
+    //             if (j[key] === '-999' || j[key] === '-999.00') {
+    //               j[key] = null
+    //             }
+    //           })
+    //         }
+    //       }
+    //     }
+    //     console.log(convertedFields[k])
+    //   }
+    // }
+
+         // dispatch(setIsLoading({
+         //    notificationType: 'success',
+         //    notificationText: 'fuck',
+         //    isLoading: false,
+         //    showNotification: true,
+         //  }))
+
+
       fetch('/api/well', {
         headers,
         method: 'POST',

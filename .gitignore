@@ -47,6 +47,7 @@ tempFiles
 credentials.json
 databases.json
 aws.config.json
+responses.md
 
 # deploy script
 deploy.sh

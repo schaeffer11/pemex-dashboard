@@ -9,11 +9,11 @@ import '../../../../styles/components/_query_modal.css'
 
 import { setObjetivo, setAlcances, setTipoDeIntervenciones } from '../../../../redux/actions/intervencionesEstimulacion'
 import { setSubdireccion, setActivo, setCampo, setPozo, setFormacion, setFechaProgramadaIntervencion, setFromSaveFichaTecnicaHighLevel, setHasErrorsFichaTecnicaHighLevel, setIntervencionProgramada } from '../../../../redux/actions/pozo'
-import { setShowForms, setIsLoading, setTransactionID } from '../../../../redux/actions/global'
+import { setShowForms, setIsLoading, setTransactionID, setSaveName } from '../../../../redux/actions/global'
 import { InputDate, InputRow, InputRowUnitless, InputRowSelectUnitless, TextAreaUnitless } from '../../Common/InputRow'
 import Notification from '../../Common/Notification'
 import Loading from '../../Common/Loading'
-import { sortLabels } from '../../../../lib/formatters'
+import { sortLabels, handleImagesFromServer } from '../../../../lib/formatters'
 import { checkEmpty, checkDate } from '../../../../lib/errorCheckers'
 import ButtonGroup from './ButtonGroup'
 
@@ -27,6 +27,7 @@ import ButtonGroup from './ButtonGroup'
       proposalOptions: [],
       selectedProposal: null,
       selectedSave: null,
+      selectedSaveName: null,
       errors: {
         subdireccion: {
           type: 'number',
@@ -180,6 +181,7 @@ import ButtonGroup from './ButtonGroup'
   }
 
   checkIncomplete() {
+    return false
     let { interventionFormData, formData } = this.props
 
     interventionFormData = interventionFormData.toJS()
@@ -234,7 +236,7 @@ import ButtonGroup from './ButtonGroup'
             {saveOptions.map(i => {
               let className = i.id === selectedSave ? 'save-item active-save' : 'save-item'
               return (
-                <div key={`saveOption_${i.id}`} className={className} onClick={(e) => this.handleSelectSave(i.id)}>{i.name}</div>
+                <div key={`saveOption_${i.id}`} className={className} onClick={(e) => this.handleSelectSave(i.id, i.name)}>{i.name}</div>
                 )
             })}
         </div> 
@@ -244,9 +246,10 @@ import ButtonGroup from './ButtonGroup'
     )
   }
 
-  handleSelectSave(id) {
+  handleSelectSave(id, name) {
     this.setState({
-      selectedSave: id
+      selectedSave: id,
+      selectedSaveName: name
     })
   }
 
@@ -265,6 +268,7 @@ import ButtonGroup from './ButtonGroup'
       {label: 'Tratamiento de Estimulación', value: 'estimulacion'},
       {label: 'Fracturamiento Ácido', value: 'acido'},
       {label: 'Fracturamiento Apuntalado', value: 'apuntalado'},
+      {label: 'Tratamiento Térmico', value: 'termico'},
     ]
     return (
       <div className='intervention-form'>
@@ -428,8 +432,8 @@ import ButtonGroup from './ButtonGroup'
 
   
   async handleLoad() {
-    let { selectedSave } = this.state
-    let { user, formData, setLoading } = this.props
+    let { selectedSave, selectedSaveName } = this.state
+    let { user, formData, setLoading, setSaveName } = this.props
 
     this.setState({
       isOpen: false
@@ -455,7 +459,7 @@ import ButtonGroup from './ButtonGroup'
 
     let { transactionID, tipoDeIntervenciones } = data
 
-    Promise.all([
+    const results = await Promise.all([
       fetch(`api/getFields?transactionID=${transactionID}&saved=1`, headers).then(r => r.json()),
       fetch(`api/getHistIntervencionesEstimulacionNew?transactionID=${transactionID}&saved=1`, headers).then(r => r.json()),
       fetch(`api/getHistIntervencionesAcidoNew?transactionID=${transactionID}&saved=1`, headers).then(r => r.json()),
@@ -481,10 +485,12 @@ import ButtonGroup from './ButtonGroup'
       fetch(`api/getInterventionEstimulacion?transactionID=${transactionID}&saved=1`, headers).then(r => r.json()),
       fetch(`api/getInterventionAcido?transactionID=${transactionID}&saved=1`, headers).then(r => r.json()),
       fetch(`api/getInterventionApuntalado?transactionID=${transactionID}&saved=1`, headers).then(r => r.json()),
+      fetch(`api/getInterventionTermico?transactionID=${transactionID}&saved=1`, headers).then(r => r.json()),
       fetch(`api/getLabTest?transactionID=${transactionID}&saved=1`, headers).then(r => r.json()),
       fetch(`api/getCedulaEstimulacion?transactionID=${transactionID}&saved=1`, headers).then(r => r.json()),   
       fetch(`api/getCedulaAcido?transactionID=${transactionID}&saved=1`, headers).then(r => r.json()),   
-      fetch(`api/getCedulaApuntalado?transactionID=${transactionID}&saved=1`, headers).then(r => r.json()),      
+      fetch(`api/getCedulaApuntalado?transactionID=${transactionID}&saved=1`, headers).then(r => r.json()), 
+      fetch(`api/getCedulaTermico?transactionID=${transactionID}&saved=1`, headers).then(r => r.json()),      
       fetch(`api/getCosts?transactionID=${transactionID}&saved=1`, headers).then(r => r.json()),
     ])
       .catch(error => {
@@ -496,28 +502,29 @@ import ButtonGroup from './ButtonGroup'
           notificationText: `No se ha descargado informacion del pozo: ${pozo}`
         })
       })
-      .then((results) => {
-        const newState = {}
-        console.log(results)
-        results.forEach(r => {
-          const rKeys = Object.keys(r)
-          rKeys.forEach(registerName => {
-            Object.keys(r[registerName]).forEach(key => {
-              objectPath.set(newState, `${registerName}.${key}`, r[registerName][key])
-            })
-          })
-        })
 
-
-        
-        setLoading({ 
-          isLoading: false,
-          showNotification: true,
-          notificationType: 'success',
-          notificationText: `Se ha descargado informacion del pozo: ${wellID}`
+    let newState = {}
+    console.log(results)
+    results.forEach(r => {
+      const rKeys = Object.keys(r)
+      rKeys.forEach(registerName => {
+        Object.keys(r[registerName]).forEach(key => {
+          objectPath.set(newState, `${registerName}.${key}`, r[registerName][key])
         })
-        this.props.loadFromSave(newState)
       })
+    })
+
+    const allImages = await fetch(`api/getImages?transactionID=${transactionID}&saved=1`, headers).then(r => r.json())
+    newState = handleImagesFromServer(allImages, newState)
+
+    setLoading({ 
+      isLoading: false,
+      showNotification: true,
+      notificationType: 'success',
+      notificationText: `Se ha descargado informacion del pozo: ${wellID}`
+    })
+    setSaveName(selectedSaveName)
+    this.props.loadFromSave(newState)
   }
 
   handleSelectFormType(val) {
@@ -608,6 +615,7 @@ const mapDispatchToProps = dispatch => ({
   setHasErrorsFichaTecnicaHighLevel: obj => dispatch(setHasErrorsFichaTecnicaHighLevel(obj)),
   setFromSaveFichaTecnicaHighLevel: obj => dispatch(setFromSaveFichaTecnicaHighLevel(obj)),
   setIntervencionProgramada: obj => dispatch(setIntervencionProgramada(obj)),
+  setSaveName: obj => dispatch(setSaveName(obj)),
 })
 
 export default connect(mapStateToProps, mapDispatchToProps)(GeneralData)

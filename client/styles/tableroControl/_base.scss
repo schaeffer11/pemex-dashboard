@@ -1,0 +1,52 @@
+.analysis-content {
+	display: grid;
+	grid-template-columns: 150px auto;
+	grid-template-areas: 'menu data';
+	height: 100%;
+	overflow: hidden;
+}
+
+.menu {
+	grid-area: menu;
+	border-right: solid 1px grey;
+
+	.menu-item {
+		height: 50px;
+		width: 150px;
+		border: solid 1px grey;
+		text-align: center;
+		line-height: 50px;
+	}
+
+	.menu-link {
+		display: inline-block;
+		height: 100%;
+		width: 100%;
+	}
+
+	.menu-item:hover {
+		text-decoration: none;
+		color: black;
+		background: #F5F5F5;
+	}
+
+	.menu-link:hover {
+		text-decoration: none;
+		color: black;
+	}
+
+
+	.active {
+		background: #70AC46;
+	}
+}
+
+.data {
+	grid-area: data;	
+	overflow: hidden;
+
+	.header {
+		padding: 5px 20px 0px 20px;
+	}
+
+}

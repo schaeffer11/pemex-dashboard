@@ -461,9 +461,9 @@ import { setFromSaveSistemas, setHasErrorsSistemas, setSistemasArtificialesImgUR
         <div className='header'>
           Cargar imagen del sistema de producción
         </div>
-        <input type='file' accept="image/*" onChange={this.handleFileUpload}></input>
+        {/* <input type='file' accept="image/*" onChange={this.handleFileUpload}></input> */}
 
-        {imgURL ? <img className='img-preview' src={imgURL}></img> : null }
+        {/* {imgURL ? <img className='img-preview' src={imgURL}></img> : null } */}
       </div>
     )
   }
@@ -528,7 +528,6 @@ import { setFromSaveSistemas, setHasErrorsSistemas, setSistemasArtificialesImgUR
             <InputRowSelectUnitless header='Tipo de sistema' name='tipoDeSistemo' value={tipoDeSistemo} options={options} callback={this.handleSelectSistema} errors={this.state.errors} />
           </div>
           { forms[tipoDeSistemo]}
-          { this.makeImgInput() }
           </div>
         <div className='right'>
           <div className={className}/>

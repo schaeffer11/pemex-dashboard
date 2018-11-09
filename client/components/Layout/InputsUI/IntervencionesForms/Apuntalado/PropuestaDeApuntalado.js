@@ -1,18 +1,17 @@
 import React, { Component } from 'react'
 import autobind from 'autobind-decorator'
 import InputTable from '../../../Common/InputTable'
-import ReactTable from 'react-table'
-import Select from 'react-select'
 import { connect } from 'react-redux'
 
-import { InputRow, CalculatedValue, InputRowUnitless, InputRowSelectUnitless } from '../../../Common/InputRow'
+import { InputRow, CalculatedValue, InputRowSelectUnitless } from '../../../Common/InputRow'
 import { setHasErrorsPropuestaApuntalado, setCedulaData, setModuloYoungArena, setModuloYoungLutitas, 
   setRelacPoissonArena, setRelacPoissonLutatas, setGradienteDeFractura, setDensidadDeDisparos, setDiametroDeDisparos, 
   setIntervalo, setLongitudDeIntervalo, setVolAparejo, setCapacidadTotalDelPozo, setVolumenPrecolchonN2, 
   setVolumenDeApuntalante, setVolumenDeGelDeFractura, setVolumenDesplazamiento, setVolumenTotalDeLiquido, 
   setPropuestaCompany } from '../../../../../redux/actions/intervencionesApuntalado'
-import { round, calculateVolumes, getSistemaOptions } from '../../../../../lib/helpers'
+import { round, calculateVolumes, getSistemaApuntaladoOptions, getDisabledColumnForApuntaladoCeluda } from '../../../../../lib/helpers'
 import { checkEmpty, checkDate } from '../../../../../lib/errorCheckers'
+import { calculateValuesApuntaladoCedula } from '../../../../../lib/formatters';
 
 @autobind class PropuestaDeApuntalado extends Component {
   constructor(props) {
@@ -175,13 +174,14 @@ import { checkEmpty, checkDate } from '../../../../../lib/errorCheckers'
   makeDetallesForm() {
     let { formData } = this.props
     formData = formData.toJS()
-    const { volumenSistemaReactivo,
-      volumenSistemaNoReativo,
-      volumenSistemaDivergente,
-      volumenDesplazamientoLiquido,
-      volumenDesplazamientoN2,
+
+    const {
       volumenPrecolchonN2,
-      volumenTotalDeLiquido } = formData
+      volumenGelFractura,
+      volumenDesplazamientoLiquido,
+      volumenTotalDeLiquido,
+      volumenApuntalante
+    } = formData
 
     return (
       <div className='detalles-form' >
@@ -189,39 +189,29 @@ import { checkEmpty, checkDate } from '../../../../../lib/errorCheckers'
           Volúmenes
         </div>
         <CalculatedValue
-          header={<div>Precolchón N<sub>2</sub></div>}
+          header={<div>Precolchón</div>}
           value={volumenPrecolchonN2}
-          unit={<div>m<sup>3</sup></div>} 
+          unit={<div>U.S. Gal</div>} 
         />
         <CalculatedValue
-          header={<div>Sistema no reactivo</div>}
-          value={volumenSistemaNoReativo}
-          unit={<div>m<sup>3</sup></div>} 
+          header={<div>Apuntalante</div>}
+          value={volumenApuntalante}
+          unit={<div>sacos</div>} 
         />
         <CalculatedValue
-          header={<div>Sistema reactivo</div>}
-          value={volumenSistemaReactivo}
-          unit={<div>m<sup>3</sup></div>} 
-        />
-        <CalculatedValue
-          header={<div>Sistema divergente</div>}
-          value={volumenSistemaDivergente}
-          unit={<div>m<sup>3</sup></div>} 
+          header={<div>Gel de fractura</div>}
+          value={volumenGelFractura}
+          unit={<div>U.S. Gal</div>} 
         />
         <CalculatedValue
           header={<div>Desplazamiento líquido</div>}
           value={volumenDesplazamientoLiquido}
-          unit={<div>m<sup>3</sup></div>} 
-        />
-        <CalculatedValue
-          header={<div>Desplazamiento N<sub>2</sub></div>}
-          value={volumenDesplazamientoN2}
-          unit={<div>m<sup>3</sup></div>} 
+          unit={<div>U.S. Gal</div>} 
         />
         <CalculatedValue
           header={<div>Total de líquido</div>}
           value={volumenTotalDeLiquido}
-          unit={<div>m<sup>3</sup></div>} 
+          unit={<div>U.S. Gal</div>} 
         />
       </div>
     )
@@ -310,80 +300,57 @@ import { checkEmpty, checkDate } from '../../../../../lib/errorCheckers'
 
   setAllData(data) {
     const { setCedulaData } = this.props
-    const cedulaData = data.map((row, i) => {
-      let { sistema, relN2Liq, gastoLiqudo, volLiquid } = row
-      if (sistema === 'desplazamientoN2' || sistema === 'pre-colchon') {
-        row.volLiquid = 0
-        row.gastoLiqudo = 0
-        row.relN2Liq = 0
-        row.tiempo = round(row.volN2 / row.gastoN2)
-      } else {
-        row.gastoN2 = round(relN2Liq / 6.291 * gastoLiqudo)
-        row.volN2 = round((6.291 * volLiquid / gastoLiqudo) * row.gastoN2)
-        row.tiempo = round((volLiquid * 6.291) / gastoLiqudo)
-      }
-      const prev = data[i - 1]
-      row.volLiquidoAcum = prev ? round(parseFloat(prev.volLiquidoAcum) + parseFloat(row.volLiquid)) : row.volLiquid
-      row.volN2Acum = prev ? round(parseFloat(prev.volN2Acum) + parseFloat(row.volN2)) : row.volN2
-      return row
-    })
-
+    const cedulaData = calculateValuesApuntaladoCedula(data)
     const volumes = {
-      volumenSistemaReactivo: calculateVolumes(cedulaData, 'volLiquid', 'reactivo'),
-      volumenSistemaNoReativo: calculateVolumes(cedulaData, 'volLiquid', 'no-reactivo'),
-      volumenSistemaDivergente: calculateVolumes(cedulaData, 'volLiquid', 'divergente'),
-      volumenDesplazamientoLiquido: calculateVolumes(cedulaData, 'volLiquid', 'desplazamiento'),
-      volumenDesplazamientoN2: calculateVolumes(cedulaData, 'volN2', 'desplazamiento'),
-      volumenPrecolchonN2: calculateVolumes(cedulaData, 'volN2', 'pre-colchon'),
-      volumenTotalDeLiquido: calculateVolumes(cedulaData, 'volLiquid'),
+      volumenPrecolchonN2: calculateVolumes(cedulaData, 'volLiquido', ['pre-pad']),
+      volumenGelFractura: calculateVolumes(cedulaData, 'volLiquido', ['pad', 'pad-proppant']),
+      volumenDesplazamientoLiquido: calculateVolumes(cedulaData, 'volLiquido', ['flush']),
+      volumenTotalDeLiquido: calculateVolumes(cedulaData, 'volLiquido'),
+      volumenApuntalante: cedulaData[cedulaData.length - 1].apuntalanteAcumulado / 100
     }
     setCedulaData(cedulaData, volumes)
   }
 
   makeCedulaTable() {
-    let { formData, setCedulaData, intervalos } = this.props
+    let { formData } = this.props
     formData = formData.toJS()
     let { cedulaData } = formData
-    intervalos = intervalos.toJS()
-
-    const intervaloOptions = intervalos.map(elem =>({
-      value: `${elem.cimaMD}-${elem.baseMD}`,
-      label: `${elem.cimaMD}-${elem.baseMD}`,
-    }))
-    
-    const sistemaOptions = getSistemaOptions()
-
-    // const objectTemplate = {}
+    const sistemaOptions = getSistemaApuntaladoOptions()
     const rowObj = {
       error: true,
       sistema: '',
       nombreComercial: '',
+      tipoDeFluido: '',
       tipoDeApuntalante: '',
-      concentraciDeApuntalante: '',
-      volLiquid: '',
-      gastoN2: '',
-      gastoLiqudo: '',
+      volLiquido: '',
+      volLechada: '',
+      gastoSuperficie: '',
+      gastoN2Superficie: '',
       gastoEnFondo: '',
-      calidad: '',
-      volN2: '',
-      volLiquidoAcum: '',
-      volN2Acum: '',
-      relN2Liq: '',
-      tiempo: '',
+      calidadN2Fondo: '',
+      volEspumaFondo: '',
+      concentracionApuntalanteSuperficie: '',
+      concentracionApuntalanteFondo: '',
+      apuntalanteAcumulado: '',
+      tiempo: ''
     }
 
     const errors = [
       { name: 'sistema', type: 'text' },
       { name: 'nombreComercial', type: 'text' },
-      { name: 'tipoDeApuntalante', type: 'text' },
-      { name: 'concentraciDeApuntalante', type: 'number' },
-      { name: 'volLiquid', type: 'number' },
-      { name: 'gastoN2', type: 'number' },
-      { name: 'gastoLiqudo', type: 'number' },
+      { name: 'tipoDeFluido', type: 'text' },
+      { name: 'tipoDeApuntalante', type: 'number' },
+      { name: 'volLiquido', type: 'number' },
+      { name: 'volLechada', type: 'number' },
+      { name: 'gastoSuperficie', type: 'number' },
+      { name: 'gastoN2Superficie', type: 'number' },
       { name: 'gastoEnFondo', type: 'number' },
-      { name: 'calidad', type: 'number' },
-      { name: 'volN2', type: 'number' },
-      { name: 'relN2Liq', type: 'number' },
+      { name: 'calidadN2Fondo', type: 'number' },
+      { name: 'volEspumaFondo', type: 'number' },
+      { name: 'concentracionApuntalanteSuperficie', type: 'number' },
+      { name: 'concentracionApuntalanteFondo', type: 'number' },
+      { name: 'apuntalanteAcumulado', type: 'number' },
+      { name: 'tiempo', type: 'number' },
     ]
 
     let columns = [
@@ -413,60 +380,68 @@ import { checkEmpty, checkDate } from '../../../../../lib/errorCheckers'
         cell: 'renderEditable',
       },
       {
+        Header: 'Tipo de Fluido',
+        accessor: 'tipoDeFluido',
+        cell: 'renderEditable',
+      },
+      {
         Header: 'Tipo de Apuntalante',
         accessor: 'tipoDeApuntalante',
         cell: 'renderEditable',
-      }, { 
-        Header: <div>Concentración de Apuntalante<br/>(lbm/gal)</div>,
-        accessor: 'concentraciDeApuntalante',
+      },
+      {
+        Header: <div>Vol. Liq.<br/>(U.S. Gal)</div>,
+        accessor: 'volLiquido',
         cell: 'renderNumber',
       },
       {
-        Header: <div>Vol. Liq.<br/>(m<sup>3</sup>)</div>,
-        accessor: 'volLiquid',
-        cell: 'renderNumberDisable',
-      },
-      { 
-        Header: <div>Gasto Líquido<br/>(bpm)</div>,
-        accessor: 'gastoLiqudo',
-        cell: 'renderNumberDisable',
-      },
-      {
-        Header: <div>Rel. N<sub>2</sub>/Liq<br/>(m<sup>3</sup>std/m<sup>3)</sup></div>,
-        accessor: 'relN2Liq',
-        cell: 'renderNumberDisable',
-      },
-      {
-        Header: <div>Calidad<br/>(%)</div>,
-        accessor: 'calidad',
+        Header: <div>Vol. de la Lechada.<br/>(bbl)</div>,
+        accessor: 'volLechada',
         cell: 'renderNumber',
       },
-      { 
-        Header: <div>Gasto en fondo<br/>(bpm)</div>,
+      {
+        Header: <div>Gasto en Superficie<br/>(bpm)</div>,
+        accessor: 'gastoSuperficie',
+        cell: 'renderNumber',
+      },
+      {
+        Header: <div>Gasto N<sub>2</sub> Superficie<br/>(m<sup>3</sup>/min)</div>,
+        accessor: 'gastoN2Superficie',
+        cell: 'renderNumber',
+      },
+      {
+        Header: <div>Gasto Total Fondo<br/>(bpm)</div>,
         accessor: 'gastoEnFondo',
         cell: 'renderNumber',
       },
-      { 
-        Header: <div>Gasto N<sub>2</sub><br/>(m<sup>3</sup>/min)</div>,
-        accessor: 'gastoN2',
-        cell: 'renderNumberDisable',
-      }, 
-      { 
-        Header: <div>Vol. N<sub>2</sub><br/>(m<sup>3</sup> std)</div>,
-        accessor: 'volN2',
-        cell: 'renderNumberDisable'
+      {
+        Header: <div>Calidad N<sub>2</sub><br/>(%)</div>,
+        accessor: 'calidadN2Fondo',
+        cell: 'renderNumber',
       },
-      { 
-        Header: <div>Vol. Liq. Acum.<br/>(m<sup>3</sup>)</div>,
-        accessor: 'volLiquidoAcum',
+      {
+        Header: <div>Vol. Espuma Fondo.<br/>(U.S. Gal)</div>,
+        accessor: 'volEspumaFondo',
+        cell: 'renderNumber',
       },
-      { 
-        Header: <div>Vol. N<sub>2</sub> Acum.<br/>(m<sup>3</sup> std)</div>,
-        accessor: 'volN2Acum',
-      },     
+      {
+        Header: <div>Concentración de Apuntalante Superficie<br/>(lbm/gal)</div>,
+        accessor: 'concentracionApuntalanteSuperficie',
+        cell: 'renderNumber',
+      },
+      {
+        Header: <div>Concentración de Apuntalante Fondo<br/>(lbm/gal)</div>,
+        accessor: 'concentracionApuntalanteFondo',
+        cell: 'renderNumber',
+      },
+      {
+        Header: <div>Apuntalante Acumulado<br/>(lbm)</div>,
+        accessor: 'apuntalanteAcumulado',
+      },
       { 
         Header: <div>Tiempo<br/>(min)</div>,
         accessor: 'tiempo',
+        cell: 'renderNumberDisable',
       },
     ]
     return (
@@ -481,6 +456,7 @@ import { checkEmpty, checkDate } from '../../../../../lib/errorCheckers'
             selectOptions={sistemaOptions}
             setData={this.setAllData}
             columns={columns}
+            disabledColumns={getDisabledColumnForApuntaladoCeluda}
             showPagination={false}
             showPageSizeOptions={false}
             sortable={false}
@@ -496,11 +472,12 @@ import { checkEmpty, checkDate } from '../../../../../lib/errorCheckers'
 
 
   render() {
-    console.log('mounting propuesta')
-    
     return (
       <div className="form propuesta-de-apuntalado">
         <div className='top'>
+          { this.makeCedulaTable() }
+        </div>
+        <div className='bot'>
           <div className="left">
             { this.makeGeneralForm() }
             { this.makeDetallesForm() }
@@ -510,9 +487,7 @@ import { checkEmpty, checkDate } from '../../../../../lib/errorCheckers'
             <div className='image'/>
           </div>
         </div>
-        <div className='bot'>
-          { this.makeCedulaTable() }       
-        </div>
+        
       </div>
     )
   }

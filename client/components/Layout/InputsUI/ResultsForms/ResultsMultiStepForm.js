@@ -7,9 +7,11 @@ import Evaluaciones from './Evaluaciones'
 import GraficaTratamiento from './GraficaTratamiento'
 import { setMergeResultsMeta } from '../../../../redux/actions/results'
 import EstimacionCostosResults from './EstimacionCostosResults'
+import ResultadosGenerales from './ResultadosGenerales'
 
 import { setIsLoading, setShowForms } from '../../../../redux/actions/global'
 const forms = [
+  {'title' : 'Datos generales', 'content': <ResultadosGenerales /> },
   {'title' : 'Gráfica de tratamiento', 'content': <GraficaTratamiento /> },
   {'title' : 'Aforos', 'content': <HistoricoDeAforosResults /> },
   {'title' : 'Tratamiento', 'content': <Tratamientos /> },
@@ -105,12 +107,28 @@ const mergeKeys = elem => {
   render() {
     let { setShowForms, hasSubmitted, hasErrorsHistoricoDeAforosResults, hasErrorsEstCostResults, hasErrorsTratamientoEstimulacion, 
       hasErrorsTratamientoAcido, hasErrorsTratamientoApuntalado, tipoDeIntervencionesResults, hasErrorsEvaluacionApuntalado, 
-      hasErrorsEvaluacionAcido, hasErrorsEvaluacionEstimulacion, stimulationType } = this.props
+      hasErrorsEvaluacionAcido, hasErrorsEvaluacionEstimulacion, hasErrorsTratamientoTermico, hasErrorsResultadosGenerales, stimulationType } = this.props
     let className = 'subtab'
 
-    let evaluacionErrors = tipoDeIntervencionesResults === 'estimulacion' ? (stimulationType === 'matricial' ? hasErrorsEvaluacionEstimulacion : false) : (tipoDeIntervencionesResults === 'acido' ? hasErrorsEvaluacionAcido : hasErrorsEvaluacionApuntalado)
-    let tratamientoError = tipoDeIntervencionesResults === 'estimulacion' ? hasErrorsTratamientoEstimulacion : (tipoDeIntervencionesResults === 'acido' ? hasErrorsTratamientoAcido : hasErrorsTratamientoApuntalado)
-    let errors = [false, hasErrorsHistoricoDeAforosResults, tratamientoError, evaluacionErrors, hasErrorsEstCostResults]
+    let evaluacionErrors = 
+      tipoDeIntervencionesResults === 'estimulacion' 
+        ? (stimulationType === 'matricial' ? hasErrorsEvaluacionEstimulacion : false) 
+        : tipoDeIntervencionesResults === 'acido' 
+          ? hasErrorsEvaluacionAcido 
+          : tipoDeIntervencionesResults === 'apuntalado' 
+            ? hasErrorsEvaluacionApuntalado
+            : false
+
+    let tratamientoError = 
+      tipoDeIntervencionesResults === 'estimulacion' 
+        ? hasErrorsTratamientoEstimulacion 
+        : tipoDeIntervencionesResults === 'acido' 
+          ? hasErrorsTratamientoAcido 
+          : tipoDeIntervencionesResults === 'apuntalado' 
+            ? hasErrorsTratamientoApuntalado
+            : hasErrorsTratamientoTermico
+
+    let errors = [hasErrorsResultadosGenerales, false, hasErrorsHistoricoDeAforosResults, tratamientoError, evaluacionErrors, hasErrorsEstCostResults]
 
     let title = forms[this.state.currentStep].title
 
@@ -156,10 +174,12 @@ const mapStateToProps = state => ({
   hasErrorsEstCostResults: state.getIn(['estCostResults', 'hasErrors']),
   hasErrorsTratamientoEstimulacion: state.getIn(['tratamientoEstimulacion', 'hasErrors']),
   hasErrorsTratamientoAcido: state.getIn(['tratamientoAcido', 'hasErrors']),
+  hasErrorsTratamientoTermico: state.getIn(['tratamientoTermico', 'hasErrors']),
   hasErrorsTratamientoApuntalado: state.getIn(['tratamientoApuntalado', 'hasErrors']),
   hasErrorsEvaluacionApuntalado: state.getIn(['evaluacionApuntalado', 'hasErrors']),
   hasErrorsEvaluacionAcido: state.getIn(['evaluacionAcido', 'hasErrors']),
   hasErrorsEvaluacionEstimulacion: state.getIn(['evaluacionEstimulacion', 'hasErrors']),
+  hasErrorsResultadosGenerales: state.getIn(['resultadosGenerales', 'hasErrors']),
   tipoDeIntervencionesResults: state.getIn(['resultsMeta', 'interventionType']),
 })
 

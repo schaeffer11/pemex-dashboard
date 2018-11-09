@@ -21,7 +21,4 @@ const mapStateToProps = state => ({
   interventionType: state.getIn(['resultsMeta', 'interventionType'])
 })
 
-const mapDispatchToProps = dispatch => ({
-})
-
 export default connect(mapStateToProps)(Evaluaciones)

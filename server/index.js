@@ -65,6 +65,21 @@ app.use(auth)
 import api from './api/api'
 app.use('/api', api)
 
+import executiveRoutes from './api/tableroDeControl/executive'
+app.use('/executive', executiveRoutes)
+
+import statisticsRoutes from './api/tableroDeControl/statistics'
+app.use('/statistics', statisticsRoutes)
+
+import wellRoutes from './api/tableroDeControl/well'
+app.use('/well', wellRoutes)
+
+import jobRoutes from './api/tableroDeControl/job'
+app.use('/job', jobRoutes)
+
+import timeSeries from './api/tableroDeControl/timeSeries'
+app.use('/timeSeries', timeSeries)
+
 // ENABLE LOGGING AND CACHE CONTROL
 app.use(logger)
 

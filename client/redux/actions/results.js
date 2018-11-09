@@ -2,11 +2,28 @@ import { setIsSaved, setIsLoading } from '../../redux/actions/global'
 import Immutable from 'immutable'
 
 
+export const setMergeTratamientoTermico = (value) => ({
+  value,
+  type: 'set_mergeTratamientoTermico',
+})
+
+export const setCedulaTratamientoTermico = (cedula, volumes) => ({
+  cedula,
+  volumes,
+  type: 'set_cedulaTratamientoTermico',
+})
+
 
 export const setGeneralGraficaTratamiento = (location, value) => ({
   location,
   value,
   type: 'set_generalGraficaTratamiento',
+})
+
+export const setGeneralResultadosGenerales = (location, value) => ({
+  location,
+  value,
+  type: 'set_generalResultadosGenerales',
 })
 
 export const setGeneralHistoricoDeAforosResults = (location, value) => ({
@@ -136,8 +153,8 @@ export function submitResultsForm(action, token) {
     
  
     let filteredKeys = ['user', 'global', 'graficaTratamiento', 'historicoDeAforosResults', 'estCostResults', 
-    'tratamientoEstimulacion', 'tratamientoAcido', 'tratamientoApuntalado', 
-    'evaluacionApuntalado', 'evaluacionAcido', 'evaluacionEstimulacion', 'resultsMeta']
+    'tratamientoEstimulacion', 'tratamientoAcido', 'tratamientoApuntalado', 'tratamientoTermico',
+    'evaluacionApuntalado', 'evaluacionAcido', 'evaluacionEstimulacion', 'resultsMeta', 'resultadosGenerales']
 
 
     // const { pozo } = convertedFields.global

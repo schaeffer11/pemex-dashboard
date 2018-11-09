@@ -3,9 +3,13 @@ import React, { Component } from 'react'
 import autobind from 'autobind-decorator'
 import InputsUI from './InputsUI/InputsUI'
 import DiagnosticosUI from './DiagnosticosUI/DiagnosticosUI'
+import CompromisosUI from './CompromisosUI/CompromisosUI'
+import ManageCompromisos from './CompromisosUI/ManageCompromisos'
+import TableroDeControlUI from './TableroDeControlUI/TableroDeControlUI'
 import HomeUI from './HomeUI/HomeUI'
-import { BrowserRouter, Route, Redirect } from 'react-router-dom'
+import { Route, Redirect } from 'react-router-dom'
 import LoginForm from '../User/LoginForm'
+import Sidebar from './TableroDeControlUI/Common/Sidebar'
 
 
 @autobind class Productspace extends Component {
@@ -24,14 +28,15 @@ import LoginForm from '../User/LoginForm'
   render() {
     const onPage = this.props.onPage || 'sample_page'
     const { isLoading } = this.state
-
+    console.log('something happened?')
     return (
-      <BrowserRouter>
-        <div className="productspace">
+        <div id="page-wrap" className="productspace">
           <PrivateRoute exact path="/carga_datos" component={InputsUI} user={this.props.user} />
           <PrivateRoute exact path="/diagnosticos" component={DiagnosticosUI} user={this.props.user} />
+          <PrivateRoute exact path="/compromisos" component={CompromisosUI} user={this.props.user} />
+          <PrivateRoute exact path="/compromisos/manage" component={ManageCompromisos} user={this.props.user} />
+          <PrivateRoute path="/tablero_control" component={TableroDeControlUI} user={this.props.user} />
           <Route exact path="/" component={HomeUI} />
-
           { this.props.user === null && (
             <div className="login">
               <div className="loginModal">
@@ -40,7 +45,6 @@ import LoginForm from '../User/LoginForm'
             </div>
           )}
         </div>
-      </BrowserRouter>
     )
   }
 }

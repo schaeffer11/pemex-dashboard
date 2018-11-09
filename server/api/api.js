@@ -10,20 +10,71 @@ import { create as createWell, getFields, getWell, getSurveys,
             getHistIntervenciones, getHistIntervencionesNew, getLayer, getMudLoss, getMecanico, 
             getAnalisisAgua, getEmboloViajero, getBombeoNeumatico, getBombeoHidraulico, 
             getBombeoCavidades, getBombeoElectrocentrifugo, getBombeoMecanico, 
-            getFieldPressure, getWellPressure, 
+            getFieldPressure, getWellPressure,
             getWellAforos, getWellProduccion, getWellImages, getInterventionBase, 
-            getInterventionEsimulacion, getInterventionAcido, getInterventionApuntalado, 
+            getInterventionEsimulacion, getInterventionAcido, getInterventionApuntalado,
+            getInterventionTermico, getCedulaTermico, 
             getLabTest, getCedulaEstimulacion, getCedulaAcido, getCedulaApuntalado, 
-            getCosts, getInterventionImage } from './pozo'
+            getCosts, getInterventionImages } from './pozo'
+
+
+import { create as createCompromiso, mine as myCompromisos, collection as getCompromisos, get as getCompromiso, put as updateCompromiso } from './compromisos';
+
 import { createResults } from './results'
 
-// import { create as createDiagnostico } from './diagnosticos';
+import { create as createDiagnostico, get as getDiagnostico, getAll as getDiagnosticos } from './diagnosticos';
 import { getAuthorization } from '../middleware';
 
 const connection = db.getConnection(appConfig.users.database)
 const env = process.env.NODE_ENV || 'dev'
 const isProduction = env === 'production'
 const router = Router()
+
+const getImagesForClient = async (transactionID, action) => new Promise((resolve, reject) => {
+  getWellImages(transactionID, action, async (wellImages) => {
+    const formattedWellImages = await handleImageResponse(wellImages)
+    console.log('format well img', formattedWellImages)
+    getInterventionImages(transactionID, action, async (interventionImages) => {
+      const formattedInterventionImages = await handleImageResponse(interventionImages)
+      console.log('format intervention img', formattedInterventionImages)
+      resolve({ ...formattedWellImages, ...formattedInterventionImages })
+    })
+  })
+})
+
+async function handleImageResponse(data) {
+  const filteredData = data.filter(well => well.IMG_URL !== null && well.IMG_URL !== '').sort((a, b) => {
+    if(a.label < b.label) return -1;
+    if(a.label > b.label) return 1;
+    return 0;
+  })
+  const final = {}
+  for (let well of filteredData) {
+    const imgName = well.IMG_URL
+    // makes no sense but we had to do this so we didn't need to add a new column
+    const labID = well.IMAGE_NAME
+    const imgInformation = well.IMG_URL.split('.')
+    const parent = imgInformation[1]
+    const index = imgInformation[imgInformation.length - 1]
+    const isNumber = /^[0-9]*$/.test(index)
+    // get img url from s3
+    const imgURL = await signedURL(imgName)
+    const innerObj = {
+      imgName,
+      imgURL,
+      imgSource: 's3',
+    }
+    // determine if we need to store in array
+    if (isNumber) {
+      // this is naive assumes everything is in order
+      innerObj.labID = labID
+      objectPath.push(final, parent, innerObj)
+    } else {
+      objectPath.set(final, parent, innerObj)
+    }
+  }
+  return final
+}
 
 // We do not want to check authorization for templates so we put above middleware!
 router.get('/get_template/:template', (req, res) => {
@@ -97,9 +148,53 @@ router.post('/comment', (req, res) => {
     })
 })
 
+router.get('/users', (req, res) => {
+    let table = appConfig.users.table
+    connection.query(`SELECT username, id FROM ??`, [table], (err, results) => {
+        if (err) {
+            res.json([])
+        }
+
+        res.json({ results })
+    })
+})
+
+router.get('/activo', (req, res) => {
+    connection.query(`SELECT DISTINCT ACTIVO_NAME, ACTIVO_ID FROM FieldWellMapping`, (err, results) => {
+        res.json(results)
+    })
+})
+
+router.post('/compromiso', (req, res) => {
+  createCompromiso(req, res)
+})
+
+router.put('/compromiso/:id', (req, res) => {
+    updateCompromiso(req, res)
+})
+
+router.get('/compromiso/mine', (req, res) => {
+    myCompromisos(req, res)
+})
+
+router.get('/compromiso', (req, res) => {
+    getCompromisos(req, res)
+})
+
+router.get('/compromiso/:id', (req, res) => {
+    getCompromiso(req, res)
+})
 
 router.post('/diagnostico', (req, res) => {
     createDiagnostico(req, res)
+})
+
+router.get('/diagnostico', (req, res) => {
+    getDiagnosticos(req, res)
+})
+
+router.get('/diagnostico/:id', (req, res) => {
+    getDiagnostico(req, res)
 })
 
 
@@ -109,9 +204,95 @@ router.get('/getSubmittedFieldWellMapping', (req, res) => {
     })
 })
 
+router.get('/getDates', (req, res) => {
+  connection.query(`select 
+      YEAR(MIN(FECHA_INTERVENCION)) * 12 + MONTH(MIN(FECHA_INTERVENCION)) AS MIN, 
+      YEAR(MAX(FECHA_INTERVENCION)) * 12 + MONTH(MAX(FECHA_INTERVENCION)) + 1 AS MAX, 
+      MIN(FECHA_INTERVENCION) AS MIN_DATE, 
+      MAX(FECHA_INTERVENCION) AS MAX_DATE 
+      FROM TransactionsResults`, (err, results) => {
+        res.json(results)
+      })
+})
+
+router.get('/getTerminationTypes', (req, res) => {
+  const query = `SELECT DISTINCT(TIPO_DE_TERMINACION) FROM WellMecanico`
+  connection.query(query, (err, results) => {
+    results = results.map(i => i.TIPO_DE_TERMINACION)
+    res.send(results)
+  })
+})
+
+router.get('/getTreatmentCompanies', (req, res) => {
+  const query = `
+    SELECT DISTINCT(COMPANIA) FROM
+      (SELECT COMPANIA FROM
+      ResultsCedulaApuntalado
+      UNION
+      SELECT COMPANIA FROM
+      ResultsCedulaEstimulacion
+      UNION
+      SELECT COMPANIA FROM
+      ResultsCedulaTermico
+      UNION
+      SELECT COMPANIA FROM
+      ResultsCedulaAcido) companies
+  `
+  connection.query(query, (err, results) => {
+    if (err) {
+      console.log('there was an error', err)
+    }
+    results = results.map(i => i.COMPANIA)
+    res.json(results)
+  })
+})
+
+router.get('/getInterventionTypes', (req, res) => {
+  const query = `SELECT DISTINCT(TIPO_DE_INTERVENCIONES) FROM Intervenciones`
+  connection.query(query, (err, results) => {
+    if (err) {
+      console.log('there was an error', err)
+    }
+    results = results.map(i => i.TIPO_DE_INTERVENCIONES)
+    res.json(results)
+  })
+})
+
+router.get('/getFormationTypes', (req, res) => {
+  const query = `SELECT DISTINCT(FORMACION) FROM WellsData`
+  connection.query(query, (err, results) => {
+    if (err) {
+      console.log('there was an error', err)
+    }
+    results = results.map(i => i.FORMACION)
+    res.json(results)
+  })
+})
+
+
+
+router.get('/getJobs', (req, res) => {
+    let { well } = req.query
+
+    connection.query(`SELECT * FROM Intervenciones WHERE WELL_FORMACION_ID = ?`, well, (err, results) => {
+
+      res.json(results)
+    })
+})
+
 
 router.get('/getFieldWellMapping', (req, res) => {
     connection.query(`SELECT * FROM FieldWellMapping`, (err, results) => {
+      res.json(results)
+    })
+})
+
+router.get('/getFieldWellMappingHasData', (req, res) => {
+    connection.query(`
+      SELECT * FROM FieldWellMapping 
+      WHERE WELL_FORMACION_ID IN 
+        (SELECT DISTINCT(WELL_FORMACION_ID) FROM Transactions)
+        `, (err, results) => {
       res.json(results)
     })
 })
@@ -245,13 +426,14 @@ router.post('/well', async (req, res) => {
 router.post('/wellSave', async (req, res) => {
 
   // TODO: Find a way to clean up callbacks from createWell
-  createWell(req.body, 'save', err => {
+  createWell(req.body, 'save', async (err, transactionID) => {
     if (err) {
       console.log('we got an error saving', err)
       res.json({ isSaved: false })
     } else {
       console.log('all good in the saving neighborhood')
-      res.json({ isSaved: true })
+      const images = await getImagesForClient(transactionID, 'loadSave')
+      res.json({ isSaved: true, images })
     }
   })
 })
@@ -545,6 +727,28 @@ router.get('/getWell', async (req, res) => {
     SW: { parent: 'fichaTecnicaDelPozo', child: 'sw'},
     CAA: { parent: 'fichaTecnicaDelPozo', child: 'caa'},
     CGA: { parent: 'fichaTecnicaDelPozo', child: 'cga'},
+    DENSIDAD_ACEITE : { parent: 'fichaTecnicaDelPozo', child: 'densidadAceite'},
+    BO : { parent: 'fichaTecnicaDelPozo', child: 'bo'},
+    VISCOSIDAD_ACEITE : { parent: 'fichaTecnicaDelPozo', child: 'viscosidadAceite'},
+    GRAVEDAD_ESPECIFICA_GAS : { parent: 'fichaTecnicaDelPozo', child: 'gravedadEspecificaGas'},
+    BG : { parent: 'fichaTecnicaDelPozo', child: 'bg'},
+    RGA : { parent: 'fichaTecnicaDelPozo', child: 'rga'},
+    ASFALTENOS : { parent: 'fichaTecnicaDelPozo', child: 'asfaltenos'},
+    PARAFINAS : { parent: 'fichaTecnicaDelPozo', child: 'parafinas'},
+    RESINAS_ASFALTICAS : { parent: 'fichaTecnicaDelPozo', child: 'resinasAsfalticas'},
+    INDICE_EST_COLOIDAL : { parent: 'fichaTecnicaDelPozo', child: 'indiceEstColoidal'},
+    DENSIDAD_AGUA : { parent: 'fichaTecnicaDelPozo', child: 'densidadAgua'},
+    CONTENIDO_AGUA : { parent: 'fichaTecnicaDelPozo', child: 'contenidoAgua'},
+    SALINIDAD : { parent: 'fichaTecnicaDelPozo', child: 'salinidad'},
+    PH : { parent: 'fichaTecnicaDelPozo', child: 'ph'},
+    INDICE_EST_AGUA : { parent: 'fichaTecnicaDelPozo', child: 'indiceEstAgua'},
+    CONENIDO_EMULSION : { parent: 'fichaTecnicaDelPozo', child: 'contenidoEmulsion'},
+    PRUEBA_DE_PRESION : { parent: 'fichaTecnicaDelPozo', child: 'pruebaDePresion'},
+    MODELO : { parent: 'fichaTecnicaDelPozo', child: 'modelo'},
+    KH : { parent: 'fichaTecnicaDelPozo', child: 'kh'},
+    K : { parent: 'fichaTecnicaDelPozo', child: 'k'},
+    S : { parent: 'fichaTecnicaDelPozo', child: 's'},
+    PI_EN_NIVEL_SONDA : { parent: 'fichaTecnicaDelPozo', child: 'piEnNivelSonda'},
     TIPO_DE_POZO: { parent: 'fichaTecnicaDelPozo', child: 'tipoDePozo'},
     PWS_FECHA: { parent: 'fichaTecnicaDelPozo', child: 'pwsFecha'},
     PWF_FECHA: { parent: 'fichaTecnicaDelPozo', child: 'pwfFecha'},
@@ -785,6 +989,7 @@ router.get('/getMudLoss', async (req, res) => {
         objectPath.push(finalObj, `${mainParent}.${innerParent}`, innerObj)
       })
       finalObj.evaluacionPetrofisica.hasErrors = data[0].TABLE_HAS_ERRORS === 0 ? false : true
+      console.log('what is this?', finalObj)
       res.json(finalObj)
     }
     else if (action === 'loadTransaction'){
@@ -808,7 +1013,6 @@ router.get('/getMecanico', async (req, res) => {
 
   let action = saved ? 'loadSave' : 'loadTransaction'
 
-
   const map = {
     TIPO_DE_TERMINACION: { parent: 'mecanicoYAparejoDeProduccion', child: 'tipoDeTerminacion'},
     H_INTERVALO_PRODUCTOR: { parent: 'mecanicoYAparejoDeProduccion', child: 'hIntervaloProductor'},
@@ -830,7 +1034,6 @@ router.get('/getMecanico', async (req, res) => {
   }
 
   getMecanico(transactionID, action, (data) => {
-    
     if (data && data.length > 0) {const finalObj = {}
       Object.keys(data[0]).forEach(key => {
         if (map[key]) {
@@ -1385,14 +1588,30 @@ router.get('/getWellProduccion', async (req, res) => {
   })
 })
 
+
+
+router.get('/getImages', async (req, res) => {
+  const { transactionID, saved } = req.query
+  const action = saved ? 'loadSave' : 'loadTransaction'
+  const imagesForClient = await getImagesForClient(transactionID, action).catch(r => console.log('something went wrong getting images'))
+  console.log('da images from client', imagesForClient)
+  res.json(imagesForClient)
+})
 router.get('/getWellImages', async (req, res) => {
   let { transactionID, saved } = req.query
-
   let action = saved ? 'loadSave' : 'loadTransaction'
+  getWellImages(transactionID, action, async (data) => {
+    const final = await handleImageResponse(data)
+    res.json(final)
+  })
+})
 
-
-  getWellImages(transactionID, action, (data) => {
-    res.json(data)
+router.get('/getInterventionImages', async (req, res) => {
+  let { transactionID, saved } = req.query
+  let action = saved ? 'loadSave' : 'loadTransaction'
+  getInterventionImages(transactionID, action, async (data) => {
+    const final = await handleImageResponse(data)
+    res.json(final)
   })
 })
 
@@ -1651,6 +1870,48 @@ router.get('/getInterventionApuntalado', async (req, res) => {
     res.json(finalObj)
   })
 })
+
+
+router.get('/getInterventionTermico', async (req, res) => {
+  let { transactionID, saved } = req.query
+
+  let action = saved ? 'loadSave' : 'loadTransaction'
+
+
+  const map = {
+    VOLUMEN_VAPOR_INYECTAR: { parent: 'propuestaTermica', child: 'volumenVapor' },
+    CALIDAD: { parent: 'propuestaTermica', child: 'calidad' }, 
+    GASTO_INYECCION: { parent: 'propuestaTermica', child: 'gastoInyeccion' },     
+    PRESION_MAXIMA_SALIDA_GENERADOR: { parent: 'propuestaTermica', child: 'presionMaximaSalidaGenerador' },
+    TEMPERATURA_MAXIMA_GENERADOR: { parent: 'propuestaTermica', child: 'temperaturaMaximaGenerador' }, 
+  } 
+
+  getInterventionTermico(transactionID, action, (data) => {
+    const finalObj = {}
+
+    if (data[0]) {
+      Object.keys(data[0]).forEach(key => {
+        if (map[key]) {
+          const { parent, child } = map[key]
+          objectPath.set(finalObj, `${parent}.${child}`, data[0][key])
+        }
+      })   
+      finalObj.propuestaTermica.hasErrors = data[0].HAS_ERRORS_PROPUESTA === 0 ? false : true
+    }
+    else {
+      Object.keys(map).forEach(key => {
+        const { parent, child } = map[key]
+        objectPath.set(finalObj, `${parent}.${child}`, '')
+      })
+      finalObj.propuestaTermica.hasErrors = true
+    }
+    res.json(finalObj)
+  })
+})
+
+
+
+
 router.get('/getLabTest', async (req, res) => {
   let { transactionID, saved } = req.query
 
@@ -1669,15 +1930,14 @@ router.get('/getLabTest', async (req, res) => {
 
     labIDs.forEach((id, index) => {
       let subset = data.filter(i => i.LAB_ID === id)
-
       let type
       if (subset.length > 0) {
         type = subset[0].TIPO_DE_ANALISIS
         let i = subset[0]
-
         if (type === 'caracterizacionFisico') {
           outData.push({
             edited: true,
+            labID: i.LAB_ID,
             index: index,
             length: labIDs.length,
             type: type,
@@ -1720,6 +1980,7 @@ router.get('/getLabTest', async (req, res) => {
 
           outData.push({
             edited: true,
+            labID: i.LAB_ID,
             index: index,
             length: labIDs.length,
             type: type,
@@ -1742,6 +2003,7 @@ router.get('/getLabTest', async (req, res) => {
           })
           outData.push({
             edited: true,
+            labID: i.LAB_ID,
             index: index,
             length: labIDs.length,
             type: type,
@@ -1756,6 +2018,7 @@ router.get('/getLabTest', async (req, res) => {
         else if (type === 'pruebasDeSolubilidad') {
           outData.push({
             edited: true,
+            labID: i.LAB_ID,
             index: index,
             length: labIDs.length,
             type: type,
@@ -1774,6 +2037,7 @@ router.get('/getLabTest', async (req, res) => {
         else if (type === 'pruebasGelDeFractura') {
           outData.push({
             edited: true,
+            labID: i.LAB_ID,
             index: index,
             length: labIDs.length,
             type: type,
@@ -1793,6 +2057,7 @@ router.get('/getLabTest', async (req, res) => {
         else if (type === 'pruebasParaApuntalante') {
           outData.push({
             edited: true,
+            labID: i.LAB_ID,
             index: index,
             length: labIDs.length,
             type: type,
@@ -1808,6 +2073,48 @@ router.get('/getLabTest', async (req, res) => {
             aglutinamiento: i.AGLUTINAMIENTO,
             turbidez: i.TURBIDEZ,
             solubilidad: i.SOLUBILIDAD_APUNTALANTE
+          })
+        }
+        else if (type === 'cromatografiaDelGas') {
+          outData.push({
+            edited: true,
+            labID: i.LAB_ID,
+            index: index,
+            length: labIDs.length,
+            type: type,
+            fechaMuestreo: (i.FECHA_DE_MUESTREO ? i.FECHA_DE_MUESTREO = i.FECHA_DE_MUESTREO.toJSON().slice(0, 10) : null),
+            fechaPrueba : (i.FECHA_DE_PRUEBA ? i.FECHA_DE_PRUEBA = i.FECHA_DE_PRUEBA.toJSON().slice(0, 10) : null),
+            compania: i.COMPANIA,
+            superviso: i.PERSONAL_DE_PEMEX_QUE_SUPERVISO,
+            obervaciones: i.OBSERVACIONES,
+          })
+        }
+        else if (type === 'pruebaDeDureza') {
+          outData.push({
+            edited: true,
+            labID: i.LAB_ID,
+            index: index,
+            length: labIDs.length,
+            type: type,
+            fechaMuestreo: (i.FECHA_DE_MUESTREO ? i.FECHA_DE_MUESTREO = i.FECHA_DE_MUESTREO.toJSON().slice(0, 10) : null),
+            fechaPrueba : (i.FECHA_DE_PRUEBA ? i.FECHA_DE_PRUEBA = i.FECHA_DE_PRUEBA.toJSON().slice(0, 10) : null),
+            compania: i.COMPANIA,
+            superviso: i.PERSONAL_DE_PEMEX_QUE_SUPERVISO,
+            obervaciones: i.OBSERVACIONES,
+          })
+        }
+        else if (type === 'determinacionDeLaCalidad') {
+          outData.push({
+            edited: true,
+            labID: i.LAB_ID,
+            index: index,
+            length: labIDs.length,
+            type: type,
+            fechaMuestreo: (i.FECHA_DE_MUESTREO ? i.FECHA_DE_MUESTREO = i.FECHA_DE_MUESTREO.toJSON().slice(0, 10) : null),
+            fechaPrueba : (i.FECHA_DE_PRUEBA ? i.FECHA_DE_PRUEBA = i.FECHA_DE_PRUEBA.toJSON().slice(0, 10) : null),
+            compania: i.COMPANIA,
+            superviso: i.PERSONAL_DE_PEMEX_QUE_SUPERVISO,
+            obervaciones: i.OBSERVACIONES,
           })
         }
       }
@@ -1882,7 +2189,7 @@ router.get('/getCedulaEstimulacion', async (req, res) => {
         'propuestaEstimulacion': {
           "propuestaCompany": '',
           "cedulaData": [
-            {}
+            {etapa: 1}
           ]
         }
       }
@@ -1946,7 +2253,7 @@ router.get('/getCedulaAcido', async (req, res) => {
         'propuestaAcido': {
           "propuestaCompany": '',
           "cedulaData": [
-            {}
+            {etapa: 1}
           ]
         }
       }
@@ -1966,17 +2273,18 @@ router.get('/getCedulaApuntalado', async (req, res) => {
     ETAPA: { child: 'etapa' }, 
     SISTEMA: { child: 'sistema' }, 
     NOMBRE_COMERCIAL: { child: 'nombreComercial' },
+    TIPO_DE_FLUIDO: { child: 'tipoDeFluido'},
     TIPO_DE_APUNTALANTE: { child: 'tipoDeApuntalante' }, 
-    CONCENTRACION_DE_APUNTALANTE: { child: 'concentraciDeApuntalante' }, 
-    VOL_LIQUID: { child: 'volLiquid' }, 
-    GASTO_N2: { child: 'gastoN2' }, 
-    GASTO_LIQUIDO: { child: 'gastoLiqudo' }, 
-    GASTO_EN_FONDO: { child: 'gastoEnFondo' }, 
-    CALIDAD: { child: 'calidad' }, 
-    VOL_N2: { child: 'volN2' }, 
-    VOL_LIQUIDO_ACUM: { child: 'volLiquidoAcum' }, 
-    VOL_N2_ACUM: { child: 'volN2Acum' }, 
-    REL_N2_LIQ: { child: 'relN2Liq' }, 
+    VOL_LIQUIDO: { child: 'volLiquido' }, 
+    VOL_LECHADA: { child: 'volLechada' }, 
+    GASTO_EN_SUPERFICIE: { child: 'gastoSuperficie' }, 
+    GASTO_N2_SUPERFICIE: { child: 'gastoN2Superficie' }, 
+    GASTO_TOTAL_FONDO: {child: 'gastoEnFondo'},
+    CALIDAD_N2: { child: 'calidadN2Fondo' }, 
+    VOL_ESPUMA_FONDO: { child: 'volEspumaFondo' }, 
+    CONCENTRACION_APUNTALANTE_SUPERFICIE: { child: 'concentracionApuntalanteSuperficie' }, 
+    CONCENTRACION_APUNTALANTE_FONDO: { child: 'concentracionApuntalanteFondo' }, 
+    APUNTALANTE_ACUMULADO: { child: 'apuntalanteAcumulado' }, 
     TIEMPO: { child: 'tiempo' },
     HAS_ERRORS: { child: 'error' },
   }
@@ -2010,7 +2318,7 @@ router.get('/getCedulaApuntalado', async (req, res) => {
         'propuestaApuntalado': {
           "propuestaCompany": '',
           "cedulaData": [
-            {}
+            {etapa: 1}
           ]
         }
       }
@@ -2020,6 +2328,60 @@ router.get('/getCedulaApuntalado', async (req, res) => {
   })
 })
 
+
+router.get('/getCedulaTermico', async (req, res) => {
+  let { transactionID, saved } = req.query
+
+  let action = saved ? 'loadSave' : 'loadTransaction'
+
+  const map = {
+    ETAPA: { child: 'etapa' }, 
+    ACTIVIDAD: { child: 'actividad' }, 
+    DESCRIPCION: { child: 'descripcion' },
+    JUSTIFICACION: { child: 'justificacion'},
+    HAS_ERRORS: { child: 'error' },
+  }
+
+  const mainParent = 'propuestaTermica'
+  const innerParent = 'cedulaData'
+
+  getCedulaTermico(transactionID, action, (data) => {
+    let finalObj = {}
+    let error = false
+
+    if (data && data.length > 0) {
+      data.forEach((d, index) => {
+        d.HAS_ERRORS = d.HAS_ERRORS === 0 || d.HAS_ERRORS === undefined ? false : true
+        d.HAS_ERRORS === true ? error = true : null
+        const innerObj = {}
+        Object.keys(d).forEach(k => {
+          if (map[k]) {
+            const { child } = map[k]
+            objectPath.set(innerObj, child, d[k])
+          }
+        })
+        objectPath.set(innerObj, 'length', data.length)
+        objectPath.set(innerObj, 'index', index)
+        objectPath.push(finalObj, `${mainParent}.${innerParent}`, innerObj)
+      })
+      finalObj.propuestaTermica.propuestaCompany = data[0].COMPANIA
+      finalObj.propuestaTermica.hasErrors = error
+    }
+    else {
+      finalObj = {
+        'propuestaTermica': {
+          "propuestaCompany": '',
+          "cedulaData": [
+            {etapa: 1}
+          ]
+        }
+      }
+    }
+
+    console.log(finalObj)
+    res.json(finalObj)
+  })
+})
 
 router.get('/getCosts', async (req, res) => {
   let { transactionID, saved } = req.query
@@ -2046,6 +2408,7 @@ router.get('/getCosts', async (req, res) => {
       data.forEach((d, index) => {
         d.HAS_ERRORS = d.HAS_ERRORS === 0 || d.HAS_ERRORS === undefined ? false : true
         d.HAS_ERRORS === true ? error = true : null
+        d.ITEM = d.ITEM ? parseInt(d.ITEM) : null
         const innerObj = {}
         Object.keys(d).forEach(k => {
           if (map[k]) {
@@ -2072,18 +2435,6 @@ router.get('/getCosts', async (req, res) => {
     res.json(finalObj)
   })
 })
-
-router.get('/getInterventionImage', async (req, res) => {
-  let { transactionID, saved } = req.query
-
-  let action = saved ? 'loadSave' : 'loadTransaction'
-
-
-  getInterventionImage(transactionID, action, (data) => {
-    res.json(data)
-  })
-})
-
 
 router.get('*', (req, res) => {
   res.status(404).send(`No API endpoint found for "${req.url}"`)
