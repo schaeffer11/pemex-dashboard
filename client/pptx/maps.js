@@ -43,7 +43,9 @@ const units = {
   gasLiquidRelation: 'm3*std/m3',
   minutes: 'min',
   concentration: 'lbm/gal',
-  massPunds: 'lbm',
+  massPounds: 'lbm',
+  massGrams: 'gr',
+  malla: 'malla',
 }
 
 export const maps = {}
@@ -439,40 +441,80 @@ maps.propuesta = {
 
 maps.pruebasDeLaboratorio = {
   general: {
-    type: { text: '', unit: units },
-    compania: { text: '', unit: units },
-    superviso: { text: '', unit: units },
-    fechaMuestreo: { text: '', unit: units },
-    fechaPrueba: { text: '', unit: units },
-    obervaciones: { text: '', unit: units },
+    type: { text: 'Tipo de Analisis', unit: '' },
+    fechaMuestreo: { text: 'Fecha de muestreo', unit: '' },
+    fechaPrueba: { text: 'Fecha de prueba', unit: '' },
+    compania: { text: 'Compañía', unit: '' },
+    superviso: { text: 'Personal de Pemex que supervisó', unit: '' },
+    obervaciones: { text: 'Observaciones', unit: '' },
   },
   caracterizacionFisico: {
-    percentAceite: { text: 'Determinación del porcentaje de aceite', unit: units },
-    percentAgua: { text: 'Determinación del porcentaje de agua', unit: units },
-    percentEmulsion: { text: 'Determinación del porcentaje de emulsión', unit: units },
-    percentSolidos: { text: 'Determinación del porcentaje de sólidos', unit: units },
-    percentAsfaltenos: { text: 'Determinación del porcentaje de asfaltenos', unit: units },
-    percentParafinas: { text: 'Determinación del porcentaje de parafinas', unit: units },
-    percentResinasAsfalticas: { text: 'Determinación del porcentaje de resinas asfalticas', unit: units },
-    percentContenidoDeSolidos: { text: 'Determinación del porcentaje de contenido de sólidos', unit: units },
-    densityAceite: { text: 'Densidad del aceite', unit: units },
-    densityAgua: { text: 'Densidad del agua', unit: units },
-    densityEmulsion: { text: 'Densidad de la emulsión', unit: units },
-    viscosityAceite: { text: 'Viscosidad del aceite', unit: units },
-    viscosityEmulsion: { text: 'Viscosidad de la emulsión', unit: units },
-    phDelAgua: { text: 'pH del agua', unit: units },
-    salinidadDelAgua: { text: 'Salinidad del agua', unit: units },
-    salinidadDelAceite: { text: 'Salinidad del aceite', unit: units },
+    percentAceite: { text: 'Determinación del porcentaje de aceite', unit: units.percent },
+    percentAgua: { text: 'Determinación del porcentaje de agua', unit: units.percent },
+    percentEmulsion: { text: 'Determinación del porcentaje de emulsión', unit: units.percent },
+    percentSolidos: { text: 'Determinación del porcentaje de sólidos', unit: units.percent },
+    percentAsfaltenos: { text: 'Determinación del porcentaje de asfaltenos', unit: units.percent },
+    percentParafinas: { text: 'Determinación del porcentaje de parafinas', unit: units.percent },
+    percentResinasAsfalticas: { text: 'Determinación del porcentaje de resinas asfalticas', unit: units.percent },
+    percentContenidoDeSolidos: { text: 'Determinación del porcentaje de contenido de sólidos', unit: units.percent },
+    densityAceite: { text: 'Densidad del aceite', unit: units.density },
+    densityAgua: { text: 'Densidad del agua', unit: units.density },
+    densityEmulsion: { text: 'Densidad de la emulsión', unit: units.density },
+    viscosityAceite: { text: 'Viscosidad del aceite', unit: units.viscosity },
+    viscosityEmulsion: { text: 'Viscosidad de la emulsión', unit: units.viscosity },
+    phDelAgua: { text: 'pH del agua', unit: '' },
+    salinidadDelAgua: { text: 'Salinidad del agua', unit: units.ppm },
+    salinidadDelAceite: { text: 'Salinidad del aceite', unit: units.ppm },
   },
   pruebasDeCompatibilidad: {
-    compatibilidadTable: {
-      aceiteDelPozo: { text: '', unit: units },
-      condicion: { text: '', unit: units },
-      diseno: { text: '', unit: units },
-      separacionDeFases: { text: '', unit: units },
-      sistema: { text: '', unit: units },
-      solidos: { text: '', unit: units },
-      tiempoDeRompimiento: { text: '', unit: units },
+    compatabilidadTable: {
+      diseno: { text: 'Diseño', unit: '' },
+      sistema: { text: 'Sistema', unit: '' },
+      aceiteDelPozo: { text: 'Aceite del pozo', unit: '' },
+      tiempoDeRompimiento: { text: 'Tiempo de Rompimiento', unit: '' },
+      separacionDeFases: { text: 'Separación de fases', unit: '' },
+      solidos: { text: 'Solidos', unit: '' },
+      condicion: { text: 'Condición', unit: '' },
     },
   },
+  pruebasDeGrabado: {
+    grabadoTable: {
+      sistemaAcido: { text: 'Sistema Ácido', unit: '' },
+      tiempoDeContacto: { text: 'Tiempo de contacto', unit: units.minutes },
+      grabado: { text: 'Grabado', unit: '' },
+    }
+  },
+  pruebasDeSolubilidad: {
+    tipoDeMuestra: { text: 'Tipo de muestra', unit: '' },
+    pesoDeLaMuestra: { text: 'Peso de la muestra', unit: units.massGrams },
+    tipoDeSistemaEmpleado: { text: 'Tipo de sistema químico empleado', unit: '' },
+    pesoDeLaMuestraFinal: { text: 'Peso final de la muestra', unit: units.massGrams },
+    solubilidad: { text: 'Solubilidad', unit: units.percent },
+  },
+  pruebasGelDeFractura: {
+    hidratacionDelFluido: { text: 'Hidratación del fluido', unit: units },
+    tiempoDeActivacion: { text: 'Tiempo de activación del gel', unit: units.specificGravity },
+    determinacionDePh: { text: 'Determinación de pH', unit: '' },
+    tiempoDeRompimiento: { text: 'Tiempo de rompimiento', unit: units },
+    dosificacionDeQuebradors: { text: 'Dosificación de quebradores', unit: units.specificGravity },
+    viscosidadDelGelDeFractura: { text: 'Viscosidad del gel de fractura', unit: units.specificGravity },
+  },
+  pruebasParaApuntalante: {
+    esfericidad: { text: 'Esfericidad', unit: units.specificGravity },
+    redondez: { text: 'Redondez', unit: units.specificGravity },
+    resistenciaCompresion: { text: 'Resistencia a la compresión', unit: units.pressureEnglish },
+    malla: { text: 'Malla', unit: units.malla },
+    aglutinamiento: { text: 'Aglutinamiento', unit: units.specificGravity },
+    turbidez: { text: 'Turbidez', unit: units.specificGravity },
+    solubilidad: { text: 'Solubilidad', unit: units.percent },
+  },
+  cromatografiaDelGas: {
+    // image
+  },
+  pruebaDeDureza: {
+    // image
+  },
+  determinacionDeLaCalidad: {
+    // image
+  }
 }

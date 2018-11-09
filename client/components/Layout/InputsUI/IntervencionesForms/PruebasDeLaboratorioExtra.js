@@ -185,15 +185,20 @@ const grabadoOptions = [
     return (
       <div className='solubilidad-form' >
           <InputRowSelectUnitless 
-          header="Tipo de muestra" name='tipoDeMuestra' value={pruebasDeLaboratorioData[index].tipoDeMuestra} options={tipoDeMuestraOptions} callback={(e) => this.handleSelectNonTable(e.value, 'tipoDeMuestra', index)} index={index} errors={this.state.errors} onBlur={this.validate} / >
+          header="Tipo de muestra"
+          name='tipoDeMuestra' value={pruebasDeLaboratorioData[index].tipoDeMuestra} options={tipoDeMuestraOptions} callback={(e) => this.handleSelectNonTable(e.value, 'tipoDeMuestra', index)} index={index} errors={this.state.errors} onBlur={this.validate} / >
           <InputRow 
-          header="Peso de la muestra" name='pesoDeLaMuestra' value={pruebasDeLaboratorioData[index].pesoDeLaMuestra} onChange={this.updateValue} index={index} unit='gr' errors={this.state.errors} onBlur={this.validate}  />
+          header="Peso de la muestra"
+          name='pesoDeLaMuestra' value={pruebasDeLaboratorioData[index].pesoDeLaMuestra} onChange={this.updateValue} index={index} unit='gr' errors={this.state.errors} onBlur={this.validate}  />
           <InputRowSelectUnitless 
-          header="Tipo de sistema químico empleado" name='tipoDeSistemaEmpleado' value={pruebasDeLaboratorioData[index].tipoDeSistemaEmpleado} options={tipoDeSistemaEmpleadoOptions} callback={(e) => this.handleSelectNonTable(e.value, 'tipoDeSistemaEmpleado', index)} index={index} errors={this.state.errors} onBlur={this.validate} />
+          header="Tipo de sistema químico empleado"
+          name='tipoDeSistemaEmpleado' value={pruebasDeLaboratorioData[index].tipoDeSistemaEmpleado} options={tipoDeSistemaEmpleadoOptions} callback={(e) => this.handleSelectNonTable(e.value, 'tipoDeSistemaEmpleado', index)} index={index} errors={this.state.errors} onBlur={this.validate} />
           <InputRow 
-          header="Peso final de la muestra" name='pesoDeLaMuestraFinal' value={pruebasDeLaboratorioData[index].pesoDeLaMuestraFinal} onChange={this.updateValue} index={index} unit='gr' errors={this.state.errors} onBlur={this.validate} />
+          header="Peso final de la muestra"
+          name='pesoDeLaMuestraFinal' value={pruebasDeLaboratorioData[index].pesoDeLaMuestraFinal} onChange={this.updateValue} index={index} unit='gr' errors={this.state.errors} onBlur={this.validate} />
           <InputRow 
-          header="Solubilidad" name='solubilidad' value={pruebasDeLaboratorioData[index].solubilidad} onChange={this.updateValue} index={index} unit='%' errors={this.state.errors} onBlur={this.validate} />
+          header="Solubilidad"
+          name='solubilidad' value={pruebasDeLaboratorioData[index].solubilidad} onChange={this.updateValue} index={index} unit='%' errors={this.state.errors} onBlur={this.validate} />
           {this.makeImageInput(index, 'solubilidad')}
         </div>
     )
@@ -206,13 +211,27 @@ const grabadoOptions = [
 
     return (
       <div className='apuntalante-form' >
-          <InputRow header="Esfericidad" name='esfericidad' value={pruebasDeLaboratorioData[index].esfericidad} onChange={this.updateValue} index={index} unit='adim' errors={this.state.errors} onBlur={this.validate} />
-          <InputRow header="Redondez" name='redondez' value={pruebasDeLaboratorioData[index].redondez} onChange={this.updateValue} index={index} unit='adim' errors={this.state.errors} onBlur={this.validate} />
-          <InputRow header="Resistencia a la compresión" name='resistenciaCompresion' value={pruebasDeLaboratorioData[index].resistenciaCompresion} onChange={this.updateValue} index={index} unit='psi' errors={this.state.errors} onBlur={this.validate} />
-          <InputRowUnitless header="Malla" name='malla' value={pruebasDeLaboratorioData[index].malla} onChange={this.updateValue} index={index} errors={this.state.errors} onBlur={this.validate} />
-          <InputRow header="Aglutinamiento" name='aglutinamiento' value={pruebasDeLaboratorioData[index].aglutinamiento} onChange={this.updateValue} index={index} unit='adim' errors={this.state.errors} onBlur={this.validate} />
-          <InputRow header="Turbidez" name='turbidez' value={pruebasDeLaboratorioData[index].turbidez} onChange={this.updateValue} index={index} unit='adim' errors={this.state.errors} onBlur={this.validate} />
-          <InputRow header="Solubilidad" name='solubilidad' value={pruebasDeLaboratorioData[index].solubilidad} onChange={this.updateValue} index={index} unit='%' />
+          <InputRow
+          header="Esfericidad"
+          name='esfericidad' value={pruebasDeLaboratorioData[index].esfericidad} onChange={this.updateValue} index={index} unit='adim' errors={this.state.errors} onBlur={this.validate} />
+          <InputRow
+          header="Redondez"
+          name='redondez' value={pruebasDeLaboratorioData[index].redondez} onChange={this.updateValue} index={index} unit='adim' errors={this.state.errors} onBlur={this.validate} />
+          <InputRow
+          header="Resistencia a la compresión"
+          name='resistenciaCompresion' value={pruebasDeLaboratorioData[index].resistenciaCompresion} onChange={this.updateValue} index={index} unit='psi' errors={this.state.errors} onBlur={this.validate} />
+          <InputRowUnitless
+          header="Malla"
+          name='malla' value={pruebasDeLaboratorioData[index].malla} onChange={this.updateValue} index={index} errors={this.state.errors} onBlur={this.validate} />
+          <InputRow
+          header="Aglutinamiento"
+          name='aglutinamiento' value={pruebasDeLaboratorioData[index].aglutinamiento} onChange={this.updateValue} index={index} unit='adim' errors={this.state.errors} onBlur={this.validate} />
+          <InputRow
+          header="Turbidez"
+          name='turbidez' value={pruebasDeLaboratorioData[index].turbidez} onChange={this.updateValue} index={index} unit='adim' errors={this.state.errors} onBlur={this.validate} />
+          <InputRow
+          header="Solubilidad"
+          name='solubilidad' value={pruebasDeLaboratorioData[index].solubilidad} onChange={this.updateValue} index={index} unit='%' />
           {this.makeImageInput(index, 'apuntalante')}
         </div>
     )
@@ -225,12 +244,24 @@ const grabadoOptions = [
 
     return (
       <div className='apuntalante-form' >
-          <InputRowSelectUnitless header="Hidratación del fluido " name='hidratacionDelFluido' value={pruebasDeLaboratorioData[index].hidratacionDelFluido} options={hidratacionDelFluidoOptions} callback={(e) => this.handleSelectNonTable(e.value, 'hidratacionDelFluido', index)} index={index}/>
-          <InputRow header="Tiempo de activación del gel" name='tiempoDeActivacion' value={pruebasDeLaboratorioData[index].tiempoDeActivacion} onChange={this.updateValue} index={index} unit='adim' />
-          <InputRow header="Determinación de pH" name='determinacionDePh' value={pruebasDeLaboratorioData[index].determinacionDePh} onChange={this.updateValue} index={index} unit='psi' />
-          <InputRow header="Tiempo de rompimiento" name='tiempoDeRompimiento' value={pruebasDeLaboratorioData[index].tiempoDeRompimiento} onChange={this.updateValue} index={index} />
-          <InputRow header="Dosificación de quebradores" name='dosificacionDeQuebradors' value={pruebasDeLaboratorioData[index].dosificacionDeQuebradors} onChange={this.updateValue} index={index} unit='adim' />
-          <InputRow header="Viscosidad del gel de fractura" name='viscosidadDelGelDeFractura' value={pruebasDeLaboratorioData[index].viscosidadDelGelDeFractura} onChange={this.updateValue} index={index} unit='adim' />
+          <InputRowSelectUnitless
+          header="Hidratación del fluido"
+          name='hidratacionDelFluido' value={pruebasDeLaboratorioData[index].hidratacionDelFluido} options={hidratacionDelFluidoOptions} callback={(e) => this.handleSelectNonTable(e.value, 'hidratacionDelFluido', index)} index={index}/>
+          <InputRow
+          header="Tiempo de activación del gel"
+          name='tiempoDeActivacion' value={pruebasDeLaboratorioData[index].tiempoDeActivacion} onChange={this.updateValue} index={index} unit='adim' />
+          <InputRow
+          header="Determinación de pH"
+          name='determinacionDePh' value={pruebasDeLaboratorioData[index].determinacionDePh} onChange={this.updateValue} index={index} unit='' />
+          <InputRow
+          header="Tiempo de rompimiento"
+          name='tiempoDeRompimiento' value={pruebasDeLaboratorioData[index].tiempoDeRompimiento} onChange={this.updateValue} index={index} />
+          <InputRow
+          header="Dosificación de quebradores"
+          name='dosificacionDeQuebradors' value={pruebasDeLaboratorioData[index].dosificacionDeQuebradors} onChange={this.updateValue} index={index} unit='adim' />
+          <InputRow
+          header="Viscosidad del gel de fractura"
+          name='viscosidadDelGelDeFractura' value={pruebasDeLaboratorioData[index].viscosidadDelGelDeFractura} onChange={this.updateValue} index={index} unit='adim' />
           {this.makeImageInput(index, 'gelFractura')}
         </div>
     )

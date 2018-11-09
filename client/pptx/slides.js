@@ -265,5 +265,21 @@ export async function buildLabReports(pptx, token, id) {
 
   pruebasDeLaboratorioData.forEach((lab) => {
     const map = maps.pruebasDeLaboratorio[lab.type]
+    if (map) {
+      let tableName = ''
+      const isTable = Object.keys(map).filter(m => {
+        console.log('lab type', lab.type, lab[m])
+        if (Array.isArray(lab[m])) {
+          tableName = m
+          return true
+        }
+        return false
+      }).length > 0
+      console.log('is table?', isTable, lab.type)
+      if (isTable) {
+        const table = buildTable('testing', map[tableName], lab[tableName])
+        console.log('da table', table)
+      }
+    }
   })
 }
