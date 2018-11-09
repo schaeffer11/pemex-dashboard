@@ -256,30 +256,64 @@ export async function buildGeneralProposal(pptx, token, id) {
   return slide
 }
 
-export async function buildLabReports(pptx, token, id) {
-  const slide = pptx.addNewSlide('MASTER_SLIDE')
-  slide.addText('Pruebas de laboratorio', { placeholder: 'slide_title' })
-  const data = await getData('getLabTest', token, id)
-  console.log('que me llego?', data)
-  const { pruebasDeLaboratorioData } = data.pruebasDeLaboratorio
-
-  pruebasDeLaboratorioData.forEach((lab) => {
-    const map = maps.pruebasDeLaboratorio[lab.type]
-    if (map) {
-      let tableName = ''
-      const isTable = Object.keys(map).filter(m => {
-        console.log('lab type', lab.type, lab[m])
-        if (Array.isArray(lab[m])) {
-          tableName = m
-          return true
-        }
-        return false
-      }).length > 0
-      console.log('is table?', isTable, lab.type)
-      if (isTable) {
-        const table = buildTable('testing', map[tableName], lab[tableName])
-        console.log('da table', table)
-      }
+async function buildMainLabSlide(pptx, labTitle, lab, image) {
+  const mainSlide = pptx.addNewSlide('MASTER_SLIDE')
+  mainSlide.addText('Pruebas de laboratorio', { placeholder: 'slide_title' })
+  mainSlide.addText(labTitle, { x: 0.5, y: 1.0, fontSize: 18 })
+  const tableOptionsCopy = {...tableOptions}
+  delete tableOptionsCopy.colW 
+  const generalTable = buildSimpleTable('Datos generales', maps.pruebasDeLaboratorio.general, lab, false)
+  mainSlide.addTable(generalTable, { x: 0.5, y: 1.5, ...tableOptionsCopy})
+  if (image) {
+    const base64 = await getBase64FromURL(image.imgURL).catch(e => e)
+    if (!base64.error) {
+      mainSlide.addImage({
+        data: `image/png;base64,${base64}`, x: 4.4, y: 3.3, w: 4.5, h: 3.5,
+        sizing: { type: 'contain', h: 4.5, w: 4.5 }
+      })
     }
-  })
+  }
+}
+
+function buildLabDataSlide(pptx, map, lab, labTitle) {
+  let tableName = ''
+  const isTable = Object.keys(map).filter(m => {
+    if (Array.isArray(lab[m])) {
+      tableName = m
+      return true
+    }
+    return false
+  }).length > 0
+  if (isTable) {
+    const tableOptionsCopy = {...tableOptions}
+    delete tableOptionsCopy.colW 
+    const dataSlide = pptx.addNewSlide('MASTER_SLIDE')
+    dataSlide.addText('Pruebas de laboratorio', { placeholder: 'slide_title' })
+    dataSlide.addText(labTitle, { x: 0.5, y: 1.0, fontSize: 18 })
+    const table = buildTable('', map[tableName], lab[tableName])
+    dataSlide.addTable(table, {x: 0.5, y: 1.5, ...tableOptionsCopy})
+  } else {
+    if (Object.keys(map).length > 0) {
+      const tableOptionsCopy = {...tableOptions}
+      const dataSlide = pptx.addNewSlide('MASTER_SLIDE')
+      dataSlide.addText('Pruebas de laboratorio', { placeholder: 'slide_title' })
+      dataSlide.addText(labTitle, { x: 0.5, y: 1.0, fontSize: 18 })
+      const table = buildSimpleTable('', map, lab)
+      dataSlide.addTable(table, {x: 0.5, y: 1.5, ...tableOptionsCopy})
+    }
+  }
+}
+
+export async function buildLabReports(pptx, token, id, images) {
+  const data = await getData('getLabTest', token, id)
+  const { pruebasDeLaboratorioData } = data.pruebasDeLaboratorio
+  for (let lab of pruebasDeLaboratorioData) {
+    const labImage = images ? images.find(elem => elem.labID.toString() === lab.labID.toString()) : null
+    const labTitle = maps.pruebasDeLaboratorioTitles[lab.type].text
+    const map = maps.pruebasDeLaboratorio[lab.type]
+    await buildMainLabSlide(pptx, labTitle, lab, labImage)
+    if (map) {
+      buildLabDataSlide(pptx, map, lab, labTitle)
+    }
+  }
 }
