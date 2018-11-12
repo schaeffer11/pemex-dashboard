@@ -21,7 +21,7 @@ import { KPI } from '../Common/KPIs'
     groups.forEach(name => {
       let filteredData = data.filter(i => i.groupedName === name).map(j => {
         let utc = new Date(j.FECHA)
-        utc = Date.UTC(utc.getFullYear(), utc.getMonth(), utc.getDate())
+        utc = Date.UTC(utc.getFullYear(), utc.getMonth())
 
         return {
           x: utc,
@@ -49,11 +49,18 @@ import { KPI } from '../Common/KPIs'
         title: {
           text: 'Item'
         },
-        type: 'datetime'
+        tickInterval   : 24 * 3600 * 1000*30,
+        type: 'datetime',
       },
       yAxis: {
         title: {
           text: 'Costs'
+        }
+      },
+      plotOptions: {
+        column: {
+          stacking: 'normal',
+          pointRange: 24 * 3600 * 1000*30
         }
       },
       credits: {
@@ -62,12 +69,15 @@ import { KPI } from '../Common/KPIs'
       series: series
   }
 
+
+  console.log(series)
     return (
       <div className="cost-bar test">
         <div className='chart'>
           <ReactHighcharts
             className='chart'
             config={config}
+            ref={(ref) => { this.chart = ref }}
           />
         </div>
       </div>

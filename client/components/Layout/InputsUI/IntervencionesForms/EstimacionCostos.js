@@ -271,7 +271,6 @@ import { checkEmpty, checkDate } from '../../../../lib/errorCheckers';
 
     return (
       <div className="form estimated-costs">
-          <div className='image'/>
           { this.makeCostsForm() }
 
           <div className='kpis'>

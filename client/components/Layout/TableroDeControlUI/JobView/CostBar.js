@@ -74,6 +74,7 @@ import { KPI } from '../Common/KPIs'
           <ReactHighcharts
             className='chart'
             config={config}
+            ref={(ref) => { this.chart = ref }}
           />
         </div>
       </div>

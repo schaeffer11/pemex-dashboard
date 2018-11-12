@@ -23,7 +23,7 @@ import { KPI } from '../Common/KPIs'
     if (data) {
       data.forEach(i => {
         let utc = new Date(i.FECHA_INTERVENCION)
-        utc = Date.UTC(utc.getFullYear(), utc.getMonth(), utc.getDate())
+        utc = Date.UTC(utc.getFullYear(), utc.getMonth())
 
         i.TOTAL_SISTEMA_NO_REACTIVO ? sistemaNoReactivoData.push({ x: utc, y: i.TOTAL_SISTEMA_NO_REACTIVO}) : null
         i.TOTAL_SISTEMA_REACTIVO ? sistemaReactivo.push({ x: utc, y: i.TOTAL_SISTEMA_REACTIVO}) : null
@@ -35,34 +35,6 @@ import { KPI } from '../Common/KPIs'
         i.TOTAL_PRECOLCHON_APUNTALANTE ? precolchonApuntalante.push({ x: utc, y: i.TOTAL_PRECOLCHON_APUNTALANTE}) : null
 
       })
-      
-      // let desplazamientoN2 = []
-      // let totalPrecolchonN2 = []
-      // let vaporInjected = [] 
-
-      // i.TOTAL_DESPLAZAMIENTO_N2 ? desplazamientoN2.push({ x: utc, y: i.TOTAL_DESPLAZAMIENTO_N2}) : null
-      // i.TOTAL_PRECOLCHON_N2 ? totalPrecolchonN2.push({ x: utc, y: i.TOTAL_PRECOLCHON_N2}) : null
-      // i.TOTAL_VAPOR_INJECTED ? vaporInjected.push({ x: utc, y: i.TOTAL_VAPOR_INJECTED}) : null
-
-      // {
-      //   title: {
-      //     text: 'Volume Gasto (m3)'
-      //   }
-      // }
-
-      // [{
-      //   name: 'Desplazamiento N2',
-      //   data: desplazamientoN2,
-
-      // },{
-      //   name: 'Precolchon N2',
-      //   data: totalPrecolchonN2,
-
-      // },{
-      //   name: 'Vapor Injected',
-      //   data: vaporInjected,
-
-      // }]
 
 
       series = [{
@@ -105,7 +77,9 @@ import { KPI } from '../Common/KPIs'
         title: {
           text: 'Item'
         },
-        type: 'datetime'
+        tickInterval   : 24 * 3600 * 1000 * 30,
+        type: 'datetime',
+
       },
       yAxis: {
         title: {
@@ -117,7 +91,8 @@ import { KPI } from '../Common/KPIs'
       },
       plotOptions: {
         column: {
-          stacking: 'normal'
+          stacking: 'normal',
+          pointRange: 24 * 3600 * 1000*30
         }
       },
       credits: {
@@ -133,6 +108,7 @@ import { KPI } from '../Common/KPIs'
           <ReactHighcharts
             className='chart'
             config={config}
+            ref={(ref) => { this.chart = ref }}
           />
         </div>
       </div>

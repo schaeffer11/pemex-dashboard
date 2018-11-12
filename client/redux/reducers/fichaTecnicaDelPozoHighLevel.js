@@ -6,6 +6,7 @@ const initialState = Map({
   activo: '',
   campo: '',
   pozo: '',
+  pozoName:'',
   formacion: '',
 })
 
@@ -20,8 +21,10 @@ const fichaTechnicaDelPozo = (state = initialState, action) => {
     	return state.set('activo', fromJS(action.value))
     case 'set_campo':
     	return state.set('campo', fromJS(action.value))
-    case 'set_pozo':
-    	return state.set('pozo', fromJS(action.value))
+      case 'set_pozo':
+        let pozo = action.value
+    	return state.set('pozo', fromJS(pozo.value))
+                    .set('pozoName', fromJS(pozo.label))
     case 'set_formacion':
     	return state.set('formacion', fromJS(action.value))
     default:

@@ -246,25 +246,29 @@ let tratamientoPorOptions = [
           Terminación
         </div>
         TIPO
-        <InputRowSelectUnitless header="Tipo de terminación" value={tipoDeTerminacion} callback={this.handleSelectTipoDeTerminacion} options={tipoDeTerminacionOptions} name='tipoDeTerminacion' onBlur={this.updateErrors} errors={this.state.errors} />
-        <InputRow header="h (intervalo productor)" value={hIntervaloProductor} onChange={setHIntervaloProductor} name='hIntervaloProductor' unit='mv' onBlur={this.updateErrors} errors={this.state.errors} />
-        <InputRow header="Empacador" name='empacador' value={empacador} onChange={setEmpacador} unit='mv' onBlur={this.updateErrors} errors={this.state.errors} />
-        <InputRow header="Presión dif. empacador" name='presionDifEmpacador' value={presionDifEmpacador} onChange={setPresionDifEmpacador} unit='psi' onBlur={this.updateErrors} errors={this.state.errors} />
-        <InputRow header="Profundidad Sensor P y T" name='sensorPyt' value={sensorPyt} onChange={setSensorPyt} unit='mv' onBlur={this.updateErrors} errors={this.state.errors} />
+        <div className="input-table">
+          <InputRowSelectUnitless header="Tipo de terminación" value={tipoDeTerminacion} callback={this.handleSelectTipoDeTerminacion} options={tipoDeTerminacionOptions} name='tipoDeTerminacion' onBlur={this.updateErrors} errors={this.state.errors} />
+          <InputRow header="h (intervalo productor)" value={hIntervaloProductor} onChange={setHIntervaloProductor} name='hIntervaloProductor' unit='mv' onBlur={this.updateErrors} errors={this.state.errors} />
+          <InputRow header="Empacador" name='empacador' value={empacador} onChange={setEmpacador} unit='mv' onBlur={this.updateErrors} errors={this.state.errors} />
+          <InputRow header="Presión dif. empacador" name='presionDifEmpacador' value={presionDifEmpacador} onChange={setPresionDifEmpacador} unit='psi' onBlur={this.updateErrors} errors={this.state.errors} />
+          <InputRow header="Profundidad Sensor P y T" name='sensorPyt' value={sensorPyt} onChange={setSensorPyt} unit='mv' onBlur={this.updateErrors} errors={this.state.errors} />
+        </div>
         LINER
-        <InputRowSelectUnitless header="Tipo de liner" name='tipoDeLiner' value={tipoDeLiner} options={tipoDeLinerOptions} callback={(e) => setTipoDeLiner(e.value)} onBlur={this.updateErrors} errors={this.state.errors} />
-        <InputRow header="Diámetro de liner" name='diametroDeLiner' value={diametroDeLiner} onChange={setDiametroDeLiner} unit='pg' onBlur={this.updateErrors} errors={this.state.errors} />
-        {
-          tipoDeTerminacion === 'Agujero Descubierto (AD)' ? null :
-          <div>
-            DISPAROS
-            <InputRowUnitless header="Tipo de pistolas" name='tipoDePistolas' value={tipoDePistolas} onChange={setTipoDePistolas}  onBlur={this.updateErrors} errors={this.state.errors} />
-            <InputRow header="Densidad de disparos" name='densidadDeDisparosMecanico' value={densidadDeDisparosMecanico} onChange={setDensidadDeDisparosMecanico} unit='c/m' onBlur={this.updateErrors} errors={this.state.errors} />
-            <InputRow header="Fase" name='fase' value={fase} onChange={setFase} unit='Grados' onBlur={this.updateErrors} errors={this.state.errors} />
-            <InputRow header="Diámetro de orificio" name='diametroDeOrificio' value={diametroDeOrificio} onChange={setDiametroDeOrificio} unit='pg' onBlur={this.updateErrors} errors={this.state.errors} />
-            <InputRow header="Penetración" name='penetracion' value={penetracion} onChange={setPenetracion} unit='pg' onBlur={this.updateErrors} errors={this.state.errors} />
-          </div>
-        }
+        <div className="input-table">
+          <InputRowSelectUnitless header="Tipo de liner" name='tipoDeLiner' value={tipoDeLiner} options={tipoDeLinerOptions} callback={(e) => setTipoDeLiner(e.value)} onBlur={this.updateErrors} errors={this.state.errors} />
+          <InputRow header="Diámetro de liner" name='diametroDeLiner' value={diametroDeLiner} onChange={setDiametroDeLiner} unit='pg' onBlur={this.updateErrors} errors={this.state.errors} />
+          {
+            tipoDeTerminacion === 'Agujero Descubierto (AD)' ? null :
+            <div>
+              DISPAROS
+              <InputRowUnitless header="Tipo de pistolas" name='tipoDePistolas' value={tipoDePistolas} onChange={setTipoDePistolas}  onBlur={this.updateErrors} errors={this.state.errors} />
+              <InputRow header="Densidad de disparos" name='densidadDeDisparosMecanico' value={densidadDeDisparosMecanico} onChange={setDensidadDeDisparosMecanico} unit='c/m' onBlur={this.updateErrors} errors={this.state.errors} />
+              <InputRow header="Fase" name='fase' value={fase} onChange={setFase} unit='Grados' onBlur={this.updateErrors} errors={this.state.errors} />
+              <InputRow header="Diámetro de orificio" name='diametroDeOrificio' value={diametroDeOrificio} onChange={setDiametroDeOrificio} unit='pg' onBlur={this.updateErrors} errors={this.state.errors} />
+              <InputRow header="Penetración" name='penetracion' value={penetracion} onChange={setPenetracion} unit='pg' onBlur={this.updateErrors} errors={this.state.errors} />
+            </div>
+          }
+        </div>
       </div>
     )
   }
@@ -280,11 +284,13 @@ let tratamientoPorOptions = [
           Capacidad
         </div>
         VOLUMEN
-        <InputRowSelectUnitless header="Tratamiento por" name='tratamientoPor' value={tratamientoPor} callback={(e) => setTratamientoPor(e.value)} options={tratamientoPorOptions} onBlur={this.updateErrors} errors={this.state.errors} />
-        <InputRow header="Volumen aparejo de producción" name='volumenAparejoDeProduccion' value={volumenAparejoDeProduccion} onChange={setVolumenAparejoDeProduccion} unit={<div>m<sup>3</sup></div>} onBlur={this.updateErrors} errors={this.state.errors} />
-        <InputRow header="Volumen @ cima de intervalo" name='volumenCimaDeIntervalo' value={volumenCimaDeIntervalo} onChange={setVolumenCimaDeIntervalo} unit={<div>m<sup>3</sup></div>} onBlur={this.updateErrors} errors={this.state.errors} />
-        <InputRow header="Volumen @ base de intervalo" name='volumenBaseDeIntervalo' value={volumenBaseDeIntervalo} onChange={setVolumenBaseDeIntervalo} unit={<div>m<sup>3</sup></div>} onBlur={this.updateErrors} errors={this.state.errors} />
-        <InputRow header="Volumen de espacio anular (EA)" name='volumenDeEspacioAnular' value={volumenDeEspacioAnular} onChange={setVolumenDeEspacioAnular} unit={<div>m<sup>3</sup></div>} onBlur={this.updateErrors} errors={this.state.errors} />
+        <div className="input-table">
+          <InputRowSelectUnitless header="Tratamiento por" name='tratamientoPor' value={tratamientoPor} callback={(e) => setTratamientoPor(e.value)} options={tratamientoPorOptions} onBlur={this.updateErrors} errors={this.state.errors} />
+          <InputRow header="Volumen aparejo de producción" name='volumenAparejoDeProduccion' value={volumenAparejoDeProduccion} onChange={setVolumenAparejoDeProduccion} unit={<div>m<sup>3</sup></div>} onBlur={this.updateErrors} errors={this.state.errors} />
+          <InputRow header="Volumen @ cima de intervalo" name='volumenCimaDeIntervalo' value={volumenCimaDeIntervalo} onChange={setVolumenCimaDeIntervalo} unit={<div>m<sup>3</sup></div>} onBlur={this.updateErrors} errors={this.state.errors} />
+          <InputRow header="Volumen @ base de intervalo" name='volumenBaseDeIntervalo' value={volumenBaseDeIntervalo} onChange={setVolumenBaseDeIntervalo} unit={<div>m<sup>3</sup></div>} onBlur={this.updateErrors} errors={this.state.errors} />
+          <InputRow header="Volumen de espacio anular (EA)" name='volumenDeEspacioAnular' value={volumenDeEspacioAnular} onChange={setVolumenDeEspacioAnular} unit={<div>m<sup>3</sup></div>} onBlur={this.updateErrors} errors={this.state.errors} />
+        </div>
       </div>
     )
   }
@@ -424,7 +430,6 @@ let tratamientoPorOptions = [
   render() {
     return (
       <div className="form mecanico-y-aparejo">
-        <div className='image'/>
         <div className='left'>
           { this.makeTerminacionForm() }
         </div>

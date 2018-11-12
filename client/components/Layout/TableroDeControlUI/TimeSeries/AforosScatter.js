@@ -21,7 +21,7 @@ import { KPI } from '../Common/KPIs'
     groups.forEach(name => {
       let filteredData = data.filter(i => i[groupBy] === name).map(j => {
         let utc = new Date(j.date)
-        utc = Date.UTC(utc.getFullYear(), utc.getMonth(), utc.getDate())
+        utc = Date.UTC(utc.getFullYear(), utc.getMonth())
 
         return {
           x: utc,
@@ -51,6 +51,7 @@ import { KPI } from '../Common/KPIs'
         title: {
           text: 'Item'
         },
+        tickInterval   : 24 * 3600 * 1000*30,
         type: 'datetime'
       },
       yAxis: {
@@ -70,6 +71,7 @@ import { KPI } from '../Common/KPIs'
           <ReactHighcharts
             className='chart'
             config={config}
+            ref={(ref) => { this.chart = ref }}
           />
         </div>
       </div>

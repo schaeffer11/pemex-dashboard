@@ -22,7 +22,17 @@ import ReactHighcharts from 'react-highcharts'
 	    series: [{
 	        name: 'Count',
 	        data: data
-	    }]
+	    }],
+	    plotOptions: {
+	    	pie: {
+	    		dataLabels: {
+	    			enabled: true,
+	    			formatter: function() {
+              return '<b>'+ this.point.name +'</b>: '+ this.y;
+            }
+	    		}
+	    	}
+	    }
 		}
 
     return (

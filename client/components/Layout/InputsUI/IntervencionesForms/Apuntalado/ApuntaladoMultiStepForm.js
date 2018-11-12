@@ -71,9 +71,11 @@ import EstimacionCostos from '../EstimacionCostos'
 
     let errors = [propuestaHasErrors, false, false, resultadosSimulacionHasErrors, estIncProduccionHasErrors, estCostsHasErrors]
     let title = forms[this.state.currentStep].title
+    let formClassName = forms[this.state.currentStep].content.type.WrappedComponent.name
 
      return (
          <div className={`multistep-form`}>
+          <div className ={`banner ${formClassName}`}></div>
           <div className="subtabs">
               {forms.map( (tab, index) => {
                 let active = this.state.currentStep === index ? 'active' : ''; 
@@ -85,12 +87,15 @@ import EstimacionCostos from '../EstimacionCostos'
               )}
           </div>
           <div className="content">
-            <div className="tab-title">
-              <i class="far fa-caret-square-left" style={{position: 'relative', fontSize: '50px', left: '-20px', top: '7px', color: '#70AC46'}} onClick={(e) => setShowForms(false)}></i>
-              { title }
-              <button className="cta next" onClick={this.handleNextSubtab}>Siguiente</button>
-              <button className="cta prev" onClick={this.handlePrevSubtab}>Anterior</button> 
-            </div>
+              <div className="tab-title">
+                  { title }
+              </div>
+              <div className="tab-actions">
+                  <button className="cta clear" onClick={(e) => setShowForms(false)}><i className="fa fa-undo">&nbsp;</i></button>
+                  <button className="cta next" onClick={this.handleNextSubtab}>Siguiente</button>
+                  <button className="cta prev" onClick={this.handlePrevSubtab}>Anterior</button>
+                  <button className="cta clear load" onClick={this.activateModal}><i className="fa fa-download">&nbsp;</i></button>
+              </div>
 
             {forms[this.state.currentStep].content}
           </div>

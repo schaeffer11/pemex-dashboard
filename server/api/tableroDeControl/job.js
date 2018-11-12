@@ -494,7 +494,76 @@ select FECHA, QO, QW, QG from ResultsAforos WHERE PROPUESTA_ID = ? AND Qo != -99
 
 
 
+router.get('/getLabs', (req, res) => {
+  let { transactionID } = req.query
+  
+  let query = `select * from IntervencionesLabTests where TRANSACTION_ID = ?`
 
+  connection.query(query, transactionID, (err, results) => {
+      console.log('comment err', err)
+
+     if (err) {
+        res.json({ success: false})
+      }
+      else {
+
+        results = results.map(i => {
+          return {
+            id: i.LAB_ID,
+            type: i.TIPO_DE_ANALISIS,
+            fechaMuestreo: i.FECHA_DE_MUESTREO,
+            fechaPrueba: i.FECHA_DE_PRUEBA,
+            compania: i.COMPANIA,
+            superviso: i.PERSONAL_DE_PEMEX_QUE_SUPERVISO,
+            observaciones: i.OBSERVACIONES
+          }
+        })
+
+        console.log(query, transactionID)
+        console.log(results)
+        res.json(results)
+      }
+    })
+})
+
+
+router.get('/getLabData', (req, res) => {
+  let { labID, type } = req.query
+  
+  let query = `select 1 from Users limit 1`
+
+  if (type === 'caracterizacionFisico') {
+    query = `select * from IntervencionesLabTestsCaracterizacionFisico where LAB_ID = ?`
+  }
+  else if (type === 'pruebasDeCompatibilidad') {
+    query = `select * from IntervencionesLabTestsPruebasDeCompatibilidad where LAB_ID = ?`
+  }
+  else if (type === 'pruebasDeGrabado') {
+    query = `select * from IntervencionesLabTestsPrueasDeGrabado where LAB_ID = ?`
+  }
+  else if (type === 'pruebasDeSolubilidad') {
+    query = `select * from IntervencionesLabTestsPruebasDeSolubilidad where LAB_ID = ?`
+  }
+  else if (type === 'pruebasGelDeFractura') {
+    query = `select * from IntervencionesLabTestsPruebasGelDeFractura where LAB_ID = ?`
+  }
+  else if (type === 'pruebasParaApuntalante') {
+    query = `select * from IntervencionesLabTestsPruebasParaApuntalante where LAB_ID = ?`
+  }
+  
+
+  connection.query(query, labID, (err, results) => {
+      console.log('comment err', err)
+
+     if (err) {
+        res.json({ success: false})
+      }
+      else {
+
+        res.json(results)
+      }
+    })
+})
 
 
 export default router
