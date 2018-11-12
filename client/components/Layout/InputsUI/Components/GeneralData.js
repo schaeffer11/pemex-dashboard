@@ -153,7 +153,7 @@ import ButtonGroup from './ButtonGroup'
       setSubdireccion(val.value)
       setActivo('')   
       setCampo('')
-      setPozo('')
+      setPozo({value: '', label:''})
     }
   }
 
@@ -165,7 +165,7 @@ import ButtonGroup from './ButtonGroup'
     if (activo !== val.value) {
       setActivo(val.value) 
       setCampo('')
-      setPozo('')  
+      setPozo({value: '', label:''})
     }
   }
 
@@ -176,8 +176,12 @@ import ButtonGroup from './ButtonGroup'
 
     if (campo !== val.value) {
       setCampo(val.value)
-      setPozo('')
+      setPozo({value: '', label:''})
     }
+  }
+
+  handleSelectWell(val) {
+      this.props.setPozo(val)
   }
 
   checkIncomplete() {
@@ -275,27 +279,29 @@ import ButtonGroup from './ButtonGroup'
         <div className='header'>
           Intervención
         </div>
-        <TextAreaUnitless header="Objetivo" name='objetivo' className={'objetivo'} value={objetivo} onChange={setObjetivo} tooltip='Describir el objetivo de la intervención indicando la causa principal, tipo de tratamiento a aplicar y técnica de colocación de los sistemas.' />
-        <TextAreaUnitless header="Alcances" name='alcances' className={'alcances'} value={alcances} onChange={setAlcances} tooltip='Describir los alcances que se pretenden obtener con la intervención programada a ejecutar.' />
-        <InputRowSelectUnitless header='Tipo de intervenciones' name='tipoDeIntervenciones' value={tipoDeIntervenciones} options={tipoDeIntervencionesOptions} callback={(e) => setTipoDeIntervenciones(e.value)} />
-        <InputDate
-          header="Fecha Programada de Intervención"
-          name='fechaProgramadaIntervencion'
-          value={fechaProgramadaIntervencion}
-          onChange={setFechaProgramadaIntervencion}
-          onBlur={this.updateErrors}
-          errors={this.state.errors}
-        />
-        <InputRowSelectUnitless
-          header='Intervención Programada'
-          name='tipoDeIntervenciones'
-          value={intervencionProgramada}
-          options={[
-            {label: 'Sí', value: true},
-            {label: 'No', value: false},
-          ]}
-          callback={(e) => setIntervencionProgramada(e.value)}
-        />
+        <div className="input-table">
+          <TextAreaUnitless header="Objetivo" name='objetivo' className={'objetivo'} value={objetivo} onChange={setObjetivo} tooltip='Describir el objetivo de la intervención indicando la causa principal, tipo de tratamiento a aplicar y técnica de colocación de los sistemas.' />
+          <TextAreaUnitless header="Alcances" name='alcances' className={'alcances'} value={alcances} onChange={setAlcances} tooltip='Describir los alcances que se pretenden obtener con la intervención programada a ejecutar.' />
+          <InputRowSelectUnitless header='Tipo de intervenciones' name='tipoDeIntervenciones' value={tipoDeIntervenciones} options={tipoDeIntervencionesOptions} callback={(e) => setTipoDeIntervenciones(e.value)} />
+          <InputDate
+            header="Fecha Programada de Intervención"
+            name='fechaProgramadaIntervencion'
+            value={fechaProgramadaIntervencion}
+            onChange={setFechaProgramadaIntervencion}
+            onBlur={this.updateErrors}
+            errors={this.state.errors}
+          />
+          <InputRowSelectUnitless
+            header='Intervención Programada'
+            name='tipoDeIntervenciones'
+            value={intervencionProgramada}
+            options={[
+              {label: 'Sí', value: true},
+              {label: 'No', value: false},
+            ]}
+            callback={(e) => setIntervencionProgramada(e.value)}
+          />
+        </div>
       </div>
     )
   }
@@ -396,11 +402,13 @@ import ButtonGroup from './ButtonGroup'
         <div className='header'>
           Pozo
         </div>
-        <InputRowSelectUnitless header='Subdirección' name="subdireccion" value={subdireccion} options={subdireccionOptions} callback={this.handleSelectSubdireccion}  />
-        <InputRowSelectUnitless header='Activo' name="activo" value={activo} options={activoOptions} callback={this.handleSelectActivo}  />
-        <InputRowSelectUnitless header="Campo" name="campo" value={campo} options={fieldOptions} callback={this.handleSelectField} name='campo'  />
-        <InputRowSelectUnitless header="Pozo" name="pozo" value={pozo} options={wellOptions} callback={(e) => setPozo(e.value)} name='pozo'  />
-        <InputRowSelectUnitless header="Formación" value={formacion} options={formacionOptions} callback={(e) => setFormacion(e.value)} name='formacion'  />
+        <div className="input-table">
+          <InputRowSelectUnitless header='Subdirección' name="subdireccion" value={subdireccion} options={subdireccionOptions} callback={this.handleSelectSubdireccion}  />
+          <InputRowSelectUnitless header='Activo' name="activo" value={activo} options={activoOptions} callback={this.handleSelectActivo}  />
+          <InputRowSelectUnitless header="Campo" name="campo" value={campo} options={fieldOptions} callback={this.handleSelectField} name='campo'  />
+          <InputRowSelectUnitless header="Pozo" name="pozo" value={pozo} options={wellOptions} callback={this.handleSelectWell} name='pozo'  />
+          <InputRowSelectUnitless header="Formación" value={formacion} options={formacionOptions} callback={(e) => setFormacion(e.value)} name='formacion'  />
+        </div>
       </div>
 
     )
@@ -548,7 +556,7 @@ import ButtonGroup from './ButtonGroup'
     return (
       <div className='general-data-outer'>
         <div className='image'>
-          <img src={'/images/homepageBannerThin2.jpg'} style={{width: '100%', borderRadius: '20px'}}></img> 
+          <img src={'/images/homepageBannerThin2.jpg'}></img>
         </div>
          <ButtonGroup 
             className={'button-group'}
@@ -568,14 +576,14 @@ import ButtonGroup from './ButtonGroup'
           { this.makeGeneralForm() }
           { this.makeGeneralInterventionForm() }
           <button className="submit submit-load" onClick={this.activateModal}> Descargar borrador</button>
-          <button className='submit submit-continue' disabled={this.checkIncomplete()} onClick={(e) => setShowForms(true)} >Siguiente</button>
+          <button className='cta next submit-next' disabled={this.checkIncomplete()} onClick={(e) => setShowForms(true)} >Siguiente</button>
           <Notification />
           <Loading />
           { isOpen ? this.buildModal() : null }
         </div>
        : <div className='form general-data-upload'>
           { this.makeUploadResultsForm() }
-          <button className='submit submit-continue' disabled={!selectedProposal} onClick={this.handleSiguienteResults}>Siguiente</button>
+          <button className='cta next submit-continue' disabled={!selectedProposal} onClick={this.handleSiguienteResults}>Siguiente</button>
        </div> }
       </div>
     )
@@ -601,7 +609,7 @@ const mapDispatchToProps = dispatch => ({
   setSubdireccion: val => dispatch(setSubdireccion(val)), 
   setActivo: val => dispatch(setActivo(val)), 
   setCampo: val => dispatch(setCampo(val)), 
-  setPozo: val => dispatch(setPozo(val)), 
+  setPozo: val => dispatch(setPozo(val)),
   setFormacion: val => dispatch(setFormacion(val)),
   setObjetivo : val => dispatch(setObjetivo(val)),
   setAlcances : val => dispatch(setAlcances(val)),
