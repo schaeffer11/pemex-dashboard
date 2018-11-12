@@ -3,3 +3,24 @@
   background: -webkit-linear-gradient(legacy-direction($direction), $color-stops);
   background: linear-gradient($direction, $color-stops);
 }
+
+@mixin grid-two-column {
+  display: grid;
+  grid-template-columns: 48% 48%;
+  grid-column-gap: 4%;
+}
+
+/* React Select fix positioning */
+@mixin react-select-fix {
+  .input div:nth-child(3) {
+    position: absolute;
+    top: 100%;
+    width: 100%;
+
+    div {
+      top: 0;
+      position: relative;
+      width: 100%;
+    }
+  }
+}

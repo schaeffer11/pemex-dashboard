@@ -3,18 +3,17 @@
   grid-template-columns: 40% 40% 20%;
   grid-template-areas: "header input unit";
   width: 100%;
-  background: whitesmoke;
   padding: 5px;
-  border: solid 1px white;
 
   .header {
   	grid-area: header;
   	font-size: 14px;
+    color: white;
   }
 
   .input {
   	grid-area: input;
-  	font-size: 12px
+  	font-size: 12px;
   }
 
   .unit {
@@ -22,6 +21,7 @@
   	font-size: 10px;
   	text-align: center;
   	line-height: 30px;
+    color: white;
   }
 
   .error {
@@ -42,16 +42,10 @@
   width: 100%;
   background: whitesmoke;
   padding: 5px;
-  border: solid 1px white;
 
   .header {
   	grid-area: header;
   	font-size: 14px;
-  }
-
-  .input {
-  	grid-area: input;
-  	font-size: 12px
   }
 }
 

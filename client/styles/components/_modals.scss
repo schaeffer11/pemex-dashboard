@@ -1,0 +1,22 @@
+div[role="dialog"]{
+  .header {
+    margin-bottom: 10px;
+  }
+
+  .input-table {
+    border: 1px solid $steel;
+    margin-bottom: 10px;
+  }
+
+  .input-row {
+    .label { text-align: left; }
+    border-bottom: 1px solid $steel;
+
+    @include react-select-fix();
+  }
+
+  .active-save {
+    color: $white;
+    background: $active-green !important;
+  }
+}

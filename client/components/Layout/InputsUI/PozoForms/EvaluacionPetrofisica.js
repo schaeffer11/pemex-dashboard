@@ -306,7 +306,6 @@ let mudLossColumns = [
   render() {
     return (
       <div className="form evaluacionPetrofisica">
-        <div className="image"/>
         {this.makeLayerTable()}
         {this.makeMudLossTable()}
         {this.makeImgInput()}

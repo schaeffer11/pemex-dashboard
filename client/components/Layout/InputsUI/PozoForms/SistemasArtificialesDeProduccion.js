@@ -311,10 +311,12 @@ import { setFromSaveSistemas, setHasErrorsSistemas, setSistemasArtificialesImgUR
 
     return (
       <div className='sistemas-artificiales-form' key={1}>
-        <InputRow header="Presión de cabeza" name='presionDeCabeza' value={presionDeCabeza} onChange={setPresionDeCabeza} unit={<div>Kg/cm<sup>2</sup></div>} errors={this.state.errors} onBlur={this.updateErrors}/>
-        <InputRow header="Presión de línea o de separador" name='presionDeLineaODeSeparador' value={presionDeLineaODeSeparador} onChange={setPresionDeLineaODeSeparador} unit={<div>Kg/cm<sup>2</sup></div>} errors={this.state.errors} onBlur={this.updateErrors}/>
-        <InputRowUnitless header="Número de descargas o ciclos" name='numeroDeDescargasOCiclosEV' value={numeroDeDescargasOCiclosEV} onChange={setNumeroDeDescargasOCiclosEV} errors={this.state.errors} onBlur={this.updateErrors}/>
-        <InputRowUnitless header="Volumen desplazado por ciclo" name='volumenDesplazadoPorCircloEV' value={volumenDesplazadoPorCircloEV} onChange={setVolumenDesplazadoPorCircloEV} errors={this.state.errors} onBlur={this.updateErrors}/>
+        <div className="input-table">
+          <InputRow header="Presión de cabeza" name='presionDeCabeza' value={presionDeCabeza} onChange={setPresionDeCabeza} unit={<div>Kg/cm<sup>2</sup></div>} errors={this.state.errors} onBlur={this.updateErrors}/>
+          <InputRow header="Presión de línea o de separador" name='presionDeLineaODeSeparador' value={presionDeLineaODeSeparador} onChange={setPresionDeLineaODeSeparador} unit={<div>Kg/cm<sup>2</sup></div>} errors={this.state.errors} onBlur={this.updateErrors}/>
+          <InputRowUnitless header="Número de descargas o ciclos" name='numeroDeDescargasOCiclosEV' value={numeroDeDescargasOCiclosEV} onChange={setNumeroDeDescargasOCiclosEV} errors={this.state.errors} onBlur={this.updateErrors}/>
+          <InputRowUnitless header="Volumen desplazado por ciclo" name='volumenDesplazadoPorCircloEV' value={volumenDesplazadoPorCircloEV} onChange={setVolumenDesplazadoPorCircloEV} errors={this.state.errors} onBlur={this.updateErrors}/>
+        </div>
       </div>
     )
   }
@@ -329,14 +331,16 @@ import { setFromSaveSistemas, setHasErrorsSistemas, setSistemasArtificialesImgUR
     
     return (
       <div className='sistemas-artificiales-form' key={2}>
-        <InputRow header="Presión de cabeza" name='presionDeCabeza' value={presionDeCabeza} onChange={setPresionDeCabeza} unit={<div>Kg/cm<sup>2</sup></div>} errors={this.state.errors} onBlur={this.updateErrors}/>
-        <InputRow header="Presión de linea o de separador" name='presionDeLineaODeSeparador' value={presionDeLineaODeSeparador} onChange={setPresionDeLineaODeSeparador} unit={<div>Kg/cm<sup>2</sup></div>} errors={this.state.errors} onBlur={this.updateErrors}/>
-        <InputRow header="Presión de inyección" name='presionDeInyeccionBN' value={presionDeInyeccionBN} onChange={setPresionDeInyeccionBN} unit={<div>Kg/cm<sup>2</sup></div>} errors={this.state.errors} onBlur={this.updateErrors}/>
-        <InputRow header="Presión de descarga" name='presionDeDescargaBN' value={presionDeDescargaBN} onChange={setPresionDeDescargaBN} unit={<div>Kg/cm<sup>2</sup></div>} errors={this.state.errors} onBlur={this.updateErrors}/>
-        <InputRowUnitless header="Número de válvulas" name='numeroDeValvulasBN' value={numeroDeValvulasBN} onChange={setNumeroDeValvulasBN} errors={this.state.errors}  onBlur={this.updateErrors}/>
-        <InputRow header="Profundidad de la válvula operante" name='profundidadDeLaVulvulaOperanteBN' value={profundidadDeLaVulvulaOperanteBN} onChange={setProfundidadDeLaVulvulaOperanteBN} unit='m' errors={this.state.errors} onBlur={this.updateErrors}/>
-        <InputRow header="Orificio" name='orificioBN' value={orificioBN} onChange={setOrificioBN} unit='pg' errors={this.state.errors} onBlur={this.updateErrors}/>
-        <InputRow header="Volumen de gas inyectado" name='volumenDeGasInyectadoBN' value={volumenDeGasInyectadoBN} onChange={setVolumenDeGasInyectadoBN} unit={<div>m<sup>3</sup></div>} errors={this.state.errors} onBlur={this.updateErrors}/>
+        <div className="input-table">
+          <InputRow header="Presión de cabeza" name='presionDeCabeza' value={presionDeCabeza} onChange={setPresionDeCabeza} unit={<div>Kg/cm<sup>2</sup></div>} errors={this.state.errors} onBlur={this.updateErrors}/>
+          <InputRow header="Presión de linea o de separador" name='presionDeLineaODeSeparador' value={presionDeLineaODeSeparador} onChange={setPresionDeLineaODeSeparador} unit={<div>Kg/cm<sup>2</sup></div>} errors={this.state.errors} onBlur={this.updateErrors}/>
+          <InputRow header="Presión de inyección" name='presionDeInyeccionBN' value={presionDeInyeccionBN} onChange={setPresionDeInyeccionBN} unit={<div>Kg/cm<sup>2</sup></div>} errors={this.state.errors} onBlur={this.updateErrors}/>
+          <InputRow header="Presión de descarga" name='presionDeDescargaBN' value={presionDeDescargaBN} onChange={setPresionDeDescargaBN} unit={<div>Kg/cm<sup>2</sup></div>} errors={this.state.errors} onBlur={this.updateErrors}/>
+          <InputRowUnitless header="Número de válvulas" name='numeroDeValvulasBN' value={numeroDeValvulasBN} onChange={setNumeroDeValvulasBN} errors={this.state.errors}  onBlur={this.updateErrors}/>
+          <InputRow header="Profundidad de la válvula operante" name='profundidadDeLaVulvulaOperanteBN' value={profundidadDeLaVulvulaOperanteBN} onChange={setProfundidadDeLaVulvulaOperanteBN} unit='m' errors={this.state.errors} onBlur={this.updateErrors}/>
+          <InputRow header="Orificio" name='orificioBN' value={orificioBN} onChange={setOrificioBN} unit='pg' errors={this.state.errors} onBlur={this.updateErrors}/>
+          <InputRow header="Volumen de gas inyectado" name='volumenDeGasInyectadoBN' value={volumenDeGasInyectadoBN} onChange={setVolumenDeGasInyectadoBN} unit={<div>m<sup>3</sup></div>} errors={this.state.errors} onBlur={this.updateErrors}/>
+        </div>
       </div>
     )
   }
@@ -349,14 +353,16 @@ import { setFromSaveSistemas, setHasErrorsSistemas, setSistemasArtificialesImgUR
 
     return (
       <div className='sistemas-artificiales-form' key={3}>
-        <InputRow header="Presión de cabeza" name='presionDeCabeza' value={presionDeCabeza} onChange={setPresionDeCabeza} unit={<div>Kg/cm<sup>2</sup></div>} errors={this.state.errors} onBlur={this.updateErrors}/>
-        <InputRow header="Presión de linea o de separador" name='presionDeLineaODeSeparador' value={presionDeLineaODeSeparador} onChange={setPresionDeLineaODeSeparador} unit={<div>Kg/cm<sup>2</sup></div>} errors={this.state.errors} onBlur={this.updateErrors}/>
-        <InputRow header="Profundidad de la bomba" name='profundidadDeLaBombaBH' value={profundidadDeLaBombaBH} onChange={setProfundidadDeLaBombaBH} unit='m' errors={this.state.errors} onBlur={this.updateErrors}/>
-        <InputRowUnitless header="Tipo y marca de bomba" name="tipoYMarcaDeBombaBH" value={tipoYMarcaDeBombaBH} onChange={setTipoYMarcaDeBombaBH} errors={this.state.errors}  onBlur={this.updateErrors}/>
-        <InputRow header="Orificio" name='orificioBH' value={orificioBH} onChange={setOrificioBH} unit='pg' errors={this.state.errors} onBlur={this.updateErrors}/>
-        <InputRow header="Tipo de camisa" name='tipoDeCamisaBH' value={tipoDeCamisaBH} onChange={setTipoDeCamisaBH} unit='pg' errors={this.state.errors} onBlur={this.updateErrors}/>
-        <InputRowUnitless header="Fluido motriz" name="fluidoMotrizBH" value={fluidoMotrizBH} onChange={setFluidoMotrizBH} errors={this.state.errors} onBlur={this.updateErrors}/>
-        <InputRow header="Equipo superficial" name='equipoSuperficialBH' value={equipoSuperficialBH} onChange={setEquipoSuperficialBH} unit='HP' errors={this.state.errors} onBlur={this.updateErrors}/>
+        <div className="input-table">
+          <InputRow header="Presión de cabeza" name='presionDeCabeza' value={presionDeCabeza} onChange={setPresionDeCabeza} unit={<div>Kg/cm<sup>2</sup></div>} errors={this.state.errors} onBlur={this.updateErrors}/>
+          <InputRow header="Presión de linea o de separador" name='presionDeLineaODeSeparador' value={presionDeLineaODeSeparador} onChange={setPresionDeLineaODeSeparador} unit={<div>Kg/cm<sup>2</sup></div>} errors={this.state.errors} onBlur={this.updateErrors}/>
+          <InputRow header="Profundidad de la bomba" name='profundidadDeLaBombaBH' value={profundidadDeLaBombaBH} onChange={setProfundidadDeLaBombaBH} unit='m' errors={this.state.errors} onBlur={this.updateErrors}/>
+          <InputRowUnitless header="Tipo y marca de bomba" name="tipoYMarcaDeBombaBH" value={tipoYMarcaDeBombaBH} onChange={setTipoYMarcaDeBombaBH} errors={this.state.errors}  onBlur={this.updateErrors}/>
+          <InputRow header="Orificio" name='orificioBH' value={orificioBH} onChange={setOrificioBH} unit='pg' errors={this.state.errors} onBlur={this.updateErrors}/>
+          <InputRow header="Tipo de camisa" name='tipoDeCamisaBH' value={tipoDeCamisaBH} onChange={setTipoDeCamisaBH} unit='pg' errors={this.state.errors} onBlur={this.updateErrors}/>
+          <InputRowUnitless header="Fluido motriz" name="fluidoMotrizBH" value={fluidoMotrizBH} onChange={setFluidoMotrizBH} errors={this.state.errors} onBlur={this.updateErrors}/>
+          <InputRow header="Equipo superficial" name='equipoSuperficialBH' value={equipoSuperficialBH} onChange={setEquipoSuperficialBH} unit='HP' errors={this.state.errors} onBlur={this.updateErrors}/>
+        </div>
       </div>
     )
   }
@@ -369,16 +375,17 @@ import { setFromSaveSistemas, setHasErrorsSistemas, setSistemasArtificialesImgUR
 
     return (
       <div className='sistemas-artificiales-form' key={4}>
-        <InputRow header="Presión de cabeza" name='presionDeCabeza' value={presionDeCabeza} onChange={setPresionDeCabeza} unit={<div>Kg/cm<sup>2</sup></div>} errors={this.state.errors} onBlur={this.updateErrors}/>
-        <InputRow header="Presión de linea o de separador" name='presionDeLineaODeSeparador' value={presionDeLineaODeSeparador} onChange={setPresionDeLineaODeSeparador} unit={<div>Kg/cm<sup>2</sup></div>} errors={this.state.errors} onBlur={this.updateErrors}/>
-        <InputRowUnitless header="Motor y tipo de motor" name='motorYTipoDeMotorBCP' value={motorYTipoDeMotorBCP} onChange={setMotorYTipoDeMotorBCP} errors={this.state.errors} onBlur={this.updateErrors}/>
-        <InputRowUnitless header="Profundidad del motor" name='profunidadDelMotorBCP' value={profunidadDelMotorBCP} onChange={setProfunidadDelMotorBCP} errors={this.state.errors} onBlur={this.updateErrors}/>
-        <InputRow header="Velocidad" unit='' name='velocidadBCP' value={velocidadBCP} onChange={setVelocidadBCP} errors={this.state.errors} onBlur={this.updateErrors}/>
-        <InputRow header="HP" unit='' name='hpBCP' value={hpBCP} onChange={setHpBCP} errors={this.state.errors} onBlur={this.updateErrors}/>
-        <InputRow header="Arreglo de varillas" unit='' name='arregloDeVarillasBCP' value={arregloDeVarillasBCP} onChange={setArregloDeVarillasBCP} errors={this.state.errors} onBlur={this.updateErrors}/>
-        <InputRow header="Tipo de elastómero (composición quimica)" unit='' name='tipoDeElastomeroBCP' value={tipoDeElastomeroBCP} onChange={setTipoDeElastomeroBCP} errors={this.state.errors} onBlur={this.updateErrors}/>
-        <InputRow header="Profundidad del ancla antitorque" unit='' name='profundidadDelAnclaAntitorqueBCP' value={profundidadDelAnclaAntitorqueBCP} onChange={setProfundidadDelAnclaAntitorqueBCP} errors={this.state.errors} onBlur={this.updateErrors}/>
-
+        <div className="input-table">
+          <InputRow header="Presión de cabeza" name='presionDeCabeza' value={presionDeCabeza} onChange={setPresionDeCabeza} unit={<div>Kg/cm<sup>2</sup></div>} errors={this.state.errors} onBlur={this.updateErrors}/>
+          <InputRow header="Presión de linea o de separador" name='presionDeLineaODeSeparador' value={presionDeLineaODeSeparador} onChange={setPresionDeLineaODeSeparador} unit={<div>Kg/cm<sup>2</sup></div>} errors={this.state.errors} onBlur={this.updateErrors}/>
+          <InputRowUnitless header="Motor y tipo de motor" name='motorYTipoDeMotorBCP' value={motorYTipoDeMotorBCP} onChange={setMotorYTipoDeMotorBCP} errors={this.state.errors} onBlur={this.updateErrors}/>
+          <InputRowUnitless header="Profundidad del motor" name='profunidadDelMotorBCP' value={profunidadDelMotorBCP} onChange={setProfunidadDelMotorBCP} errors={this.state.errors} onBlur={this.updateErrors}/>
+          <InputRow header="Velocidad" unit='' name='velocidadBCP' value={velocidadBCP} onChange={setVelocidadBCP} errors={this.state.errors} onBlur={this.updateErrors}/>
+          <InputRow header="HP" unit='' name='hpBCP' value={hpBCP} onChange={setHpBCP} errors={this.state.errors} onBlur={this.updateErrors}/>
+          <InputRow header="Arreglo de varillas" unit='' name='arregloDeVarillasBCP' value={arregloDeVarillasBCP} onChange={setArregloDeVarillasBCP} errors={this.state.errors} onBlur={this.updateErrors}/>
+          <InputRow header="Tipo de elastómero (composición quimica)" unit='' name='tipoDeElastomeroBCP' value={tipoDeElastomeroBCP} onChange={setTipoDeElastomeroBCP} errors={this.state.errors} onBlur={this.updateErrors}/>
+          <InputRow header="Profundidad del ancla antitorque" unit='' name='profundidadDelAnclaAntitorqueBCP' value={profundidadDelAnclaAntitorqueBCP} onChange={setProfundidadDelAnclaAntitorqueBCP} errors={this.state.errors} onBlur={this.updateErrors}/>
+        </div>
       </div>
     )
   }
@@ -391,17 +398,18 @@ import { setFromSaveSistemas, setHasErrorsSistemas, setSistemasArtificialesImgUR
 
     return (
       <div className='sistemas-artificiales-form' key={5}>
-        <InputRow header="Presión de cabeza" name='presionDeCabeza' value={presionDeCabeza} onChange={setPresionDeCabeza} unit={<div>Kg/cm<sup>2</sup></div>} errors={this.state.errors} onBlur={this.updateErrors}/>
-        <InputRow header="Presión de linea o de separador" name='presionDeLineaODeSeparador' value={presionDeLineaODeSeparador} onChange={setPresionDeLineaODeSeparador} unit={<div>Kg/cm<sup>2</sup></div>} errors={this.state.errors} onBlur={this.updateErrors}/>
-        <InputRow header="Profundidad del motor" name='profundidadDelMotorBE' value={profundidadDelMotorBE} onChange={setProfundidadDelMotorBE} unit='m' errors={this.state.errors} onBlur={this.updateErrors}/>
-        <InputRow header="Diámetro" name='diametroBE' value={diametroBE} onChange={setDiametroBE} unit='pg' errors={this.state.errors} onBlur={this.updateErrors}/>
-        <InputRow header="Volts" name='voltsBE' value={voltsBE} onChange={setVoltsBE} unit='V' errors={this.state.errors} onBlur={this.updateErrors}/>
-        <InputRow header="Amperaje" name='amparajeBE' value={amparajeBE} onChange={setAmparajeBE} unit='A' errors={this.state.errors} onBlur={this.updateErrors}/>
-        <InputRowUnitless header="Armadura (bomba)" name='armaduraBE' value={armaduraBE} onChange={setArmaduraBE} errors={this.state.errors} onBlur={this.updateErrors}/>
-        <InputRowUnitless header="Tipo de cable" name='tipoDeCableBE' value={tipoDeCableBE} onChange={setTipoDeCableBE} errors={this.state.errors} onBlur={this.updateErrors}/>
-        <InputRow header="Longitud de cable" name='longitudDeCableBE' value={longitudDeCableBE} onChange={setLongitudDeCableBE} unit='m' errors={this.state.errors} onBlur={this.updateErrors}/>
-        <InputRowUnitless header="RPM" name='rmpBE' value={rmpBE} onChange={setRmpBE} errors={this.state.errors}  onBlur={this.updateErrors}/>
-
+        <div className="input-table">
+          <InputRow header="Presión de cabeza" name='presionDeCabeza' value={presionDeCabeza} onChange={setPresionDeCabeza} unit={<div>Kg/cm<sup>2</sup></div>} errors={this.state.errors} onBlur={this.updateErrors}/>
+          <InputRow header="Presión de linea o de separador" name='presionDeLineaODeSeparador' value={presionDeLineaODeSeparador} onChange={setPresionDeLineaODeSeparador} unit={<div>Kg/cm<sup>2</sup></div>} errors={this.state.errors} onBlur={this.updateErrors}/>
+          <InputRow header="Profundidad del motor" name='profundidadDelMotorBE' value={profundidadDelMotorBE} onChange={setProfundidadDelMotorBE} unit='m' errors={this.state.errors} onBlur={this.updateErrors}/>
+          <InputRow header="Diámetro" name='diametroBE' value={diametroBE} onChange={setDiametroBE} unit='pg' errors={this.state.errors} onBlur={this.updateErrors}/>
+          <InputRow header="Volts" name='voltsBE' value={voltsBE} onChange={setVoltsBE} unit='V' errors={this.state.errors} onBlur={this.updateErrors}/>
+          <InputRow header="Amperaje" name='amparajeBE' value={amparajeBE} onChange={setAmparajeBE} unit='A' errors={this.state.errors} onBlur={this.updateErrors}/>
+          <InputRowUnitless header="Armadura (bomba)" name='armaduraBE' value={armaduraBE} onChange={setArmaduraBE} errors={this.state.errors} onBlur={this.updateErrors}/>
+          <InputRowUnitless header="Tipo de cable" name='tipoDeCableBE' value={tipoDeCableBE} onChange={setTipoDeCableBE} errors={this.state.errors} onBlur={this.updateErrors}/>
+          <InputRow header="Longitud de cable" name='longitudDeCableBE' value={longitudDeCableBE} onChange={setLongitudDeCableBE} unit='m' errors={this.state.errors} onBlur={this.updateErrors}/>
+          <InputRowUnitless header="RPM" name='rmpBE' value={rmpBE} onChange={setRmpBE} errors={this.state.errors}  onBlur={this.updateErrors}/>
+        </div>
       </div>
     )
   }
@@ -414,18 +422,20 @@ import { setFromSaveSistemas, setHasErrorsSistemas, setSistemasArtificialesImgUR
 
     return (
       <div className='sistemas-artificiales-form' key={6}>
-        <InputRow header="Presión de cabeza" name='presionDeCabeza' value={presionDeCabeza} onChange={setPresionDeCabeza} unit={<div>Kg/cm<sup>2</sup></div>} errors={this.state.errors} onBlur={this.updateErrors}/>
-        <InputRow header="Presión de linea o de separador" name='presionDeLineaODeSeparador' value={presionDeLineaODeSeparador} onChange={setPresionDeLineaODeSeparador} unit={<div>Kg/cm<sup>2</sup></div>} errors={this.state.errors} onBlur={this.updateErrors}/>
-        <InputRowUnitless header="Tipo de unidad" name='tipoDeUnidadBM' value={tipoDeUnidadBM} onChange={setTipoDeUnidadBM} errors={this.state.errors} onBlur={this.updateErrors}/>
-        <InputRow header="Velocidad" name='velocidadBM' value={velocidadBM} onChange={setVelocidadBM} unit='EPM' errors={this.state.errors} onBlur={this.updateErrors}/>
-        <InputRow header="Longitud de carera" name='longitudDeCareraBM' value={longitudDeCareraBM} onChange={setLongitudDeCareraBM} unit='pg' errors={this.state.errors} onBlur={this.updateErrors}/>
-        <InputRowUnitless header="Tipo de bomba subsuperficial" name='tipoDeBombaSubsuperficialBM' value={tipoDeBombaSubsuperficialBM} onChange={setTipoDeBombaSubsuperficialBM} errors={this.state.errors} onBlur={this.updateErrors}/>
-        <InputRowUnitless header="Tamaño de bomba subsuperficial" name='tamanoDeBombaSubsuperficialBM' value={tamanoDeBombaSubsuperficialBM} onChange={setTamanoDeBombaSubsuperficialBM} errors={this.state.errors} onBlur={this.updateErrors}/>
-        <InputRow header="Profundidad de la bomba" name='profundidadDeLaBombaBM' value={profundidadDeLaBombaBM} onChange={setProfundidadDeLaBombaBM} unit='m' errors={this.state.errors} onBlur={this.updateErrors}/>
-        <InputRowUnitless header="Arreglo de varillas" name='arregloDeVarillasBM' value={arregloDeVarillasBM} onChange={setArregloDeVarillasBM} errors={this.state.errors} onBlur={this.updateErrors}/>
-        <InputRowUnitless header="Cuenta con ancla mecánica o empacador" name='CuantaConAnclaBM' value={CuantaConAnclaBM} onChange={setCuantaConAnclaBM} errors={this.state.errors} onBlur={this.updateErrors}/>
-        <InputRow header="Nivel dinámico" name='nivelDinamico' value={nivelDinamico} onChange={setNivelDinamico} unit='m' errors={this.state.errors} onBlur={this.updateErrors}/>
-        <InputRow header="Nivel estático" name='nivelEstatico' value={nivelEstatico} onChange={setNivelEstatico} unit='m' errors={this.state.errors} onBlur={this.updateErrors}/>
+        <div className="input-table">
+          <InputRow header="Presión de cabeza" name='presionDeCabeza' value={presionDeCabeza} onChange={setPresionDeCabeza} unit={<div>Kg/cm<sup>2</sup></div>} errors={this.state.errors} onBlur={this.updateErrors}/>
+          <InputRow header="Presión de linea o de separador" name='presionDeLineaODeSeparador' value={presionDeLineaODeSeparador} onChange={setPresionDeLineaODeSeparador} unit={<div>Kg/cm<sup>2</sup></div>} errors={this.state.errors} onBlur={this.updateErrors}/>
+          <InputRowUnitless header="Tipo de unidad" name='tipoDeUnidadBM' value={tipoDeUnidadBM} onChange={setTipoDeUnidadBM} errors={this.state.errors} onBlur={this.updateErrors}/>
+          <InputRow header="Velocidad" name='velocidadBM' value={velocidadBM} onChange={setVelocidadBM} unit='EPM' errors={this.state.errors} onBlur={this.updateErrors}/>
+          <InputRow header="Longitud de carera" name='longitudDeCareraBM' value={longitudDeCareraBM} onChange={setLongitudDeCareraBM} unit='pg' errors={this.state.errors} onBlur={this.updateErrors}/>
+          <InputRowUnitless header="Tipo de bomba subsuperficial" name='tipoDeBombaSubsuperficialBM' value={tipoDeBombaSubsuperficialBM} onChange={setTipoDeBombaSubsuperficialBM} errors={this.state.errors} onBlur={this.updateErrors}/>
+          <InputRowUnitless header="Tamaño de bomba subsuperficial" name='tamanoDeBombaSubsuperficialBM' value={tamanoDeBombaSubsuperficialBM} onChange={setTamanoDeBombaSubsuperficialBM} errors={this.state.errors} onBlur={this.updateErrors}/>
+          <InputRow header="Profundidad de la bomba" name='profundidadDeLaBombaBM' value={profundidadDeLaBombaBM} onChange={setProfundidadDeLaBombaBM} unit='m' errors={this.state.errors} onBlur={this.updateErrors}/>
+          <InputRowUnitless header="Arreglo de varillas" name='arregloDeVarillasBM' value={arregloDeVarillasBM} onChange={setArregloDeVarillasBM} errors={this.state.errors} onBlur={this.updateErrors}/>
+          <InputRowUnitless header="Cuenta con ancla mecánica o empacador" name='CuantaConAnclaBM' value={CuantaConAnclaBM} onChange={setCuantaConAnclaBM} errors={this.state.errors} onBlur={this.updateErrors}/>
+          <InputRow header="Nivel dinámico" name='nivelDinamico' value={nivelDinamico} onChange={setNivelDinamico} unit='m' errors={this.state.errors} onBlur={this.updateErrors}/>
+          <InputRow header="Nivel estático" name='nivelEstatico' value={nivelEstatico} onChange={setNivelEstatico} unit='m' errors={this.state.errors} onBlur={this.updateErrors}/>
+        </div>
       </div>
     )
   }
@@ -525,7 +535,9 @@ import { setFromSaveSistemas, setHasErrorsSistemas, setSistemasArtificialesImgUR
       <div className="form sistemas-artificiales-de-produccion">
         <div className='left'>
           <div className='select-sistema' >
-            <InputRowSelectUnitless header='Tipo de sistema' name='tipoDeSistemo' value={tipoDeSistemo} options={options} callback={this.handleSelectSistema} errors={this.state.errors} />
+            <div className="input-table">
+             <InputRowSelectUnitless header='Tipo de sistema' name='tipoDeSistemo' value={tipoDeSistemo} options={options} callback={this.handleSelectSistema} errors={this.state.errors} />
+            </div>
           </div>
           { forms[tipoDeSistemo]}
           </div>
