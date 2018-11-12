@@ -439,6 +439,18 @@ maps.propuesta = {
   },
 }
 
+maps.pruebasDeLaboratorioTitles = {
+  caracterizacionFisico: { text: 'Caracterización fisico-química de fluidos' },
+  pruebasDeCompatibilidad: { text: 'Pruebas de compatiblidad por emulsión' },
+  pruebasDeGrabado: { text: 'Pruebas de grabado' },
+  pruebasDeSolubilidad: { text: 'Pruebas de solubilidad' },
+  pruebasGelDeFractura: { text: 'Pruebas gel de fractura' },
+  pruebasParaApuntalante: { text: 'Pruebas para apuntalante' },
+  cromatografiaDelGas: { text: 'Cromatografía del gas' },
+  pruebaDeDureza: { text: 'Prueba de dureza' },
+  determinacionDeLaCalidad: { text: 'Determinación de la calidad método de los cloruros' },
+}
+
 maps.pruebasDeLaboratorio = {
   general: {
     type: { text: 'Tipo de Analisis', unit: '' },
@@ -492,10 +504,10 @@ maps.pruebasDeLaboratorio = {
     solubilidad: { text: 'Solubilidad', unit: units.percent },
   },
   pruebasGelDeFractura: {
-    hidratacionDelFluido: { text: 'Hidratación del fluido', unit: units },
+    hidratacionDelFluido: { text: 'Hidratación del fluido', unit: units.specificGravity },
     tiempoDeActivacion: { text: 'Tiempo de activación del gel', unit: units.specificGravity },
     determinacionDePh: { text: 'Determinación de pH', unit: '' },
-    tiempoDeRompimiento: { text: 'Tiempo de rompimiento', unit: units },
+    tiempoDeRompimiento: { text: 'Tiempo de rompimiento', unit: '' },
     dosificacionDeQuebradors: { text: 'Dosificación de quebradores', unit: units.specificGravity },
     viscosidadDelGelDeFractura: { text: 'Viscosidad del gel de fractura', unit: units.specificGravity },
   },
