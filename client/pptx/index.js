@@ -1,5 +1,5 @@
 import PptxGenJS from 'pptxgenjs'
-import { buildEstadoMecanicoYAparejo, buildFichaTecnicaDelCampo, buildFichaTecnicaDelPozo, buildSistemasArtificialesDeProduccion, buildEvaluacionPetrofisica, buildEvaluacionPetrofisicaImage, buildProposalCedula, buildGeneralProposal } from './slides'
+import { buildEstadoMecanicoYAparejo, buildFichaTecnicaDelCampo, buildFichaTecnicaDelPozo, buildSistemasArtificialesDeProduccion, buildEvaluacionPetrofisica, buildEvaluacionPetrofisicaImage, buildProposalCedula, buildGeneralProposal, buildLabReports } from './slides'
 
 function buildMasterSlide(slideWidth, slideHeight) {
   const logo = { x: 0.7, y: 0.15, w: 1.5, h: 0.5, path: '/images/pemex-logo-fpo.png' }
@@ -39,28 +39,27 @@ export async function getData(url, token, id) {
 }
 
 export function buildTable(title, map, data) {
- 
-
   const headerOptions = {
     fill: '2c6c94',
     color: 'ffffff',
   }
-
   const mapKeys = Object.keys(map)
   const headers = mapKeys.map((header) => {
-    const obj = map[header]
-    let text = obj.text
-    if (obj.unit !== '') {
-      text += `\n (${obj.unit})`
+    let { text, unit } = {...map[header]}
+    if (unit !== '') {
+      text += `\n (${unit})`
     }
     return { text, options: headerOptions }
   })
-
-  const body = data.map((elem, index) => mapKeys.map((header) => {
-    const options = {}
-    options.fill = index % 2 === 1 ? 'cdd4dc' : 'e8ebef'
-    return { text: elem[header], options }
-  }))
+  const body = data.map((elem, index) => {
+    const d = mapKeys.map((header) => {
+      const options = {}
+      options.fill = index % 2 === 1 ? 'cdd4dc' : 'e8ebef'
+      const obj = { text: elem[header], options }
+      return obj
+    })
+    return d
+  })
   const final = [headers, ...body]
   if (title) {
     const titleHeader =[{
@@ -77,13 +76,13 @@ export function buildTable(title, map, data) {
   return final
 }
 
-export function buildSimpleTable(title, map, data) {
+export function buildSimpleTable(title, map, data, hasUnits=true) {
   const titleHeader =[{
     text: title,
     options: {
       fill: '2c6c94',
       color: 'ffffff',
-      colspan: 3,
+      colspan: hasUnits ? 3 : 2,
       align: 'center'
     }
   }]
@@ -94,17 +93,24 @@ export function buildSimpleTable(title, map, data) {
   const headers = [
     { text: 'Descripción', options: headerOptions },
     { text: 'Valor', options: headerOptions },
-    { text: 'Unidades', options: headerOptions },
+    // { text: 'Unidades', options: headerOptions },
   ]
-  const body = Object.keys(map).map((elem, index) => {
+  if (hasUnits) {
+    headers.push({ text: 'Unidades', options: headerOptions })
+  }
+  const mapKeys = Object.keys(map)
+  const body = mapKeys.map((elem, index) => {
     const options = {}
     options.fill = index % 2 === 1 ? 'cdd4dc' : 'e8ebef'
     const { text, unit } = map[elem]
-    return [
+    const dataArray = [
       { text, options },
       { text: data[elem], options },
-      { text: unit, options },
     ]
+    if (hasUnits) {
+      dataArray.push({ text: unit, options })
+    }
+    return dataArray
   })
   const final = [headers, ...body]
   if (title) {
@@ -128,15 +134,26 @@ export async function generatePowerPoint(token, jobID) {
   pptx.defineSlideMaster(masterSlide)
   const images = await getData('getImages', token, jobID)
   console.log('images', images)
-  const sections = await Promise.all([
-    buildFichaTecnicaDelCampo(pptx, token, jobID),
-    buildFichaTecnicaDelPozo(pptx, token, jobID),
-    buildEstadoMecanicoYAparejo(pptx, token, jobID, images.mecanicoYAparejoDeProduccion),
-    buildSistemasArtificialesDeProduccion(pptx, token, jobID),
-    buildEvaluacionPetrofisica(pptx, token, jobID),
-    buildEvaluacionPetrofisicaImage(pptx, images.evaluacionPetrofisica),
-    buildProposalCedula(pptx, token, jobID),
-    buildGeneralProposal(pptx, token, jobID)
-  ])
+  await buildFichaTecnicaDelCampo(pptx, token, jobID),
+  await buildFichaTecnicaDelPozo(pptx, token, jobID),
+  await buildEstadoMecanicoYAparejo(pptx, token, jobID, images.mecanicoYAparejoDeProduccion),
+  await buildSistemasArtificialesDeProduccion(pptx, token, jobID),
+  await buildEvaluacionPetrofisica(pptx, token, jobID, images.buildEvaluacionPetrofisica),
+  // buildEvaluacionPetrofisicaImage(pptx, images.evaluacionPetrofisica),
+  await buildProposalCedula(pptx, token, jobID),
+  await buildGeneralProposal(pptx, token, jobID),
+  await buildLabReports(pptx, token, jobID, images.pruebasDeLaboratorio),
+  
+  // const sections = await Promise.all([
+    // buildFichaTecnicaDelCampo(pptx, token, jobID),
+    // buildFichaTecnicaDelPozo(pptx, token, jobID),
+    // buildEstadoMecanicoYAparejo(pptx, token, jobID, images.mecanicoYAparejoDeProduccion),
+    // buildSistemasArtificialesDeProduccion(pptx, token, jobID),
+    // buildEvaluacionPetrofisica(pptx, token, jobID, images.buildEvaluacionPetrofisica),
+    // // buildEvaluacionPetrofisicaImage(pptx, images.evaluacionPetrofisica),
+    // buildProposalCedula(pptx, token, jobID),
+    // buildGeneralProposal(pptx, token, jobID),
+    // buildLabReports(pptx, token, jobID),
+  // ])
   pptx.save()
 }

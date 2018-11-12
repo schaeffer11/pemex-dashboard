@@ -1935,6 +1935,7 @@ router.get('/getLabTest', async (req, res) => {
         type = subset[0].TIPO_DE_ANALISIS
         let i = subset[0]
         if (type === 'caracterizacionFisico') {
+          console.log('what is my type', type)
           outData.push({
             edited: true,
             labID: i.LAB_ID,

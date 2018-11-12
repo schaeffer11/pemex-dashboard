@@ -43,7 +43,9 @@ const units = {
   gasLiquidRelation: 'm3*std/m3',
   minutes: 'min',
   concentration: 'lbm/gal',
-  massPunds: 'lbm',
+  massPounds: 'lbm',
+  massGrams: 'gr',
+  malla: 'malla',
 }
 
 export const maps = {}
@@ -316,7 +318,7 @@ maps.propuesta = {
       tiempo: { text: 'Tiempo', unit: units.minutes },
     },
     general: {
-      tipoDeColocacion: { text: 'Tipo de colocación', unit: units },
+      tipoDeColocacion: { text: 'Tipo de colocación', unit: '' },
       tiempoDeContacto: { text: 'Tiempo de contacto', unit: units.minutes },
     },
     volumes: {
@@ -435,4 +437,96 @@ maps.propuesta = {
       justificacion: { text: 'Justificación', unit: '' },
     }
   },
+}
+
+maps.pruebasDeLaboratorioTitles = {
+  caracterizacionFisico: { text: 'Caracterización fisico-química de fluidos' },
+  pruebasDeCompatibilidad: { text: 'Pruebas de compatiblidad por emulsión' },
+  pruebasDeGrabado: { text: 'Pruebas de grabado' },
+  pruebasDeSolubilidad: { text: 'Pruebas de solubilidad' },
+  pruebasGelDeFractura: { text: 'Pruebas gel de fractura' },
+  pruebasParaApuntalante: { text: 'Pruebas para apuntalante' },
+  cromatografiaDelGas: { text: 'Cromatografía del gas' },
+  pruebaDeDureza: { text: 'Prueba de dureza' },
+  determinacionDeLaCalidad: { text: 'Determinación de la calidad método de los cloruros' },
+}
+
+maps.pruebasDeLaboratorio = {
+  general: {
+    type: { text: 'Tipo de Analisis', unit: '' },
+    fechaMuestreo: { text: 'Fecha de muestreo', unit: '' },
+    fechaPrueba: { text: 'Fecha de prueba', unit: '' },
+    compania: { text: 'Compañía', unit: '' },
+    superviso: { text: 'Personal de Pemex que supervisó', unit: '' },
+    obervaciones: { text: 'Observaciones', unit: '' },
+  },
+  caracterizacionFisico: {
+    percentAceite: { text: 'Determinación del porcentaje de aceite', unit: units.percent },
+    percentAgua: { text: 'Determinación del porcentaje de agua', unit: units.percent },
+    percentEmulsion: { text: 'Determinación del porcentaje de emulsión', unit: units.percent },
+    percentSolidos: { text: 'Determinación del porcentaje de sólidos', unit: units.percent },
+    percentAsfaltenos: { text: 'Determinación del porcentaje de asfaltenos', unit: units.percent },
+    percentParafinas: { text: 'Determinación del porcentaje de parafinas', unit: units.percent },
+    percentResinasAsfalticas: { text: 'Determinación del porcentaje de resinas asfalticas', unit: units.percent },
+    percentContenidoDeSolidos: { text: 'Determinación del porcentaje de contenido de sólidos', unit: units.percent },
+    densityAceite: { text: 'Densidad del aceite', unit: units.density },
+    densityAgua: { text: 'Densidad del agua', unit: units.density },
+    densityEmulsion: { text: 'Densidad de la emulsión', unit: units.density },
+    viscosityAceite: { text: 'Viscosidad del aceite', unit: units.viscosity },
+    viscosityEmulsion: { text: 'Viscosidad de la emulsión', unit: units.viscosity },
+    phDelAgua: { text: 'pH del agua', unit: '' },
+    salinidadDelAgua: { text: 'Salinidad del agua', unit: units.ppm },
+    salinidadDelAceite: { text: 'Salinidad del aceite', unit: units.ppm },
+  },
+  pruebasDeCompatibilidad: {
+    compatabilidadTable: {
+      diseno: { text: 'Diseño', unit: '' },
+      sistema: { text: 'Sistema', unit: '' },
+      aceiteDelPozo: { text: 'Aceite del pozo', unit: '' },
+      tiempoDeRompimiento: { text: 'Tiempo de Rompimiento', unit: '' },
+      separacionDeFases: { text: 'Separación de fases', unit: '' },
+      solidos: { text: 'Solidos', unit: '' },
+      condicion: { text: 'Condición', unit: '' },
+    },
+  },
+  pruebasDeGrabado: {
+    grabadoTable: {
+      sistemaAcido: { text: 'Sistema Ácido', unit: '' },
+      tiempoDeContacto: { text: 'Tiempo de contacto', unit: units.minutes },
+      grabado: { text: 'Grabado', unit: '' },
+    }
+  },
+  pruebasDeSolubilidad: {
+    tipoDeMuestra: { text: 'Tipo de muestra', unit: '' },
+    pesoDeLaMuestra: { text: 'Peso de la muestra', unit: units.massGrams },
+    tipoDeSistemaEmpleado: { text: 'Tipo de sistema químico empleado', unit: '' },
+    pesoDeLaMuestraFinal: { text: 'Peso final de la muestra', unit: units.massGrams },
+    solubilidad: { text: 'Solubilidad', unit: units.percent },
+  },
+  pruebasGelDeFractura: {
+    hidratacionDelFluido: { text: 'Hidratación del fluido', unit: units.specificGravity },
+    tiempoDeActivacion: { text: 'Tiempo de activación del gel', unit: units.specificGravity },
+    determinacionDePh: { text: 'Determinación de pH', unit: '' },
+    tiempoDeRompimiento: { text: 'Tiempo de rompimiento', unit: '' },
+    dosificacionDeQuebradors: { text: 'Dosificación de quebradores', unit: units.specificGravity },
+    viscosidadDelGelDeFractura: { text: 'Viscosidad del gel de fractura', unit: units.specificGravity },
+  },
+  pruebasParaApuntalante: {
+    esfericidad: { text: 'Esfericidad', unit: units.specificGravity },
+    redondez: { text: 'Redondez', unit: units.specificGravity },
+    resistenciaCompresion: { text: 'Resistencia a la compresión', unit: units.pressureEnglish },
+    malla: { text: 'Malla', unit: units.malla },
+    aglutinamiento: { text: 'Aglutinamiento', unit: units.specificGravity },
+    turbidez: { text: 'Turbidez', unit: units.specificGravity },
+    solubilidad: { text: 'Solubilidad', unit: units.percent },
+  },
+  cromatografiaDelGas: {
+    // image
+  },
+  pruebaDeDureza: {
+    // image
+  },
+  determinacionDeLaCalidad: {
+    // image
+  }
 }
