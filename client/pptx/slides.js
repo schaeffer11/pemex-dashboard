@@ -49,16 +49,17 @@ export async function buildEstadoMecanicoYAparejo(pptx, token, id, image) {
   const volumenTable = buildSimpleTable('Capacidad', volumen, data.mecanicoYAparejoDeProduccion)
 
   slide.addTable(terminacionTable, { x: 0.5, y: 1.0, ...tableOptions })
-  slide.addTable(linerTable, { x: 4.0, y: 1.0, ...tableOptions })
-  slide.addTable(disparosTable, { x: 4.0, y: 2.5, ...tableOptions })
+  slide.addTable(linerTable, { x: 0.5, y: 3.0, ...tableOptions })
+  slide.addTable(disparosTable, { x: 0.5, y: 4.25, ...tableOptions })
   slide.addTable(volumenTable, { x: 7.5, y: 1.0, ...tableOptions })
-
   if (image) {
-    const base64 = await getBase64FromURL(image.imgURL)
-    slide.addImage({
-      data: `image/png;base64,${base64}`, x: 7.5, y: 3, w:4, h:3,
-      sizing: { type: 'contain', h: 3.5, w: 3.5 }
-    })
+    const base64 = await getBase64FromURL(image.imgURL).catch(e => e)
+    if (!base64.error) {
+      slide.addImage({
+        data: `image/png;base64,${base64}`, x: 7.5, y: 3, w:4, h:3,
+        sizing: { type: 'contain', h: 3.5, w: 3.5 }
+      })
+    }
   }
   return slide
 }
@@ -124,23 +125,37 @@ export async function buildEvaluacionPetrofisica(pptx, token, id, image) {
   delete tableOptionsCopy.colW
   slide.addTable(layerTable, { x: 0.5, y: 1.0, ...tableOptionsCopy })
   slide.addTable(mudLossTable, { x: 0.5, y: 5.0, ...tableOptionsCopy })
+  if (image) {
+    const imageSlide = pptx.addNewSlide('MASTER_SLIDE')
+    imageSlide.addText('Evaluación Petrofísica', { placeholder: 'slide_title' })
+    imageSlide.addText('Registro del pozo', { x: 0.5, y: 1.0, fontSize: 14 })
+    const base64 = await getBase64FromURL(image.imgURL).catch(e => e)
+    if (!base64.error) {
+      imageSlide.addImage({
+        data: `image/png;base64,${base64}`, x: (13.3 - 6.5) / 2, y: 1.0, w:4, h:3,
+        sizing: { type: 'contain', h: 6.5, w: 6.5 }
+      })
+    }
+  }
   return slide
 }
 
 
-export async function buildEvaluacionPetrofisicaImage(pptx, image) {
-  if (image) {
-    const slide = pptx.addNewSlide('MASTER_SLIDE')
-    slide.addText('Evaluación Petrofísica', { placeholder: 'slide_title' })
-    slide.addText('Registro del pozo', { x: 0.5, y: 1.0, fontSize: 14 })
-    const base64 = await getBase64FromURL(image.imgURL)
-    slide.addImage({
-      data: `image/png;base64,${base64}`, x: (13.3 - 6.5) / 2, y: 1.0, w:4, h:3,
-      sizing: { type: 'contain', h: 6.5, w: 6.5 }
-    })
-  }
-  return
-}
+// export async function buildEvaluacionPetrofisicaImage(pptx, image) {
+//   if (image) {
+//     const slide = pptx.addNewSlide('MASTER_SLIDE')
+//     slide.addText('Evaluación Petrofísica', { placeholder: 'slide_title' })
+//     slide.addText('Registro del pozo', { x: 0.5, y: 1.0, fontSize: 14 })
+//     const base64 = await getBase64FromURL(image.imgURL).catch(e => e)
+//     if (!base64.error) {
+//       slide.addImage({
+//         data: `image/png;base64,${base64}`, x: (13.3 - 6.5) / 2, y: 1.0, w:4, h:3,
+//         sizing: { type: 'contain', h: 6.5, w: 6.5 }
+//       })
+//     }
+//   }
+//   return
+// }
 
 export async function buildProposalCedula(pptx, token, id) {
   const interventionTypeData = await getData('getInterventionBase', token, id)
@@ -222,7 +237,6 @@ export async function buildGeneralProposal(pptx, token, id) {
   const slide = pptx.addNewSlide('MASTER_SLIDE')
   slide.addText('Propuesta de tratamiento', { placeholder: 'slide_title' })
   const data = await getData(interventionURL, token, id)
-  console.log('!data', data, propuestaData, data[propuestaData])
 
   
   const tableOptionsCopy = {...tableOptions}
@@ -239,6 +253,33 @@ export async function buildGeneralProposal(pptx, token, id) {
     const limpiezaTable = buildSimpleTable('Limpieza de Aparejo', map.general, data[propuestaData])
     slide.addTable(limpiezaTable, { x: 3.5, y: 1.0, ...tableOptionsCopy })
   }
-  console.log('for something')
   return slide
+}
+
+export async function buildLabReports(pptx, token, id) {
+  const slide = pptx.addNewSlide('MASTER_SLIDE')
+  slide.addText('Pruebas de laboratorio', { placeholder: 'slide_title' })
+  const data = await getData('getLabTest', token, id)
+  console.log('que me llego?', data)
+  const { pruebasDeLaboratorioData } = data.pruebasDeLaboratorio
+
+  pruebasDeLaboratorioData.forEach((lab) => {
+    const map = maps.pruebasDeLaboratorio[lab.type]
+    if (map) {
+      let tableName = ''
+      const isTable = Object.keys(map).filter(m => {
+        console.log('lab type', lab.type, lab[m])
+        if (Array.isArray(lab[m])) {
+          tableName = m
+          return true
+        }
+        return false
+      }).length > 0
+      console.log('is table?', isTable, lab.type)
+      if (isTable) {
+        const table = buildTable('testing', map[tableName], lab[tableName])
+        console.log('da table', table)
+      }
+    }
+  })
 }
