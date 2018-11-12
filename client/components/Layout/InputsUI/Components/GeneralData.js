@@ -555,9 +555,7 @@ import ButtonGroup from './ButtonGroup'
 
     return (
       <div className='general-data-outer'>
-        <div className='image'>
-          <img src={'/images/homepageBannerThin2.jpg'}></img>
-        </div>
+        <div className='banner image' style={{backgroundImage:'url(/images/homepageBannerThin2.jpg)'}}></div>
          <ButtonGroup 
             className={'button-group'}
             buttons={
@@ -576,14 +574,14 @@ import ButtonGroup from './ButtonGroup'
           { this.makeGeneralForm() }
           { this.makeGeneralInterventionForm() }
           <button className="submit submit-load" onClick={this.activateModal}> Descargar borrador</button>
-          <button className='cta next submit-next' disabled={this.checkIncomplete()} onClick={(e) => setShowForms(true)} >Siguiente</button>
+          <button className='cta next submit-continue' disabled={this.checkIncomplete()} onClick={(e) => setShowForms(true)} >Siguiente</button>
           <Notification />
           <Loading />
           { isOpen ? this.buildModal() : null }
         </div>
        : <div className='form general-data-upload'>
           { this.makeUploadResultsForm() }
-          <button className='cta next submit-continue' disabled={!selectedProposal} onClick={this.handleSiguienteResults}>Siguiente</button>
+          <button className='cta next submit-next' disabled={!selectedProposal} onClick={this.handleSiguienteResults}>Siguiente</button>
        </div> }
       </div>
     )
