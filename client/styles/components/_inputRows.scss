@@ -42,16 +42,10 @@
   width: 100%;
   background: whitesmoke;
   padding: 5px;
-  border: solid 1px white;
 
   .header {
   	grid-area: header;
   	font-size: 14px;
-  }
-
-  .input {
-  	grid-area: input;
-  	font-size: 12px
   }
 }
 

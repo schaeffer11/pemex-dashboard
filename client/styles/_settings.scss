@@ -1,14 +1,26 @@
 // Global
+
+$bluegreen: #018081;
+$steel: #7c808d;
+$cloudy-blue: #b4bacd;
+$nasty-green: #70ad46;
+$brown-grey: #7f7f7f;
+$greyish-brown: #595959;
+$charcoal-grey: #2d2e33;
+$harcoal-grey: #44474e;
+$white: #ffffff;
+
 $primary-green: #028080;
 $active-green: #70AC46;
 
 $background-color: #393b41;
-$primary-font-color: #585858;
-$primary-border-color: #C0C0C0;
+$primary-font-color: $white;
+$primary-border-color: $cloudy-blue;
 
-$table-row-font-color: #fff;
-$table-row-color: $background-color;
-$table-row-alt-color: #272a2c;
+$table-row-font-color: $white;
+$table-row-color: #393b41;
+$table-row-alt-color: #272a2c ;
+
 
 // QRI Colors
 $qriLogoBlue: #0076C0;
