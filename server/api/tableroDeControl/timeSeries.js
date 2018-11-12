@@ -192,7 +192,7 @@ WHERE aforos.TRANSACTION_ID = aforo_results.PROPUESTA_ID`
             well: i.WELL_NAME,
             wellID: i.WELL_FORMACION_ID,
             formation: i.FORMACION,
-            company: i.PROPUESTA_COMPANIA,
+            company: i.COMPANY,
             interventionType: i.TIPO_DE_INTERVENCIONES,
             terminationType: i.TIPO_DE_TERMINACION,
             date: i.FECHA,
@@ -234,7 +234,7 @@ router.get('/volumeData', (req, res) => {
     values.push(tipoDeTerminacion)
   }
   if (lowDate) {
-    whereClause += ' AND FECHA_INTERVENCION >= ?'
+    whereClause += ' AND i.FECHA_INTERVENCION >= ?'
     let year = Math.floor((lowDate - 1) / 12)
     let month = lowDate % 12
     month === 0 ? month = 12 : null
@@ -242,7 +242,7 @@ router.get('/volumeData', (req, res) => {
     values.push(lowDateString)
   }
   if (highDate) {
-    whereClause += ' AND FECHA_INTERVENCION <= ?'
+    whereClause += ' AND i.FECHA_INTERVENCION <= ?'
     let year = Math.floor((highDate - 1) / 12)
     let month = highDate % 12
     month === 0 ? month = 12 : null
@@ -282,7 +282,7 @@ router.get('/volumeData', (req, res) => {
   let groupByClause = select !== 1 ? `groupedName, ` : ''
   let query = 
 `
-select ${select}, YEAR(FECHA_INTERVENCION), MONTH(FECHA_INTERVENCION), FECHA_INTERVENCION, i.WELL_FORMACION_ID, WELL_NAME, 
+select ${select}, YEAR(i.FECHA_INTERVENCION), MONTH(i.FECHA_INTERVENCION), i.FECHA_INTERVENCION, i.WELL_FORMACION_ID, WELL_NAME, 
 SUM(IF(ra.VOLUMEN_SISTEMA_NO_REACTIVO, ra.VOLUMEN_SISTEMA_NO_REACTIVO, 0) + IF(re.VOLUMEN_SISTEMA_NO_REACTIVO, re.VOLUMEN_SISTEMA_NO_REACTIVO, 0)) as TOTAL_SISTEMA_NO_REACTIVO,
 SUM(IF(ra.VOLUMEN_SISTEMA_REACTIVO, ra.VOLUMEN_SISTEMA_REACTIVO, 0) + IF(re.VOLUMEN_SISTEMA_REACTIVO, re.VOLUMEN_SISTEMA_REACTIVO, 0)) as TOTAL_SISTEMA_REACTIVO,
 SUM(IF(ra.VOLUMEN_SISTEMA_DIVERGENTE, ra.VOLUMEN_SISTEMA_DIVERGENTE, 0) + IF(re.VOLUMEN_SISTEMA_DIVERGENTE, re.VOLUMEN_SISTEMA_DIVERGENTE, 0)) as TOTAL_SISTEMA_DIVERGENTE,
@@ -301,6 +301,7 @@ LEFT JOIN ResultsApuntalado rap ON i.WELL_FORMACION_ID = rap.WELL_FORMACION_ID
 LEFT JOIN ResultsEstimulacions re ON i.WELL_FORMACION_ID = re.WELL_FORMACION_ID
 LEFT JOIN ResultsTermico rt ON i.WELL_FORMACION_ID = rt.WELL_FORMACION_ID
 LEFT JOIN Transactions t ON i.PROPUESTA_ID = t.TRANSACTION_ID
+LEFT JOIN TransactionsResults tr ON i.TRANSACTION_ID = tr.TRANSACTION_ID
 ${whereClause}
 GROUP BY ${groupByClause} YEAR(FECHA_INTERVENCION), MONTH(FECHA_INTERVENCION)
 `

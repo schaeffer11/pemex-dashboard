@@ -195,7 +195,7 @@ router.get('/aforosData', (req, res) => {
   let query = `
 SELECT *, COUNT(1) AS y,  (QO_RESULT - QO) AS DELTA_QO, IF(QO_RESULT > QO, 'Successful', 'Unsuccessful') as name,  IF(QO_RESULT > QO, 'green', 'red') as color ${select} FROM 
 
-(SELECT SUBDIRECCION_NAME, ACTIVO_NAME, FIELD_NAME, A.WELL_FORMACION_ID, WELL_NAME, FORMACION, COMPANY, TIPO_DE_INTERVENCIONES, TIPO_DE_TERMINACION, A.PROPUESTA_ID, QO AS QO_RESULT, QW AS QW_RESULT, FECHA  
+(SELECT SUBDIRECCION_NAME, ACTIVO_NAME, FIELD_NAME, A.WELL_FORMACION_ID, WELL_NAME, FORMACION, COMPANY, TIPO_DE_INTERVENCIONES, TIPO_DE_TERMINACION, A.PROPUESTA_ID, QO AS QO_RESULT, QW AS QW_RESULT, QG AS QG_RESULT, FECHA  
 FROM
 (
   select fwm.SUBDIRECCION_NAME, fwm.ACTIVO_NAME, fwm.FIELD_NAME, fwm.WELL_FORMACION_ID, FORMACION, COMPANY, WELL_NAME, ResultsAforos.PROPUESTA_ID, ResultsAforos.TRANSACTION_ID, MAX(FECHA) AS FECHA, TIPO_DE_TERMINACION, TIPO_DE_INTERVENCIONES
@@ -206,7 +206,7 @@ FROM
   WHERE QO != '-999'  ${whereClause} GROUP BY TRANSACTION_ID
 ) A INNER JOIN ResultsAforos B USING(TRANSACTION_ID, FECHA)) as aforo_results, 
 
-(SELECT A.TRANSACTION_ID, QO, QW 
+(SELECT A.TRANSACTION_ID, QO, QW, QG
 FROM
 (
   select WellAforos.TRANSACTION_ID, MAX(FECHA) AS FECHA
@@ -253,9 +253,11 @@ ${groupByClause}`
           terminationType: i.TIPO_DE_TERMINACION,
           date: i.FECHA,
           qo: i.QO,
+          qg: i.QG,
           qw: i.QW,
           qoResult: i.QO_RESULT,
           qwResult: i.QW_RESULT,
+          qgResult: i.QG_RESULT,
           groupedName: i.groupedName
         }))
 

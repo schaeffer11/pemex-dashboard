@@ -133,21 +133,21 @@ import { setGeneralGlobalAnalysis } from '../../../../redux/actions/global'
               >
               <CostBar data={costData} />
             </Card>
-              <Card
+{/*              <Card
                 id="aforos"
                 title="Production"
                 ref={this.cards[1]}
               >
               <AforosScatter data={aforosData} groupBy={groupBy} />
-            </Card>
+            </Card>*/}
               <Card
                 id="volume"
                 title="Volume Usage"
                 ref={this.cards[2]}
                 multiplyChartsOnGrouping
               >
-              <VolumeLine label='Liquids' data={volumeData} />
-              <VolumeGasLine label="Gases" data={volumeData} />
+              <VolumeLine label='Liquids' data={volumeData} costData={costData} />
+              <VolumeGasLine label="Gases" data={volumeData} costData={costData} />
             </Card>
           </CardDeck>
         </div>
