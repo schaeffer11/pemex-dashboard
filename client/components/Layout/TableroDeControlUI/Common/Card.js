@@ -100,12 +100,14 @@ const arraysAreEqual = (arr1, arr2) => {
   }
 
   handleCardExport() {
-    const chart = this.getChartRef()
+    const chart = this.getChartRef()   
+
     if (chart) {
       chart.exportChartLocal({
         type: 'application/png',
       })
-    } else {
+    } 
+    else {
       console.log('Could not find a ReactHighcharts to export')
     }
   }
@@ -177,8 +179,11 @@ const arraysAreEqual = (arr1, arr2) => {
   }
 
   renderUserOptions() {
-    const { userOptionsOpen } = this.state
-    const { id } = this.props
+    const { userOptionsOpen, showing } = this.state
+    const { id, children, isImage, isTable } = this.props
+
+    const viewing = Array.isArray(children) ? children[showing] : children
+
     return (
       <div>
         <Popover
@@ -191,13 +196,13 @@ const arraysAreEqual = (arr1, arr2) => {
             User Options
           </PopoverHeader>
           <PopoverBody>
-            <Button
-              onClick={this.handleCardExport}
-            >
-              Export
-              {' '}
-{/*              <FontAwesomeIcon icon="file-export" />*/}
-            </Button>
+            {isImage 
+              ? <a href={viewing.props.src} target="_blank"><Button>Export</Button></a>
+              : isTable 
+                ? null
+                : <Button onClick={this.handleCardExport}>
+                    Export
+                  </Button> }
           </PopoverBody>
         </Popover>
       </div>
@@ -244,12 +249,13 @@ const arraysAreEqual = (arr1, arr2) => {
   }
 
   renderChildren(viewing) {
-    const { multiplyChartsOnGrouping, multipleData } = this.props
+    const { multiplyChartsOnGrouping, multipleData, isImage } = this.props
     const { groupProps } = this.state
     const childProps = {
       ...viewing.props,
       ref: this.selectedChild,
     }
+
     if (objectPath.has(childProps, 'data')) {
       if (childProps.data !== undefined) {
         if (multiplyChartsOnGrouping) {
@@ -288,7 +294,7 @@ const arraysAreEqual = (arr1, arr2) => {
       userOptionsOpen,
       userOptionsTooltip,
     } = this.state
-    const { title, id, chartOptions } = this.props
+    const { title, id, chartOptions, isImage, isTable } = this.props
 
     let { children } = this.props
     // Only consider children that are react elements and cast result to array
@@ -310,8 +316,10 @@ const arraysAreEqual = (arr1, arr2) => {
       : ''
     const viewing = Array.isArray(children) ? children[showing] : children
     const cardHasOptions = Array.isArray(chartOptions)
+
+    let style = isImage || isTable ? {width: '100%'} : null 
     return (
-      <div>
+      <div style={style}>
         <RSCard>
           <CardTitle>
             <span>

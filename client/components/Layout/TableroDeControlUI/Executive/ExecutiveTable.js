@@ -12,11 +12,10 @@ import { CategoryDist, TrafficLight, Currency, Integer } from '../../../../lib/f
     
     return true
   }
-  
 
 
   render() {
-    let { data, estIncData, aforosData, groupBy } = this.props
+    let { data, estIncData, aforosData, volumeData, groupBy } = this.props
 
     let header = ''
 
@@ -82,6 +81,61 @@ import { CategoryDist, TrafficLight, Currency, Integer } from '../../../../lib/f
         Header: <div>Date / Type of<br/>Last Treatment</div>,
         accessor: 'dateType', 
         minWidth: 150
+      }, {
+        Header: <div>Total Sistema<br/>No Reactivo<br/>(m<sup>3</sup>)</div>,
+        accessor: 'sistemaNoReactivo', 
+        Cell: Integer,
+        minWidth: 150
+      },{
+        Header: <div>Total Sistema<br/>Reactivo<br/>(m<sup>3</sup>)</div>,
+        accessor: 'sistemaReactivo', 
+        Cell: Integer,
+        minWidth: 150
+      },{
+        Header: <div>Total Sistema<br/>Divergente<br/>(m<sup>3</sup>)</div>,
+        accessor: 'sistemaDivergente', 
+        Cell: Integer,
+        minWidth: 150
+      },{
+        Header: <div>Total Desplazamiento<br/>Liquido<br/>(m<sup>3</sup>)</div>,
+        accessor: 'desplazamientoLiquido', 
+        Cell: Integer,
+        minWidth: 150
+      },{
+        Header: <div>Total Desplazamiento<br/>N2<br/>(m<sup>3</sup>)</div>,
+        accessor: 'desplazamientoN2', 
+        Cell: Integer,
+        minWidth: 150
+      },{
+        Header: <div>Total Precolchon<br/>N2<br/>(m<sup>3</sup>)</div>,
+        accessor: 'precolchonN2', 
+        Cell: Integer,
+        minWidth: 150
+      },{
+        Header: <div>Total Liquido<br/>(m<sup>3</sup>)</div>,
+        accessor: 'liquido', 
+        Cell: Integer,
+        minWidth: 150
+      },{
+        Header: <div>Total Apuntalante<br/>(sacos)</div>,
+        accessor: 'apuntalante', 
+        Cell: Integer,
+        minWidth: 150
+      },{
+        Header: <div>Total Gel de<br/>Fractura<br/>(U.S. gal)</div>,
+        accessor: 'gelDeFractura', 
+        Cell: Integer,
+        minWidth: 150
+      },{
+        Header: <div>Total Precolchon<br/>apuntalante<br/>(U.S. gal)</div>,
+        accessor: 'precolchonApuntalante', 
+        Cell: Integer,
+        minWidth: 150
+      },{
+        Header: <div>Total Vapor<br/>Injected<br/>(ton)</div>,
+        accessor: 'vapor', 
+        Cell: Integer,
+        minWidth: 150
       }]
 
       if (groupBy) {
@@ -91,14 +145,18 @@ import { CategoryDist, TrafficLight, Currency, Integer } from '../../../../lib/f
           minWidth: 150,
         })
       }
-      console.log(data, estIncData, aforosData, groupBy)
-
-
 
     data = data.map(i => {
 
         let estProd = estIncData.find(j => j.groupedName === i.groupedName) ? estIncData.find(j => j.groupedName === i.groupedName).EST_INC_Qo : undefined
-        let realProd = aforosData.filter(j => j.groupedName === i.groupedName).length > 0 ? aforosData.filter(j => j.groupedName === i.groupedName).reduce((sum, cur) => sum + cur.qoResult, 0) : null
+        let realProd = groupBy 
+                          ? aforosData.filter(j => j.groupedName === i.groupedName).length > 0 ? aforosData.filter(j => j.groupedName === i.groupedName).reduce((sum, cur) => sum + cur.qoResult, 0) : null
+                          : aforosData ? aforosData.reduce((sum, cur) => sum + cur.qoResult, 0) : null
+
+        let volumen = groupBy 
+                  ? (volumeData.find(j => j.groupedName === i.groupedName) ? volumeData.find(j => j.groupedName === i.groupedName) : {}) 
+                  : (volumeData ? volumeData[0] : {})
+
 
         return {
             name: i.groupedName,
@@ -111,23 +169,32 @@ import { CategoryDist, TrafficLight, Currency, Integer } from '../../../../lib/f
             percEstimulacion: i.NUM_ESTIMULACION / i.NUM_TREATMENTS * 100,
             numTermico: i.NUM_TERMICO,
             percTermico: i.NUM_TERMICO / i.NUM_TREATMENTS * 100,
-            cost: i.COST,
+            cost: i.COST ? i.COST.toFixed(0) : 0 ,
             estProd: estProd,
             realProd: realProd,
             light: estProd && realProd ? realProd / estProd : null,
-            dateType: '-'
+            dateType: '-',
+            sistemaNoReactivo: volumen ? volumen.TOTAL_SISTEMA_NO_REACTIVO : undefined,
+            sistemaReactivo: volumen ? volumen.TOTAL_SISTEMA_REACTIVO : undefined,
+            sistemaDivergente: volumen ? volumen.TOTAL_SISTEMA_DIVERGENTE : undefined,
+            desplazamientoLiquido: volumen ? volumen.TOTAL_DESPLAZAMIENTO_LIQUIDO : undefined,
+            desplazamientoN2: volumen ? volumen.TOTAL_DESPLAZAMIENTO_N2 : undefined,
+            precolchonN2: volumen ? volumen.TOTAL_PRECOLCHON_N2 : undefined,
+            liquido: volumen ? volumen.TOTAL_LIQUIDO : undefined,
+            apuntalante: volumen ? volumen.TOTAL_APUNTALANTE : undefined,
+            gelDeFractura: volumen ? volumen.TOTAL_GEL_DE_FRACTURA : undefined,
+            precolchonApuntalante: volumen ? volumen.TOTAL_PRECOLCHON_APUNTALANTE : undefined,
+            vapor: volumen ? volumen.TOTAL_VAPOR_INJECTED : undefined,
         }
     })
 
-    console.log(data)
-    
     return (
       <div className='table'>
         <ReactTable 
           columns={columns}
           showPagination={false}
           data={data}
-          pageSize={8}
+          pageSize={data  ? data.length : 5}
           defaultSorted={[
             {
               id: 'numTreatments',

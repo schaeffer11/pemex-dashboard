@@ -66,11 +66,17 @@ router.get('/getCedula', (req, res) => {
       SELECT * FROM IntervencionesCedulaAcido
       WHERE TRANSACTION_ID = ?`
   }
-  else {
+  else if (type === 'Apuntalado') {
     query = `
       SELECT * FROM IntervencionesCedulaApuntalado
       WHERE TRANSACTION_ID = ?`
   }
+  else {
+    query = `
+    SELECT * FROM IntervencionesCedulaTermico
+    WHERE TRANSACTION_ID = ?`
+  }
+
   connection.query(query, transactionID, (err, results) => {
       console.log('comment err', err)
 
@@ -78,6 +84,80 @@ router.get('/getCedula', (req, res) => {
         res.json({ success: false})
       }
       else {
+        if (type === 'Estimulacion') {
+          results = results.map(i => {
+            return {
+              etapa: i.ETAPA,
+              sistema: i.SISTEMA,
+              nombreComercial: i.NOMBRE_COMERCIAL,
+              volLiquid: i.VOL_LIQUID,
+              gastoLiqudo: i.GASTO_LIQUIDO,
+              relN2Liq: i. REL_N2_LIQ,
+              calidad: i.CALIDAD,
+              gastoEnFondo: i.GASTO_EN_FONDO,
+              gastoN2: i.GASTO_N2,
+              volN2: i.VOL_N2,
+              volLiquidoAcum: i.VOL_LIQUIDO_ACUM,
+              volN2Acum: i.VOL_N2_ACUM,
+              tiempo: i.TIEMPO
+            }
+          })
+        }
+        else if (type === 'Acido') {
+          results = results.map(i => {
+            return {
+              etapa: i.ETAPA,
+              sistema: i.SISTEMA,
+              nombreComercial: i.NOMBRE_COMERCIAL,
+              tipoDeApuntalante: i.TIPO_DE_APUNTALANTE,
+              concentraciDeApuntalante: i.CONCENTRACION_DE_APUNTALANTE,
+              volLiquid: i.VOL_LIQUID,
+              gastoLiqudo: i.GASTO_LIQUIDO,
+              relN2Liq: i.REL_N2_LIQ,
+              calidad: i.CALIDAD,
+              gastoEnFondo: i.GASTO_EN_FONDO,
+              gastoN2: i.GASTO_N2,
+              volN2: i.VOL_N2,
+              volLiquidoAcum: i.VOL_LIQUIDO_ACUM,
+              volN2Acum: i.VOL_N2_ACUM,
+              tiempo: i.TIEMPO,      
+            }
+          })
+
+        }
+        else if (type === 'Apuntalado') {
+          results = results.map(i => {
+            return {
+              etapa: i.ETAPA,
+              sistema: i.SISTEMA,
+              nombreComercial: i.NOMBRE_COMERCIAL,
+              tipoDeFluido: i.TIPO_DE_FLUIDO,
+              tipoDeApuntalante: i.TIPO_DE_APUNTALANTE,
+              volLiquido: i.VOL_LIQUIDO,
+              volLechada: i.VOL_LECHADA,
+              gastoSuperficie: i.GASTO_EN_SUPERFICIE,
+              gastoN2Superficie: i.GASTO_N2_SUPERFICIE,
+              gastoEnFondo: i.GASTO_TOTAL_FONDO,
+              calidadN2Fondo: i.CALIDAD_N2,
+              volEspumaFondo: i.VOL_ESPUMA_FONDO,
+              concentracionApuntalanteSuperficie: i.CONCENTRACION_APUNTALANTE_SUPERFICIE,
+              concentracionApuntalanteFondo: i.CONCENTRACION_APUNTALANTE_FONDO,
+              apuntalanteAcumulado: i.APUNTALANTE_ACUMULADO,
+              tiempo: i.TIEMPO,
+            }
+          })
+        }
+        else {
+          results = results.map(i => {
+            return {
+              etapa: i.ETAPA,
+              actividad: i.ACTIVIDAD,
+              descripcion: i.DESCRIPCION,
+              justificacion: i.JUSTIFICACION,    
+            }
+          })
+        }
+
         res.json(results)
       }
     })
@@ -98,9 +178,14 @@ router.get('/getCedulaResults', (req, res) => {
       SELECT * FROM ResultsCedulaAcido
       WHERE PROPUESTA_ID = ?`
   }
-  else {
+  else if (type === 'Apuntalado') {
     query = `
       SELECT * FROM ResultsCedulaApuntalado
+      WHERE PROPUESTA_ID = ?`
+  }
+  else { 
+    query =`
+      SELECT * FROM ResultsCedulaTermico
       WHERE PROPUESTA_ID = ?`
   }
 
@@ -111,6 +196,80 @@ router.get('/getCedulaResults', (req, res) => {
         res.json({ success: false})
       }
       else {
+        if (type === 'Estimulacion') {
+          results = results.map(i => {
+            return {
+              etapa: i.ETAPA,
+              sistema: i.SISTEMA,
+              nombreComercial: i.NOMBRE_COMERCIAL,
+              volLiquid: i.VOL_LIQUID,
+              gastoLiqudo: i.GASTO_LIQUIDO,
+              relN2Liq: i. REL_N2_LIQ,
+              calidad: i.CALIDAD,
+              gastoEnFondo: i.GASTO_EN_FONDO,
+              gastoN2: i.GASTO_N2,
+              volN2: i.VOL_N2,
+              volLiquidoAcum: i.VOL_LIQUIDO_ACUM,
+              volN2Acum: i.VOL_N2_ACUM,
+              tiempo: i.TIEMPO
+            }
+          })
+        }
+        else if (type === 'Acido') {
+          results = results.map(i => {
+            return {
+              etapa: i.ETAPA,
+              sistema: i.SISTEMA,
+              nombreComercial: i.NOMBRE_COMERCIAL,
+              tipoDeApuntalante: i.TIPO_DE_APUNTALANTE,
+              concentraciDeApuntalante: i.CONCENTRACION_DE_APUNTALANTE,
+              volLiquid: i.VOL_LIQUID,
+              gastoLiqudo: i.GASTO_LIQUIDO,
+              relN2Liq: i.REL_N2_LIQ,
+              calidad: i.CALIDAD,
+              gastoEnFondo: i.GASTO_EN_FONDO,
+              gastoN2: i.GASTO_N2,
+              volN2: i.VOL_N2,
+              volLiquidoAcum: i.VOL_LIQUIDO_ACUM,
+              volN2Acum: i.VOL_N2_ACUM,
+              tiempo: i.TIEMPO,      
+            }
+          })
+        }
+        else if (type === 'Apuntalado') {
+          results = results.map(i => {
+            return {
+              etapa: i.ETAPA,
+              sistema: i.SISTEMA,
+              nombreComercial: i.NOMBRE_COMERCIAL,
+              tipoDeFluido: i.TIPO_DE_FLUIDO,
+              tipoDeApuntalante: i.TIPO_DE_APUNTALANTE,
+              volLiquido: i.VOL_LIQUIDO,
+              volLechada: i.VOL_LECHADA,
+              gastoSuperficie: i.GASTO_EN_SUPERFICIE,
+              gastoN2Superficie: i.GASTO_N2_SUPERFICIE,
+              gastoEnFondo: i.GASTO_TOTAL_FONDO,
+              calidadN2Fondo: i.CALIDAD_N2,
+              volEspumaFondo: i.VOL_ESPUMA_FONDO,
+              concentracionApuntalanteSuperficie: i.CONCENTRACION_APUNTALANTE_SUPERFICIE,
+              concentracionApuntalanteFondo: i.CONCENTRACION_APUNTALANTE_FONDO,
+              apuntalanteAcumulado: i.APUNTALANTE_ACUMULADO,
+              tiempo: i.TIEMPO,
+            }
+          })
+        }
+        else {
+          results = results.map(i => {
+            return {
+              etapa: i.ETAPA,
+              actividad: i.ACTIVIDAD,
+              descripcion: i.DESCRIPCION,
+              justificacion: i.JUSTIFICACION,    
+            }
+          })
+        }
+
+
         res.json(results)
       }
     })
@@ -335,7 +494,76 @@ select FECHA, QO, QW, QG from ResultsAforos WHERE PROPUESTA_ID = ? AND Qo != -99
 
 
 
+router.get('/getLabs', (req, res) => {
+  let { transactionID } = req.query
+  
+  let query = `select * from IntervencionesLabTests where TRANSACTION_ID = ?`
 
+  connection.query(query, transactionID, (err, results) => {
+      console.log('comment err', err)
+
+     if (err) {
+        res.json({ success: false})
+      }
+      else {
+
+        results = results.map(i => {
+          return {
+            id: i.LAB_ID,
+            type: i.TIPO_DE_ANALISIS,
+            fechaMuestreo: i.FECHA_DE_MUESTREO,
+            fechaPrueba: i.FECHA_DE_PRUEBA,
+            compania: i.COMPANIA,
+            superviso: i.PERSONAL_DE_PEMEX_QUE_SUPERVISO,
+            observaciones: i.OBSERVACIONES
+          }
+        })
+
+        console.log(query, transactionID)
+        console.log(results)
+        res.json(results)
+      }
+    })
+})
+
+
+router.get('/getLabData', (req, res) => {
+  let { labID, type } = req.query
+  
+  let query = `select 1 from Users limit 1`
+
+  if (type === 'caracterizacionFisico') {
+    query = `select * from IntervencionesLabTestsCaracterizacionFisico where LAB_ID = ?`
+  }
+  else if (type === 'pruebasDeCompatibilidad') {
+    query = `select * from IntervencionesLabTestsPruebasDeCompatibilidad where LAB_ID = ?`
+  }
+  else if (type === 'pruebasDeGrabado') {
+    query = `select * from IntervencionesLabTestsPrueasDeGrabado where LAB_ID = ?`
+  }
+  else if (type === 'pruebasDeSolubilidad') {
+    query = `select * from IntervencionesLabTestsPruebasDeSolubilidad where LAB_ID = ?`
+  }
+  else if (type === 'pruebasGelDeFractura') {
+    query = `select * from IntervencionesLabTestsPruebasGelDeFractura where LAB_ID = ?`
+  }
+  else if (type === 'pruebasParaApuntalante') {
+    query = `select * from IntervencionesLabTestsPruebasParaApuntalante where LAB_ID = ?`
+  }
+  
+
+  connection.query(query, labID, (err, results) => {
+      console.log('comment err', err)
+
+     if (err) {
+        res.json({ success: false})
+      }
+      else {
+
+        res.json(results)
+      }
+    })
+})
 
 
 export default router

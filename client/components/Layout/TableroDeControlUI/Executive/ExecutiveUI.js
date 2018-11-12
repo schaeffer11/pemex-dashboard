@@ -25,7 +25,8 @@ import ExecutiveTable from './ExecutiveTable'
       costDataAverage: [],
       singularCostData: [],
       execTableData: [],
-      estIncData: []
+      estIncData: [],
+      volumeData: []
     }
 
     this.cards = []
@@ -37,7 +38,7 @@ import ExecutiveTable from './ExecutiveTable'
   async fetchData() {
     let { globalAnalysis } = this.props
     globalAnalysis = globalAnalysis.toJS()
-    let { subdir, activo, field, well, formation, company, tipoDeIntervencion, tipoDeTerminacion, groupBy } = globalAnalysis
+    let { subdireccion, activo, field, well, formation, company, interventionType, terminationType, groupBy } = globalAnalysis
 
     const { token } = this.props
     const headers = {
@@ -51,14 +52,14 @@ import ExecutiveTable from './ExecutiveTable'
     let params = []
     let query
 
-    subdir ? params.push(`subdir=${subdir}`) : null
+    subdireccion ? params.push(`subdir=${subdireccion}`) : null
     activo ? params.push(`activo=${activo}`) : null
     field ? params.push(`field=${field}`) : null
     well ? params.push(`well=${well}`) : null
     formation ? params.push(`formation=${formation}`) : null
     company ? params.push(`company=${company}`) : null
-    tipoDeIntervencion ? params.push(`tipoDeIntervencion=${tipoDeIntervencion}`) : null
-    tipoDeTerminacion ? params.push(`tipoDeTerminacion=${tipoDeTerminacion}`) : null
+    interventionType ? params.push(`tipoDeIntervencion=${interventionType}`) : null
+    terminationType ? params.push(`tipoDeTerminacion=${terminationType}`) : null
     groupBy ? params.push(`groupBy=${groupBy}`) : null
 
     //TODO: MAKE PARALLEL
@@ -70,6 +71,7 @@ import ExecutiveTable from './ExecutiveTable'
     let singularCostQuery = `/executive/costData?` + params.join('&') + `&noGroup=1`
     let execTableQuery = `/executive/tableData?` + params.join('&')
     let estIncQuery = `/executive/estIncData?` + params.join('&')
+    let volumeQuery = `/executive/volumeData?` + params.join('&')
 
     const data = await Promise.all([
       fetch(jobQuery, headers).then(r => r.json()),
@@ -79,13 +81,13 @@ import ExecutiveTable from './ExecutiveTable'
       fetch(avgCostQuery, headers).then(r => r.json()),
       fetch(singularCostQuery, headers).then(r => r.json()),
       fetch(execTableQuery, headers).then(r => r.json()),
-      fetch(estIncQuery, headers).then(r => r.json())
+      fetch(estIncQuery, headers).then(r => r.json()),
+      fetch(volumeQuery, headers).then(r => r.json())
     ])
       .catch(error => {
         console.log('err', error)
       })
 
-    console.log(data)
 
     let newState = {
       jobBreakdownData: data[0],
@@ -95,10 +97,9 @@ import ExecutiveTable from './ExecutiveTable'
       costDataAverage: data[4],
       singularCostData: data[5], 
       execTableData: data[6],
-      estIncData: data[7]
+      estIncData: data[7],
+      volumeData: data[8]
     }
-
-
 
     this.setState(newState)
 
@@ -115,23 +116,20 @@ import ExecutiveTable from './ExecutiveTable'
     globalAnalysis = globalAnalysis.toJS()
     prev = prev.toJS()
 
-    let { subdir, activo, field, well, formation, company, tipoDeIntervencion, tipoDeTerminacion, groupBy } = globalAnalysis
+    let { subdireccion, activo, field, well, formation, company, interventionType, terminationType, groupBy } = globalAnalysis
 
-    if (activo !== prev.activo || field !== prev.field || well !== prev.well || formation !== prev.formation ||
-      company !== prev.company || tipoDeIntervencion !== prev.tipoDeIntervencion || tipoDeTerminacion !== prev.tipoDeTerminacion ||
+    if (subdireccion !== prev.subdireccion || activo !== prev.activo || field !== prev.field || well !== prev.well || formation !== prev.formation ||
+      company !== prev.company || interventionType !== prev.interventionType || terminationType !== prev.terminationType ||
       groupBy !== prev.groupBy) {
 			this.fetchData()	
 		}
   }
 
   render() {
-    let { jobBreakdownData, aforosData, aforosCarouselData, costData, costDataAverage, singularCostData, execTableData, estIncData } = this.state
+    let { jobBreakdownData, aforosData, aforosCarouselData, costData, costDataAverage, singularCostData, execTableData, estIncData, volumeData } = this.state
     let { globalAnalysis } = this.props
-
     globalAnalysis = globalAnalysis.toJS()
-
     let { groupBy } = globalAnalysis
-    console.log('base updating')
 
     return (
       <div className="data executive">
@@ -171,7 +169,7 @@ import ExecutiveTable from './ExecutiveTable'
               <AvgDeltaCostBar label={'Avg'} data={costDataAverage} groupBy={groupBy} />
             </Card>
           </CardDeck>
-          <ExecutiveTable data={execTableData} estIncData={estIncData} aforosData={aforosData} groupBy={groupBy} />
+          <ExecutiveTable data={execTableData} estIncData={estIncData} aforosData={aforosData} volumeData={volumeData} groupBy={groupBy} />
         </div>
       </div>
     )

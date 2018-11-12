@@ -36,8 +36,14 @@ let colorWheel = [
         categories.push('Total Cost')
         series = [{
           name: ' ',
-          data: [((data[0].totalCost / (data[0].totalEstimatedCost)) - 1) * 100]
+          data: data.map(i => {
+            return {
+              x: 0,
+              y: ((i.totalCost / i.totalEstimatedCost) - 1) * 100
+            }
+          })
         }]
+        console.log(series)
       }
       else {
         data.forEach(i => {

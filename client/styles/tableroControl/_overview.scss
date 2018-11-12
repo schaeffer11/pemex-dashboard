@@ -1,6 +1,6 @@
 .overview {
 	display: grid;
-	overflow: scroll;
+	overflow-y: auto;
 	grid-template-rows: 50% 50%;
 	grid-template-columns: 50% 50%;
 	grid-template-areas: 	'tl tr' 
@@ -36,6 +36,7 @@
 			width: 50%;
 			display: inline-block;
 			height: 80px;
+			padding-top: 15px;
 
 			.value {
 				font-size: 30px;

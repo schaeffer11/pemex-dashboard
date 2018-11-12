@@ -149,7 +149,6 @@ import TypeKPI from './TypeKPI'
         <TypeKPI data={data[1]} />
         <TypeKPI data={data[2]} />
         <TypeKPI data={data[3]} />
-      	<ExecutiveTable data={data} />
       </div>
     )
   }

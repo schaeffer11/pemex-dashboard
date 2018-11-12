@@ -19,11 +19,11 @@ router.get('/costData', (req, res) => {
   let whereClause = 'WHERE TRUE'
 
   if (level) {
-    whereClause = `AND ${level} = ?`
+    whereClause += ` AND ${level} = ?`
     values.push(well ? well : field ? field : activo ? activo : subdir ? subdir : null)
   }
   if (formation) {
-    whereClause = ` AND FORMACION = ?`
+    whereClause += ` AND FORMACION = ?`
     values.push(formation)
   }
   if (company) {
@@ -31,7 +31,7 @@ router.get('/costData', (req, res) => {
     values.push(company)
   }
   if (tipoDeIntervencion) {
-    whereClause += ' AND TIPO_DE_INTERVENCIONES = ?'
+    whereClause += ' AND i.TIPO_DE_INTERVENCIONES = ?'
     values.push(tipoDeIntervencion)
   }
   if (tipoDeTerminacion) {
@@ -77,7 +77,7 @@ router.get('/costData', (req, res) => {
       select = 'COMPANY as groupedName'
       break
     case 'interventionType':
-      select = 'TIPO_DE_INTERVENCIONES as groupedName'
+      select = 'i.TIPO_DE_INTERVENCIONES as groupedName'
       break
     case 'terminationType':
       select = 'TIPO_DE_TERMINACION as groupedName'
@@ -87,12 +87,13 @@ router.get('/costData', (req, res) => {
   let groupByClause = select !== 1 ? `groupedName, ` : ''
 
   let query = `
-select ${select}, YEAR(FECHA), MONTH(FECHA), DAY(FECHA), FECHA, SUM(COST_MNX + COST_DLS * MNXtoDLS) as COST
+select ${select}, YEAR(FECHA), MONTH(FECHA), FECHA, SUM(COST_MNX + COST_DLS * MNXtoDLS) as COST
 FROM ResultsCosts rc
 JOIN Intervenciones i ON rc.INTERVENTION_ID = i.INTERVENCIONES_ID
 JOIN FieldWellMapping fwm ON i.WELL_FORMACION_ID = fwm.WELL_FORMACION_ID
+LEFT JOIN Transactions t ON rc.PROPUESTA_ID = t.TRANSACTION_ID
 ${whereClause}
-GROUP BY ${groupByClause} YEAR(FECHA), MONTH(FECHA), DAY(FECHA);
+GROUP BY ${groupByClause} YEAR(FECHA), MONTH(FECHA);
   `
 
   connection.query(query, values, (err, results) => {
@@ -116,11 +117,11 @@ router.get('/aforosData', (req, res) => {
   let whereClause = ''
 
   if (level) {
-    whereClause = `AND ${level} = ?`
+    whereClause += ` AND ${level} = ?`
     values.push(well ? well : field ? field : activo ? activo : subdir ? subdir : null)
   }
   if (formation) {
-    whereClause = ` AND FORMACION = ?`
+    whereClause += ` AND FORMACION = ?`
     values.push(formation)
   }
   if (company) {
@@ -213,11 +214,11 @@ router.get('/volumeData', (req, res) => {
   let whereClause = 'WHERE TRUE'
 
   if (level) {
-    whereClause = `AND ${level} = ?`
+    whereClause += ` AND ${level} = ?`
     values.push(well ? well : field ? field : activo ? activo : subdir ? subdir : null)
   }
   if (formation) {
-    whereClause = ` AND FORMACION = ?`
+    whereClause += ` AND FORMACION = ?`
     values.push(formation)
   }
   if (company) {
@@ -281,31 +282,30 @@ router.get('/volumeData', (req, res) => {
   let groupByClause = select !== 1 ? `groupedName, ` : ''
   let query = 
 `
-select ${select}, YEAR(FECHA_INTERVENCION), MONTH(FECHA_INTERVENCION), DAY(FECHA_INTERVENCION), FECHA_INTERVENCION, i.WELL_FORMACION_ID, WELL_NAME, 
-SUM(ia.VOLUMEN_SISTEMA_NO_REACTIVO + ie.VOLUMEN_SISTEMA_NO_REACTIVO) as TOTAL_SISTEMA_NO_REACTIVO,
-SUM(ia.VOLUMEN_SISTEMA_REACTIVO + ie.VOLUMEN_SISTEMA_REACTIVO) as TOTAL_SISTEMA_REACTIVO,
-SUM(ia.VOLUMEN_SISTEMA_DIVERGENTE + ie.VOLUMEN_SISTEMA_DIVERGENTE) as TOTAL_SISTEMA_DIVERGENTE,
-SUM(ia.VOLUMEN_DESPLAZAMIENTO_LIQUIDO + (iap.VOLUMEN_DESPLAZAMIENTO_LIQUIDO / 264.172) + ie.VOLUMEN_DISPLAZAMIENTO_LIQUIDO) as TOTAL_DESPLAZAMIENTO_LIQUIDO,
-SUM(ia.VOLUMEN_DESPLAZAMIENTO_N2 + ie.VOLUMEN_DESPLAZAMIENTO_N2) as TOTAL_DESPLAZAMIENTO_N2,
-SUM(ia.VOLUMEN_PRECOLCHON_N2 + ie.VOLUMEN_PRECOLCHON_N2) as TOTAL_PRECOLCHON_N2,
-SUM(ia.VOLUMEN_TOTAL_DE_LIQUIDO + (iap.VOLUMEN_TOTAL_DE_LIQUIDO / 264.172) + ie.VOLUMEN_TOTAL_DE_LIQUIDO) as TOTAL_LIQUIDO,
-SUM(iap.VOLUMEN_APUNTALANTE /  264.172) as TOTAL_APUNTALANTE,
-SUM(iap.VOLUMEN_GEL_DE_FRACTURA /  264.172) as TOTAL_GEL_DE_FRACTURA,
-SUM(iap.VOLUMEN_PRECOLCHON_APUNTALANTE/  264.172) as TOTAL_PRECOLCHON_APUNTALANTE,
-SUM(it.VOLUMEN_VAPOR_INYECTAR) as TOTAL_VAPOR_INJECTED
+select ${select}, YEAR(FECHA_INTERVENCION), MONTH(FECHA_INTERVENCION), FECHA_INTERVENCION, i.WELL_FORMACION_ID, WELL_NAME, 
+SUM(IF(ra.VOLUMEN_SISTEMA_NO_REACTIVO, ra.VOLUMEN_SISTEMA_NO_REACTIVO, 0) + IF(re.VOLUMEN_SISTEMA_NO_REACTIVO, re.VOLUMEN_SISTEMA_NO_REACTIVO, 0)) as TOTAL_SISTEMA_NO_REACTIVO,
+SUM(IF(ra.VOLUMEN_SISTEMA_REACTIVO, ra.VOLUMEN_SISTEMA_REACTIVO, 0) + IF(re.VOLUMEN_SISTEMA_REACTIVO, re.VOLUMEN_SISTEMA_REACTIVO, 0)) as TOTAL_SISTEMA_REACTIVO,
+SUM(IF(ra.VOLUMEN_SISTEMA_DIVERGENTE, ra.VOLUMEN_SISTEMA_DIVERGENTE, 0) + IF(re.VOLUMEN_SISTEMA_DIVERGENTE, re.VOLUMEN_SISTEMA_DIVERGENTE, 0)) as TOTAL_SISTEMA_DIVERGENTE,
+SUM(IF(ra.VOLUMEN_DESPLAZAMIENTO_LIQUIDO, ra.VOLUMEN_DESPLAZAMIENTO_LIQUIDO, 0) + (IF(rap.VOLUMEN_DESPLAZAMIENTO_LIQUIDO, rap.VOLUMEN_DESPLAZAMIENTO_LIQUIDO, 0) / 264.172) + IF(re.VOLUMEN_DISPLAZAMIENTO_LIQUIDO, re.VOLUMEN_DISPLAZAMIENTO_LIQUIDO, 0)) as TOTAL_DESPLAZAMIENTO_LIQUIDO,
+SUM(IF(ra.VOLUMEN_DESPLAZAMIENTO_N2, ra.VOLUMEN_DESPLAZAMIENTO_N2, 0) + IF(re.VOLUMEN_DESPLAZAMIENTO_N2, re.VOLUMEN_DESPLAZAMIENTO_N2, 0)) as TOTAL_DESPLAZAMIENTO_N2,
+SUM(IF(ra.VOLUMEN_PRECOLCHON_N2, ra.VOLUMEN_PRECOLCHON_N2, 0) + IF(re.VOLUMEN_PRECOLCHON_N2, re.VOLUMEN_PRECOLCHON_N2, 0)) as TOTAL_PRECOLCHON_N2,
+SUM(IF(ra.VOLUMEN_TOTAL_DE_LIQUIDO, ra.VOLUMEN_TOTAL_DE_LIQUIDO, 0) + (IF(rap.VOLUMEN_TOTAL_DE_LIQUIDO, rap.VOLUMEN_TOTAL_DE_LIQUIDO, 0) / 264.172) + IF(re.VOLUMEN_TOTAL_DE_LIQUIDO, re.VOLUMEN_TOTAL_DE_LIQUIDO, 0)) as TOTAL_LIQUIDO,
+SUM(IF(rap.VOLUMEN_APUNTALANTE, rap.VOLUMEN_APUNTALANTE, 0) /  264.172) as TOTAL_APUNTALANTE,
+SUM(IF(rap.VOLUMEN_GEL_DE_FRACTURA, rap.VOLUMEN_GEL_DE_FRACTURA, 0)/  264.172) as TOTAL_GEL_DE_FRACTURA,
+SUM(IF(rap.VOLUMEN_PRECOLCHON_APUNTALANTE, rap.VOLUMEN_PRECOLCHON_APUNTALANTE, 0)/  264.172) as TOTAL_PRECOLCHON_APUNTALANTE,
+SUM(IF(rt.VOLUMEN_VAPOR_INYECTAR, rt.VOLUMEN_VAPOR_INYECTAR, 0)) as TOTAL_VAPOR_INJECTED
 FROM Results i 
 JOIN FieldWellMapping fwm ON i.WELL_FORMACION_ID = fwm.WELL_FORMACION_ID
-LEFT JOIN ResultsAcido ia ON i.WELL_FORMACION_ID = ia.WELL_FORMACION_ID
-LEFT JOIN ResultsApuntalado iap ON i.WELL_FORMACION_ID = iap.WELL_FORMACION_ID
-LEFT JOIN ResultsEstimulacions ie ON i.WELL_FORMACION_ID = ie.WELL_FORMACION_ID
-LEFT JOIN ResultsTermico it ON i.WELL_FORMACION_ID = it.WELL_FORMACION_ID
+LEFT JOIN ResultsAcido ra ON i.WELL_FORMACION_ID = ra.WELL_FORMACION_ID
+LEFT JOIN ResultsApuntalado rap ON i.WELL_FORMACION_ID = rap.WELL_FORMACION_ID
+LEFT JOIN ResultsEstimulacions re ON i.WELL_FORMACION_ID = re.WELL_FORMACION_ID
+LEFT JOIN ResultsTermico rt ON i.WELL_FORMACION_ID = rt.WELL_FORMACION_ID
 LEFT JOIN Transactions t ON i.PROPUESTA_ID = t.TRANSACTION_ID
 ${whereClause}
-GROUP BY ${groupByClause} YEAR(FECHA_INTERVENCION), MONTH(FECHA_INTERVENCION), DAY(FECHA_INTERVENCION)
+GROUP BY ${groupByClause} YEAR(FECHA_INTERVENCION), MONTH(FECHA_INTERVENCION)
 `
 
-  console.log(query)
-  console.log('values', values)
+  console.log('rererere', query, values)
 
   connection.query(query, values, (err, results) => {
       console.log('comment err', err)

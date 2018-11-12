@@ -58,7 +58,7 @@ import { KPI } from '../Common/KPIs'
           zoomType: 'x',
       },
       title: {
-          text: 'Estimated Vs Actual Volumes'
+          text: ' '
       },
       xAxis: {
         title: {
@@ -83,6 +83,7 @@ import { KPI } from '../Common/KPIs'
           <ReactHighcharts
             className='chart'
             config={config}
+            ref={(ref) => { this.chart = ref }}
           />
         </div>
       </div>

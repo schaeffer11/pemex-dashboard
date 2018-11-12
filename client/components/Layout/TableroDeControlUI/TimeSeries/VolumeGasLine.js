@@ -4,39 +4,44 @@ import ReactHighcharts from 'react-highcharts'
 
 import { KPI } from '../Common/KPIs'
 
-@autobind class CostBar extends PureComponent {
+@autobind class VolumeGasLine extends PureComponent {
 
   render() {
     let { data } = this.props
 
-    let groups = []
+    let desplazamientoN2 = []
+    let totalPrecolchonN2 = []
+    let vaporInjected = [] 
+
     let series = []
 
-    data.forEach(i => {
-      if (!groups.includes(i.groupedName)) {
-        groups.push(i.groupedName)
-      }
-    })
-
-    groups.forEach(name => {
-      let filteredData = data.filter(i => i.groupedName === name).map(j => {
-        let utc = new Date(j.FECHA)
+    if (data) {
+      data.forEach(i => {
+        let utc = new Date(i.FECHA_INTERVENCION)
         utc = Date.UTC(utc.getFullYear(), utc.getMonth())
 
-        return {
-          x: utc,
-          y: j.COST
-        }
+        i.TOTAL_DESPLAZAMIENTO_N2 ? desplazamientoN2.push({ x: utc, y: i.TOTAL_DESPLAZAMIENTO_N2}) : null
+        i.TOTAL_PRECOLCHON_N2 ? totalPrecolchonN2.push({ x: utc, y: i.TOTAL_PRECOLCHON_N2}) : null
+        i.TOTAL_VAPOR_INJECTED ? vaporInjected.push({ x: utc, y: i.TOTAL_VAPOR_INJECTED}) : null
       })
+      
 
-      series.push({
-        name: name ? name : 'Cost Data',
-        data: filteredData
-      })
-    })
+      series =  [{
+        name: 'Desplazamiento N2',
+        data: desplazamientoN2,
 
+      },{
+        name: 'Precolchon N2',
+        data: totalPrecolchonN2,
 
+      },{
+        name: 'Vapor Injected',
+        data: vaporInjected,
 
+      }]
+
+    }
+   
     let config = {
       chart: {
           type: 'column',
@@ -49,16 +54,20 @@ import { KPI } from '../Common/KPIs'
         title: {
           text: 'Item'
         },
-        tickInterval   : 24 * 3600 * 1000*30,
-        type: 'datetime',
+        tickInterval   : 24 * 3600 * 1000 *30,
+        type: 'datetime'
       },
       yAxis: {
         title: {
-          text: 'Costs'
+          text: 'Volume (m3)'
         }
+      },
+      tooltip: {
+        shared: true
       },
       plotOptions: {
         column: {
+          pointRange: 1,
           stacking: 'normal',
           pointRange: 24 * 3600 * 1000*30
         }
@@ -70,7 +79,6 @@ import { KPI } from '../Common/KPIs'
   }
 
 
-  console.log(series)
     return (
       <div className="cost-bar test">
         <div className='chart'>
@@ -87,4 +95,4 @@ import { KPI } from '../Common/KPIs'
 
 
 
-export default CostBar
+export default VolumeGasLine

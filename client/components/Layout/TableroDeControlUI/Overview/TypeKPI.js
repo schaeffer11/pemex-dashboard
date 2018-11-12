@@ -18,7 +18,7 @@ const numWithCommas = (x) => {
 @autobind class TypeKPI extends PureComponent {
   render() {
     let { data } = this.props
-    let { name, cost, numProposals, numResults, days, percEstimated, percResults } = data
+    let { name, cost, numProposals, numResults, days, percEstimated, percResults, prodEstimated, prodReal } = data
 
     percResults = percResults ? percResults : 0
 
@@ -27,11 +27,11 @@ const numWithCommas = (x) => {
         <div className='name'>
             {name}
         </div>
-        <div className = 'gauge' style={{height: '200px', width: '50%', display: 'inline-block'}}>
+        <div className = 'gauge' style={{height: '200px', width: '50%', display: 'inline-block', verticalAlign: 'top'}}>
             <Gauge label={`${numResults}/${numProposals}`} subLabel={'% de Avance'} value={percResults} />
          </div>
-        <div className = 'bar' style={{height: '200px', width: '50%', display: 'inline-block'}}>
-            <Bar estimated={5} actual={10} />
+        <div className = 'bar' style={{height: '200px', paddingTop: '20px', width: '50%', position: 'relative', left: '-10px', display: 'inline-block', verticalAlign: 'top'}}>
+            <Bar estimated={prodEstimated} actual={prodReal} />
          </div>
         <div className='kpi'>
             <div className='value'>
@@ -43,7 +43,7 @@ const numWithCommas = (x) => {
         </div>
         <div className='kpi'>
             <div className='value'>
-                {cost ? `$${numWithCommas(cost.toFixed(2))}` : '-' }
+                {cost ? `$${numWithCommas(cost.toFixed(0))}` : '-' }
             </div>
             <div className='header'>
                 Costo Tltal (MNX)

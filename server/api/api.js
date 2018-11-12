@@ -17,10 +17,12 @@ import { create as createWell, getFields, getWell, getSurveys,
             getLabTest, getCedulaEstimulacion, getCedulaAcido, getCedulaApuntalado, 
             getCosts, getInterventionImages } from './pozo'
 
-// import { create as createCompromiso, mine as myCompromisos, get as getCompromisos } from './compromisos';
+
+import { create as createCompromiso, mine as myCompromisos, collection as getCompromisos, get as getCompromiso, put as updateCompromiso } from './compromisos';
+
 import { createResults } from './results'
 
-// import { create as createDiagnostico } from './diagnosticos';
+import { create as createDiagnostico, get as getDiagnostico, getAll as getDiagnosticos } from './diagnosticos';
 import { getAuthorization } from '../middleware';
 
 const connection = db.getConnection(appConfig.users.database)
@@ -167,6 +169,10 @@ router.post('/compromiso', (req, res) => {
   createCompromiso(req, res)
 })
 
+router.put('/compromiso/:id', (req, res) => {
+    updateCompromiso(req, res)
+})
+
 router.get('/compromiso/mine', (req, res) => {
     myCompromisos(req, res)
 })
@@ -175,8 +181,20 @@ router.get('/compromiso', (req, res) => {
     getCompromisos(req, res)
 })
 
+router.get('/compromiso/:id', (req, res) => {
+    getCompromiso(req, res)
+})
+
 router.post('/diagnostico', (req, res) => {
     createDiagnostico(req, res)
+})
+
+router.get('/diagnostico', (req, res) => {
+    getDiagnosticos(req, res)
+})
+
+router.get('/diagnostico/:id', (req, res) => {
+    getDiagnostico(req, res)
 })
 
 

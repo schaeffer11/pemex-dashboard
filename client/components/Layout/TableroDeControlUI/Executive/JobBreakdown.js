@@ -8,8 +8,6 @@ import ReactHighcharts from 'react-highcharts'
 
   render() {
     let { data } = this.props
-
-    console.log(data)
     
     let config = {
 	    chart: {
