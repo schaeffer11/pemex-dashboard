@@ -7,24 +7,36 @@ import { KPI } from '../Common/KPIs'
 @autobind class VolumeGasLine extends PureComponent {
 
   render() {
-    let { data } = this.props
+    let { data, costData } = this.props
 
     let desplazamientoN2 = []
     let totalPrecolchonN2 = []
     let vaporInjected = [] 
 
     let series = []
+    let costSeriesData = []
 
     if (data) {
       data.forEach(i => {
         let utc = new Date(i.FECHA_INTERVENCION)
-        utc = Date.UTC(utc.getFullYear(), utc.getMonth(), utc.getDate())
+        utc = Date.UTC(utc.getFullYear(), utc.getMonth())
 
         i.TOTAL_DESPLAZAMIENTO_N2 ? desplazamientoN2.push({ x: utc, y: i.TOTAL_DESPLAZAMIENTO_N2}) : null
         i.TOTAL_PRECOLCHON_N2 ? totalPrecolchonN2.push({ x: utc, y: i.TOTAL_PRECOLCHON_N2}) : null
         i.TOTAL_VAPOR_INJECTED ? vaporInjected.push({ x: utc, y: i.TOTAL_VAPOR_INJECTED}) : null
       })
       
+      if (costData) {
+        costSeriesData = costData.map(j => {
+          let utc = new Date(j.FECHA)
+          utc = Date.UTC(utc.getFullYear(), utc.getMonth())
+
+          return {
+            x: utc,
+            y: j.COST
+          }
+        })
+      }
 
       series =  [{
         name: 'Desplazamiento N2',
@@ -37,7 +49,11 @@ import { KPI } from '../Common/KPIs'
       },{
         name: 'Vapor Injected',
         data: vaporInjected,
-
+      },{
+        name: 'Cost',
+        data: costSeriesData,
+        type: 'line',
+        yAxis: 1
       }]
 
     }
@@ -54,19 +70,27 @@ import { KPI } from '../Common/KPIs'
         title: {
           text: 'Item'
         },
+        tickInterval   : 24 * 3600 * 1000 *30,
         type: 'datetime'
       },
-      yAxis: {
+      yAxis: [{
         title: {
           text: 'Volume (m3)'
         }
-      },
+      }, {
+        title: {
+          text: 'Cost ($MNX)'
+        },
+        opposite: true
+      }],
       tooltip: {
         shared: true
       },
       plotOptions: {
         column: {
-          stacking: 'normal'
+          pointRange: 1,
+          stacking: 'normal',
+          pointRange: 24 * 3600 * 1000*30
         }
       },
       credits: {
@@ -75,6 +99,7 @@ import { KPI } from '../Common/KPIs'
       series: series
   }
 
+  console.log(series)
 
     return (
       <div className="cost-bar test">
@@ -82,6 +107,7 @@ import { KPI } from '../Common/KPIs'
           <ReactHighcharts
             className='chart'
             config={config}
+            ref={(ref) => { this.chart = ref }}
           />
         </div>
       </div>

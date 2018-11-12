@@ -177,7 +177,6 @@ let columns = [
 
     return (
       <div className='historico-presion' >
-        <div className='image'/>
         <div className="inputs">
           <ExcelUpload
           template="HistoricoPresionCampo"

@@ -13,6 +13,7 @@ import Card from '../Common/Card'
 import { CardDeck } from 'reactstrap';
 import AforoScatter from './AforoScatter'
 import CedulaTable from './CedulaTable'
+import LabTable from './LabTable'
 
 @autobind class jobViewUI extends Component {
   constructor(props) {
@@ -29,10 +30,12 @@ import CedulaTable from './CedulaTable'
       aforoData: [],
       volumeData: [],
       estVolumeData: [],
-      date: null
+      date: null,
+      labData: [],
+      specificLabData: [],
     }    
     this.cards = []
-    for (let i = 0; i < 6; i += 1) {
+    for (let i = 0; i < 7; i += 1) {
       this.cards.push(React.createRef())
     }
   }
@@ -80,6 +83,38 @@ import CedulaTable from './CedulaTable'
     })
   }
 
+
+
+
+  async fetchLabData(id, type) {
+    let { token } = this.props
+    let specificLabQuery = `/job/getLabData?labID=${id}&type=${type}` 
+    
+    const headers = {
+      headers: {
+        'Authorization': `Bearer ${token}`,
+        'content-type': 'application/json',
+      }
+    }
+
+    this.setState({
+      specificLabData: []
+    })
+
+      fetch(specificLabQuery, headers)
+        .then(r => r.json())
+        .then(r => {
+
+          this.setState({
+            specificLabData: r
+          })
+      })
+
+  }
+
+
+
+
   async fetchData() {
   	console.log('fetching')
     let { globalAnalysis, token } = this.props
@@ -97,7 +132,8 @@ import CedulaTable from './CedulaTable'
       aforoData: [],
       date: null,
       volumeData: [],
-      estVolumeData: []
+      estVolumeData: [],
+      labData: []
     })
 
     let fieldWellOptionsQuery = `/api/getFieldWellMappingHasData`
@@ -111,6 +147,7 @@ import CedulaTable from './CedulaTable'
     let aforosQuery = `/job/getAforoData?transactionID=${job}`
     let volumeQuery = `/job/getVolumeData?transactionID=${job}&type=${jobType}`
     let estVolumeQuery = `/job/getEstimatedVolumeData?transactionID=${job}&type=${jobType}`
+    let labsQuery = `/job/getLabs?transactionID=${job}`
 
     const headers = {
       headers: {
@@ -140,7 +177,8 @@ import CedulaTable from './CedulaTable'
         fetch(interventionResultsQuery, headers).then(r => r.json()),
         fetch(aforosQuery, headers).then(r => r.json()),
         fetch(volumeQuery, headers).then(r => r.json()),
-        fetch(estVolumeQuery, headers).then(r => r.json())
+        fetch(estVolumeQuery, headers).then(r => r.json()),
+        fetch(labsQuery, headers).then(r => r.json())
       ])
         .catch(error => {
           console.log('err', error)
@@ -157,7 +195,8 @@ import CedulaTable from './CedulaTable'
         aforoData: data[7],
         data: data[6] ? data[6].FECHA_INTERVENCION : null,
         volumeData: data[8],
-        estVolumeData: data[9]
+        estVolumeData: data[9],
+        labData: data[10]
       }
 
       this.setState(newState) 
@@ -199,13 +238,12 @@ import CedulaTable from './CedulaTable'
         let obj = imageData[i]
 
         if (Array.isArray(obj)) {
-          console.log(obj)
           return obj.map(j => {
-            return <img label={`Lab - ${j.imgName.split('.')[2]}`} src={j.imgURL}></img> 
+            return <img style={{objectFit: 'contain'}} label={`Lab - ${j.imgName.split('.')[2]}`} src={j.imgURL}></img> 
           })
         }
         else {
-          return <img label={obj.imgName.split('.')[1]} src={obj.imgURL}></img>     
+          return <img style={{objectFit: 'contain'}} label={obj.imgName.split('.')[1]} src={obj.imgURL}></img>     
         }
       })
 
@@ -218,7 +256,7 @@ import CedulaTable from './CedulaTable'
   } 
 
   render() {
-    let { fieldWellOptions, jobOptions, imageData, costData, estCostData, volumeData, estVolumeData, cedulaData, cedulaResultData, date, aforoData, interventionData, interventionResultsData } = this.state
+    let { fieldWellOptions, jobOptions, imageData, costData, estCostData, volumeData, estVolumeData, cedulaData, cedulaResultData, date, aforoData, interventionData, interventionResultsData, labData, specificLabData } = this.state
     let { globalAnalysis } = this.props
 
     globalAnalysis = globalAnalysis.toJS()
@@ -233,6 +271,8 @@ import CedulaTable from './CedulaTable'
     console.log('intervention results', interventionResultsData)
     console.log('aforo data', aforoData)
     console.log('date', date)
+    console.log('labData', labData)
+    console.log('specificLabData', specificLabData)
 
     return (
       <div className="data job-view">
@@ -261,6 +301,7 @@ import CedulaTable from './CedulaTable'
                 id="simulationResults"
                 title="Simulation Results"
                 ref={this.cards[2]}
+                isTable={true}
               >          
               <SimulationTreatmentTable type={jobType} interventionData={interventionData} interventionResultsData={interventionResultsData} />
             </Card>            
@@ -275,16 +316,27 @@ import CedulaTable from './CedulaTable'
                 id="cedula"
                 title="Cedulas"
                 ref={this.cards[4]}
+                isTable={true}
               >          
               <CedulaTable label='Proposed' data={cedulaData} type={jobType} />
               <CedulaTable label='Actual' data={cedulaResultData} type={jobType} />
             </Card>   
              <Card
+
                 id="images"
                 title="Images"
                 ref={this.cards[5]}
+                isImage={true}
               >
               {this.makeImages()}
+            </Card> 
+            <Card
+                id="labs"
+                title="Lab Tests"
+                ref={this.cards[5]}
+                isImage={true}
+              >
+              <LabTable data={labData} labData={specificLabData} handleChange={this.fetchLabData} />
             </Card> 
           </CardDeck>
           <div style={{height: '500px'}}/>

@@ -57,7 +57,6 @@ import { generatePowerPoint } from '../../../../pptx';
     })
 
     if (well) {
-      console.log('this shouldnt be null', well)
       fetch(`/well/previousTransaction`, {
           method: 'POST',
           headers: {
@@ -221,15 +220,14 @@ import { generatePowerPoint } from '../../../../pptx';
     makeImages() {
       let { imageData } = this.state
 
-      console.log('im hereeeeee', imageData)
       if (imageData && Object.keys(imageData).length > 0) {
         return Object.keys(imageData).map(i => {
           let obj = imageData[i]
-          return <img label={obj.imgName.split('.')[1]} src={obj.imgURL}></img> 
+          return <img style={{objectFit: 'contain'}} label={obj.imgName.split('.')[1]} src={obj.imgURL}></img> 
         })
       }
       else {
-        return <div>hi</div>
+        return <div></div>
       }
     } 
 
@@ -245,8 +243,6 @@ import { generatePowerPoint } from '../../../../pptx';
     // console.log('images', imageData, imageData)
     // console.log('interventionDates', interventionDates)
 
-    console.log('also here', imageData)
-
     return (
       <div className="data well-view">
         <div className='header'>
@@ -258,6 +254,7 @@ import { generatePowerPoint } from '../../../../pptx';
                 id="kpis"
                 title="KPIs"
                 ref={this.cards[0]}
+                isTable={true}
               >
                 <KPIFichaTecnica label='Ficha Tecnica' data={wellData} />
                 <KPIMecanico label='Mecanico Data' data={wellData} />
@@ -287,6 +284,7 @@ import { generatePowerPoint } from '../../../../pptx';
                 id="images"
                 title="Images"
                 ref={this.cards[4]}
+                isImage={true}
               >
               {this.makeImages()}
             </Card>
