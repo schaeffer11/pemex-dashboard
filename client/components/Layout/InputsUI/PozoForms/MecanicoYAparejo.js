@@ -18,7 +18,9 @@ let tipoDeTerminacionOptions = [
   { label: 'Liner Cementado y Disparado (LCD)', value: 'Liner Cementado y Disparado (LCD)' },
   { label: 'Liner Ranurado (LR)', value: 'Liner Ranurado (LR)' },
   { label: 'Liner Ranurado y Disparado (LRD)', value: 'Liner Ranurado y Disparado (LRD)' },
-  { label: 'Cola extendida', value: 'Cola extendida' }
+  { label: 'Cola extendida', value: 'Cola extendida' },
+  { label: 'Simple', value: 'Simple' },
+  { label: 'Tuberia Cementada y Disparada (TCD)', value: 'Tuberia Cementada y Disparada (TCD)'}
 ]
 
 let tipoDeLinerOptions = [
@@ -27,6 +29,10 @@ let tipoDeLinerOptions = [
   { label: 'Liner Disparado (LD)', value: 'Liner Disparado (LD)' },
   { label: 'Liner Cementado y Disparado (LCD)', value: 'Liner Cementado y Disparado (LCD)' },
   { label: 'Cola extendida', value: 'Cola extendida' },
+  { label: 'Liner mas complemento', value: 'Liner mas complemento' },
+  { label: 'Tie back', value: 'Tie back' },
+  { label: 'Sencillo', value: 'Sencillo' },
+  { label: 'No aplica', value: 'No aplica' },
 ]
 
 let tratamientoPorOptions = [
@@ -34,6 +40,7 @@ let tratamientoPorOptions = [
   { label: 'Tubería de Revestimiento-Tubería de Producción (TR-TP)', value: 'Tubería de Revestimiento-Tubería de Producción (TR-TP)' },
   { label: 'Espacio Anular (EA)', value: 'Espacio Anular (EA)' },
   { label: 'Espacio Anular-Tuberia de Producción (EA-TP)', value: 'Espacio Anular-Tuberia de Producción (EA-TP)' },
+  { label: 'Tubería Flexible (TF)', value: 'Tubería Flexible (TF)' }
 ]
 @autobind class MecanicoYAparejo extends Component {
   constructor(props) {
@@ -248,10 +255,10 @@ let tratamientoPorOptions = [
         TIPO
         <div className="input-table">
           <InputRowSelectUnitless header="Tipo de terminación" value={tipoDeTerminacion} callback={this.handleSelectTipoDeTerminacion} options={tipoDeTerminacionOptions} name='tipoDeTerminacion' onBlur={this.updateErrors} errors={this.state.errors} />
-          <InputRow header="h (intervalo productor)" value={hIntervaloProductor} onChange={setHIntervaloProductor} name='hIntervaloProductor' unit='mv' onBlur={this.updateErrors} errors={this.state.errors} />
-          <InputRow header="Empacador" name='empacador' value={empacador} onChange={setEmpacador} unit='mv' onBlur={this.updateErrors} errors={this.state.errors} />
+          <InputRow header="h (intervalo productor)" value={hIntervaloProductor} onChange={setHIntervaloProductor} name='hIntervaloProductor' unit='md' onBlur={this.updateErrors} errors={this.state.errors} />
+          <InputRow header="Profunidad del Empacador" name='empacador' value={empacador} onChange={setEmpacador} unit='md' onBlur={this.updateErrors} errors={this.state.errors} />
           <InputRow header="Presión dif. empacador" name='presionDifEmpacador' value={presionDifEmpacador} onChange={setPresionDifEmpacador} unit='psi' onBlur={this.updateErrors} errors={this.state.errors} />
-          <InputRow header="Profundidad Sensor P y T" name='sensorPyt' value={sensorPyt} onChange={setSensorPyt} unit='mv' onBlur={this.updateErrors} errors={this.state.errors} />
+          <InputRow header="Profundidad Sensor de P y T" name='sensorPyt' value={sensorPyt} onChange={setSensorPyt} unit='md' onBlur={this.updateErrors} errors={this.state.errors} />
         </div>
         LINER
         <div className="input-table">
@@ -287,8 +294,8 @@ let tratamientoPorOptions = [
         <div className="input-table">
           <InputRowSelectUnitless header="Tratamiento por" name='tratamientoPor' value={tratamientoPor} callback={(e) => setTratamientoPor(e.value)} options={tratamientoPorOptions} onBlur={this.updateErrors} errors={this.state.errors} />
           <InputRow header="Volumen aparejo de producción" name='volumenAparejoDeProduccion' value={volumenAparejoDeProduccion} onChange={setVolumenAparejoDeProduccion} unit={<div>m<sup>3</sup></div>} onBlur={this.updateErrors} errors={this.state.errors} />
-          <InputRow header="Volumen @ cima de intervalo" name='volumenCimaDeIntervalo' value={volumenCimaDeIntervalo} onChange={setVolumenCimaDeIntervalo} unit={<div>m<sup>3</sup></div>} onBlur={this.updateErrors} errors={this.state.errors} />
-          <InputRow header="Volumen @ base de intervalo" name='volumenBaseDeIntervalo' value={volumenBaseDeIntervalo} onChange={setVolumenBaseDeIntervalo} unit={<div>m<sup>3</sup></div>} onBlur={this.updateErrors} errors={this.state.errors} />
+          <InputRow header="Volumen a la cima de intervalo" name='volumenCimaDeIntervalo' value={volumenCimaDeIntervalo} onChange={setVolumenCimaDeIntervalo} unit={<div>m<sup>3</sup></div>} onBlur={this.updateErrors} errors={this.state.errors} />
+          <InputRow header="Volumen a la base de intervalo" name='volumenBaseDeIntervalo' value={volumenBaseDeIntervalo} onChange={setVolumenBaseDeIntervalo} unit={<div>m<sup>3</sup></div>} onBlur={this.updateErrors} errors={this.state.errors} />
           <InputRow header="Volumen de espacio anular (EA)" name='volumenDeEspacioAnular' value={volumenDeEspacioAnular} onChange={setVolumenDeEspacioAnular} unit={<div>m<sup>3</sup></div>} onBlur={this.updateErrors} errors={this.state.errors} />
         </div>
       </div>

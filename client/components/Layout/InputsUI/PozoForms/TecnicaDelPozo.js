@@ -390,7 +390,7 @@ import { setHasErrorsFichaTecnicaDelPozo, setTipoDeSistemo, setHistorialInterven
             errors={this.state.errors}
           />
           <InputRow
-            header="RGA"
+            header="Asfaltenos"
             name='asfaltenos'
             value={asfaltenos}
             unit="%"

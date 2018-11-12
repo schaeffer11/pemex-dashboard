@@ -206,24 +206,24 @@ const yesOrNoOptions = [{
         </div>
         <div className="input-table">
           <InputRow header="pH" name='pH' value={pH} onChange={setPH} unit='' errors={this.state.errors} onBlur={this.updateErrors}/>
-          <InputRow header="Temperatura de conductividad" name='temperaturaDeConductividad' value={temperaturaDeConductividad} onChange={setTemperaturaDeConductividad} unit='°C' errors={this.state.errors} onBlur={this.updateErrors}/>
+          <InputRow header="Temperatura" name='temperaturaDeConductividad' value={temperaturaDeConductividad} onChange={setTemperaturaDeConductividad} unit='°C' errors={this.state.errors} onBlur={this.updateErrors}/>
           <InputRow header="Resistividad" name='resistividad' value={resistividad} onChange={setResistividad} unit='Ohm*m' errors={this.state.errors} onBlur={this.updateErrors}/>
-          <InputRow header="Salinidad con conductimetro" name='salinidadConConductimetro' value={salinidadConConductimetro} onChange={setSalinidadConConductimetro} unit='mg/L o PPM' errors={this.state.errors} onBlur={this.updateErrors}/>
-          <InputRow header="Solidos disueltos totales" name='solidosDisueltosTotales' value={solidosDisueltosTotales} onChange={setSolidosDisueltosTotales} unit='mg/L o PPM' errors={this.state.errors} onBlur={this.updateErrors}/>
-          <InputRow header={<div>Dureza total como CaCO<sub>3</sub></div>} name='durezaTotalComoCaCO3' value={durezaTotalComoCaCO3} onChange={setDurezaTotalComoCaCO3} unit='mg/L o PPM' errors={this.state.errors} onBlur={this.updateErrors}/>
-          <InputRow header={<div>Dureza de calcio como CaCO<sub>3</sub></div>} name='durezaDeCalcioComoCaCO3' value={durezaDeCalcioComoCaCO3} onChange={setDurezaDeCalcioComoCaCO3} unit='mg/L o PPM' errors={this.state.errors} onBlur={this.updateErrors}/>
-          <InputRow header={<div>Dureza de magnesio como CaCO<sub>3</sub></div>} name='durezaDeMagnesioComoCaCO3' value={durezaDeMagnesioComoCaCO3} onChange={setDurezaDeMagnesioComoCaCO3} unit='mg/L o PPM' errors={this.state.errors} onBlur={this.updateErrors}/>
-          <InputRow header={<div>Alcalinidad total como CaCO<sub>3</sub></div>} name='alcalinidadTotalComoCaCO3' value={alcalinidadTotalComoCaCO3} onChange={setAlcalinidadTotalComoCaCO3} unit='mg/L o PPM' errors={this.state.errors} onBlur={this.updateErrors}/>
-          <InputRow header={<div>Alcalinidad a la fenolftaleína como CaCO<sub>3</sub></div>} name='alcalinidadALaFenolftaleinaComoCaCO3' value={alcalinidadALaFenolftaleinaComoCaCO3} onChange={setAlcalinidadALaFenolftaleinaComoCaCO3} unit='mg/L o PPM' errors={this.state.errors} onBlur={this.updateErrors}/>
-          <InputRow header="Salinidad como NaCl" name='salinidadComoNaCl' value={salinidadComoNaCl} onChange={setSalinidadComoNaCl} unit='mg/L o PPM' errors={this.state.errors} onBlur={this.updateErrors}/>
-          <InputRow header="Sodio" name='sodio' value={sodio} onChange={setSodio} unit='mg/L o PPM' errors={this.state.errors} onBlur={this.updateErrors}/>
-          <InputRow header="Calcio" name='calcio' value={calcio} onChange={setCalcio} unit='mg/L o PPM' errors={this.state.errors} onBlur={this.updateErrors}/>
-          <InputRow header="Magnesio" name='magnesio' value={magnesio} onChange={setMagnesio} unit='mg/L o PPM' errors={this.state.errors} onBlur={this.updateErrors}/>
-          <InputRow header="Fierro" name='fierro' value={fierro} onChange={setFierro} unit='mg/L o PPM' errors={this.state.errors} onBlur={this.updateErrors}/>
-          <InputRow header="Cloruros" name='cloruros' value={cloruros} onChange={setCloruros} unit='mg/L o PPM' errors={this.state.errors} onBlur={this.updateErrors}/>
-          <InputRow header="Bicarbonatos" name='bicarbonatos' value={bicarbonatos} onChange={setBicarbonatos} unit='mg/L o PPM' errors={this.state.errors} onBlur={this.updateErrors}/>
-          <InputRow header="Sulfatos" name='sulfatos' value={sulfatos} onChange={setSulfatos} unit='mg/L o PPM' errors={this.state.errors} onBlur={this.updateErrors}/>
-          <InputRow header="Carbonatos" name='carbonatos' value={carbonatos} onChange={setCarbonatos} unit='mg/L o PPM' errors={this.state.errors} onBlur={this.updateErrors}/>
+          <InputRow header="Salinidad" name='salinidadConConductimetro' value={salinidadConConductimetro} onChange={setSalinidadConConductimetro} unit='mEq/L' errors={this.state.errors} onBlur={this.updateErrors}/>
+          <InputRow header="Solidos disueltos totales" name='solidosDisueltosTotales' value={solidosDisueltosTotales} onChange={setSolidosDisueltosTotales} unit='mEq/L' errors={this.state.errors} onBlur={this.updateErrors}/>
+          <InputRow header={<div>Dureza total como CaCO<sub>3</sub></div>} name='durezaTotalComoCaCO3' value={durezaTotalComoCaCO3} onChange={setDurezaTotalComoCaCO3} unit='mEq/L' errors={this.state.errors} onBlur={this.updateErrors}/>
+          <InputRow header={<div>Dureza de calcio como CaCO<sub>3</sub></div>} name='durezaDeCalcioComoCaCO3' value={durezaDeCalcioComoCaCO3} onChange={setDurezaDeCalcioComoCaCO3} unit='mEq/L' errors={this.state.errors} onBlur={this.updateErrors}/>
+          <InputRow header={<div>Dureza de magnesio como CaCO<sub>3</sub></div>} name='durezaDeMagnesioComoCaCO3' value={durezaDeMagnesioComoCaCO3} onChange={setDurezaDeMagnesioComoCaCO3} unit='mEq/L' errors={this.state.errors} onBlur={this.updateErrors}/>
+          <InputRow header={<div>Alcalinidad total como CaCO<sub>3</sub></div>} name='alcalinidadTotalComoCaCO3' value={alcalinidadTotalComoCaCO3} onChange={setAlcalinidadTotalComoCaCO3} unit='mEq/L' errors={this.state.errors} onBlur={this.updateErrors}/>
+          <InputRow header={<div>Alcalinidad a la fenolftaleína como CaCO<sub>3</sub></div>} name='alcalinidadALaFenolftaleinaComoCaCO3' value={alcalinidadALaFenolftaleinaComoCaCO3} onChange={setAlcalinidadALaFenolftaleinaComoCaCO3} unit='mEq/L' errors={this.state.errors} onBlur={this.updateErrors}/>
+          <InputRow header="Salinidad como NaCl" name='salinidadComoNaCl' value={salinidadComoNaCl} onChange={setSalinidadComoNaCl} unit='mEq/L' errors={this.state.errors} onBlur={this.updateErrors}/>
+          <InputRow header="Sodio" name='sodio' value={sodio} onChange={setSodio} unit='mEq/L' errors={this.state.errors} onBlur={this.updateErrors}/>
+          <InputRow header="Calcio" name='calcio' value={calcio} onChange={setCalcio} unit='mEq/L' errors={this.state.errors} onBlur={this.updateErrors}/>
+          <InputRow header="Magnesio" name='magnesio' value={magnesio} onChange={setMagnesio} unit='mEq/L' errors={this.state.errors} onBlur={this.updateErrors}/>
+          <InputRow header="Hierro" name='fierro' value={fierro} onChange={setFierro} unit='mEq/L' errors={this.state.errors} onBlur={this.updateErrors}/>
+          <InputRow header="Cloruros" name='cloruros' value={cloruros} onChange={setCloruros} unit='mEq/L' errors={this.state.errors} onBlur={this.updateErrors}/>
+          <InputRow header="Bicarbonatos" name='bicarbonatos' value={bicarbonatos} onChange={setBicarbonatos} unit='mEq/L' errors={this.state.errors} onBlur={this.updateErrors}/>
+          <InputRow header="Sulfatos" name='sulfatos' value={sulfatos} onChange={setSulfatos} unit='mEq/L' errors={this.state.errors} onBlur={this.updateErrors}/>
+          <InputRow header="Carbonatos" name='carbonatos' value={carbonatos} onChange={setCarbonatos} unit='mEq/L' errors={this.state.errors} onBlur={this.updateErrors}/>
           <InputRow header="Densidad @ 15.5 °C" name='densidadAt15' value={densidadAt15} onChange={setDensidadAt15} unit={<div>g/cm<sup>3</sup></div>} errors={this.state.errors} onBlur={this.updateErrors}/>
           <InputRow header="Densidad @ 20 °C" name='densidadAt20' value={densidadAt20} onChange={setDensidadAt20} unit={<div>g/cm<sup>3</sup></div>} errors={this.state.errors} onBlur={this.updateErrors}/>
         </div>
