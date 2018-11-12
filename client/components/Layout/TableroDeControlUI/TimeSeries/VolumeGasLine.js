@@ -7,14 +7,13 @@ import { KPI } from '../Common/KPIs'
 @autobind class VolumeGasLine extends PureComponent {
 
   render() {
-    let { data, costData } = this.props
+    let { data } = this.props
 
     let desplazamientoN2 = []
     let totalPrecolchonN2 = []
     let vaporInjected = [] 
 
     let series = []
-    let costSeriesData = []
 
     if (data) {
       data.forEach(i => {
@@ -26,17 +25,6 @@ import { KPI } from '../Common/KPIs'
         i.TOTAL_VAPOR_INJECTED ? vaporInjected.push({ x: utc, y: i.TOTAL_VAPOR_INJECTED}) : null
       })
       
-      if (costData) {
-        costSeriesData = costData.map(j => {
-          let utc = new Date(j.FECHA)
-          utc = Date.UTC(utc.getFullYear(), utc.getMonth())
-
-          return {
-            x: utc,
-            y: j.COST
-          }
-        })
-      }
 
       series =  [{
         name: 'Desplazamiento N2',
@@ -49,11 +37,6 @@ import { KPI } from '../Common/KPIs'
       },{
         name: 'Vapor Injected',
         data: vaporInjected,
-      },{
-        name: 'Cost',
-        data: costSeriesData,
-        type: 'line',
-        yAxis: 1
       }]
 
     }
@@ -77,11 +60,6 @@ import { KPI } from '../Common/KPIs'
         title: {
           text: 'Volume (m3)'
         }
-      }, {
-        title: {
-          text: 'Cost ($MNX)'
-        },
-        opposite: true
       }],
       tooltip: {
         shared: true

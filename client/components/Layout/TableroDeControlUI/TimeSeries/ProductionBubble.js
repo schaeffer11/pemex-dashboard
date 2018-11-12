@@ -4,13 +4,13 @@ import ReactHighcharts from 'react-highcharts'
 
 import { KPI } from '../Common/KPIs'
 
-@autobind class CostBar extends PureComponent {
+@autobind class ProductionBubble extends PureComponent {
 
   render() {
-    let { data } = this.props
+    let { data, costData, groupBy } = this.props
 
-    let groups = []
     let series = []
+    let groups = []
 
     data.forEach(i => {
       if (!groups.includes(i.groupedName)) {
@@ -18,28 +18,46 @@ import { KPI } from '../Common/KPIs'
       }
     })
 
+    costData = costData.map(i => {
+      let utc = Date.UTC(i.YEAR, i.MONTH - 1)
+      return {
+        x: utc,
+        groupedName: i.groupedName,
+        cost: i.COST,
+        year: i.YEAR,
+        month: i.MONTH
+      }
+    })
+
     groups.forEach(name => {
       let filteredData = data.filter(i => i.groupedName === name).map(j => {
         let utc = Date.UTC(j.YEAR, j.MONTH - 1)
 
+        let costObj = name 
+                      ? costData.find(i => i.year === j.YEAR && i.month === j.MONTH && i.groupedName === j.groupedName)
+                      : costData.find(i => i.year === j.YEAR && i.month === j.MONTH)
+
+        let cost = 0
+        if (costObj !== undefined) {
+          cost = costObj.cost
+        }
+
         return {
           x: utc,
-          y: j.COST
+          y: j.QO,
+          z: cost
         }
       })
 
       series.push({
-        name: name ? name : 'Cost Data',
-        data: filteredData
+        name: name ? name : 'Production Data',
+        data: filteredData,         
       })
     })
 
-
-
-
     let config = {
       chart: {
-          type: 'column',
+          type: 'bubble',
           zoomType: 'x',
       },
       title: {
@@ -47,20 +65,14 @@ import { KPI } from '../Common/KPIs'
       },
       xAxis: {
         title: {
-          text: 'Item'
+          text: 'Fecha'
         },
         tickInterval   : 24 * 3600 * 1000*30,
-        type: 'datetime',
+        type: 'datetime'
       },
       yAxis: {
         title: {
-          text: 'Costs'
-        }
-      },
-      plotOptions: {
-        column: {
-          stacking: 'normal',
-          pointRange: 24 * 3600 * 1000*30
+          text: 'Qo'
         }
       },
       credits: {
@@ -69,10 +81,10 @@ import { KPI } from '../Common/KPIs'
       series: series
   }
 
-
   console.log(series)
+
     return (
-      <div className="cost-bar test">
+      <div className="production-bubble test">
         <div className='chart'>
           <ReactHighcharts
             className='chart'
@@ -87,4 +99,4 @@ import { KPI } from '../Common/KPIs'
 
 
 
-export default CostBar
+export default ProductionBubble
