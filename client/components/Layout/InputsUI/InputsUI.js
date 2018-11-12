@@ -16,13 +16,12 @@ import { submitForm } from '../../../redux/actions/pozoFormActions'
 import { submitResultsForm } from '../../../redux/actions/results'
 import Notification from '../Common/Notification'
 import Loading from '../Common/Loading'
-import { setHasSubmitted, setIsLoading, setCurrentPage, setSaveName } from '../../../redux/actions/global'
+import { setHasSubmitted, setIsLoading, setCurrentPage, setSaveName, setTab } from '../../../redux/actions/global'
 
 @autobind class InputsUI extends Component {
   constructor(props) {
     super(props)
-    this.state = { 
-      selectedTab: 'Pozo',
+    this.state = {
       isOpen: false,
       isOpenBug: false,
       error: '', 
@@ -75,7 +74,7 @@ import { setHasSubmitted, setIsLoading, setCurrentPage, setSaveName } from '../.
   }
 
   handleSelectTab(val) {
-    let { setCurrentPage, tipoDeIntervenciones } = this.props
+    let { setCurrentPage, tipoDeIntervenciones, setTab } = this.props
 
     console.log(val)
     if (val === 'Intervenciones') {
@@ -91,8 +90,9 @@ import { setHasSubmitted, setIsLoading, setCurrentPage, setSaveName } from '../.
     else {
       setCurrentPage('Ficha Technica del Campo')
     }
+
+    setTab(val)
     this.setState({
-      selectedTab: val,
       error: '',
       comment: '',
     })
@@ -340,8 +340,8 @@ import { setHasSubmitted, setIsLoading, setCurrentPage, setSaveName } from '../.
 
 
   render() {
-    let { selectedTab, error, isOpen, isOpenBug, saveName, fieldWellOptions } = this.state
-    let { global } = this.props
+    let { error, isOpen, isOpenBug, saveName, fieldWellOptions } = this.state
+    let { global, selectedTab } = this.props
 
     global = global.toJS()
 
@@ -371,13 +371,16 @@ import { setHasSubmitted, setIsLoading, setCurrentPage, setSaveName } from '../.
     else if (showForms === true) {
       return (
         <div className="input-forms">
-          <Tabs handleSelectTab={this.handleSelectTab} selectedTab={selectedTab} />
+          {/*<Tabs handleSelectTab={this.handleSelectTab} selectedTab={selectedTab} />*/}
           <div className="tab-content">
             { form }
           </div>
-          <button className="submit save-button"  onClick={(e) => this.activateModal()}>Guardar</button>
-          <button className="submit submit-button" onClick={(e) => this.handleSubmit('submit')}>Enviar</button>
-          <button className="submit bug-button" onClick={(e) => this.activateBugModal()}>Comentarios</button>
+          <div className="button-group">
+            <button className="submit save-button"  onClick={(e) => this.activateModal()}>Guardar</button>
+            <button className="submit submit-button" onClick={(e) => this.handleSubmit('submit')}>Enviar</button>
+
+            <button className="submit bug-button" onClick={(e) => this.activateBugModal()}>Comentarios</button>
+          </div>
           <div className="form-error">{this.state.error}</div> 
           <div style={{height: '10px'}}></div>
           <Notification />
@@ -410,6 +413,7 @@ const mapStateToProps = state => ({
   global: state.get('global'),
   user: state.getIn(['user', 'id']),
   formsState: state.get('forms'),
+  selectedTab: state.getIn(['global', 'selectedTab']),
   token: state.getIn(['user', 'token']),
   stimulationType: state.getIn(['resultsMeta', 'stimulationType']),
   hasErrorsFichaTecnicaDelPozo: state.getIn(['fichaTecnicaDelPozo', 'hasErrors']),
@@ -453,7 +457,8 @@ const mapDispatchToProps = dispatch => ({
   submitPozoForm: (action, token, name) => {dispatch(submitForm(action, token, name))},
   submitResultsForm: (action, token) => {dispatch(submitResultsForm(action, token))},
   setCurrentPage: val => {dispatch(setCurrentPage(val))},
-  setSaveName: val => {dispatch(setSaveName(val))},
+  setTab: val => {dispatch(setTab(val))},
+  setSaveName: val => {dispatch(setSaveName(val))}
 })
 
 export default connect(mapStateToProps, mapDispatchToProps)(InputsUI)

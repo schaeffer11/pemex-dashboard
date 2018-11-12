@@ -201,7 +201,6 @@ let columns = [
     let { pressureDepthPozo } = formData
     return (
       <div className='historico-presion' >
-        <div className='image'/>
         <div className="inputs">
           <ExcelUpload
             template="HistoricoPresionPozo"

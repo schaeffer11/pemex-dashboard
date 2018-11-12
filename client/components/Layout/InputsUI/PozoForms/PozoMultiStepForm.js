@@ -781,18 +781,20 @@ const forms = [
         verticallyCenter={true}
         focusDialog={true}
         dialogClass="queryModalPartialReset"
-        dialogStyle={{verticalAlign: '', textAlign: 'center', maxHeight: '80%', marginTop: '2%'}}
+        dialogStyle={{verticalAlign: '', textAlign: 'center', maxHeight: '80%', marginTop: '20%'}}
       >
       <div className="modalTest" >
         <div className="modal-title">
         </div>
         <div className="modal-info">
-          Seleccione un pozo para descargar su información
-
-          <InputRowSelectUnitless header="Campo" name="campo" value={selectedField} options={fieldOptions} callback={this.handleSelectField} name='campo' />
-          <InputRowSelectUnitless header="Pozo" name="pozo" value={selectedWell} options={wellOptions} callback={this.handleSelectWell} name='pozo' />
+          <div className='header'>
+              Seleccione un pozo para descargar su información
+          </div>
+          <div className="input-table">
+            <InputRowSelectUnitless header="Campo" name="campo" value={selectedField} options={fieldOptions} callback={this.handleSelectField} name='campo' />
+            <InputRowSelectUnitless header="Pozo" name="pozo" value={selectedWell} options={wellOptions} callback={this.handleSelectWell} name='pozo' />
+          </div>
           <button className="submit submit-load-options" disabled={!selectedField || !selectedWell} onClick={this.fetchLoadFromDatabaseOptions}>Mostrar opciones</button>
-
         </div>
         <div className="modal-body">
             {transactionOptions.length > 0 ? transactionOptions.map(i => {
@@ -819,11 +821,13 @@ const forms = [
     let { isOpen } = this.state
     let className = 'subtab'
     let title = forms[this.state.currentStep].title
+    let formClassName = forms[this.state.currentStep].content.type.WrappedComponent.name
     
     let errors = [fichaTecnicaDelCampoHasErrors, fichaTecnicaDelPozoHasErrors, historialDeIntervencionesHasErrors, evaluacionPetrofisicaHasErrors, mecanicoYAparejoDeProduccionHasErrors, analisisDelAguaHasErrors, sistemasArtificialesDeProduccionHasErrors, historicoDePresionCampoHasErrors, historicoDePresionPozoHasErrors, historicoDeAforosHasErrors, historicoDeProduccionHasErrors]
 
     return (
-       <div className={`multistep-form`}>
+       <div className={`multistep-form ${formClassName}`}>
+        <div className ={`banner ${formClassName}`}></div>
         <div className="subtabs">
             {forms.map( (tab, index) => {
                const active = this.state.currentStep === index ? 'active' : ''; 
@@ -836,11 +840,13 @@ const forms = [
         </div>
         <div className="content">
           <div className="tab-title">
-            <i className="far fa-caret-square-left" style={{position: 'relative', fontSize: '50px', left: '-20px', top: '7px', color: '#70AC46'}} onClick={(e) => setShowForms(false)}></i>
             { title }
-            <button className="cta next" onClick={this.handleNextSubtab}>Siguiente</button>
-            <button className="cta prev" onClick={this.handlePrevSubtab}>Anterior</button> 
-            <button className="cta load" onClick={this.activateModal}>Descargar intervención</button> 
+          </div>
+          <div className="tab-actions">
+             <button className="cta clear" onClick={(e) => setShowForms(false)}><i className="fa fa-undo">&nbsp;</i></button>
+             <button className="cta next" onClick={this.handleNextSubtab}>Siguiente</button>
+             <button className="cta prev" onClick={this.handlePrevSubtab}>Anterior</button>
+             <button className="cta clear load" onClick={this.activateModal}><i className="fa fa-download">&nbsp;</i></button>
           </div>
 
           {forms[this.state.currentStep].content}
