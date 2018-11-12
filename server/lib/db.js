@@ -2,7 +2,7 @@ import mysql from 'mysql'
 import comysql from 'co-mysql'
 import APP_ROOT from 'app-root-path'
 import debug from 'debug'
-const databases = require(APP_ROOT + '/localDatabases.json')
+const databases = require(APP_ROOT + '/databases.json')
 const message = debug('database')
 
 export default {
