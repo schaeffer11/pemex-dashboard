@@ -101,6 +101,23 @@ router.post('/productionData', (req, res) => {
     })
 })
 
+router.post('/fieldHistoricalPressure', (req, res) => {
+  let { transactionID } = req.body
+
+  let query = `SELECT * FROM FieldHistoricalPressure WHERE TRANSACTION_ID = ? ORDER BY FECHA DESC`
+
+  connection.query(query, transactionID, (err, results) => {
+      console.log('comment err', err)
+
+     if (err) {
+        res.json({ success: false})
+      }
+      else {
+        res.json(results)
+      }
+    })
+})
+
 router.post('/pressureData', (req, res) => {
   let { transactionID } = req.body
 

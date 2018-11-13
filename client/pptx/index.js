@@ -1,5 +1,5 @@
 import PptxGenJS from 'pptxgenjs'
-import { buildEstadoMecanicoYAparejo, buildFichaTecnicaDelCampo, buildFichaTecnicaDelPozo, buildSistemasArtificialesDeProduccion, buildEvaluacionPetrofisica, buildEvaluacionPetrofisicaImage, buildProposalCedula, buildGeneralProposal, buildLabReports } from './slides'
+import { buildEstadoMecanicoYAparejo, buildFichaTecnicaDelCampo, buildFichaTecnicaDelPozo, buildSistemasArtificialesDeProduccion, buildEvaluacionPetrofisica, buildEvaluacionPetrofisicaImage, buildProposalCedula, buildGeneralProposal, buildLabReports, buildHistorialIntervenciones, buildChart, buildProductionChart, buildAforoChart, buildPressureChart, buildWaterAnalysis } from './slides'
 
 function buildMasterSlide(slideWidth, slideHeight) {
   const logo = { x: 0.7, y: 0.15, w: 1.5, h: 0.5, path: '/images/pemex-logo-fpo.png' }
@@ -9,12 +9,13 @@ function buildMasterSlide(slideWidth, slideHeight) {
   const topBar = { x: 0, y: 0, w:'100%', h: 0.10, fill:'ce0a00' }
   const topLine = { get x() { return (slideWidth - this.w) / 2 }, y: logo.h + logo.y + 0.1, w: slideWidth * 0.9, h: bottomBarLight.h / 7, fill: '424242' }
   const slideTitle = {
-    options: { name: 'slide_title', type: 'body', w: '100%', y: logo.h - 0.15, fontSize: 24, align: 'center' },
+    options: { name: 'slide_title', type: 'body', w: '100%', y: logo.h - 0.15, fontSize: 24, align: 'center', fontFace: 'Arial Narrow' },
     text: '(title)'
   }
   return {
     title: 'MASTER_SLIDE',
     bkgd: 'e2e2e2',
+    fontFace: 'Arial Narrow',
     objects: [
       { rect: bottomBarLight },
       { rect: bottomBarDarkLeft },
@@ -34,14 +35,27 @@ export async function getData(url, token, id) {
       'content-type': 'application/json',
     },
   }
-  const data = await fetch(`/api/${url}?transactionID=${id}`, headers).then(r => r.json())
-  return data
+  return fetch(`/api/${url}?transactionID=${id}`, headers).then(r => r.json())
+}
+
+export async function getPostData(url, token, transactionID) {
+  return fetch(url, {
+    method: 'POST',
+    headers: {
+      'content-type': 'application/json',
+    },
+    body: JSON.stringify({
+      transactionID
+    })
+  })
+  .then(res => res.json())
 }
 
 export function buildTable(title, map, data) {
   const headerOptions = {
     fill: '2c6c94',
     color: 'ffffff',
+    fontFace: 'Arial Narrow',
   }
   const mapKeys = Object.keys(map)
   const headers = mapKeys.map((header) => {
@@ -53,7 +67,7 @@ export function buildTable(title, map, data) {
   })
   const body = data.map((elem, index) => {
     const d = mapKeys.map((header) => {
-      const options = {}
+      const options = { fontFace: 'Arial Narrow' }
       options.fill = index % 2 === 1 ? 'cdd4dc' : 'e8ebef'
       const obj = { text: elem[header], options }
       return obj
@@ -83,7 +97,8 @@ export function buildSimpleTable(title, map, data, hasUnits=true) {
       fill: '2c6c94',
       color: 'ffffff',
       colspan: hasUnits ? 3 : 2,
-      align: 'center'
+      align: 'center',
+      fontFace: 'Arial Narrow',
     }
   }]
   const headerOptions = {
@@ -100,7 +115,7 @@ export function buildSimpleTable(title, map, data, hasUnits=true) {
   }
   const mapKeys = Object.keys(map)
   const body = mapKeys.map((elem, index) => {
-    const options = {}
+    const options = { fontFace: 'Arial Narrow' }
     options.fill = index % 2 === 1 ? 'cdd4dc' : 'e8ebef'
     const { text, unit } = map[elem]
     const dataArray = [
@@ -124,7 +139,7 @@ export const tableOptions = {
   colW: '2',
 }
 
-export async function generatePowerPoint(token, jobID) {
+export async function generatePowerPoint(token, jobID, wellID) {
   const slideWidth = 13.3
   const slideHeight = 7.5
   const pptx = new PptxGenJS()
@@ -134,26 +149,19 @@ export async function generatePowerPoint(token, jobID) {
   pptx.defineSlideMaster(masterSlide)
   const images = await getData('getImages', token, jobID)
   console.log('images', images)
-  await buildFichaTecnicaDelCampo(pptx, token, jobID),
-  await buildFichaTecnicaDelPozo(pptx, token, jobID),
-  await buildEstadoMecanicoYAparejo(pptx, token, jobID, images.mecanicoYAparejoDeProduccion),
-  await buildSistemasArtificialesDeProduccion(pptx, token, jobID),
-  await buildEvaluacionPetrofisica(pptx, token, jobID, images.buildEvaluacionPetrofisica),
-  // buildEvaluacionPetrofisicaImage(pptx, images.evaluacionPetrofisica),
-  await buildProposalCedula(pptx, token, jobID),
-  await buildGeneralProposal(pptx, token, jobID),
-  await buildLabReports(pptx, token, jobID, images.pruebasDeLaboratorio),
-  
-  // const sections = await Promise.all([
-    // buildFichaTecnicaDelCampo(pptx, token, jobID),
-    // buildFichaTecnicaDelPozo(pptx, token, jobID),
-    // buildEstadoMecanicoYAparejo(pptx, token, jobID, images.mecanicoYAparejoDeProduccion),
-    // buildSistemasArtificialesDeProduccion(pptx, token, jobID),
-    // buildEvaluacionPetrofisica(pptx, token, jobID, images.buildEvaluacionPetrofisica),
-    // // buildEvaluacionPetrofisicaImage(pptx, images.evaluacionPetrofisica),
-    // buildProposalCedula(pptx, token, jobID),
-    // buildGeneralProposal(pptx, token, jobID),
-    // buildLabReports(pptx, token, jobID),
-  // ])
+  // await buildFichaTecnicaDelCampo(pptx, token, jobID)
+  // await buildPressureChart(pptx, token, jobID, true)
+  // await buildFichaTecnicaDelPozo(pptx, token, jobID)
+  // await buildEstadoMecanicoYAparejo(pptx, token, jobID, images.mecanicoYAparejoDeProduccion)
+  // await buildSistemasArtificialesDeProduccion(pptx, token, jobID)
+  // await buildEvaluacionPetrofisica(pptx, token, jobID, images.buildEvaluacionPetrofisica)
+  // await buildProposalCedula(pptx, token, jobID)
+  // await buildGeneralProposal(pptx, token, jobID)
+  // await buildLabReports(pptx, token, jobID, images.pruebasDeLaboratorio)
+  // await buildHistorialIntervenciones(pptx, token, jobID)
+  // await buildProductionChart(pptx, token, jobID)
+  await buildAforoChart(pptx, token, jobID)
+  // await buildPressureChart(pptx, token, jobID)
+  await buildWaterAnalysis(pptx, token, jobID)
   pptx.save()
 }
