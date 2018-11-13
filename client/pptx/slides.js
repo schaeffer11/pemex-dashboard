@@ -255,19 +255,19 @@ export async function buildGeneralProposal(pptx, token, id) {
       interventionURL = 'getInterventionEstimulacion'
       simulacionData = 'resultadosSimulacionEstimulacion'
       propuestaData = 'propuestaEstimulacion'
-      // simulacionData = 'estIncProduccionEstimulacion'
+      estimacionProduccionData = 'estIncProduccionEstimulacion'
       break;
     case 'acido':
       interventionURL = 'getInterventionAcido'
       simulacionData = 'resultadosSimulacionAcido'
       propuestaData = 'propuestaAcido'
-      // simulacionData = 'estIncProduccionAcido'
+      estimacionProduccionData = 'estIncProduccionAcido'
       break;
     case 'apuntalado':
       interventionURL = 'getInterventionApuntalado'
       simulacionData = 'resultadosSimulacionApuntalado'
       propuestaData = 'propuestaApuntalado'
-      // simulacionData = 'estIncProduccionApuntalado'
+      estimacionProduccionData = 'estIncProduccionApuntalado'
       break;
     case 'termico':
       interventionURL = 'getInterventionTermico'
@@ -284,8 +284,11 @@ export async function buildGeneralProposal(pptx, token, id) {
 
   const tableOptionsCopy = { ...tableOptions }
   const map = maps.propuesta[interventionType]
-  const volumesTable = buildSimpleTable('Volúmenes', map.volumes, data[propuestaData])
-  slide.addTable(volumesTable, { x: 0.5, y: 1.0, ...tableOptionsCopy })
+
+  if (map.volumes) {
+    const volumesTable = buildSimpleTable('Volúmenes', map.volumes, data[propuestaData])
+    slide.addTable(volumesTable, { x: 0.5, y: 1.0, ...tableOptionsCopy })
+  }
 
   if (map.geoMechanicInformation) {
     const geoMechanicTable = buildSimpleTable('Información de Geomecánica', map.geoMechanicInformation, data[propuestaData])
@@ -296,9 +299,15 @@ export async function buildGeneralProposal(pptx, token, id) {
     const limpiezaTable = buildSimpleTable('Limpieza de Aparejo', map.general, data[propuestaData])
     slide.addTable(limpiezaTable, { x: 3.5, y: 1.0, ...tableOptionsCopy })
   }
-  const simulacionTable = buildSimpleTable('Resultados de la simulacion', map.resultadosSimulacion, data[simulacionData])
-  console.log('what is this', data, propuestaData)
-  slide.addTable(simulacionTable, { x: 3.5, y: 2.0, ...tableOptionsCopy })
+
+  if (map.resultadosSimulacion) {
+    const simulacionTable = buildSimpleTable('Resultados de la simulación', map.resultadosSimulacion, data[simulacionData])
+    slide.addTable(simulacionTable, { x: 3.5, y: 2.0, ...tableOptionsCopy })
+  }
+
+  const estimacionTable = buildSimpleTable('Estimación', maps.estimacionProduccion, data[estimacionProduccionData])
+  slide.addTable(estimacionTable, { x: 3.5, y: 2.0, ...tableOptionsCopy })
+
   return slide
 }
 
