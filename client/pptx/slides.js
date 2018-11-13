@@ -1,6 +1,7 @@
-import { getData, buildSimpleTable, buildTable, tableOptions } from './index'
+import { getData, buildSimpleTable, buildTable, tableOptions, getPostData } from './index'
 import { maps } from './maps'
 import { getBase64FromURL } from '../redux/actions/pozoFormActions'
+import ReactHighcharts from 'react-highcharts'
 
 export async function buildFichaTecnicaDelCampo(pptx, token, id) {
   const slide = pptx.addNewSlide('MASTER_SLIDE')
@@ -56,7 +57,7 @@ export async function buildEstadoMecanicoYAparejo(pptx, token, id, image) {
     const base64 = await getBase64FromURL(image.imgURL).catch(e => e)
     if (!base64.error) {
       slide.addImage({
-        data: `image/png;base64,${base64}`, x: 7.5, y: 3, w:4, h:3,
+        data: `image/png;base64,${base64}`, x: 7.5, y: 3, w: 4, h: 3,
         sizing: { type: 'contain', h: 3.5, w: 3.5 }
       })
     }
@@ -117,45 +118,29 @@ export async function buildEvaluacionPetrofisica(pptx, token, id, image) {
   const mud = await getData('getMudLoss', token, id)
 
   let { layerData } = layers.evaluacionPetrofisica
+  console.log('layerData', layerData)
   let { mudLossData } = mud.evaluacionPetrofisica
   const layerTable = buildTable('Propiedades promedio', maps.evaluacionPetrofisica.layerData, layerData)
   const mudLossTable = buildTable('Zona de pérdida', maps.evaluacionPetrofisica.mudLossData, mudLossData)
 
-  const tableOptionsCopy = {...tableOptions}
+  const tableOptionsCopy = { ...tableOptions }
   delete tableOptionsCopy.colW
   slide.addTable(layerTable, { x: 0.5, y: 1.0, ...tableOptionsCopy })
   slide.addTable(mudLossTable, { x: 0.5, y: 5.0, ...tableOptionsCopy })
   if (image) {
     const imageSlide = pptx.addNewSlide('MASTER_SLIDE')
     imageSlide.addText('Evaluación Petrofísica', { placeholder: 'slide_title' })
-    imageSlide.addText('Registro del pozo', { x: 0.5, y: 1.0, fontSize: 14 })
+    imageSlide.addText('Registro del pozo', { x: 0.5, y: 1.0, fontSize: 14, fontFace: 'Arial Narrow' })
     const base64 = await getBase64FromURL(image.imgURL).catch(e => e)
     if (!base64.error) {
       imageSlide.addImage({
-        data: `image/png;base64,${base64}`, x: (13.3 - 6.5) / 2, y: 1.0, w:4, h:3,
+        data: `image/png;base64,${base64}`, x: (13.3 - 6.5) / 2, y: 1.0, w: 4, h: 3,
         sizing: { type: 'contain', h: 6.5, w: 6.5 }
       })
     }
   }
   return slide
 }
-
-
-// export async function buildEvaluacionPetrofisicaImage(pptx, image) {
-//   if (image) {
-//     const slide = pptx.addNewSlide('MASTER_SLIDE')
-//     slide.addText('Evaluación Petrofísica', { placeholder: 'slide_title' })
-//     slide.addText('Registro del pozo', { x: 0.5, y: 1.0, fontSize: 14 })
-//     const base64 = await getBase64FromURL(image.imgURL).catch(e => e)
-//     if (!base64.error) {
-//       slide.addImage({
-//         data: `image/png;base64,${base64}`, x: (13.3 - 6.5) / 2, y: 1.0, w:4, h:3,
-//         sizing: { type: 'contain', h: 6.5, w: 6.5 }
-//       })
-//     }
-//   }
-//   return
-// }
 
 export async function buildProposalCedula(pptx, token, id) {
   const interventionTypeData = await getData('getInterventionBase', token, id)
@@ -178,7 +163,7 @@ export async function buildProposalCedula(pptx, token, id) {
       return
   }
 
-  
+
   const slide = pptx.addNewSlide('MASTER_SLIDE')
   slide.addText('Propuesta de tratamiento', { placeholder: 'slide_title' })
   const data = await getData(cedulaURL, token, id)
@@ -188,11 +173,11 @@ export async function buildProposalCedula(pptx, token, id) {
   const intervals = layerData.map(elem => `${elem.cimaMD}-${elem.baseMD}`).join('\n')
   const cedulaMap = maps.propuesta[interventionType].cedulaData
   const cedulaTable = buildTable('Cedula de tratamiento', cedulaMap, cedulaData)
-  const tableOptionsCopy = {...tableOptions}
-  
-  
+  const tableOptionsCopy = { ...tableOptions }
+
+
   const generalTable = buildSimpleTable('General', maps.propuestaGeneral, { propuestaCompany, intervals })
-  
+
   slide.addTable(generalTable, { x: 0.5, y: 1.0, ...tableOptionsCopy })
   delete tableOptionsCopy.colW
   slide.addTable(cedulaTable, { x: 0.5, y: 2.5, ...tableOptionsCopy })
@@ -238,8 +223,8 @@ export async function buildGeneralProposal(pptx, token, id) {
   slide.addText('Propuesta de tratamiento', { placeholder: 'slide_title' })
   const data = await getData(interventionURL, token, id)
 
-  
-  const tableOptionsCopy = {...tableOptions}
+
+  const tableOptionsCopy = { ...tableOptions }
   const map = maps.propuesta[interventionType]
   const volumesTable = buildSimpleTable('Volúmenes', map.volumes, data[propuestaData])
   slide.addTable(volumesTable, { x: 0.5, y: 1.0, ...tableOptionsCopy })
@@ -259,11 +244,11 @@ export async function buildGeneralProposal(pptx, token, id) {
 async function buildMainLabSlide(pptx, labTitle, lab, image) {
   const mainSlide = pptx.addNewSlide('MASTER_SLIDE')
   mainSlide.addText('Pruebas de laboratorio', { placeholder: 'slide_title' })
-  mainSlide.addText(labTitle, { x: 0.5, y: 1.0, fontSize: 18 })
-  const tableOptionsCopy = {...tableOptions}
-  delete tableOptionsCopy.colW 
+  mainSlide.addText(labTitle, { x: 0.5, y: 1.0, fontSize: 18, fontFace: 'Arial Narrow' })
+  const tableOptionsCopy = { ...tableOptions }
+  delete tableOptionsCopy.colW
   const generalTable = buildSimpleTable('Datos generales', maps.pruebasDeLaboratorio.general, lab, false)
-  mainSlide.addTable(generalTable, { x: 0.5, y: 1.5, ...tableOptionsCopy})
+  mainSlide.addTable(generalTable, { x: 0.5, y: 1.5, ...tableOptionsCopy })
   if (image) {
     const base64 = await getBase64FromURL(image.imgURL).catch(e => e)
     if (!base64.error) {
@@ -285,21 +270,21 @@ function buildLabDataSlide(pptx, map, lab, labTitle) {
     return false
   }).length > 0
   if (isTable) {
-    const tableOptionsCopy = {...tableOptions}
-    delete tableOptionsCopy.colW 
+    const tableOptionsCopy = { ...tableOptions }
+    delete tableOptionsCopy.colW
     const dataSlide = pptx.addNewSlide('MASTER_SLIDE')
     dataSlide.addText('Pruebas de laboratorio', { placeholder: 'slide_title' })
-    dataSlide.addText(labTitle, { x: 0.5, y: 1.0, fontSize: 18 })
+    dataSlide.addText(labTitle, { x: 0.5, y: 1.0, fontSize: 18, fontFace: 'Arial Narrow' })
     const table = buildTable('', map[tableName], lab[tableName])
-    dataSlide.addTable(table, {x: 0.5, y: 1.5, ...tableOptionsCopy})
+    dataSlide.addTable(table, { x: 0.5, y: 1.5, ...tableOptionsCopy })
   } else {
     if (Object.keys(map).length > 0) {
-      const tableOptionsCopy = {...tableOptions}
+      const tableOptionsCopy = { ...tableOptions }
       const dataSlide = pptx.addNewSlide('MASTER_SLIDE')
       dataSlide.addText('Pruebas de laboratorio', { placeholder: 'slide_title' })
-      dataSlide.addText(labTitle, { x: 0.5, y: 1.0, fontSize: 18 })
+      dataSlide.addText(labTitle, { x: 0.5, y: 1.0, fontSize: 18, fontFace: 'Arial Narrow' })
       const table = buildSimpleTable('', map, lab)
-      dataSlide.addTable(table, {x: 0.5, y: 1.5, ...tableOptionsCopy})
+      dataSlide.addTable(table, { x: 0.5, y: 1.5, ...tableOptionsCopy })
     }
   }
 }
@@ -316,4 +301,316 @@ export async function buildLabReports(pptx, token, id, images) {
       buildLabDataSlide(pptx, map, lab, labTitle)
     }
   }
+}
+
+function buildHistoricSlides(pptx, data, map, title) {
+  if (data.length > 0) {
+    const table = buildTable('', map, data)
+    const slide = pptx.addNewSlide('MASTER_SLIDE')
+    slide.addText(title, { placeholder: 'slide_title' })
+    slide.addTable(table)
+  }
+}
+
+export async function buildHistorialIntervenciones(pptx, token, id) {
+  const dataGeneral = await getData('getHistIntervenciones', token, id)
+  const dataStimulation = await getData('getHistIntervencionesEstimulacionNew', token, id)
+  const dataAcido = await getData('getHistIntervencionesAcidoNew', token, id)
+  const dataApuntalado = await getData('getHistIntervencionesApuntaladoNew', token, id)
+  const { historicoEstimulacionData } = dataStimulation.historialDeIntervenciones
+  const { historicoAcidoData } = dataAcido.historialDeIntervenciones
+  const { historicoApuntaladoData } = dataApuntalado.historialDeIntervenciones
+  const { general, estimulacion, acido, apuntalado } = maps.historialDeIntervenciones
+
+  buildHistoricSlides(pptx, dataGeneral.fichaTecnicaDelPozo.historialIntervencionesData, general, 'Historial de intervenciones')
+  buildHistoricSlides(pptx, historicoEstimulacionData, estimulacion, 'Historial de intervenciones de estimulacion')
+  buildHistoricSlides(pptx, historicoAcidoData, acido, 'Historial de intervenciones de acido')
+  buildHistoricSlides(pptx, historicoApuntaladoData, apuntalado, 'Historial de intervenciones de apuntalado')
+  return
+}
+
+export async function buildProductionChart(pptx, token, id) {
+  const data = await getPostData('/well/productionData', token, id)
+  const config = {
+    chart: {
+      type: 'line',
+      zoomType: 'xy',
+      renderTo: 'hiddenChart',
+      // width: 800,
+    },
+    title: {
+      text: ''
+    },
+    credits: {
+      enabled: false
+    },
+    xAxis: {
+      title: {
+        enabled: true,
+        text: 'Fecha'
+      },
+      type: 'datetime'
+    },
+    yAxis: [{
+      title: {
+        text: 'Gasto (bbl/d)'
+      }
+    }, {
+      opposite: true,
+      title: {
+        text: 'Gasto (MMpc/d)'
+      }
+    }],
+    plotOptions: {
+      series: {
+        animation: false,
+      },
+      scatter: {
+        marker: {
+          radius: 5,
+        },
+
+      }
+    },
+    series: [{
+      name: 'Qo',
+      color: '#35b06d',
+      label: 'bbl/d',
+      data: []
+    }, {
+      name: 'Qg',
+      color: '#CC3D3D',
+      yAxis: 1,
+      label: 'MMpc/d',
+      data: []
+    }, {
+      name: 'Qw',
+      color: '#3a88c0',
+      label: 'bbl/d',
+      data: []
+    }]
+  }
+
+  let qoData = []
+  let qwData = []
+  let qgData = []
+
+  data.forEach(i => {
+    if (i.Fecha) {
+      let date = new Date(i.Fecha)
+      date = Date.UTC(date.getFullYear(), date.getMonth(), date.getDate())
+
+      qoData.push([date, i.QO])
+      qwData.push([date, i.QW])
+      qgData.push([date, i.QG])
+    }
+  })
+
+  config.series[0].data = qoData.sort((a, b) => { return a[0] - b[0] })
+  config.series[1].data = qgData.sort((a, b) => { return a[0] - b[0] })
+  config.series[2].data = qwData.sort((a, b) => { return a[0] - b[0] })
+  const base64 = await buildChartBase64(config)
+  const slide = pptx.addNewSlide('MASTER_SLIDE')
+  slide.addText('Histórico de producción', { placeholder: 'slide_title' })
+  slide.addImage({
+    data: base64, x: (13.3 - 7) / 2, y: 1,
+    sizing: { type: 'contain', h: 5.25, w: 7 }
+  })
+}
+
+export async function buildChartBase64(config) {
+  const domElement = document.createElement('div')
+  domElement.id = 'hiddenChart'
+  domElement.style.display = 'none'
+  document.body.appendChild(domElement)
+  const chart = new ReactHighcharts.Highcharts.Chart(config)
+  const dataURL = `data:image/svg+xml;base64,${btoa(unescape(encodeURIComponent(chart.getSVG())))}`
+  document.getElementById('hiddenChart').outerHTML = ''
+  return dataURL
+}
+
+export async function buildAforoChart(pptx, token, id) {
+  const data = await getPostData('/well/aforosData', token, id)
+  let config = {
+    chart: {
+      type: 'scatter',
+      zoomType: 'xy',
+      renderTo: 'hiddenChart',
+
+    },
+    title: {
+      text: ''
+    },
+    credits: {
+      enabled: false
+    },
+    xAxis: {
+      title: {
+        enabled: true,
+        text: 'Fecha'
+      },
+      type: 'datetime',
+    },
+    yAxis: [{
+      title: {
+        text: 'Gasto (bbl/d)'
+      }
+    }, {
+      opposite: true,
+      title: {
+        text: 'Gasto (MMpc/d)'
+      }
+    }],
+    plotOptions: {
+      scatter: {
+        marker: {
+          radius: 5,
+        },
+
+      }
+    },
+    series: [{
+      name: 'Qo',
+      color: '#35b06d',
+      label: 'bbl/d',
+      data: []
+    }, {
+      name: 'Qg',
+      color: '#CC3D3D',
+      yAxis: 1,
+      label: 'MMpc/d',
+      data: []
+    }, {
+      name: 'Qw',
+      color: '#3a88c0',
+      label: 'bbl/d',
+      data: []
+    }]
+  }
+  let qoData = []
+  let qwData = []
+  let qgData = []
+  data.forEach(i => {
+    if (i.FECHA) {
+      let date = new Date(i.FECHA)
+      date = Date.UTC(date.getFullYear(), date.getMonth(), date.getDate())
+      qoData.push([date, i.QO])
+      qwData.push([date, i.QW])
+      qgData.push([date, i.QG])
+    }
+  })
+  config.series[0].data = qoData
+  config.series[1].data = qgData
+  config.series[2].data = qwData
+  const base64 = await buildChartBase64(config)
+  const slide = pptx.addNewSlide('MASTER_SLIDE')
+  slide.addText('Histórico de aforos', { placeholder: 'slide_title' })
+  slide.addImage({
+    data: base64, x: (13.3 - 7) / 2, y: 1,
+    sizing: { type: 'contain', h: 5.25, w: 7 }
+  })
+}
+
+export async function buildPressureChart(pptx, token, id, isField = false) {
+  let data
+  if (isField) {
+    data = await getPostData('/well/fieldHistoricalPressure', token, id)
+  } else {
+    data = await getPostData('/well/pressureData', token, id)
+  }
+
+  console.log('pressuredata', data)
+  let config = {
+    chart: {
+      type: 'line',
+      zoomType: 'xy',
+      renderTo: 'hiddenChart',
+
+    },
+    title: {
+      text: ''
+    },
+    credits: {
+      enabled: false
+    },
+    xAxis: {
+      title: {
+        enabled: true,
+        text: 'Fecha'
+      },
+      type: 'datetime'
+    },
+    yAxis: [{
+      title: {
+        text: 'PWS (someUnit)'
+      }
+    }, {
+      opposite: true,
+      title: {
+        text: 'PWF (someUnit)'
+      }
+    }],
+    plotOptions: {
+      series: {
+        animation: false,
+      },
+      scatter: {
+        marker: {
+          radius: 5,
+        },
+
+      }
+    },
+    series: [{
+      name: 'PWS',
+      color: '#0000A0',
+      label: 'bbl/d',
+      data: []
+    }, {
+      name: 'PWF',
+      color: '#3a88c0',
+      yAxis: 1,
+      label: 'MMpc/d',
+      data: []
+    }]
+  }
+
+  let pwsData = []
+  let pwfData = []
+
+  data.forEach(i => {
+    if (i.FECHA) {
+      let date = new Date(i.FECHA)
+      date = Date.UTC(date.getFullYear(), date.getMonth(), date.getDate())
+
+      pwsData.push([date, i.PWS])
+      pwfData.push([date, i.PWF])
+    }
+  })
+
+  config.series[0].data = pwsData.sort((a, b) => { return a[0] - b[0] })
+  config.series[1].data = pwfData.sort((a, b) => { return a[0] - b[0] })
+
+  const base64 = await buildChartBase64(config)
+  const slide = pptx.addNewSlide('MASTER_SLIDE')
+  let title = 'Histórico de presión - '
+  title += isField ? 'campo' : 'pozo'
+  slide.addText(title, { placeholder: 'slide_title' })
+  slide.addImage({
+    data: base64, x: (13.3 - 7) / 2, y: 1,
+    sizing: { type: 'contain', h: 5.25, w: 7 }
+  })
+}
+
+export async function buildWaterAnalysis(pptx, token, id) {
+  const data = await getData('getAnalisisAgua', token, id)
+  if (data.err) {
+    return
+  }
+  const tableOptionsCopy = {...tableOptions}
+  const table = buildSimpleTable('', maps.analisisDelAgua, data.analisisDelAgua)
+  console.log('tableOptions', tableOptionsCopy)
+  const slide = pptx.addNewSlide('MASTER_SLIDE')
+  slide.addText('Análisis del Agua', { placeholder: 'slide_title' })
+  slide.addTable(table, { x: 0.5, y: 1.0, tableOptionsCopy })
 }
