@@ -18,6 +18,7 @@ export const options = [
   { label: 'Cromatografía del gas', value: 'cromatografiaDelGas' },
   { label: 'Prueba de dureza', value: 'pruebaDeDureza' },
   { label: 'Determinación de la calidad método de los cloruros', value: 'determinacionDeLaCalidad' },
+  { label: 'Curva de Viscosidad', value: 'curvaDeViscosidad' },
 ]
 
 const companyOptions = [

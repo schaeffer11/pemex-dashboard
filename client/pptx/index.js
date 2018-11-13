@@ -1,5 +1,6 @@
 import PptxGenJS from 'pptxgenjs'
-import { buildEstadoMecanicoYAparejo, buildFichaTecnicaDelCampo, buildFichaTecnicaDelPozo, buildSistemasArtificialesDeProduccion, buildEvaluacionPetrofisica, buildEvaluacionPetrofisicaImage, buildProposalCedula, buildGeneralProposal, buildLabReports, buildHistorialIntervenciones, buildChart, buildProductionChart, buildAforoChart, buildPressureChart, buildWaterAnalysis } from './slides'
+import ReactHighcharts from 'react-highcharts'
+import { buildEstadoMecanicoYAparejo, buildFichaTecnicaDelCampo, buildFichaTecnicaDelPozo, buildSistemasArtificialesDeProduccion, buildEvaluacionPetrofisica, buildEvaluacionPetrofisicaImage, buildProposalCedula, buildGeneralProposal, buildLabReports, buildHistorialIntervenciones, buildChart, buildProductionChart, buildAforoChart, buildPressureChart, buildWaterAnalysis, buildResultsCedula, buildGeneralResults } from './slides'
 
 function buildMasterSlide(slideWidth, slideHeight) {
   const logo = { x: 0.7, y: 0.15, w: 1.5, h: 0.5, path: '/images/pemex-logo-fpo.png' }
@@ -16,6 +17,7 @@ function buildMasterSlide(slideWidth, slideHeight) {
     title: 'MASTER_SLIDE',
     bkgd: 'e2e2e2',
     fontFace: 'Arial Narrow',
+    slideNumber: { x:12.5, y:'92%', fontSize: 18 },
     objects: [
       { rect: bottomBarLight },
       { rect: bottomBarDarkLeft },
@@ -134,12 +136,40 @@ export function buildSimpleTable(title, map, data, hasUnits=true) {
   return final
 }
 
+export async function buildChartBase64(config) {
+  const domElement = document.createElement('div')
+  domElement.id = 'hiddenChart'
+  domElement.style.display = 'none'
+  document.body.appendChild(domElement)
+  const chart = new ReactHighcharts.Highcharts.Chart(config)
+  const dataURL = `data:image/svg+xml;base64,${btoa(unescape(encodeURIComponent(chart.getSVG())))}`
+  document.getElementById('hiddenChart').outerHTML = ''
+  return dataURL
+}
+
 export const tableOptions = {
   fontSize: 8,
   colW: '2',
 }
 
-export async function generatePowerPoint(token, jobID, wellID) {
+function buildSectionSlide(pptx, title) {
+  const slide = pptx.addNewSlide('MASTER_SLIDE')
+  slide.addText(' ', { placeholder: 'slide_title' })
+  slide.addText(title, { w: '100%', h: '100%', fontSize: 48, fontFace: 'Arial Narrow', align: 'center', valign: 'middle' })
+}
+
+async function getHasresults(token, id) {
+  const headers = {
+    headers: {
+      'Authorization': `Bearer ${token}`,
+      'content-type': 'application/json',
+    },
+  }
+  const data = await fetch(`/job/generalResults?transactionID=${id}`, headers).then(r => r.json())
+  return Object.keys(data) > 0
+}
+
+export async function generatePowerPoint(token, jobID, wellID, jobType) {
   const slideWidth = 13.3
   const slideHeight = 7.5
   const pptx = new PptxGenJS()
@@ -148,20 +178,29 @@ export async function generatePowerPoint(token, jobID, wellID) {
   const masterSlide = buildMasterSlide(slideWidth, slideHeight)
   pptx.defineSlideMaster(masterSlide)
   const images = await getData('getImages', token, jobID)
+  const hasResults = await getHasresults(token, jobID)
   console.log('images', images)
+  buildSectionSlide(pptx, 'Información del campo')
   await buildFichaTecnicaDelCampo(pptx, token, jobID)
   await buildPressureChart(pptx, token, jobID, true)
+  buildSectionSlide(pptx, 'Información del pozo')
   await buildFichaTecnicaDelPozo(pptx, token, jobID)
+  await buildHistorialIntervenciones(pptx, token, jobID)
   await buildEstadoMecanicoYAparejo(pptx, token, jobID, images.mecanicoYAparejoDeProduccion)
   await buildSistemasArtificialesDeProduccion(pptx, token, jobID)
   await buildEvaluacionPetrofisica(pptx, token, jobID, images.buildEvaluacionPetrofisica)
   await buildWaterAnalysis(pptx, token, jobID)
-  await buildProposalCedula(pptx, token, jobID)
-  await buildGeneralProposal(pptx, token, jobID)
-  await buildLabReports(pptx, token, jobID, images.pruebasDeLaboratorio)
-  await buildHistorialIntervenciones(pptx, token, jobID)
   await buildProductionChart(pptx, token, jobID)
   await buildAforoChart(pptx, token, jobID)
   await buildPressureChart(pptx, token, jobID)
+  buildSectionSlide(pptx, 'Información de la propuesta')
+  await buildProposalCedula(pptx, token, jobID)
+  await buildGeneralProposal(pptx, token, jobID)
+  await buildLabReports(pptx, token, jobID, images.pruebasDeLaboratorio)
+  if (hasResults) {
+    buildSectionSlide(pptx, 'Información de los resultados')
+    await buildResultsCedula(pptx, token, jobID, jobType)
+    await buildGeneralResults(pptx, token, jobID, jobType)
+  }
   pptx.save()
 }

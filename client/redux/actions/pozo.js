@@ -57,6 +57,7 @@ export const setFromSaveFichaTecnicaDelCampo = value => ({ type: 'set_fromSaveFi
 export const setHistoricoEstimulacionData = value => ({ type: 'set_historicoEstimulacionData', value})
 export const setHistoricoAcidoData = value => ({ type: 'set_historicoAcidoData', value})
 export const setHistoricoApuntaladoData = value => ({ type: 'set_historicoApuntaladoData', value})
+export const setHistoricoTermicoData = value => ({ type: 'set_historicoTermicoData', value})
 export const setHistorialDeIntervenciones = value => ({ type: 'set_historialDeIntervenciones', value})
 export const setHasErrorsHistorialDeIntervenciones = value => ({ type: 'set_hasErrorsHistorialDeIntervenciones', value})
 export const setFromSaveHistorialDeIntervenciones = value => ({ type: 'set_fromSaveHistorialDeIntervenciones', value})

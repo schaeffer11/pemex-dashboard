@@ -1,6 +1,7 @@
 import { Router } from 'express'
 import db from '../../lib/db'
 import appConfig from '../../../app-config.js'
+import moment from 'moment'
 // import path from 'path'
 // import fs from 'fs'
 // import objectPath from 'object-path'
@@ -269,6 +270,8 @@ router.get('/getCedulaResults', (req, res) => {
           })
         }
 
+        console.log('da results', results)
+
 
         res.json(results)
       }
@@ -310,27 +313,89 @@ router.get('/getInterventionData', (req, res) => {
 
 
 router.get('/getInterventionResultsData', (req, res) => {
-  let { transactionID, type } = req.query
+  let { transactionID, type, shouldMapData } = req.query
   
   let query 
-
+  let map
   if (type === 'Estimulacion') {
     query = `
       SELECT * FROM ResultsEstimulacions re
       JOIN Results r ON re.INTERVENTION_ID = r.INTERVENCIONES_ID
       WHERE re.PROPUESTA_ID = ?`
+    map = {
+      TIPO_DE_ESTIMULACION: 'tipoDeEstimulacion',
+      VOLUMEN_PRECOLCHON_N2: 'volumenPrecolchonN2',
+      VOLUMEN_SISTEMA_NO_REACTIVO: 'volumenSistemaNoReativo',
+      VOLUMEN_SISTEMA_REACTIVO: 'volumenSistemaReactivo',
+      VOLUMEN_SISTEMA_DIVERGENTE: 'volumenSistemaDivergente',
+      VOLUMEN_DESPLAZAMIENTO_LIQUIDO: 'volumenDesplazamientoLiquido',
+      VOLUMEN_DESPLAZAMIENTO_N2: 'volumenDesplazamientoN2',
+      VOLUMEN_TOTAL_DE_LIQUIDO: 'volumenTotalDeLiquido',
+      TIPO_DE_COLOCACION: 'tipoDeColocacion',
+      TIEMPO_DE_CONTACTO: 'tiempoDeContacto',
+      PENETRACION_RADIAL: 'penetracionRadial',
+      LONGITUD_DE_AGUJERO_DE_GUSANO: 'longitudDeAgujeroDeGusano',
+    }
   }
   else if (type === 'Acido') {
     query = `
       SELECT * FROM ResultsAcido ra
       JOIN Results r ON ra.INTERVENTION_ID = r.INTERVENCIONES_ID
       WHERE ra.PROPUESTA_ID = ?`
+
+      map = {
+        VOLUMEN_PRECOLCHON_N2: 'volumenPrecolchonN2',
+        VOLUMEN_SISTEMA_NO_REACTIVO: 'volumenSistemaNoReativo',
+        VOLUMEN_SISTEMA_REACTIVO: 'volumenSistemaReactivo',
+        VOLUMEN_SISTEMA_DIVERGENTE: 'volumenSistemaDivergente',
+        VOLUMEN_DESPLAZAMIENTO_LIQUIDO: 'volumenDesplazamientoLiquido',
+        VOLUMEN_DESPLAZAMIENTO_N2: 'volumenDesplazamientoN2',
+        VOLUMEN_TOTAL_DE_LIQUIDO: 'volumenTotalDeLiquido',
+        MODULO_YOUNG_ARENA: 'moduloYoungArena',
+        MODULO_YOUNG_LUTITAS: 'moduloYoungLutitas',
+        RELAC_POISSON_ARENA: 'relacPoissonArena',
+        RELAC_POISSON_LUTITAS: 'relacPoissonLutatas',
+        GRADIENTE_DE_FRACTURA: 'gradienteDeFractura',
+        DENSIDAD_DE_DISPAROS: 'densidadDeDisparos',
+        DIAMETRO_DE_DISPAROS: 'diametroDeDisparos',
+        LONGITUD_TOTAL: 'longitudTotal',
+        LONGITUD_EFECTIVA_GRABADA: 'longitudEfectivaGrabada',
+        ALTURA_GRABADA: 'alturaGrabada',
+        ANCHO_PROMEDIO: 'anchoPromedio',
+        CONCENTRACION_DEL_ACIDO: 'concentracionDelAcido',
+        CONDUCTIVIDAD: 'conductividad',
+        FCD: 'fcd',
+        PRESION_NETA: 'presionNeta',
+        EFICIENCIA_DE_FLUIDO_DE_FRACTURA: 'eficienciaDeFluidoDeFractura',
+      }
   }
   else {
     query = `
       SELECT * FROM ResultsApuntalado rap
       JOIN Results r ON rap.INTERVENTION_ID = r.INTERVENCIONES_ID
       WHERE rap.PROPUESTA_ID = ?`
+    map = {
+      VOLUMEN_PRECOLCHON_APUNTALANTE: 'volumenPrecolchonN2',
+      VOLUMEN_APUNTALANTE: 'volumenApuntalante',
+      VOLUMEN_DESPLAZAMIENTO_LIQUIDO: 'volumenDesplazamientoLiquido',
+      VOLUMEN_TOTAL_DE_LIQUIDO: 'volumenTotalDeLiquido',
+      VOLUMEN_GEL_DE_FRACTURA: 'volumenGelFractura',
+      MODULO_YOUNG_ARENA: 'moduloYoungArena',
+      MODULO_YOUNG_LUTITAS: 'moduloYoungLutitas',
+      RELAC_POISSON_ARENA: 'relacPoissonArena',
+      RELAC_POISSON_LUTITAS: 'relacPoissonLutatas',
+      GRADIENTE_DE_FRACTURA: 'gradienteDeFractura',
+      DENSIDAD_DE_DISPAROS: 'densidadDeDisparos',
+      DIAMETRO_DE_DISPAROS: 'diametroDeDisparos',
+      LONGITUD_APUNTALADA: 'longitudApuntalada',
+      ALTURA_TOTAL_DE_FRACTURA: 'alturaTotalDeFractura',
+      ANCHO_PROMEDIO: 'anchoPromedio',
+      CONCENTRACION_AREAL: 'concentractionAreal',
+      CONDUCTIVIDAD: 'conductividad',
+      FCD: 'fcd',
+      PRESION_NETA: 'presionNeta',
+      EFICIENCIA_DE_FLUIDO_DE_FRACTURA: 'eficienciaDeFluidoDeFractura',
+    }
   }
 
   connection.query(query, transactionID, (err, results) => {
@@ -340,7 +405,18 @@ router.get('/getInterventionResultsData', (req, res) => {
         res.json({ success: false})
       }
       else {
-        res.json(results)
+        if (shouldMapData) {
+          const final = {}
+          console.log('results', results[0], results[0].VOLUMEN_TOTAL_DE_LIQUIDO)
+          console.log('map', map.VOLUMEN_TOTAL_DE_LIQUIDO)
+          Object.keys(results[0]).forEach((key) => {
+            console.log('key', key, map[key])
+            final[map[key]] = results[0][key]
+          })
+          res.json(final)
+        } else {
+          res.json(results)
+        }
       }
     })
 })
@@ -563,6 +639,35 @@ router.get('/getLabData', (req, res) => {
         res.json(results)
       }
     })
+})
+
+
+router.get('/generalResults', (req, res) => {
+  let { transactionID } = req.query  
+  // const query = `select * from Results where PROPUESTA_ID = ?`
+
+  const query = `select TransactionsResults.COMPANY, Results.* from TransactionsResults
+                 inner join Results on TransactionsResults.PROPUESTA_ID = Results.PROPUESTA_ID
+                 where Results.PROPUESTA_ID = ?`
+  connection.query(query, transactionID, (err, results) => {
+    console.log('comment err', err)
+    if (err) {
+      res.json({ success: false})
+    } else {
+      let final = {}
+      if (results.length > 0) {
+        const result = results[0]
+        console.log("results", results)
+        final = {
+          company: result.COMPANY,
+          fecha: moment(result.FECHA_INTERVENCION).format('YYYY-MM-DD'),
+          justificacion: result.JUSTIFICACION_INTERVENCION,
+          comentarios: result.COMENTARIOS_INTERVENCION,
+        }
+      }
+      res.json(final)
+    }
+  })
 })
 
 
