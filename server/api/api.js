@@ -248,7 +248,7 @@ router.get('/getTreatmentCompanies', (req, res) => {
 })
 
 router.get('/getInterventionTypes', (req, res) => {
-  const query = `SELECT DISTINCT(TIPO_DE_INTERVENCIONES) FROM Intervenciones`
+  const query = `SELECT DISTINCT(TIPO_DE_INTERVENCIONES) FROM Transactions`
   connection.query(query, (err, results) => {
     if (err) {
       console.log('there was an error', err)

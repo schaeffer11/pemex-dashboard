@@ -18,12 +18,12 @@ const numWithCommas = (x) => {
 @autobind class TypeKPI extends PureComponent {
   render() {
     let { data } = this.props
-    let { name, cost, numProposals, numResults, days, percEstimated, percResults, prodEstimated, prodReal } = data
+    let { name, classname, cost, numProposals, numResults, days, percEstimated, percResults, prodEstimated, prodReal } = data
 
     percResults = percResults ? percResults : 0
 
     return (
-      <div className={`kpi-outer ${name}`}>
+      <div className={`kpi-outer ${classname}`}>
         <div className='name'>
             {name}
         </div>
