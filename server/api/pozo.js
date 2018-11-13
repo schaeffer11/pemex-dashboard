@@ -1110,6 +1110,19 @@ export const create = async (body, action, cb) => {
         temperaturaMaximaGenerador, cedulaData, propuestaCompany } = finalObj.propuestaTermica
   }
 
+    let realTipoDeIntervenciones = tipoDeIntervenciones.slice()
+    
+    if (realTipoDeIntervenciones === 'estimulacion' && action === 'submit') {
+        if (tipoDeEstimulacion === 'limpieza') {
+            realTipoDeIntervenciones = 'estimulacionLimpieza'
+        }
+        else {
+            realTipoDeIntervenciones = 'estimulacionMatricial'
+        }
+    }
+
+
+
   // write to db
   
   let fieldFormacionID = campo
@@ -1780,7 +1793,7 @@ export const create = async (body, action, cb) => {
                                                   })
                                                 }
 
-                                                values = action === 'save' ? [transactionID, userID, wellFormacionID, tipoDeIntervenciones, saveName] : [transactionID, userID, subdireccion, activo, fieldFormacionID, wellFormacionID, formacion, propuestaCompany, tipoDeIntervenciones, tipoDeTerminacion]
+                                                values = action === 'save' ? [transactionID, userID, wellFormacionID, tipoDeIntervenciones, saveName] : [transactionID, userID, subdireccion, activo, fieldFormacionID, wellFormacionID, formacion, propuestaCompany, realTipoDeIntervenciones, tipoDeTerminacion]
                                                 connection.query((action === 'save' ? INSERT_TRANSACTION.save : INSERT_TRANSACTION.submit), values, (err, results) => {
                                                   console.log('transaction', err)
                                                   console.log('transaction', results)

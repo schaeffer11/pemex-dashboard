@@ -97,6 +97,7 @@ import TypeKPI from './TypeKPI'
 
     let data = [{
         name: 'Fractuarmiento Acido',
+        classname: 'Acido',
         numProposals: countData.find(i => i.TIPO_DE_INTERVENCIONES === 'acido') ? countData.find(i => i.TIPO_DE_INTERVENCIONES === 'acido').COUNT : null,
         numResults: countData.find(i => i.TIPO_DE_INTERVENCIONES === 'acido') ? countData.find(i => i.TIPO_DE_INTERVENCIONES === 'acido').COUNT_RESULTS : null,
         percResults:  countData.find(i => i.TIPO_DE_INTERVENCIONES === 'acido') ? countData.find(i => i.TIPO_DE_INTERVENCIONES === 'acido').COUNT_RESULTS / countData.find(i => i.TIPO_DE_INTERVENCIONES === 'acido').COUNT * 100: null,   
@@ -107,6 +108,7 @@ import TypeKPI from './TypeKPI'
         days: dateDiffData.find(i => i.type === 'acido') ? dateDiffData.find(i => i.type === 'acido').avgDateDiff : null
     }, {
         name: 'Fractuaramiento Apuntalado',
+        classname: 'Apuntalado',
         numProposals: countData.find(i => i.TIPO_DE_INTERVENCIONES === 'apuntalado') ? countData.find(i => i.TIPO_DE_INTERVENCIONES === 'apuntalado').COUNT : null,
         numResults: countData.find(i => i.TIPO_DE_INTERVENCIONES === 'apuntalado') ? countData.find(i => i.TIPO_DE_INTERVENCIONES === 'apuntalado').COUNT_RESULTS : null,
         percResults:  countData.find(i => i.TIPO_DE_INTERVENCIONES === 'apuntalado') ? countData.find(i => i.TIPO_DE_INTERVENCIONES === 'apuntalado').COUNT_RESULTS / countData.find(i => i.TIPO_DE_INTERVENCIONES === 'apuntalado').COUNT * 100 : null ,
@@ -117,6 +119,7 @@ import TypeKPI from './TypeKPI'
         days: dateDiffData.find(i => i.type === 'apuntalado') ? dateDiffData.find(i => i.type === 'apuntalado').avgDateDiff : null
     }, {
         name: 'Estimulacion',
+        classname: 'Estimulacion',
         numProposals: countData.find(i => i.TIPO_DE_INTERVENCIONES === 'estimulacion') ? countData.find(i => i.TIPO_DE_INTERVENCIONES === 'estimulacion').COUNT : null,
         numResults: countData.find(i => i.TIPO_DE_INTERVENCIONES === 'estimulacion') ? countData.find(i => i.TIPO_DE_INTERVENCIONES === 'estimulacion').COUNT_RESULTS : null,
         percResults:  countData.find(i => i.TIPO_DE_INTERVENCIONES === 'estimulacion') ? countData.find(i => i.TIPO_DE_INTERVENCIONES === 'estimulacion').COUNT_RESULTS / countData.find(i => i.TIPO_DE_INTERVENCIONES === 'estimulacion').COUNT * 100 : null, 
@@ -127,6 +130,7 @@ import TypeKPI from './TypeKPI'
         days: dateDiffData.find(i => i.type === 'estimulacion') ? dateDiffData.find(i => i.type === 'estimulacion').avgDateDiff : null
     }, {
         name: 'Estimulacion Termica',
+        classname: 'Termico',
         numProposals: countData.find(i => i.TIPO_DE_INTERVENCIONES === 'termico') ? countData.find(i => i.TIPO_DE_INTERVENCIONES === 'termico').COUNT : null,
         numResults: countData.find(i => i.TIPO_DE_INTERVENCIONES === 'termico') ? countData.find(i => i.TIPO_DE_INTERVENCIONES === 'termico').COUNT_RESULTS : null,
         percResults:  countData.find(i => i.TIPO_DE_INTERVENCIONES === 'termico') ? countData.find(i => i.TIPO_DE_INTERVENCIONES === 'termico').COUNT_RESULTS / countData.find(i => i.TIPO_DE_INTERVENCIONES === 'termico').COUNT * 100 : null, 
