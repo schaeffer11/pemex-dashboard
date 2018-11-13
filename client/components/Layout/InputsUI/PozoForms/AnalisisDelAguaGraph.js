@@ -39,7 +39,7 @@ const config = {
           reversed: true,
           type: 'logarithmic',
           title: {
-            text: 'meg/L'
+            text: 'mEq/L'
           }
         },
         series: [{
@@ -83,7 +83,7 @@ const config = {
           max: 10000,
           type: 'logarithmic',
           title: {
-            text: 'meg/L'
+            text: 'mEq/L'
           }
         },
         series: [{

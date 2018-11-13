@@ -10,48 +10,45 @@ import { KPI } from '../Common/KPIs'
     let { data, numTreatmentData, groupBy } = this.props
 
     let series = []
-    
-    if (data) {
-      let groups = Object.keys(data)
 
-      numTreatmentData = numTreatmentData.map(i => {
+    if (data) {
+      numTreatmentData = numTreatmentData.filter(i => i.groupedName === data[0].groupedName).map(i => {
         let utc = Date.UTC(i.YEAR, i.MONTH - 1)
         return {
           x: utc,
           y: i.COUNT,
           groupedName: i.groupedName,
         }
+      }).sort((a, b) => {return a.x - b.x})
+
+
+
+      data = data.map(j => {
+        let utc = Date.UTC(j.YEAR, j.MONTH - 1)
+
+        return {
+          x: utc,
+          y: j.TOTAL_VOLUME,
+        }
       })
 
-      numTreatmentData = numTreatmentData.sort((a, b) => {return a.x - b.x})
-
-      groups.forEach(name => {
-        let filteredData = data.map(j => {
-          let utc = Date.UTC(j.YEAR, j.MONTH - 1)
-
-          return {
-            x: utc,
-            y: j.TOTAL_VOLUME,
-          }
-        })
-
-        series.push({
-          name: name !== 'undefined' ? name : 'Volume Data',
-          data: filteredData,  
-          yAxis: 0,
-          zIndex: 0       
-        })
+      series.push({
+        name: 'Volume Used',
+        data: data,  
+        yAxis: 0,
+        zIndex: 0       
+      })
 
 
-        series.push({
-          name: name ? name : 'Num Treatments',
-          data: numTreatmentData.filter(i => i.groupedName === name),
-          type: 'line',
-          yAxis: 1,
-          zIndex: 1
-        })
+      series.push({
+        name: 'Num Treatments',
+        data: numTreatmentData,
+        type: 'line',
+        yAxis: 1,
+        zIndex: 1
       })
     }
+
     let config = {
       chart: {
           type: 'column',

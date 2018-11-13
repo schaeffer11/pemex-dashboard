@@ -198,7 +198,7 @@ const grabadoOptions = [
           <InputRowSelectUnitless header="Hidratación del fluido " name='hidratacionDelFluido' value={pruebasDeLaboratorioData[index].hidratacionDelFluido} options={hidratacionDelFluidoOptions} callback={(e) => this.handleSelectNonTable(e.value, 'hidratacionDelFluido', index)} index={index}/>
           <InputRow header="Tiempo de activación del gel" name='tiempoDeActivacion' value={pruebasDeLaboratorioData[index].tiempoDeActivacion} onChange={this.updateValue} index={index} unit='adim' />
           <InputRow header="Determinación de pH" name='determinacionDePh' value={pruebasDeLaboratorioData[index].determinacionDePh} onChange={this.updateValue} index={index} unit='psi' />
-          <InputRow header="Tiempo de rompimiento" name='tiempoDeRompimiento' value={pruebasDeLaboratorioData[index].tiempoDeRompimiento} onChange={this.updateValue} index={index} />
+          <InputRow header="Tiempo de rompimiento" name='tiempoDeRompimiento' value={pruebasDeLaboratorioData[index].tiempoDeRompimiento} onChange={this.updateValue} index={index} unit='mins' />
           <InputRow header="Dosificación de quebradores" name='dosificacionDeQuebradors' value={pruebasDeLaboratorioData[index].dosificacionDeQuebradors} onChange={this.updateValue} index={index} unit='adim' />
           <InputRow header="Viscosidad del gel de fractura" name='viscosidadDelGelDeFractura' value={pruebasDeLaboratorioData[index].viscosidadDelGelDeFractura} onChange={this.updateValue} index={index} unit='adim' />
           {this.makeImageInput(index, 'gelFractura')}
