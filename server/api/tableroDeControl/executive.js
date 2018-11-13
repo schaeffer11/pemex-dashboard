@@ -440,7 +440,8 @@ router.get('/tableData', (req, res) => {
 select 
 ${select},
 COUNT(1) as NUM_TREATMENTS,  
-SUM(TIPO_DE_INTERVENCIONES = 'estimulacion') as NUM_ESTIMULACION,
+SUM(TIPO_DE_INTERVENCIONES = 'estimulacionLimpieza') as NUM_ESTIMULACION_LIMPIEZA,
+SUM(TIPO_DE_INTERVENCIONES = 'estimulacionMatricial') as NUM_ESTIMULACION_MATRICIAL,
 SUM(TIPO_DE_INTERVENCIONES = 'acido') as NUM_ACIDO, 
 SUM(TIPO_DE_INTERVENCIONES = 'apuntalado') as NUM_APUNTALADO, 
 SUM(TIPO_DE_INTERVENCIONES = 'termico') as NUM_TERMICO,
@@ -501,11 +502,10 @@ router.get('/estIncData', (req, res) => {
     values = values.concat([tipoDeTerminacion, tipoDeTerminacion, tipoDeTerminacion])
   }
 
-
-  let groupByKey = 1
   let select = `1 as groupedName`
   let selectAcido = ''
-  let selectEstimulacion = ''
+  let selectEstimulacionLimpieza = ''
+  let selectEstimulacionMatricial = ''
   let selectApuntalado = ''
 
   switch(groupBy) {
@@ -530,7 +530,8 @@ router.get('/estIncData', (req, res) => {
     case 'interventionType':
       select = '1'
       selectAcido = `, 'acido' AS groupedName`
-      selectEstimulacion = `, 'estimulacion' AS groupedName`
+      selectEstimulacionLimpieza = `, 'estimulacionLimpieza' AS groupedName`
+      selectEstimulacionMatricial = `, 'estimulacionMatricial' AS groupedName`
       selectApuntalado = `, 'apuntalado' AS groupedName`
 
       break
@@ -549,11 +550,17 @@ select groupedName, SUM(EST_INC_Qo) as EST_INC_Qo from
  JOIN TransactionsResults tr on tr.PROPUESTA_ID = ia.TRANSACTION_ID
 ${whereClause}
  UNION
-select EST_INC_Qo, ${select} ${selectEstimulacion} FROM IntervencionesEstimulacions ie
+select EST_INC_Qo, ${select} ${selectEstimulacionLimpieza} FROM IntervencionesEstimulacions ie
  JOIN FieldWellMapping fwm ON ie.WELL_FORMACION_ID = fwm.WELL_FORMACION_ID
  JOIN Transactions t ON ie.TRANSACTION_ID = t.TRANSACTION_ID
  JOIN TransactionsResults tr on tr.PROPUESTA_ID = ie.TRANSACTION_ID
-${whereClause}
+${whereClause} AND TIPO_DE_INTERVENCIONES = 'estimulacionLimpieza'
+  UNION
+select EST_INC_Qo, ${select} ${selectEstimulacionMatricial} FROM IntervencionesEstimulacions ie
+ JOIN FieldWellMapping fwm ON ie.WELL_FORMACION_ID = fwm.WELL_FORMACION_ID
+ JOIN Transactions t ON ie.TRANSACTION_ID = t.TRANSACTION_ID
+ JOIN TransactionsResults tr on tr.PROPUESTA_ID = ie.TRANSACTION_ID
+${whereClause} AND TIPO_DE_INTERVENCIONES = 'estimulacionMatricial'
   UNION
 select EST_INC_Qo, ${select} ${selectApuntalado} FROM IntervencionesApuntalado iap
  JOIN FieldWellMapping fwm ON iap.WELL_FORMACION_ID = fwm.WELL_FORMACION_ID
@@ -711,10 +718,11 @@ JOIN FieldWellMapping ON t.WELL_FORMACION_ID = FieldWellMapping.WELL_FORMACION_I
 router.get('/dateDiffData', (req, res) => {
 
   let query = `
-select TIPO_DE_INTERVENCIONES as type, AVG(DATEDIFF(FECHA_INTERVENCION, FECHA_PROGRAMADA_INTERVENCION))  as avgDateDiff
+select t.TIPO_DE_INTERVENCIONES as type, AVG(DATEDIFF(FECHA_INTERVENCION, FECHA_PROGRAMADA_INTERVENCION))  as avgDateDiff, COUNT(1) as COUNT
 FROM Results r 
 JOIN Intervenciones i ON r.PROPUESTA_ID = i.TRANSACTION_ID 
-GROUP BY TIPO_DE_INTERVENCIONES`
+JOIN Transactions t on r.PROPUESTA_ID = t.TRANSACTION_ID
+GROUP BY type`
 
   connection.query(query, (err, results) => {
       console.log('comment err', err)
