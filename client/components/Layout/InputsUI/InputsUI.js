@@ -393,9 +393,6 @@ import { setHasSubmitted, setIsLoading, setCurrentPage, setSaveName, setTab } fr
     else {
       return (
         <div className="input-forms">
-          <div className='tabs'>
-            <div className={`tab active`} >Results</div>
-          </div>
           <div className='tab-content'> 
            { form }
           </div>

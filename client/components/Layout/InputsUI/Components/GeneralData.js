@@ -237,12 +237,14 @@ import ButtonGroup from './ButtonGroup'
           Seleccione borrador para descargar
         </div>
         <div className="modal-body" style={{ height: '200px' }}>
-            {saveOptions.map(i => {
-              let className = i.id === selectedSave ? 'save-item active-save' : 'save-item'
-              return (
-                <div key={`saveOption_${i.id}`} className={className} onClick={(e) => this.handleSelectSave(i.id, i.name)}>{i.name}</div>
-                )
-            })}
+            <div className="save-item-container">
+              {saveOptions.map(i => {
+                let className = i.id === selectedSave ? 'save-item active-save' : 'save-item'
+                return (
+                  <div key={`saveOption_${i.id}`} className={className} onClick={(e) => this.handleSelectSave(i.id, i.name)}>{i.name}</div>
+                  )
+              })}
+            </div>
         </div> 
         <button disabled={!selectedSave} className="submit submit-load" onClick={this.handleLoad}>Descargar borrador</button>
       </div>

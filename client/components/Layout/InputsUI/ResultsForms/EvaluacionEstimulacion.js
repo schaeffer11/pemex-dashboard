@@ -84,24 +84,26 @@ import { setGeneralEvaluacionEstimulacion, setMergeEvaluacionEstimulacion } from
       <div className='result-form' >
         <div className='header'>
         </div>
-        <InputRow
-          header="Penetración radial"
-          name='penetracionRadial'
-          unit="m"
-          value={penetracionRadial}
-          onChange={e => setGeneralEvaluacionEstimulacion(['penetracionRadial'], e)}
-          errors={this.state.errors}
-          onBlur={this.updateErrors}
-        />
-        <InputRow
-          header="Longitud de agujero de gusano"
-          name='longitudDeAgujeroDeGusano'
-          unit="m"
-          value={longitudDeAgujeroDeGusano}
-          onChange={e => setGeneralEvaluacionEstimulacion(['longitudDeAgujeroDeGusano'], e)}
-          errors={this.state.errors}
-          onBlur={this.updateErrors}
-        />
+        <div className="input-table">
+          <InputRow
+            header="Penetración radial"
+            name='penetracionRadial'
+            unit="m"
+            value={penetracionRadial}
+            onChange={e => setGeneralEvaluacionEstimulacion(['penetracionRadial'], e)}
+            errors={this.state.errors}
+            onBlur={this.updateErrors}
+          />
+          <InputRow
+            header="Longitud de agujero de gusano"
+            name='longitudDeAgujeroDeGusano'
+            unit="m"
+            value={longitudDeAgujeroDeGusano}
+            onChange={e => setGeneralEvaluacionEstimulacion(['longitudDeAgujeroDeGusano'], e)}
+            errors={this.state.errors}
+            onBlur={this.updateErrors}
+          />
+        </div>
       </div>
     )
   }

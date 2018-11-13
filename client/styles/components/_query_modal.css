@@ -25,14 +25,24 @@
   margin-bottom: 10px;
 }
 
+.save-item-container {
+  border: 2px solid #b4bacd;
+}
+
 .save-item {
-  height: 30px;
+  color: #2d2e33;
   background: #f2f2f2;
   cursor: pointer;
+  padding: 8px 10px;
+  border-bottom: 1px solid #b4bacd;
 }
 
 .save-item:nth-child(even) {
   background: #e6e6e6;
+}
+
+.save-item:last-child {
+  border-bottom: none;
 }
 
 .save-item:hover {
@@ -40,9 +50,9 @@
 }
 
 .save-item:active {
-  background: #6699FF;
+  background: #70AC46;
 }
 
 .active-save {
-  background: #3399FF !important;
+  background: #70AC46 !important;
 }

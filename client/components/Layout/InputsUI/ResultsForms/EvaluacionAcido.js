@@ -117,87 +117,89 @@ import { setGeneralEvaluacionAcido, setMergeEvaluacionAcido } from '../../../../
       <div className='result-form' >
         <div className='header'>
         </div>
-        <InputRow
-          header="Longitud total"
-          name='longitudTotal'
-          unit="m"
-          value={longitudTotal}
-          onChange={e => setGeneralEvaluacionAcido(['longitudTotal'], e)}
-          errors={this.state.errors}
-          onBlur={this.updateErrors}
-        />
-        <InputRow
-          header="Longitud efectiva grabada"
-          name='longitudEfectivaGrabada'
-          unit="m"
-          value={longitudEfectivaGrabada}
-          onChange={e => setGeneralEvaluacionAcido(['longitudEfectivaGrabada'], e)}
-          errors={this.state.errors}
-          onBlur={this.updateErrors}
-        />
-        <InputRow
-          header="Altura grabada"
-          name='alturaGrabada'
-          unit="m"
-          value={alturaGrabada}
-          onChange={e => setGeneralEvaluacionAcido(['alturaGrabada'], e)}
-          errors={this.state.errors}
-          onBlur={this.updateErrors}
-        />
-        <InputRow
-          header="Ancho promedio"
-          name='anchoPromedio'
-          unit="pg."
-          value={anchoPromedio}
-          onChange={e => setGeneralEvaluacionAcido(['anchoPromedio'], e)}
-          errors={this.state.errors}
-          onBlur={this.updateErrors}
-        />
-        <InputRow
-          header="Concentración del ácido"
-          name='concentracionDelAcido'
-          unit={<div>lb/pg<sup>2</sup></div>}
-          value={concentracionDelAcido}
-          onChange={e => setGeneralEvaluacionAcido(['concentracionDelAcido'], e)}
-          errors={this.state.errors}
-          onBlur={this.updateErrors}
-        />
-        <InputRow
-          header="Conductividad"
-          name='conductividad'
-          unit="mD*ft"
-          value={conductividad}
-          onChange={e => setGeneralEvaluacionAcido(['conductividad'], e)}
-          errors={this.state.errors}
-          onBlur={this.updateErrors}
-        />
-        <InputRow
-          header="FCD"
-          name='fcd'
-          unit="adim."
-          value={fcd}
-          onChange={e => setGeneralEvaluacionAcido(['fcd'], e)}
-          errors={this.state.errors}
-          onBlur={this.updateErrors}
-        />
-        <InputRow
-          header="Presión neta"
-          name='presionNeta'
-          unit="psi"
-          value={presionNeta}
-          onChange={e => setGeneralEvaluacionAcido(['presionNeta'], e)}
-          errors={this.state.errors}
-          onBlur={this.updateErrors}
-        />
-        <InputRow
-          header="Eficiencia de fluido de fractura"
-          name='eficienciaDeFluidoDeFractura'
-          unit="%"
-          value={eficienciaDeFluidoDeFractura}
-          onChange={e => setGeneralEvaluacionAcido(['eficienciaDeFluidoDeFractura'], e)}
-          errors={this.state.errors}
-          onBlur={this.updateErrors}
-        />
+        <div className="input-table">
+          <InputRow
+            header="Longitud total"
+            name='longitudTotal'
+            unit="m"
+            value={longitudTotal}
+            onChange={e => setGeneralEvaluacionAcido(['longitudTotal'], e)}
+            errors={this.state.errors}
+            onBlur={this.updateErrors}
+          />
+          <InputRow
+            header="Longitud efectiva grabada"
+            name='longitudEfectivaGrabada'
+            unit="m"
+            value={longitudEfectivaGrabada}
+            onChange={e => setGeneralEvaluacionAcido(['longitudEfectivaGrabada'], e)}
+            errors={this.state.errors}
+            onBlur={this.updateErrors}
+          />
+          <InputRow
+            header="Altura grabada"
+            name='alturaGrabada'
+            unit="m"
+            value={alturaGrabada}
+            onChange={e => setGeneralEvaluacionAcido(['alturaGrabada'], e)}
+            errors={this.state.errors}
+            onBlur={this.updateErrors}
+          />
+          <InputRow
+            header="Ancho promedio"
+            name='anchoPromedio'
+            unit="pg."
+            value={anchoPromedio}
+            onChange={e => setGeneralEvaluacionAcido(['anchoPromedio'], e)}
+            errors={this.state.errors}
+            onBlur={this.updateErrors}
+          />
+          <InputRow
+            header="Concentración del ácido"
+            name='concentracionDelAcido'
+            unit={<div>lb/pg<sup>2</sup></div>}
+            value={concentracionDelAcido}
+            onChange={e => setGeneralEvaluacionAcido(['concentracionDelAcido'], e)}
+            errors={this.state.errors}
+            onBlur={this.updateErrors}
+          />
+          <InputRow
+            header="Conductividad"
+            name='conductividad'
+            unit="mD*ft"
+            value={conductividad}
+            onChange={e => setGeneralEvaluacionAcido(['conductividad'], e)}
+            errors={this.state.errors}
+            onBlur={this.updateErrors}
+          />
+          <InputRow
+            header="FCD"
+            name='fcd'
+            unit="adim."
+            value={fcd}
+            onChange={e => setGeneralEvaluacionAcido(['fcd'], e)}
+            errors={this.state.errors}
+            onBlur={this.updateErrors}
+          />
+          <InputRow
+            header="Presión neta"
+            name='presionNeta'
+            unit="psi"
+            value={presionNeta}
+            onChange={e => setGeneralEvaluacionAcido(['presionNeta'], e)}
+            errors={this.state.errors}
+            onBlur={this.updateErrors}
+          />
+          <InputRow
+            header="Eficiencia de fluido de fractura"
+            name='eficienciaDeFluidoDeFractura'
+            unit="%"
+            value={eficienciaDeFluidoDeFractura}
+            onChange={e => setGeneralEvaluacionAcido(['eficienciaDeFluidoDeFractura'], e)}
+            errors={this.state.errors}
+            onBlur={this.updateErrors}
+          />
+        </div>
       </div>
     )
   }
