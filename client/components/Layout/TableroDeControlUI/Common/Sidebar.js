@@ -196,7 +196,7 @@ const filterArr = arr => {
   render() {
     const { isOpen, fieldWellOptions, companyOptions, interventionOptions, terminationOptions, 
       formationOptions, subdireccionOptions, activoOptions, fieldOptions, wellOptions } = this.state
-    const { company, interventionType, terminationType, formation, groupBy, subdireccion, activo, field, well, job, token } = this.props
+    const { company, interventionType, terminationType, formation, groupBy, subdireccion, activo, field, well, job, token, jobType } = this.props
     const groupByOptions = [
       { value: 'subdireccion', label: 'Subdirección' },
       { value: 'activo', label: 'Activo' },
@@ -299,7 +299,7 @@ const filterArr = arr => {
             />
           </div>
           <div>
-            <button disabled={!job} onClick={() => generatePowerPoint(token, job, well)}>generar presentacion</button>
+            <button disabled={!job} onClick={() => generatePowerPoint(token, job, well, jobType)}>generar presentacion</button>
           </div>
         </Menu>
       </div>
@@ -318,7 +318,8 @@ const mapStateToProps = state => ({
   terminationType: state.getIn(['globalAnalysis', 'terminationType']),
   formation: state.getIn(['globalAnalysis', 'formation']),
   groupBy: state.getIn(['globalAnalysis', 'groupBy']),
-  job: state.getIn(['globalAnalysis', 'job'])
+  job: state.getIn(['globalAnalysis', 'job']),
+  jobType: state.getIn(['globalAnalysis', 'jobType']),
 })
 
 const mapDispatchToProps = dispatch => ({

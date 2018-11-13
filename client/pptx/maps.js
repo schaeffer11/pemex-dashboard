@@ -612,3 +612,11 @@ maps.analisisDelAgua = {
   densidadAt15: { text: 'Densidad @ 15.5 °C', unit: units.density },
   densidadAt20: { text: 'Densidad @ 20 °C', unit: units.density },
 }
+
+maps.generalResults = {
+  intervals: { text: 'Intervalos', unit: '' },
+  company: { text: 'Compañía', units: '' },
+  fecha: { text: 'Fecha', units: '' },
+  justificacion: { text: 'Justificación', units: '' },
+  comentarios: { text: 'Comentarios', units: '' },
+}

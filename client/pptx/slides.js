@@ -1,7 +1,6 @@
-import { getData, buildSimpleTable, buildTable, tableOptions, getPostData } from './index'
+import { getData, buildSimpleTable, buildTable, tableOptions, getPostData, buildChartBase64 } from './index'
 import { maps } from './maps'
 import { getBase64FromURL } from '../redux/actions/pozoFormActions'
-import ReactHighcharts from 'react-highcharts'
 
 export async function buildFichaTecnicaDelCampo(pptx, token, id) {
   const slide = pptx.addNewSlide('MASTER_SLIDE')
@@ -142,7 +141,34 @@ export async function buildEvaluacionPetrofisica(pptx, token, id, image) {
   return slide
 }
 
-export async function buildProposalCedula(pptx, token, id) {
+export async function buildResultsCedula(pptx, token, id, interventionType) {
+  const headers = {
+    headers: {
+      'Authorization': `Bearer ${token}`,
+      'content-type': 'application/json',
+    },
+  }
+  const generalResults = await fetch(`/job/generalResults?transactionID=${id}`, headers).then(r => r.json())
+  const cedulaData = await fetch(`/job/getCedulaResults?transactionID=${id}&type=${interventionType}`, headers).then(r => r.json())
+  const layers = await getData('getLayer', token, id)
+  const { layerData } = layers.evaluacionPetrofisica
+  const intervals = layerData.map(elem => `${elem.cimaMD}-${elem.baseMD}`).join('\n')
+  console.log('intervals', intervals)
+  const cedulaMap = maps.propuesta[interventionType.toLowerCase()].cedulaData
+  const cedulaTable = buildTable('Cedula de tratamiento', cedulaMap, cedulaData)
+  const tableOptionsCopy = { ...tableOptions }
+
+
+  const generalTable = buildSimpleTable('General', maps.generalResults, { ...generalResults, intervals }, false)
+  console.log('dataResults', generalTable, cedulaTable)
+  const slide = pptx.addNewSlide('MASTER_SLIDE')
+  slide.addText('Cédula de tratamiento', { placeholder: 'slide_title' })
+  slide.addTable(generalTable, { x: 0.5, y: 1.0, ...tableOptionsCopy })
+  delete tableOptionsCopy.colW
+  slide.addTable(cedulaTable, { x: 0.5, y: 2.5, ...tableOptionsCopy })
+}
+
+export async function buildProposalCedula(pptx, token, id, isResults=false) {
   const interventionTypeData = await getData('getInterventionBase', token, id)
   const interventionType = interventionTypeData.objetivoYAlcancesIntervencion.tipoDeIntervenciones
   let cedulaURL
@@ -185,6 +211,38 @@ export async function buildProposalCedula(pptx, token, id) {
   return slide
 }
 
+export async function buildGeneralResults(pptx, token, id, interventionType) {
+  const headers = {
+    headers: {
+      'Authorization': `Bearer ${token}`,
+      'content-type': 'application/json',
+    },
+  }
+  const data = await fetch(`/job/getInterventionResultsData?transactionID=${id}&type=${interventionType}&shouldMapData=true`, headers).then(r => r.json())
+  console.log('data', data)
+  const slide = pptx.addNewSlide('MASTER_SLIDE')
+  slide.addText('Resultados de tratamiento', { placeholder: 'slide_title' })
+
+  const tableOptionsCopy = { ...tableOptions }
+  const map = maps.propuesta[interventionType.toLowerCase()]
+  const volumesTable = buildSimpleTable('Volúmenes', map.volumes, data)
+  slide.addTable(volumesTable, { x: 0.5, y: 1.0, ...tableOptionsCopy })
+
+  if (map.geoMechanicInformation) {
+    const geoMechanicTable = buildSimpleTable('Información de Geomecánica', map.geoMechanicInformation, data)
+    slide.addTable(geoMechanicTable, { x: 3.5, y: 1.0, ...tableOptionsCopy })
+  }
+
+  if (interventionType === 'estimulacion' && data.tipoDeEstimulacion === 'limpieza') {
+    const limpiezaTable = buildSimpleTable('Limpieza de Aparejo', map.general, data)
+    slide.addTable(limpiezaTable, { x: 3.5, y: 1.0, ...tableOptionsCopy })
+  }
+
+  const simulacionTable = buildSimpleTable('Resultados de la simulacion', map.resultadosSimulacion, data)
+  slide.addTable(simulacionTable, { x: 3.5, y: 2.0, ...tableOptionsCopy })
+  return slide
+}
+
 export async function buildGeneralProposal(pptx, token, id) {
   const interventionTypeData = await getData('getInterventionBase', token, id)
   const interventionType = interventionTypeData.objetivoYAlcancesIntervencion.tipoDeIntervenciones
@@ -197,19 +255,19 @@ export async function buildGeneralProposal(pptx, token, id) {
       interventionURL = 'getInterventionEstimulacion'
       simulacionData = 'resultadosSimulacionEstimulacion'
       propuestaData = 'propuestaEstimulacion'
-      simulacionData = 'estIncProduccionEstimulacion'
+      // simulacionData = 'estIncProduccionEstimulacion'
       break;
     case 'acido':
       interventionURL = 'getInterventionAcido'
       simulacionData = 'resultadosSimulacionAcido'
       propuestaData = 'propuestaAcido'
-      simulacionData = 'estIncProduccionAcido'
+      // simulacionData = 'estIncProduccionAcido'
       break;
     case 'apuntalado':
       interventionURL = 'getInterventionApuntalado'
       simulacionData = 'resultadosSimulacionApuntalado'
       propuestaData = 'propuestaApuntalado'
-      simulacionData = 'estIncProduccionApuntalado'
+      // simulacionData = 'estIncProduccionApuntalado'
       break;
     case 'termico':
       interventionURL = 'getInterventionTermico'
@@ -238,6 +296,9 @@ export async function buildGeneralProposal(pptx, token, id) {
     const limpiezaTable = buildSimpleTable('Limpieza de Aparejo', map.general, data[propuestaData])
     slide.addTable(limpiezaTable, { x: 3.5, y: 1.0, ...tableOptionsCopy })
   }
+  const simulacionTable = buildSimpleTable('Resultados de la simulacion', map.resultadosSimulacion, data[simulacionData])
+  console.log('what is this', data, propuestaData)
+  slide.addTable(simulacionTable, { x: 3.5, y: 2.0, ...tableOptionsCopy })
   return slide
 }
 
@@ -416,17 +477,6 @@ export async function buildProductionChart(pptx, token, id) {
     data: base64, x: (13.3 - 7) / 2, y: 1,
     sizing: { type: 'contain', h: 5.25, w: 7 }
   })
-}
-
-export async function buildChartBase64(config) {
-  const domElement = document.createElement('div')
-  domElement.id = 'hiddenChart'
-  domElement.style.display = 'none'
-  document.body.appendChild(domElement)
-  const chart = new ReactHighcharts.Highcharts.Chart(config)
-  const dataURL = `data:image/svg+xml;base64,${btoa(unescape(encodeURIComponent(chart.getSVG())))}`
-  document.getElementById('hiddenChart').outerHTML = ''
-  return dataURL
 }
 
 export async function buildAforoChart(pptx, token, id) {
