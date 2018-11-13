@@ -108,6 +108,10 @@ const grabadoOptions = [
     return this.makeImageInput(index, 'cromatografiaDelGas')
   }
 
+  makeCurvaDeViscosidad(index) {
+    return this.makeImageInput(index, 'curvaDeViscosidad')
+  }
+
   makePruebaDeDureza(index) {
     return this.makeImageInput(index, 'pruebaDeDureza')
   }
@@ -649,6 +653,7 @@ const grabadoOptions = [
         cromatografiaDelGas: this.makeCromatografiaDelGas(i),
         pruebaDeDureza: this.makePruebaDeDureza(i),
         determinacionDeLaCalidad: this.makeDeterminacionDeLaCalidad(i),
+        curvaDeViscosidad: this.makeCurvaDeViscosidad(i),
       }
 
       return (
