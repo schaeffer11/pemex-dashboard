@@ -63,7 +63,7 @@ import TypeKPI from './TypeKPI'
   render() {
   	let { aforosData, costData, countData, estIncData, dateDiffData } = this.state
 
-    console.log(dateDiffData)
+    console.log(costData)
 
     aforosData = [{
         type: 'total',
@@ -88,22 +88,28 @@ import TypeKPI from './TypeKPI'
 
     costData = [{
         type: 'total',
-        cost: costData.reduce((sum, curr) => sum + curr.totalCost, 0)
+        cost: costData.reduce((sum, curr) => sum + curr.totalCost, 0),
+        estCost: costData.reduce((sum, curr) => sum + curr.totalEstimatedCost, 0)
     },{
         type: 'acido',
-        cost: costData.filter(i => i.interventionType === 'acido').reduce((sum, curr) => sum + curr.totalCost, 0)
+        cost: costData.find(i => i.interventionType === 'acido') ? costData.find(i => i.interventionType === 'acido').totalCost : 0,
+        estCost: costData.find(i => i.interventionType === 'acido') ? costData.find(i => i.interventionType === 'acido').totalEstimatedCot : 0
     },{
         type: 'apuntalado',
-        cost: costData.filter(i => i.interventionType === 'apuntalado').reduce((sum, curr) => sum + curr.totalCost, 0)
+        cost: costData.find(i => i.interventionType === 'apuntalado') ? costData.find(i => i.interventionType === 'apuntalado').totalCost : 0,
+        estCost: costData.find(i => i.interventionType === 'apuntalado') ? costData.find(i => i.interventionType === 'apuntalado').totalEstimatedCost : 0
     },{
         type: 'estimulacionLimpieza',
-        cost: costData.filter(i => i.interventionType === 'estimulacionLimpieza').reduce((sum, curr) => sum + curr.totalCost, 0)
+        cost: costData.find(i => i.interventionType === 'estimulacionLimpieza') ? costData.find(i => i.interventionType === 'estimulacionLimpieza').totalCost : 0,
+        estCost: costData.find(i => i.interventionType === 'estimulacionLimpieza') ? costData.find(i => i.interventionType === 'estimulacionLimpieza').totalEstimatedCost: 0
     },{
         type: 'estimulacionMatricial',
-        cost: costData.filter(i => i.interventionType === 'estimulacionMatricial').reduce((sum, curr) => sum + curr.totalCost, 0)
+        cost: costData.find(i => i.interventionType === 'estimulacionMatricial') ? costData.find(i => i.interventionType === 'estimulacionMatricial').totalCost : 0,
+        estCost: costData.find(i => i.interventionType === 'estimulacionMatricial') ? costData.find(i => i.interventionType === 'estimulacionMatricial').totalEstimatedCost : 0
     },{
         type: 'termico',
-        cost: costData.filter(i => i.interventionType === 'termico').reduce((sum, curr) => sum + curr.totalCost, 0)
+        cost: costData.find(i => i.interventionType === 'termico') ? costData.find(i => i.interventionType === 'termico').totalCost : 0,
+        estCost: costData.find(i => i.interventionType === 'termico') ? costData.find(i => i.interventionType === 'termico').totalEstimatedCost : 0
     }]
 
     let data = [{
@@ -115,7 +121,8 @@ import TypeKPI from './TypeKPI'
         prodEstimated: estIncData.reduce((sum, curr) => sum += curr.EST_INC_Qo, 0),
         prodReal: aforosData.find(i => i.type === 'total').qo,
         percEstimated: aforosData.find(i => i.type === 'total').qo * 100 / estIncData.reduce((sum, curr) => sum += curr.EST_INC_Qo, 0),
-        cost: costData.find(i => i.type === 'total') ? costData.find(i => i.type === 'total').cost : null,
+        cost: costData.find(i => i.type === 'total').cost,
+        estCost: costData.find(i => i.type === 'total').estCost,
         days: dateDiffData.reduce((sum, curr) => sum + (curr.avgDateDiff * curr.COUNT), 0) / dateDiffData.reduce((sum, curr) => sum + curr.COUNT, 0) 
     }, {
         name: 'Fractuarmiento Acido',
@@ -126,7 +133,8 @@ import TypeKPI from './TypeKPI'
         prodEstimated: estIncData.find(i => i.groupedName === 'acido') ? estIncData.find(i => i.groupedName === 'acido').EST_INC_Qo : null,
         prodReal: aforosData.find(i => i.type === 'acido') ? aforosData.find(i => i.type === 'acido').qo : null,
         percEstimated: estIncData.find(i => i.groupedName === 'acido') && aforosData.find(i => i.type === 'acido') ? aforosData.find(i => i.type === 'acido').qo * 100 / estIncData.find(i => i.groupedName === 'acido').EST_INC_Qo : null,
-        cost: costData.find(i => i.type === 'acido') ? costData.find(i => i.type === 'acido').cost : null,
+        cost: costData.find(i => i.type === 'acido').cost,
+        estCost: costData.find(i => i.type === 'acido').estCost,
         days: dateDiffData.find(i => i.type === 'acido') ? dateDiffData.find(i => i.type === 'acido').avgDateDiff : null
     }, {
         name: 'Fractuaramiento Apuntalado',
@@ -137,7 +145,8 @@ import TypeKPI from './TypeKPI'
         prodEstimated: estIncData.find(i => i.groupedName === 'apuntalado') ? estIncData.find(i => i.groupedName === 'apuntalado').EST_INC_Qo : null,
         prodReal: aforosData.find(i => i.type === 'apuntalado') ? aforosData.find(i => i.type === 'apuntalado').qo : null,
         percEstimated: estIncData.find(i => i.groupedName === 'apuntalado') && aforosData.find(i => i.type === 'apuntalado') ? aforosData.find(i => i.type === 'apuntalado').qo * 100 / estIncData.find(i => i.groupedName === 'apuntalado').EST_INC_Qo : null,
-        cost: costData.find(i => i.type === 'apuntalado') ? costData.find(i => i.type === 'apuntalado').cost : null,
+        cost: costData.find(i => i.type === 'apuntalado').cost,
+        estCost: costData.find(i => i.type === 'apuntalado').estCost,
         days: dateDiffData.find(i => i.type === 'apuntalado') ? dateDiffData.find(i => i.type === 'apuntalado').avgDateDiff : null
     }, {
         name: 'Estimulacion Limpieza',
@@ -148,7 +157,8 @@ import TypeKPI from './TypeKPI'
         prodEstimated: estIncData.find(i => i.groupedName === 'estimulacionLimpieza') ? estIncData.find(i => i.groupedName === 'estimulacionLimpieza').EST_INC_Qo : null,
         prodReal: aforosData.find(i => i.type === 'estimulacionLimpieza') ? aforosData.find(i => i.type === 'estimulacionLimpieza').qo : null,
         percEstimated: estIncData.find(i => i.groupedName === 'estimulacionLimpieza') && aforosData.find(i => i.type === 'estimulacionLimpieza') ? aforosData.find(i => i.type === 'estimulacionLimpieza').qo * 100 / estIncData.find(i => i.groupedName === 'estimulacionLimpieza').EST_INC_Qo : null,
-        cost: costData.find(i => i.type === 'estimulacionLimpieza') ? costData.find(i => i.type === 'estimulacionLimpieza').cost : null,
+        cost: costData.find(i => i.type === 'estimulacionLimpieza').cost,
+        estCost: costData.find(i => i.type === 'estimulacionLimpieza').estCost,
         days: dateDiffData.find(i => i.type === 'estimulacionLimpieza') ? dateDiffData.find(i => i.type === 'estimulacionLimpieza').avgDateDiff : null
     }, {
         name: 'Estimulacion Matricial',
@@ -159,7 +169,8 @@ import TypeKPI from './TypeKPI'
         prodEstimated: estIncData.find(i => i.groupedName === 'estimulacionMatricial') ? estIncData.find(i => i.groupedName === 'estimulacionMatricial').EST_INC_Qo : null,
         prodReal: aforosData.find(i => i.type === 'estimulacionMatricial') ? aforosData.find(i => i.type === 'estimulacionMatricial').qo : null,
         percEstimated: estIncData.find(i => i.groupedName === 'estimulacionMatricial') && aforosData.find(i => i.type === 'estimulacionMatricial') ? aforosData.find(i => i.type === 'estimulacionMatricial').qo * 100 / estIncData.find(i => i.groupedName === 'estimulacionMatricial').EST_INC_Qo : null,
-        cost: costData.find(i => i.type === 'estimulacionMatricial') ? costData.find(i => i.type === 'estimulacionMatricial').cost : null,
+        cost: costData.find(i => i.type === 'estimulacionMatricial').cost,
+        estCost: costData.find(i => i.type === 'estimulacionMatricial').estCost,
         days: dateDiffData.find(i => i.type === 'estimulacionMatricial') ? dateDiffData.find(i => i.type === 'estimulacionMatricial').avgDateDiff : null
     }, {
         name: 'Estimulacion Termica',
@@ -170,7 +181,8 @@ import TypeKPI from './TypeKPI'
         prodEstimated: estIncData.find(i => i.groupedName === 'termico') ? estIncData.find(i => i.groupedName === 'termico').EST_INC_Qo : null,
         prodReal: aforosData.find(i => i.type === 'termico') ? aforosData.find(i => i.type === 'termico').qo : null,
         percEstimated: estIncData.find(i => i.groupedName === 'termico') && aforosData.find(i => i.type === 'termico') ? aforosData.find(i => i.type === 'termico').qo * 100 / estIncData.find(i => i.groupedName === 'termico').EST_INC_Qo : null,
-        cost: costData.find(i => i.type === 'termico') ? costData.find(i => i.type === 'termico').cost : null,
+        cost: costData.find(i => i.type === 'termico').cost,
+        estCost: costData.find(i => i.type === 'termico').estCost,
         days: dateDiffData.find(i => i.type === 'termico') ? dateDiffData.find(i => i.type === 'termico').avgDateDiff : null
     }]
 
@@ -178,7 +190,7 @@ import TypeKPI from './TypeKPI'
 
 
 
-
+    console.log(data)
 
     return (
       <div className="data overview">

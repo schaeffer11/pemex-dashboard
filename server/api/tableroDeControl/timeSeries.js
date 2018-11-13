@@ -97,6 +97,7 @@ ${whereClause}
 GROUP BY ${groupByClause} YEAR(FECHA_INTERVENCION), MONTH(FECHA_INTERVENCION);
   `
 
+  console.log(query, values)
   connection.query(query, values, (err, results) => {
       console.log('comment err', err)
 

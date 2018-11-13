@@ -110,6 +110,10 @@ const rootReducer = (state, action) => {
     if (action.type === 'RESET_APP') {
       return state = Map({ user, app })
     }
+    if (action.type === 'RESET_APP_FROM_SUBMIT') {
+      
+      return state = Map({ user, app, global })
+    }
     if (action.type === 'LOGOUT') {
       state = undefined
     }
