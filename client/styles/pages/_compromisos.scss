@@ -1,27 +1,5 @@
 .compromisos {
-  background: $white;
   padding: 20px 40px;
-
-  .title {
-    font-size: 1.5em;
-    font-weight: bold;
-    padding-bottom: 1em;
-    margin-bottom: 1em;
-    color: #585858;
-    border-bottom: 1px solid #585858;
-  }
-
-  .cta {
-    float: right;
-    padding: 5px 10px;
-    font-size: 16px;
-    font-weight: normal;
-    background: #21658C;
-    color: #fff;
-    border-radius: 5px;
-    text-decoration: none;
-    margin: 18px 0;
-  }
 
   button.submit {
     display: block;
@@ -32,8 +10,6 @@
 
 .compromisos-table {
   .rt-thead {
-    background: #21658C;
-    color: white;
 
     .rt-th {
       padding: 10px !important;
@@ -49,30 +25,10 @@
           min-height: 30px;
         }
 
-        & > div:nth-child(3) {
-          position: absolute;
-          top: 0;
-
-          & > div {
-            width: auto;
-          }
-        }
-
-
         div[aria-hidden] {
           padding: 4px;
         }
       }
-    }
-  }
-
-  .rt-thead.-filters {
-    background-color: lightgray;
-  }
-
-  &.-striped {
-    .rt-tr.-odd{
-      background: #CADEF5;
     }
   }
 
@@ -100,7 +56,8 @@
     margin: auto;
     display: block;
     background: transparent;
-    color: #21658C;
+    color: $white;
+    text-decoration: underline;
     border: none;
   }
 }
@@ -153,15 +110,6 @@
     textarea {
       width: 100%;
     }
-
-    .buttons-group {
-      text-align: center;
-    }
-
-    button {
-      // margin: 2rem 5px 0;
-    }
-
   }
 }
 

@@ -254,9 +254,9 @@ let pieChart = {
             <div className="compromisos">
                 { this.state.openModal && <Modal compromisoId={this.state.compromisoId} handleClose={this.handleClose} onUpdateData={this.onUpdateData} activos={this.state.activos} users={this.state.users}/> }
 
-                <div className="title">
-                    <i className="far fa-caret-square-left" style={{position: 'relative', fontSize: '50px', left: '-20px', top: '7px', color: '#70AC46'}} onClick={(e) => this.props.history.push('/compromisos')}></i>
-                    SISTEMA DE SEGUIMIENTO DE COMPROMISOS Y REUNIONES
+                <div className="title">SISTEMA DE SEGUIMIENTO DE COMPROMISOS Y REUNIONES</div>
+                <div className="actions">
+                    <button className="cta clear" onClick={(e) => this.props.history.push('/compromisos')}><i className="fa fa-undo">&nbsp;</i></button>
                 </div>
                 { this.state.compromisos &&
                     <CompromisosTable
@@ -543,7 +543,7 @@ const Modal = (props) => {
             verticallyCenter={true}
             focusDialog={true}
             dialogClass="queryModalPartialReset"
-            dialogStyle={{verticalAlign: '', textAlign: 'center', maxHeight: '80%', marginTop: '2%'}}
+            dialogStyle={{verticalAlign: '', textAlign: 'center', maxHeight: '80%', marginTop: '20%'}}
         >
             <div className="compromisosModal" >
                 <CompromisosForm
