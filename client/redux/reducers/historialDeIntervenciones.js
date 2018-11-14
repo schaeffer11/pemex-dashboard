@@ -66,6 +66,7 @@ const initialState = fromJS({
         calidad: '',
         Qiny: '',
         aguaAcum: '',
+        error: true,
     }]
 })
 

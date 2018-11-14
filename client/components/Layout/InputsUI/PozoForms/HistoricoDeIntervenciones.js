@@ -634,7 +634,7 @@ let columnsApuntalado = [
     return (
       <div className='presion-table'>
         <div className='header'>
-          Histórico de tratamientos de estimulación
+          Histórico de tratamientos térmicos
         </div>
         {/* <ExcelUpload
           template='HistorialIntervencionesEstimulacion'
