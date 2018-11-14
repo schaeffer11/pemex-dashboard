@@ -1996,10 +1996,10 @@ export const create = async (body, action, cb) => {
                                                                   })
                                                                   historicoTermicoData.forEach(i => {
                                                                       if (action === 'save') {
-                                                                          values.push([wellFormacionID, 'termico', null, -999, -999, -999, -9999, -9999, -9999, -9999, -9999, -9999, -9999, -9999, -9999, -9999, -9999, -9999, -9999, -9999, -9999, -9999, -9999, -9999, -9999, -9999, -9999, -9999, i.ciclo,i.fechaInicio,i.fechaFin,i.Piny,i.Tiny, i.calidad, i.Qiny, i.aguaAcum, i.error, tableError, transactionID])
+                                                                          values.push([wellFormacionID, 'termico', null, -999, -999, -999, -9999, -9999, -9999, -9999, -9999, -9999, -9999, -9999, i.beneficioProgramado, i.beneficioOficial, -9999, -9999, -9999, -9999, -9999, -9999, -9999, -9999, -9999, -9999, -9999, -9999, i.ciclo,i.fechaInicio,i.fechaFin,i.Piny,i.Tiny, i.calidad, i.Qiny, i.aguaAcum, i.error, tableError, transactionID])
                                                                       }
                                                                       else {
-                                                                          values.push([wellFormacionID, 'termico', null, -999, -999, -999, -9999, -9999, -9999, -9999, -9999, -9999, -9999, -9999, -9999, -9999, -9999, -9999, -9999, -9999, -9999, -9999, -9999, -9999, -9999, -9999, -9999, -9999, i.ciclo,i.fechaInicio,i.fechaFin,i.Piny,i.Tiny, i.calidad, i.Qiny, i.aguaAcum, transactionID])
+                                                                          values.push([wellFormacionID, 'termico', null, -999, -999, -999, -9999, -9999, -9999, -9999, -9999, -9999, -9999, -9999, i.beneficioProgramado, i.beneficioOficial, -9999, -9999, -9999, -9999, -9999, -9999, -9999, -9999, -9999, -9999, -9999, -9999, i.ciclo,i.fechaInicio,i.fechaFin,i.Piny,i.Tiny, i.calidad, i.Qiny, i.aguaAcum, transactionID])
                                                                       }
                                                                       
                                                                   })                                                               

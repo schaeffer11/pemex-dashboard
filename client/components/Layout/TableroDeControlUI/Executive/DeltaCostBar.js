@@ -33,7 +33,7 @@ let colorWheel = [
 
     if (data.length > 0) {
       if (!groupBy) {
-        categories.push('Total Cost')
+        categories.push('Individual Cost Devations')
         series = [{
           name: ' ',
           data: data.map(i => {
@@ -89,7 +89,6 @@ let colorWheel = [
         categories: categories
       },
       yAxis: {
-        reversed: true,
         title: {
           text: 'Percentage'
         },
