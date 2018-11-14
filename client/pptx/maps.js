@@ -436,6 +436,13 @@ maps.propuesta = {
       actividad: { text: 'Actividad', unit: '' },
       descripcion: { text: 'Descripción', unit: '' },
       justificacion: { text: 'Justificación', unit: '' },
+    },
+    general: {
+      volumenVapor: { text: '', unit: units },
+      calidad: { text: '', unit: units },
+      gastoInyeccion: { text: '', unit: units },
+      presionMaximaSalidaGenerador: { text: '', unit: units },
+      temperaturaMaximaGenerador: { text: '', unit: units },
     }
   },
 }

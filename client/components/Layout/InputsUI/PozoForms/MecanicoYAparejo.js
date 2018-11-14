@@ -342,11 +342,6 @@ let tratamientoPorOptions = [
         }
       },
       {
-        Header: <div>Comments</div>,
-        accessor: 'comments',
-        cell: 'renderTextarea',
-      },
-      {
         Header: <div>Measured Depth<br></br>(m)</div>,
         accessor: 'measuredDepth',
         cell: 'renderNumber',
@@ -406,9 +401,13 @@ let tratamientoPorOptions = [
         accessor: 'longitude',
         cell: 'renderNumber',
       },
+      {
+        Header: <div>Comments</div>,
+        accessor: 'comments',
+        cell: 'renderTextarea',
+      },
     ]
     const rowObj = {
-      comments: '',
       measuredDepth: '',
       inclination: '',
       azimuth: '',
@@ -421,6 +420,7 @@ let tratamientoPorOptions = [
       easting: '',
       latitude: '',
       longitude: '',
+      comments: '',
       error: true,
     }
 
