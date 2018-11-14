@@ -147,6 +147,19 @@ let columnsTermico = [
     accessor: 'aguaAcum',
     cell: 'renderNumber',
   },
+  {
+    Header: <div>Beneficio<br/>(bpd)</div>,
+    columns: [{
+      Header: 'Programado',
+      accessor: 'beneficioProgramado',
+      cell: 'renderNumber'
+    }, 
+    {
+      Header: 'Oficial',
+      accessor: 'beneficioOficial',
+      cell: 'renderNumber'
+    }]
+  }
 ]
 
 let columnsAcido = [
@@ -616,6 +629,8 @@ let columnsApuntalado = [
       calidad: '',
       Qiny: '',
       aguaAcum: '',
+      beneficioProgramado: '',
+      beneficioOficial: '',
       error: true,
     }
 
@@ -629,6 +644,8 @@ let columnsApuntalado = [
       { name: 'calidad', type: 'number' },
       { name: 'Qiny', type: 'number' },
       { name: 'aguaAcum', type: 'number' },
+      { name: 'beneficioProgramado', type: 'number' },
+      { name: 'beneficioOficial', type: 'number' },
     ]
 
     return (
@@ -636,11 +653,11 @@ let columnsApuntalado = [
         <div className='header'>
           Histórico de tratamientos térmicos
         </div>
-        {/* <ExcelUpload
-          template='HistorialIntervencionesEstimulacion'
+        <ExcelUpload
+          template='HistorialIntervencionesTermicas'
           headers={errors}
           setData={setHistoricoEstimulacionData}
-        /> */}
+        />
         <div className='table'>
           <InputTable
             className="-striped"
