@@ -269,8 +269,6 @@ router.get('/getFormationTypes', (req, res) => {
   })
 })
 
-
-
 router.get('/getJobs', (req, res) => {
     let { well } = req.query
 
@@ -570,8 +568,8 @@ router.get('/getHistIntervencionesEstimulacionNew', async (req, res) => {
     }
     else {
       res.json({
-        mainParent: {
-          innerParent: [
+        [mainParent]: {
+          [innerParent]: [
           {}
           ]
         }
@@ -632,8 +630,8 @@ router.get('/getHistIntervencionesAcidoNew', async (req, res) => {
     }
     else {
       res.json({
-        mainParent: {
-          innerParent: [
+        [mainParent]: {
+          [innerParent]: [
           {}
           ]
         }
@@ -695,8 +693,65 @@ router.get('/getHistIntervencionesApuntaladoNew', async (req, res) => {
     }
     else {
       res.json({
-        mainParent: {
-          innerParent: [
+        [mainParent]: {
+          [innerParent]: [
+          {}
+          ]
+        }
+      })
+    }
+  })
+})
+
+router.get('/getHistIntervencionesTermicoNew', async (req, res) => {
+  let { transactionID, saved } = req.query
+
+  let action = saved ? 'loadSaveTermico' : 'loadTransactionTermico'
+  
+  const map = {
+    FECHA_INICIO: { child: 'fechaInicio' },
+    FECHA_FIN: { child: 'fechaFin' },
+    OBJETIVO: { child: 'objetivo' },
+    CICLO: { child: 'ciclo' },
+    P_INY: { child: 'Piny' },
+    T_INY: { child: 'Tiny' },
+    CALIDAD: { child: 'calidad' },
+    Q_INY: { child: 'Qiny' },
+    AGUA_ACUM: { child: 'aguaAcum' },
+    HAS_ERRORS: { child: 'error'}
+  }
+
+  const mainParent = 'historialDeIntervenciones'
+  const innerParent = 'historicoTermicoData'
+
+  getHistIntervencionesNew(transactionID, action, (data) => {
+    const finalObj = {}
+    if (data && data.length > 0) {
+      data.forEach((d, index) => {
+        d.FECHA_INICIO ? d.FECHA_INICIO = d.FECHA_INICIO.toJSON().slice(0, 10) : null
+        d.FECHA_FIN ? d.FECHA_FIN = d.FECHA_FIN.toJSON().slice(0, 10) : null
+        d.HAS_ERRORS = d.HAS_ERRORS === 0 || d.HAS_ERRORS === undefined ? false : true
+        const innerObj = {}
+        Object.keys(d).forEach(k => {
+          if (map[k]) {
+            const { child } = map[k]
+            objectPath.set(innerObj, child, d[k])
+          }
+        })
+        objectPath.set(innerObj, 'length', data.length)
+        objectPath.set(innerObj, 'index', index)
+        objectPath.push(finalObj, `${mainParent}.${innerParent}`, innerObj)
+      })
+
+      res.json(finalObj)
+    }
+    else if (action === 'loadTransaction'){
+      res.json({ err: 'No value found in database'  })
+    }
+    else {
+      res.json({
+        [mainParent]: {
+          [innerParent]: [
           {}
           ]
         }
@@ -827,8 +882,8 @@ router.get('/getHistIntervenciones', async (req, res) => {
     }
     else {
       res.json({
-        mainParent: {
-          innerParent: [
+        [mainParent]: {
+          [innerParent]: [
           {}
           ]
         }
@@ -943,8 +998,8 @@ router.get('/getLayer', async (req, res) => {
     }
     else {
       res.json({
-        mainParent: {
-          innerParent: [
+        [mainParent]: {
+          [innerParent]: [
           {}
           ]
         }
@@ -997,8 +1052,8 @@ router.get('/getMudLoss', async (req, res) => {
     }
     else {
       res.json({
-        mainParent: {
-          innerParent: [
+        [mainParent]: {
+          [innerParent]: [
           {}
           ]
         }
@@ -1406,8 +1461,8 @@ router.get('/getFieldPressure', async (req, res) => {
     }
     else {
       res.json({
-        mainParent: {
-          innerParent: [
+        [mainParent]: {
+          [innerParent]: [
           {}
           ],
           presionDataCampo: ''
@@ -1461,8 +1516,8 @@ router.get('/getWellPressure', async (req, res) => {
     }
     else {
       res.json({
-        mainParent: {
-          innerParent: [
+        [mainParent]: {
+          [innerParent]: [
           {}
           ],
           pressureDepthPozo: ''
@@ -1889,6 +1944,23 @@ router.get('/getInterventionTermico', async (req, res) => {
     GASTO_INYECCION: { parent: 'propuestaTermica', child: 'gastoInyeccion' },     
     PRESION_MAXIMA_SALIDA_GENERADOR: { parent: 'propuestaTermica', child: 'presionMaximaSalidaGenerador' },
     TEMPERATURA_MAXIMA_GENERADOR: { parent: 'propuestaTermica', child: 'temperaturaMaximaGenerador' }, 
+    EST_INC_ESTRANGULADOR: { parent: 'estIncProduccionTermico', child: 'estIncEstrangulador' },
+    EST_INC_Ptp: { parent: 'estIncProduccionTermico', child: 'estIncPtp' }, 
+    EST_INC_Ttp: { parent: 'estIncProduccionTermico', child: 'estIncTtp' }, 
+    EST_INC_Pbaj: { parent: 'estIncProduccionTermico', child: 'estIncPbaj' }, 
+    EST_INC_Tbaj: { parent: 'estIncProduccionTermico', child: 'estIncTbaj' },
+    EST_INC_Ptr: { parent: 'estIncProduccionTermico', child: 'estIncPtr' }, 
+    EST_INC_Qi: { parent: 'estIncProduccionTermico', child: 'estIncQl' }, 
+    EST_INC_Qo: { parent: 'estIncProduccionTermico', child: 'estIncQo' }, 
+    EST_INC_Qq: { parent: 'estIncProduccionTermico', child: 'estIncQg' }, 
+    EST_INC_Qw: { parent: 'estIncProduccionTermico', child: 'estIncQw' },
+    EST_INC_RGA: { parent: 'estIncProduccionTermico', child: 'estIncRGA' }, 
+    EST_INC_SALINIDAD: { parent: 'estIncProduccionTermico', child: 'estIncSalinidad' }, 
+    EST_INC_IP: { parent: 'estIncProduccionTermico', child: 'estIncIP' }, 
+    EST_INC_DELTA_P: { parent: 'estIncProduccionTermico', child: 'estIncDeltaP' }, 
+    EST_INC_GASTO_COMPROMISO_Qo: { parent: 'estIncProduccionTermico', child: 'estIncGastoCompromisoQo' },
+    EST_INC_GASTO_COMPROMISO_Qg: { parent: 'estIncProduccionTermico', child: 'estIncGastoCompromisoQg' }, 
+    EST_INC_OBSERVACIONES: { parent: 'estIncProduccionTermico', child: 'observacionesEstIncTermico' },
   } 
 
   getInterventionTermico(transactionID, action, (data) => {
@@ -1902,6 +1974,7 @@ router.get('/getInterventionTermico', async (req, res) => {
         }
       })   
       finalObj.propuestaTermica.hasErrors = data[0].HAS_ERRORS_PROPUESTA === 0 ? false : true
+      finalObj.estIncProduccionTermico.hasErrors = data[0].HAS_ERRORS_EST_INC === 0 ? false : true
     }
     else {
       Object.keys(map).forEach(key => {
@@ -1909,6 +1982,7 @@ router.get('/getInterventionTermico', async (req, res) => {
         objectPath.set(finalObj, `${parent}.${child}`, '')
       })
       finalObj.propuestaTermica.hasErrors = true
+      finalObj.estIncProduccionTermico.hasErrors = true
     }
     res.json(finalObj)
   })

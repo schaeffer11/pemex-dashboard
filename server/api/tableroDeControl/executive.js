@@ -483,23 +483,23 @@ router.get('/estIncData', (req, res) => {
   if (level) {
     whereClause += ` AND ${level} = ?`
     let val  = well ? well : field ? field : activo ? activo : subdir ? subdir : null
-    values = values.concat([val, val, val])
+    values = values.concat([val, val, val, val])
   }
   if (formation) {
     whereClause += ` AND FORMACION = ?`
-    values = values.concat([formation, formation, formation])
+    values = values.concat([formation, formation, formation, formation])
   }
   if (company) {
     whereClause += ' AND COMPANY = ?'
-    values = values.concat([company, company, company])
+    values = values.concat([company, company, company, company])
   }
   if (tipoDeIntervencion) {
     whereClause += ' AND TIPO_DE_INTERVENCIONES = ?'
-    values = values.concat([tipoDeIntervencion, tipoDeIntervencion, tipoDeIntervencion])
+    values = values.concat([tipoDeIntervencion, tipoDeIntervencion, tipoDeIntervencion, tipoDeIntervencion])
   }
   if (tipoDeTerminacion) {
     whereClause += ' AND TIPO_DE_TERMINACION = ?'
-    values = values.concat([tipoDeTerminacion, tipoDeTerminacion, tipoDeTerminacion])
+    values = values.concat([tipoDeTerminacion, tipoDeTerminacion, tipoDeTerminacion, tipoDeTerminacion])
   }
 
   let select = `1 as groupedName`
