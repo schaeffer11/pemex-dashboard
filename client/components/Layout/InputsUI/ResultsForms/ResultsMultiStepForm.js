@@ -107,7 +107,7 @@ const mergeKeys = elem => {
   render() {
     let { setShowForms, hasSubmitted, hasErrorsHistoricoDeAforosResults, hasErrorsEstCostResults, hasErrorsTratamientoEstimulacion, 
       hasErrorsTratamientoAcido, hasErrorsTratamientoApuntalado, tipoDeIntervencionesResults, hasErrorsEvaluacionApuntalado, 
-      hasErrorsEvaluacionAcido, hasErrorsEvaluacionEstimulacion, hasErrorsTratamientoTermico, hasErrorsResultadosGenerales, stimulationType } = this.props
+      hasErrorsEvaluacionAcido, hasErrorsEvaluacionEstimulacion, hasErrorsTratamientoTermico, hasErrorsEvaluacionTermica, hasErrorsResultadosGenerales, stimulationType } = this.props
     let className = 'subtab'
 
     let evaluacionErrors = 
@@ -117,7 +117,7 @@ const mergeKeys = elem => {
           ? hasErrorsEvaluacionAcido 
           : tipoDeIntervencionesResults === 'apuntalado' 
             ? hasErrorsEvaluacionApuntalado
-            : false
+            : hasErrorsEvaluacionTermica
 
     let tratamientoError = 
       tipoDeIntervencionesResults === 'estimulacion' 
@@ -179,6 +179,7 @@ const mapStateToProps = state => ({
   hasErrorsEvaluacionApuntalado: state.getIn(['evaluacionApuntalado', 'hasErrors']),
   hasErrorsEvaluacionAcido: state.getIn(['evaluacionAcido', 'hasErrors']),
   hasErrorsEvaluacionEstimulacion: state.getIn(['evaluacionEstimulacion', 'hasErrors']),
+  hasErrorsEvaluacionTermica: state.getIn(['evaluacionTermica', 'hasErrors']),
   hasErrorsResultadosGenerales: state.getIn(['resultadosGenerales', 'hasErrors']),
   tipoDeIntervencionesResults: state.getIn(['resultsMeta', 'interventionType']),
 })
