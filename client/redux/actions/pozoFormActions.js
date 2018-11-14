@@ -189,24 +189,7 @@ export function submitForm(action, token, saveName) {
           let notificationType = ''
           let notificationText = ''
           if (isSubmitted) {
-            dispatch(setShowForms(false))
             dispatch({ type: 'RESET_APP_FROM_SUBMIT' })
-            setTimeout(dispatch(setIsLoading({
-              notificationType: 'success',
-              notificationText: 'Su información se ha guardado',
-              isLoading: false,
-              showNotification: true,
-              showForms: false,
-              saved: null,
-              loaded: null,
-              submitted: null,
-              loadText: null,
-              currentPage: '',
-              selectedTab: 'Pozo',
-              hasSubmitted: false,
-              transactionID: null,
-              saveName: null,
-            })), 200)
           } else {
             notificationType = 'error'
             notificationText = 'Su información no se guardó ningún campo puede estar vacio'

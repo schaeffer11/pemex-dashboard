@@ -113,8 +113,23 @@ const rootReducer = (state, action) => {
       return state = Map({ user, app })
     }
     if (action.type === 'RESET_APP_FROM_SUBMIT') {
-      
-      return state = Map({ user, app, global })
+      let newGlobal = {
+        notificationType: 'success',
+        notificationText: 'Su información se ha guardado',
+        isLoading: false,
+        showNotification: true,
+        showForms: false,
+        saved: null,
+        loaded: null,
+        submitted: null,
+        loadText: null,
+        currentPage: '',
+        selectedTab: 'Pozo',
+        hasSubmitted: false,
+        transactionID: null,
+        saveName: null 
+      }
+      return state = Map({ user, app, global: newGlobal })
     }
     if (action.type === 'LOGOUT') {
       state = undefined
