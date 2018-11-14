@@ -457,7 +457,7 @@ export const createResults = async (body, action, cb) => {
                   }
 
                   values = [interventionID, wellFormacionID, fechaIntervencion, justificacionIntervencion, 
-                  comentariosIntervencion, propuestaID, transactionID]
+                  comentariosIntervencion, qo, qg, qw, propuestaID, transactionID]
 
                   connection.query(INSERT_RESULTS_QUERY.submit, values, (err, results) => {
                     console.log('results', err)

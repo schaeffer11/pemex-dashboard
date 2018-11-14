@@ -220,21 +220,23 @@ export function submitResultsForm(action, token) {
       })
         .then(r => r.json())
         .then(({ isSubmitted }) => {
-          let notificationType = ''
-          let notificationText = ''
           if (isSubmitted) {
-            notificationType = 'success'
-            notificationText = 'Su información se ha guardado'
+            dispatch({ type: 'RESET_APP_FROM_SUBMIT' })
+            
+            setTimeout(dispatch(setIsLoading({
+              notificationType: 'success',
+              notificationText: 'Su información se ha guardado',
+              isLoading: false,
+              showNotification: true,
+            })), 300)
           } else {
-            notificationType = 'error'
-            notificationText = 'Su información no se guardó ningún campo puede estar vacio'
+            dispatch(setIsLoading({
+              notificationType : 'error',
+              notificationText : 'Su información no se guardó ningún campo puede estar vacio',
+              isLoading: false,
+              showNotification: true,
+            }))
           }
-          dispatch(setIsLoading({
-            notificationType,
-            notificationText,
-            isLoading: false,
-            showNotification: true,
-          }))
         })
     }
   }
