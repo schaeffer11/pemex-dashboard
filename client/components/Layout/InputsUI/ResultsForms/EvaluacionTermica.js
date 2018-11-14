@@ -27,7 +27,7 @@ import { setGeneralEvaluacionTermica } from '../../../../redux/actions/results'
   }
 
   componentDidMount() {
-    let { hasSubmitted, setMergeEvaluacionTermica } = this.props
+    let { hasSubmitted, setGeneralEvaluacionTermica } = this.props
     let hasErrors = this.checkAllInputs(hasSubmitted)
     setGeneralEvaluacionTermica(['hasErrors'], hasErrors)
   }
