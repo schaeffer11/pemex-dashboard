@@ -570,8 +570,9 @@ router.get('/getHistIntervencionesEstimulacionNew', async (req, res) => {
       res.json({
         [mainParent]: {
           [innerParent]: [
-          {}
-          ]
+          {error: true}
+          ],
+          hasErrors: true
         }
       })
     }
@@ -632,8 +633,9 @@ router.get('/getHistIntervencionesAcidoNew', async (req, res) => {
       res.json({
         [mainParent]: {
           [innerParent]: [
-          {}
-          ]
+          {error: true}
+          ],
+          hasErrors: true
         }
       })
     }
@@ -695,8 +697,9 @@ router.get('/getHistIntervencionesApuntaladoNew', async (req, res) => {
       res.json({
         [mainParent]: {
           [innerParent]: [
-          {}
-          ]
+          {error: true}
+          ],
+          hasErrors: true
         }
       })
     }
@@ -752,8 +755,9 @@ router.get('/getHistIntervencionesTermicoNew', async (req, res) => {
       res.json({
         [mainParent]: {
           [innerParent]: [
-          {}
-          ]
+          {error: true}
+          ],
+          hasErrors: true
         }
       })
     }
@@ -901,12 +905,19 @@ router.get('/getSurvey', async (req, res) => {
 
 
   const map = {
-    PROFUNDIDAD: { child: 'depth' },
-    INCLINACION: { child: 'inclination'},
-    AZIMUT: { child: 'azimuth'},
-    MV: { child: 'trueVerticalDepth'},
-    X: { child: 'x_offset'},
-    Y: { child: 'y_offset'},
+    COMMENTS: { child: 'comments' },
+    MEASURED_DEPTH: { child: 'measuredDepth'},
+    INCLINATION: { child: 'inclination'},
+    AZIMUTH: { child: 'azimuth'},
+    TRUE_VERTICAL_DEPTH: { child: 'trueVerticalDepth'},
+    VERTICAL_SECTION: { child: 'verticalSection'},
+    NS: { child: 'ns'},
+    EW: { child: 'ew'},
+    DLS: { child: 'dls'},
+    NORTHING: { child: 'northing'},
+    EASTING: { child: 'easting'},
+    LATITUDE: { child: 'latitude'},
+    LONGITUDE: { child: 'longitude'},
     HAS_ERRORS: { child: 'error'}
   }
 
@@ -938,7 +949,7 @@ router.get('/getSurvey', async (req, res) => {
       res.json({
         [mainParent]: {
           [innerParent]: [
-          {depth: '', inclination: '', azimuth: '', trueVerticalDepth: '', x_offset: '', y_offset: '', error: true}
+          {comments: '', measuredDepth: '', inclination: '', azimuth: '', trueVerticalDepth: '', verticalSection: '', ns: '', ew: '', dls: '', northing: '', easting: '', latitude: '', longitude: '', error: true}
           ]
         }
       })
