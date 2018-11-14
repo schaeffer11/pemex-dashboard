@@ -18,6 +18,7 @@ function buildMasterSlide(slideWidth, slideHeight) {
     bkgd: 'e2e2e2',
     fontFace: 'Arial Narrow',
     slideNumber: { x:12.5, y:'92%', fontSize: 18 },
+    margin: 0.5,
     objects: [
       { rect: bottomBarLight },
       { rect: bottomBarDarkLeft },
@@ -29,6 +30,8 @@ function buildMasterSlide(slideWidth, slideHeight) {
     ]
   }
 }
+
+export const getMiddle = (len) => (13.3 - len) / 2
 
 export async function getData(url, token, id) {
   const headers = {
@@ -149,7 +152,9 @@ export async function buildChartBase64(config) {
 
 export const tableOptions = {
   fontSize: 8,
-  colW: '2',
+  // colW: '2',
+  w: 4,
+  align: 'center',
 }
 
 function buildSectionSlide(pptx, title) {
@@ -166,7 +171,7 @@ async function getHasresults(token, id) {
     },
   }
   const data = await fetch(`/job/generalResults?transactionID=${id}`, headers).then(r => r.json())
-  return Object.keys(data) > 0
+  return Object.keys(data).length > 0
 }
 
 export async function generatePowerPoint(token, jobID, wellID, jobType) {
@@ -197,6 +202,7 @@ export async function generatePowerPoint(token, jobID, wellID, jobType) {
   await buildProposalCedula(pptx, token, jobID)
   await buildGeneralProposal(pptx, token, jobID)
   await buildLabReports(pptx, token, jobID, images.pruebasDeLaboratorio)
+  // console.log('has results', hasResults)
   if (hasResults) {
     buildSectionSlide(pptx, 'Información de los resultados')
     await buildResultsCedula(pptx, token, jobID, jobType)

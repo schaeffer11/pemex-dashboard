@@ -541,7 +541,7 @@ maps.pruebasDeLaboratorio = {
 
 maps.historialDeIntervenciones = {
   general: {
-    fecha: { text: 'Fecha', unit: '' },
+    fecha: { text: 'Fecha', unit: '', width: .5 },
     intervenciones: { text: 'Historial de intervenciones', unit: '' },
   },
   estimulacion: {

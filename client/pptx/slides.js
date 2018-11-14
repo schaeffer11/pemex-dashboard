@@ -1,4 +1,4 @@
-import { getData, buildSimpleTable, buildTable, tableOptions, getPostData, buildChartBase64 } from './index'
+import { getData, buildSimpleTable, buildTable, tableOptions, getPostData, buildChartBase64, getMiddle } from './index'
 import { maps } from './maps'
 import { getBase64FromURL } from '../redux/actions/pozoFormActions'
 
@@ -156,16 +156,17 @@ export async function buildResultsCedula(pptx, token, id, interventionType) {
   console.log('intervals', intervals)
   const cedulaMap = maps.propuesta[interventionType.toLowerCase()].cedulaData
   const cedulaTable = buildTable('Cedula de tratamiento', cedulaMap, cedulaData)
+  const generalTable = buildSimpleTable('', maps.generalResults, { ...generalResults, intervals }, false)
+  
+  const mainSlide = pptx.addNewSlide('MASTER_SLIDE')
+  mainSlide.addText('Tratamiento', { placeholder: 'slide_title' })
+  mainSlide.addTable(generalTable, { x: getMiddle(10), y: 1.0, colW: [2.0, 8.0], fontSize: 24 })
+
   const tableOptionsCopy = { ...tableOptions }
-
-
-  const generalTable = buildSimpleTable('General', maps.generalResults, { ...generalResults, intervals }, false)
-  console.log('dataResults', generalTable, cedulaTable)
   const slide = pptx.addNewSlide('MASTER_SLIDE')
   slide.addText('Cédula de tratamiento', { placeholder: 'slide_title' })
-  slide.addTable(generalTable, { x: 0.5, y: 1.0, ...tableOptionsCopy })
-  delete tableOptionsCopy.colW
-  slide.addTable(cedulaTable, { x: 0.5, y: 2.5, ...tableOptionsCopy })
+  delete tableOptionsCopy.w
+  slide.addTable(cedulaTable, { x: 0.5, y: 1.0, ...tableOptionsCopy })
 }
 
 export async function buildProposalCedula(pptx, token, id, isResults=false) {
@@ -189,25 +190,25 @@ export async function buildProposalCedula(pptx, token, id, isResults=false) {
       return
   }
 
+  const data = await getData(cedulaURL, token, id)
+  const layers = await getData('getLayer', token, id)
+  const { cedulaData, propuestaCompany } = data[Object.keys(data)[0]]
+  const { layerData } = layers.evaluacionPetrofisica
+  const cedulaMap = maps.propuesta[interventionType].cedulaData
+  const intervals = layerData.map(elem => `${elem.cimaMD}-${elem.baseMD}`).join('\n')
+  
+  const cedulaTable = buildTable('Cedula de tratamiento', cedulaMap, cedulaData)
+  const generalTable = buildSimpleTable('', maps.propuestaGeneral, { propuestaCompany, intervals }, false)
+  console.log('generaltable', generalTable)
+  const mainSlide = pptx.addNewSlide('MASTER_SLIDE')
+  mainSlide.addText('Propuesta', { placeholder: 'slide_title' })
+  mainSlide.addTable(generalTable, { x: getMiddle(10), y: 1.0, colW: [2.0, 8.0], fontSize: 24 })
 
+  const tableOptionsCopy = { ...tableOptions }
+  delete tableOptionsCopy.w
   const slide = pptx.addNewSlide('MASTER_SLIDE')
   slide.addText('Propuesta de tratamiento', { placeholder: 'slide_title' })
-  const data = await getData(cedulaURL, token, id)
-  const { cedulaData, propuestaCompany } = data[Object.keys(data)[0]]
-  const layers = await getData('getLayer', token, id)
-  const { layerData } = layers.evaluacionPetrofisica
-  const intervals = layerData.map(elem => `${elem.cimaMD}-${elem.baseMD}`).join('\n')
-  const cedulaMap = maps.propuesta[interventionType].cedulaData
-  const cedulaTable = buildTable('Cedula de tratamiento', cedulaMap, cedulaData)
-  const tableOptionsCopy = { ...tableOptions }
-
-
-  const generalTable = buildSimpleTable('General', maps.propuestaGeneral, { propuestaCompany, intervals })
-
-  slide.addTable(generalTable, { x: 0.5, y: 1.0, ...tableOptionsCopy })
-  delete tableOptionsCopy.colW
-  slide.addTable(cedulaTable, { x: 0.5, y: 2.5, ...tableOptionsCopy })
-
+  slide.addTable(cedulaTable, { x: 0.5, y: 1.0, ...tableOptionsCopy })
   return slide
 }
 
@@ -297,16 +298,16 @@ export async function buildGeneralProposal(pptx, token, id) {
 
   if (interventionType === 'estimulacion' && data[propuestaData].tipoDeEstimulacion === 'limpieza') {
     const limpiezaTable = buildSimpleTable('Limpieza de Aparejo', map.general, data[propuestaData])
-    slide.addTable(limpiezaTable, { x: 3.5, y: 1.0, ...tableOptionsCopy })
+    slide.addTable(limpiezaTable, { x: 0.5, y: 4.0, ...tableOptionsCopy })
   }
 
   if (map.resultadosSimulacion) {
     const simulacionTable = buildSimpleTable('Resultados de la simulación', map.resultadosSimulacion, data[simulacionData])
-    slide.addTable(simulacionTable, { x: 3.5, y: 2.0, ...tableOptionsCopy })
+    slide.addTable(simulacionTable, { x: 0.5, y: 4.0, ...tableOptionsCopy })
   }
 
   const estimacionTable = buildSimpleTable('Estimación', maps.estimacionProduccion, data[estimacionProduccionData])
-  slide.addTable(estimacionTable, { x: 3.5, y: 2.0, ...tableOptionsCopy })
+  slide.addTable(estimacionTable, { x: 7.5, y: 1.0, ...tableOptionsCopy })
 
   return slide
 }
@@ -373,12 +374,13 @@ export async function buildLabReports(pptx, token, id, images) {
   }
 }
 
-function buildHistoricSlides(pptx, data, map, title) {
+function buildHistoricSlides(pptx, data, map, title, options=false) {
   if (data.length > 0) {
+    let tableOptions = options || {}
     const table = buildTable('', map, data)
     const slide = pptx.addNewSlide('MASTER_SLIDE')
     slide.addText(title, { placeholder: 'slide_title' })
-    slide.addTable(table)
+    slide.addTable(table, tableOptions)
   }
 }
 
@@ -392,7 +394,8 @@ export async function buildHistorialIntervenciones(pptx, token, id) {
   const { historicoApuntaladoData } = dataApuntalado.historialDeIntervenciones
   const { general, estimulacion, acido, apuntalado } = maps.historialDeIntervenciones
 
-  buildHistoricSlides(pptx, dataGeneral.fichaTecnicaDelPozo.historialIntervencionesData, general, 'Historial de intervenciones')
+  buildHistoricSlides(pptx, dataGeneral.fichaTecnicaDelPozo.historialIntervencionesData, general, 'Historial de intervenciones', { x: getMiddle(7), colW: [1, 6] })
+
   buildHistoricSlides(pptx, historicoEstimulacionData, estimulacion, 'Historial de intervenciones de estimulacion')
   buildHistoricSlides(pptx, historicoAcidoData, acido, 'Historial de intervenciones de acido')
   buildHistoricSlides(pptx, historicoApuntaladoData, apuntalado, 'Historial de intervenciones de apuntalado')
