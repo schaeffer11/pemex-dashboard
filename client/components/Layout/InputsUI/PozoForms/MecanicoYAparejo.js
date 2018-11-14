@@ -342,53 +342,101 @@ let tratamientoPorOptions = [
         }
       },
       {
-        Header: <div>Profundidad<br></br>(m)</div>,
-        accessor: 'depth',
+        Header: <div>Comments</div>,
+        accessor: 'comments',
+        cell: 'renderTextarea',
+      },
+      {
+        Header: <div>Measured Depth<br></br>(m)</div>,
+        accessor: 'measuredDepth',
         cell: 'renderNumber',
       },
       {
-        Header: <div>Inclinación<br></br>(grados)</div>,
+        Header: <div>Inclination<br></br>(deg)</div>,
         accessor: 'inclination',
         cell: 'renderNumber',
       },
       {
-        Header: <div>Azimut<br></br>(grados)</div>,
+        Header: <div>Azimuth<br></br>(deg)</div>,
         accessor: 'azimuth',
         cell: 'renderNumber',
       },
       {
-        Header: <div>MV<br></br>(metros)</div>,
+        Header: <div>TVD<br></br>(m)</div>,
         accessor: 'trueVerticalDepth',
         cell: 'renderNumber',
       },
       {
-        Header: <div>X<br></br>(metros)</div>,
-        accessor: 'x_offset',
+        Header: <div>Vertical Section<br></br>(m)</div>,
+        accessor: 'verticalSection',
         cell: 'renderNumber',
       },
       {
-        Header: <div>Y<br></br>(metros)</div>,
-        accessor: 'y_offset',
+        Header: <div>NS<br></br>(m)</div>,
+        accessor: 'ns',
+        cell: 'renderNumber',
+      },
+      {
+        Header: <div>EW<br></br>(m)</div>,
+        accessor: 'ew',
+        cell: 'renderNumber',
+      },
+      {
+        Header: <div>DLS<br></br>(deg/30m)</div>,
+        accessor: 'dls',
+        cell: 'renderNumber',
+      },
+      {
+        Header: <div>Northing<br></br>(m)</div>,
+        accessor: 'northing',
+        cell: 'renderNumber',
+      },
+      {
+        Header: <div>Easting<br></br>(m)</div>,
+        accessor: 'easting',
+        cell: 'renderNumber',
+      },
+      {
+        Header: <div>Latitude</div>,
+        accessor: 'latitude',
+        cell: 'renderNumber',
+      },
+      {
+        Header: <div>Longitude</div>,
+        accessor: 'longitude',
         cell: 'renderNumber',
       },
     ]
     const rowObj = {
-      depth: '',
+      comments: '',
+      measuredDepth: '',
       inclination: '',
       azimuth: '',
       trueVerticalDepth: '',
-      x_offset: '',
-      y_offset: '',
+      verticalSection: '',
+      ns: '',
+      ew: '',
+      dls: '',
+      northing: '',
+      easting: '',
+      latitude: '',
+      longitude: '',
       error: true,
     }
+
     const errors = [
-      { name: 'depth', type: 'number' },
+      { name: 'measuredDepth', type: 'number' },
       { name: 'inclination', type: 'number' },
       { name: 'azimuth', type: 'number' },
       { name: 'trueVerticalDepth', type: 'number' },
-      { name: 'x_offset', type: 'number' },
-      { name: 'y_offset', type: 'number' },
-      { name: 'error', type: 'number' },
+      { name: 'verticalSection', type: 'number' },
+      { name: 'ns', type: 'number' },
+      { name: 'ew', type: 'number' },
+      { name: 'dls', type: 'number' },
+      { name: 'northing', type: 'number' },
+      { name: 'easting', type: 'number' },
+      { name: 'latitude', type: 'number' },
+      { name: 'longitude', type: 'number' },
     ]
     return (
       <div>
