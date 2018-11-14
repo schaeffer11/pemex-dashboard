@@ -47,6 +47,18 @@ import { setGeneralEvaluacionAcido, setMergeEvaluacionAcido } from '../../../../
           type: 'number',
           value: '',
         },
+        qo: {
+          type: 'number',
+          value: '',
+        },
+        qw: {
+          type: 'number',
+          value: '',
+        },
+        qg: {
+          type: 'number',
+          value: '',
+        },
       }
     }
   }
@@ -202,6 +214,45 @@ import { setGeneralEvaluacionAcido, setMergeEvaluacionAcido } from '../../../../
     )
   }
 
+  makeProductionResults() {
+    let { formData, setGeneralEvaluacionAcido } = this.props
+    let { qo, qg, qw } = formData
+    return (
+      <div className='result-form' >
+        <div className='header'>
+          Producción post-intervención
+        </div>
+        <InputRow
+          header={<div>Q<sub>o</sub></div>}
+          name='qo'
+          unit="bpd"
+          value={qo}
+          onChange={e => setGeneralEvaluacionAcido(['qo'], e)}
+          errors={this.state.errors}
+          onBlur={this.updateErrors}
+        />
+        <InputRow
+          header={<div>Q<sub>g</sub></div>}
+          name='qg'
+          unit="MMpcd"
+          value={qg}
+          onChange={e => setGeneralEvaluacionAcido(['qg'], e)}
+          errors={this.state.errors}
+          onBlur={this.updateErrors}
+        />
+        <InputRow
+          header={<div>Q<sub>w</sub></div>}
+          name='qw'
+          unit="bbl"
+          value={qw}
+          onChange={e => setGeneralEvaluacionAcido(['qw'], e)}
+          errors={this.state.errors}
+          onBlur={this.updateErrors}
+        />
+      </div>
+    )
+  }
+
   handleFileUpload(e, index, intervalo) {
     console.log('da index', index)
     const { setGeneralEvaluacionAcido } = this.props
@@ -240,6 +291,7 @@ import { setGeneralEvaluacionAcido, setMergeEvaluacionAcido } from '../../../../
         <div className='image' />
         <div className='left'>
           { this.makeResultForm() }
+          { this.makeProductionResults() }
           { this.makeGeometryInput() }
         </div>
       </div>

@@ -11,6 +11,9 @@ const initialState = fromJS({
   fcd: '',
   presionNeta: '',
   eficienciaDeFluidoDeFractura: '',
+  qo: '',
+  qw: '',
+  qg: '',
   geometria: [{
     intervalo: '',
     imgURL: '',

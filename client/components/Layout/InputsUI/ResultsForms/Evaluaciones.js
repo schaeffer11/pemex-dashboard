@@ -12,6 +12,8 @@ const Evaluaciones = ({ interventionType }) => {
       return <EvaluacionAcido />
     case 'apuntalado':
       return <EvaluacionApuntalado />
+    // case 'termico':
+    //   return <EvaluacionApuntalado />
     default:
       return <div>Nothing</div>
   }

@@ -49,6 +49,14 @@ export const setGeneralEvaluacionAcido = (location, value) => ({
   type: 'set_generalEvaluacionAcido',
 })
 
+export const setGeneralEvaluacionTermica = (location, value) => ({
+  location,
+  value,
+  type: 'set_generalEvaluacionTermica',
+})
+
+
+
 export const setMergeEvaluacionAcido = (value) => ({
   value,
   type: 'set_mergeEvaluacionAcido',
