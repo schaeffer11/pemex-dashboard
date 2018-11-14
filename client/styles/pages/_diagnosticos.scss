@@ -1,15 +1,6 @@
 .diagnostico {
   padding: .7em;
 
-  .title {
-    font-size: 1.5em;
-    font-weight: bold;
-    padding-bottom: 1em;
-    margin-bottom: 1em;
-    color: $table-row-font-color;
-    border-bottom: 1px solid $primary-border-color;
-  }
-
   .import {
     float: right;
   }
@@ -17,7 +8,7 @@
   .heading {
     width: 100%;
     clear: both;
-    padding: 25px;
+    padding: 25px 0;
     margin-bottom: 5px;
     display: table;
 
@@ -28,7 +19,7 @@
   }
 
   .activo {
-    margin: 0 25px 25px;
+    margin: 0 0 25px;
 
     .input {
       max-width: 500px;
@@ -36,10 +27,12 @@
   }
 
   .header {
+    background:  $table-head-color;
+    color: $table-head-font-color;
+
     > div {
       display: inline-block;
       padding: 5px;
-      background: $table-row-alt-color;
       font-weight: bold;
     }
   }
