@@ -721,6 +721,8 @@ router.get('/getHistIntervencionesTermicoNew', async (req, res) => {
     CALIDAD: { child: 'calidad' },
     Q_INY: { child: 'Qiny' },
     AGUA_ACUM: { child: 'aguaAcum' },
+    BENEFICIO_PROGRAMADO: { child: 'beneficioProgramado'},
+    BENEFICIO_OFICIAL: { child: 'beneficioOficial'},
     HAS_ERRORS: { child: 'error'}
   }
 

@@ -10,6 +10,7 @@ import Filters from '../Common/Filters'
 import Card from '../Common/Card'
 import { CardDeck } from 'reactstrap';
 import CostBar from './CostBar'
+import AvgCostBar from './AvgCostBar'
 import DeltaCostBar from './DeltaCostBar'
 import AvgDeltaCostBar from './AvgDeltaCostBar'
 import ExecutiveTable from './ExecutiveTable'
@@ -22,7 +23,6 @@ import ExecutiveTable from './ExecutiveTable'
       aforosData: [],
       aforosCarouselData: [],
       costData: [],
-      costDataAverage: [],
       singularCostData: [],
       execTableData: [],
       estIncData: [],
@@ -67,7 +67,6 @@ import ExecutiveTable from './ExecutiveTable'
   	let aforosQuery = `/executive/aforosData?` + params.join('&')
     let aforosCarouselQuery = `/executive/aforosData?` + params.join('&') + `&carousel=1`
     let costQuery = `/executive/costData?` + params.join('&')
-    let avgCostQuery = `/executive/costData?` + params.join('&') + `&avg=1`
     let singularCostQuery = `/executive/costData?` + params.join('&') + `&noGroup=1`
     let execTableQuery = `/executive/tableData?` + params.join('&')
     let estIncQuery = `/executive/estIncData?` + params.join('&')
@@ -78,7 +77,6 @@ import ExecutiveTable from './ExecutiveTable'
       fetch(aforosQuery, headers).then(r => r.json()),
       fetch(aforosCarouselQuery, headers).then(r => r.json()),
       fetch(costQuery, headers).then(r => r.json()),
-      fetch(avgCostQuery, headers).then(r => r.json()),
       fetch(singularCostQuery, headers).then(r => r.json()),
       fetch(execTableQuery, headers).then(r => r.json()),
       fetch(estIncQuery, headers).then(r => r.json()),
@@ -94,11 +92,10 @@ import ExecutiveTable from './ExecutiveTable'
       aforosData: data[1],
       aforosCarouselData: data[2],
       costData: data[3],
-      costDataAverage: data[4],
-      singularCostData: data[5], 
-      execTableData: data[6],
-      estIncData: data[7],
-      volumeData: data[8]
+      singularCostData: data[4], 
+      execTableData: data[5],
+      estIncData: data[6],
+      volumeData: data[7]
     }
 
     this.setState(newState)
@@ -126,7 +123,7 @@ import ExecutiveTable from './ExecutiveTable'
   }
 
   render() {
-    let { jobBreakdownData, aforosData, aforosCarouselData, costData, costDataAverage, singularCostData, execTableData, estIncData, volumeData } = this.state
+    let { jobBreakdownData, aforosData, aforosCarouselData, costData, singularCostData, execTableData, estIncData, volumeData } = this.state
     let { globalAnalysis } = this.props
     globalAnalysis = globalAnalysis.toJS()
     let { groupBy } = globalAnalysis
@@ -161,15 +158,15 @@ import ExecutiveTable from './ExecutiveTable'
                 ref={this.cards[2]}
               >
               <CostBar label={'Total'} data={costData} groupBy={groupBy} />  
-              <CostBar label={'Average'} data={costDataAverage} groupBy={groupBy} />  
+              <AvgCostBar label={'Average'} data={costData} groupBy={groupBy} />  
             </Card>
             <Card
                 id="costDeviations"
                 title="Cost Deviations"
                 ref={this.cards[3]}
               >       
-              <DeltaCostBar label={'Total'} data={singularCostData} groupBy={groupBy} />
-              <AvgDeltaCostBar label={'Avg'} data={costDataAverage} groupBy={groupBy} />
+              <DeltaCostBar label={'Individual'} data={singularCostData} groupBy={groupBy} />
+              <AvgDeltaCostBar label={'Avg'} data={costData} groupBy={groupBy} />
             </Card>
           </CardDeck>
           <ExecutiveTable data={execTableData} estIncData={estIncData} aforosData={aforosData} volumeData={volumeData} groupBy={groupBy} />
