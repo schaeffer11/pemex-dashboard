@@ -36,6 +36,7 @@ import tratamientoTermico from './reducers/tratamientoTermico'
 import evaluacionAcido from './reducers/evaluacionAcido'
 import evaluacionApuntalado from './reducers/evaluacionApuntalado'
 import evaluacionEstimulacion from './reducers/evaluacionEstimulacion'
+import evaluacionTermica from './reducers/evaluacionTermica'
 import resultsMeta from './reducers/resultsMeta'
 import graficaTratamiento from './reducers/graficaTratamiento'
 import resultadosGenerales from './reducers/resultadosGenerales'
@@ -85,6 +86,7 @@ const appReducer = combineReducers({
   evaluacionAcido,
   evaluacionApuntalado,
   evaluacionEstimulacion,
+  evaluacionTermica,
   graficaTratamiento,
   resultadosGenerales,
   resultsMeta,

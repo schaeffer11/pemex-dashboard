@@ -162,7 +162,7 @@ export function submitResultsForm(action, token) {
  
     let filteredKeys = ['user', 'global', 'graficaTratamiento', 'historicoDeAforosResults', 'estCostResults', 
     'tratamientoEstimulacion', 'tratamientoAcido', 'tratamientoApuntalado', 'tratamientoTermico',
-    'evaluacionApuntalado', 'evaluacionAcido', 'evaluacionEstimulacion', 'resultsMeta', 'resultadosGenerales']
+    'evaluacionApuntalado', 'evaluacionAcido', 'evaluacionEstimulacion', 'evaluacionTermica', 'resultsMeta', 'resultadosGenerales']
 
 
     // const { pozo } = convertedFields.global
