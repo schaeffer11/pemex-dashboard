@@ -52,8 +52,6 @@ const LinkButton = ({ text, disabled , width, height, src, to}) => {
 */
     return (
       <div className="home">
-        <div className='title'>
-        </div>
         <div className="backdrop-title">
           <div className="background-image">
             <div className='head'>
