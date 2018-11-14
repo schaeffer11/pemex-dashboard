@@ -37,7 +37,6 @@ import { KPI } from '../Common/KPIs'
       },{
         name: 'Vapor Injected',
         data: vaporInjected,
-
       }]
 
     }
@@ -57,11 +56,11 @@ import { KPI } from '../Common/KPIs'
         tickInterval   : 24 * 3600 * 1000 *30,
         type: 'datetime'
       },
-      yAxis: {
+      yAxis: [{
         title: {
           text: 'Volume (m3)'
         }
-      },
+      }],
       tooltip: {
         shared: true
       },
@@ -78,6 +77,7 @@ import { KPI } from '../Common/KPIs'
       series: series
   }
 
+  console.log(series)
 
     return (
       <div className="cost-bar test">

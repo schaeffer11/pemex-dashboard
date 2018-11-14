@@ -3,25 +3,6 @@
 	overflow-y: auto;
 	grid-template-rows: 50% 50%;
 	grid-template-columns: 50% 50%;
-	grid-template-areas: 	'tl tr' 
-							'bl br';
-
-
-	.Acido {
-		grid-area: tl;
-	}
-
-	.Apuntalado {
-		grid-area: tr;
-	}
-	
-	.Estimulacion {
-		grid-area: bl;
-	}
-	
-	.Termico {
-		grid-area: br;
-	}
 
 	.kpi-outer {
 		text-align: center;

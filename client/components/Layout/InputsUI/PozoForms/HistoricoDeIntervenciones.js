@@ -1,7 +1,7 @@
 import React, { Component } from 'react'
 import { connect } from 'react-redux'
 import autobind from 'autobind-decorator'
-import { setFromSaveHistorialDeIntervenciones, setHistoricoEstimulacionData, setHistoricoAcidoData, setHistoricoApuntaladoData, setHasErrorsHistorialDeIntervenciones } from '../../../../redux/actions/pozo'
+import { setFromSaveHistorialDeIntervenciones, setHistoricoTermicoData, setHistoricoEstimulacionData, setHistoricoAcidoData, setHistoricoApuntaladoData, setHasErrorsHistorialDeIntervenciones } from '../../../../redux/actions/pozo'
 import InputTable from '../../Common/InputTable'
 import ExcelUpload from '../../Common/ExcelUpload'
 import { checkDate, checkEmpty } from '../../../../lib/errorCheckers'
@@ -88,6 +88,65 @@ let columnsEstimulacion = [
       cell: 'renderNumber',
   }]
 }
+]
+
+let columnsTermico = [
+  {
+    Header: '',
+    accessor: 'delete',
+    width: 35,
+    resizable: false,
+    Cell: row => {
+      if (row.original.length > 1) {
+        return (<div style={{color: 'white', background: 'red', borderRadius: '4px', textAlign: 'center', cursor: 'pointer'}}>X</div>)
+      }
+    }
+  }, 
+  {
+    Header: 'Ciclo',
+    accessor: 'ciclo',
+    cell: 'renderNumber',
+  }, 
+  {
+    Header: 'Fecha Inicio',
+    accessor: 'fechaInicio',
+    cell: 'renderDate',
+   },
+   { 
+    Header: 'Fecha Fin',
+    accessor: 'fechaFin',
+    cell: 'renderDate',
+  },
+  { 
+    Header: 'Objectivo',
+    accessor: 'objetivo',
+    cell: 'renderTextarea',
+  },
+  { 
+    Header: <div>P<sub>iny</sub><br/>(kg/cm<sup>2</sup>)</div>,
+    accessor: 'Piny',
+    cell: 'renderNumber',
+  },
+  { 
+    Header: <div>T<sub>iny</sub><br/>(°C)</div>,
+    accessor: 'Tiny',
+    cell: 'renderNumber',
+  },
+  { 
+    Header: <div>Calidad<br/>(%)</div>,
+    accessor: 'calidad',
+    cell: 'renderNumber',
+  },
+  { 
+    Header: <div>Q<sub>iny</sub><br/>(bpd)</div>,
+    accessor: 'Qiny',
+    cell: 'renderNumber',
+  },
+  { 
+    Header: <div>Agua Acum<br/>(bbl)</div>,
+    accessor: 'aguaAcum',
+    cell: 'renderNumber',
+  },
 ]
 
 let columnsAcido = [
@@ -262,6 +321,10 @@ let columnsApuntalado = [
           type: 'table',
         },
         estimulacionTable: {
+          value: '',
+          type: 'table',
+        },
+        termicoTable: {
           value: '',
           type: 'table',
         },
@@ -539,6 +602,65 @@ let columnsApuntalado = [
       )
   }
 
+  makeTermicoData() {
+    let { formData, setHistoricoTermicoData, hasSubmitted } = this.props
+    formData = formData.toJS()
+    let { historicoTermicoData, fromSave } = formData
+    const rowObj = {
+      ciclo: '',
+      fechaInicio: null,
+      fechaFin: null,
+      objetivo: '',
+      Piny: '',
+      Tiny: '',
+      calidad: '',
+      Qiny: '',
+      aguaAcum: '',
+      error: true,
+    }
+
+    const errors = [
+      { name: 'ciclo', type: 'number' },
+      { name: 'fechaInicio', type: 'date' },
+      { name: 'fechaFin', type: 'date' },
+      { name: 'objetivo', type: 'text' },
+      { name: 'Piny', type: 'number' },
+      { name: 'Tiny', type: 'number' },
+      { name: 'calidad', type: 'number' },
+      { name: 'Qiny', type: 'number' },
+      { name: 'aguaAcum', type: 'number' },
+    ]
+
+    return (
+      <div className='presion-table'>
+        <div className='header'>
+          Histórico de tratamientos de estimulación
+        </div>
+        {/* <ExcelUpload
+          template='HistorialIntervencionesEstimulacion'
+          headers={errors}
+          setData={setHistoricoEstimulacionData}
+        /> */}
+        <div className='table'>
+          <InputTable
+            className="-striped"
+            data={historicoTermicoData}
+            setData={setHistoricoTermicoData}
+            columns={columnsTermico}
+            showPagination={false}
+            showPageSizeOptions={false}
+            sortable={false}
+            errorArray={errors}
+            rowObj={rowObj}
+            checkForErrors={val => this.checkForErrors(val, 'termicoTable')}
+            hasSubmitted={hasSubmitted}
+            fromSave={fromSave}
+          />
+        </div>
+      </div>
+      )
+  }
+
 
   render() {
     return (
@@ -546,6 +668,7 @@ let columnsApuntalado = [
         { this.makeEstimulacionTable() }
         { this.makeAcidoTable() }
         { this.makeApuntaladoTable() }
+        { this.makeTermicoData() }
       </div>
     )
   }
@@ -558,6 +681,7 @@ const mapStateToProps = state => ({
 
 const mapDispatchToProps = dispatch => ({
     setHistoricoEstimulacionData: val => dispatch(setHistoricoEstimulacionData(val)),
+    setHistoricoTermicoData: val => dispatch(setHistoricoTermicoData(val)),
     setHistoricoAcidoData: val => dispatch(setHistoricoAcidoData(val)),
     setHasErrorsHistorialDeIntervenciones: val => dispatch(setHasErrorsHistorialDeIntervenciones(val)),
     setHistoricoApuntaladoData: val => dispatch(setHistoricoApuntaladoData(val)),

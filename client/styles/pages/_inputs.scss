@@ -1101,8 +1101,8 @@
 			background-image: url('/images/labTest2Banner2.jpeg');
 		}
 
-		&.ResultadosDeSimulacion {
-			background-image: url('/images/simulationBanner2.jpeg');
+		&.ResultadosDeLaSimulacionEstimulacion {
+			background-image: url('/images/simulationBanner.png');
 		}
 
 		&.EstimacionIncProduccionEstimulacion {
@@ -1129,11 +1129,11 @@
 			background-image: url('/images/propuestaBanner.png');
 		}
 
-		&.ResultadosDeSimulacionApuntalado {
+		&.ResultadosDeLaSimulacionApuntalado {
 			background-image: url('/images/simulationBanner.png');
 		}
 
-		&.EstimacionIncProduccionEstimulacionApuntalado {
+		&.EstimacionIncProduccionApuntalado {
 			background-image: url('/images/estIncBanner.png');
 		}
 
@@ -1141,7 +1141,7 @@
 			background-image: url('/images/estCostBanner.png');
 		}
 
-		.SistemasArtificialesDeProduccion {
+		&.SistemasArtificialesDeProduccion {
 			background-image: url('/images/sistemasBanner.png');
 		}
 

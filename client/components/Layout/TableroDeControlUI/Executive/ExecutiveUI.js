@@ -5,7 +5,7 @@ import { connect } from 'react-redux'
 import JobBreakdown from './JobBreakdown'
 import DeltaOil from './DeltaOil'
 import DeltaWater from './DeltaWater'
-import ClassificationBreakdown from './ClassificationBreakdown'
+import DeltaGas from './DeltaGas'
 import Filters from '../Common/Filters'
 import Card from '../Common/Card'
 import { CardDeck } from 'reactstrap';
@@ -131,6 +131,8 @@ import ExecutiveTable from './ExecutiveTable'
     globalAnalysis = globalAnalysis.toJS()
     let { groupBy } = globalAnalysis
 
+    console.log(aforosData)
+
     return (
       <div className="data executive">
         <div className='content'>
@@ -142,6 +144,7 @@ import ExecutiveTable from './ExecutiveTable'
               >
               <DeltaOil label='Oil' data={aforosData} groupBy={groupBy} />
               <DeltaWater label='Water' data={aforosData} groupBy={groupBy} />
+              <DeltaGas label='Gas' data={aforosData} groupBy={groupBy} />
             </Card>
             <Card
                 id="classifications"
@@ -186,27 +189,4 @@ const mapDispatchToProps = dispatch => ({
 })
 
 export default connect(mapStateToProps, mapDispatchToProps)(executiveUI)
-
-
-         {/* <VolumeTable data={execTableWellData} estIncData={estIncWellData} aforosData={aforosData} volumenData={volumenData} />*/}
-
-    // fetch(`/executive/countData`, {
-    //   method: 'POST',
-    //   headers: {
-    //     'content-type': 'application/json',
-    //   },
-    //   body: JSON.stringify({
-    //     activo,
-    //     field,
-    //     well,
-    //     formation
-    //   })
-    // })
-    // .then(res => res.json())
-    // .then(res => {
-    //   this.setState({
-    //     countData: res
-    //   })
-    // })
-
     

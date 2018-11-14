@@ -4,19 +4,19 @@ import autobind from 'autobind-decorator'
 
 import { setIsLoading, setShowForms, setCurrentPage } from '../../../../../redux/actions/global'
 import PropuestaTermica from './PropuestaTermica'
-// import PruebasDeLaboratorio from '../PruebasDeLaboratorio'
-// import PruebasDeLaboratorioExtra from '../PruebasDeLaboratorioExtra'
+import PruebasDeLaboratorio from '../PruebasDeLaboratorio'
+import PruebasDeLaboratorioExtra from '../PruebasDeLaboratorioExtra'
 // import ResultadosDeLaSimulacionEstimulacion from './ResultadosDeLaSimulacionEstimulacion'
-// import EstimacionIncProduccionEstimulacion from './EstimacionIncProduccionEstimulacion'
+import EstimacionIncProduccionTermico from './EstimacionIncProduccionTermico'
 import EstimacionCostos from '../EstimacionCostos'
 
 
     const forms = [
       {'title' : 'Propuesta de Tratamiento Térmico', 'content': <PropuestaTermica /> },
-      // {'title' : 'Pruebas de Laboratorio', 'content': <PruebasDeLaboratorio /> },
-      // {'title' : 'Pruebas de Laboratorio Térmicas', 'content': <PruebasDeLaboratorioExtra /> },
+      {'title' : 'Pruebas de Laboratorio', 'content': <PruebasDeLaboratorio /> },
+      {'title' : 'Pruebas de Laboratorio Térmicas', 'content': <PruebasDeLaboratorioExtra /> },
       // {'title' : 'Resultados de la Simulación de Estimulación', 'content': <ResultadosDeLaSimulacionEstimulacion /> },
-      // {'title' : 'Estimación del Incremento de Producción', 'content': <EstimacionIncProduccionEstimulacion  /> },
+      {'title' : 'Estimación del Incremento de Producción', 'content': <EstimacionIncProduccionTermico /> },
       {'title' : 'Estimación de Costos de Estimulación', 'content': <EstimacionCostos /> }
     ]
 
@@ -114,7 +114,7 @@ const mapStateToProps = state => ({
   hasSubmitted: state.getIn(['global', 'hasSubmitted']),
   propuestaHasErrors: state.getIn(['propuestaTermica', 'hasErrors']),
   // resultadosSimulacionHasErrors: state.getIn(['resultadosSimulacionEstimulacion', 'hasErrors']),
-  // estIncProduccionHasErrors: state.getIn(['estIncProduccionEstimulacion', 'hasErrors']),
+  estIncProduccionHasErrors: state.getIn(['estIncProduccionEstimulacion', 'hasErrors']),
   estCostsHasErrors: state.getIn(['estCost', 'hasErrors']),
 })
 

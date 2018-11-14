@@ -1,4 +1,4 @@
-import { setIsSaved, setIsLoading, setImagesInState } from '../../redux/actions/global'
+import { setIsSaved, setIsLoading, setShowForms, setImagesInState } from '../../redux/actions/global'
 import Immutable from 'immutable'
 
 function bufferToBase64(buf) {
@@ -15,14 +15,18 @@ export function getBase64FromURL(imgURL) {
     xhr.responseType = 'arraybuffer'
   
     xhr.onload = function(e) {
+      console.log('image status', this.status)
       if (this.status == 200) {
         var uInt8Array = new Uint8Array(this.response);
         var byte3 = uInt8Array[4]; 
         const base64 = bufferToBase64(uInt8Array)
         resolve(base64)
       } else {
-        reject('no image')
+        reject({ error: true, message: 'no image' })
       }
+    }
+    xhr.onerror = function (e) {
+      reject({ error: true, message: 'no image' })
     }
     xhr.send()
   })
@@ -173,12 +177,6 @@ export function submitForm(action, token, saveName) {
     //   }
     // }
 
-         // dispatch(setIsLoading({
-         //    notificationType: 'success',
-         //    notificationText: 'fuck',
-         //    isLoading: false,
-         //    showNotification: true,
-         //  }))
 
 
       fetch('/api/well', {
@@ -191,18 +189,35 @@ export function submitForm(action, token, saveName) {
           let notificationType = ''
           let notificationText = ''
           if (isSubmitted) {
-            notificationType = 'success'
-            notificationText = 'Su información se ha guardado'
+            dispatch(setShowForms(false))
+            dispatch({ type: 'RESET_APP_FROM_SUBMIT' })
+            setTimeout(dispatch(setIsLoading({
+              notificationType: 'success',
+              notificationText: 'Su información se ha guardado',
+              isLoading: false,
+              showNotification: true,
+              showForms: false,
+              saved: null,
+              loaded: null,
+              submitted: null,
+              loadText: null,
+              currentPage: '',
+              selectedTab: 'Pozo',
+              hasSubmitted: false,
+              transactionID: null,
+              saveName: null,
+            })), 200)
           } else {
             notificationType = 'error'
             notificationText = 'Su información no se guardó ningún campo puede estar vacio'
+          
+            dispatch(setIsLoading({
+              notificationType,
+              notificationText,
+              isLoading: false,
+              showNotification: true,
+            }))
           }
-          dispatch(setIsLoading({
-            notificationType,
-            notificationText,
-            isLoading: false,
-            showNotification: true,
-          }))
         })
     }
   }

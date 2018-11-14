@@ -480,7 +480,26 @@ const INSERT_LAB_TEST_QUERY = {
         LEFT JOIN _IntervencionesLabTestsPruebasGelDeFracturaSave PGF ON IL.LAB_ID = PGF.LAB_ID
         LEFT JOIN _IntervencionesLabTestsPruebasParaApuntalanteSave PPA ON IL.LAB_ID = PPA.LAB_ID
         WHERE IL.TRANSACTION_ID = ?`,
-    loadTransaction: `SELECT * FROM IntervencionesLabTests WHERE TRANSACTION_ID = ?`    
+    // loadTransaction: `SELECT * FROM IntervencionesLabTests WHERE TRANSACTION_ID = ?`
+    loadTransaction: `SELECT 
+    IL.LAB_ID, IL.TIPO_DE_ANALISIS, IL.FECHA_DE_MUESTREO, IL.FECHA_DE_PRUEBA, IL.COMPANIA, IL.PERSONAL_DE_PEMEX_QUE_SUPERVISO, IL.OBSERVACIONES,
+    CF.PORENTAJE_DE_ACEITE, CF.PORENTAJE_DE_AGUA, CF.PORENTAJE_DE_EMULSION, CF.PORENTAJE_DE_SOLIDOS, CF.PORENTAJE_DE_ASFALTENOS, CF.PORENTAJE_DE_PARAFINAS,
+    CF.PORENTAJE_DE_RESINAS_ASFALTICAS, CF.PORENTAJE_DE_CONTENIDO_DE_SOLIDOS, CF.DENSIDAD_DEL_ACEITE, CF.DENSIDAD_DEL_AGUA, CF.DENSIDAD_DE_LA_EMULSION,
+    CF.VISCOSIDAD_DEL_ACEITE, CF.VISCOSIDAD_DE_LA_EMULSION, CF.PH_DEL_AGUA, CF.SALINIDAD_DEL_AGUA, CF.SALINIDAD_DEL_ACEITE,
+    PC.DISENO, PC.SISTEMA, PC.ACEITE_DEL_POZO, PC.TIEMPO_DE_ROMPIMIENTO, PC.SEPARACION_DE_FASES, PC.SOLIDOS, PC.CONDICION,
+    PG.SISTEMA_ACIDO, PG.TIEMPO_DE_CONTACTO, PG.GRABADO,
+    PS.TIPO_DE_MUESTRA, PS.PESO_DE_LA_MUESTRA, PS.TIPO_DE_SISTEMA_QUIMICO, PS.PESO_FINAL_DE_LA_MUESTRA, PS.SOLUBILIDAD,
+    PGF.HIDRATACION, PGF.TIEMPO_DE_ACTIVACION_DEL_GEL, PGF.DETERMINACION_DE_PH, PGF.TIEMPO_DE_ROMPIMIENTO as TIEMPO_DE_ROMPIMIENTO_GEL,
+    PGF.DOSIFICATION_DE_QUEBRADORES, PGF.VISCOSIDAD_DEL_GEL_DE_FRACTURA, 
+    PPA.ESFERICIDAD, PPA.REDONDEZ, PPA.RESISTENCIA_A_LA_COMPRESION, PPA.MALLA, PPA.AGLUTINAMIENTO, PPA.TURBIDEZ, PPA.SOLUBILIDAD as SOLUBILIDAD_APUNTALANTE
+    FROM IntervencionesLabTests IL 
+    LEFT JOIN IntervencionesLabTestsCaracterizacionFisico CF ON IL.LAB_ID = CF.LAB_ID 
+    LEFT JOIN IntervencionesLabTestsPruebasDeCompatibilidad PC ON IL.LAB_ID = PC.LAB_ID 
+    LEFT JOIN IntervencionesLabTestsPruebasDeGrabado PG ON IL.LAB_ID = PG.LAB_ID
+    LEFT JOIN IntervencionesLabTestsPruebasDeSolubilidad PS ON IL.LAB_ID = PS.LAB_ID
+    LEFT JOIN IntervencionesLabTestsPruebasGelDeFractura PGF ON IL.LAB_ID = PGF.LAB_ID
+    LEFT JOIN IntervencionesLabTestsPruebasParaApuntalante PPA ON IL.LAB_ID = PPA.LAB_ID
+    WHERE IL.TRANSACTION_ID = ?`,
 }
 
 const INSERT_CEDULA_ESTIMULACION_QUERY = {
@@ -1090,6 +1109,19 @@ export const create = async (body, action, cb) => {
       var { volumenVapor, calidad, gastoInyeccion, presionMaximaSalidaGenerador, 
         temperaturaMaximaGenerador, cedulaData, propuestaCompany } = finalObj.propuestaTermica
   }
+
+    let realTipoDeIntervenciones = tipoDeIntervenciones.slice()
+    
+    if (realTipoDeIntervenciones === 'estimulacion' && action === 'submit') {
+        if (tipoDeEstimulacion === 'limpieza') {
+            realTipoDeIntervenciones = 'estimulacionLimpieza'
+        }
+        else {
+            realTipoDeIntervenciones = 'estimulacionMatricial'
+        }
+    }
+
+
 
   // write to db
   
@@ -1761,7 +1793,7 @@ export const create = async (body, action, cb) => {
                                                   })
                                                 }
 
-                                                values = action === 'save' ? [transactionID, userID, wellFormacionID, tipoDeIntervenciones, saveName] : [transactionID, userID, subdireccion, activo, fieldFormacionID, wellFormacionID, formacion, propuestaCompany, tipoDeIntervenciones, tipoDeTerminacion]
+                                                values = action === 'save' ? [transactionID, userID, wellFormacionID, tipoDeIntervenciones, saveName] : [transactionID, userID, subdireccion, activo, fieldFormacionID, wellFormacionID, formacion, propuestaCompany, realTipoDeIntervenciones, tipoDeTerminacion]
                                                 connection.query((action === 'save' ? INSERT_TRANSACTION.save : INSERT_TRANSACTION.submit), values, (err, results) => {
                                                   console.log('transaction', err)
                                                   console.log('transaction', results)
@@ -1979,10 +2011,11 @@ export const create = async (body, action, cb) => {
                                                                           values.push(deleteID)
                                                                         }
 
+                                                                        // FIXME: This deletes images that should not be deleted. fix in the futre!
                                                                         if (deleteID !== null) {
                                                                           console.log('getting wellimages', deleteID)
-                                                                          const deletedImages = await deleteImages(deleteID, action).catch(r => console.log('something went wrong'))
-                                                                          console.log('i should get some deletions', deletedImages)
+                                                                          // const deletedImages = await deleteImages(deleteID, action).catch(r => console.log('something went wrong'))
+                                                                          // console.log('i should get some deletions', deletedImages)
                                                                         }
 
                                                                         connection.query(action === 'save' ? DELETE_QUERY : DUMMY_QUERY, values, (err, results) => {

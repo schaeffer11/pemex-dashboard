@@ -44,7 +44,7 @@ let tipoDeInterventionSeries = [{
     color: '#C26A1B',
   }]
 
-@autobind class DeltaWater extends PureComponent {
+@autobind class DeltaGas extends PureComponent {
 
   shouldComponentUpdate(nextProps) {
     if (this.props.groupBy !== nextProps.groupBy) {
@@ -60,11 +60,11 @@ let tipoDeInterventionSeries = [{
     let groupByList = []
 
     data = data.map(i => {
-        if (i.qw > max) {
-            max = i.qw
+        if (i.qg > max) {
+            max = i.qg
         }
-        if (i.qwResult > max) {
-            max = i.qwResult
+        if (i.qgResult > max) {
+            max = i.qgResult
         }
 
       if (groupBy) {
@@ -74,9 +74,9 @@ let tipoDeInterventionSeries = [{
       }
 
 
-      i.x = i.qw
-      i.y = i.qwResult
-      i.group =  i.qw < i.qwResult ? 'Unsuccessful' : 'Successful'
+      i.x = i.qg
+      i.y = i.qgResult
+      i.group =  i.qg > i.qgResult ? 'Unsuccessful' : 'Successful'
         
       return i
     })
@@ -145,12 +145,12 @@ let tipoDeInterventionSeries = [{
         },
         xAxis: {
             title: {
-                text: 'Pre-Water (bbl/d)'
+                text: 'Pre-Gas (MMpc/d)'
             }
         },
         yAxis: {
             title: {
-                text: 'Post-Water (bbl/d)'
+                text: 'Post-Gas (MMpc/d)'
             }
         },
         credits: {
@@ -170,4 +170,4 @@ let tipoDeInterventionSeries = [{
 }
 
 
-export default DeltaWater
+export default DeltaGas

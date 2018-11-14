@@ -140,12 +140,12 @@ let tipoDeInterventionSeries = [{
 	    },
 	    xAxis: {
 	    	title: {
-	    		text: 'Pre-Oil'
+	    		text: 'Pre-Oil (bbl/d)'
 	    	}
 	    },
 	    yAxis: {
 	    	title: {
-	    		text: 'Post-Oil'
+	    		text: 'Post-Oil (bbl/d)'
 	    	}
 	    },
 	    credits: {

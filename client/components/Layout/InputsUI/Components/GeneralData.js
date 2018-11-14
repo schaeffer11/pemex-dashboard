@@ -92,7 +92,7 @@ import ButtonGroup from './ButtonGroup'
 
   componentDidUpdate(prevProps) {
     let { hasSubmitted, formData, setFromSaveFichaTecnicaHighLevel, setHasErrorsFichaTecnicaHighLevel } = this.props
-    formData = formData.toJS()
+    formData = formData ? formData.toJS() : {}
     let { fromSave } = formData
     if (hasSubmitted !== prevProps.hasSubmitted || fromSave) {
       let err = this.checkAllInputs(true, formData)
@@ -105,7 +105,7 @@ import ButtonGroup from './ButtonGroup'
 
   checkAllInputs(showErrors, data=null) {
     let { formData } = this.props
-    formData = formData.toJS()
+    formData = formData ? formData.toJS() : {}
     formData = data !== null ? data : formData
     const { errors } = this.state
     let hasErrors = false
@@ -268,7 +268,7 @@ import ButtonGroup from './ButtonGroup'
 
   makeGeneralInterventionForm() {
     let { setObjetivo, setAlcances, setTipoDeIntervenciones, interventionFormData, setFechaProgramadaIntervencion, setIntervencionProgramada } = this.props
-    interventionFormData = interventionFormData.toJS()
+    interventionFormData = interventionFormData ? interventionFormData.toJS() : {}
     let { objetivo, alcances, tipoDeIntervenciones, fechaProgramadaIntervencion, intervencionProgramada } = interventionFormData
     let tipoDeIntervencionesOptions = [
       {label: 'Tratamiento de Estimulación', value: 'estimulacion'},
@@ -312,7 +312,7 @@ import ButtonGroup from './ButtonGroup'
     let { setActivo, setCampo, setPozo, setFormacion, formData, fieldWellOptions } = this.props
 
 
-    formData = formData.toJS()
+    formData = formData ? formData.toJS() : {}
     
     let { subdireccion, activo, campo, pozo, formacion } = formData
 
