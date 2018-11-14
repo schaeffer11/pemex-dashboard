@@ -3,6 +3,12 @@
 	min-width: 1000px;
 	color: $white;
 
+	/* Adjust subtabs to overlap with the banner when present */
+	.banner {
+		+ .subtabs {
+			margin-top: -69px;
+		}
+	}
 
 	.subtabs {
         min-height: 50px;
@@ -10,7 +16,6 @@
 		cursor: pointer;
         text-align: center;
         border-radius: 10px 10px 0px 0px;
-		margin-top: -69px;
 		position: relative;
 
 		&::before {
