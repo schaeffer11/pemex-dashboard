@@ -114,8 +114,8 @@ const rootReducer = (state, action) => {
     }
     if (action.type === 'RESET_APP_FROM_SUBMIT') {
       let newGlobal = {
-        notificationType: 'success',
-        notificationText: 'Su información se ha guardado',
+        notificationType: null,
+        notificationText: null,
         isLoading: false,
         showNotification: true,
         showForms: false,
@@ -129,7 +129,7 @@ const rootReducer = (state, action) => {
         transactionID: null,
         saveName: null 
       }
-      return state = Map({ user, app, global: newGlobal })
+      return state = fromJS({ user, app, global: newGlobal })
     }
     if (action.type === 'LOGOUT') {
       state = undefined

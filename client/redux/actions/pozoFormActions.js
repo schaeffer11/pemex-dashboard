@@ -190,6 +190,14 @@ export function submitForm(action, token, saveName) {
           let notificationText = ''
           if (isSubmitted) {
             dispatch({ type: 'RESET_APP_FROM_SUBMIT' })
+
+            setTimeout(dispatch(setIsLoading({
+              notificationType: 'success',
+              notificationText: 'Su información se ha guardado',
+              isLoading: false,
+              showNotification: true,
+            })), 300)
+
           } else {
             notificationType = 'error'
             notificationText = 'Su información no se guardó ningún campo puede estar vacio'

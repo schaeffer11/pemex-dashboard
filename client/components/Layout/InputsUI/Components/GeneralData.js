@@ -474,6 +474,7 @@ import ButtonGroup from './ButtonGroup'
       fetch(`api/getHistIntervencionesEstimulacionNew?transactionID=${transactionID}&saved=1`, headers).then(r => r.json()),
       fetch(`api/getHistIntervencionesAcidoNew?transactionID=${transactionID}&saved=1`, headers).then(r => r.json()),
       fetch(`api/getHistIntervencionesApuntaladoNew?transactionID=${transactionID}&saved=1`, headers).then(r => r.json()),
+      fetch(`api/getHistIntervencionesTermicoNew?transactionID=${transactionID}&saved=1`, headers).then(r => r.json()),
       fetch(`api/getMudLoss?transactionID=${transactionID}&saved=1`, headers).then(r => r.json()),
       fetch(`api/getLayer?transactionID=${transactionID}&saved=1`, headers).then(r => r.json()),
       fetch(`api/getWell?transactionID=${transactionID}&saved=1`, headers).then(r => r.json()),

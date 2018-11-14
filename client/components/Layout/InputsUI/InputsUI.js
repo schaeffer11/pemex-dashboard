@@ -105,7 +105,8 @@ import { setHasSubmitted, setIsLoading, setCurrentPage, setSaveName, setTab } fr
       hasErrorsPropuestaEstimulacion, hasErrorsPropuestaApuntalado, hasErrorsPropuestaAcido, hasErrorsResultadosSimulacionAcido, 
       hasErrorsResultadosSimulacionEstimulacion, hasErrorsResultadosSimulacionApuntalado, hasErrorsEstIncProduccionAcido,
       hasErrorsEstIncProduccionEstimulacion, hasErrorsEstIncProduccionApuntalado, hasErrorsEstCosts, hasErrorsHistoricoDeProduccion,
-      setHasSubmitted, hasErrorsHistoricoDeAforos, hasErrorsSistemasArtificialesDeProduccion, hasErrorsPropuestaTermica, setIsLoading, setSaveName } = this.props
+      setHasSubmitted, hasErrorsHistoricoDeAforos, hasErrorsSistemasArtificialesDeProduccion, hasErrorsPropuestaTermica, 
+      hasErrorsEstIncProduccionTermico, setIsLoading, setSaveName } = this.props
 
 
     if (action === 'submit') {
@@ -125,7 +126,7 @@ import { setHasSubmitted, setIsLoading, setCurrentPage, setSaveName, setTab } fr
       else if (tipoDeIntervenciones === 'apuntalado' && (hasErrorsPropuestaApuntalado || hasErrorsResultadosSimulacionApuntalado || hasErrorsEstIncProduccionApuntalado)) {
         hasErrors = true
       }
-      else if (tipoDeIntervenciones === 'termico' && (hasErrorsPropuestaTermica)) {
+      else if (tipoDeIntervenciones === 'termico' && (hasErrorsPropuestaTermica || hasErrorsEstIncProduccionTermico)) {
         hasErrors = true
       }
 
@@ -437,6 +438,7 @@ const mapStateToProps = state => ({
   hasErrorsEstIncProduccionAcido: state.getIn(['estIncProduccionAcido', 'hasErrors']),
   hasErrorsEstIncProduccionEstimulacion: state.getIn(['estIncProduccionEstimulacion', 'hasErrors']),
   hasErrorsEstIncProduccionApuntalado: state.getIn(['estIncProduccionApuntalado', 'hasErrors']),
+  hasErrorsEstIncProduccionTermico: state.getIn(['estIncProduccionTermico', 'hasErrors']),
   hasErrorsEstCosts: state.getIn(['estCost', 'hasErrors']),
   hasErrorsHistoricoDeAforosResults: state.getIn(['historicoDeAforosResults', 'hasErrors']),
   hasErrorsEstCostResults: state.getIn(['estCostResults', 'hasErrors']),
