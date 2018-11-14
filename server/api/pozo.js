@@ -83,11 +83,13 @@ const INSERT_WELL_QUERY = {
 
 const INSERT_SURVERY_QUERY = {
     save: `INSERT INTO _WellSurveysSave (
-        SURVEY_ID, WELL_FORMACION_ID, PROFUNDIDAD, INCLINACION, AZIMUT,
-        MV, X, Y, TRANSACTION_ID, HAS_ERRORS) VALUES ?`,
+        SURVEY_ID, WELL_FORMACION_ID, COMMENTS, MEASURED_DEPTH, INCLINATION, AZIMUTH,
+        TRUE_VERTICAL_DEPTH, VERTICAL_SECTION, NS, EW, DLS, NORTHING, EASTING, LATITUDE,
+        LONGITUDE, TRANSACTION_ID, HAS_ERRORS) VALUES ?`,
     submit: `INSERT INTO WellSurveys (
-        SURVEY_ID, WELL_FORMACION_ID, PROFUNDIDAD, INCLINACION, AZIMUT,
-        MV, X, Y, TRANSACTION_ID) VALUES ?`,
+        SURVEY_ID, WELL_FORMACION_ID, COMMENTS, MEASURED_DEPTH, INCLINATION, AZIMUTH,
+        TRUE_VERTICAL_DEPTH, VERTICAL_SECTION, NS, EW, DLS, NORTHING, EASTING, LATITUDE,
+        LONGITUDE, TRANSACTION_ID) VALUES ?`,
     loadSave: `SELECT * FROM _WellSurveysSave WHERE TRANSACTION_ID = ?`,
     loadTransaction: `SELECT * FROM WellSurveys WHERE TRANSACTION_ID = ?`
 }
@@ -2019,7 +2021,8 @@ export const create = async (body, action, cb) => {
                                                                       desviacion.forEach(i => {
   
                                                                         let surveyID = Math.floor(Math.random() * 1000000000)
-                                                                        let newRow = [surveyID, wellFormacionID, i.depth, i.inclination, i.azimuth, i.trueVerticalDepth, i.x_offset, i.y_offset, transactionID]
+                                                                        let newRow = [surveyID, wellFormacionID, i.comments, i.measuredDepth, i.inclination, i.azimuth, i.trueVerticalDepth, i.verticalSection,
+                                                                                        i.ns, i.ew, i.dls, i.northing, i.easting, i.latitude, i.longitude, transactionID]
                                                                        
                                                                         if (action === 'save') {
                                                                           newRow.push(i.error)
