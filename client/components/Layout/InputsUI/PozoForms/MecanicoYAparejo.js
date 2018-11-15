@@ -438,6 +438,8 @@ let tratamientoPorOptions = [
       { name: 'latitude', type: 'number' },
       { name: 'longitude', type: 'number' },
     ]
+
+    const headers = [...errors, { name: 'comments', type: 'text' }]
     return (
       <div>
         <div className='header'>
@@ -445,7 +447,7 @@ let tratamientoPorOptions = [
         </div>
         <ExcelUpload
           template="Survey"
-          headers={errors}
+          headers={headers}
           setData={this.props.setDesviacion}
         />
         <div className='historico-produccion' >

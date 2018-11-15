@@ -92,7 +92,8 @@ export function buildTable(title, map, data) {
     }]
     final.unshift(titleHeader)
   }
-  return final
+  const options = largeTableOptions()
+  return { options, table: final }
 }
 
 export function buildSimpleTable(title, map, data, hasUnits=true) {
@@ -136,7 +137,9 @@ export function buildSimpleTable(title, map, data, hasUnits=true) {
   if (title) {
     final.unshift(titleHeader)
   }
-  return final
+
+  const options = smallTableOptions()
+  return { options, table: final }
 }
 
 export async function buildChartBase64(config) {
@@ -150,12 +153,20 @@ export async function buildChartBase64(config) {
   return dataURL
 }
 
-export const tableOptions = {
+const tableOptions = {
   fontSize: 8,
-  // colW: '2',
-  w: 4,
   align: 'center',
 }
+
+export const smallTableOptions = () => ({
+  w: 4,
+  ...tableOptions
+})
+
+export const largeTableOptions = () => ({
+  w: 10,
+  ...tableOptions
+})
 
 function buildSectionSlide(pptx, title) {
   const slide = pptx.addNewSlide('MASTER_SLIDE')
@@ -201,12 +212,11 @@ export async function generatePowerPoint(token, jobID, wellID, jobType) {
   buildSectionSlide(pptx, 'Información de la propuesta')
   await buildProposalCedula(pptx, token, jobID)
   await buildGeneralProposal(pptx, token, jobID)
-  await buildLabReports(pptx, token, jobID, images.pruebasDeLaboratorio)
-  // console.log('has results', hasResults)
-  if (hasResults) {
-    buildSectionSlide(pptx, 'Información de los resultados')
-    await buildResultsCedula(pptx, token, jobID, jobType)
-    await buildGeneralResults(pptx, token, jobID, jobType)
-  }
+  // await buildLabReports(pptx, token, jobID, images.pruebasDeLaboratorio)
+  // if (hasResults) {
+  //   buildSectionSlide(pptx, 'Información de los resultados')
+  //   await buildResultsCedula(pptx, token, jobID, jobType)
+  //   await buildGeneralResults(pptx, token, jobID, jobType)
+  // }
   pptx.save()
 }

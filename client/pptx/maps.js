@@ -594,6 +594,19 @@ maps.historialDeIntervenciones = {
     beneficioProgramado: { text: 'Beneficio Programado', unit: units.barrelsPerDay },
     beneficioOficial: { text: 'Beneficio Oficial', unit: units.barrelsPerDay },
   },
+  termico: {
+    ciclo: { text: 'Ciclo', unit: ''},
+    fechaInicio: { text: 'Fecha Inicio', unit: '' },
+    fechaFin: { text: 'Fecha Fin', unit: '' },
+    objetivo: { text: 'Objectivo', unit: '' },
+    Piny: { text: 'P iny', unit: units.pressure },
+    Tiny: { text: 'T iny', unit: units.temperature },
+    calidad: { text: 'Calidad', unit: units.percent },
+    Qiny: { text: 'Q iny', unit: units.barrelsPerDay },
+    aguaAcum: { text: 'Agua acum.', unit: units.volumeBarrels },
+    beneficioProgramado: { text: 'Beneficio Programado', unit: units.barrelsPerDay },
+    beneficioOficial: { text: 'Beneficio Oficial', unit: units.barrelsPerDay },
+  }
 }
 
 maps.analisisDelAgua = {
