@@ -27,7 +27,8 @@ import TimeSlider from '../TimeSeries/TimeSlider'
       singularCostData: [],
       execTableData: [],
       estIncData: [],
-      volumeData: []
+      volumeData: [],
+      singularEstIncData: []
     }
 
     this.cards = []
@@ -73,6 +74,7 @@ import TimeSlider from '../TimeSeries/TimeSlider'
     let singularCostQuery = `/executive/costData?` + params.join('&') + `&noGroup=1`
     let execTableQuery = `/executive/tableData?` + params.join('&')
     let estIncQuery = `/executive/estIncData?` + params.join('&')
+    let singularEstIncQuery = `/executive/estIncData?` + params.join('&') + `&noGroup=1`
     let volumeQuery = `/executive/volumeData?` + params.join('&')
 
     const data = await Promise.all([
@@ -83,7 +85,8 @@ import TimeSlider from '../TimeSeries/TimeSlider'
       fetch(singularCostQuery, headers).then(r => r.json()),
       fetch(execTableQuery, headers).then(r => r.json()),
       fetch(estIncQuery, headers).then(r => r.json()),
-      fetch(volumeQuery, headers).then(r => r.json())
+      fetch(volumeQuery, headers).then(r => r.json()),
+      fetch(singularEstIncQuery, headers).then(r => r.json())
     ])
       .catch(error => {
         console.log('err', error)
@@ -98,7 +101,8 @@ import TimeSlider from '../TimeSeries/TimeSlider'
       singularCostData: data[4], 
       execTableData: data[5],
       estIncData: data[6],
-      volumeData: data[7]
+      volumeData: data[7],
+      singularEstIncData: data[8]
     }
 
     this.setState(newState)
@@ -126,7 +130,7 @@ import TimeSlider from '../TimeSeries/TimeSlider'
   }
 
   render() {
-    let { jobBreakdownData, aforosData, aforosCarouselData, costData, singularCostData, execTableData, estIncData, volumeData } = this.state
+    let { jobBreakdownData, aforosData, aforosCarouselData, costData, singularCostData, execTableData, estIncData, volumeData, singularEstIncData } = this.state
     let { globalAnalysis } = this.props
     globalAnalysis = globalAnalysis.toJS()
     let { groupBy } = globalAnalysis
@@ -143,9 +147,9 @@ import TimeSlider from '../TimeSeries/TimeSlider'
                 title="Delta Production Graphs"
                 ref={this.cards[0]}
               >
-              <DeltaOil label='Oil' data={aforosData} groupBy={groupBy} />
-              <DeltaWater label='Water' data={aforosData} groupBy={groupBy} />
-              <DeltaGas label='Gas' data={aforosData} groupBy={groupBy} />
+              <DeltaOil label='Oil' data={singularEstIncData} groupBy={groupBy} />
+              <DeltaWater label='Water' data={singularEstIncData} groupBy={groupBy} />
+              <DeltaGas label='Gas' data={singularEstIncData} groupBy={groupBy} />
             </Card>
             <Card
                 id="classifications"
@@ -173,7 +177,7 @@ import TimeSlider from '../TimeSeries/TimeSlider'
               <AvgDeltaCostBar label={'Avg'} data={costData} groupBy={groupBy} />
             </Card>
           </CardDeck>
-          <ExecutiveTable data={execTableData} estIncData={estIncData} aforosData={aforosData} volumeData={volumeData} groupBy={groupBy} />
+          <ExecutiveTable data={execTableData} estIncData={estIncData} volumeData={volumeData} groupBy={groupBy} />
         </div>
       </div>
     )

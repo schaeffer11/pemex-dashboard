@@ -15,7 +15,7 @@ import { CategoryDist, TrafficLight, Currency, Integer, numWithCommas } from '..
 
 
   render() {
-    let { data, estIncData, aforosData, volumeData, groupBy } = this.props
+    let { data, estIncData, volumeData, groupBy } = this.props
 
     let header = ''
 
@@ -161,10 +161,8 @@ import { CategoryDist, TrafficLight, Currency, Integer, numWithCommas } from '..
 
     data = data.map(i => {
 
-        let estProd = estIncData.find(j => j.groupedName === i.groupedName) ? estIncData.find(j => j.groupedName === i.groupedName).EST_INC_Qo : undefined
-        let realProd = groupBy 
-                          ? aforosData.filter(j => j.groupedName === i.groupedName).length > 0 ? aforosData.filter(j => j.groupedName === i.groupedName).reduce((sum, cur) => sum + cur.qoResult, 0) : null
-                          : aforosData ? aforosData.reduce((sum, cur) => sum + cur.qoResult, 0) : null
+        let estProd = estIncData.find(j => j.groupedName === i.groupedName) ? estIncData.find(j => j.groupedName === i.groupedName).qo : undefined
+        let realProd = estIncData.find(j => j.groupedName === i.groupedName) ? estIncData.find(j => j.groupedName === i.groupedName).qoResult : undefined
 
         let volumen = groupBy 
                   ? (volumeData.find(j => j.groupedName === i.groupedName) ? volumeData.find(j => j.groupedName === i.groupedName) : {}) 

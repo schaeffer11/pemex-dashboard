@@ -525,10 +525,10 @@ router.get('/tableData', (req, res) => {
       select = 'COMPANY as groupedName'
       break
     case 'interventionType':
-      select = 'tr.TIPO_DE_INTERVENCIONES as groupedName'
+      select = 't.TIPO_DE_INTERVENCIONES as groupedName'
       break
     case 'terminationType':
-      select = 'tr.TIPO_DE_TERMINACION as groupedName'
+      select = 't.TIPO_DE_TERMINACION as groupedName'
       break
   }
 
@@ -571,7 +571,7 @@ console.log('herherehrehrer', query, values)
 
 
 router.get('/estIncData', (req, res) => {
-  let { subdir, activo, field, well, formation, company, tipoDeIntervencion, tipoDeTerminacion, groupBy, lowDate, highDate } = req.query
+  let { subdir, activo, field, well, formation, company, tipoDeIntervencion, tipoDeTerminacion, groupBy, noGroup, lowDate, highDate } = req.query
 
   let level = well ? 'fwm.WELL_FORMACION_ID' : field ? 'fwm.FIELD_FORMACION_ID' : activo ? 'fwm.ACTIVO_ID' : subdir ? 'fwm.SUBDIRECCION_ID' : null
   let values = []
@@ -581,30 +581,53 @@ router.get('/estIncData', (req, res) => {
   if (level) {
     whereClause += ` AND ${level} = ?`
     let val  = well ? well : field ? field : activo ? activo : subdir ? subdir : null
-    values = values.concat([val, val, val, val])
+    values.push(val)
   }
   if (formation) {
     whereClause += ` AND FORMACION = ?`
-    values = values.concat([formation, formation, formation, formation])
+    values.push(formation)
   }
   if (company) {
     whereClause += ' AND COMPANY = ?'
-    values = values.concat([company, company, company, company])
+    values.push(company)
   }
   if (tipoDeIntervencion) {
     whereClause += ' AND TIPO_DE_INTERVENCIONES = ?'
-    values = values.concat([tipoDeIntervencion, tipoDeIntervencion, tipoDeIntervencion, tipoDeIntervencion])
+    values.push(tipoDeIntervencion)
   }
   if (tipoDeTerminacion) {
     whereClause += ' AND TIPO_DE_TERMINACION = ?'
-    values = values.concat([tipoDeTerminacion, tipoDeTerminacion, tipoDeTerminacion, tipoDeTerminacion])
+    values.push(tipoDeTerminacion)
   }
+  if (lowDate) {
+    whereClause += ' AND tr.FECHA_INTERVENCION >= ?'
+    let year = Math.floor((lowDate - 1) / 12)
+    let month = lowDate % 12
+    month === 0 ? month = 12 : null
+    let lowDateString = `${year}-${month}-01`
+    values.push(lowDateString)
+  }
+  if (highDate) {
+    whereClause += ' AND tr.FECHA_INTERVENCION <= ?'
+    let year = Math.floor((highDate - 1) / 12)
+    let month = highDate % 12
+    month === 0 ? month = 12 : null
+    let highDateString = `${year}-${month}-31`
+    values.push(highDateString)
+  }
+
+  values = [values, values, values, values, values]
+
+  values = [].concat.apply([], values)
+  console.log(values)
+
 
   let select = `1 as groupedName`
   let selectAcido = ''
   let selectEstimulacionLimpieza = ''
   let selectEstimulacionMatricial = ''
   let selectApuntalado = ''
+  let selectTermico = ''
 
   switch(groupBy) {
     case 'subdireccion':
@@ -631,7 +654,7 @@ router.get('/estIncData', (req, res) => {
       selectEstimulacionLimpieza = `, 'estimulacionLimpieza' AS groupedName`
       selectEstimulacionMatricial = `, 'estimulacionMatricial' AS groupedName`
       selectApuntalado = `, 'apuntalado' AS groupedName`
-
+      selectTermico = `, 'termico' AS groupedName`
       break
     case 'terminationType':
       select = 'TIPO_DE_TERMINACION as groupedName'
@@ -640,33 +663,81 @@ router.get('/estIncData', (req, res) => {
 
 
 
-  let query = `
-select groupedName, SUM(EST_INC_Qo) as EST_INC_Qo from
-(select EST_INC_Qo, ${select} ${selectAcido} FROM IntervencionesAcido ia
+//   let query = `
+// select groupedName, SUM(EST_INC_Qo) as EST_INC_Qo from
+// (select EST_INC_Qo, ${select} ${selectAcido} FROM IntervencionesAcido ia
+//  JOIN FieldWellMapping fwm ON ia.WELL_FORMACION_ID = fwm.WELL_FORMACION_ID
+//  JOIN Transactions t ON ia.TRANSACTION_ID = t.TRANSACTION_ID
+//  JOIN TransactionsResults tr on tr.PROPUESTA_ID = ia.TRANSACTION_ID
+// ${whereClause}
+//  UNION
+// select EST_INC_Qo, ${select} ${selectEstimulacionLimpieza} FROM IntervencionesEstimulacions ie
+//  JOIN FieldWellMapping fwm ON ie.WELL_FORMACION_ID = fwm.WELL_FORMACION_ID
+//  JOIN Transactions t ON ie.TRANSACTION_ID = t.TRANSACTION_ID
+//  JOIN TransactionsResults tr on tr.PROPUESTA_ID = ie.TRANSACTION_ID
+// ${whereClause} AND TIPO_DE_INTERVENCIONES = 'estimulacionLimpieza'
+//   UNION
+// select EST_INC_Qo, ${select} ${selectEstimulacionMatricial} FROM IntervencionesEstimulacions ie
+//  JOIN FieldWellMapping fwm ON ie.WELL_FORMACION_ID = fwm.WELL_FORMACION_ID
+//  JOIN Transactions t ON ie.TRANSACTION_ID = t.TRANSACTION_ID
+//  JOIN TransactionsResults tr on tr.PROPUESTA_ID = ie.TRANSACTION_ID
+// ${whereClause} AND TIPO_DE_INTERVENCIONES = 'estimulacionMatricial'
+//   UNION
+// select EST_INC_Qo, ${select} ${selectApuntalado} FROM IntervencionesApuntalado iap
+//  JOIN FieldWellMapping fwm ON iap.WELL_FORMACION_ID = fwm.WELL_FORMACION_ID
+//  JOIN Transactions t ON iap.TRANSACTION_ID = t.TRANSACTION_ID
+//  JOIN TransactionsResults tr on tr.PROPUESTA_ID = iap.TRANSACTION_ID
+//  ${whereClause}) as a
+//  GROUP BY groupedName
+// `
+
+  let groupByClause = noGroup ? 'GROUP BY TRANSACTION_ID' : 'GROUP BY groupedName'
+
+
+let query = `select groupedName, TRANSACTION_ID, SUM(EST_INC_GASTO_COMPROMISO_Qo) as EST_INC_GASTO_COMPROMISO_Qo, SUM(EST_INC_Qw) as EST_INC_Qw, SUM(EST_INC_GASTO_COMPROMISO_Qg) as EST_INC_GASTO_COMPROMISO_Qg, SUM(QO_RESULT) as QO_RESULT, SUM(QG_RESULT) as QG_RESULT, SUM(QW_RESULT) as QW_RESULT from
+
+(select r.TRANSACTION_ID, QO_RESULT, QW_RESULT, QG_RESULT, EST_INC_GASTO_COMPROMISO_QO, EST_INC_QW, EST_INC_GASTO_COMPROMISO_QG, ${select} ${selectAcido}
+from Results r
+JOIN IntervencionesAcido ia ON r.PROPUESTA_ID = ia.TRANSACTION_ID
  JOIN FieldWellMapping fwm ON ia.WELL_FORMACION_ID = fwm.WELL_FORMACION_ID
  JOIN Transactions t ON ia.TRANSACTION_ID = t.TRANSACTION_ID
  JOIN TransactionsResults tr on tr.PROPUESTA_ID = ia.TRANSACTION_ID
-${whereClause}
- UNION
-select EST_INC_Qo, ${select} ${selectEstimulacionLimpieza} FROM IntervencionesEstimulacions ie
- JOIN FieldWellMapping fwm ON ie.WELL_FORMACION_ID = fwm.WELL_FORMACION_ID
- JOIN Transactions t ON ie.TRANSACTION_ID = t.TRANSACTION_ID
- JOIN TransactionsResults tr on tr.PROPUESTA_ID = ie.TRANSACTION_ID
+ ${whereClause}
+UNION
+select r.TRANSACTION_ID, QO_RESULT, QW_RESULT, QG_RESULT, EST_INC_GASTO_COMPROMISO_QO, EST_INC_QW, EST_INC_GASTO_COMPROMISO_QG, ${select} ${selectEstimulacionLimpieza} 
+from Results r
+JOIN IntervencionesEstimulacions ia ON r.PROPUESTA_ID = ia.TRANSACTION_ID
+ JOIN FieldWellMapping fwm ON ia.WELL_FORMACION_ID = fwm.WELL_FORMACION_ID
+ JOIN Transactions t ON ia.TRANSACTION_ID = t.TRANSACTION_ID
+ JOIN TransactionsResults tr on tr.PROPUESTA_ID = ia.TRANSACTION_ID
 ${whereClause} AND TIPO_DE_INTERVENCIONES = 'estimulacionLimpieza'
-  UNION
-select EST_INC_Qo, ${select} ${selectEstimulacionMatricial} FROM IntervencionesEstimulacions ie
- JOIN FieldWellMapping fwm ON ie.WELL_FORMACION_ID = fwm.WELL_FORMACION_ID
- JOIN Transactions t ON ie.TRANSACTION_ID = t.TRANSACTION_ID
- JOIN TransactionsResults tr on tr.PROPUESTA_ID = ie.TRANSACTION_ID
+UNION
+select r.TRANSACTION_ID, QO_RESULT, QW_RESULT, QG_RESULT, EST_INC_GASTO_COMPROMISO_QO, EST_INC_QW, EST_INC_GASTO_COMPROMISO_QG, ${select} ${selectEstimulacionMatricial}
+from Results r
+JOIN IntervencionesEstimulacions ia ON r.PROPUESTA_ID = ia.TRANSACTION_ID
+ JOIN FieldWellMapping fwm ON ia.WELL_FORMACION_ID = fwm.WELL_FORMACION_ID
+ JOIN Transactions t ON ia.TRANSACTION_ID = t.TRANSACTION_ID
+ JOIN TransactionsResults tr on tr.PROPUESTA_ID = ia.TRANSACTION_ID
 ${whereClause} AND TIPO_DE_INTERVENCIONES = 'estimulacionMatricial'
-  UNION
-select EST_INC_Qo, ${select} ${selectApuntalado} FROM IntervencionesApuntalado iap
- JOIN FieldWellMapping fwm ON iap.WELL_FORMACION_ID = fwm.WELL_FORMACION_ID
- JOIN Transactions t ON iap.TRANSACTION_ID = t.TRANSACTION_ID
- JOIN TransactionsResults tr on tr.PROPUESTA_ID = iap.TRANSACTION_ID
+UNION
+select r.TRANSACTION_ID, QO_RESULT, QW_RESULT, QG_RESULT, EST_INC_GASTO_COMPROMISO_QO, EST_INC_QW, EST_INC_GASTO_COMPROMISO_QG, ${select} ${selectApuntalado}
+from Results r
+ JOIN IntervencionesApuntalado ia ON r.PROPUESTA_ID = ia.TRANSACTION_ID
+ JOIN FieldWellMapping fwm ON ia.WELL_FORMACION_ID = fwm.WELL_FORMACION_ID
+ JOIN Transactions t ON ia.TRANSACTION_ID = t.TRANSACTION_ID
+ JOIN TransactionsResults tr on tr.PROPUESTA_ID = ia.TRANSACTION_ID
+ ${whereClause}
+UNION
+select r.TRANSACTION_ID, QO_RESULT, QW_RESULT, QG_RESULT, EST_INC_GASTO_COMPROMISO_QO, EST_INC_QW, EST_INC_GASTO_COMPROMISO_QG, ${select} ${selectTermico} 
+from Results r
+JOIN IntervencionesTermico ia ON r.PROPUESTA_ID = ia.TRANSACTION_ID
+ JOIN FieldWellMapping fwm ON ia.WELL_FORMACION_ID = fwm.WELL_FORMACION_ID
+ JOIN Transactions t ON ia.TRANSACTION_ID = t.TRANSACTION_ID
+ JOIN TransactionsResults tr on tr.PROPUESTA_ID = ia.TRANSACTION_ID
  ${whereClause}) as a
- GROUP BY groupedName
-`
+ ${groupByClause}`
+
+ console.log(query, values)
 
   connection.query(query, values, (err, results) => {
       console.log('comment err', err)
@@ -675,6 +746,18 @@ select EST_INC_Qo, ${select} ${selectApuntalado} FROM IntervencionesApuntalado i
         res.json({ success: false})
       }
       else {
+
+        results = results.map(i => {
+          return {
+            groupedName: i.groupedName,
+            qo: i.EST_INC_GASTO_COMPROMISO_Qo,
+            qg: i.EST_INC_GASTO_COMPROMISO_Qg,
+            qw: i.EST_INC_Qw,
+            qoResult: i.QO_RESULT,
+            qgResult: i.QG_RESULT,
+            qwResult: i.QW_RESULT
+          }
+        })
         res.json(results)
       }
     })
