@@ -144,12 +144,13 @@ const forms = [
     let dataEstimulacion = await fetch(`api/getHistIntervencionesEstimulacionNew?transactionID=${selectedTransaction}`, headers).then(r => r.json())
     let dataAcido = await fetch(`api/getHistIntervencionesAcidoNew?transactionID=${selectedTransaction}`, headers).then(r => r.json())
     let dataApuntalado = await fetch(`api/getHistIntervencionesApuntaladoNew?transactionID=${selectedTransaction}`, headers).then(r => r.json())
+    let dataTermico = await fetch(`api/getHistIntervencionesTermicoNew?transactionID=${selectedTransaction}`, headers).then(r => r.json())
 
-
-    if (dataEstimulacion && !dataEstimulacion.err && dataAcido && !dataAcido.err && dataApuntalado && !dataApuntalado.err) {
+    if (dataEstimulacion && !dataEstimulacion.err && dataAcido && !dataAcido.err && dataApuntalado && !dataApuntalado.err && dataTermico && !dataTermico.err) {
       let newObj = dataEstimulacion.historialDeIntervenciones
       newObj.historicoAcidoData = dataAcido.historialDeIntervenciones.historicoAcidoData
       newObj.historicoApuntaladoData = dataApuntalado.historialDeIntervenciones.historicoApuntaladoData
+      newObj.historicoTermicoData = dataTermico.historialDeIntervenciones.historicoTermicoData
 
       setHistorialDeIntervenciones(newObj)
       setFromSaveHistorialDeIntervenciones(true)
