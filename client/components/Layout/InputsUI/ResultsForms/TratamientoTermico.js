@@ -140,64 +140,66 @@ import { calculateValuesTermicaCedula } from '../../../../lib/formatters';
         <div className='header'>
           General
         </div>
-        <InputRowSelectUnitless
-          header="Compañía Seleccionada para el Tratamiento"
-          name="tratamientoCompany"
-          options={companyOptions}
-          onBlur={this.updateErrors}
-          value={tratamientoCompany}
-          callback={e => setMergeTratamientoTermico({ tratamientoCompany: e.value })}
-          errors={this.state.errors}
-        />
-        <CalculatedValue
-          header={<div>Intervalos</div>}
-          value={intervalsDiv}
-        />
-        <InputRow
-          header="Volumen de vapor a inyectar"
-          name='volumenVapor'
-          unit="ton"
-          value={volumenVapor}
-          onChange={(e) => setMergeTratamientoTermico({ volumenVapor: e })}
-          errors={this.state.errors}
-          onBlur={this.updateErrors}
-        />
-        <InputRow
-          header="Calidad"
-          name='calidad'
-          unit="%"
-          value={calidad}
-          onChange={(e) => setMergeTratamientoTermico({ calidad: e })}
-          errors={this.state.errors}
-          onBlur={this.updateErrors}
-        />
-        <InputRow
-          header="Gasto de inyección"
-          name='gastoInyeccion'
-          unit="GPM"
-          value={gastoInyeccion}
-          onChange={(e) => setMergeTratamientoTermico({ gastoInyeccion: e })}
-          errors={this.state.errors}
-          onBlur={this.updateErrors}
-        />
-        <InputRow
-          header="Presión máxima de salida del generador"
-          name='presionMaximaSalidaGenerador'
-          unit="psi"
-          value={presionMaximaSalidaGenerador}
-          onChange={(e) => setMergeTratamientoTermico({ presionMaximaSalidaGenerador: e })}
-          errors={this.state.errors}
-          onBlur={this.updateErrors}
-        />
-        <InputRow
-          header="Temperatura máxima del generador"
-          name='temperaturaMaximaGenerador'
-          unit="psi"
-          value={temperaturaMaximaGenerador}
-          onChange={(e) => setMergeTratamientoTermico({ temperaturaMaximaGenerador: e })}
-          errors={this.state.errors}
-          onBlur={this.updateErrors}
-        />
+        <div className="input-table">
+          <InputRowSelectUnitless
+            header="Compañía Seleccionada para el Tratamiento"
+            name="tratamientoCompany"
+            options={companyOptions}
+            onBlur={this.updateErrors}
+            value={tratamientoCompany}
+            callback={e => setMergeTratamientoTermico({ tratamientoCompany: e.value })}
+            errors={this.state.errors}
+          />
+          <CalculatedValue
+            header={<div>Intervalos</div>}
+            value={intervalsDiv}
+          />
+          <InputRow
+            header="Volumen de vapor a inyectar"
+            name='volumenVapor'
+            unit="ton"
+            value={volumenVapor}
+            onChange={(e) => setMergeTratamientoTermico({ volumenVapor: e })}
+            errors={this.state.errors}
+            onBlur={this.updateErrors}
+          />
+          <InputRow
+            header="Calidad"
+            name='calidad'
+            unit="%"
+            value={calidad}
+            onChange={(e) => setMergeTratamientoTermico({ calidad: e })}
+            errors={this.state.errors}
+            onBlur={this.updateErrors}
+          />
+          <InputRow
+            header="Gasto de inyección"
+            name='gastoInyeccion'
+            unit="GPM"
+            value={gastoInyeccion}
+            onChange={(e) => setMergeTratamientoTermico({ gastoInyeccion: e })}
+            errors={this.state.errors}
+            onBlur={this.updateErrors}
+          />
+          <InputRow
+            header="Presión máxima de salida del generador"
+            name='presionMaximaSalidaGenerador'
+            unit="psi"
+            value={presionMaximaSalidaGenerador}
+            onChange={(e) => setMergeTratamientoTermico({ presionMaximaSalidaGenerador: e })}
+            errors={this.state.errors}
+            onBlur={this.updateErrors}
+          />
+          <InputRow
+            header="Temperatura máxima del generador"
+            name='temperaturaMaximaGenerador'
+            unit="psi"
+            value={temperaturaMaximaGenerador}
+            onChange={(e) => setMergeTratamientoTermico({ temperaturaMaximaGenerador: e })}
+            errors={this.state.errors}
+            onBlur={this.updateErrors}
+          />
+        </div>
       </div>
     )
   }

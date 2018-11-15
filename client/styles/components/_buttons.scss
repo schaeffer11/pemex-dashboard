@@ -47,9 +47,9 @@ button {
     border: none;
     background: $red;
     padding: 6px 30px;
-    font-size: 1.2em;
     color: white;
     min-width: 100px;
+    box-shadow: 0 2px 4px 0 #484848, inset 0 2px 3px 0 #f3bbbb;
   }
   &.bug-button{
     float: left;

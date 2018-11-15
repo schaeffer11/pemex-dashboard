@@ -145,12 +145,14 @@ const mergeKeys = elem => {
             )}
         </div>
         <div className="content">
-          <div className="tab-title">
-            <i className="far fa-caret-square-left" style={{position: 'relative', fontSize: '50px', left: '-20px', top: '7px', color: '#70AC46'}} onClick={(e) => setShowForms(false)}></i>
-            { title }
-            <button className="cta next" onClick={this.handleNextSubtab}>Siguiente</button>
-            <button className="cta prev" onClick={this.handlePrevSubtab}>Anterior</button> 
-          </div>
+            <div className="tab-title">
+                { title }
+            </div>
+            <div className="tab-actions">
+                <button className="cta clear" onClick={(e) => setShowForms(false)}><i className="fa fa-undo">&nbsp;</i></button>
+                <button className="cta next" onClick={this.handleNextSubtab}>Siguiente</button>
+                <button className="cta prev" onClick={this.handlePrevSubtab}>Anterior</button>
+            </div>
 
           {forms[this.state.currentStep].content}
 

@@ -83,33 +83,35 @@ import { getJustificacionesOptions } from '../../../../lib/helpers';
     const { fechaIntervencion, comentariosIntervencion, justificacionIntervencion } = formData
     const justificacionesOptions = getJustificacionesOptions()
     return (
-      <div className='results-form' >
+      <div className='results-form form' >
         <div className='header'>
         </div>
-        <InputDate
-          header="Fecha de Intervención"
-          name='fechaIntervencion'
-          value={fechaIntervencion}
-          onChange={(e) => setGeneralResultadosGenerales(['fechaIntervencion'], e)}
-          onBlur={this.updateErrors}
-          errors={this.state.errors}
-        />
-        <InputRowSelectUnitless
-          header="Justificación"
-          value={justificacionIntervencion}
-          callback={(e) => setGeneralResultadosGenerales(['justificacionIntervencion'], e.value)}
-          name='tipoDePozo'
-          options={justificacionesOptions}
-          onBlur={this.updateErrors}
-          errors={this.state.errors}
-        />
-        <TextAreaUnitless
-          header='Comentarios'
-          name='comentariosIntervencion'
-          className={'objetivo'}
-          value={comentariosIntervencion}
-          onChange={e => setGeneralResultadosGenerales(['comentariosIntervencion'], e)}
-        />
+        <div className="input-table">
+          <InputDate
+            header="Fecha de Intervención"
+            name='fechaIntervencion'
+            value={fechaIntervencion}
+            onChange={(e) => setGeneralResultadosGenerales(['fechaIntervencion'], e)}
+            onBlur={this.updateErrors}
+            errors={this.state.errors}
+          />
+          <InputRowSelectUnitless
+            header="Justificación"
+            value={justificacionIntervencion}
+            callback={(e) => setGeneralResultadosGenerales(['justificacionIntervencion'], e.value)}
+            name='tipoDePozo'
+            options={justificacionesOptions}
+            onBlur={this.updateErrors}
+            errors={this.state.errors}
+          />
+          <TextAreaUnitless
+            header='Comentarios'
+            name='comentariosIntervencion'
+            className={'objetivo'}
+            value={comentariosIntervencion}
+            onChange={e => setGeneralResultadosGenerales(['comentariosIntervencion'], e)}
+          />
+        </div>
       </div>
     )
   }
