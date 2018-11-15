@@ -1,8 +1,10 @@
 import React, { Component } from 'react'
 import autobind from 'autobind-decorator'
 import { connect } from 'react-redux'
+
 import ExecutiveTable from './ExecutiveTable'
 import TypeKPI from './TypeKPI'
+import TimeSlider from '../TimeSeries/TimeSlider'
 
 @autobind class overviewUI extends Component {
   constructor(props) {
@@ -18,19 +20,27 @@ import TypeKPI from './TypeKPI'
   }
 
   async fetchData() {
-    const { token } = this.props
+    let { token, globalAnalysis } = this.props
+    globalAnalysis = globalAnalysis.toJS()
+    let { lowDate, highDate } = globalAnalysis
+
+
     const headers = {
       headers: {
         'Authorization': `Bearer ${token}`,
         'content-type': 'application/json',
       },
     }
+    let params = []
 
-  	let aforosQuery = `/executive/aforosData?`
-    let costQuery = `/executive/costData?groupBy=interventionType`
-    let estIncQuery = `/executive/estIncData?groupBy=interventionType`
-    let countQuery = `/executive/countData`
-    let dateDiffQuery = '/executive/dateDiffData'
+    lowDate ? params.push(`lowDate=${lowDate}`) : null
+    highDate ? params.push(`highDate=${highDate}`) : null
+
+  	let aforosQuery = `/executive/aforosData?`  + params.join('&')
+    let costQuery = `/executive/costData?groupBy=interventionType&`  + params.join('&')
+    let estIncQuery = `/executive/estIncData?groupBy=interventionType&`  + params.join('&')
+    let countQuery = `/executive/countData?`  + params.join('&')
+    let dateDiffQuery = '/executive/dateDiffData?'  + params.join('&')
 
     const data = await Promise.all([
       fetch(aforosQuery, headers).then(r => r.json()),
@@ -53,6 +63,20 @@ import TypeKPI from './TypeKPI'
 
     this.setState(newState)
 
+  }
+
+  componentDidUpdate(prevProps) {
+    let { globalAnalysis } = this.props
+    let prev = prevProps.globalAnalysis
+
+    globalAnalysis = globalAnalysis.toJS()
+    prev = prev.toJS()
+
+    let { lowDate, highDate } = globalAnalysis
+
+    if (prev.lowDate !== lowDate || highDate !== prev.highDate) {
+      this.fetchData()  
+    }
   }
 
   componentDidMount() {
@@ -93,7 +117,7 @@ import TypeKPI from './TypeKPI'
     },{
         type: 'acido',
         cost: costData.find(i => i.interventionType === 'acido') ? costData.find(i => i.interventionType === 'acido').totalCost : 0,
-        estCost: costData.find(i => i.interventionType === 'acido') ? costData.find(i => i.interventionType === 'acido').totalEstimatedCot : 0
+        estCost: costData.find(i => i.interventionType === 'acido') ? costData.find(i => i.interventionType === 'acido').totalEstimatedCost : 0
     },{
         type: 'apuntalado',
         cost: costData.find(i => i.interventionType === 'apuntalado') ? costData.find(i => i.interventionType === 'apuntalado').totalCost : 0,
@@ -193,13 +217,18 @@ import TypeKPI from './TypeKPI'
     console.log(data)
 
     return (
-      <div className="data overview">
-        <TypeKPI data={data[0]} />
-        <TypeKPI data={data[1]} />
-        <TypeKPI data={data[2]} />
-        <TypeKPI data={data[3]} />
-        <TypeKPI data={data[4]} />
-        <TypeKPI data={data[5]} />
+      <div className='data'>
+        <div style={{padding: '40px'}}>
+          <TimeSlider />
+        </div>
+        <div className="overview">
+          <TypeKPI data={data[0]} />
+          <TypeKPI data={data[1]} />
+          <TypeKPI data={data[2]} />
+          <TypeKPI data={data[3]} />
+          <TypeKPI data={data[4]} />
+          <TypeKPI data={data[5]} />
+        </div>
       </div>
     )
   }
@@ -207,6 +236,7 @@ import TypeKPI from './TypeKPI'
 
 const mapStateToProps = state => ({
   token: state.getIn(['user', 'token']),
+  globalAnalysis: state.get('globalAnalysis'),
 })
 
 const mapDispatchToProps = dispatch => ({

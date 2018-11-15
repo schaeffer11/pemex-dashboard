@@ -1,11 +1,42 @@
-import React from 'react'
+import React, { Component } from 'react'
+import autobind from 'autobind-decorator'
 import { Route, NavLink } from 'react-router-dom'
+import { connect } from 'react-redux'
+
+import { setGeneralGlobalAnalysis } from '../../../redux/actions/global'
 import routes from '../../../routes/routes'
 import Sidebar from './Common/Sidebar'
-// import Navigation from '../../Layout/Navigation'
 
-const TableroDeControlUI = (props) => {
-  return (
+@autobind class TableroDeControlUI extends Component {
+  constructor(props) {
+    super(props)
+
+  }
+
+  componentDidMount() {
+    const { token, setGeneral } = this.props
+    const headers = {
+      headers: {
+        'Authorization': `Bearer ${token}`,
+        'content-type': 'application/json',
+      },
+    }
+
+
+    fetch(`/api/getDates`, headers)
+      .then(r => r.json())
+      .then(r => {
+        setGeneral(['minDate'], r[0].MIN)
+        setGeneral(['maxDate'], r[0].MAX) 
+        setGeneral(['lowDate'], r[0].MIN)
+        setGeneral(['highDate'], r[0].MAX) 
+      })
+
+  }
+
+
+  render() {
+   return (
     <div className="analysis-content">
       <div className='menu'>
         <Sidebar />
@@ -32,7 +63,18 @@ const TableroDeControlUI = (props) => {
         />
       ))}
     </div>
-  )
+  )   
+  }
 }
 
-export default TableroDeControlUI
+
+const mapStateToProps = state => ({
+  token: state.getIn(['user', 'token']),
+})
+
+const mapDispatchToProps = dispatch => ({
+  setGeneral: (location, value) => dispatch(setGeneralGlobalAnalysis(location, value)),
+})
+
+
+export default connect(mapStateToProps, mapDispatchToProps)(TableroDeControlUI)

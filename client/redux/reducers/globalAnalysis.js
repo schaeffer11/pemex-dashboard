@@ -17,6 +17,10 @@ const initialState = fromJS({
   maxDate: null,
   lowDate: null,
   highDate: null,
+  lowMonth: null,
+  lowYear: null,
+  highMonth: null,
+  highYear: null
 })
 
 

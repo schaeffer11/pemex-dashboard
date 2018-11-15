@@ -14,6 +14,7 @@ import AvgCostBar from './AvgCostBar'
 import DeltaCostBar from './DeltaCostBar'
 import AvgDeltaCostBar from './AvgDeltaCostBar'
 import ExecutiveTable from './ExecutiveTable'
+import TimeSlider from '../TimeSeries/TimeSlider'
 
 @autobind class executiveUI extends Component {
   constructor(props) {
@@ -38,7 +39,7 @@ import ExecutiveTable from './ExecutiveTable'
   async fetchData() {
     let { globalAnalysis } = this.props
     globalAnalysis = globalAnalysis.toJS()
-    let { subdireccion, activo, field, well, formation, company, interventionType, terminationType, groupBy } = globalAnalysis
+    let { subdireccion, activo, field, well, formation, company, interventionType, terminationType, groupBy, lowDate, highDate } = globalAnalysis
 
     const { token } = this.props
     const headers = {
@@ -61,6 +62,8 @@ import ExecutiveTable from './ExecutiveTable'
     interventionType ? params.push(`tipoDeIntervencion=${interventionType}`) : null
     terminationType ? params.push(`tipoDeTerminacion=${terminationType}`) : null
     groupBy ? params.push(`groupBy=${groupBy}`) : null
+    lowDate ? params.push(`lowDate=${lowDate}`) : null
+    highDate ? params.push(`highDate=${highDate}`) : null
 
     //TODO: MAKE PARALLEL
     let jobQuery = `/executive/jobBreakdown?` + params.join('&')
@@ -113,11 +116,11 @@ import ExecutiveTable from './ExecutiveTable'
     globalAnalysis = globalAnalysis.toJS()
     prev = prev.toJS()
 
-    let { subdireccion, activo, field, well, formation, company, interventionType, terminationType, groupBy } = globalAnalysis
+    let { subdireccion, activo, field, well, formation, company, interventionType, terminationType, groupBy, lowDate, highDate } = globalAnalysis
 
     if (subdireccion !== prev.subdireccion || activo !== prev.activo || field !== prev.field || well !== prev.well || formation !== prev.formation ||
       company !== prev.company || interventionType !== prev.interventionType || terminationType !== prev.terminationType ||
-      groupBy !== prev.groupBy) {
+      groupBy !== prev.groupBy || prev.lowDate !== lowDate || highDate !== prev.highDate) {
 			this.fetchData()	
 		}
   }
@@ -128,11 +131,12 @@ import ExecutiveTable from './ExecutiveTable'
     globalAnalysis = globalAnalysis.toJS()
     let { groupBy } = globalAnalysis
 
-    console.log(aforosData)
+    console.log(costData)
 
     return (
       <div className="data executive">
         <div className='content'>
+          <TimeSlider />
           <CardDeck className="content-deck">
             <Card
                 id="productionGraphs"
