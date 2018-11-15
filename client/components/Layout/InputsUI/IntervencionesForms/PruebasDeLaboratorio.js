@@ -18,6 +18,7 @@ export const options = [
   { label: 'Cromatografía del gas', value: 'cromatografiaDelGas' },
   { label: 'Prueba de dureza', value: 'pruebaDeDureza' },
   { label: 'Determinación de la calidad método de los cloruros', value: 'determinacionDeLaCalidad' },
+  { label: 'Curva de Viscosidad', value: 'curvaDeViscosidad' },
 ]
 
 const companyOptions = [
@@ -224,7 +225,6 @@ const companyOptions = [
 
     return (
       <div className="form pruebas-de-laboratorio-estimulacion">
-          <div className='image'/>
           { this.makeGeneralesForm() }
           <button className='new-row-button' onClick={this.addNewRow}>Añadir un renglón</button>
       </div>

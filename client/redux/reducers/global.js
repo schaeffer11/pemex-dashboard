@@ -11,6 +11,7 @@ const initialState = Map({
     loadText: null,
     isLoading: false,
     currentPage: '',
+    selectedTab: 'Pozo',
     hasSubmitted: false,
     transactionID: null,
     saveName: null,
@@ -25,6 +26,8 @@ const global = (state = initialState, action) => {
       return state.set('saved', action.value)
     case 'set_currentPage':
       return state.set('currentPage', action.value)
+    case 'set_tab':
+      return state.set('selectedTab', action.value)
     case 'set_isLoading':
       console.log('setting some loading stuff', action.obj)
       return state.mergeDeep(fromJS(action.obj))

@@ -11,7 +11,7 @@ const router = Router()
 
 
 router.get('/jobBreakdown', (req, res) => {
-  let { subdir, activo, field, well, formation, company, tipoDeIntervencion, tipoDeTerminacion, groupBy, avg, noGroup } = req.query
+  let { subdir, activo, field, well, formation, company, tipoDeIntervencion, tipoDeTerminacion, groupBy, noGroup } = req.query
   
   let level = well ? 'fwm.WELL_FORMACION_ID' : field ? 'fwm.FIELD_FORMACION_ID' : activo ? 'fwm.ACTIVO_ID' : subdir ? 'fwm.SUBDIRECCION_ID' : null
   let values = []
@@ -29,7 +29,7 @@ router.get('/jobBreakdown', (req, res) => {
     values.push(formation)
   }
   if (company) {
-    whereClause += ' AND PROPUESTA_COMPANIA = ?'
+    whereClause += ' AND COMPANY = ?'
     values.push(company)
   }
   if (tipoDeIntervencion) {
@@ -65,8 +65,8 @@ router.get('/jobBreakdown', (req, res) => {
       groupByKey = 'FORMACION as groupedName'
       break
     case 'company':
-      groupByClause = `, PROPUESTA_COMPANIA`
-      groupByKey = 'PROPUESTA_COMPANIA as groupedName'
+      groupByClause = `, COMPANY`
+      groupByKey = 'COMPANY as groupedName'
       break
     case 'interventionType':
       groupByClause = `, TIPO_DE_INTERVENCIONES`
@@ -81,6 +81,7 @@ router.get('/jobBreakdown', (req, res) => {
   let query = `SELECT TIPO_DE_INTERVENCIONES as name, COUNT(1) AS y, ${groupByKey} 
   FROM Results r
   JOIN Transactions t ON r.PROPUESTA_ID = t.TRANSACTION_ID
+  JOIN TransactionsResults tr on tr.TRANSACTION_ID = r.TRANSACTION_ID
   JOIN FieldWellMapping fwm ON r.WELL_FORMACION_ID = fwm.WELL_FORMACION_ID
   ${whereClause}
   GROUP BY TIPO_DE_INTERVENCIONES ${groupByClause}`
@@ -134,7 +135,7 @@ router.get('/aforosData', (req, res) => {
     values.push(formation)
   }
   if (company) {
-    whereClause += ' AND PROPUESTA_COMPANIA = ?'
+    whereClause += ' AND COMPANY = ?'
     values.push(company)
   }
   if (tipoDeIntervencion) {
@@ -172,8 +173,8 @@ router.get('/aforosData', (req, res) => {
       select = `, FORMACION as groupedName`
       break
     case 'company':
-      groupByKey = 'PROPUESTA_COMPANIA'
-      select = `, PROPUESTA_COMPANIA as groupedName`
+      groupByKey = 'COMPANY'
+      select = `, COMPANY as groupedName`
       break
     case 'interventionType':
       groupByKey = 'TIPO_DE_INTERVENCIONES'
@@ -195,7 +196,7 @@ router.get('/aforosData', (req, res) => {
   let query = `
 SELECT *, COUNT(1) AS y,  (QO_RESULT - QO) AS DELTA_QO, IF(QO_RESULT > QO, 'Successful', 'Unsuccessful') as name,  IF(QO_RESULT > QO, 'green', 'red') as color ${select} FROM 
 
-(SELECT SUBDIRECCION_NAME, ACTIVO_NAME, FIELD_NAME, A.WELL_FORMACION_ID, WELL_NAME, FORMACION, COMPANY, TIPO_DE_INTERVENCIONES, TIPO_DE_TERMINACION, A.PROPUESTA_ID, QO AS QO_RESULT, QW AS QW_RESULT, FECHA  
+(SELECT SUBDIRECCION_NAME, ACTIVO_NAME, FIELD_NAME, A.WELL_FORMACION_ID, WELL_NAME, FORMACION, COMPANY, TIPO_DE_INTERVENCIONES, TIPO_DE_TERMINACION, A.PROPUESTA_ID, QO AS QO_RESULT, QW AS QW_RESULT, QG AS QG_RESULT, FECHA  
 FROM
 (
   select fwm.SUBDIRECCION_NAME, fwm.ACTIVO_NAME, fwm.FIELD_NAME, fwm.WELL_FORMACION_ID, FORMACION, COMPANY, WELL_NAME, ResultsAforos.PROPUESTA_ID, ResultsAforos.TRANSACTION_ID, MAX(FECHA) AS FECHA, TIPO_DE_TERMINACION, TIPO_DE_INTERVENCIONES
@@ -206,7 +207,7 @@ FROM
   WHERE QO != '-999'  ${whereClause} GROUP BY TRANSACTION_ID
 ) A INNER JOIN ResultsAforos B USING(TRANSACTION_ID, FECHA)) as aforo_results, 
 
-(SELECT A.TRANSACTION_ID, QO, QW 
+(SELECT A.TRANSACTION_ID, QO, QW, QG
 FROM
 (
   select WellAforos.TRANSACTION_ID, MAX(FECHA) AS FECHA
@@ -253,9 +254,11 @@ ${groupByClause}`
           terminationType: i.TIPO_DE_TERMINACION,
           date: i.FECHA,
           qo: i.QO,
+          qg: i.QG,
           qw: i.QW,
           qoResult: i.QO_RESULT,
           qwResult: i.QW_RESULT,
+          qgResult: i.QG_RESULT,
           groupedName: i.groupedName
         }))
 
@@ -270,7 +273,7 @@ ${groupByClause}`
 
 
 router.get('/costData', (req, res) => {
-  let { subdir, activo, field, well, formation, company, tipoDeIntervencion, tipoDeTerminacion, groupBy, avg, noGroup } = req.query
+  let { subdir, activo, field, well, formation, company, tipoDeIntervencion, tipoDeTerminacion, groupBy, noGroup } = req.query
   
   let level = well ? 'fwm.WELL_FORMACION_ID' : field ? 'fwm.FIELD_FORMACION_ID' : activo ? 'fwm.ACTIVO_ID' : subdir ? 'fwm.SUBDIRECCION_ID' : null
   let values = []
@@ -278,6 +281,7 @@ router.get('/costData', (req, res) => {
 
   let whereClause = 'WHERE 1 = 1'
   let groupByClause = ''
+  let onClause = 'ON a.PROPUESTA_ID = b.TRANSACTION_ID'
 
   if (level) {
     whereClause += ` AND ${level} = ?`
@@ -288,7 +292,7 @@ router.get('/costData', (req, res) => {
     values.push(formation)
   }
   if (company) {
-    whereClause += ' AND PROPUESTA_COMPANIA = ?'
+    whereClause += ' AND COMPANY = ?'
     values.push(company)
   }
   if (tipoDeIntervencion) {
@@ -303,45 +307,74 @@ router.get('/costData', (req, res) => {
   switch(groupBy) {
     case 'subdireccion':
       groupByClause = `GROUP BY SUBDIRECCION_NAME`
+      onClause = `ON a.SUBDIRECCION_NAME = b.SUBDIRECCION_NAME`
       break
     case 'activo':
       groupByClause = `GROUP BY ACTIVO_NAME`
+      onClause = `ON a.ACTIVO_NAME = b.ACTIVO_NAME`
       break
     case 'field':
       groupByClause = `GROUP BY FIELD_NAME`
+      onClause = `ON a.FIELD_NAME = b.FIELD_NAMEg`
       break
     case 'well':
       groupByClause = `GROUP BY WELL_FORMACION_ID`
+      onClause = `ON a.WELL_FORMACION_ID = b.WELL_FORMACION_ID`
       break
     case 'formation':
       groupByClause = `GROUP BY FORMACION`
+      onClause = `ON a.FORMACION = b.FORMACIONng`
       break
     case 'company':
       groupByClause = `GROUP BY COMPANY`
+      onClause = `ON a.COMPANY = b.COMPANYhing`
       break
     case 'interventionType':
       groupByClause = `GROUP BY TIPO_DE_INTERVENCIONES`
+      onClause = `ON a.TIPO_DE_INTERVENCIONES = b.TIPO_DE_INTERVENCIONES`
       break
     case 'terminationType':
       groupByClause = `GROUP BY TIPO_DE_TERMINACION`
+      onClause = `ON a.TIPO_DE_TERMINACION = b.TIPO_DE_TERMINACION`
       break
   }
 
   if (noGroup) {
     groupByClause = 'GROUP BY rc.TRANSACTION_ID'
+    onClause = 'ON a.PROPUESTA_ID = b.TRANSACTION_ID'
   }
 
-  let agg = avg ? 'AVG' : 'SUM'
 
-
-  let query = `
-    select SUBDIRECCION_NAME, ACTIVO_NAME, FIELD_NAME, fwm.WELL_FORMACION_ID, WELL_NAME, FORMACION, rc.COMPANY AS COMPANY, TIPO_DE_INTERVENCIONES, TIPO_DE_TERMINACION, ${agg}(rc.COST_MNX + rc.COST_DLS * rc.MNXtoDLS) as TOTAL_COST, ${agg}(iec.COST_MNX + iec.COST_DLS * iec.MNXtoDLS) as TOTAL_ESTIMATED_COST 
+  let query = 
+`
+    select a.SUBDIRECCION_NAME, a.ACTIVO_NAME, a.FIELD_NAME, a.WELL_FORMACION_ID, a.WELL_NAME, a.FORMACION, a.COMPANY, a.TIPO_DE_INTERVENCIONES, a.TIPO_DE_TERMINACION,
+    TOTAL_COST, AVG_COST, TOTAL_EST_COST, AVG_EST_COST FROM
+    (select SUBDIRECCION_NAME, ACTIVO_NAME, FIELD_NAME, fwm.WELL_FORMACION_ID, WELL_NAME, FORMACION, rc.COMPANY AS COMPANY, TIPO_DE_INTERVENCIONES, TIPO_DE_TERMINACION,
+      SUM(rc.COST_MNX + rc.COST_DLS * rc.MNXtoDLS) as TOTAL_COST,
+      SUM(rc.COST_MNX + rc.COST_DLS * rc.MNXtoDLS) / COUNT(DISTINCT rc.TRANSACTION_ID)  as AVG_COST,
+      rc.PROPUESTA_ID, rc.TRANSACTION_ID
     FROM ResultsCosts rc
-    JOIN Transactions t ON rc.PROPUESTA_ID = t.TRANSACTION_ID
-    JOIN IntervencionesEstimatedCosts iec ON rc.PROPUESTA_ID = iec.TRANSACTION_ID
+    JOIN Transactions t ON rc.PROPUESTA_ID = t.TRANSACTION_ID    
     JOIN FieldWellMapping fwm ON t.WELL_FORMACION_ID = fwm.WELL_FORMACION_ID
     ${whereClause}
-    ${groupByClause}`
+    ${groupByClause}) a
+  
+  JOIN 
+  
+  (select SUBDIRECCION_NAME, ACTIVO_NAME, FIELD_NAME, fwm.WELL_FORMACION_ID, WELL_NAME, FORMACION, rc.COMPANY AS COMPANY, TIPO_DE_INTERVENCIONES, TIPO_DE_TERMINACION,
+      SUM(rc.COST_MNX + rc.COST_DLS * rc.MNXtoDLS) as TOTAL_EST_COST,
+      SUM(rc.COST_MNX + rc.COST_DLS * rc.MNXtoDLS) / COUNT(DISTINCT rc.TRANSACTION_ID)  as AVG_EST_COST,
+      rc.TRANSACTION_ID
+    FROM IntervencionesEstimatedCosts rc
+    JOIN Transactions t ON rc.TRANSACTION_ID = t.TRANSACTION_ID    
+    JOIN FieldWellMapping fwm ON t.WELL_FORMACION_ID = fwm.WELL_FORMACION_ID
+    ${whereClause}
+    ${groupByClause}) b
+    
+    ${onClause}
+`
+
+  console.log('cost stuff', query, values)
 
   connection.query(query, values, (err, results) => {
       console.log('err', err)
@@ -362,7 +395,9 @@ router.get('/costData', (req, res) => {
           interventionType: i.TIPO_DE_INTERVENCIONES,
           terminationType: i.TIPO_DE_TERMINACION,
           totalCost: i.TOTAL_COST,
-          totalEstimatedCost: i.TOTAL_ESTIMATED_COST
+          totalEstimatedCost: i.TOTAL_EST_COST,
+          avgCost: i.AVG_COST,
+          avgEstCost: i.AVG_EST_COST
 
         }))
 
@@ -390,7 +425,7 @@ router.get('/tableData', (req, res) => {
     values.push(formation)
   }
   if (company) {
-    whereClause += ' AND PROPUESTA_COMPANIA = ?'
+    whereClause += ' AND COMPANY = ?'
     values.push(company)
   }
   if (tipoDeIntervencion) {
@@ -421,7 +456,7 @@ router.get('/tableData', (req, res) => {
       select = 'FORMACION as groupedName'
       break
     case 'company':
-      select = 'PROPUESTA_COMPANIA as groupedName'
+      select = 'COMPANY as groupedName'
       break
     case 'interventionType':
       select = 'TIPO_DE_INTERVENCIONES as groupedName'
@@ -437,15 +472,17 @@ router.get('/tableData', (req, res) => {
 select 
 ${select},
 COUNT(1) as NUM_TREATMENTS,  
-SUM(TIPO_DE_INTERVENCIONES = 'estimulacion') as NUM_ESTIMULACION,
+SUM(TIPO_DE_INTERVENCIONES = 'estimulacionLimpieza') as NUM_ESTIMULACION_LIMPIEZA,
+SUM(TIPO_DE_INTERVENCIONES = 'estimulacionMatricial') as NUM_ESTIMULACION_MATRICIAL,
 SUM(TIPO_DE_INTERVENCIONES = 'acido') as NUM_ACIDO, 
 SUM(TIPO_DE_INTERVENCIONES = 'apuntalado') as NUM_APUNTALADO, 
 SUM(TIPO_DE_INTERVENCIONES = 'termico') as NUM_TERMICO,
 SUM(COST) AS COST
 from Results r 
+LEFT JOIN TransactionsResults tr ON tr.TRANSACTION_ID = r.TRANSACTION_ID
 JOIN Transactions t ON r.PROPUESTA_ID = t.TRANSACTION_ID
 JOIN FieldWellMapping fwm ON r.WELL_FORMACION_ID = fwm.WELL_FORMACION_ID 
-LEFT JOIN (select TRANSACTION_ID, COMPANY, SUM(COST_MNX + COST_DLS * MNXtoDLS) as COST FROM ResultsCosts rc GROUP BY TRANSACTION_ID) costs  ON r.TRANSACTION_ID = costs.TRANSACTION_ID
+LEFT JOIN (select TRANSACTION_ID, SUM(COST_MNX + COST_DLS * MNXtoDLS) as COST FROM ResultsCosts rc GROUP BY TRANSACTION_ID) costs  ON r.TRANSACTION_ID = costs.TRANSACTION_ID
 ${whereClause}
 GROUP BY groupedName
 `
@@ -478,30 +515,29 @@ router.get('/estIncData', (req, res) => {
   if (level) {
     whereClause += ` AND ${level} = ?`
     let val  = well ? well : field ? field : activo ? activo : subdir ? subdir : null
-    values = values.concat([val, val, val])
+    values = values.concat([val, val, val, val])
   }
   if (formation) {
     whereClause += ` AND FORMACION = ?`
-    values = values.concat([formation, formation, formation])
+    values = values.concat([formation, formation, formation, formation])
   }
   if (company) {
-    whereClause += ' AND PROPUESTA_COMPANIA = ?'
-    values = values.concat([company, company, company])
+    whereClause += ' AND COMPANY = ?'
+    values = values.concat([company, company, company, company])
   }
   if (tipoDeIntervencion) {
     whereClause += ' AND TIPO_DE_INTERVENCIONES = ?'
-    values = values.concat([tipoDeIntervencion, tipoDeIntervencion, tipoDeIntervencion])
+    values = values.concat([tipoDeIntervencion, tipoDeIntervencion, tipoDeIntervencion, tipoDeIntervencion])
   }
   if (tipoDeTerminacion) {
     whereClause += ' AND TIPO_DE_TERMINACION = ?'
-    values = values.concat([tipoDeTerminacion, tipoDeTerminacion, tipoDeTerminacion])
+    values = values.concat([tipoDeTerminacion, tipoDeTerminacion, tipoDeTerminacion, tipoDeTerminacion])
   }
 
-
-  let groupByKey = 1
   let select = `1 as groupedName`
   let selectAcido = ''
-  let selectEstimulacion = ''
+  let selectEstimulacionLimpieza = ''
+  let selectEstimulacionMatricial = ''
   let selectApuntalado = ''
 
   switch(groupBy) {
@@ -521,12 +557,13 @@ router.get('/estIncData', (req, res) => {
       select = 't.FORMACION as groupedName'
       break
     case 'company':
-      select = 't.PROPUESTA_COMPANIA as groupedName'
+      select = 'COMPANY as groupedName'
       break
     case 'interventionType':
       select = '1'
       selectAcido = `, 'acido' AS groupedName`
-      selectEstimulacion = `, 'estimulacion' AS groupedName`
+      selectEstimulacionLimpieza = `, 'estimulacionLimpieza' AS groupedName`
+      selectEstimulacionMatricial = `, 'estimulacionMatricial' AS groupedName`
       selectApuntalado = `, 'apuntalado' AS groupedName`
 
       break
@@ -542,16 +579,25 @@ select groupedName, SUM(EST_INC_Qo) as EST_INC_Qo from
 (select EST_INC_Qo, ${select} ${selectAcido} FROM IntervencionesAcido ia
  JOIN FieldWellMapping fwm ON ia.WELL_FORMACION_ID = fwm.WELL_FORMACION_ID
  JOIN Transactions t ON ia.TRANSACTION_ID = t.TRANSACTION_ID
+ JOIN TransactionsResults tr on tr.PROPUESTA_ID = ia.TRANSACTION_ID
 ${whereClause}
  UNION
-select EST_INC_Qo, ${select} ${selectEstimulacion} FROM IntervencionesEstimulacions ie
+select EST_INC_Qo, ${select} ${selectEstimulacionLimpieza} FROM IntervencionesEstimulacions ie
  JOIN FieldWellMapping fwm ON ie.WELL_FORMACION_ID = fwm.WELL_FORMACION_ID
  JOIN Transactions t ON ie.TRANSACTION_ID = t.TRANSACTION_ID
-${whereClause}
+ JOIN TransactionsResults tr on tr.PROPUESTA_ID = ie.TRANSACTION_ID
+${whereClause} AND TIPO_DE_INTERVENCIONES = 'estimulacionLimpieza'
+  UNION
+select EST_INC_Qo, ${select} ${selectEstimulacionMatricial} FROM IntervencionesEstimulacions ie
+ JOIN FieldWellMapping fwm ON ie.WELL_FORMACION_ID = fwm.WELL_FORMACION_ID
+ JOIN Transactions t ON ie.TRANSACTION_ID = t.TRANSACTION_ID
+ JOIN TransactionsResults tr on tr.PROPUESTA_ID = ie.TRANSACTION_ID
+${whereClause} AND TIPO_DE_INTERVENCIONES = 'estimulacionMatricial'
   UNION
 select EST_INC_Qo, ${select} ${selectApuntalado} FROM IntervencionesApuntalado iap
  JOIN FieldWellMapping fwm ON iap.WELL_FORMACION_ID = fwm.WELL_FORMACION_ID
  JOIN Transactions t ON iap.TRANSACTION_ID = t.TRANSACTION_ID
+ JOIN TransactionsResults tr on tr.PROPUESTA_ID = iap.TRANSACTION_ID
  ${whereClause}) as a
  GROUP BY groupedName
 `
@@ -587,7 +633,7 @@ router.get('/volumeData', (req, res) => {
     values.push(formation)
   }
   if (company) {
-    whereClause += ' AND PROPUESTA_COMPANIA = ?'
+    whereClause += ' AND COMPANY = ?'
     values.push(company)
   }
   if (tipoDeIntervencion) {
@@ -624,8 +670,8 @@ router.get('/volumeData', (req, res) => {
       select = `FORMACION as groupedName,`
       break
     case 'company':
-      groupByClause = 'GROUP BY PROPUESTA_COMPANIA'
-      select = `PROPUESTA_COMPANIA as groupedName,`
+      groupByClause = 'GROUP BY COMPANY'
+      select = `COMPANY as groupedName,`
       break
     case 'interventionType':
       groupByClause = 'GROUP BY TIPO_DE_INTERVENCIONES'
@@ -656,6 +702,7 @@ SUM(IF(rt.VOLUMEN_VAPOR_INYECTAR, rt.VOLUMEN_VAPOR_INYECTAR, 0)) as TOTAL_VAPOR_
 FROM Results r 
 JOIN FieldWellMapping fwm ON r.WELL_FORMACION_ID = fwm.WELL_FORMACION_ID
 LEFT JOIN Transactions t ON r.PROPUESTA_ID = t.TRANSACTION_ID
+LEFT JOIN TransactionsResults tr on tr.TRANSACTION_ID = r.TRANSACTION_ID
 LEFT JOIN ResultsAcido ra ON r.WELL_FORMACION_ID = ra.WELL_FORMACION_ID
 LEFT JOIN ResultsApuntalado rap ON r.WELL_FORMACION_ID = rap.WELL_FORMACION_ID
 LEFT JOIN ResultsEstimulacions re ON r.WELL_FORMACION_ID = re.WELL_FORMACION_ID
@@ -703,10 +750,11 @@ JOIN FieldWellMapping ON t.WELL_FORMACION_ID = FieldWellMapping.WELL_FORMACION_I
 router.get('/dateDiffData', (req, res) => {
 
   let query = `
-select TIPO_DE_INTERVENCIONES as type, AVG(DATEDIFF(FECHA_INTERVENCION, FECHA_PROGRAMADA_INTERVENCION))  as avgDateDiff
+select t.TIPO_DE_INTERVENCIONES as type, AVG(DATEDIFF(FECHA_INTERVENCION, FECHA_PROGRAMADA_INTERVENCION))  as avgDateDiff, COUNT(1) as COUNT
 FROM Results r 
 JOIN Intervenciones i ON r.PROPUESTA_ID = i.TRANSACTION_ID 
-GROUP BY TIPO_DE_INTERVENCIONES`
+JOIN Transactions t on r.PROPUESTA_ID = t.TRANSACTION_ID
+GROUP BY type`
 
   connection.query(query, (err, results) => {
       console.log('comment err', err)

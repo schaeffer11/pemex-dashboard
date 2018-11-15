@@ -1,142 +1,50 @@
 .input-forms {
 	height: 100%;
 	min-width: 1000px;
-	padding: .7em;
+	color: $white;
 
-
-/*
-	grid-template-rows: 100px 75px 40px 500px;
-	grid-template-areas: 	"tabs"
-							"subtabs"
-							"title"
-							"forms";
-*/
-	.tabs {
-		grid-area: tabs;
-		padding: 10px 40px 0;
-		z-index: 2;
-		.tab {
-			height: calc(100% + 1px);
-			display: inline-block;
-			border: solid 1px $primary-green;
-                        border-bottom: none;
-			border-radius: 10px 10px 0px 0px;
-			width: 200px;
-			padding: 10px;
-			color: $primary-font-color;
-			background: $white;
-			margin-right: 10px;
-			cursor: pointer;
-                        text-align: center;
-                        font-weight: 500;
-                        font-size: 1.1em;
-
-                        &.active {
-                          color: $white;
-                          background: $primary-green;
-                          border-color: $primary-green;
-                          border-bottom: none;
-                        }
+	/* Adjust subtabs to overlap with the banner when present */
+	.banner {
+		+ .subtabs {
+			margin-top: -69px;
 		}
 	}
 
-	.save-button {
-		width: 120px;
-		left: calc(35% - 120px);
-		position: relative;
-		margin-right: 5px;
-		margin-top: 10px;
-		padding-bot: 40px;
-		color: white;
-  	}
-  	
-	.submit-button {
-		width: 120px;
-		left: calc(35% - 120px);
-		position: relative;
-		margin-left: 5px;
-		margin-top: 10px;
-		padding-bot: 40px;
-		color: white;
-	}
-
 	.subtabs {
-                min-height: 50px;
-                background: $primary-green;
+        min-height: 50px;
 		grid-area: subtabs;
 		cursor: pointer;
-                text-align: center;
-                border-radius: 10px 10px 0px 0px;
+        text-align: center;
+        border-radius: 10px 10px 0px 0px;
+		position: relative;
+
+		&::before {
+			position: absolute;
+			content: '';
+			width: 100%;
+			height: 100%;
+			display: block;
+			background: linear-gradient(transparent  20%, $background-color 40%);
+		}
 
 		.subtab {
-                        position: relative;
+            position: relative;
 			display: inline-block;
 			width: calc(100vw / 12);
-                        vertical-align: top;
+            vertical-align: middle;
 			text-align: center;
-                        margin: 20px auto 40px;
-                        color: $white;
-                        font-size: .75rem;
-                        font-weight: 100;
+			margin: 20px auto 40px;
+            color: $white;
+            font-size: .75rem;
+            font-weight: 100;
 
-                        &:before {
-                            display: block;
-                            content: "";
-                            height: 2px;
-                            width: 100%;
-                            background: white;
-                            top: 17px;
-                            position: absolute;
-                        }
-
-                        &:first-child {
-                            &:before {
-                                     width: 50%;
-                                     margin-left: 50%;
-                            }
-                        }
-
-                        &:last-child {
-                            &:before {
-                                     width: 50%;
-                                     margin-left: 0%;
-                            }
-                        }
-
-                        span {
-                          display: block;
-                          position: relative;
-                          height: 20px;
-                          width: 20px;
-                          background: $white;
-                          border-radius: 50%;
-                          margin: 8px auto 10px;
-                        }
-
-                        &.active {
-                           font-size: 1.1em;
-                           font-weight: 500;
-
-                           span {
-                             height: 30px;
-                             width: 30px;
-                             margin-top: 0;
-
-                             &:after {
-                               display: block;
-                               content: '';
-                               width: 20px;
-                               height: 20px;
-                               border-radius: 50%;
-                               position: absolute;
-                               margin: 5px;
-                               background: $active-green;
-                             }
-                           }
-                        }
-                        &.error {
-                          color: red;
-                        }
+			&.active {
+            	font-weight: bold;
+				border-bottom: 1px solid $white;
+			}
+            &.error {
+            	color: red;
+            }
 		}
 
 		.subtab-active {
@@ -154,23 +62,31 @@
 		}
 	}
 
-        .tab-content {
-                /*
-                border-width: 0 1px 1px 1px; 
-                border-style: solid;
-				border-color: $primary-green;   
-				*/
+    .tab-content {
 
 		.tab-title {
-			font-size: 1.5em;
-			font-weight: bold;
-                        padding-bottom: 1em;
-                        margin-bottom: 1em;
-                        color: $primary-font-color;
-                        border-bottom: 1px solid $primary-font-color;
+			font-size: 2em;
+            margin-bottom: 1em;
+            color: $primary-font-color;
+            border-bottom: 1px solid $greyish-brown;
 		}
 
-        }
+		.tab-actions {
+			font-size: 1.5em;
+			padding-bottom: 1em;
+			margin-bottom: 1em;
+
+			i.fa {
+				color: $white;
+				font-size: 19px;
+			}
+
+			.cta.load {
+				float: right;
+			}
+		}
+
+    }
 
 	.img-preview {
 		max-width: 200px;
@@ -188,32 +104,47 @@
 		outline: 0 !important;
 	}
 
+	div[contenteditable="true"] {
+		background: $white;
+		color: $black;
+		padding: 1px;
+		border: 2px solid $white;
+	}
+
 	.form {
 		grid-area: forms;
 
-                .header {
-                     font-weight: 600;
-                     font-size: 1.4em;
-                     color: $primary-green;
-                     margin-left: 0;
-                }
+			.header {
+            	font-weight: 600;
+				font-size: 1.25em;
+				color: $white;
+				margin-bottom: 5px;
+            }
 
+			.input-table {
+				border: 2px solid $cloudy-blue;
+				margin-bottom: 10px;
+			}
 
             .input-row {
                 background: $table-row-color;
                 padding: 10px;
-                margin-bottom: 4px;
                 align-items: center;
+				border-bottom: 1px solid $cloudy-blue;
 
                 .label {
-                    color: black;
+                    color: white;
                     font-weight: 500;
                     font-size: .9em;
                 }
 
-                &:nth-child(even) {
+                &:nth-child(odd) {
                    background: $table-row-alt-color;
                 }
+
+				&:last-child {
+					border: none;
+				}
 
                 .input-row-tooltip {
                 	position: absolute;
@@ -228,7 +159,6 @@
                 	z-index: 10;
                 }
 
-
        			&:hover {
        				.input-row-tooltip {
        					visibility: visible;
@@ -236,32 +166,85 @@
        			}
             }
 
+			/* React Select Fix */
+			@include react-select-fix();
+			.input {
+				grid-area: input;
+				font-size: 12px;
+
+				& > div {
+					min-height: 28px;
+
+					[aria-hidden]{
+						padding: 2px;
+					}
+
+					& > div:first-child {
+						padding: 0px 4px;
+					}
+				}
+
+				div:nth-child(3) {
+					color: $black;
+				}
+			}
+
             .lab-results {
                 margin: 2em 0;
             }
 	}
 
+	.input-row-unitless{
+		@include react-select-fix()
+		.input div:nth-child(3) {
+			color: $black;
+		}
+	}
+
+	.ReactTable {
+		border: solid 2px $cloudy-blue;
+
+		.rt-th, .rt-td {
+			border-bottom: 1px solid $cloudy-blue;
+			border-right: 1px solid $cloudy-blue;
+		}
+	}
+
+
+	.button-group{
+		padding: 20px 40px;
+		display: inline-block;
+		width: 100%;
+	}
+
+	.save-button {
+		width: 120px;
+		position: relative;
+		margin-right: 5px;
+		margin-top: 10px;
+		padding-bot: 40px;
+		color: white;
+		float: right;
+	}
+
+	.submit-button {
+		width: 120px;
+		position: relative;
+		margin-left: 5px;
+		margin-top: 10px;
+		padding-bot: 40px;
+		color: white;
+		float: right;
+	}
+
+	.bug-button {
+		float: left;
+	}
+
     .multistep-form {
       .content {
         padding: 20px 40px;
-        border: solid;
-        border-width: 0px 1px 1px 1px;
-				border-color: $primary-green;
       }
-    }
-
-
-    .general-data-outer {
-
-		.image {
-			z-index: 1;
-			margin-top: 10px;
-			margin-bottom: 20px;
-			width: 90%;
-			left: 5%;
-			position: relative;
-		}
-
     }
 
     .general-data {
@@ -270,9 +253,7 @@
     	grid-column-gap: 10px;
     	position: relative;
     	width: 80%;
-    	height: 520px;
     	left: 10%;
-    	border: solid 2px green;
     	border-radius: 5px;
     	padding: 20px;
     	grid-template-columns: calc(50% - 215px) 200px 200px calc(50% - 215px);
@@ -284,9 +265,6 @@
     	.general-form {
     		grid-area: general;
     	}
-
-
-
 
     	.intervention-form {
     		grid-area: intervention;
@@ -318,7 +296,7 @@
     	width: 80%;
     	height: 520px;
     	left: 10%;
-    	border: solid 2px green;
+    	border: solid 2px $white;
     	border-radius: 5px;
     	padding: 20px;
     	text-align: center;
@@ -391,8 +369,8 @@
 
 	.tecnica-del-campo {
 		display: grid;
-		grid-template-columns: 33% 33% 33%;
-		grid-column-gap: 10px;
+		grid-template-columns: 32% 32% 32%;
+		grid-column-gap: 2%;
 
 		grid-template-areas: 	
 		"image image image"
@@ -548,9 +526,7 @@
 
 
 	.mecanico-y-aparejo {
-		display: grid;
-		grid-template-columns: 50% 50%;
-		grid-column-gap: 10px;
+		@grid-two-column()
 
 		grid-template-areas: 
 		'image image'
@@ -586,9 +562,7 @@
 	}
 
 	.historico-presion-campo {
-		display: grid;
-		grid-template-columns: 50% 50%;
-		grid-column-gap: 10px;
+		@grid-two-column()
 		grid-template-areas: 	'inputs image';
 		.inputs {
 			grid-area: inputs;
@@ -611,9 +585,7 @@
 	}
 	
 	.historico-presion {
-		display: grid;
-		grid-template-columns: 50% 50%;
-		grid-column-gap: 10px;
+		@grid-two-column()
 		grid-template-areas: 'inputs image';
 		.inputs {
 			grid-area: inputs;
@@ -639,8 +611,8 @@
 	.analisis-del-agua {
 		display: grid;
 		grid-template-rows: 675px auto;
-		grid-template-columns: 50% 50%;
-		grid-column-gap: 10px;
+		grid-template-columns: 48% 48%;
+		grid-column-gap: 4%;
 		grid-template-areas: 	'left right'
 								'left right';
 
@@ -674,9 +646,7 @@
 	.propuesta-de-estimulacion {
 		overflow-x: auto;
 		.top {
-			display: grid;
-			grid-template-columns: 50% 50%;
-			grid-column-gap: 10px;
+			@include grid-two-column();;
 			grid-template-areas: 'left right';
 		
 			.left {
@@ -742,9 +712,7 @@
 	}
 
 	.resultados-de-simulacion {
-		display: grid;
-		grid-template-columns: 50% 50%;
-		grid-column-gap: 10px;
+		@include grid-two-column();
 		grid-template-areas: 	'image image'
 								'left right';
 
@@ -771,9 +739,7 @@
 	}
 
 	.estimacion-inc-produccion-estimulacion {
-		display: grid;
-		grid-template-columns: 50% 50%;
-		grid-column-gap: 10px;
+		@include grid-two-column();
 		grid-template-areas: 'left right';
 
 		.image {
@@ -822,8 +788,8 @@
 		overflow-x: auto;
 		.top {
 			display: grid;
-			grid-template-columns: 50% 50%;
-			grid-column-gap: 10px;
+			grid-template-columns: 48% 48%;
+			grid-column-gap: 4%;
 			grid-template-areas: 'left right';
 		
 			.left {
@@ -852,9 +818,7 @@
 	}
 
 	.pruebas-de-laboratorio-acido-extra {
-		display: grid;
-		grid-template-columns: 50% 50%;
-		grid-column-gap: 10px;
+		@include grid-two-column();
 		grid-template-areas: 'left right';
 	
 		.left {
@@ -868,9 +832,7 @@
 	}
 
 	.resultados-de-simulacion-acido {
-		display: grid;
-		grid-template-columns: 50% 50%;
-		grid-column-gap: 10px;
+		@include grid-two-column();
 		grid-template-areas: 	'image image'
 								'left right';
 
@@ -896,9 +858,7 @@
 	}
 
 	.estimacion-inc-produccion-estimulacion-acido {
-		display: grid;
-		grid-template-columns: 50% 50%;
-		grid-column-gap: 10px;
+		@include grid-two-column();
 		grid-template-areas: 'left right';
 
 		.image {
@@ -932,8 +892,8 @@
 		overflow-x: auto;
 		.top {
 			display: grid;
-			grid-template-columns: 50% 50%;
-			grid-column-gap: 10px;
+			grid-template-columns: 48% 48%;
+			grid-column-gap: 4%;
 			grid-template-areas: 'left right';
 		
 			.left {
@@ -963,8 +923,8 @@
 	.pruebas-de-laboratorio-apuntalado-extra {
 		.top{
 			display: grid;
-			grid-template-columns: 50% 50%;
-			grid-column-gap: 10px;
+			grid-template-columns: 48% 48%;
+			grid-column-gap: 4%;
 			grid-template-areas: 'left right';
 		
 			.left {
@@ -980,9 +940,7 @@
 	}
 
 	.resultados-de-simulacion-apuntalado {
-		display: grid;
-		grid-template-columns: 50% 50%;
-		grid-column-gap: 10px;
+		@include grid-two-column();
 		grid-template-areas: 	'image image'
 								'left right';
 
@@ -1008,9 +966,7 @@
 	}
 
 	.estimacion-inc-produccion-estimulacion-apuntalado {
-		display: grid;
-		grid-template-columns: 50% 50%;
-		grid-column-gap: 10px;
+		@include grid-two-column();
 		grid-template-areas: 'left right';
 
 		.image {
@@ -1091,12 +1047,121 @@
 		}
 	}
 
-        .form-error {
-          margin: auto;
-          text-align: center;
-          color: red;
-          margin: 1rem auto;
-        }
+
+
+	.banner {
+		background-size: cover;
+		height: 250px;
+		min-height: 100px;
+		background-repeat: no-repeat;
+		position: relative;
+		margin-bottom: 20px;
+
+		&.TechnicaDelPozo {
+			background-image: url('/images/fichaTecnicaDelPozoBanner2.jpeg');
+		}
+
+		&.TecnicaDelCampo {
+			background-image: url('/images/fichaTecnicaDelCampoBanner2.jpeg');
+		}
+
+		&.EvaluacionPetrofisica {
+			background-image: url('/images/evaluacionPetrofisicaBanner2.jpeg');
+		}
+
+		&.MecanicoYAparejo {
+			background-image: url('/images/mecanicoBanner2.jpeg');
+		}
+
+		&.HistoricoDePresionCampo {
+			background-image: url('/images/pressionBanner.png');
+		}
+
+		&.HistoricoDePresionPozo {
+			background-image: url('/images/pressionBanner.png');
+		}
+
+		&.AnalisisDelAgua {
+			background-image: url('/images/aguaBanner.png');
+		}
+
+		&.PropuestaDeEstimulacion {
+			background-image: url('/images/propuestaBanner.png');
+		}
+
+		&.PruebasDeLaboratorio {
+			background-image: url('/images/labTestsBanner.png');
+		}
+
+		&.PruebasDeLaboratorioEstimulacion {
+			background-image: url('/images/labTestsBanner.png');
+		}
+
+		&.PruebasDeLaboratorioExtra {
+			background-image: url('/images/labTest2Banner2.jpeg');
+		}
+
+		&.ResultadosDeLaSimulacionEstimulacion {
+			background-image: url('/images/simulationBanner.png');
+		}
+
+		&.EstimacionIncProduccionEstimulacion {
+			background-image: url('/images/estIncBanner2.jpeg');
+		}
+
+		&.EstimacionCostosEstimulacion {
+			background-image: url('/images/estCostBanner.png');
+		}
+
+		&.PropuestaDeAcido {
+			background-image: url('/images/propuestaBanner.png');
+		}
+
+		&.ResultadosDeLaSimulacionAcido {
+			background-image: url('/images/simulationBanner.png');
+		}
+
+		&.EstimacionIncProduccionAcido {
+			background-image: url('/images/estIncBanner.png');
+		}
+
+		&.PropuestaDeApuntalado {
+			background-image: url('/images/propuestaBanner.png');
+		}
+
+		&.ResultadosDeLaSimulacionApuntalado {
+			background-image: url('/images/simulationBanner.png');
+		}
+
+		&.EstimacionIncProduccionApuntalado {
+			background-image: url('/images/estIncBanner.png');
+		}
+
+		&.EstimacionCostos {
+			background-image: url('/images/estCostBanner.png');
+		}
+
+		&.SistemasArtificialesDeProduccion {
+			background-image: url('/images/sistemasBanner.png');
+		}
+
+		&.PropuestaTermica {
+			background-image: url('/images/propuestaBanner.png');
+		}
+	}
+
+	input[type="file"]::-webkit-file-upload-button {
+		border-radius: 4px;
+		border: solid 2px $cloudy-blue;
+		background-color: #ffffff;
+	}
+
+    .form-error {
+       margin: auto;
+       text-align: center;
+       color: red;
+       margin: 1rem auto;
+    }
 
 }
 

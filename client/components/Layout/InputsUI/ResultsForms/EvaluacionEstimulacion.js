@@ -19,6 +19,18 @@ import { setGeneralEvaluacionEstimulacion, setMergeEvaluacionEstimulacion } from
           type: 'number',
           value: '',
         },
+        qo: {
+          type: 'number',
+          value: '',
+        },
+        qw: {
+          type: 'number',
+          value: '',
+        },
+        qg: {
+          type: 'number',
+          value: '',
+        },
       }
     }
   }
@@ -84,21 +96,62 @@ import { setGeneralEvaluacionEstimulacion, setMergeEvaluacionEstimulacion } from
       <div className='result-form' >
         <div className='header'>
         </div>
+        <div className="input-table">
+          <InputRow
+            header="Penetración radial"
+            name='penetracionRadial'
+            unit="m"
+            value={penetracionRadial}
+            onChange={e => setGeneralEvaluacionEstimulacion(['penetracionRadial'], e)}
+            errors={this.state.errors}
+            onBlur={this.updateErrors}
+          />
+          <InputRow
+            header="Longitud de agujero de gusano"
+            name='longitudDeAgujeroDeGusano'
+            unit="m"
+            value={longitudDeAgujeroDeGusano}
+            onChange={e => setGeneralEvaluacionEstimulacion(['longitudDeAgujeroDeGusano'], e)}
+            errors={this.state.errors}
+            onBlur={this.updateErrors}
+          />
+        </div>
+      </div>
+    )
+  }
+
+  makeProductionResults() {
+    let { formData, setGeneralEvaluacionEstimulacion } = this.props
+    let { qo, qg, qw } = formData
+    return (
+      <div className='result-form' >
+        <div className='header'>
+          Producción post-intervención
+        </div>
         <InputRow
-          header="Penetración radial"
-          name='penetracionRadial'
-          unit="m"
-          value={penetracionRadial}
-          onChange={e => setGeneralEvaluacionEstimulacion(['penetracionRadial'], e)}
+          header={<div>Q<sub>o</sub></div>}
+          name='qo'
+          unit="bpd"
+          value={qo}
+          onChange={e => setGeneralEvaluacionEstimulacion(['qo'], e)}
           errors={this.state.errors}
           onBlur={this.updateErrors}
         />
         <InputRow
-          header="Longitud de agujero de gusano"
-          name='longitudDeAgujeroDeGusano'
-          unit="m"
-          value={longitudDeAgujeroDeGusano}
-          onChange={e => setGeneralEvaluacionEstimulacion(['longitudDeAgujeroDeGusano'], e)}
+          header={<div>Q<sub>g</sub></div>}
+          name='qg'
+          unit="MMpcd"
+          value={qg}
+          onChange={e => setGeneralEvaluacionEstimulacion(['qg'], e)}
+          errors={this.state.errors}
+          onBlur={this.updateErrors}
+        />
+        <InputRow
+          header={<div>Q<sub>w</sub></div>}
+          name='qw'
+          unit="bbl"
+          value={qw}
+          onChange={e => setGeneralEvaluacionEstimulacion(['qw'], e)}
           errors={this.state.errors}
           onBlur={this.updateErrors}
         />
@@ -142,6 +195,7 @@ import { setGeneralEvaluacionEstimulacion, setMergeEvaluacionEstimulacion } from
         <div className='image' />
         <div className='left'>
           { stimulationType === 'matricial' ? this.makeResultForm() : <div>Evaluacion no es requerida para limpiezas</div> }
+          { this.makeProductionResults() }
         </div>
       </div>
     )

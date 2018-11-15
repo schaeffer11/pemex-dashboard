@@ -32,6 +32,7 @@ import LabTable from './LabTable'
       estVolumeData: [],
       date: null,
       labData: [],
+      specificLabData: [],
     }    
     this.cards = []
     for (let i = 0; i < 7; i += 1) {
@@ -81,6 +82,38 @@ import LabTable from './LabTable'
         })
     })
   }
+
+
+
+
+  async fetchLabData(id, type) {
+    let { token } = this.props
+    let specificLabQuery = `/job/getLabData?labID=${id}&type=${type}` 
+    
+    const headers = {
+      headers: {
+        'Authorization': `Bearer ${token}`,
+        'content-type': 'application/json',
+      }
+    }
+
+    this.setState({
+      specificLabData: []
+    })
+
+      fetch(specificLabQuery, headers)
+        .then(r => r.json())
+        .then(r => {
+
+          this.setState({
+            specificLabData: r
+          })
+      })
+
+  }
+
+
+
 
   async fetchData() {
   	console.log('fetching')
@@ -205,7 +238,6 @@ import LabTable from './LabTable'
         let obj = imageData[i]
 
         if (Array.isArray(obj)) {
-          console.log(obj)
           return obj.map(j => {
             return <img style={{objectFit: 'contain'}} label={`Lab - ${j.imgName.split('.')[2]}`} src={j.imgURL}></img> 
           })
@@ -224,7 +256,7 @@ import LabTable from './LabTable'
   } 
 
   render() {
-    let { fieldWellOptions, jobOptions, imageData, costData, estCostData, volumeData, estVolumeData, cedulaData, cedulaResultData, date, aforoData, interventionData, interventionResultsData, labData } = this.state
+    let { fieldWellOptions, jobOptions, imageData, costData, estCostData, volumeData, estVolumeData, cedulaData, cedulaResultData, date, aforoData, interventionData, interventionResultsData, labData, specificLabData } = this.state
     let { globalAnalysis } = this.props
 
     globalAnalysis = globalAnalysis.toJS()
@@ -240,6 +272,7 @@ import LabTable from './LabTable'
     console.log('aforo data', aforoData)
     console.log('date', date)
     console.log('labData', labData)
+    console.log('specificLabData', specificLabData)
 
     return (
       <div className="data job-view">
@@ -303,7 +336,7 @@ import LabTable from './LabTable'
                 ref={this.cards[5]}
                 isImage={true}
               >
-              <LabTable data={labData}/>
+              <LabTable data={labData} labData={specificLabData} handleChange={this.fetchLabData} />
             </Card> 
           </CardDeck>
           <div style={{height: '500px'}}/>

@@ -59,7 +59,7 @@ let layerColumns = [
     accessor: 'sw',
     cell: 'renderNumber',
   }, { 
-    Header: <div>Dens.<br></br>(gr/cc)</div>,
+    Header: <div>Dens.<br></br>(gr/cm<sup>3</sup>)</div>,
     accessor: 'dens',
     cell: 'renderNumber',
   }, { 
@@ -97,7 +97,7 @@ let mudLossColumns = [
     accessor: 'lodoPerdido',
     cell: 'renderNumber',
   }, { 
-    Header: <div>Densidad<br></br>(gr/cc)</div>,
+    Header: <div>Dens.<br></br>(gr/cm<sup>3</sup>)</div>,
     accessor: 'densidad',
     cell: 'renderNumber',
   }
@@ -306,7 +306,6 @@ let mudLossColumns = [
   render() {
     return (
       <div className="form evaluacionPetrofisica">
-        <div className="image"/>
         {this.makeLayerTable()}
         {this.makeMudLossTable()}
         {this.makeImgInput()}

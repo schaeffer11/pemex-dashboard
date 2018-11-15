@@ -92,7 +92,7 @@ import ButtonGroup from './ButtonGroup'
 
   componentDidUpdate(prevProps) {
     let { hasSubmitted, formData, setFromSaveFichaTecnicaHighLevel, setHasErrorsFichaTecnicaHighLevel } = this.props
-    formData = formData.toJS()
+    formData = formData ? formData.toJS() : {}
     let { fromSave } = formData
     if (hasSubmitted !== prevProps.hasSubmitted || fromSave) {
       let err = this.checkAllInputs(true, formData)
@@ -105,7 +105,7 @@ import ButtonGroup from './ButtonGroup'
 
   checkAllInputs(showErrors, data=null) {
     let { formData } = this.props
-    formData = formData.toJS()
+    formData = formData ? formData.toJS() : {}
     formData = data !== null ? data : formData
     const { errors } = this.state
     let hasErrors = false
@@ -153,7 +153,7 @@ import ButtonGroup from './ButtonGroup'
       setSubdireccion(val.value)
       setActivo('')   
       setCampo('')
-      setPozo('')
+      setPozo({value: '', label:''})
     }
   }
 
@@ -165,7 +165,7 @@ import ButtonGroup from './ButtonGroup'
     if (activo !== val.value) {
       setActivo(val.value) 
       setCampo('')
-      setPozo('')  
+      setPozo({value: '', label:''})
     }
   }
 
@@ -176,8 +176,12 @@ import ButtonGroup from './ButtonGroup'
 
     if (campo !== val.value) {
       setCampo(val.value)
-      setPozo('')
+      setPozo({value: '', label:''})
     }
+  }
+
+  handleSelectWell(val) {
+      this.props.setPozo(val)
   }
 
   checkIncomplete() {
@@ -233,12 +237,14 @@ import ButtonGroup from './ButtonGroup'
           Seleccione borrador para descargar
         </div>
         <div className="modal-body" style={{ height: '200px' }}>
-            {saveOptions.map(i => {
-              let className = i.id === selectedSave ? 'save-item active-save' : 'save-item'
-              return (
-                <div key={`saveOption_${i.id}`} className={className} onClick={(e) => this.handleSelectSave(i.id, i.name)}>{i.name}</div>
-                )
-            })}
+            <div className="save-item-container">
+              {saveOptions.map(i => {
+                let className = i.id === selectedSave ? 'save-item active-save' : 'save-item'
+                return (
+                  <div key={`saveOption_${i.id}`} className={className} onClick={(e) => this.handleSelectSave(i.id, i.name)}>{i.name}</div>
+                  )
+              })}
+            </div>
         </div> 
         <button disabled={!selectedSave} className="submit submit-load" onClick={this.handleLoad}>Descargar borrador</button>
       </div>
@@ -262,7 +268,7 @@ import ButtonGroup from './ButtonGroup'
 
   makeGeneralInterventionForm() {
     let { setObjetivo, setAlcances, setTipoDeIntervenciones, interventionFormData, setFechaProgramadaIntervencion, setIntervencionProgramada } = this.props
-    interventionFormData = interventionFormData.toJS()
+    interventionFormData = interventionFormData ? interventionFormData.toJS() : {}
     let { objetivo, alcances, tipoDeIntervenciones, fechaProgramadaIntervencion, intervencionProgramada } = interventionFormData
     let tipoDeIntervencionesOptions = [
       {label: 'Tratamiento de Estimulación', value: 'estimulacion'},
@@ -275,27 +281,29 @@ import ButtonGroup from './ButtonGroup'
         <div className='header'>
           Intervención
         </div>
-        <TextAreaUnitless header="Objetivo" name='objetivo' className={'objetivo'} value={objetivo} onChange={setObjetivo} tooltip='Describir el objetivo de la intervención indicando la causa principal, tipo de tratamiento a aplicar y técnica de colocación de los sistemas.' />
-        <TextAreaUnitless header="Alcances" name='alcances' className={'alcances'} value={alcances} onChange={setAlcances} tooltip='Describir los alcances que se pretenden obtener con la intervención programada a ejecutar.' />
-        <InputRowSelectUnitless header='Tipo de intervenciones' name='tipoDeIntervenciones' value={tipoDeIntervenciones} options={tipoDeIntervencionesOptions} callback={(e) => setTipoDeIntervenciones(e.value)} />
-        <InputDate
-          header="Fecha Programada de Intervención"
-          name='fechaProgramadaIntervencion'
-          value={fechaProgramadaIntervencion}
-          onChange={setFechaProgramadaIntervencion}
-          onBlur={this.updateErrors}
-          errors={this.state.errors}
-        />
-        <InputRowSelectUnitless
-          header='Intervención Programada'
-          name='tipoDeIntervenciones'
-          value={intervencionProgramada}
-          options={[
-            {label: 'Sí', value: true},
-            {label: 'No', value: false},
-          ]}
-          callback={(e) => setIntervencionProgramada(e.value)}
-        />
+        <div className="input-table">
+          <TextAreaUnitless header="Objetivo" name='objetivo' className={'objetivo'} value={objetivo} onChange={setObjetivo} tooltip='Describir el objetivo de la intervención indicando la causa principal, tipo de tratamiento a aplicar y técnica de colocación de los sistemas.' />
+          <TextAreaUnitless header="Alcances" name='alcances' className={'alcances'} value={alcances} onChange={setAlcances} tooltip='Describir los alcances que se pretenden obtener con la intervención programada a ejecutar.' />
+          <InputRowSelectUnitless header='Tipo de intervenciones' name='tipoDeIntervenciones' value={tipoDeIntervenciones} options={tipoDeIntervencionesOptions} callback={(e) => setTipoDeIntervenciones(e.value)} />
+          <InputDate
+            header="Fecha Programada de Intervención"
+            name='fechaProgramadaIntervencion'
+            value={fechaProgramadaIntervencion}
+            onChange={setFechaProgramadaIntervencion}
+            onBlur={this.updateErrors}
+            errors={this.state.errors}
+          />
+          <InputRowSelectUnitless
+            header='Intervención Programada'
+            name='tipoDeIntervenciones'
+            value={intervencionProgramada}
+            options={[
+              {label: 'Sí', value: true},
+              {label: 'No', value: false},
+            ]}
+            callback={(e) => setIntervencionProgramada(e.value)}
+          />
+        </div>
       </div>
     )
   }
@@ -304,7 +312,7 @@ import ButtonGroup from './ButtonGroup'
     let { setActivo, setCampo, setPozo, setFormacion, formData, fieldWellOptions } = this.props
 
 
-    formData = formData.toJS()
+    formData = formData ? formData.toJS() : {}
     
     let { subdireccion, activo, campo, pozo, formacion } = formData
 
@@ -357,7 +365,9 @@ import ButtonGroup from './ButtonGroup'
             activos.push(i)
           }
         })
+
         activoOptions = activos.map(i => ({label: i.ACTIVO_NAME, value: i.ACTIVO_ID})).sort(sortLabels)
+                console.log(activoOptions, activos, fieldWellOptions)
       }
 
       if (activo) {
@@ -396,11 +406,13 @@ import ButtonGroup from './ButtonGroup'
         <div className='header'>
           Pozo
         </div>
-        <InputRowSelectUnitless header='Subdirección' name="subdireccion" value={subdireccion} options={subdireccionOptions} callback={this.handleSelectSubdireccion}  />
-        <InputRowSelectUnitless header='Activo' name="activo" value={activo} options={activoOptions} callback={this.handleSelectActivo}  />
-        <InputRowSelectUnitless header="Campo" name="campo" value={campo} options={fieldOptions} callback={this.handleSelectField} name='campo'  />
-        <InputRowSelectUnitless header="Pozo" name="pozo" value={pozo} options={wellOptions} callback={(e) => setPozo(e.value)} name='pozo'  />
-        <InputRowSelectUnitless header="Formación" value={formacion} options={formacionOptions} callback={(e) => setFormacion(e.value)} name='formacion'  />
+        <div className="input-table">
+          <InputRowSelectUnitless header='Subdirección' name="subdireccion" value={subdireccion} options={subdireccionOptions} callback={this.handleSelectSubdireccion}  />
+          <InputRowSelectUnitless header='Activo' name="activo" value={activo} options={activoOptions} callback={this.handleSelectActivo}  />
+          <InputRowSelectUnitless header="Campo" name="campo" value={campo} options={fieldOptions} callback={this.handleSelectField} name='campo'  />
+          <InputRowSelectUnitless header="Pozo" name="pozo" value={pozo} options={wellOptions} callback={this.handleSelectWell} name='pozo'  />
+          <InputRowSelectUnitless header="Formación" value={formacion} options={formacionOptions} callback={(e) => setFormacion(e.value)} name='formacion'  />
+        </div>
       </div>
 
     )
@@ -464,6 +476,7 @@ import ButtonGroup from './ButtonGroup'
       fetch(`api/getHistIntervencionesEstimulacionNew?transactionID=${transactionID}&saved=1`, headers).then(r => r.json()),
       fetch(`api/getHistIntervencionesAcidoNew?transactionID=${transactionID}&saved=1`, headers).then(r => r.json()),
       fetch(`api/getHistIntervencionesApuntaladoNew?transactionID=${transactionID}&saved=1`, headers).then(r => r.json()),
+      fetch(`api/getHistIntervencionesTermicoNew?transactionID=${transactionID}&saved=1`, headers).then(r => r.json()),
       fetch(`api/getMudLoss?transactionID=${transactionID}&saved=1`, headers).then(r => r.json()),
       fetch(`api/getLayer?transactionID=${transactionID}&saved=1`, headers).then(r => r.json()),
       fetch(`api/getWell?transactionID=${transactionID}&saved=1`, headers).then(r => r.json()),
@@ -547,9 +560,7 @@ import ButtonGroup from './ButtonGroup'
 
     return (
       <div className='general-data-outer'>
-        <div className='image'>
-          <img src={'/images/homepageBannerThin2.jpg'} style={{width: '100%', borderRadius: '20px'}}></img> 
-        </div>
+        <div className='banner image' style={{backgroundImage:'url(/images/homepageBannerThin2.jpg)'}}></div>
          <ButtonGroup 
             className={'button-group'}
             buttons={
@@ -568,14 +579,14 @@ import ButtonGroup from './ButtonGroup'
           { this.makeGeneralForm() }
           { this.makeGeneralInterventionForm() }
           <button className="submit submit-load" onClick={this.activateModal}> Descargar borrador</button>
-          <button className='submit submit-continue' disabled={this.checkIncomplete()} onClick={(e) => setShowForms(true)} >Siguiente</button>
+          <button className='cta next submit-continue' disabled={this.checkIncomplete()} onClick={(e) => setShowForms(true)} >Siguiente</button>
           <Notification />
           <Loading />
           { isOpen ? this.buildModal() : null }
         </div>
        : <div className='form general-data-upload'>
           { this.makeUploadResultsForm() }
-          <button className='submit submit-continue' disabled={!selectedProposal} onClick={this.handleSiguienteResults}>Siguiente</button>
+          <button className='cta next submit-next' disabled={!selectedProposal} onClick={this.handleSiguienteResults}>Siguiente</button>
        </div> }
       </div>
     )
@@ -601,7 +612,7 @@ const mapDispatchToProps = dispatch => ({
   setSubdireccion: val => dispatch(setSubdireccion(val)), 
   setActivo: val => dispatch(setActivo(val)), 
   setCampo: val => dispatch(setCampo(val)), 
-  setPozo: val => dispatch(setPozo(val)), 
+  setPozo: val => dispatch(setPozo(val)),
   setFormacion: val => dispatch(setFormacion(val)),
   setObjetivo : val => dispatch(setObjetivo(val)),
   setAlcances : val => dispatch(setAlcances(val)),

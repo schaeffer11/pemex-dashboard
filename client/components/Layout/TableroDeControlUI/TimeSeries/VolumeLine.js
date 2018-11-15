@@ -35,34 +35,6 @@ import { KPI } from '../Common/KPIs'
         i.TOTAL_PRECOLCHON_APUNTALANTE ? precolchonApuntalante.push({ x: utc, y: i.TOTAL_PRECOLCHON_APUNTALANTE}) : null
 
       })
-      
-      // let desplazamientoN2 = []
-      // let totalPrecolchonN2 = []
-      // let vaporInjected = [] 
-
-      // i.TOTAL_DESPLAZAMIENTO_N2 ? desplazamientoN2.push({ x: utc, y: i.TOTAL_DESPLAZAMIENTO_N2}) : null
-      // i.TOTAL_PRECOLCHON_N2 ? totalPrecolchonN2.push({ x: utc, y: i.TOTAL_PRECOLCHON_N2}) : null
-      // i.TOTAL_VAPOR_INJECTED ? vaporInjected.push({ x: utc, y: i.TOTAL_VAPOR_INJECTED}) : null
-
-      // {
-      //   title: {
-      //     text: 'Volume Gasto (m3)'
-      //   }
-      // }
-
-      // [{
-      //   name: 'Desplazamiento N2',
-      //   data: desplazamientoN2,
-
-      // },{
-      //   name: 'Precolchon N2',
-      //   data: totalPrecolchonN2,
-
-      // },{
-      //   name: 'Vapor Injected',
-      //   data: vaporInjected,
-
-      // }]
 
 
       series = [{

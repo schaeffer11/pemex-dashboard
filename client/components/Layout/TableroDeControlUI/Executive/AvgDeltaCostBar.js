@@ -32,7 +32,7 @@ let colorWheel = [
     if (data.length > 0) {
       if (!groupBy) {
         data = [{
-          name: 'Average Cost',
+          name: 'Average Cost Deviation',
           data: [data[0].totalCost / data[0].totalEstimatedCost]
         }]
       }
@@ -58,10 +58,11 @@ let colorWheel = [
 	        text: ''
 	    },
       yAxis: {
-        reversed: true,
         title: {
           text: 'Percentage'
         },
+        min: -100,
+        max: 100,
         plotBands: [{
           color: '#ecb4b4',
           from: 0,

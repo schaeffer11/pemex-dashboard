@@ -145,64 +145,66 @@ import { calculateValuesTermicaCedula } from '../../../../../lib/formatters';
         <div className='header'>
           General
         </div>
-        <InputRowSelectUnitless
-          header="Compañía Seleccionada para el Tratamiento"
-          name="propuestaCompany"
-          options={companyOptions}
-          onBlur={this.updateErrors}
-          value={propuestaCompany}
-          callback={e => setMergePropuestaTermica({ propuestaCompany: e.value })}
-          errors={this.state.errors}
-        />
-        <CalculatedValue
-          header={<div>Intervalos</div>}
-          value={intervalsDiv}
-        />
-        <InputRow
-          header="Volumen de vapor a inyectar"
-          name='volumenVapor'
-          unit="ton"
-          value={volumenVapor}
-          onChange={(e) => setMergePropuestaTermica({ volumenVapor: e })}
-          errors={this.state.errors}
-          onBlur={this.updateErrors}
-        />
-        <InputRow
-          header="Calidad"
-          name='calidad'
-          unit="%"
-          value={calidad}
-          onChange={(e) => setMergePropuestaTermica({ calidad: e })}
-          errors={this.state.errors}
-          onBlur={this.updateErrors}
-        />
-        <InputRow
-          header="Gasto de inyección"
-          name='gastoInyeccion'
-          unit="GPM"
-          value={gastoInyeccion}
-          onChange={(e) => setMergePropuestaTermica({ gastoInyeccion: e })}
-          errors={this.state.errors}
-          onBlur={this.updateErrors}
-        />
-        <InputRow
-          header="Presión máxima de salida del generador"
-          name='presionMaximaSalidaGenerador'
-          unit="psi"
-          value={presionMaximaSalidaGenerador}
-          onChange={(e) => setMergePropuestaTermica({ presionMaximaSalidaGenerador: e })}
-          errors={this.state.errors}
-          onBlur={this.updateErrors}
-        />
-        <InputRow
-          header="Temperatura máxima del generador"
-          name='temperaturaMaximaGenerador'
-          unit="psi"
-          value={temperaturaMaximaGenerador}
-          onChange={(e) => setMergePropuestaTermica({ temperaturaMaximaGenerador: e })}
-          errors={this.state.errors}
-          onBlur={this.updateErrors}
-        />
+        <div className="input-table">
+          <InputRowSelectUnitless
+            header="Compañía Seleccionada para el Tratamiento"
+            name="propuestaCompany"
+            options={companyOptions}
+            onBlur={this.updateErrors}
+            value={propuestaCompany}
+            callback={e => setMergePropuestaTermica({ propuestaCompany: e.value })}
+            errors={this.state.errors}
+          />
+          <CalculatedValue
+            header={<div>Intervalos</div>}
+            value={intervalsDiv}
+          />
+          <InputRow
+            header="Volumen de vapor a inyectar"
+            name='volumenVapor'
+            unit="ton"
+            value={volumenVapor}
+            onChange={(e) => setMergePropuestaTermica({ volumenVapor: e })}
+            errors={this.state.errors}
+            onBlur={this.updateErrors}
+          />
+          <InputRow
+            header="Calidad"
+            name='calidad'
+            unit="%"
+            value={calidad}
+            onChange={(e) => setMergePropuestaTermica({ calidad: e })}
+            errors={this.state.errors}
+            onBlur={this.updateErrors}
+          />
+          <InputRow
+            header="Gasto de inyección"
+            name='gastoInyeccion'
+            unit="GPM"
+            value={gastoInyeccion}
+            onChange={(e) => setMergePropuestaTermica({ gastoInyeccion: e })}
+            errors={this.state.errors}
+            onBlur={this.updateErrors}
+          />
+          <InputRow
+            header="Presión máxima de salida del generador"
+            name='presionMaximaSalidaGenerador'
+            unit="psi"
+            value={presionMaximaSalidaGenerador}
+            onChange={(e) => setMergePropuestaTermica({ presionMaximaSalidaGenerador: e })}
+            errors={this.state.errors}
+            onBlur={this.updateErrors}
+          />
+          <InputRow
+            header="Temperatura máxima del generador"
+            name='temperaturaMaximaGenerador'
+            unit="psi"
+            value={temperaturaMaximaGenerador}
+            onChange={(e) => setMergePropuestaTermica({ temperaturaMaximaGenerador: e })}
+            errors={this.state.errors}
+            onBlur={this.updateErrors}
+          />
+        </div>
       </div>
     )
   }
@@ -289,16 +291,13 @@ import { calculateValuesTermicaCedula } from '../../../../../lib/formatters';
   render() {
 
     return (
-      <div className="form propuesta-de-estimulacion">
+      <div className="form propuesta-termica">
         <div className='top'>
           { this.makeCedulaTable() }
         </div>
         <div className='bot'>
           <div className="left">
             { this.makeGeneralForm() }
-          </div>
-          <div className="right">
-            <div className='image'/>
           </div>
         </div>
       </div>

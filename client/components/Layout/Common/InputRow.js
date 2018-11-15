@@ -44,7 +44,7 @@ export const InputRow = ({ header, type='number', name, unit, value, onChange, o
       <div className='unit'>
         {unit}
       </div>
-      {errors[name] !== undefined && errors[name] !== null && <div className="error">{errors[name].value}</div>}
+      {errors[name] !== undefined && errors[name] !== null && errors[name].value !== null && <div className="error">{errors[name].value}</div>}
     </div>
     )
 }
@@ -80,7 +80,7 @@ export const InputRowUnitless = ({ ref, header, type='text', name, unit, value, 
         {header}
       </div>
       <input className='input' type={type} value={value} onChange={handleChange} onBlur={(e) => checkEmpty(e.target.value, name, errors, onBlur)} name={name} index={index}/>
-      {errors[name] && errors[name].value !== null && <div className="error">{errors[name].value}</div>}
+      {errors[name] && errors[name].value !== "" && <div className="error">{errors[name].value}</div>}
     </div>
     )
 }
@@ -112,7 +112,7 @@ export const InputRowSelectMulti = ({ header, name, value, options, callback, on
         index={index}
         onBlur={handleBlur}
       />
-      {errors[name] !== null && <div className="error">{errors[name].value}</div>}
+      {errors[name] !== null && errors[name].value !== "" && <div className="error">{errors[name].value}</div>}
     </div>
     )
 }
@@ -151,7 +151,7 @@ export const InputRowSelectUnitless = ({ header, name, value, options, callback,
         index={index} 
       />
       {/* { errorElements } */}
-      {errors[name] !== undefined && errors[name] !== null && <div className="error">{errors[name].value}</div>}
+      {errors[name] !== undefined && errors[name] !== null && errors[name].value !== "" && <div className="error">{errors[name].value}</div>}
 
     </div>
     )
@@ -179,7 +179,7 @@ export const TextAreaUnitless = ({ header, name, unit, className, subheader, val
         name={name} 
         index={index}>
       </textarea>
-      {errors[name] && errors[name].value !== null && <div className="error">{errors[name].value}</div>}
+      {errors[name] && errors[name].value !== "" && <div className="error">{errors[name].value}</div>}
     </div>
     )
 }
@@ -259,7 +259,8 @@ export const InputDate = ({ name, onChange, value, header, onBlur, errors }) => 
           showMonthDropdown
           showYearDropdown
         />
-        {errors[name] && errors[name].value !== null && <div className="error">{errors[name].value}</div>}
+
+        {errors[name] && errors[name].value !== "" && <div className="error">{errors[name].value}</div>}
     </div>
     
   )

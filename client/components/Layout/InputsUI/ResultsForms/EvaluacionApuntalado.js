@@ -99,6 +99,18 @@ import { setGeneralEvaluacionApuntalado, setMergeEvaluacionApuntalado } from '..
           type: 'number',
           value: '',
         },
+        qo: {
+          type: 'number',
+          value: '',
+        },
+        qw: {
+          type: 'number',
+          value: '',
+        },
+        qg: {
+          type: 'number',
+          value: '',
+        },
       }
     }
   }
@@ -173,75 +185,116 @@ import { setGeneralEvaluacionApuntalado, setMergeEvaluacionApuntalado } from '..
       <div className='result-form' >
         <div className='header'>
         </div>
+        <div className="input-table">
+            <InputRow
+              header="Longitud apuntalada"
+              name='longitudApuntalada'
+              unit="m"
+              value={longitudApuntalada}
+              onChange={e => setGeneralEvaluacionApuntalado(['longitudApuntalada'], e)}
+              errors={this.state.errors}
+              onBlur={this.updateErrors}
+            />
+            <InputRow
+              header="Altura total fractura"
+              name='alturaTotalDeFractura'
+              unit="m"
+              value={alturaTotalDeFractura}
+              onChange={e => setGeneralEvaluacionApuntalado(['alturaTotalDeFractura'], e)}
+              errors={this.state.errors}
+              onBlur={this.updateErrors}
+            />
+            <InputRow
+              header="Ancho promedio"
+              name='anchoPromedio'
+              unit="pg."
+              value={anchoPromedio}
+              onChange={e => setGeneralEvaluacionApuntalado(['anchoPromedio'], e)}
+              errors={this.state.errors}
+              onBlur={this.updateErrors}
+            />
+            <InputRow
+              header="Concentración areal"
+              name='concentracionAreal'
+              unit={<div>lb/pg<sup>2</sup></div>}
+              value={concentracionAreal}
+              onChange={e => setGeneralEvaluacionApuntalado(['concentracionAreal'], e)}
+              errors={this.state.errors}
+              onBlur={this.updateErrors}
+            />
+            <InputRow
+              header="Conductividad"
+              name='conductividad'
+              unit="mD*ft"
+              value={conductividad}
+              onChange={e => setGeneralEvaluacionApuntalado(['conductividad'], e)}
+              errors={this.state.errors}
+              onBlur={this.updateErrors}
+            />
+            <InputRow
+              header="FCD"
+              name='fcd'
+              unit="adim."
+              value={fcd}
+              onChange={e => setGeneralEvaluacionApuntalado(['fcd'], e)}
+              errors={this.state.errors}
+              onBlur={this.updateErrors}
+            />
+            <InputRow
+              header="Presión neta"
+              name='presionNeta'
+              unit="psi"
+              value={presionNeta}
+              onChange={e => setGeneralEvaluacionApuntalado(['presionNeta'], e)}
+              errors={this.state.errors}
+              onBlur={this.updateErrors}
+            />
+            <InputRow
+              header="Eficiencia de fluido de fractura"
+              name='eficienciaDeFluidoDeFractura'
+              unit="%"
+              value={eficienciaDeFluidoDeFractura}
+              onChange={e => setGeneralEvaluacionApuntalado(['eficienciaDeFluidoDeFractura'], e)}
+              errors={this.state.errors}
+              onBlur={this.updateErrors}
+            />
+        </div>
+      </div>
+    )
+  }
+
+  makeProductionResults() {
+    let { formData, setGeneralEvaluacionApuntalado } = this.props
+    let { qo, qg, qw } = formData
+    return (
+      <div className='result-form' >
+        <div className='header'>
+          Producción post-intervención
+        </div>
         <InputRow
-          header="Longitud apuntalada"
-          name='longitudApuntalada'
-          unit="m"
-          value={longitudApuntalada}
-          onChange={e => setGeneralEvaluacionApuntalado(['longitudApuntalada'], e)}
+          header={<div>Q<sub>o</sub></div>}
+          name='qo'
+          unit="bpd"
+          value={qo}
+          onChange={e => setGeneralEvaluacionApuntalado(['qo'], e)}
           errors={this.state.errors}
           onBlur={this.updateErrors}
         />
         <InputRow
-          header="Altura total fractura"
-          name='alturaTotalDeFractura'
-          unit="m"
-          value={alturaTotalDeFractura}
-          onChange={e => setGeneralEvaluacionApuntalado(['alturaTotalDeFractura'], e)}
+          header={<div>Q<sub>g</sub></div>}
+          name='qg'
+          unit="MMpcd"
+          value={qg}
+          onChange={e => setGeneralEvaluacionApuntalado(['qg'], e)}
           errors={this.state.errors}
           onBlur={this.updateErrors}
         />
         <InputRow
-          header="Ancho promedio"
-          name='anchoPromedio'
-          unit="pg."
-          value={anchoPromedio}
-          onChange={e => setGeneralEvaluacionApuntalado(['anchoPromedio'], e)}
-          errors={this.state.errors}
-          onBlur={this.updateErrors}
-        />
-        <InputRow
-          header="Concentración areal"
-          name='concentracionAreal'
-          unit={<div>lb/pg<sup>2</sup></div>}
-          value={concentracionAreal}
-          onChange={e => setGeneralEvaluacionApuntalado(['concentracionAreal'], e)}
-          errors={this.state.errors}
-          onBlur={this.updateErrors}
-        />
-        <InputRow
-          header="Conductividad"
-          name='conductividad'
-          unit="mD*ft"
-          value={conductividad}
-          onChange={e => setGeneralEvaluacionApuntalado(['conductividad'], e)}
-          errors={this.state.errors}
-          onBlur={this.updateErrors}
-        />
-        <InputRow
-          header="FCD"
-          name='fcd'
-          unit="adim."
-          value={fcd}
-          onChange={e => setGeneralEvaluacionApuntalado(['fcd'], e)}
-          errors={this.state.errors}
-          onBlur={this.updateErrors}
-        />
-        <InputRow
-          header="Presión neta"
-          name='presionNeta'
-          unit="psi"
-          value={presionNeta}
-          onChange={e => setGeneralEvaluacionApuntalado(['presionNeta'], e)}
-          errors={this.state.errors}
-          onBlur={this.updateErrors}
-        />
-        <InputRow
-          header="Eficiencia de fluido de fractura"
-          name='eficienciaDeFluidoDeFractura'
-          unit="%"
-          value={eficienciaDeFluidoDeFractura}
-          onChange={e => setGeneralEvaluacionApuntalado(['eficienciaDeFluidoDeFractura'], e)}
+          header={<div>Q<sub>w</sub></div>}
+          name='qw'
+          unit="bbl"
+          value={qw}
+          onChange={e => setGeneralEvaluacionApuntalado(['qw'], e)}
           errors={this.state.errors}
           onBlur={this.updateErrors}
         />
@@ -272,132 +325,134 @@ import { setGeneralEvaluacionApuntalado, setMergeEvaluacionApuntalado } from '..
         <div className='header'>
           Precolchón
         </div>
-        <InputRowUnitless
-          header="Tipo de Fluido"
-          name='tipoDeFluido'
-          unit=""
-          value={tipoDeFluido}
-          onChange={e => setGeneralEvaluacionApuntalado(['tipoDeFluido'], e)}
-          errors={this.state.errors}
-          onBlur={this.updateErrors}
-        />
-        <InputRow
-          header="Volumen"
-          name='volumenPrecolchon'
-          unit="U.S. Gal"
-          value={volumenPrecolchon}
-          onChange={e => setGeneralEvaluacionApuntalado(['volumenPrecolchon'], e)}
-          errors={this.state.errors}
-          onBlur={this.updateErrors}
-        />
-        <InputRow
-          header="Gasto promedio"
-          name='gastoPromedio'
-          unit="bpm"
-          value={gastoPromedio}
-          onChange={e => setGeneralEvaluacionApuntalado(['gastoPromedio'], e)}
-          errors={this.state.errors}
-          onBlur={this.updateErrors}
-        />
-        <InputRow
-          header="Presión de ruptura"
-          name='presionRuptura'
-          unit="psi"
-          value={presionRuptura}
-          onChange={e => setGeneralEvaluacionApuntalado(['presionRuptura'], e)}
-          errors={this.state.errors}
-          onBlur={this.updateErrors}
-        />
-        <InputRow
-          header="Presión promedio"
-          name='presionPromedio'
-          unit="psi"
-          value={presionPromedio}
-          onChange={e => setGeneralEvaluacionApuntalado(['presionPromedio'], e)}
-          errors={this.state.errors}
-          onBlur={this.updateErrors}
-        />
-        <InputRow
-          header="ISIP"
-          name='isip'
-          unit="psi"
-          value={isip}
-          onChange={e => setGeneralEvaluacionApuntalado(['isip'], e)}
-          errors={this.state.errors}
-          onBlur={this.updateErrors}
-        />
-        <InputRow
-          header="Gradiente de fractura"
-          name='gradienteFractura'
-          unit="psi/pie"
-          value={gradienteFractura}
-          onChange={e => setGeneralEvaluacionApuntalado(['gradienteFractura'], e)}
-          errors={this.state.errors}
-          onBlur={this.updateErrors}
-        />
-        <InputRow
-          header="Presión de cierre sup."
-          name='presionCierreSuperior'
-          unit="psi"
-          value={presionCierreSuperior}
-          onChange={e => setGeneralEvaluacionApuntalado(['presionCierreSuperior'], e)}
-          errors={this.state.errors}
-          onBlur={this.updateErrors}
-        />
-        <InputRow
-          header="Gradiente de cierre"
-          name='gradienteCierre'
-          unit="psi/pie"
-          value={gradienteCierre}
-          onChange={e => setGeneralEvaluacionApuntalado(['gradienteCierre'], e)}
-          errors={this.state.errors}
-          onBlur={this.updateErrors}
-        />
-        <InputRow
-          header="Tiempo de cierre"
-          name='tiempoCierre'
-          unit="min"
-          value={tiempoCierre}
-          onChange={e => setGeneralEvaluacionApuntalado(['tiempoCierre'], e)}
-          errors={this.state.errors}
-          onBlur={this.updateErrors}
-        />
-        <InputRow
-          header="Presión de yacimiento"
-          name='presionYacimiento'
-          unit="psi"
-          value={presionYacimiento}
-          onChange={e => setGeneralEvaluacionApuntalado(['presionYacimiento'], e)}
-          errors={this.state.errors}
-          onBlur={this.updateErrors}
-        />
-        <InputRow
-          header="Gradiente de poro"
-          name='gradientePoro'
-          unit="psi/pie"
-          value={gradientePoro}
-          onChange={e => setGeneralEvaluacionApuntalado(['gradientePoro'], e)}
-          errors={this.state.errors}
-          onBlur={this.updateErrors}
-        />
-        <InputRow
-          header="Pérdida por filtrado"
-          name='perdidaFiltrado'
-          unit="pie/min 0.5"
-          value={perdidaFiltrado}
-          onChange={e => setGeneralEvaluacionApuntalado(['perdidaFiltrado'], e)}
-          errors={this.state.errors}
-          onBlur={this.updateErrors}
-        />
-        <InputRow
-          header="Eficiencia de fluido"
-          name='eficienciaFluido'
-          unit="%"
-          value={eficienciaFluido}
-          onChange={e => setGeneralEvaluacionApuntalado(['eficienciaFluido'], e)}
-          errors={this.state.errors}
-          onBlur={this.updateErrors}
-        />
+        <div className="input-table">
+            <InputRowUnitless
+              header="Tipo de Fluido"
+              name='tipoDeFluido'
+              unit=""
+              value={tipoDeFluido}
+              onChange={e => setGeneralEvaluacionApuntalado(['tipoDeFluido'], e)}
+              errors={this.state.errors}
+              onBlur={this.updateErrors}
+            />
+            <InputRow
+              header="Volumen"
+              name='volumenPrecolchon'
+              unit="U.S. Gal"
+              value={volumenPrecolchon}
+              onChange={e => setGeneralEvaluacionApuntalado(['volumenPrecolchon'], e)}
+              errors={this.state.errors}
+              onBlur={this.updateErrors}
+            />
+            <InputRow
+              header="Gasto promedio"
+              name='gastoPromedio'
+              unit="bpm"
+              value={gastoPromedio}
+              onChange={e => setGeneralEvaluacionApuntalado(['gastoPromedio'], e)}
+              errors={this.state.errors}
+              onBlur={this.updateErrors}
+            />
+            <InputRow
+              header="Presión de ruptura"
+              name='presionRuptura'
+              unit="psi"
+              value={presionRuptura}
+              onChange={e => setGeneralEvaluacionApuntalado(['presionRuptura'], e)}
+              errors={this.state.errors}
+              onBlur={this.updateErrors}
+            />
+            <InputRow
+              header="Presión promedio"
+              name='presionPromedio'
+              unit="psi"
+              value={presionPromedio}
+              onChange={e => setGeneralEvaluacionApuntalado(['presionPromedio'], e)}
+              errors={this.state.errors}
+              onBlur={this.updateErrors}
+            />
+            <InputRow
+              header="ISIP"
+              name='isip'
+              unit="psi"
+              value={isip}
+              onChange={e => setGeneralEvaluacionApuntalado(['isip'], e)}
+              errors={this.state.errors}
+              onBlur={this.updateErrors}
+            />
+            <InputRow
+              header="Gradiente de fractura"
+              name='gradienteFractura'
+              unit="psi/pie"
+              value={gradienteFractura}
+              onChange={e => setGeneralEvaluacionApuntalado(['gradienteFractura'], e)}
+              errors={this.state.errors}
+              onBlur={this.updateErrors}
+            />
+            <InputRow
+              header="Presión de cierre sup."
+              name='presionCierreSuperior'
+              unit="psi"
+              value={presionCierreSuperior}
+              onChange={e => setGeneralEvaluacionApuntalado(['presionCierreSuperior'], e)}
+              errors={this.state.errors}
+              onBlur={this.updateErrors}
+            />
+            <InputRow
+              header="Gradiente de cierre"
+              name='gradienteCierre'
+              unit="psi/pie"
+              value={gradienteCierre}
+              onChange={e => setGeneralEvaluacionApuntalado(['gradienteCierre'], e)}
+              errors={this.state.errors}
+              onBlur={this.updateErrors}
+            />
+            <InputRow
+              header="Tiempo de cierre"
+              name='tiempoCierre'
+              unit="min"
+              value={tiempoCierre}
+              onChange={e => setGeneralEvaluacionApuntalado(['tiempoCierre'], e)}
+              errors={this.state.errors}
+              onBlur={this.updateErrors}
+            />
+            <InputRow
+              header="Presión de yacimiento"
+              name='presionYacimiento'
+              unit="psi"
+              value={presionYacimiento}
+              onChange={e => setGeneralEvaluacionApuntalado(['presionYacimiento'], e)}
+              errors={this.state.errors}
+              onBlur={this.updateErrors}
+            />
+            <InputRow
+              header="Gradiente de poro"
+              name='gradientePoro'
+              unit="psi/pie"
+              value={gradientePoro}
+              onChange={e => setGeneralEvaluacionApuntalado(['gradientePoro'], e)}
+              errors={this.state.errors}
+              onBlur={this.updateErrors}
+            />
+            <InputRow
+              header="Pérdida por filtrado"
+              name='perdidaFiltrado'
+              unit="pie/min 0.5"
+              value={perdidaFiltrado}
+              onChange={e => setGeneralEvaluacionApuntalado(['perdidaFiltrado'], e)}
+              errors={this.state.errors}
+              onBlur={this.updateErrors}
+            />
+            <InputRow
+              header="Eficiencia de fluido"
+              name='eficienciaFluido'
+              unit="%"
+              value={eficienciaFluido}
+              onChange={e => setGeneralEvaluacionApuntalado(['eficienciaFluido'], e)}
+              errors={this.state.errors}
+              onBlur={this.updateErrors}
+            />
+        </div>
       </div>
     )
   }
@@ -441,6 +496,7 @@ import { setGeneralEvaluacionApuntalado, setMergeEvaluacionApuntalado } from '..
         <div className='left'>
           { this.makeResultForm() }
           { this.makePrecolchonForm() }
+          { this.makeProductionResults() }
           { this.makeGeometryInput() }
         </div>
       </div>

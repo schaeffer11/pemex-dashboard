@@ -20,8 +20,7 @@ import { KPI } from '../Common/KPIs'
 
     groups.forEach(name => {
       let filteredData = data.filter(i => i.groupedName === name).map(j => {
-        let utc = new Date(j.FECHA)
-        utc = Date.UTC(utc.getFullYear(), utc.getMonth())
+        let utc = Date.UTC(j.YEAR, j.MONTH - 1)
 
         return {
           x: utc,
@@ -34,6 +33,7 @@ import { KPI } from '../Common/KPIs'
         data: filteredData
       })
     })
+
 
 
 

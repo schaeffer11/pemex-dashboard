@@ -55,6 +55,20 @@ const initialState = fromJS({
         beneficioProgramado: '',
         beneficioOficial: '',
         error: true,
+    }],
+    historicoTermicoData: [{
+        ciclo: '',
+        fechaInicio: null,
+        fechaFin: null,
+        objetivo: '',
+        Piny: '',
+        Tiny: '',
+        calidad: '',
+        Qiny: '',
+        aguaAcum: '',
+        beneficioProgramado: '',
+        beneficioOficial: '',
+        error: true,
     }]
 })
 
@@ -71,6 +85,8 @@ const historialDeIntervenciones = (state = initialState, action) => {
         return state.set('historicoAcidoData', fromJS(action.value))
     case 'set_historicoApuntaladoData':
         return state.set('historicoApuntaladoData', fromJS(action.value))
+    case 'set_historicoTermicoData':
+        return state.set('historicoTermicoData', fromJS(action.value))
     case 'set_historialDeIntervenciones':
         return state = fromJS(action.value)
     default:

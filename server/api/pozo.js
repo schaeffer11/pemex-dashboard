@@ -41,9 +41,11 @@ const INSERT_HIST_INTERVENCIONES_NEW_QUERY = {
     loadSaveEstimulacion: `SELECT * FROM _WellHistorialIntervencionesSave WHERE TRANSACTION_ID = ? AND TIPO_DE_INTERVENCIONES = 'estimulacion'`,
     loadSaveAcido: `SELECT * FROM _WellHistorialIntervencionesSave WHERE TRANSACTION_ID = ? AND TIPO_DE_INTERVENCIONES = 'acido'`,
     loadSaveApuntalado: `SELECT * FROM _WellHistorialIntervencionesSave WHERE TRANSACTION_ID = ? AND TIPO_DE_INTERVENCIONES = 'apuntalado'`,
+    loadSaveTermico: `SELECT * FROM _WellHistorialIntervencionesSave WHERE TRANSACTION_ID = ? AND TIPO_DE_INTERVENCIONES = 'termico'`,
     loadTransactionEstimulacion: `SELECT * FROM WellHistorialIntervenciones WHERE TRANSACTION_ID = ? AND TIPO_DE_INTERVENCIONES = 'estimulacion'`,
     loadTransactionAcido: `SELECT * FROM WellHistorialIntervenciones WHERE TRANSACTION_ID = ? AND TIPO_DE_INTERVENCIONES = 'acido'`,
     loadTransactionApuntalado: `SELECT * FROM WellHistorialIntervenciones WHERE TRANSACTION_ID = ? AND TIPO_DE_INTERVENCIONES = 'apuntalado'`,
+    loadTransactionTermico: `SELECT * FROM WellHistorialIntervenciones WHERE TRANSACTION_ID = ? AND TIPO_DE_INTERVENCIONES = 'termico'`,
 }
 
 const INSERT_WELL_QUERY = {
@@ -81,11 +83,13 @@ const INSERT_WELL_QUERY = {
 
 const INSERT_SURVERY_QUERY = {
     save: `INSERT INTO _WellSurveysSave (
-        SURVEY_ID, WELL_FORMACION_ID, PROFUNDIDAD, INCLINACION, AZIMUT,
-        MV, X, Y, TRANSACTION_ID, HAS_ERRORS) VALUES ?`,
+        SURVEY_ID, WELL_FORMACION_ID, COMMENTS, MEASURED_DEPTH, INCLINATION, AZIMUTH,
+        TRUE_VERTICAL_DEPTH, VERTICAL_SECTION, NS, EW, DLS, NORTHING, EASTING, LATITUDE,
+        LONGITUDE, TRANSACTION_ID, HAS_ERRORS) VALUES ?`,
     submit: `INSERT INTO WellSurveys (
-        SURVEY_ID, WELL_FORMACION_ID, PROFUNDIDAD, INCLINACION, AZIMUT,
-        MV, X, Y, TRANSACTION_ID) VALUES ?`,
+        SURVEY_ID, WELL_FORMACION_ID, COMMENTS, MEASURED_DEPTH, INCLINATION, AZIMUTH,
+        TRUE_VERTICAL_DEPTH, VERTICAL_SECTION, NS, EW, DLS, NORTHING, EASTING, LATITUDE,
+        LONGITUDE, TRANSACTION_ID) VALUES ?`,
     loadSave: `SELECT * FROM _WellSurveysSave WHERE TRANSACTION_ID = ?`,
     loadTransaction: `SELECT * FROM WellSurveys WHERE TRANSACTION_ID = ?`
 }
@@ -440,13 +444,23 @@ const INSERT_INTERVENTION_TERMICO_QUERY = {
     save: `INSERT INTO _IntervencionesTermicoSave (
         INTERVENTION_ID, WELL_FORMACION_ID, 
         VOLUMEN_VAPOR_INYECTAR, CALIDAD, GASTO_INYECCION, PRESION_MAXIMA_SALIDA_GENERADOR,
-        TEMPERATURA_MAXIMA_GENERADOR, TRANSACTION_ID, HAS_ERRORS_PROPUESTA) VALUES
-        (?, ?, ?, ?, ?, ?, ?, ?, ?)`,
+        TEMPERATURA_MAXIMA_GENERADOR, EST_INC_ESTRANGULADOR, EST_INC_Ptp, EST_INC_Ttp, EST_INC_Pbaj, EST_INC_Tbaj,
+        EST_INC_Ptr, EST_INC_Qi, EST_INC_Qo, EST_INC_Qq, EST_INC_Qw,
+        EST_INC_RGA, EST_INC_SALINIDAD, EST_INC_IP, EST_INC_DELTA_P, EST_INC_GASTO_COMPROMISO_Qo,
+        EST_INC_GASTO_COMPROMISO_Qg, EST_INC_OBSERVACIONES, TRANSACTION_ID, HAS_ERRORS_PROPUESTA, HAS_ERRORS_EST_INC) VALUES
+        (?, ?, ?, ?, ?, ?, ?, ?, ?, ?,
+         ?, ?, ?, ?, ?, ?, ?, ?, ?, ?,
+         ?, ?, ?, ?, ?, ?, ?)`,
     submit: `INSERT INTO IntervencionesTermico (
        INTERVENTION_ID, WELL_FORMACION_ID, 
         VOLUMEN_VAPOR_INYECTAR, CALIDAD, GASTO_INYECCION, PRESION_MAXIMA_SALIDA_GENERADOR,
-        TEMPERATURA_MAXIMA_GENERADOR, TRANSACTION_ID) VALUES
-        (?, ?, ?, ?, ?, ?, ?, ?)`,     
+        TEMPERATURA_MAXIMA_GENERADOR, EST_INC_ESTRANGULADOR, EST_INC_Ptp, EST_INC_Ttp, EST_INC_Pbaj, EST_INC_Tbaj,
+        EST_INC_Ptr, EST_INC_Qi, EST_INC_Qo, EST_INC_Qq, EST_INC_Qw,
+        EST_INC_RGA, EST_INC_SALINIDAD, EST_INC_IP, EST_INC_DELTA_P, EST_INC_GASTO_COMPROMISO_Qo,
+        EST_INC_GASTO_COMPROMISO_Qg, EST_INC_OBSERVACIONES, TRANSACTION_ID) VALUES
+        (?, ?, ?, ?, ?, ?, ?, ?, ?, ?,
+         ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, 
+         ?, ?, ?, ?, ?)`,     
     loadSave: `SELECT * FROM _IntervencionesTermicoSave WHERE TRANSACTION_ID = ?`,
     loadTransaction: `SELECT * FROM IntervencionesTermico WHERE TRANSACTION_ID = ?`    
 }
@@ -480,7 +494,26 @@ const INSERT_LAB_TEST_QUERY = {
         LEFT JOIN _IntervencionesLabTestsPruebasGelDeFracturaSave PGF ON IL.LAB_ID = PGF.LAB_ID
         LEFT JOIN _IntervencionesLabTestsPruebasParaApuntalanteSave PPA ON IL.LAB_ID = PPA.LAB_ID
         WHERE IL.TRANSACTION_ID = ?`,
-    loadTransaction: `SELECT * FROM IntervencionesLabTests WHERE TRANSACTION_ID = ?`    
+    // loadTransaction: `SELECT * FROM IntervencionesLabTests WHERE TRANSACTION_ID = ?`
+    loadTransaction: `SELECT 
+    IL.LAB_ID, IL.TIPO_DE_ANALISIS, IL.FECHA_DE_MUESTREO, IL.FECHA_DE_PRUEBA, IL.COMPANIA, IL.PERSONAL_DE_PEMEX_QUE_SUPERVISO, IL.OBSERVACIONES,
+    CF.PORENTAJE_DE_ACEITE, CF.PORENTAJE_DE_AGUA, CF.PORENTAJE_DE_EMULSION, CF.PORENTAJE_DE_SOLIDOS, CF.PORENTAJE_DE_ASFALTENOS, CF.PORENTAJE_DE_PARAFINAS,
+    CF.PORENTAJE_DE_RESINAS_ASFALTICAS, CF.PORENTAJE_DE_CONTENIDO_DE_SOLIDOS, CF.DENSIDAD_DEL_ACEITE, CF.DENSIDAD_DEL_AGUA, CF.DENSIDAD_DE_LA_EMULSION,
+    CF.VISCOSIDAD_DEL_ACEITE, CF.VISCOSIDAD_DE_LA_EMULSION, CF.PH_DEL_AGUA, CF.SALINIDAD_DEL_AGUA, CF.SALINIDAD_DEL_ACEITE,
+    PC.DISENO, PC.SISTEMA, PC.ACEITE_DEL_POZO, PC.TIEMPO_DE_ROMPIMIENTO, PC.SEPARACION_DE_FASES, PC.SOLIDOS, PC.CONDICION,
+    PG.SISTEMA_ACIDO, PG.TIEMPO_DE_CONTACTO, PG.GRABADO,
+    PS.TIPO_DE_MUESTRA, PS.PESO_DE_LA_MUESTRA, PS.TIPO_DE_SISTEMA_QUIMICO, PS.PESO_FINAL_DE_LA_MUESTRA, PS.SOLUBILIDAD,
+    PGF.HIDRATACION, PGF.TIEMPO_DE_ACTIVACION_DEL_GEL, PGF.DETERMINACION_DE_PH, PGF.TIEMPO_DE_ROMPIMIENTO as TIEMPO_DE_ROMPIMIENTO_GEL,
+    PGF.DOSIFICATION_DE_QUEBRADORES, PGF.VISCOSIDAD_DEL_GEL_DE_FRACTURA, 
+    PPA.ESFERICIDAD, PPA.REDONDEZ, PPA.RESISTENCIA_A_LA_COMPRESION, PPA.MALLA, PPA.AGLUTINAMIENTO, PPA.TURBIDEZ, PPA.SOLUBILIDAD as SOLUBILIDAD_APUNTALANTE
+    FROM IntervencionesLabTests IL 
+    LEFT JOIN IntervencionesLabTestsCaracterizacionFisico CF ON IL.LAB_ID = CF.LAB_ID 
+    LEFT JOIN IntervencionesLabTestsPruebasDeCompatibilidad PC ON IL.LAB_ID = PC.LAB_ID 
+    LEFT JOIN IntervencionesLabTestsPruebasDeGrabado PG ON IL.LAB_ID = PG.LAB_ID
+    LEFT JOIN IntervencionesLabTestsPruebasDeSolubilidad PS ON IL.LAB_ID = PS.LAB_ID
+    LEFT JOIN IntervencionesLabTestsPruebasGelDeFractura PGF ON IL.LAB_ID = PGF.LAB_ID
+    LEFT JOIN IntervencionesLabTestsPruebasParaApuntalante PPA ON IL.LAB_ID = PPA.LAB_ID
+    WHERE IL.TRANSACTION_ID = ?`,
 }
 
 const INSERT_CEDULA_ESTIMULACION_QUERY = {
@@ -959,7 +992,7 @@ export const create = async (body, action, cb) => {
 
   let { subdireccion, activo, campo, pozo, formacion } = finalObj.fichaTecnicaDelPozoHighLevel
 
-  let { historicoEstimulacionData, historicoAcidoData, historicoApuntaladoData } = finalObj.historialDeIntervenciones
+  let { historicoEstimulacionData, historicoAcidoData, historicoApuntaladoData, historicoTermicoData } = finalObj.historialDeIntervenciones
 
   let { descubrimientoField, fechaDeExplotacionField, numeroDePozosOperandoField, pInicialField, pInicialAnoField, pActualField, pActualFechaField,
     dpPerAnoField, tyacField, prField, tipoDeFluidoField, densidadDelAceiteField, pSatField,
@@ -1089,7 +1122,25 @@ export const create = async (body, action, cb) => {
   else if (tipoDeIntervenciones === 'termico') {
       var { volumenVapor, calidad, gastoInyeccion, presionMaximaSalidaGenerador, 
         temperaturaMaximaGenerador, cedulaData, propuestaCompany } = finalObj.propuestaTermica
+
+      var { estIncEstrangulador, estIncPtp, estIncTtp, estIncPbaj, estIncTbaj,
+        estIncPtr, estIncQl, estIncQo, estIncQg, estIncQw,
+        estIncRGA, estIncSalinidad, estIncIP, estIncDeltaP, estIncGastoCompromisoQo,
+        estIncGastoCompromisoQg, observacionesEstIncTermico } = finalObj.estIncProduccionTermico
   }
+
+    let realTipoDeIntervenciones = tipoDeIntervenciones.slice()
+    
+    if (realTipoDeIntervenciones === 'estimulacion' && action === 'submit') {
+        if (tipoDeEstimulacion === 'limpieza') {
+            realTipoDeIntervenciones = 'estimulacionLimpieza'
+        }
+        else {
+            realTipoDeIntervenciones = 'estimulacionMatricial'
+        }
+    }
+
+
 
   // write to db
   
@@ -1562,11 +1613,16 @@ export const create = async (body, action, cb) => {
                                   else if (tipoDeIntervenciones === 'termico') {
                                     values = [
                                         interventionID, wellFormacionID, volumenVapor, calidad, gastoInyeccion, 
-                                        presionMaximaSalidaGenerador, temperaturaMaximaGenerador, transactionID
+                                        presionMaximaSalidaGenerador, temperaturaMaximaGenerador, estIncEstrangulador,
+                                        estIncPtp, estIncTtp, estIncPbaj, estIncTbaj,
+                                        estIncPtr, estIncQl, estIncQo, estIncQg, estIncQw,
+                                        estIncRGA, estIncSalinidad, estIncIP, estIncDeltaP, estIncGastoCompromisoQo,
+                                        estIncGastoCompromisoQg, observacionesEstIncTermico, transactionID
                                       ]
                                     
                                     if (action === 'save') {
                                       values.push(finalObj.propuestaTermica.hasErrors === true ? 1 : 0)
+                                      values.push(finalObj.estIncProduccionTermico.hasErrors === true ? 1 : 0)
                                     }    
                                   } 
 
@@ -1761,7 +1817,7 @@ export const create = async (body, action, cb) => {
                                                   })
                                                 }
 
-                                                values = action === 'save' ? [transactionID, userID, wellFormacionID, tipoDeIntervenciones, saveName] : [transactionID, userID, subdireccion, activo, fieldFormacionID, wellFormacionID, formacion, propuestaCompany, tipoDeIntervenciones, tipoDeTerminacion]
+                                                values = action === 'save' ? [transactionID, userID, wellFormacionID, tipoDeIntervenciones, saveName] : [transactionID, userID, subdireccion, activo, fieldFormacionID, wellFormacionID, formacion, propuestaCompany, realTipoDeIntervenciones, tipoDeTerminacion]
                                                 connection.query((action === 'save' ? INSERT_TRANSACTION.save : INSERT_TRANSACTION.submit), values, (err, results) => {
                                                   console.log('transaction', err)
                                                   console.log('transaction', results)
@@ -1914,30 +1970,40 @@ export const create = async (body, action, cb) => {
                                                                   let tableError = finalObj.historialDeIntervenciones.hasErrors === true ? 1 : 0
                                                                   historicoEstimulacionData.forEach(i => {
                                                                       if (action === 'save') {
-                                                                          values.push([wellFormacionID, 'estimulacion', i.fecha, i.tipoDeTratamiento, i.objetivo, i.compania, i.acidoVol, i.acidoNombre, i.solventeVol, i.solventeNombre, i.divergenteVol, i.divergenteNombre, i.totalN2, i.beneficioProgramado, i.beneficioOficial, -9999, -9999, -9999, -9999, -9999, -9999, -9999, -9999, -9999, -9999, -9999, -9999, -9999, i.error, tableError, transactionID ])
+                                                                          values.push([wellFormacionID, 'estimulacion', i.fecha, i.tipoDeTratamiento, i.objetivo, i.compania, i.acidoVol, i.acidoNombre, i.solventeVol, i.solventeNombre, i.divergenteVol, i.divergenteNombre, i.totalN2, i.beneficioProgramado, i.beneficioOficial, -9999, -9999, -9999, -9999, -9999, -9999, -9999, -9999, -9999, -9999, -9999, -9999, -9999, -9999,null,null,-9999,-9999,-9999,-9999,-9999, i.error, tableError, transactionID ])
                                                                       }
                                                                       else {
-                                                                          values.push([wellFormacionID, 'estimulacion', i.fecha, i.tipoDeTratamiento, i.objetivo, i.compania, i.acidoVol, i.acidoNombre, i.solventeVol, i.solventeNombre, i.divergenteVol, i.divergenteNombre, i.totalN2, i.beneficioProgramado, i.beneficioOficial, -9999, -9999, -9999, -9999, -9999, -9999, -9999, -9999, -9999, -9999, -9999, -9999, -9999, transactionID ])
+                                                                          values.push([wellFormacionID, 'estimulacion', i.fecha, i.tipoDeTratamiento, i.objetivo, i.compania, i.acidoVol, i.acidoNombre, i.solventeVol, i.solventeNombre, i.divergenteVol, i.divergenteNombre, i.totalN2, i.beneficioProgramado, i.beneficioOficial, -9999, -9999, -9999, -9999, -9999, -9999, -9999, -9999, -9999, -9999, -9999, -9999, -9999, -9999, null, null, -9999,-9999,-9999,-9999,-9999, transactionID ])
                                                                       }
                                                       
                                                                   })
                                                                   historicoAcidoData.forEach(i => {
                                                                       if (action === 'save') {
-                                                                          values.push([wellFormacionID, 'acido', i.fecha, i.tipoDeTratamiento, i.objetivo, i.compania, -9999, -9999, -9999, -9999, -9999, -9999, -9999, i.beneficioProgramado, i.beneficioOficial, i.base, i.cima, i.longitudGravada, i.alturaGravada, i.anchoGravado, i.conductividad, i.fcd, i.presionNeta, i.fluidoFractura, -9999, -9999, -9999, -9999, i.error, tableError, transactionID])
+                                                                          values.push([wellFormacionID, 'acido', i.fecha, i.tipoDeTratamiento, i.objetivo, i.compania, -9999, -9999, -9999, -9999, -9999, -9999, -9999, i.beneficioProgramado, i.beneficioOficial, i.base, i.cima, i.longitudGravada, i.alturaGravada, i.anchoGravado, i.conductividad, i.fcd, i.presionNeta, i.fluidoFractura, -9999, -9999, -9999, -9999, -9999,null,null,-9999,-9999,-9999,-9999,-9999, i.error, tableError, transactionID])
                                                                       }
                                                                       else {
-                                                                          values.push([wellFormacionID, 'acido', i.fecha, i.tipoDeTratamiento, i.objetivo, i.compania, -9999, -9999, -9999, -9999, -9999, -9999, -9999, i.beneficioProgramado, i.beneficioOficial, i.base, i.cima, i.longitudGravada, i.alturaGravada, i.anchoGravado, i.conductividad, i.fcd, i.presionNeta, i.fluidoFractura, -9999, -9999, -9999, -9999, transactionID])
+                                                                          values.push([wellFormacionID, 'acido', i.fecha, i.tipoDeTratamiento, i.objetivo, i.compania, -9999, -9999, -9999, -9999, -9999, -9999, -9999, i.beneficioProgramado, i.beneficioOficial, i.base, i.cima, i.longitudGravada, i.alturaGravada, i.anchoGravado, i.conductividad, i.fcd, i.presionNeta, i.fluidoFractura, -9999, -9999, -9999, -9999, -9999, null, null, -9999,-9999,-9999,-9999,-9999, transactionID])
                                                                       }
                                                                   })
                                                                   historicoApuntaladoData.forEach(i => {
                                                                       if (action === 'save') {
-                                                                          values.push([wellFormacionID, 'apuntalado', i.fecha, i.tipoDeTratamiento, i.objetivo, i.compania, -9999, -9999, -9999, -9999, -9999, -9999, -9999, i.beneficioProgramado, i.beneficioOficial, i.base, i.cima, -9999, -9999, -9999, i.conductividad, i.fcd, i.presionNeta, i.fluidoFractura, i.longitudApuntalada, i.alturaTotalDeFractura, i.anchoPromedio, i.concentracionAreal, i.error, tableError, transactionID])
+                                                                          values.push([wellFormacionID, 'apuntalado', i.fecha, i.tipoDeTratamiento, i.objetivo, i.compania, -9999, -9999, -9999, -9999, -9999, -9999, -9999, i.beneficioProgramado, i.beneficioOficial, i.base, i.cima, -9999, -9999, -9999, i.conductividad, i.fcd, i.presionNeta, i.fluidoFractura, i.longitudApuntalada, i.alturaTotalDeFractura, i.anchoPromedio, i.concentracionAreal, -9999,null,null,-9999,-9999,-9999,-9999,-9999, i.error, tableError, transactionID])
                                                                       }
                                                                       else {
-                                                                          values.push([wellFormacionID, 'apuntalado', i.fecha, i.tipoDeTratamiento, i.objetivo, i.compania, -9999, -9999, -9999, -9999, -9999, -9999, -9999, i.beneficioProgramado, i.beneficioOficial, i.base, i.cima, -9999, -9999, -9999, i.conductividad, i.fcd, i.presionNeta, i.fluidoFractura, i.longitudApuntalada, i.alturaTotalDeFractura, i.anchoPromedio, i.concentracionAreal, transactionID])
+                                                                          values.push([wellFormacionID, 'apuntalado', i.fecha, i.tipoDeTratamiento, i.objetivo, i.compania, -9999, -9999, -9999, -9999, -9999, -9999, -9999, i.beneficioProgramado, i.beneficioOficial, i.base, i.cima, -9999, -9999, -9999, i.conductividad, i.fcd, i.presionNeta, i.fluidoFractura, i.longitudApuntalada, i.alturaTotalDeFractura, i.anchoPromedio, i.concentracionAreal, -9999, null, null, -9999,-9999,-9999,-9999,-9999, transactionID])
                                                                       }
                                                                       
                                                                   })
+                                                                  historicoTermicoData.forEach(i => {
+                                                                      if (action === 'save') {
+                                                                          values.push([wellFormacionID, 'termico', null, -999, -999, -999, -9999, -9999, -9999, -9999, -9999, -9999, -9999, -9999, i.beneficioProgramado, i.beneficioOficial, -9999, -9999, -9999, -9999, -9999, -9999, -9999, -9999, -9999, -9999, -9999, -9999, i.ciclo,i.fechaInicio,i.fechaFin,i.Piny,i.Tiny, i.calidad, i.Qiny, i.aguaAcum, i.error, tableError, transactionID])
+                                                                      }
+                                                                      else {
+                                                                          values.push([wellFormacionID, 'termico', null, -999, -999, -999, -9999, -9999, -9999, -9999, -9999, -9999, -9999, -9999, i.beneficioProgramado, i.beneficioOficial, -9999, -9999, -9999, -9999, -9999, -9999, -9999, -9999, -9999, -9999, -9999, -9999, i.ciclo,i.fechaInicio,i.fechaFin,i.Piny,i.Tiny, i.calidad, i.Qiny, i.aguaAcum, transactionID])
+                                                                      }
+                                                                      
+                                                                  })                                                               
+
 
                                                                   connection.query(action === 'save' ? INSERT_HIST_INTERVENCIONES_NEW_QUERY.save : INSERT_HIST_INTERVENCIONES_NEW_QUERY.submit, [values], (err, results) => {
                                                                       console.log('historial interventions', err)
@@ -1955,7 +2021,8 @@ export const create = async (body, action, cb) => {
                                                                       desviacion.forEach(i => {
   
                                                                         let surveyID = Math.floor(Math.random() * 1000000000)
-                                                                        let newRow = [surveyID, wellFormacionID, i.depth, i.inclination, i.azimuth, i.trueVerticalDepth, i.x_offset, i.y_offset, transactionID]
+                                                                        let newRow = [surveyID, wellFormacionID, i.comments, i.measuredDepth, i.inclination, i.azimuth, i.trueVerticalDepth, i.verticalSection,
+                                                                                        i.ns, i.ew, i.dls, i.northing, i.easting, i.latitude, i.longitude, transactionID]
                                                                        
                                                                         if (action === 'save') {
                                                                           newRow.push(i.error)
@@ -1979,10 +2046,11 @@ export const create = async (body, action, cb) => {
                                                                           values.push(deleteID)
                                                                         }
 
+                                                                        // FIXME: This deletes images that should not be deleted. fix in the futre!
                                                                         if (deleteID !== null) {
                                                                           console.log('getting wellimages', deleteID)
-                                                                          const deletedImages = await deleteImages(deleteID, action).catch(r => console.log('something went wrong'))
-                                                                          console.log('i should get some deletions', deletedImages)
+                                                                          // const deletedImages = await deleteImages(deleteID, action).catch(r => console.log('something went wrong'))
+                                                                          // console.log('i should get some deletions', deletedImages)
                                                                         }
 
                                                                         connection.query(action === 'save' ? DELETE_QUERY : DUMMY_QUERY, values, (err, results) => {

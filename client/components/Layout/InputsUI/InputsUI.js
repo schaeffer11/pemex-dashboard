@@ -16,13 +16,12 @@ import { submitForm } from '../../../redux/actions/pozoFormActions'
 import { submitResultsForm } from '../../../redux/actions/results'
 import Notification from '../Common/Notification'
 import Loading from '../Common/Loading'
-import { setHasSubmitted, setIsLoading, setCurrentPage, setSaveName } from '../../../redux/actions/global'
+import { setHasSubmitted, setIsLoading, setCurrentPage, setSaveName, setTab } from '../../../redux/actions/global'
 
 @autobind class InputsUI extends Component {
   constructor(props) {
     super(props)
-    this.state = { 
-      selectedTab: 'Pozo',
+    this.state = {
       isOpen: false,
       isOpenBug: false,
       error: '', 
@@ -75,7 +74,7 @@ import { setHasSubmitted, setIsLoading, setCurrentPage, setSaveName } from '../.
   }
 
   handleSelectTab(val) {
-    let { setCurrentPage, tipoDeIntervenciones } = this.props
+    let { setCurrentPage, tipoDeIntervenciones, setTab } = this.props
 
     console.log(val)
     if (val === 'Intervenciones') {
@@ -91,8 +90,9 @@ import { setHasSubmitted, setIsLoading, setCurrentPage, setSaveName } from '../.
     else {
       setCurrentPage('Ficha Technica del Campo')
     }
+
+    setTab(val)
     this.setState({
-      selectedTab: val,
       error: '',
       comment: '',
     })
@@ -105,7 +105,8 @@ import { setHasSubmitted, setIsLoading, setCurrentPage, setSaveName } from '../.
       hasErrorsPropuestaEstimulacion, hasErrorsPropuestaApuntalado, hasErrorsPropuestaAcido, hasErrorsResultadosSimulacionAcido, 
       hasErrorsResultadosSimulacionEstimulacion, hasErrorsResultadosSimulacionApuntalado, hasErrorsEstIncProduccionAcido,
       hasErrorsEstIncProduccionEstimulacion, hasErrorsEstIncProduccionApuntalado, hasErrorsEstCosts, hasErrorsHistoricoDeProduccion,
-      setHasSubmitted, hasErrorsHistoricoDeAforos, hasErrorsSistemasArtificialesDeProduccion, hasErrorsPropuestaTermica, setIsLoading, setSaveName } = this.props
+      setHasSubmitted, hasErrorsHistoricoDeAforos, hasErrorsSistemasArtificialesDeProduccion, hasErrorsPropuestaTermica, 
+      hasErrorsEstIncProduccionTermico, setIsLoading, setSaveName } = this.props
 
 
     if (action === 'submit') {
@@ -125,7 +126,7 @@ import { setHasSubmitted, setIsLoading, setCurrentPage, setSaveName } from '../.
       else if (tipoDeIntervenciones === 'apuntalado' && (hasErrorsPropuestaApuntalado || hasErrorsResultadosSimulacionApuntalado || hasErrorsEstIncProduccionApuntalado)) {
         hasErrors = true
       }
-      else if (tipoDeIntervenciones === 'termico' && (hasErrorsPropuestaTermica)) {
+      else if (tipoDeIntervenciones === 'termico' && (hasErrorsPropuestaTermica || hasErrorsEstIncProduccionTermico)) {
         hasErrors = true
       }
 
@@ -159,7 +160,7 @@ import { setHasSubmitted, setIsLoading, setCurrentPage, setSaveName } from '../.
     let { setHasSubmitted, hasErrorsHistoricoDeAforosResults, hasErrorsEstCostResults, 
       hasErrorsTratamientoEstimulacion, hasErrorsTratamientoAcido, hasErrorsTratamientoApuntalado,
       tipoDeIntervencionesResults, hasErrorsEvaluacionApuntalado, hasErrorsEvaluacionAcido, hasErrorsEvaluacionEstimulacion,
-      stimulationType } = this.props
+      hasErrorsEvaluacionTermica, hasErrorsTratamientoTermico, stimulationType } = this.props
 
     hasErrorsEvaluacionEstimulacion = stimulationType === 'matricial' ? hasErrorsEvaluacionEstimulacion : false
 
@@ -170,6 +171,7 @@ import { setHasSubmitted, setIsLoading, setCurrentPage, setSaveName } from '../.
       if (hasErrorsHistoricoDeAforosResults || hasErrorsEstCostResults) {
         hasErrors = true
       }
+
       if (tipoDeIntervencionesResults === 'estimulacion' && (hasErrorsTratamientoEstimulacion || hasErrorsEvaluacionEstimulacion)) {
         hasErrors = true
       }
@@ -177,6 +179,9 @@ import { setHasSubmitted, setIsLoading, setCurrentPage, setSaveName } from '../.
         hasErrors = true
       }      
       else if (tipoDeIntervencionesResults === 'apuntalado' && (hasErrorsTratamientoApuntalado || hasErrorsEvaluacionApuntalado)) {
+        hasErrors = true
+      }
+      else if (tipoDeIntervencionesResults === 'termico' && (hasErrorsTratamientoTermico || hasErrorsEvaluacionTermica)) {
         hasErrors = true
       }
 
@@ -340,8 +345,8 @@ import { setHasSubmitted, setIsLoading, setCurrentPage, setSaveName } from '../.
 
 
   render() {
-    let { selectedTab, error, isOpen, isOpenBug, saveName, fieldWellOptions } = this.state
-    let { global } = this.props
+    let { error, isOpen, isOpenBug, saveName, fieldWellOptions } = this.state
+    let { global, selectedTab } = this.props
 
     global = global.toJS()
 
@@ -371,13 +376,16 @@ import { setHasSubmitted, setIsLoading, setCurrentPage, setSaveName } from '../.
     else if (showForms === true) {
       return (
         <div className="input-forms">
-          <Tabs handleSelectTab={this.handleSelectTab} selectedTab={selectedTab} />
+          {/*<Tabs handleSelectTab={this.handleSelectTab} selectedTab={selectedTab} />*/}
           <div className="tab-content">
             { form }
           </div>
-          <button className="submit save-button"  onClick={(e) => this.activateModal()}>Guardar</button>
-          <button className="submit submit-button" onClick={(e) => this.handleSubmit('submit')}>Enviar</button>
-          <button className="submit bug-button" onClick={(e) => this.activateBugModal()}>Comentarios</button>
+          <div className="button-group">
+            <button className="submit save-button"  onClick={(e) => this.activateModal()}>Guardar</button>
+            <button className="submit submit-button" onClick={(e) => this.handleSubmit('submit')}>Enviar</button>
+
+            <button className="submit bug-button" onClick={(e) => this.activateBugModal()}>Comentarios</button>
+          </div>
           <div className="form-error">{this.state.error}</div> 
           <div style={{height: '10px'}}></div>
           <Notification />
@@ -390,9 +398,6 @@ import { setHasSubmitted, setIsLoading, setCurrentPage, setSaveName } from '../.
     else {
       return (
         <div className="input-forms">
-          <div className='tabs'>
-            <div className={`tab active`} >Results</div>
-          </div>
           <div className='tab-content'> 
            { form }
           </div>
@@ -410,6 +415,7 @@ const mapStateToProps = state => ({
   global: state.get('global'),
   user: state.getIn(['user', 'id']),
   formsState: state.get('forms'),
+  selectedTab: state.getIn(['global', 'selectedTab']),
   token: state.getIn(['user', 'token']),
   stimulationType: state.getIn(['resultsMeta', 'stimulationType']),
   hasErrorsFichaTecnicaDelPozo: state.getIn(['fichaTecnicaDelPozo', 'hasErrors']),
@@ -433,15 +439,18 @@ const mapStateToProps = state => ({
   hasErrorsEstIncProduccionAcido: state.getIn(['estIncProduccionAcido', 'hasErrors']),
   hasErrorsEstIncProduccionEstimulacion: state.getIn(['estIncProduccionEstimulacion', 'hasErrors']),
   hasErrorsEstIncProduccionApuntalado: state.getIn(['estIncProduccionApuntalado', 'hasErrors']),
+  hasErrorsEstIncProduccionTermico: state.getIn(['estIncProduccionTermico', 'hasErrors']),
   hasErrorsEstCosts: state.getIn(['estCost', 'hasErrors']),
   hasErrorsHistoricoDeAforosResults: state.getIn(['historicoDeAforosResults', 'hasErrors']),
   hasErrorsEstCostResults: state.getIn(['estCostResults', 'hasErrors']),
   hasErrorsTratamientoEstimulacion: state.getIn(['tratamientoEstimulacion', 'hasErrors']),
   hasErrorsTratamientoAcido: state.getIn(['tratamientoAcido', 'hasErrors']),
   hasErrorsTratamientoApuntalado: state.getIn(['tratamientoApuntalado', 'hasErrors']),
+  hasErrorsTratamientoTermico: state.getIn(['tratamientoTermico', 'hasErrors']),
   hasErrorsEvaluacionApuntalado: state.getIn(['evaluacionApuntalado', 'hasErrors']),
   hasErrorsEvaluacionAcido: state.getIn(['evaluacionAcido', 'hasErrors']),
   hasErrorsEvaluacionEstimulacion: state.getIn(['evaluacionEstimulacion', 'hasErrors']),
+  hasErrorsEvaluacionTermica: state.getIn(['evaluacionTermica', 'hasErrors']),
   tipoDeIntervenciones: state.getIn(['objetivoYAlcancesIntervencion', 'tipoDeIntervenciones']),
   tipoDeIntervencionesResults: state.getIn(['resultsMeta', 'interventionType']),
   saveName: state.getIn(['global', 'saveName']),
@@ -453,7 +462,8 @@ const mapDispatchToProps = dispatch => ({
   submitPozoForm: (action, token, name) => {dispatch(submitForm(action, token, name))},
   submitResultsForm: (action, token) => {dispatch(submitResultsForm(action, token))},
   setCurrentPage: val => {dispatch(setCurrentPage(val))},
-  setSaveName: val => {dispatch(setSaveName(val))},
+  setTab: val => {dispatch(setTab(val))},
+  setSaveName: val => {dispatch(setSaveName(val))}
 })
 
 export default connect(mapStateToProps, mapDispatchToProps)(InputsUI)

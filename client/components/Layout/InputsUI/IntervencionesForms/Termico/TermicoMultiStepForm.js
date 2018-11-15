@@ -4,19 +4,19 @@ import autobind from 'autobind-decorator'
 
 import { setIsLoading, setShowForms, setCurrentPage } from '../../../../../redux/actions/global'
 import PropuestaTermica from './PropuestaTermica'
-// import PruebasDeLaboratorio from '../PruebasDeLaboratorio'
-// import PruebasDeLaboratorioExtra from '../PruebasDeLaboratorioExtra'
+import PruebasDeLaboratorio from '../PruebasDeLaboratorio'
+import PruebasDeLaboratorioExtra from '../PruebasDeLaboratorioExtra'
 // import ResultadosDeLaSimulacionEstimulacion from './ResultadosDeLaSimulacionEstimulacion'
-// import EstimacionIncProduccionEstimulacion from './EstimacionIncProduccionEstimulacion'
+import EstimacionIncProduccionTermico from './EstimacionIncProduccionTermico'
 import EstimacionCostos from '../EstimacionCostos'
 
 
     const forms = [
       {'title' : 'Propuesta de Tratamiento Térmico', 'content': <PropuestaTermica /> },
-      // {'title' : 'Pruebas de Laboratorio', 'content': <PruebasDeLaboratorio /> },
-      // {'title' : 'Pruebas de Laboratorio Térmicas', 'content': <PruebasDeLaboratorioExtra /> },
+      {'title' : 'Pruebas de Laboratorio', 'content': <PruebasDeLaboratorio /> },
+      {'title' : 'Pruebas de Laboratorio Térmicas', 'content': <PruebasDeLaboratorioExtra /> },
       // {'title' : 'Resultados de la Simulación de Estimulación', 'content': <ResultadosDeLaSimulacionEstimulacion /> },
-      // {'title' : 'Estimación del Incremento de Producción', 'content': <EstimacionIncProduccionEstimulacion  /> },
+      {'title' : 'Estimación del Incremento de Producción', 'content': <EstimacionIncProduccionTermico /> },
       {'title' : 'Estimación de Costos de Estimulación', 'content': <EstimacionCostos /> }
     ]
 
@@ -63,17 +63,19 @@ import EstimacionCostos from '../EstimacionCostos'
 
 
   render() {
-    let { setShowForms, hasSubmitted, propuestaHasErrors, estCostsHasErrors } = this.props
+    let { setShowForms, hasSubmitted, propuestaHasErrors, estIncProduccionHasErrors, estCostsHasErrors } = this.props
      let className = 'subtab'
 
 
 
-   let errors = [propuestaHasErrors, estCostsHasErrors]
+   let errors = [propuestaHasErrors, false, false, estIncProduccionHasErrors, estCostsHasErrors]
 
      let title = forms[this.state.currentStep].title
+     let formClassName = forms[this.state.currentStep].content.type.WrappedComponent.name
 
      return (
          <div className={`multistep-form`}>
+          <div className ={`banner ${formClassName}`}></div>
           <div className="subtabs">
               {forms.map( (tab, index) => {
                 let active = this.state.currentStep === index ? 'active' : '';
@@ -85,12 +87,15 @@ import EstimacionCostos from '../EstimacionCostos'
               )}
           </div>
           <div className="content">
-            <div className="tab-title">
-              <i className="far fa-caret-square-left" style={{position: 'relative', fontSize: '50px', left: '-20px', top: '7px', color: '#70AC46'}} onClick={(e) => setShowForms(false)}></i>
-              { title }
-              <button className="cta next" onClick={this.handleNextSubtab}>Siguiente</button>
-              <button className="cta prev" onClick={this.handlePrevSubtab}>Anterior</button> 
-            </div>
+              <div className="tab-title">
+                  { title }
+              </div>
+              <div className="tab-actions">
+                  <button className="cta clear" onClick={(e) => setShowForms(false)}><i className="fa fa-undo">&nbsp;</i></button>
+                  <button className="cta next" onClick={this.handleNextSubtab}>Siguiente</button>
+                  <button className="cta prev" onClick={this.handlePrevSubtab}>Anterior</button>
+                  <button className="cta clear load" onClick={this.activateModal}><i className="fa fa-download">&nbsp;</i></button>
+              </div>
 
             {forms[this.state.currentStep].content}
 
@@ -109,7 +114,7 @@ const mapStateToProps = state => ({
   hasSubmitted: state.getIn(['global', 'hasSubmitted']),
   propuestaHasErrors: state.getIn(['propuestaTermica', 'hasErrors']),
   // resultadosSimulacionHasErrors: state.getIn(['resultadosSimulacionEstimulacion', 'hasErrors']),
-  // estIncProduccionHasErrors: state.getIn(['estIncProduccionEstimulacion', 'hasErrors']),
+  estIncProduccionHasErrors: state.getIn(['estIncProduccionTermico', 'hasErrors']),
   estCostsHasErrors: state.getIn(['estCost', 'hasErrors']),
 })
 

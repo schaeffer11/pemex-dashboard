@@ -1,15 +1,6 @@
 .diagnostico {
   padding: .7em;
 
-  .title {
-    font-size: 1.5em;
-    font-weight: bold;
-    padding-bottom: 1em;
-    margin-bottom: 1em;
-    color: #585858;
-    border-bottom: 1px solid #585858;
-  }
-
   .import {
     float: right;
   }
@@ -17,7 +8,7 @@
   .heading {
     width: 100%;
     clear: both;
-    padding: 25px;
+    padding: 25px 0;
     margin-bottom: 5px;
     display: table;
 
@@ -28,7 +19,7 @@
   }
 
   .activo {
-    margin: 0 25px 25px;
+    margin: 0 0 25px;
 
     .input {
       max-width: 500px;
@@ -36,15 +27,22 @@
   }
 
   .header {
+    background:  $table-head-color;
+    color: $table-head-font-color;
+
     > div {
       display: inline-block;
       padding: 5px;
-      background: $table-row-alt-color;
       font-weight: bold;
     }
   }
 
+  .table {
+    border: 2px solid $primary-border-color;
+  }
+
   .row-title {
+    color: $table-row-font-color;
     background: $table-row-alt-color;
     margin: 2px 0;
     padding: 5px;
@@ -59,6 +57,7 @@
 
   form {
     padding: 20px 40px;
+    color: $table-row-font-color;
 
     .description {
       width: 50%;
@@ -77,6 +76,16 @@
     .trow {
       background: $table-row-color;
       margin: 2px 0;
+      border-bottom: 1px solid $primary-border-color;
+      color: $table-row-font-color;
+
+      &:nth-child(even){
+        background: $table-row-alt-color;
+      }
+
+      &:last-child{
+        border-bottom:none;
+      }
 
       & > div {
         padding: 5px;
@@ -97,7 +106,7 @@
     input {
       padding: 0.2em 0.4em;
       border-radius: 0.3em;
-      border: 1px solid #ddd;
+      border: 1px solid $primary-border-color;
       font-weight: 200;
       outline: none;
       font-size: 12px;
@@ -114,7 +123,7 @@
     }
 
     label {
-      color: black;
+      color: $table-row-font-color;
       font-weight: 500;
       font-size: .9em;
       margin-right: 1em;

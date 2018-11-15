@@ -193,28 +193,30 @@ import { calculateValuesGeneralCedula } from '../../../../../lib/formatters';
         <div className='header'>
           General
         </div>
-        <InputRowSelectUnitless
-          header="Compañía Seleccionada para el Tratamiento"
-          name="propuestaCompany"
-          options={companyOptions}
-          onBlur={this.updateErrors}
-          value={propuestaCompany}
-          callback={e => setPropuestaCompany(e.value)}
-          errors={this.state.errors}
-        />
-        <InputRowSelectUnitless
-          header="Tipo de estimulación"
-          name="tipoDeEstimulacion"
-          options={estimulacionOptions}
-          onBlur={this.updateErrors}
-          value={tipoDeEstimulacion}
-          callback={e => this.handleSelectTipoDeEstimulacion(e.value)}
-          errors={this.state.errors}
-        />
-        <CalculatedValue
-          header={<div>Intervalos</div>}
-          value={intervals}
-        />
+        <div className="input-table">
+          <InputRowSelectUnitless
+            header="Compañía Seleccionada para el Tratamiento"
+            name="propuestaCompany"
+            options={companyOptions}
+            onBlur={this.updateErrors}
+            value={propuestaCompany}
+            callback={e => setPropuestaCompany(e.value)}
+            errors={this.state.errors}
+          />
+          <InputRowSelectUnitless
+            header="Tipo de estimulación"
+            name="tipoDeEstimulacion"
+            options={estimulacionOptions}
+            onBlur={this.updateErrors}
+            value={tipoDeEstimulacion}
+            callback={e => this.handleSelectTipoDeEstimulacion(e.value)}
+            errors={this.state.errors}
+          />
+          <CalculatedValue
+            header={<div>Intervalos</div>}
+            value={intervals}
+          />
+        </div>
       </div>
     )
   }
@@ -234,16 +236,18 @@ import { calculateValuesGeneralCedula } from '../../../../../lib/formatters';
         <div className='header'>
           Limpieza de Aparejo
         </div>
-        <InputRowSelectUnitless 
-          header="Tipo de colocación" 
-          name='tipoDeColocacion' 
-          options={colocacionOptions}
-          onBlur={this.updateErrors} 
-          value={tipoDeColocacion} 
-          callback={(e) => setTipoDeColocacion(e.value)}
-          errors={this.state.errors}
-        />
-        <InputRow header="Tiempo de contacto" name='tiempoDeContacto' unit="min" value={tiempoDeContacto} onChange={setTiempoDeContacto} errors={this.state.errors} onBlur={this.updateErrors} />
+        <div className="input-table">
+          <InputRowSelectUnitless
+            header="Tipo de colocación"
+            name='tipoDeColocacion'
+            options={colocacionOptions}
+            onBlur={this.updateErrors}
+            value={tipoDeColocacion}
+            callback={(e) => setTipoDeColocacion(e.value)}
+            errors={this.state.errors}
+          />
+          <InputRow header="Tiempo de contacto" name='tiempoDeContacto' unit="min" value={tiempoDeContacto} onChange={setTiempoDeContacto} errors={this.state.errors} onBlur={this.updateErrors} />
+        </div>
       </div>
     )
   }
@@ -264,41 +268,43 @@ import { calculateValuesGeneralCedula } from '../../../../../lib/formatters';
         <div className='header'>
           Volúmenes
         </div>
-        <CalculatedValue
-          header={<div>Precolchón N<sub>2</sub></div>}
-          value={volumenPrecolchonN2}
-          unit={<div>m<sup>3</sup></div>} 
-        />
-        <CalculatedValue
-          header={<div>Sistema no reactivo</div>}
-          value={volumenSistemaNoReativo}
-          unit={<div>m<sup>3</sup></div>} 
-        />
-        <CalculatedValue
-          header={<div>Sistema reactivo</div>}
-          value={volumenSistemaReactivo}
-          unit={<div>m<sup>3</sup></div>} 
-        />
-        <CalculatedValue
-          header={<div>Sistema divergente</div>}
-          value={volumenSistemaDivergente}
-          unit={<div>m<sup>3</sup></div>} 
-        />
-        <CalculatedValue
-          header={<div>Desplazamiento líquido</div>}
-          value={volumenDesplazamientoLiquido}
-          unit={<div>m<sup>3</sup></div>} 
-        />
-        <CalculatedValue
-          header={<div>Desplazamiento N<sub>2</sub></div>}
-          value={volumenDesplazamientoN2}
-          unit={<div>m<sup>3</sup></div>} 
-        />
-        <CalculatedValue
-          header={<div>Total de líquido</div>}
-          value={volumenTotalDeLiquido}
-          unit={<div>m<sup>3</sup></div>} 
-        />
+        <div className="input-table">
+          <CalculatedValue
+            header={<div>Precolchón N<sub>2</sub></div>}
+            value={volumenPrecolchonN2}
+            unit={<div>m<sup>3</sup></div>}
+          />
+          <CalculatedValue
+            header={<div>Sistema no reactivo</div>}
+            value={volumenSistemaNoReativo}
+            unit={<div>m<sup>3</sup></div>}
+          />
+          <CalculatedValue
+            header={<div>Sistema reactivo</div>}
+            value={volumenSistemaReactivo}
+            unit={<div>m<sup>3</sup></div>}
+          />
+          <CalculatedValue
+            header={<div>Sistema divergente</div>}
+            value={volumenSistemaDivergente}
+            unit={<div>m<sup>3</sup></div>}
+          />
+          <CalculatedValue
+            header={<div>Desplazamiento líquido</div>}
+            value={volumenDesplazamientoLiquido}
+            unit={<div>m<sup>3</sup></div>}
+          />
+          <CalculatedValue
+            header={<div>Desplazamiento N<sub>2</sub></div>}
+            value={volumenDesplazamientoN2}
+            unit={<div>m<sup>3</sup></div>}
+          />
+          <CalculatedValue
+            header={<div>Total de líquido</div>}
+            value={volumenTotalDeLiquido}
+            unit={<div>m<sup>3</sup></div>}
+          />
+        </div>
       </div>
     )
   }

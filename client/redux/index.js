@@ -18,6 +18,7 @@ import resultadosSimulacionEstimulacion from './reducers/resultadosSimulacionEst
 import resultadosSimulacionAcido from './reducers/resultadosSimulacionAcido'
 import resultadosSimulacionApuntalado from './reducers/resultadosSimulacionApuntalado'
 import estIncProduccionEstimulacion from './reducers/estIncProduccionEstimulacion'
+import estIncProduccionTermico from './reducers/estIncProduccionTermico'
 import estIncProduccionAcido from './reducers/estIncProduccionAcido'
 import estIncProduccionApuntalado from './reducers/estIncProduccionApuntalado'
 import estCost from './reducers/estCost'
@@ -35,6 +36,7 @@ import tratamientoTermico from './reducers/tratamientoTermico'
 import evaluacionAcido from './reducers/evaluacionAcido'
 import evaluacionApuntalado from './reducers/evaluacionApuntalado'
 import evaluacionEstimulacion from './reducers/evaluacionEstimulacion'
+import evaluacionTermica from './reducers/evaluacionTermica'
 import resultsMeta from './reducers/resultsMeta'
 import graficaTratamiento from './reducers/graficaTratamiento'
 import resultadosGenerales from './reducers/resultadosGenerales'
@@ -66,6 +68,7 @@ const appReducer = combineReducers({
   estIncProduccionEstimulacion,
   estIncProduccionAcido,
   estIncProduccionApuntalado,
+  estIncProduccionTermico,
   estCost,
   estCostResults,
   evaluacionPetrofisica,
@@ -83,6 +86,7 @@ const appReducer = combineReducers({
   evaluacionAcido,
   evaluacionApuntalado,
   evaluacionEstimulacion,
+  evaluacionTermica,
   graficaTratamiento,
   resultadosGenerales,
   resultsMeta,
@@ -109,6 +113,25 @@ const rootReducer = (state, action) => {
     }
     if (action.type === 'RESET_APP') {
       return state = Map({ user, app })
+    }
+    if (action.type === 'RESET_APP_FROM_SUBMIT') {
+      let newGlobal = {
+        notificationType: null,
+        notificationText: null,
+        isLoading: false,
+        showNotification: true,
+        showForms: false,
+        saved: null,
+        loaded: null,
+        submitted: null,
+        loadText: null,
+        currentPage: '',
+        selectedTab: 'Pozo',
+        hasSubmitted: false,
+        transactionID: null,
+        saveName: null 
+      }
+      return state = fromJS({ user, app, global: newGlobal })
     }
     if (action.type === 'LOGOUT') {
       state = undefined

@@ -1,7 +1,7 @@
 import React, { PureComponent } from 'react'
 import autobind from 'autobind-decorator'
 import ReactTable from 'react-table' 
-import { CategoryDist, TrafficLight, Currency, Integer } from '../../../../lib/formatters'
+import { CategoryDist, TrafficLight, Currency, Integer, numWithCommas } from '../../../../lib/formatters'
 
 @autobind class ExecutiveTable2Well extends PureComponent {
 
@@ -71,12 +71,25 @@ import { CategoryDist, TrafficLight, Currency, Integer } from '../../../../lib/f
         Header: 'Produccion Real',
         accessor: 'realProd', 
         minWidth: 150,
-        Cell: Integer
-      },{
-        Header: 'Traffic Light',
-        accessor: 'light', 
-        minWidth: 150,
-        Cell: TrafficLight
+        Cell: row => {
+          console.log(row)
+          let color = row.original.realProd > row.original.estProd ? '#44A808' : '#AA1F40'
+          let transform = row.original.realProd > row.original.estProd ? 'none' : 'rotate(180deg)'
+
+          return (
+          <div>
+            <span style={{
+              color: color,
+              transition: 'all .3s ease'
+            }}>
+              {row.value ? numWithCommas(row.value.toFixed(0)) : 0}
+            </span>
+            <svg style={{color: color, transform: transform}} xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 16 16" >
+              <path d="M0,0h24v24H0V0z" fill="none"/>
+              <path d="M6.1,8.8h3.4v11h3v-11h3.9L11.3,4L6.1,8.8z" fill={color}/>
+            </svg>
+          </div>
+        )}
       },{
         Header: <div>Date / Type of<br/>Last Treatment</div>,
         accessor: 'dateType', 
@@ -165,14 +178,15 @@ import { CategoryDist, TrafficLight, Currency, Integer } from '../../../../lib/f
             percAcido: i.NUM_ACIDO / i.NUM_TREATMENTS * 100,
             numApuntalado: i.NUM_APUNTALADO,
             percApuntalado: i.NUM_APUNTALADO / i.NUM_TREATMENTS * 100,
-            numEstimulacion: i.NUM_ESTIMULACION,
-            percEstimulacion: i.NUM_ESTIMULACION / i.NUM_TREATMENTS * 100,
+            numEstimulacionLimpieza: i.NUM_ESTIMULACION_LIMPIEZA,
+            percEstimulacionLimpieza: i.NUM_ESTIMULACION_LIMPIEZA / i.NUM_TREATMENTS * 100,
+            numEstimulacionMatricial: i.NUM_ESTIMULACION_MATRICIAL,
+            percEstimulacionMatricial: i.NUM_ESTIMULACION_MATRICIAL / i.NUM_TREATMENTS * 100,
             numTermico: i.NUM_TERMICO,
             percTermico: i.NUM_TERMICO / i.NUM_TREATMENTS * 100,
             cost: i.COST ? i.COST.toFixed(0) : 0 ,
             estProd: estProd,
             realProd: realProd,
-            light: estProd && realProd ? realProd / estProd : null,
             dateType: '-',
             sistemaNoReactivo: volumen ? volumen.TOTAL_SISTEMA_NO_REACTIVO : undefined,
             sistemaReactivo: volumen ? volumen.TOTAL_SISTEMA_REACTIVO : undefined,

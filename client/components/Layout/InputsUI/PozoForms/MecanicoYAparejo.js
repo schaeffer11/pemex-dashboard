@@ -18,7 +18,9 @@ let tipoDeTerminacionOptions = [
   { label: 'Liner Cementado y Disparado (LCD)', value: 'Liner Cementado y Disparado (LCD)' },
   { label: 'Liner Ranurado (LR)', value: 'Liner Ranurado (LR)' },
   { label: 'Liner Ranurado y Disparado (LRD)', value: 'Liner Ranurado y Disparado (LRD)' },
-  { label: 'Cola extendida', value: 'Cola extendida' }
+  { label: 'Cola extendida', value: 'Cola extendida' },
+  { label: 'Simple', value: 'Simple' },
+  { label: 'Tuberia Cementada y Disparada (TCD)', value: 'Tuberia Cementada y Disparada (TCD)'}
 ]
 
 let tipoDeLinerOptions = [
@@ -27,6 +29,10 @@ let tipoDeLinerOptions = [
   { label: 'Liner Disparado (LD)', value: 'Liner Disparado (LD)' },
   { label: 'Liner Cementado y Disparado (LCD)', value: 'Liner Cementado y Disparado (LCD)' },
   { label: 'Cola extendida', value: 'Cola extendida' },
+  { label: 'Liner mas complemento', value: 'Liner mas complemento' },
+  { label: 'Tie back', value: 'Tie back' },
+  { label: 'Sencillo', value: 'Sencillo' },
+  { label: 'No aplica', value: 'No aplica' },
 ]
 
 let tratamientoPorOptions = [
@@ -34,6 +40,7 @@ let tratamientoPorOptions = [
   { label: 'Tubería de Revestimiento-Tubería de Producción (TR-TP)', value: 'Tubería de Revestimiento-Tubería de Producción (TR-TP)' },
   { label: 'Espacio Anular (EA)', value: 'Espacio Anular (EA)' },
   { label: 'Espacio Anular-Tuberia de Producción (EA-TP)', value: 'Espacio Anular-Tuberia de Producción (EA-TP)' },
+  { label: 'Tubería Flexible (TF)', value: 'Tubería Flexible (TF)' }
 ]
 @autobind class MecanicoYAparejo extends Component {
   constructor(props) {
@@ -246,25 +253,29 @@ let tratamientoPorOptions = [
           Terminación
         </div>
         TIPO
-        <InputRowSelectUnitless header="Tipo de terminación" value={tipoDeTerminacion} callback={this.handleSelectTipoDeTerminacion} options={tipoDeTerminacionOptions} name='tipoDeTerminacion' onBlur={this.updateErrors} errors={this.state.errors} />
-        <InputRow header="h (intervalo productor)" value={hIntervaloProductor} onChange={setHIntervaloProductor} name='hIntervaloProductor' unit='mv' onBlur={this.updateErrors} errors={this.state.errors} />
-        <InputRow header="Empacador" name='empacador' value={empacador} onChange={setEmpacador} unit='mv' onBlur={this.updateErrors} errors={this.state.errors} />
-        <InputRow header="Presión dif. empacador" name='presionDifEmpacador' value={presionDifEmpacador} onChange={setPresionDifEmpacador} unit='psi' onBlur={this.updateErrors} errors={this.state.errors} />
-        <InputRow header="Profundidad Sensor P y T" name='sensorPyt' value={sensorPyt} onChange={setSensorPyt} unit='mv' onBlur={this.updateErrors} errors={this.state.errors} />
+        <div className="input-table">
+          <InputRowSelectUnitless header="Tipo de terminación" value={tipoDeTerminacion} callback={this.handleSelectTipoDeTerminacion} options={tipoDeTerminacionOptions} name='tipoDeTerminacion' onBlur={this.updateErrors} errors={this.state.errors} />
+          <InputRow header="h (intervalo productor)" value={hIntervaloProductor} onChange={setHIntervaloProductor} name='hIntervaloProductor' unit='md' onBlur={this.updateErrors} errors={this.state.errors} />
+          <InputRow header="Profunidad del Empacador" name='empacador' value={empacador} onChange={setEmpacador} unit='md' onBlur={this.updateErrors} errors={this.state.errors} />
+          <InputRow header="Presión dif. empacador" name='presionDifEmpacador' value={presionDifEmpacador} onChange={setPresionDifEmpacador} unit='psi' onBlur={this.updateErrors} errors={this.state.errors} />
+          <InputRow header="Profundidad Sensor de P y T" name='sensorPyt' value={sensorPyt} onChange={setSensorPyt} unit='md' onBlur={this.updateErrors} errors={this.state.errors} />
+        </div>
         LINER
-        <InputRowSelectUnitless header="Tipo de liner" name='tipoDeLiner' value={tipoDeLiner} options={tipoDeLinerOptions} callback={(e) => setTipoDeLiner(e.value)} onBlur={this.updateErrors} errors={this.state.errors} />
-        <InputRow header="Diámetro de liner" name='diametroDeLiner' value={diametroDeLiner} onChange={setDiametroDeLiner} unit='pg' onBlur={this.updateErrors} errors={this.state.errors} />
-        {
-          tipoDeTerminacion === 'Agujero Descubierto (AD)' ? null :
-          <div>
-            DISPAROS
-            <InputRowUnitless header="Tipo de pistolas" name='tipoDePistolas' value={tipoDePistolas} onChange={setTipoDePistolas}  onBlur={this.updateErrors} errors={this.state.errors} />
-            <InputRow header="Densidad de disparos" name='densidadDeDisparosMecanico' value={densidadDeDisparosMecanico} onChange={setDensidadDeDisparosMecanico} unit='c/m' onBlur={this.updateErrors} errors={this.state.errors} />
-            <InputRow header="Fase" name='fase' value={fase} onChange={setFase} unit='Grados' onBlur={this.updateErrors} errors={this.state.errors} />
-            <InputRow header="Diámetro de orificio" name='diametroDeOrificio' value={diametroDeOrificio} onChange={setDiametroDeOrificio} unit='pg' onBlur={this.updateErrors} errors={this.state.errors} />
-            <InputRow header="Penetración" name='penetracion' value={penetracion} onChange={setPenetracion} unit='pg' onBlur={this.updateErrors} errors={this.state.errors} />
-          </div>
-        }
+        <div className="input-table">
+          <InputRowSelectUnitless header="Tipo de liner" name='tipoDeLiner' value={tipoDeLiner} options={tipoDeLinerOptions} callback={(e) => setTipoDeLiner(e.value)} onBlur={this.updateErrors} errors={this.state.errors} />
+          <InputRow header="Diámetro de liner" name='diametroDeLiner' value={diametroDeLiner} onChange={setDiametroDeLiner} unit='pg' onBlur={this.updateErrors} errors={this.state.errors} />
+          {
+            tipoDeTerminacion === 'Agujero Descubierto (AD)' ? null :
+            <div>
+              DISPAROS
+              <InputRowUnitless header="Tipo de pistolas" name='tipoDePistolas' value={tipoDePistolas} onChange={setTipoDePistolas}  onBlur={this.updateErrors} errors={this.state.errors} />
+              <InputRow header="Densidad de disparos" name='densidadDeDisparosMecanico' value={densidadDeDisparosMecanico} onChange={setDensidadDeDisparosMecanico} unit='c/m' onBlur={this.updateErrors} errors={this.state.errors} />
+              <InputRow header="Fase" name='fase' value={fase} onChange={setFase} unit='Grados' onBlur={this.updateErrors} errors={this.state.errors} />
+              <InputRow header="Diámetro de orificio" name='diametroDeOrificio' value={diametroDeOrificio} onChange={setDiametroDeOrificio} unit='pg' onBlur={this.updateErrors} errors={this.state.errors} />
+              <InputRow header="Penetración" name='penetracion' value={penetracion} onChange={setPenetracion} unit='pg' onBlur={this.updateErrors} errors={this.state.errors} />
+            </div>
+          }
+        </div>
       </div>
     )
   }
@@ -280,11 +291,13 @@ let tratamientoPorOptions = [
           Capacidad
         </div>
         VOLUMEN
-        <InputRowSelectUnitless header="Tratamiento por" name='tratamientoPor' value={tratamientoPor} callback={(e) => setTratamientoPor(e.value)} options={tratamientoPorOptions} onBlur={this.updateErrors} errors={this.state.errors} />
-        <InputRow header="Volumen aparejo de producción" name='volumenAparejoDeProduccion' value={volumenAparejoDeProduccion} onChange={setVolumenAparejoDeProduccion} unit={<div>m<sup>3</sup></div>} onBlur={this.updateErrors} errors={this.state.errors} />
-        <InputRow header="Volumen @ cima de intervalo" name='volumenCimaDeIntervalo' value={volumenCimaDeIntervalo} onChange={setVolumenCimaDeIntervalo} unit={<div>m<sup>3</sup></div>} onBlur={this.updateErrors} errors={this.state.errors} />
-        <InputRow header="Volumen @ base de intervalo" name='volumenBaseDeIntervalo' value={volumenBaseDeIntervalo} onChange={setVolumenBaseDeIntervalo} unit={<div>m<sup>3</sup></div>} onBlur={this.updateErrors} errors={this.state.errors} />
-        <InputRow header="Volumen de espacio anular (EA)" name='volumenDeEspacioAnular' value={volumenDeEspacioAnular} onChange={setVolumenDeEspacioAnular} unit={<div>m<sup>3</sup></div>} onBlur={this.updateErrors} errors={this.state.errors} />
+        <div className="input-table">
+          <InputRowSelectUnitless header="Tratamiento por" name='tratamientoPor' value={tratamientoPor} callback={(e) => setTratamientoPor(e.value)} options={tratamientoPorOptions} onBlur={this.updateErrors} errors={this.state.errors} />
+          <InputRow header="Volumen aparejo de producción" name='volumenAparejoDeProduccion' value={volumenAparejoDeProduccion} onChange={setVolumenAparejoDeProduccion} unit={<div>m<sup>3</sup></div>} onBlur={this.updateErrors} errors={this.state.errors} />
+          <InputRow header="Volumen a la cima de intervalo" name='volumenCimaDeIntervalo' value={volumenCimaDeIntervalo} onChange={setVolumenCimaDeIntervalo} unit={<div>m<sup>3</sup></div>} onBlur={this.updateErrors} errors={this.state.errors} />
+          <InputRow header="Volumen a la base de intervalo" name='volumenBaseDeIntervalo' value={volumenBaseDeIntervalo} onChange={setVolumenBaseDeIntervalo} unit={<div>m<sup>3</sup></div>} onBlur={this.updateErrors} errors={this.state.errors} />
+          <InputRow header="Volumen de espacio anular (EA)" name='volumenDeEspacioAnular' value={volumenDeEspacioAnular} onChange={setVolumenDeEspacioAnular} unit={<div>m<sup>3</sup></div>} onBlur={this.updateErrors} errors={this.state.errors} />
+        </div>
       </div>
     )
   }
@@ -329,53 +342,101 @@ let tratamientoPorOptions = [
         }
       },
       {
-        Header: <div>Profundidad<br></br>(m)</div>,
-        accessor: 'depth',
+        Header: <div>Measured Depth<br></br>(m)</div>,
+        accessor: 'measuredDepth',
         cell: 'renderNumber',
       },
       {
-        Header: <div>Inclinación<br></br>(grados)</div>,
+        Header: <div>Inclination<br></br>(deg)</div>,
         accessor: 'inclination',
         cell: 'renderNumber',
       },
       {
-        Header: <div>Azimut<br></br>(grados)</div>,
+        Header: <div>Azimuth<br></br>(deg)</div>,
         accessor: 'azimuth',
         cell: 'renderNumber',
       },
       {
-        Header: <div>MV<br></br>(metros)</div>,
+        Header: <div>TVD<br></br>(m)</div>,
         accessor: 'trueVerticalDepth',
         cell: 'renderNumber',
       },
       {
-        Header: <div>X<br></br>(metros)</div>,
-        accessor: 'x_offset',
+        Header: <div>Vertical Section<br></br>(m)</div>,
+        accessor: 'verticalSection',
         cell: 'renderNumber',
       },
       {
-        Header: <div>Y<br></br>(metros)</div>,
-        accessor: 'y_offset',
+        Header: <div>NS<br></br>(m)</div>,
+        accessor: 'ns',
         cell: 'renderNumber',
+      },
+      {
+        Header: <div>EW<br></br>(m)</div>,
+        accessor: 'ew',
+        cell: 'renderNumber',
+      },
+      {
+        Header: <div>DLS<br></br>(deg/30m)</div>,
+        accessor: 'dls',
+        cell: 'renderNumber',
+      },
+      {
+        Header: <div>Northing<br></br>(m)</div>,
+        accessor: 'northing',
+        cell: 'renderNumber',
+      },
+      {
+        Header: <div>Easting<br></br>(m)</div>,
+        accessor: 'easting',
+        cell: 'renderNumber',
+      },
+      {
+        Header: <div>Latitude</div>,
+        accessor: 'latitude',
+        cell: 'renderNumber',
+      },
+      {
+        Header: <div>Longitude</div>,
+        accessor: 'longitude',
+        cell: 'renderNumber',
+      },
+      {
+        Header: <div>Comments</div>,
+        accessor: 'comments',
+        cell: 'renderTextarea',
       },
     ]
     const rowObj = {
-      depth: '',
+      measuredDepth: '',
       inclination: '',
       azimuth: '',
       trueVerticalDepth: '',
-      x_offset: '',
-      y_offset: '',
+      verticalSection: '',
+      ns: '',
+      ew: '',
+      dls: '',
+      northing: '',
+      easting: '',
+      latitude: '',
+      longitude: '',
+      comments: '',
       error: true,
     }
+
     const errors = [
-      { name: 'depth', type: 'number' },
+      { name: 'measuredDepth', type: 'number' },
       { name: 'inclination', type: 'number' },
       { name: 'azimuth', type: 'number' },
       { name: 'trueVerticalDepth', type: 'number' },
-      { name: 'x_offset', type: 'number' },
-      { name: 'y_offset', type: 'number' },
-      { name: 'error', type: 'number' },
+      { name: 'verticalSection', type: 'number' },
+      { name: 'ns', type: 'number' },
+      { name: 'ew', type: 'number' },
+      { name: 'dls', type: 'number' },
+      { name: 'northing', type: 'number' },
+      { name: 'easting', type: 'number' },
+      { name: 'latitude', type: 'number' },
+      { name: 'longitude', type: 'number' },
     ]
     return (
       <div>
@@ -424,7 +485,6 @@ let tratamientoPorOptions = [
   render() {
     return (
       <div className="form mecanico-y-aparejo">
-        <div className='image'/>
         <div className='left'>
           { this.makeTerminacionForm() }
         </div>

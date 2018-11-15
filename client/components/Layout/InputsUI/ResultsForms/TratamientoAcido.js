@@ -148,19 +148,21 @@ import { calculateValuesGeneralCedula } from '../../../../lib/formatters';
         <div className='header'>
           General
         </div>
-        <InputRowSelectUnitless
-          header="Compañía Seleccionada para el Tratamiento"
-          name="tratamientoCompany"
-          options={companyOptions}
-          onBlur={this.updateErrors}
-          errors={this.state.errors}
-          value={tratamientoCompany}
-          callback={e => setMergeTratamientoAcido({ tratamientoCompany: e.value })}
-        />
-        <CalculatedValue
-          header={<div>Intervalos</div>}
-          value={intervalsDiv}
-        />
+        <div className="input-table">
+          <InputRowSelectUnitless
+            header="Compañía Seleccionada para el Tratamiento"
+            name="tratamientoCompany"
+            options={companyOptions}
+            onBlur={this.updateErrors}
+            errors={this.state.errors}
+            value={tratamientoCompany}
+            callback={e => setMergeTratamientoAcido({ tratamientoCompany: e.value })}
+          />
+          <CalculatedValue
+            header={<div>Intervalos</div>}
+            value={intervalsDiv}
+          />
+        </div>
       </div>
     )
   }
@@ -180,41 +182,43 @@ import { calculateValuesGeneralCedula } from '../../../../lib/formatters';
         <div className='header'>
           Volúmenes
         </div>
-        <CalculatedValue
-          header={<div>Precolchón N<sub>2</sub></div>}
-          value={volumenPrecolchonN2}
-          unit={<div>m<sup>3</sup></div>} 
-        />
-        <CalculatedValue
-          header={<div>Sistema no reactivo</div>}
-          value={volumenSistemaNoReativo}
-          unit={<div>m<sup>3</sup></div>} 
-        />
-        <CalculatedValue
-          header={<div>Sistema reactivo</div>}
-          value={volumenSistemaReactivo}
-          unit={<div>m<sup>3</sup></div>} 
-        />
-        <CalculatedValue
-          header={<div>Sistema divergente</div>}
-          value={volumenSistemaDivergente}
-          unit={<div>m<sup>3</sup></div>} 
-        />
-        <CalculatedValue
-          header={<div>Desplazamiento líquido</div>}
-          value={volumenDesplazamientoLiquido}
-          unit={<div>m<sup>3</sup></div>} 
-        />
-        <CalculatedValue
-          header={<div>Desplazamiento N<sub>2</sub></div>}
-          value={volumenDesplazamientoN2}
-          unit={<div>m<sup>3</sup></div>} 
-        />
-        <CalculatedValue
-          header={<div>Total de líquido</div>}
-          value={volumenTotalDeLiquido}
-          unit={<div>m<sup>3</sup></div>} 
-        />
+        <div className="input-table">
+          <CalculatedValue
+            header={<div>Precolchón N<sub>2</sub></div>}
+            value={volumenPrecolchonN2}
+            unit={<div>m<sup>3</sup></div>}
+          />
+          <CalculatedValue
+            header={<div>Sistema no reactivo</div>}
+            value={volumenSistemaNoReativo}
+            unit={<div>m<sup>3</sup></div>}
+          />
+          <CalculatedValue
+            header={<div>Sistema reactivo</div>}
+            value={volumenSistemaReactivo}
+            unit={<div>m<sup>3</sup></div>}
+          />
+          <CalculatedValue
+            header={<div>Sistema divergente</div>}
+            value={volumenSistemaDivergente}
+            unit={<div>m<sup>3</sup></div>}
+          />
+          <CalculatedValue
+            header={<div>Desplazamiento líquido</div>}
+            value={volumenDesplazamientoLiquido}
+            unit={<div>m<sup>3</sup></div>}
+          />
+          <CalculatedValue
+            header={<div>Desplazamiento N<sub>2</sub></div>}
+            value={volumenDesplazamientoN2}
+            unit={<div>m<sup>3</sup></div>}
+          />
+          <CalculatedValue
+            header={<div>Total de líquido</div>}
+            value={volumenTotalDeLiquido}
+            unit={<div>m<sup>3</sup></div>}
+          />
+        </div>
       </div>
     )
   }
@@ -229,13 +233,15 @@ import { calculateValuesGeneralCedula } from '../../../../lib/formatters';
         <div className='header'>
           Información de Geomecánica
         </div>
-        <InputRow header="Módulo young arena" name='moduloYoungArena' value={moduloYoungArena} onChange={e => setMergeTratamientoAcido({ moduloYoungArena: e })} unit='psi'  errors={this.state.errors} onBlur={this.updateErrors}/>
-        <InputRow header="Módulo young lutitas" name='moduloYoungLutitas' value={moduloYoungLutitas} onChange={e => setMergeTratamientoAcido({ moduloYoungLutitas: e })} unit='psi'  errors={this.state.errors} onBlur={this.updateErrors}/>
-        <InputRow header="Relac. poisson arena" name='relacPoissonArena' value={relacPoissonArena} onChange={e => setMergeTratamientoAcido({ relacPoissonArena: e })} unit='adim'  errors={this.state.errors} onBlur={this.updateErrors}/>
-        <InputRow header="Relac. poisson lutitas" name='relacPoissonLutatas' value={relacPoissonLutatas} onChange={e => setMergeTratamientoAcido({ relacPoissonLutatas: e })} unit='adim'  errors={this.state.errors} onBlur={this.updateErrors}/>
-        <InputRow header="Gradiente de fractura" name='gradienteDeFractura' value={gradienteDeFractura} onChange={e => setMergeTratamientoAcido({ gradienteDeFractura: e })} unit='psi/ft'  errors={this.state.errors} onBlur={this.updateErrors}/>
-        <InputRow header="Densidad de disparos" name='densidadDeDisparos' value={densidadDeDisparos} onChange={e => setMergeTratamientoAcido({ densidadDeDisparos: e })} unit='c/m'  errors={this.state.errors} onBlur={this.updateErrors}/>
-        <InputRow header="Diámetro de disparos" name='diametroDeDisparos' value={diametroDeDisparos} onChange={e => setMergeTratamientoAcido({ diametroDeDisparos: e })} unit='pg' errors={this.state.errors} onBlur={this.updateErrors}/>
+        <div className="input-table">
+          <InputRow header="Módulo young arena" name='moduloYoungArena' value={moduloYoungArena} onChange={e => setMergeTratamientoAcido({ moduloYoungArena: e })} unit='psi'  errors={this.state.errors} onBlur={this.updateErrors}/>
+          <InputRow header="Módulo young lutitas" name='moduloYoungLutitas' value={moduloYoungLutitas} onChange={e => setMergeTratamientoAcido({ moduloYoungLutitas: e })} unit='psi'  errors={this.state.errors} onBlur={this.updateErrors}/>
+          <InputRow header="Relac. poisson arena" name='relacPoissonArena' value={relacPoissonArena} onChange={e => setMergeTratamientoAcido({ relacPoissonArena: e })} unit='adim'  errors={this.state.errors} onBlur={this.updateErrors}/>
+          <InputRow header="Relac. poisson lutitas" name='relacPoissonLutatas' value={relacPoissonLutatas} onChange={e => setMergeTratamientoAcido({ relacPoissonLutatas: e })} unit='adim'  errors={this.state.errors} onBlur={this.updateErrors}/>
+          <InputRow header="Gradiente de fractura" name='gradienteDeFractura' value={gradienteDeFractura} onChange={e => setMergeTratamientoAcido({ gradienteDeFractura: e })} unit='psi/ft'  errors={this.state.errors} onBlur={this.updateErrors}/>
+          <InputRow header="Densidad de disparos" name='densidadDeDisparos' value={densidadDeDisparos} onChange={e => setMergeTratamientoAcido({ densidadDeDisparos: e })} unit='c/m'  errors={this.state.errors} onBlur={this.updateErrors}/>
+          <InputRow header="Diámetro de disparos" name='diametroDeDisparos' value={diametroDeDisparos} onChange={e => setMergeTratamientoAcido({ diametroDeDisparos: e })} unit='pg' errors={this.state.errors} onBlur={this.updateErrors}/>
+        </div>
       </div>
     )
   }

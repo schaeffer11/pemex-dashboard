@@ -107,7 +107,7 @@ const mergeKeys = elem => {
   render() {
     let { setShowForms, hasSubmitted, hasErrorsHistoricoDeAforosResults, hasErrorsEstCostResults, hasErrorsTratamientoEstimulacion, 
       hasErrorsTratamientoAcido, hasErrorsTratamientoApuntalado, tipoDeIntervencionesResults, hasErrorsEvaluacionApuntalado, 
-      hasErrorsEvaluacionAcido, hasErrorsEvaluacionEstimulacion, hasErrorsTratamientoTermico, hasErrorsResultadosGenerales, stimulationType } = this.props
+      hasErrorsEvaluacionAcido, hasErrorsEvaluacionEstimulacion, hasErrorsTratamientoTermico, hasErrorsEvaluacionTermica, hasErrorsResultadosGenerales, stimulationType } = this.props
     let className = 'subtab'
 
     let evaluacionErrors = 
@@ -117,7 +117,7 @@ const mergeKeys = elem => {
           ? hasErrorsEvaluacionAcido 
           : tipoDeIntervencionesResults === 'apuntalado' 
             ? hasErrorsEvaluacionApuntalado
-            : false
+            : hasErrorsEvaluacionTermica
 
     let tratamientoError = 
       tipoDeIntervencionesResults === 'estimulacion' 
@@ -145,12 +145,14 @@ const mergeKeys = elem => {
             )}
         </div>
         <div className="content">
-          <div className="tab-title">
-            <i className="far fa-caret-square-left" style={{position: 'relative', fontSize: '50px', left: '-20px', top: '7px', color: '#70AC46'}} onClick={(e) => setShowForms(false)}></i>
-            { title }
-            <button className="cta next" onClick={this.handleNextSubtab}>Siguiente</button>
-            <button className="cta prev" onClick={this.handlePrevSubtab}>Anterior</button> 
-          </div>
+            <div className="tab-title">
+                { title }
+            </div>
+            <div className="tab-actions">
+                <button className="cta clear" onClick={(e) => setShowForms(false)}><i className="fa fa-undo">&nbsp;</i></button>
+                <button className="cta next" onClick={this.handleNextSubtab}>Siguiente</button>
+                <button className="cta prev" onClick={this.handlePrevSubtab}>Anterior</button>
+            </div>
 
           {forms[this.state.currentStep].content}
 
@@ -179,6 +181,7 @@ const mapStateToProps = state => ({
   hasErrorsEvaluacionApuntalado: state.getIn(['evaluacionApuntalado', 'hasErrors']),
   hasErrorsEvaluacionAcido: state.getIn(['evaluacionAcido', 'hasErrors']),
   hasErrorsEvaluacionEstimulacion: state.getIn(['evaluacionEstimulacion', 'hasErrors']),
+  hasErrorsEvaluacionTermica: state.getIn(['evaluacionTermica', 'hasErrors']),
   hasErrorsResultadosGenerales: state.getIn(['resultadosGenerales', 'hasErrors']),
   tipoDeIntervencionesResults: state.getIn(['resultsMeta', 'interventionType']),
 })

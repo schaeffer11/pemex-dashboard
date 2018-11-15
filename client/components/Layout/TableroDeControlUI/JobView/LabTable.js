@@ -8,9 +8,11 @@ import ReactTable from 'react-table'
 @autobind class LabTable extends PureComponent {
 
   render() {
-    let { data } = this.props
+    let { data, handleChange } = this.props
 
     console.log(data)
+
+
     let columns = [{
         Header: 'Tipo de Analisis',
         accessor: 'type',
@@ -31,26 +33,48 @@ import ReactTable from 'react-table'
       },
     ] 
 
-    data.forEach(i => {
+    let newData = []
+
+      data.forEach(i => {
        let muestreoDate = new Date(i.fechaMuestreo)
         muestreoDate = `${muestreoDate.getDate()}/${muestreoDate.getMonth() + 1}/${muestreoDate.getFullYear()}`
        
        let pruebaDate = new Date(i.fechaPrueba)
         pruebaDate = `${pruebaDate.getDate()}/${pruebaDate.getMonth() + 1}/${pruebaDate.getFullYear()}`
 
-
-      i.fechaMuestreo = muestreoDate
-      i.fechaPrueba = pruebaDate
+        newData.push({
+            id: i.id,
+            type: i.type,
+            fechaMuestreo: muestreoDate,
+            fechaPrueba: pruebaDate,
+            compania: i.compania,
+            superviso: i.superviso,
+            observaciones: i.observaciones,
+        })
+  
       
     })
+
+
+
     return (
       <div className="lab-table">
         Lab Data
         <ReactTable 
           columns={columns}
           showPagination={false}
-          data={data}
-          pageSize={data ? data.length : 5}
+          data={newData}
+          pageSize={newData ? newData.length : 5}
+          getTdProps={(state, rowInfo, column, instance) => {
+              return {
+                onClick: (e, handleOriginal) => {
+                  if (rowInfo) {
+                    handleChange(rowInfo.original.id, rowInfo.original.type)
+                  }
+                
+                }
+              }
+            }}
         />
       </div>
     )

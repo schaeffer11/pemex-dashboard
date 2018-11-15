@@ -146,8 +146,9 @@ export const CategoryDist = (row) => (
   <div style={{width: '100%', height: '100%', borderRadius: '2px'}}>
     <div style={{width: `${row.original.percAcido}%`, height: '90%', display: 'inline-block', position: 'relative', backgroundColor: '#56B3D8', top: '5%', transition: 'all .5s ease-out'}}></div>
     <div style={{width: `${row.original.percApuntalado}%`, height: '90%', display: 'inline-block', position: 'relative', backgroundColor: '#C3E4CC', top: '5%', transition: 'all .5s ease-out'}}></div>
-    <div style={{width: `${row.original.percEstimulacion}%`, height: '90%', display: 'inline-block', position: 'relative', backgroundColor: '#E4CE5E', top: '5%', transition: 'all .5s ease-out'}}></div>
-    <div style={{width: `${row.original.percTermico}%`, height: '90%', display: 'inline-block', position: 'relative', backgroundColor: '#C26A1B', top: '5%', transition: 'all .5s ease-out'}}></div>
+    <div style={{width: `${row.original.percEstimulacionLimpieza}%`, height: '90%', display: 'inline-block', position: 'relative', backgroundColor: '#E4CE5E', top: '5%', transition: 'all .5s ease-out'}}></div>
+    <div style={{width: `${row.original.percEstimulacionMatricial}%`, height: '90%', display: 'inline-block', position: 'relative', backgroundColor: '#C26A1B', top: '5%', transition: 'all .5s ease-out'}}></div>
+    <div style={{width: `${row.original.percTermico}%`, height: '90%', display: 'inline-block', position: 'relative', backgroundColor: '#5D2311', top: '5%', transition: 'all .5s ease-out'}}></div>
   </div>
   )
 
