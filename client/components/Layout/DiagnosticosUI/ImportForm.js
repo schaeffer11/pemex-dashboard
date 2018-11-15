@@ -36,8 +36,7 @@ import { setIsLoading, setShowForms } from '../../../redux/actions/global'
     }
 
     cancel(e){
-        let { cancel } = this.props
-        cancel()
+        this.props.closeImportModal()
         e.preventDefault()
         return false
     }

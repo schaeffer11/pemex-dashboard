@@ -96,9 +96,11 @@ import { Link, Redirect } from 'react-router-dom'
                 { this.state.openModal && <Modal handleClose={this.handleClose} compromisoId={this.state.compromisoId} onUpdateData={this.onUpdateData} activos={this.state.activos}/> }
 
                 <div className="title">
-                    <i className="far fa-caret-square-left" style={{position: 'relative', fontSize: '50px', left: '-20px', top: '7px', color: '#70AC46'}} onClick={(e) => this.props.history.push('/')}></i>
                     Mis Compromisos
-                    <Link className="cta" to="/compromisos/manage">Administrar Compromisos</Link>
+                </div>
+                <div className="actions">
+                    <button className="cta clear" onClick={(e) => this.props.history.push('/')}><i className="fa fa-undo">&nbsp;</i></button>
+                    <button className="cta prev" onClick={() => this.props.history.push('/compromisos/manage')}>Administrar Compromisos</button>
                 </div>
                 { this.state.myCompromisos && <MyCompromisos viewDetails={this.viewDetails} compromisos={this.state.myCompromisos}/>}
 

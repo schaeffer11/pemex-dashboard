@@ -220,9 +220,9 @@ import { setIsLoading, setShowForms } from '../../../redux/actions/global'
                 {errors.notas && touched.notas && <div class="error">{errors.notas}</div>}
               </div>
 
-              <div className="buttons-group">
-                <button className="cancel button" onClick={this.props.handleClose}>Cancelar</button>
-                <button className="submit button" type="submit">{this.state.editMode ? 'Editar' : 'Crear'}</button>
+              <div className="button-group">
+                <button className="cta cancel" onClick={this.props.handleClose}>Cancelar</button>
+                <button className="cta submit" type="submit">{this.state.editMode ? 'Editar' : 'Crear'}</button>
               </div>
 
               {Object.entries(errors).length > 0 && <div class="error">Esta forma contiene errores.</div>}

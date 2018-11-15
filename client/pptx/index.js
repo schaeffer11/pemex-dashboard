@@ -18,6 +18,7 @@ function buildMasterSlide(slideWidth, slideHeight) {
     bkgd: 'e2e2e2',
     fontFace: 'Arial Narrow',
     slideNumber: { x:12.5, y:'92%', fontSize: 18 },
+    margin: 0.5,
     objects: [
       { rect: bottomBarLight },
       { rect: bottomBarDarkLeft },
@@ -29,6 +30,8 @@ function buildMasterSlide(slideWidth, slideHeight) {
     ]
   }
 }
+
+export const getMiddle = (len) => (13.3 - len) / 2
 
 export async function getData(url, token, id) {
   const headers = {
@@ -89,7 +92,8 @@ export function buildTable(title, map, data) {
     }]
     final.unshift(titleHeader)
   }
-  return final
+  const options = largeTableOptions()
+  return { options, table: final }
 }
 
 export function buildSimpleTable(title, map, data, hasUnits=true) {
@@ -133,7 +137,9 @@ export function buildSimpleTable(title, map, data, hasUnits=true) {
   if (title) {
     final.unshift(titleHeader)
   }
-  return final
+
+  const options = smallTableOptions()
+  return { options, table: final }
 }
 
 export async function buildChartBase64(config) {
@@ -147,10 +153,20 @@ export async function buildChartBase64(config) {
   return dataURL
 }
 
-export const tableOptions = {
+const tableOptions = {
   fontSize: 8,
-  colW: '2',
+  align: 'center',
 }
+
+export const smallTableOptions = () => ({
+  w: 4,
+  ...tableOptions
+})
+
+export const largeTableOptions = () => ({
+  w: 10,
+  ...tableOptions
+})
 
 function buildSectionSlide(pptx, title) {
   const slide = pptx.addNewSlide('MASTER_SLIDE')
@@ -166,7 +182,7 @@ async function getHasresults(token, id) {
     },
   }
   const data = await fetch(`/job/generalResults?transactionID=${id}`, headers).then(r => r.json())
-  return Object.keys(data) > 0
+  return Object.keys(data).length > 0
 }
 
 export async function generatePowerPoint(token, jobID, wellID, jobType) {
@@ -196,11 +212,11 @@ export async function generatePowerPoint(token, jobID, wellID, jobType) {
   buildSectionSlide(pptx, 'Información de la propuesta')
   await buildProposalCedula(pptx, token, jobID)
   await buildGeneralProposal(pptx, token, jobID)
-  await buildLabReports(pptx, token, jobID, images.pruebasDeLaboratorio)
-  if (hasResults) {
-    buildSectionSlide(pptx, 'Información de los resultados')
-    await buildResultsCedula(pptx, token, jobID, jobType)
-    await buildGeneralResults(pptx, token, jobID, jobType)
-  }
+  // await buildLabReports(pptx, token, jobID, images.pruebasDeLaboratorio)
+  // if (hasResults) {
+  //   buildSectionSlide(pptx, 'Información de los resultados')
+  //   await buildResultsCedula(pptx, token, jobID, jobType)
+  //   await buildGeneralResults(pptx, token, jobID, jobType)
+  // }
   pptx.save()
 }

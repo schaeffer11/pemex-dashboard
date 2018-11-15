@@ -47,3 +47,40 @@
     }
   }
 }
+
+.ReactTable.-striped {
+  border: 2px solid $primary-border-color;
+
+  .rt-tr {
+    border-bottom: 1px solid $table-border-color;
+    color: $table-head-font-color;
+  }
+
+  .rt-td {
+    border-left: 1px solid $table-border-color;
+  }
+
+  .rt-thead {
+    background:  $table-head-color;
+
+    &.-filters{
+      background: $background-color;
+    }
+  }
+
+  .rt-tbody {
+    .rt-tr {
+      background: $table-row-color;
+      color: $table-row-font-color;
+
+      &.-odd {
+        background: $table-row-alt-color;
+      }
+    }
+  }
+
+  .pagination-bottom {
+    background: $table-head-color;
+    color: $table-head-font-color;
+  }
+}

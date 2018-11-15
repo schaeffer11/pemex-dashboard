@@ -33,12 +33,14 @@ import { setGeneralGraficaTratamiento } from '../../../../redux/actions/results'
         <div className='header'>
           Cargar gráfica de tratamiento
         </div>
-        <input
-          type='file'
-          accept="image/*"
-          onChange={(e) => this.handleFileUpload(e)}
-        />
-        {imgURL ? <img className='img-preview' src={imgURL} /> : null }
+        <div className="input-table">
+          <input
+            type='file'
+            accept="image/*"
+            onChange={(e) => this.handleFileUpload(e)}
+          />
+          {imgURL ? <img className='img-preview' src={imgURL} /> : null }
+        </div>
       </div>
     )
   }

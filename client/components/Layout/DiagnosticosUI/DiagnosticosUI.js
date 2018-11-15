@@ -108,7 +108,7 @@ const ImportModal = (props) => {
             dialogStyle={{verticalAlign: '', textAlign: 'center', maxHeight: '80%', marginTop: '10%'}}
         >
             <div className="compromisosModal" >
-                <ImportForm diagnosticos={props.diagnosticos} select={props.select} close={props.closeImportModal} />
+                <ImportForm diagnosticos={props.diagnosticos} select={props.select} closeImportModal={props.closeImportModal} />
             </div>
         </AriaModal>
     )
