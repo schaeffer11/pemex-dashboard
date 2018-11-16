@@ -10,6 +10,8 @@ import EstimacionCostosResults from './EstimacionCostosResults'
 import ResultadosGenerales from './ResultadosGenerales'
 
 import { setIsLoading, setShowForms } from '../../../../redux/actions/global'
+import StickySubtabs from '../Components/StickySubtabs'
+
 const forms = [
   {'title' : 'Datos generales', 'content': <ResultadosGenerales /> },
   {'title' : 'Gráfica de tratamiento', 'content': <GraficaTratamiento /> },
@@ -134,7 +136,7 @@ const mergeKeys = elem => {
 
     return (
        <div className={`multistep-form`}>
-        <div className="subtabs">
+        <StickySubtabs>
             {forms.map( (tab, index) => {
               let active = this.state.currentStep === index ? 'active' : '';
               let error = errors[index]
@@ -143,7 +145,7 @@ const mergeKeys = elem => {
                  return <div className={`${className} ${active} ${errorClass}`} onClick={() => this.handleClick(index)} key={index}><span></span> {tab.title} </div>
                }
             )}
-        </div>
+        </StickySubtabs>
         <div className="content">
             <div className="tab-title">
                 { title }
