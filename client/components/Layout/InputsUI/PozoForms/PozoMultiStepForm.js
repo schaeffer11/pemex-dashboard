@@ -17,6 +17,7 @@ import HistoricoDeProduccion from './HistoricoDeProduccion'
 import AnalisisDelAgua from './AnalisisDelAgua'
 import HistoricoDeIntervenciones from './HistoricoDeIntervenciones'
 import { InputRow, InputRowUnitless, InputRowSelectUnitless, InputDate } from '../../Common/InputRow'
+import StickySubtabs from '../Components/StickySubtabs'
 
 import { setFichaTecnicaDelCampo, setHistorialDeIntervenciones, setFichaTecnicaDelPozo, setEvaluacionPetrofisica, setMecanicoYAparejoDeProduccion, 
   setAnalisisDelAgua, setSistemasArtificialesDeProduccion, setPresionDataCampo, setPressureDepthCampo, setPresionDataPozo, setPressureDepthPozo, setHistoricoProduccion, setHistoricoDeAforos,
@@ -42,8 +43,11 @@ const forms = [
 
 @autobind class PozoMultiStepForm extends Component {
 
+
+
   constructor(props) {
     super(props)
+
     this.state = {
       currentStep: 0,
       isOpen: false,
@@ -71,7 +75,6 @@ const forms = [
           fieldWellOptions: r
         })
     })
-
   }
 
   async loadTecnicaDelCampo() {
@@ -828,7 +831,7 @@ const forms = [
     return (
        <div className={`multistep-form ${formClassName}`}>
         <div className ={`banner ${formClassName}`}></div>
-        <div className="subtabs">
+        <StickySubtabs>
             {forms.map( (tab, index) => {
                const active = this.state.currentStep === index ? 'active' : ''; 
                let error = errors[index]
@@ -837,7 +840,7 @@ const forms = [
                return <div className={`${className} ${active} ${errorClass}`} onClick={() => this.handleClick(index)} key={index}><span></span> {tab.title} </div>
                }
             )}
-        </div>
+        </StickySubtabs>
         <div className="content">
           <div className="tab-title">
             { title }

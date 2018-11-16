@@ -27,6 +27,13 @@
 			background: linear-gradient(transparent  20%, $background-color 40%);
 		}
 
+		&.stick {
+			position: sticky;
+			top: 0;
+			z-index: 9;
+			background: $background-color;
+		}
+
 		.subtab {
             position: relative;
 			display: inline-block;
