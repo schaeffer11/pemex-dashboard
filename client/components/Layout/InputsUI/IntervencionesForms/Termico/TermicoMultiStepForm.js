@@ -13,12 +13,12 @@ import StickySubtabs from '../../Components/StickySubtabs'
 
 
     const forms = [
-      {'title' : 'Propuesta de Tratamiento Térmico', 'content': <PropuestaTermica /> },
-      {'title' : 'Pruebas de Laboratorio', 'content': <PruebasDeLaboratorio /> },
-      {'title' : 'Pruebas de Laboratorio Térmicas', 'content': <PruebasDeLaboratorioExtra /> },
-      // {'title' : 'Resultados de la Simulación de Estimulación', 'content': <ResultadosDeLaSimulacionEstimulacion /> },
-      {'title' : 'Estimación del Incremento de Producción', 'content': <EstimacionIncProduccionTermico /> },
-      {'title' : 'Estimación de Costos de Estimulación', 'content': <EstimacionCostos /> }
+      {'title' : 'Propuesta de Tratamiento Térmico', 'content': <PropuestaTermica />, className: 'PropuestaTermica' },
+      {'title' : 'Pruebas de Laboratorio', 'content': <PruebasDeLaboratorio />, className: 'PruebasDeLaboratorio' },
+      {'title' : 'Pruebas de Laboratorio Térmicas', 'content': <PruebasDeLaboratorioExtra />, className: 'PruebasDeLaboratorioExtra' },
+      // {'title' : 'Resultados de la Simulación de Estimulación', 'content': <ResultadosDeLaSimulacionEstimulacion />, className: 'ResultadosDeLaSimulacionEstimulacion' },
+      {'title' : 'Estimación del Incremento de Producción', 'content': <EstimacionIncProduccionTermico />, className: 'EstimacionIncProduccionTermico' },
+      {'title' : 'Estimación de Costos de Estimulación', 'content': <EstimacionCostos />, className: 'EstimacionCostos' }
     ]
 
 @autobind class TermicoMultiStepForm extends Component {
@@ -72,7 +72,7 @@ import StickySubtabs from '../../Components/StickySubtabs'
    let errors = [propuestaHasErrors, false, false, estIncProduccionHasErrors, estCostsHasErrors]
 
      let title = forms[this.state.currentStep].title
-     let formClassName = forms[this.state.currentStep].content.type.WrappedComponent.name
+     let formClassName = forms[this.state.currentStep].className
 
      return (
          <div className={`multistep-form`}>
@@ -95,7 +95,6 @@ import StickySubtabs from '../../Components/StickySubtabs'
                   <button className="cta clear" onClick={(e) => setShowForms(false)}><i className="fa fa-undo">&nbsp;</i></button>
                   <button className="cta next" onClick={this.handleNextSubtab}>Siguiente</button>
                   <button className="cta prev" onClick={this.handlePrevSubtab}>Anterior</button>
-                  <button className="cta clear load" onClick={this.activateModal}><i className="fa fa-download">&nbsp;</i></button>
               </div>
 
             {forms[this.state.currentStep].content}

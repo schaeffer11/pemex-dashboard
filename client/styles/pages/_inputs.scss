@@ -1092,6 +1092,9 @@
 		&.HistoricoDeAforos {
 			background-image: url('/images/historicoDeAforos.jpg');
 		}
+		&.HistoricoDeProduccion {
+			background-image: url('/images/historicoDeProduccion.jpg');
+		}
 		&.AnalisisDelAgua {
 			background-image: url('/images/aguaBanner.png');
 		}
@@ -1153,9 +1156,11 @@
 		}
 
 		&.SistemasArtificialesDeProduccion {
-			background-image: url('/images/sistemasBanner.png');
+			background-image: url('/images/sistemasBanner.jpg');
 		}
-
+		&.EstimacionIncProduccionTermico {
+			background-image: url('/images/estIncBanner.png');
+		}
 		&.PropuestaTermica {
 			background-image: url('/images/propuestaBanner.png');
 		}

@@ -989,6 +989,8 @@ JOIN TransactionsResults tr on r.TRANSACTION_ID = tr.TRANSACTION_ID
 ${whereClause} 
 GROUP BY type`
 
+  console.log(query, values)
+  
   connection.query(query, values, (err, results) => {
       console.log('comment err', err)
 

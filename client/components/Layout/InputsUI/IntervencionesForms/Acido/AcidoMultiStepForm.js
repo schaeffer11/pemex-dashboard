@@ -12,13 +12,13 @@ import PruebasDeLaboratorioExtra from '../PruebasDeLaboratorioExtra'
 import ResultadosDeLaSimulacionAcido from './ResultadosDeLaSimulacionAcido'
 import StickySubtabs from '../../Components/StickySubtabs'
 
-     const forms = [
-      {'title' : 'Propuesta de Fracturamiento Ácido', 'content': <PropuestaDeAcido /> },  
-      {'title' : 'Pruebas de Laboratorio', 'content': <PruebasDeLaboratorio /> },
-      {'title' : 'Pruebas de Laboratorio de Fracturamiento Ácido', 'content': <PruebasDeLaboratorioExtra /> },
-      {'title' : 'Resultados de la Simulación de Fracturamiento Ácido', 'content': <ResultadosDeLaSimulacionAcido /> },
-      {'title' : 'Estimación del Incremento de Producción', 'content': <EstimacionIncProduccionAcido /> },
-      {'title' : 'Estimación de Costos de Fracturamiento Acido', 'content': <EstimacionCostos /> }
+     const forms = [  
+      {'title' : 'Propuesta de Fracturamiento Ácido', menuTitle: 'Propuesta', 'content': <PropuestaDeAcido />, className: 'PropuestaDeAcido' },  
+      {'title' : 'Pruebas de Laboratorio', menuTitle: 'Laboratorios General', 'content': <PruebasDeLaboratorio />, className: 'PruebasDeLaboratorio' },
+      {'title' : 'Pruebas de Laboratorio de Fracturamiento Ácido', menuTitle: 'Laboratorios Detallados', 'content': <PruebasDeLaboratorioExtra />, className: 'PruebasDeLaboratorioExtra' },
+      {'title' : 'Resultados de la Simulación de Fracturamiento Ácido', menuTitle: 'Resultados', 'content': <ResultadosDeLaSimulacionAcido />, className: 'ResultadosDeLaSimulacionAcido' },
+      {'title' : 'Estimación del Incremento de Producción', menuTitle: 'Incremento Producción', 'content': <EstimacionIncProduccionAcido />, className: 'EstimacionIncProduccionAcido' },
+      {'title' : 'Estimación de Costos de Fracturamiento Acido', menuTitle: 'Costos', 'content': <EstimacionCostos />, className: 'EstimacionCostos' }
     ]
 
 
@@ -72,7 +72,7 @@ import StickySubtabs from '../../Components/StickySubtabs'
     
     let errors = [propuestaHasErrors, false, false, resultadosSimulacionHasErrors, estIncProduccionHasErrors, estCostsHasErrors]
     let title = forms[this.state.currentStep].title
-    let formClassName = forms[this.state.currentStep].content.type.WrappedComponent.name
+    let formClassName = forms[this.state.currentStep].className
 
      return (
          <div className={`multistep-form`}>
@@ -83,7 +83,7 @@ import StickySubtabs from '../../Components/StickySubtabs'
                  let error = errors[index]
                   const errorClass = (error && hasSubmitted) ? 'error' : '';
 
-                   return <div className={`${className} ${active} ${errorClass}`} onClick={() => this.handleClick(index)} key={index}><span></span> {tab.title} </div>
+                   return <div className={`${className} ${active} ${errorClass}`} onClick={() => this.handleClick(index)} key={index}><span></span> {tab.menuTitle} </div>
                  }
               )}
           </StickySubtabs>
@@ -95,7 +95,6 @@ import StickySubtabs from '../../Components/StickySubtabs'
                <button className="cta clear" onClick={(e) => setShowForms(false)}><i className="fa fa-undo">&nbsp;</i></button>
                <button className="cta next" onClick={this.handleNextSubtab}>Siguiente</button>
                <button className="cta prev" onClick={this.handlePrevSubtab}>Anterior</button>
-               <button className="cta clear load" onClick={this.activateModal}><i className="fa fa-download">&nbsp;</i></button>
             </div>
 
             {forms[this.state.currentStep].content}
