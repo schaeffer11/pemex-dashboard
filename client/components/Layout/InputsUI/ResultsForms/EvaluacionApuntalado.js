@@ -99,6 +99,18 @@ import { setGeneralEvaluacionApuntalado, setMergeEvaluacionApuntalado } from '..
           type: 'number',
           value: '',
         },
+        qo: {
+          type: 'number',
+          value: '',
+        },
+        qw: {
+          type: 'number',
+          value: '',
+        },
+        qg: {
+          type: 'number',
+          value: '',
+        },
       }
     }
   }
@@ -247,6 +259,45 @@ import { setGeneralEvaluacionApuntalado, setMergeEvaluacionApuntalado } from '..
               onBlur={this.updateErrors}
             />
         </div>
+      </div>
+    )
+  }
+
+  makeProductionResults() {
+    let { formData, setGeneralEvaluacionApuntalado } = this.props
+    let { qo, qg, qw } = formData
+    return (
+      <div className='result-form' >
+        <div className='header'>
+          Producción post-intervención
+        </div>
+        <InputRow
+          header={<div>Q<sub>o</sub></div>}
+          name='qo'
+          unit="bpd"
+          value={qo}
+          onChange={e => setGeneralEvaluacionApuntalado(['qo'], e)}
+          errors={this.state.errors}
+          onBlur={this.updateErrors}
+        />
+        <InputRow
+          header={<div>Q<sub>g</sub></div>}
+          name='qg'
+          unit="MMpcd"
+          value={qg}
+          onChange={e => setGeneralEvaluacionApuntalado(['qg'], e)}
+          errors={this.state.errors}
+          onBlur={this.updateErrors}
+        />
+        <InputRow
+          header={<div>Q<sub>w</sub></div>}
+          name='qw'
+          unit="bbl"
+          value={qw}
+          onChange={e => setGeneralEvaluacionApuntalado(['qw'], e)}
+          errors={this.state.errors}
+          onBlur={this.updateErrors}
+        />
       </div>
     )
   }
@@ -445,6 +496,7 @@ import { setGeneralEvaluacionApuntalado, setMergeEvaluacionApuntalado } from '..
         <div className='left'>
           { this.makeResultForm() }
           { this.makePrecolchonForm() }
+          { this.makeProductionResults() }
           { this.makeGeometryInput() }
         </div>
       </div>

@@ -141,8 +141,8 @@ const INSERT_RESULTS_QUERY = {
     save: ``,
     submit: `INSERT INTO Results (
         INTERVENCIONES_ID, WELL_FORMACION_ID, FECHA_INTERVENCION, 
-        JUSTIFICACION_INTERVENCION, COMENTARIOS_INTERVENCION, PROPUESTA_ID, TRANSACTION_ID) VALUES
-        (?, ?, ?, ?, ?, ?, ?)`,     
+        JUSTIFICACION_INTERVENCION, COMENTARIOS_INTERVENCION, QO_RESULT, QG_RESULT, QW_RESULT, PROPUESTA_ID, TRANSACTION_ID) VALUES
+        (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`,     
     loadSave: ``,
     loadTransaction: ``    
 }
@@ -218,7 +218,7 @@ export const createResults = async (body, action, cb) => {
       var { tipoDeColocacion, tiempoDeContacto, volumenPrecolchonN2, volumenSistemaNoReativo, volumenSistemaReactivo, volumenSistemaDivergente,
         volumenDesplazamientoLiquido, volumenDesplazamientoN2, volumenTotalDeLiquido, cedulaData, tratamientoCompany } = finalObj.tratamientoEstimulacion
 
-      var { penetracionRadial, longitudDeAgujeroDeGusano } = finalObj.evaluacionEstimulacion
+      var { penetracionRadial, longitudDeAgujeroDeGusano, qo, qw, qg } = finalObj.evaluacionEstimulacion
 
       var geometria = []
       
@@ -234,7 +234,7 @@ export const createResults = async (body, action, cb) => {
         relacPoissonLutatas, gradienteDeFractura, densidadDeDisparos, diametroDeDisparos, cedulaData, tratamientoCompany } = finalObj.tratamientoAcido
 
       var { longitudTotal, longitudEfectivaGrabada, alturaGrabada, anchoPromedio, concentracionDelAcido,
-        conductividad, fcd, presionNeta, eficienciaDeFluidoDeFractura, geometria } = finalObj.evaluacionAcido
+        conductividad, fcd, presionNeta, eficienciaDeFluidoDeFractura, geometria, qo, qw, qg } = finalObj.evaluacionAcido
   }
 
   else if (interventionType === 'apuntalado') {
@@ -245,12 +245,15 @@ export const createResults = async (body, action, cb) => {
       var { longitudApuntalada, alturaTotalDeFractura, anchoPromedio, concentracionAreal, conductividad,
         fcd, presionNeta, eficienciaDeFluidoDeFractura, geometria,  tipoDeFluido, gastoPromedio, 
         presionRuptura, presionPromedio, isip, gradienteFractura, presionCierreSuperior, gradienteCierre, 
-        tiempoCierre, presionYacimiento, gradientePoro, perdidaFiltrado, eficienciaFluido } = finalObj.evaluacionApuntalado
+        tiempoCierre, presionYacimiento, gradientePoro, perdidaFiltrado, eficienciaFluido, qo, qw, qg } = finalObj.evaluacionApuntalado
 
   }
   else if (interventionType === 'termico') {
       var { volumenVapor, calidad, gastoInyeccion, presionMaximaSalidaGenerador, temperaturaMaximaGenerador, tratamientoCompany } = finalObj.tratamientoTermico
+      
+      var { qo, qw, qg }  = finalObj.evaluacionTermica
   }
+
 
 // write to db
   connection.beginTransaction(function(err) {
@@ -454,7 +457,7 @@ export const createResults = async (body, action, cb) => {
                   }
 
                   values = [interventionID, wellFormacionID, fechaIntervencion, justificacionIntervencion, 
-                  comentariosIntervencion, propuestaID, transactionID]
+                  comentariosIntervencion, qo, qg, qw, propuestaID, transactionID]
 
                   connection.query(INSERT_RESULTS_QUERY.submit, values, (err, results) => {
                     console.log('results', err)

@@ -24,6 +24,9 @@ const initialState = fromJS({
     gradientePoro: '',
     perdidaFiltrado: '',
     eficienciaFluido: '',
+    qo: '',
+    qw: '',
+    qg: '',
     geometria: [{
       intervalo: '',
       imgURL: '',

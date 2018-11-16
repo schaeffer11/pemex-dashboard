@@ -64,12 +64,12 @@ import StickySubtabs from '../../Components/StickySubtabs'
 
 
   render() {
-    let { setShowForms, hasSubmitted, propuestaHasErrors, estCostsHasErrors } = this.props
+    let { setShowForms, hasSubmitted, propuestaHasErrors, estIncProduccionHasErrors, estCostsHasErrors } = this.props
      let className = 'subtab'
 
 
 
-   let errors = [propuestaHasErrors, estCostsHasErrors]
+   let errors = [propuestaHasErrors, false, false, estIncProduccionHasErrors, estCostsHasErrors]
 
      let title = forms[this.state.currentStep].title
      let formClassName = forms[this.state.currentStep].content.type.WrappedComponent.name
@@ -115,7 +115,7 @@ const mapStateToProps = state => ({
   hasSubmitted: state.getIn(['global', 'hasSubmitted']),
   propuestaHasErrors: state.getIn(['propuestaTermica', 'hasErrors']),
   // resultadosSimulacionHasErrors: state.getIn(['resultadosSimulacionEstimulacion', 'hasErrors']),
-  estIncProduccionHasErrors: state.getIn(['estIncProduccionEstimulacion', 'hasErrors']),
+  estIncProduccionHasErrors: state.getIn(['estIncProduccionTermico', 'hasErrors']),
   estCostsHasErrors: state.getIn(['estCost', 'hasErrors']),
 })
 

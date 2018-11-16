@@ -1071,7 +1071,9 @@
 		&.TecnicaDelCampo {
 			background-image: url('/images/fichaTecnicaDelCampoBanner2.jpeg');
 		}
-
+		&.HistorialDeIntervenciones {
+			background-image: url('/images/historicoDeIntervenciones.jpg');
+		}
 		&.EvaluacionPetrofisica {
 			background-image: url('/images/evaluacionPetrofisicaBanner2.jpeg');
 		}
@@ -1087,7 +1089,9 @@
 		&.HistoricoDePresionPozo {
 			background-image: url('/images/pressionBanner.png');
 		}
-
+		&.HistoricoDeAforos {
+			background-image: url('/images/historicoDeAforos.jpg');
+		}
 		&.AnalisisDelAgua {
 			background-image: url('/images/aguaBanner.png');
 		}

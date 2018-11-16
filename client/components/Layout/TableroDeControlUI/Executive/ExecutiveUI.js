@@ -10,9 +10,11 @@ import Filters from '../Common/Filters'
 import Card from '../Common/Card'
 import { CardDeck } from 'reactstrap';
 import CostBar from './CostBar'
+import AvgCostBar from './AvgCostBar'
 import DeltaCostBar from './DeltaCostBar'
 import AvgDeltaCostBar from './AvgDeltaCostBar'
 import ExecutiveTable from './ExecutiveTable'
+import TimeSlider from '../TimeSeries/TimeSlider'
 
 @autobind class executiveUI extends Component {
   constructor(props) {
@@ -22,11 +24,11 @@ import ExecutiveTable from './ExecutiveTable'
       aforosData: [],
       aforosCarouselData: [],
       costData: [],
-      costDataAverage: [],
       singularCostData: [],
       execTableData: [],
       estIncData: [],
-      volumeData: []
+      volumeData: [],
+      singularEstIncData: []
     }
 
     this.cards = []
@@ -38,7 +40,7 @@ import ExecutiveTable from './ExecutiveTable'
   async fetchData() {
     let { globalAnalysis } = this.props
     globalAnalysis = globalAnalysis.toJS()
-    let { subdireccion, activo, field, well, formation, company, interventionType, terminationType, groupBy } = globalAnalysis
+    let { subdireccion, activo, field, well, formation, company, interventionType, terminationType, groupBy, lowDate, highDate } = globalAnalysis
 
     const { token } = this.props
     const headers = {
@@ -61,16 +63,18 @@ import ExecutiveTable from './ExecutiveTable'
     interventionType ? params.push(`tipoDeIntervencion=${interventionType}`) : null
     terminationType ? params.push(`tipoDeTerminacion=${terminationType}`) : null
     groupBy ? params.push(`groupBy=${groupBy}`) : null
+    lowDate ? params.push(`lowDate=${lowDate}`) : null
+    highDate ? params.push(`highDate=${highDate}`) : null
 
     //TODO: MAKE PARALLEL
     let jobQuery = `/executive/jobBreakdown?` + params.join('&')
   	let aforosQuery = `/executive/aforosData?` + params.join('&')
     let aforosCarouselQuery = `/executive/aforosData?` + params.join('&') + `&carousel=1`
     let costQuery = `/executive/costData?` + params.join('&')
-    let avgCostQuery = `/executive/costData?` + params.join('&') + `&avg=1`
     let singularCostQuery = `/executive/costData?` + params.join('&') + `&noGroup=1`
     let execTableQuery = `/executive/tableData?` + params.join('&')
     let estIncQuery = `/executive/estIncData?` + params.join('&')
+    let singularEstIncQuery = `/executive/estIncData?` + params.join('&') + `&noGroup=1`
     let volumeQuery = `/executive/volumeData?` + params.join('&')
 
     const data = await Promise.all([
@@ -78,11 +82,11 @@ import ExecutiveTable from './ExecutiveTable'
       fetch(aforosQuery, headers).then(r => r.json()),
       fetch(aforosCarouselQuery, headers).then(r => r.json()),
       fetch(costQuery, headers).then(r => r.json()),
-      fetch(avgCostQuery, headers).then(r => r.json()),
       fetch(singularCostQuery, headers).then(r => r.json()),
       fetch(execTableQuery, headers).then(r => r.json()),
       fetch(estIncQuery, headers).then(r => r.json()),
-      fetch(volumeQuery, headers).then(r => r.json())
+      fetch(volumeQuery, headers).then(r => r.json()),
+      fetch(singularEstIncQuery, headers).then(r => r.json())
     ])
       .catch(error => {
         console.log('err', error)
@@ -94,11 +98,11 @@ import ExecutiveTable from './ExecutiveTable'
       aforosData: data[1],
       aforosCarouselData: data[2],
       costData: data[3],
-      costDataAverage: data[4],
-      singularCostData: data[5], 
-      execTableData: data[6],
-      estIncData: data[7],
-      volumeData: data[8]
+      singularCostData: data[4], 
+      execTableData: data[5],
+      estIncData: data[6],
+      volumeData: data[7],
+      singularEstIncData: data[8]
     }
 
     this.setState(newState)
@@ -116,35 +120,36 @@ import ExecutiveTable from './ExecutiveTable'
     globalAnalysis = globalAnalysis.toJS()
     prev = prev.toJS()
 
-    let { subdireccion, activo, field, well, formation, company, interventionType, terminationType, groupBy } = globalAnalysis
+    let { subdireccion, activo, field, well, formation, company, interventionType, terminationType, groupBy, lowDate, highDate } = globalAnalysis
 
     if (subdireccion !== prev.subdireccion || activo !== prev.activo || field !== prev.field || well !== prev.well || formation !== prev.formation ||
       company !== prev.company || interventionType !== prev.interventionType || terminationType !== prev.terminationType ||
-      groupBy !== prev.groupBy) {
+      groupBy !== prev.groupBy || prev.lowDate !== lowDate || highDate !== prev.highDate) {
 			this.fetchData()	
 		}
   }
 
   render() {
-    let { jobBreakdownData, aforosData, aforosCarouselData, costData, costDataAverage, singularCostData, execTableData, estIncData, volumeData } = this.state
+    let { jobBreakdownData, aforosData, aforosCarouselData, costData, singularCostData, execTableData, estIncData, volumeData, singularEstIncData } = this.state
     let { globalAnalysis } = this.props
     globalAnalysis = globalAnalysis.toJS()
     let { groupBy } = globalAnalysis
 
-    console.log(aforosData)
+    console.log(costData)
 
     return (
       <div className="data executive">
         <div className='content'>
+          <TimeSlider />
           <CardDeck className="content-deck">
             <Card
                 id="productionGraphs"
                 title="Delta Production Graphs"
                 ref={this.cards[0]}
               >
-              <DeltaOil label='Oil' data={aforosData} groupBy={groupBy} />
-              <DeltaWater label='Water' data={aforosData} groupBy={groupBy} />
-              <DeltaGas label='Gas' data={aforosData} groupBy={groupBy} />
+              <DeltaOil label='Oil' data={singularEstIncData} groupBy={groupBy} />
+              <DeltaWater label='Water' data={singularEstIncData} groupBy={groupBy} />
+              <DeltaGas label='Gas' data={singularEstIncData} groupBy={groupBy} />
             </Card>
             <Card
                 id="classifications"
@@ -161,18 +166,18 @@ import ExecutiveTable from './ExecutiveTable'
                 ref={this.cards[2]}
               >
               <CostBar label={'Total'} data={costData} groupBy={groupBy} />  
-              <CostBar label={'Average'} data={costDataAverage} groupBy={groupBy} />  
+              <AvgCostBar label={'Average'} data={costData} groupBy={groupBy} />  
             </Card>
             <Card
                 id="costDeviations"
                 title="Cost Deviations"
                 ref={this.cards[3]}
               >       
-              <DeltaCostBar label={'Total'} data={singularCostData} groupBy={groupBy} />
-              <AvgDeltaCostBar label={'Avg'} data={costDataAverage} groupBy={groupBy} />
+              <DeltaCostBar label={'Individual'} data={singularCostData} groupBy={groupBy} />
+              <AvgDeltaCostBar label={'Avg'} data={costData} groupBy={groupBy} />
             </Card>
           </CardDeck>
-          <ExecutiveTable data={execTableData} estIncData={estIncData} aforosData={aforosData} volumeData={volumeData} groupBy={groupBy} />
+          <ExecutiveTable data={execTableData} estIncData={estIncData} volumeData={volumeData} groupBy={groupBy} />
         </div>
       </div>
     )

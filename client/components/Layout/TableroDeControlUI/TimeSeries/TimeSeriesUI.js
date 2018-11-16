@@ -72,7 +72,6 @@ import VolumeGasTreatments from './VolumeGasTreatments'
       fetch(costQuery, headers).then(r => r.json()),
       fetch(aforosQuery, headers).then(r => r.json()),
       fetch(volumesQuery, headers).then(r => r.json()),
-      fetch(`/api/getDates`, headers).then(r => r.json()),
       fetch(numTreatmentsQuery, headers).then(r => r.json()),
     ])
       .catch(error => {
@@ -85,14 +84,7 @@ import VolumeGasTreatments from './VolumeGasTreatments'
       costData: data[1],
       aforosData: data[2],
       volumeData: data[3],
-      numTreatmentData: data[5]
-    }
-
-    if (sequence === 'initial') {
-      setGeneral(['minDate'], data[4][0].MIN)
-      setGeneral(['maxDate'], data[4][0].MAX) 
-      setGeneral(['lowDate'], data[4][0].MIN)
-      setGeneral(['highDate'], data[4][0].MAX) 
+      numTreatmentData: data[4]
     }
 
     this.setState(newState)
@@ -127,9 +119,9 @@ import VolumeGasTreatments from './VolumeGasTreatments'
 
     let { groupBy } = globalAnalysis
 
-    console.log('costData', costData)
-    console.log('aforosData', aforosData)
-    console.log('volumeData', volumeData)
+    // console.log('costData', costData)
+    // console.log('aforosData', aforosData)
+    // console.log('volumeData', volumeData)
     let aforosCarouselData = {}
 
     if (aforosData.length > 0) {

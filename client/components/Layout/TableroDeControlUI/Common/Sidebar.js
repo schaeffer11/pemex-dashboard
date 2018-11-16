@@ -96,13 +96,9 @@ const filterArr = arr => {
   handleSelect(selection, location) {
     const { fieldWellOptions, companyOptions, interventionOptions, terminationOptions, 
       formationOptions, activoOptions, fieldOptions, wellOptions } = this.state
-    const { setGeneral, groupBy } = this.props
+    const { setGeneral, groupBy, highYear, lowYear, highMonth, lowMonth } = this.props
     const value = objectPath.has(selection, 'value') ? selection.value : null
     setGeneral([location], value)
-
-
-
-    console.log(companyOptions, interventionOptions, terminationOptions, formationOptions, activoOptions, fieldOptions, wellOptions)
 
     switch(location) {
       case 'subdireccion':
@@ -117,6 +113,38 @@ const filterArr = arr => {
       case 'field':
         setGeneral(['well'], null)
         break
+      // case 'highYear':
+      //   if (value && lowYear && highMonth && lowMonth) {
+      //     console.log(lowYear, lowMonth, lowYear * 12 + lowMonth)
+      //     console.log(value, highMonth, value * 12 + highMonth)
+      //     setGeneral(['lowDate'], lowYear * 12 + lowMonth)
+      //     setGeneral(['highDate'], value * 12 + highMonth)
+      //   }
+      //   break
+      // case 'lowYear':
+      //   if (value && highYear && highMonth && lowMonth) {
+      //     console.log(value, lowMonth, value * 12 + lowMonth)
+      //     console.log(highYear, highMonth, highYear * 12 + highMonth)
+      //     setGeneral(['lowDate'], value * 12 + lowMonth)
+      //     setGeneral(['highDate'], highYear * 12 + highMonth)
+      //   }
+      //   break
+      // case 'highMonth':
+      //   if (value && highYear && lowYear && lowMonth) {
+      //     console.log(lowYear, lowMonth, lowYear * 12 + lowMonth)
+      //     console.log(highYear, value, highYear * 12 + value)
+      //     setGeneral(['lowDate'], lowYear * 12 + lowMonth)
+      //     setGeneral(['highDate'], highYear * 12 + value)
+      //   }
+      //   break
+      // case 'lowMonth':
+      //   if (value && highYear && lowYear && highMonth) {
+      //     console.log(lowYear, value, lowYear * 12 + value)
+      //     console.log(highYear, highMonth, highYear * 12 + highMonth)
+      //     setGeneral(['lowDate'], lowYear * 12 + value)
+      //     setGeneral(['highDate'], highYear * 12 + highMonth)
+      //   }
+      //   break
       default:
         break
     }
@@ -196,7 +224,8 @@ const filterArr = arr => {
   render() {
     const { isOpen, fieldWellOptions, companyOptions, interventionOptions, terminationOptions, 
       formationOptions, subdireccionOptions, activoOptions, fieldOptions, wellOptions } = this.state
-    const { company, interventionType, terminationType, formation, groupBy, subdireccion, activo, field, well, job, token, jobType } = this.props
+    const { company, interventionType, terminationType, formation, groupBy, subdireccion, activo, field, 
+      well, job, token, jobType, lowYear, lowMonth, highYear, highMonth, minDate, maxDate } = this.props
     const groupByOptions = [
       { value: 'subdireccion', label: 'Subdirección' },
       { value: 'activo', label: 'Activo' },
@@ -207,6 +236,32 @@ const filterArr = arr => {
       { value: 'interventionType', label: 'Tipo de Intervención' },
       { value: 'terminationType', label: 'Tipo de Terminación' },
     ]
+
+    // let yearOptions = []
+
+    // if (minDate && maxDate) {
+    //   let minYear = Math.floor((minDate - 1) / 12)
+    //   let maxYear = Math.floor((maxDate - 1) / 12)
+
+    //   for (let i = minYear; i < maxYear + 1; i++) {
+    //     yearOptions.push({ label: i, value: i})
+    //   }
+    // }
+   
+    // const monthOptions = [
+    //   { label: 'Jan', value: 1},
+    //   { label: 'Feb', value: 2},
+    //   { label: 'Mar', value: 3},
+    //   { label: 'Apr', value: 4},
+    //   { label: 'May', value: 5},
+    //   { label: 'Jun', value: 6},
+    //   { label: 'Jul', value: 7},
+    //   { label: 'Aug', value: 8},
+    //   { label: 'Sep', value: 9},
+    //   { label: 'Oct', value: 10},
+    //   { label: 'Nov', value: 11},
+    //   { label: 'Dec', value: 12}
+    // ]
 
     return (
       <div>
@@ -289,6 +344,38 @@ const filterArr = arr => {
               isClearable={true}
             />
           </div>
+{/*          <div className='low-date-selector'>
+            From
+            <Select
+              value={selectSimpleValue(lowYear, yearOptions)}
+              options={yearOptions}
+              onChange={c => this.handleSelect(c, 'lowYear')}
+              isClearable={true}
+            />
+            <div style={{height: '5px'}} />
+            <Select
+              value={selectSimpleValue(lowMonth, monthOptions)}
+              options={monthOptions}
+              onChange={c => this.handleSelect(c, 'lowMonth')}
+              isClearable={true}
+            />
+          </div>
+          <div className='high-date-selector'>
+            To
+            <Select
+              value={selectSimpleValue(highYear, yearOptions)}
+              options={yearOptions}
+              onChange={c => this.handleSelect(c, 'highYear')}
+              isClearable={true}
+            />
+            <div style={{height: '5px'}} />
+            <Select
+              value={selectSimpleValue(highMonth, monthOptions)}
+              options={monthOptions}
+              onChange={c => this.handleSelect(c, 'highMonth')}
+              isClearable={true}
+            />
+          </div>*/}
           <div className='formation-selector'>
             Group By
             <Select
@@ -320,6 +407,12 @@ const mapStateToProps = state => ({
   groupBy: state.getIn(['globalAnalysis', 'groupBy']),
   job: state.getIn(['globalAnalysis', 'job']),
   jobType: state.getIn(['globalAnalysis', 'jobType']),
+  lowMonth: state.getIn(['globalAnalysis', 'lowMonth']),
+  highMonth: state.getIn(['globalAnalysis', 'highMonth']),
+  lowYear: state.getIn(['globalAnalysis', 'lowYear']),
+  highYear: state.getIn(['globalAnalysis', 'highYear']),
+  minDate: state.getIn(['globalAnalysis', 'minDate']),
+  maxDate: state.getIn(['globalAnalysis', 'maxDate']),
 })
 
 const mapDispatchToProps = dispatch => ({

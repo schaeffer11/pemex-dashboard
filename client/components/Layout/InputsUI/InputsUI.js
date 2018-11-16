@@ -105,7 +105,8 @@ import { setHasSubmitted, setIsLoading, setCurrentPage, setSaveName, setTab } fr
       hasErrorsPropuestaEstimulacion, hasErrorsPropuestaApuntalado, hasErrorsPropuestaAcido, hasErrorsResultadosSimulacionAcido, 
       hasErrorsResultadosSimulacionEstimulacion, hasErrorsResultadosSimulacionApuntalado, hasErrorsEstIncProduccionAcido,
       hasErrorsEstIncProduccionEstimulacion, hasErrorsEstIncProduccionApuntalado, hasErrorsEstCosts, hasErrorsHistoricoDeProduccion,
-      setHasSubmitted, hasErrorsHistoricoDeAforos, hasErrorsSistemasArtificialesDeProduccion, hasErrorsPropuestaTermica, setIsLoading, setSaveName } = this.props
+      setHasSubmitted, hasErrorsHistoricoDeAforos, hasErrorsSistemasArtificialesDeProduccion, hasErrorsPropuestaTermica, 
+      hasErrorsEstIncProduccionTermico, setIsLoading, setSaveName } = this.props
 
 
     if (action === 'submit') {
@@ -125,7 +126,7 @@ import { setHasSubmitted, setIsLoading, setCurrentPage, setSaveName, setTab } fr
       else if (tipoDeIntervenciones === 'apuntalado' && (hasErrorsPropuestaApuntalado || hasErrorsResultadosSimulacionApuntalado || hasErrorsEstIncProduccionApuntalado)) {
         hasErrors = true
       }
-      else if (tipoDeIntervenciones === 'termico' && (hasErrorsPropuestaTermica)) {
+      else if (tipoDeIntervenciones === 'termico' && (hasErrorsPropuestaTermica || hasErrorsEstIncProduccionTermico)) {
         hasErrors = true
       }
 
@@ -159,7 +160,7 @@ import { setHasSubmitted, setIsLoading, setCurrentPage, setSaveName, setTab } fr
     let { setHasSubmitted, hasErrorsHistoricoDeAforosResults, hasErrorsEstCostResults, 
       hasErrorsTratamientoEstimulacion, hasErrorsTratamientoAcido, hasErrorsTratamientoApuntalado,
       tipoDeIntervencionesResults, hasErrorsEvaluacionApuntalado, hasErrorsEvaluacionAcido, hasErrorsEvaluacionEstimulacion,
-      stimulationType } = this.props
+      hasErrorsEvaluacionTermica, hasErrorsTratamientoTermico, stimulationType } = this.props
 
     hasErrorsEvaluacionEstimulacion = stimulationType === 'matricial' ? hasErrorsEvaluacionEstimulacion : false
 
@@ -170,6 +171,7 @@ import { setHasSubmitted, setIsLoading, setCurrentPage, setSaveName, setTab } fr
       if (hasErrorsHistoricoDeAforosResults || hasErrorsEstCostResults) {
         hasErrors = true
       }
+
       if (tipoDeIntervencionesResults === 'estimulacion' && (hasErrorsTratamientoEstimulacion || hasErrorsEvaluacionEstimulacion)) {
         hasErrors = true
       }
@@ -177,6 +179,9 @@ import { setHasSubmitted, setIsLoading, setCurrentPage, setSaveName, setTab } fr
         hasErrors = true
       }      
       else if (tipoDeIntervencionesResults === 'apuntalado' && (hasErrorsTratamientoApuntalado || hasErrorsEvaluacionApuntalado)) {
+        hasErrors = true
+      }
+      else if (tipoDeIntervencionesResults === 'termico' && (hasErrorsTratamientoTermico || hasErrorsEvaluacionTermica)) {
         hasErrors = true
       }
 
@@ -434,15 +439,18 @@ const mapStateToProps = state => ({
   hasErrorsEstIncProduccionAcido: state.getIn(['estIncProduccionAcido', 'hasErrors']),
   hasErrorsEstIncProduccionEstimulacion: state.getIn(['estIncProduccionEstimulacion', 'hasErrors']),
   hasErrorsEstIncProduccionApuntalado: state.getIn(['estIncProduccionApuntalado', 'hasErrors']),
+  hasErrorsEstIncProduccionTermico: state.getIn(['estIncProduccionTermico', 'hasErrors']),
   hasErrorsEstCosts: state.getIn(['estCost', 'hasErrors']),
   hasErrorsHistoricoDeAforosResults: state.getIn(['historicoDeAforosResults', 'hasErrors']),
   hasErrorsEstCostResults: state.getIn(['estCostResults', 'hasErrors']),
   hasErrorsTratamientoEstimulacion: state.getIn(['tratamientoEstimulacion', 'hasErrors']),
   hasErrorsTratamientoAcido: state.getIn(['tratamientoAcido', 'hasErrors']),
   hasErrorsTratamientoApuntalado: state.getIn(['tratamientoApuntalado', 'hasErrors']),
+  hasErrorsTratamientoTermico: state.getIn(['tratamientoTermico', 'hasErrors']),
   hasErrorsEvaluacionApuntalado: state.getIn(['evaluacionApuntalado', 'hasErrors']),
   hasErrorsEvaluacionAcido: state.getIn(['evaluacionAcido', 'hasErrors']),
   hasErrorsEvaluacionEstimulacion: state.getIn(['evaluacionEstimulacion', 'hasErrors']),
+  hasErrorsEvaluacionTermica: state.getIn(['evaluacionTermica', 'hasErrors']),
   tipoDeIntervenciones: state.getIn(['objetivoYAlcancesIntervencion', 'tipoDeIntervenciones']),
   tipoDeIntervencionesResults: state.getIn(['resultsMeta', 'interventionType']),
   saveName: state.getIn(['global', 'saveName']),
