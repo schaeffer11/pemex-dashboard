@@ -225,6 +225,109 @@ GROUP BY ${groupByClause} YEAR(FECHA_INTERVENCION), MONTH(FECHA_INTERVENCION)`
   })
 })
 
+
+router.get('/incProdData', (req, res) => {
+  let { subdir, activo, field, well, formation, company, tipoDeIntervencion, tipoDeTerminacion, lowDate, highDate, groupBy } = req.query
+  
+  let level = well ? 'fwm.WELL_FORMACION_ID' : field ? 'fwm.FIELD_FORMACION_ID' : activo ? 'fwm.ACTIVO_ID' : subdir ? 'fwm.SUBDIRECCION_ID' : null
+  let values = []
+
+  let whereClause = ''
+
+  if (level) {
+    whereClause += ` AND ${level} = ?`
+    values.push(well ? well : field ? field : activo ? activo : subdir ? subdir : null)
+  }
+  if (formation) {
+    whereClause += ` AND FORMACION = ?`
+    values.push(formation)
+  }
+  if (company) {
+    whereClause += ' AND COMPANY = ?'
+    values.push(company)
+  }
+  if (tipoDeIntervencion) {
+    whereClause += ' AND TIPO_DE_INTERVENCIONES = ?'
+    values.push(tipoDeIntervencion)
+  }
+  if (tipoDeTerminacion) {
+    whereClause += ' AND TIPO_DE_TERMINACION = ?'
+    values.push(tipoDeTerminacion)
+  }
+  if (lowDate) {
+    whereClause += ' AND tr.FECHA_INTERVENCION >= ?'
+    let year = Math.floor((lowDate - 1) / 12)
+    let month = lowDate % 12
+    month === 0 ? month = 12 : null
+    let lowDateString = `${year}-${month}-01`
+    values.push(lowDateString)
+  }
+  if (highDate) {
+    whereClause += ' AND tr.FECHA_INTERVENCION <= ?'
+    let year = Math.floor((highDate - 1) / 12)
+    let month = highDate % 12
+    month === 0 ? month = 12 : null
+    let highDateString = `${year}-${month}-31`
+    values.push(highDateString)
+  }
+
+  let select = ''
+
+  switch(groupBy) {
+    case 'subdireccion':
+      select = 'SUBDIRECCION_NAME as groupedName,'
+      break
+    case 'activo':
+      select = 'ACTIVO_NAME as groupedName,'
+      break
+    case 'field':
+      select = 'FIELD_NAME as groupedName,'
+      break
+    case 'well':
+      select = 'WELL_NAME as groupedName,'
+      break
+    case 'formation':
+      select = 'FORMACION as groupedName,'
+      break
+    case 'company':
+      select = 'COMPANY as groupedName,'
+      break
+    case 'interventionType':
+      select = 'TIPO_DE_INTERVENCIONES as groupedName,'
+      break
+    case 'terminationType':
+      select = 'TIPO_DE_TERMINACION as groupedName,'
+      break
+  }
+
+  let groupByClause = select !== '' ? `groupedName, ` : ''
+
+
+  let query = 
+`SELECT ${select} fwm.SUBDIRECCION_NAME, fwm.ACTIVO_NAME, fwm.FIELD_NAME, fwm.WELL_FORMACION_ID, FORMACION, COMPANY, WELL_NAME, tr.FECHA_INTERVENCION, YEAR(tr.FECHA_INTERVENCION) as YEAR, MONTH(tr.FECHA_INTERVENCION) as MONTH, TIPO_DE_TERMINACION, TIPO_DE_INTERVENCIONES, QO_RESULT
+  FROM Results 
+  JOIN FieldWellMapping fwm ON Results.WELL_FORMACION_ID = fwm.WELL_FORMACION_ID 
+  JOIN Transactions t ON Results.PROPUESTA_ID = t.TRANSACTION_ID
+  JOIN TransactionsResults tr ON Results.TRANSACTION_ID = tr.TRANSACTION_ID
+${whereClause} 
+GROUP BY ${groupByClause} YEAR, MONTH`
+
+  connection.query(query, values, (err, results) => {
+      console.log('comment err', err)
+
+     if (err) {
+        res.json({ success: false})
+      }
+    else {
+
+      res.json(results)
+    }
+  })
+})
+
+
+
+
 router.get('/volumeData', (req, res) => {
   let { subdir, activo, field, well, formation, company, tipoDeIntervencion, tipoDeTerminacion, groupBy, lowDate, highDate } = req.query
   

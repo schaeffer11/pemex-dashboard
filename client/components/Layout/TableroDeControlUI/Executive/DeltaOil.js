@@ -91,12 +91,6 @@ let tipoDeInterventionSeries = [{
         return i
       })
     }
-    else if (groupBy === 'company') {
-      series = companySeries.map(i => {
-        i.data = data.filter(j => j.groupedName === i.name)
-        return i
-      })
-    }
     else if (groupBy === 'type') {
       series = tipoDeInterventionSeries.map(i => {
         i.data = data.filter(j => j.groupedName === i.name)
@@ -143,12 +137,12 @@ let tipoDeInterventionSeries = [{
 	    },
 	    xAxis: {
 	    	title: {
-	    		text: 'Pre-Oil (bbl/d)'
+	    		text: 'Est Inc Oil (bbl/d)'
 	    	}
 	    },
 	    yAxis: {
 	    	title: {
-	    		text: 'Post-Oil (bbl/d)'
+	    		text: 'Real Inc Oil (bbl/d)'
 	    	}
 	    },
 	    credits: {

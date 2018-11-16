@@ -13,9 +13,9 @@ export const Bar = ({ estimated, actual }) => {
 
   return (
     <div className={classnames("Bar")} style={{height: '100%', padding: '33px'}}>
-      <div style={{textAlign: 'left'}}> Real Prod. - {actual ? `${actual.toFixed(0)} bbl/d` : null} </div>
+      <div style={{textAlign: 'left'}}> Real Inc Prod. - {actual ? `${actual.toFixed(0)} bbl/d` : null} </div>
       <div style={{height: '20%', background: realColor, width: realWidth }} />
-      <div style={{textAlign: 'left'}}> Est Prod. - {estimated ? `${estimated.toFixed(0)} bbl/d` : null} </div>
+      <div style={{textAlign: 'left'}}> Est Inc Prod. - {estimated ? `${estimated.toFixed(0)} bbl/d` : null} </div>
       <div style={{height: '20%', background: 'grey', width: estWidth }} />
     </div>
 

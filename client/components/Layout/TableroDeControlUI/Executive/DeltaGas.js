@@ -145,12 +145,12 @@ let tipoDeInterventionSeries = [{
         },
         xAxis: {
             title: {
-                text: 'Pre-Gas (MMpc/d)'
+                text: 'Est Inc Gas (MMpc/d)'
             }
         },
         yAxis: {
             title: {
-                text: 'Post-Gas (MMpc/d)'
+                text: 'Real Inc Gas (MMpc/d)'
             }
         },
         credits: {

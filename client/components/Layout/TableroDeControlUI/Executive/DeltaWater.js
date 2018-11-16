@@ -145,12 +145,12 @@ let tipoDeInterventionSeries = [{
         },
         xAxis: {
             title: {
-                text: 'Pre-Water (bbl/d)'
+                text: 'Est Inc Water (bbl/d)'
             }
         },
         yAxis: {
             title: {
-                text: 'Post-Water (bbl/d)'
+                text: 'Real Inc Water (bbl/d)'
             }
         },
         credits: {

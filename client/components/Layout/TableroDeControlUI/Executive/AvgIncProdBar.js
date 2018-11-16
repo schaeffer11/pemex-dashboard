@@ -2,7 +2,6 @@ import React, { PureComponent } from 'react'
 import autobind from 'autobind-decorator'
 import ReactHighcharts from 'react-highcharts'
 
-
 let colorWheel = [
       '#56B3D8',
       '#C3E4CC',
@@ -15,7 +14,7 @@ let colorWheel = [
       '#F4F296',
     ]
 
-@autobind class AvgDeltaCostBar extends PureComponent {
+@autobind class AvgIncProdBar extends PureComponent {
 
   shouldComponentUpdate(nextProps) {
     if (this.props.groupBy !== nextProps.groupBy) {
@@ -24,59 +23,56 @@ let colorWheel = [
     
     return true
   }
-
-
+  
   render() {
     let { data, groupBy } = this.props
-
+    let dataPoints = []
+    let series
+    let categories = []
     if (data.length > 0) {
       if (!groupBy) {
-        data = [{
-          name: 'Average Cost Deviation',
-          data: [data[0].avgDeviation]
+        categories.push('Average Incremental Production')
+        series = [{
+          name: ' ',
+          data: [data[0].avgQoResult]
         }]
       }
       else {
-        data = data.map(i => {
-          return {
-            name: i[groupBy],
-            borderColor: 'black',
-            data: [i.avgDeviation]
-          }
+        data.forEach((i, index) => {
+          let colorIndex = index % colorWheel.length
+
+          dataPoints.push({y: i.avgQoResult, color: colorWheel[colorIndex]})
+          categories.push(i.groupedName)
         })
+
+        series = [{
+          name: ' ',
+          data: dataPoints
+        }]
       }   
     }
 
-    // console.log(data)
-
     let config = {
 	    chart: {
-	        type: 'column',
           zoomType: 'y',
+	        type: 'column'
 	    },
 	    title: {
 	        text: ''
 	    },
-      yAxis: {
-        title: {
-          text: 'Percentage'
-        },
-        min: -100,
-        max: 100,
-        plotBands: [{
-          color: '#ecb4b4',
-          from: 0,
-          to: 1000
-        }, {
-          color: '#b4ecb4',
-          from: 0,
-          to: -1000
-        }]
+
+      legend: {
+        enabled: false
+      },
+      xAxis: {
+        categories: categories,
       },
 	    credits: {
 	    	enabled: false
 	    },
-	    series: data
+      plotOptions: {
+      },
+	    series: series
 		}
 
     return (
@@ -90,4 +86,4 @@ let colorWheel = [
 }
 
 
-export default AvgDeltaCostBar
+export default AvgIncProdBar

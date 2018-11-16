@@ -15,6 +15,10 @@ import DeltaCostBar from './DeltaCostBar'
 import AvgDeltaCostBar from './AvgDeltaCostBar'
 import ExecutiveTable from './ExecutiveTable'
 import TimeSlider from '../TimeSeries/TimeSlider'
+import IncProdBar from './IncProdBar'
+import AvgIncProdBar from './AvgIncProdBar'
+import DeltaIncProdScatter from './DeltaIncProdScatter'
+import AvgDeltaIncProdBar from './AvgDeltaIncProdBar'
 
 @autobind class executiveUI extends Component {
   constructor(props) {
@@ -32,7 +36,7 @@ import TimeSlider from '../TimeSeries/TimeSlider'
     }
 
     this.cards = []
-    for (let i = 0; i < 4; i += 1) {
+    for (let i = 0; i < 5; i += 1) {
       this.cards.push(React.createRef())
     }
   }
@@ -158,12 +162,28 @@ import TimeSlider from '../TimeSeries/TimeSlider'
                 multiplyChartsOnGrouping
               >
               <JobBreakdown label='Job Type' data={jobBreakdownData} />
-              <JobBreakdown label='Success' data={aforosCarouselData} />
+{/*              <JobBreakdown label='Success' data={aforosCarouselData} />*/}
+            </Card>
+            <Card
+                id="incProd"
+                title="Incremental Production"
+                ref={this.cards[2]}
+              >
+              <IncProdBar label={'Total'} data={estIncData} groupBy={groupBy} />  
+              <AvgIncProdBar label={'Average'} data={estIncData} groupBy={groupBy} />  
+            </Card>
+            <Card
+                id="incProdDeviations"
+                title="Incremental Production Deviations"
+                ref={this.cards[3]}
+              >       
+              <DeltaIncProdScatter label={'Individual'} data={singularEstIncData} groupBy={groupBy} />
+              <AvgDeltaIncProdBar label={'Avg'} data={estIncData} groupBy={groupBy} />
             </Card>
             <Card
                 id="costs"
                 title="Costs"
-                ref={this.cards[2]}
+                ref={this.cards[4]}
               >
               <CostBar label={'Total'} data={costData} groupBy={groupBy} />  
               <AvgCostBar label={'Average'} data={costData} groupBy={groupBy} />  
@@ -171,7 +191,7 @@ import TimeSlider from '../TimeSeries/TimeSlider'
             <Card
                 id="costDeviations"
                 title="Cost Deviations"
-                ref={this.cards[3]}
+                ref={this.cards[5]}
               >       
               <DeltaCostBar label={'Individual'} data={singularCostData} groupBy={groupBy} />
               <AvgDeltaCostBar label={'Avg'} data={costData} groupBy={groupBy} />
