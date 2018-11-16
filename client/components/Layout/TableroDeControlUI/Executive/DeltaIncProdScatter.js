@@ -15,7 +15,7 @@ let colorWheel = [
       '#F4F296',
     ]
 
-@autobind class DeltaCostBar extends PureComponent {
+@autobind class DeltaIncProdScatter extends PureComponent {
 
   shouldComponentUpdate(nextProps) {
     if (this.props.groupBy !== nextProps.groupBy) {
@@ -31,18 +31,15 @@ let colorWheel = [
     let series
     let categories = []
 
-
-    console.log(data)
-
     if (data.length > 0) {
       if (!groupBy) {
-        categories.push('Individual Cost Devations')
+        categories.push('Individual Inc Prod Devations')
         series = [{
           name: ' ',
           data: data.map(i => {
             return {
               x: 0,
-              y: i.deviation
+              y: i.qoDeviation
             }
           })
         }]
@@ -51,21 +48,21 @@ let colorWheel = [
       else {
         data.forEach(i => {
 
-          if (!categories.includes(i[groupBy])) {
-            categories.push(i[groupBy])      
+          if (!categories.includes(i.groupedName)) {
+            categories.push(i.groupedName)      
           }
 
         })
 
         categories.forEach((i, index) => {
           let colorIndex = index % colorWheel.length
-          let subData = data.filter(j => j[groupBy] === i)
+          let subData = data.filter(j => j.groupedName === i)
 
           subData.forEach(j => {
-            console.log(j)
+            let val = ((j.qoResult / j.qo) - 1) * 100
             dataPoints.push({
               x: index, 
-              y: j.deviation, 
+              y: j.qoDeviation, 
               color: colorWheel[colorIndex]})
           })
         })
@@ -101,11 +98,11 @@ let colorWheel = [
           width: 5,
         }],
         plotBands: [{
-          color: '#ecb4b4',
+          color: '#b4ecb4',
           from: 0,
           to: 1000
         }, {
-          color: '#b4ecb4',
+          color: '#ecb4b4',
           from: 0,
           to: -1000
         }]
@@ -126,8 +123,6 @@ let colorWheel = [
 	    series: series
 		}
 
-    console.log(series)
-
     return (
     	<ReactHighcharts
     		className='chart'
@@ -139,4 +134,4 @@ let colorWheel = [
 }
 
 
-export default DeltaCostBar
+export default DeltaIncProdScatter

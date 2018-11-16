@@ -68,8 +68,8 @@ let tipoDeInterventionSeries = [{
     	}
 
       if (groupBy) {
-        if (!groupByList.includes(i[groupBy])) {
-          groupByList.push(i[groupBy])
+        if (!groupByList.includes(i.groupedName)) {
+          groupByList.push(i.groupedName)
         }
       }
 
@@ -86,19 +86,14 @@ let tipoDeInterventionSeries = [{
 
     if (!groupBy) {
       series = classificationSeries.map(i => {
-        i.data = data.filter(j => j.group === i.name)
-        return i
-      })
-    }
-    else if (groupBy === 'company') {
-      series = companySeries.map(i => {
-        i.data = data.filter(j => j.company === i.name)
+        console.log(i.name, data, data.filter(j => j.qoResult > j.qo), data.filter(j => j.qoResult <= j.qo))
+        i.data = i.name === 'Successful' ? data.filter(j => j.qoResult > j.qo) : data.filter(j => j.qoResult <= j.qo)
         return i
       })
     }
     else if (groupBy === 'type') {
       series = tipoDeInterventionSeries.map(i => {
-        i.data = data.filter(j => j.type === i.name)
+        i.data = data.filter(j => j.groupedName === i.name)
         return i
       })  
     }
@@ -106,10 +101,12 @@ let tipoDeInterventionSeries = [{
       series = groupByList.map(i => {
         return {
           name: i,
-          data: data.filter(j => j[groupBy] === i)
+          data: data.filter(j => j.groupedName === i)
         }
       })
     }
+
+    console.log(series)
 
 
     series.push({
@@ -140,12 +137,12 @@ let tipoDeInterventionSeries = [{
 	    },
 	    xAxis: {
 	    	title: {
-	    		text: 'Pre-Oil (bbl/d)'
+	    		text: 'Est Inc Oil (bbl/d)'
 	    	}
 	    },
 	    yAxis: {
 	    	title: {
-	    		text: 'Post-Oil (bbl/d)'
+	    		text: 'Real Inc Oil (bbl/d)'
 	    	}
 	    },
 	    credits: {

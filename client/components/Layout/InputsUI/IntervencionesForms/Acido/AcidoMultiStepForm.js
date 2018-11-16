@@ -10,7 +10,7 @@ import PropuestaDeAcido from './PropuestaDeAcido'
 import PruebasDeLaboratorio from '../PruebasDeLaboratorio'
 import PruebasDeLaboratorioExtra from '../PruebasDeLaboratorioExtra'
 import ResultadosDeLaSimulacionAcido from './ResultadosDeLaSimulacionAcido'
-
+import StickySubtabs from '../../Components/StickySubtabs'
 
      const forms = [
       {'title' : 'Propuesta de Fracturamiento Ácido', 'content': <PropuestaDeAcido /> },  
@@ -77,7 +77,7 @@ import ResultadosDeLaSimulacionAcido from './ResultadosDeLaSimulacionAcido'
      return (
          <div className={`multistep-form`}>
           <div className ={`banner ${formClassName}`}></div>
-          <div className="subtabs">
+          <StickySubtabs>
               {forms.map( (tab, index) => {
                  let active = this.state.currentStep === index ? 'active' : '';
                  let error = errors[index]
@@ -86,7 +86,7 @@ import ResultadosDeLaSimulacionAcido from './ResultadosDeLaSimulacionAcido'
                    return <div className={`${className} ${active} ${errorClass}`} onClick={() => this.handleClick(index)} key={index}><span></span> {tab.title} </div>
                  }
               )}
-          </div>
+          </StickySubtabs>
           <div className="content">
             <div className="tab-title">
               { title }

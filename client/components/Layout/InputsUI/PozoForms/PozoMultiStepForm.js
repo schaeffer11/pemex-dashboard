@@ -17,6 +17,7 @@ import HistoricoDeProduccion from './HistoricoDeProduccion'
 import AnalisisDelAgua from './AnalisisDelAgua'
 import HistoricoDeIntervenciones from './HistoricoDeIntervenciones'
 import { InputRow, InputRowUnitless, InputRowSelectUnitless, InputDate } from '../../Common/InputRow'
+import StickySubtabs from '../Components/StickySubtabs'
 
 import { setFichaTecnicaDelCampo, setHistorialDeIntervenciones, setFichaTecnicaDelPozo, setEvaluacionPetrofisica, setMecanicoYAparejoDeProduccion, 
   setAnalisisDelAgua, setSistemasArtificialesDeProduccion, setPresionDataCampo, setPressureDepthCampo, setPresionDataPozo, setPressureDepthPozo, setHistoricoProduccion, setHistoricoDeAforos,
@@ -42,8 +43,11 @@ const forms = [
 
 @autobind class PozoMultiStepForm extends Component {
 
+
+
   constructor(props) {
     super(props)
+
     this.state = {
       currentStep: 0,
       isOpen: false,
@@ -71,7 +75,6 @@ const forms = [
           fieldWellOptions: r
         })
     })
-
   }
 
   async loadTecnicaDelCampo() {
@@ -144,12 +147,13 @@ const forms = [
     let dataEstimulacion = await fetch(`api/getHistIntervencionesEstimulacionNew?transactionID=${selectedTransaction}`, headers).then(r => r.json())
     let dataAcido = await fetch(`api/getHistIntervencionesAcidoNew?transactionID=${selectedTransaction}`, headers).then(r => r.json())
     let dataApuntalado = await fetch(`api/getHistIntervencionesApuntaladoNew?transactionID=${selectedTransaction}`, headers).then(r => r.json())
+    let dataTermico = await fetch(`api/getHistIntervencionesTermicoNew?transactionID=${selectedTransaction}`, headers).then(r => r.json())
 
-
-    if (dataEstimulacion && !dataEstimulacion.err && dataAcido && !dataAcido.err && dataApuntalado && !dataApuntalado.err) {
+    if (dataEstimulacion && !dataEstimulacion.err && dataAcido && !dataAcido.err && dataApuntalado && !dataApuntalado.err && dataTermico && !dataTermico.err) {
       let newObj = dataEstimulacion.historialDeIntervenciones
       newObj.historicoAcidoData = dataAcido.historialDeIntervenciones.historicoAcidoData
       newObj.historicoApuntaladoData = dataApuntalado.historialDeIntervenciones.historicoApuntaladoData
+      newObj.historicoTermicoData = dataTermico.historialDeIntervenciones.historicoTermicoData
 
       setHistorialDeIntervenciones(newObj)
       setFromSaveHistorialDeIntervenciones(true)
@@ -828,7 +832,7 @@ const forms = [
     return (
        <div className={`multistep-form ${formClassName}`}>
         <div className ={`banner ${formClassName}`}></div>
-        <div className="subtabs">
+        <StickySubtabs>
             {forms.map( (tab, index) => {
                const active = this.state.currentStep === index ? 'active' : ''; 
                let error = errors[index]
@@ -837,7 +841,7 @@ const forms = [
                return <div className={`${className} ${active} ${errorClass}`} onClick={() => this.handleClick(index)} key={index}><span></span> {tab.title} </div>
                }
             )}
-        </div>
+        </StickySubtabs>
         <div className="content">
           <div className="tab-title">
             { title }

@@ -26,7 +26,8 @@ import VolumeGasTreatments from './VolumeGasTreatments'
       costData: [],
       aforosData: [],
       volumeData: [],
-      numTreatmentData: []
+      numTreatmentData: [],
+      incProdData: []
     }
     this.cards = []
     for (let i = 0; i < 3; i += 1) {
@@ -64,15 +65,16 @@ import VolumeGasTreatments from './VolumeGasTreatments'
     let fieldWellOptionsQuery = `/api/getFieldWellMappingHasData`
     let costQuery = `/timeSeries/costData?` + params.join('&')
     let aforosQuery = `/timeSeries/aforosData?` + params.join('&')
+    let incProdQuery = `/timeSeries/incProdData?` + params.join('&')
     let volumesQuery = `/timeSeries/volumeData?` + params.join('&')
     let numTreatmentsQuery = `/timeSeries/numTreatmentData?` + params.join('&')
 
     const data = await Promise.all([
       fetch(fieldWellOptionsQuery, headers).then(r => r.json()),
       fetch(costQuery, headers).then(r => r.json()),
-      fetch(aforosQuery, headers).then(r => r.json()),
+      // fetch(aforosQuery, headers).then(r => r.json()),
+      fetch(incProdQuery, headers).then(r => r.json()),
       fetch(volumesQuery, headers).then(r => r.json()),
-      fetch(`/api/getDates`, headers).then(r => r.json()),
       fetch(numTreatmentsQuery, headers).then(r => r.json()),
     ])
       .catch(error => {
@@ -83,16 +85,9 @@ import VolumeGasTreatments from './VolumeGasTreatments'
     let newState = {
       fieldWellOptions: data[0],
       costData: data[1],
-      aforosData: data[2],
+      incProdData: data[2],
       volumeData: data[3],
-      numTreatmentData: data[5]
-    }
-
-    if (sequence === 'initial') {
-      setGeneral(['minDate'], data[4][0].MIN)
-      setGeneral(['maxDate'], data[4][0].MAX) 
-      setGeneral(['lowDate'], data[4][0].MIN)
-      setGeneral(['highDate'], data[4][0].MAX) 
+      numTreatmentData: data[4]
     }
 
     this.setState(newState)
@@ -120,23 +115,47 @@ import VolumeGasTreatments from './VolumeGasTreatments'
 
 
   render() {
-    let { fieldWellOptions, costData, aforosData, volumeData, numTreatmentData } = this.state
+    let { fieldWellOptions, costData, aforosData, volumeData, numTreatmentData, incProdData } = this.state
     let { globalAnalysis } = this.props
 
     globalAnalysis = globalAnalysis.toJS()
 
     let { groupBy } = globalAnalysis
 
-    console.log('costData', costData)
-    console.log('aforosData', aforosData)
-    console.log('volumeData', volumeData)
-    let aforosCarouselData = {}
+    // console.log('costData', costData)
+    // console.log('aforosData', aforosData)
+    // console.log('volumeData', volumeData)
+    // let aforosCarouselData = {}
 
-    if (aforosData.length > 0) {
+    // if (aforosData.length > 0) {
+    //   if (groupBy) {
+    //     let groups = []
+
+    //     aforosData.forEach(i => {
+    //       if (!groups.includes(i.groupedName)) {
+    //         groups.push(i.groupedName)
+    //       }
+    //     })
+
+
+    //     groups.forEach(name => {
+    //       aforosCarouselData[name] = aforosData.filter(j => j.groupedName === name)
+    //     }) 
+    //   }
+    //   else {
+    //     aforosCarouselData = {
+    //       undefined: aforosData
+    //     }
+    //   }
+    // }
+
+    let incProdCarouselData = {}
+
+    if (incProdData.length > 0) {
       if (groupBy) {
         let groups = []
 
-        aforosData.forEach(i => {
+        incProdData.forEach(i => {
           if (!groups.includes(i.groupedName)) {
             groups.push(i.groupedName)
           }
@@ -144,19 +163,17 @@ import VolumeGasTreatments from './VolumeGasTreatments'
 
 
         groups.forEach(name => {
-          aforosCarouselData[name] = aforosData.filter(j => j.groupedName === name)
+          incProdCarouselData[name] = incProdData.filter(j => j.groupedName === name)
         }) 
       }
       else {
-        aforosCarouselData = {
-          undefined: aforosData
+        incProdCarouselData = {
+          undefined: incProdData
         }
       }
     }
 
-
-    console.log(aforosCarouselData)
-    
+    console.log(incProdCarouselData)
     return (
       <div className="data statistics">
         <div className='content'>
@@ -164,14 +181,14 @@ import VolumeGasTreatments from './VolumeGasTreatments'
           <CardDeck className="content-deck">
             <Card
                 id="productionCost"
-                title="Production & Cost"
+                title="Inc Production & Cost"
                 ref={this.cards[0]}
               >
-              <ProductionBubble data={aforosData} costData={costData} groupBy={groupBy} />
+              <ProductionBubble data={incProdData} costData={costData} groupBy={groupBy} />
             </Card>
               <Card
                 id="productionCost"
-                title="Production & Cost"
+                title="Volume & Cost"
                 ref={this.cards[0]}
               >
               <VolumeCostBubble label='Liquids' data={volumeData} costData={costData} groupBy={groupBy} />
@@ -179,11 +196,11 @@ import VolumeGasTreatments from './VolumeGasTreatments'
             </Card>
               <Card
                 id="productionTreatments"
-                title="Production & Number of Treatments"
+                title="Inc Production & Number of Treatments"
                 ref={this.cards[0]}
                 multiplyChartsOnGrouping
               >
-              <ProductionTreatmentsBar data={aforosCarouselData} numTreatmentData={numTreatmentData} groupBy={groupBy} />
+              <ProductionTreatmentsBar data={incProdCarouselData} numTreatmentData={numTreatmentData} groupBy={groupBy} />
             </Card>
               <Card
                 id="volumeTreatments"

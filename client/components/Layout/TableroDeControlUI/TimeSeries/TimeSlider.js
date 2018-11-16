@@ -10,6 +10,11 @@ import 'rc-slider/assets/index.css';
 @autobind class timeSlider extends Component {
   constructor(props) {
     super(props)
+
+    this.state = {
+      lowDateState: null,
+      highDateState: null
+    }
   }
 
   handleChange(value) {
@@ -17,6 +22,15 @@ import 'rc-slider/assets/index.css';
 
     setGeneral(['lowDate'], value[0])
     setGeneral(['highDate'], value[1]) 
+  }
+
+
+  handleChangeState(value) {
+
+    this.setState({
+      lowDateState: value[0],
+      highDateState: value[1]
+    })
   }
 
   formatDate(value) {
@@ -65,15 +79,36 @@ import 'rc-slider/assets/index.css';
     return `${month} ${year}`
   }
 
+  componentDidMount() {
+    let { lowDate, highDate } = this.props
+
+    this.setState({
+      lowDateState: lowDate,
+      highDateState: highDate
+    })
+  }
+
+  componentDidUpdate(prevProps) {
+
+    if (prevProps.lowDate !== this.props.lowDate || prevProps.highDate !== this.props.highDate) {
+      this.setState({
+        lowDateState: this.props.lowDate,
+        highDateState: this.props.highDate
+      })  
+    }
+  }
+
   render() {
     let { minDate, maxDate, lowDate, highDate } = this.props
-
+    let { lowDateState, highDateState } = this.state
+    
     return (
       <div>
         <Range
           min={minDate}
           max={maxDate}
-          defaultValue={[lowDate, highDate]}
+          value={[lowDateState, highDateState]}
+          onChange={this.handleChangeState}
           onAfterChange={this.handleChange}
           tipFormatter={this.formatDate}
         />

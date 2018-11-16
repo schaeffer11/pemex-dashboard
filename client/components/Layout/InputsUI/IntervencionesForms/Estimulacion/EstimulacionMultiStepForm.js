@@ -9,6 +9,7 @@ import PruebasDeLaboratorioExtra from '../PruebasDeLaboratorioExtra'
 import ResultadosDeLaSimulacionEstimulacion from './ResultadosDeLaSimulacionEstimulacion'
 import EstimacionIncProduccionEstimulacion from './EstimacionIncProduccionEstimulacion'
 import EstimacionCostos from '../EstimacionCostos'
+import StickySubtabs from '../../Components/StickySubtabs'
 
 
     const forms = [
@@ -76,7 +77,7 @@ import EstimacionCostos from '../EstimacionCostos'
      return (
          <div className={`multistep-form`}>
           <div className ={`banner ${formClassName}`}></div>
-          <div className="subtabs">
+          <StickySubtabs>
               {forms.map( (tab, index) => {
                 let active = this.state.currentStep === index ? 'active' : '';
                 let error = errors[index]
@@ -85,7 +86,7 @@ import EstimacionCostos from '../EstimacionCostos'
                    return <div className={`${className} ${active} ${errorClass}`} onClick={() => this.handleClick(index)} key={index}><span></span> {tab.title} </div>
                  }
               )}
-          </div>
+          </StickySubtabs>
           <div className="content">
               <div className="tab-title">
                   { title }

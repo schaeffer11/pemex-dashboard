@@ -68,8 +68,8 @@ let tipoDeInterventionSeries = [{
         }
 
       if (groupBy) {
-        if (!groupByList.includes(i[groupBy])) {
-          groupByList.push(i[groupBy])
+        if (!groupByList.includes(i.groupedName)) {
+          groupByList.push(i.groupedName)
         }
       }
 
@@ -88,31 +88,31 @@ let tipoDeInterventionSeries = [{
 
     if (!groupBy) {
       series = classificationSeries.map(i => {
-        i.data = data.filter(j => j.group === i.name)
+        i.data = i.name === 'Successful' ? data.filter(j => j.qwResult < j.qw) : data.filter(j => j.qwResult >= j.qw)
         return i
       })
     }
     else if (groupBy === 'company') {
       series = companySeries.map(i => {
-        i.data = data.filter(j => j.company === i.name)
+        i.data = data.filter(j => j.groupedName === i.name)
         return i
       })
     }
     else if (groupBy === 'type') {
       series = tipoDeInterventionSeries.map(i => {
-        i.data = data.filter(j => j.type === i.name)
+        i.data = data.filter(j => j.groupedName === i.name)
         return i
       })  
     }
     else {
-      console.log(groupByList)
       series = groupByList.map(i => {
         return {
           name: i,
-          data: data.filter(j => j[groupBy] === i)
+          data: data.filter(j => j.groupedName === i)
         }
       })
     }
+
 
     console.log(series)
 
@@ -145,12 +145,12 @@ let tipoDeInterventionSeries = [{
         },
         xAxis: {
             title: {
-                text: 'Pre-Water (bbl/d)'
+                text: 'Est Inc Water (bbl/d)'
             }
         },
         yAxis: {
             title: {
-                text: 'Post-Water (bbl/d)'
+                text: 'Real Inc Water (bbl/d)'
             }
         },
         credits: {

@@ -29,19 +29,21 @@ let colorWheel = [
   render() {
     let { data, groupBy } = this.props
 
+    console.log(data)
+    
     if (data.length > 0) {
       if (!groupBy) {
         data = [{
-          name: 'Average Cost Deviation',
-          data: [data[0].avgDeviation]
+          name: 'Average Inc Prod Deviation',
+          data: [data[0].avgQoDeviation]
         }]
       }
       else {
         data = data.map(i => {
           return {
-            name: i[groupBy],
+            name: i.groupedName,
             borderColor: 'black',
-            data: [i.avgDeviation]
+            data: [i.avgQoDeviation]
           }
         })
       }   
@@ -64,11 +66,11 @@ let colorWheel = [
         min: -100,
         max: 100,
         plotBands: [{
-          color: '#ecb4b4',
+          color: '#b4ecb4',
           from: 0,
           to: 1000
         }, {
-          color: '#b4ecb4',
+          color: '#ecb4b4',
           from: 0,
           to: -1000
         }]

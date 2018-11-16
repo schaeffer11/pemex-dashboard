@@ -38,12 +38,12 @@ import { KPI } from '../Common/KPIs'
           let utc = Date.UTC(j.YEAR, j.MONTH - 1)
           return {
             x: utc,
-            y: j.QO,
+            y: j.QO_RESULT,
           }
         })
 
         series.push({
-          name: 'Qo',
+          name: 'Inc Qo',
           data: filteredData,         
           yAxis: 0,
           zIndex: 0
@@ -77,7 +77,7 @@ import { KPI } from '../Common/KPIs'
       },
       yAxis: [{
         title: {
-          text: 'Qo'
+          text: 'Inc Qo'
         }
       }, {
         title: {
