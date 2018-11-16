@@ -687,10 +687,14 @@ SUM(EST_INC_Qw) / COUNT(DISTINCT TRANSACTION_ID) as AVG_EST_INC_Qw,
 SUM(EST_INC_GASTO_COMPROMISO_Qg) / COUNT(DISTINCT TRANSACTION_ID) as AVG_EST_INC_GASTO_COMPROMISO_Qg, 
 SUM(QO_RESULT) / COUNT(DISTINCT TRANSACTION_ID) as AVG_QO_RESULT, 
 SUM(QG_RESULT) / COUNT(DISTINCT TRANSACTION_ID) as AVG_QG_RESULT, 
-SUM(QW_RESULT) / COUNT(DISTINCT TRANSACTION_ID) as AVG_QW_RESULT 
+SUM(QW_RESULT) / COUNT(DISTINCT TRANSACTION_ID) as AVG_QW_RESULT, 
  
-
-
+((SUM(QO_RESULT) / SUM(EST_INC_GASTO_COMPROMISO_Qo)) - 1) * 100 AS QO_DEVIATION,
+SUM(((QO_RESULT / EST_INC_GASTO_COMPROMISO_Qo) - 1) * 100)   / COUNT(DISTINCT TRANSACTION_ID) as AVG_QO_DEVIATION,
+((SUM(QG_RESULT) / SUM(EST_INC_GASTO_COMPROMISO_Qg)) - 1) * 100 AS QG_DEVIATION,
+SUM(((QG_RESULT / EST_INC_GASTO_COMPROMISO_Qg) - 1) * 100)   / COUNT(DISTINCT TRANSACTION_ID) as AVG_QG_DEVIATION,
+((SUM(QW_RESULT) / SUM(EST_INC_Qw)) - 1) * 100 AS QW_DEVIATION,
+SUM(((QW_RESULT / EST_INC_Qw) - 1) * 100)   / COUNT(DISTINCT TRANSACTION_ID) as AVG_QW_DEVIATION
 
 from
 (select r.TRANSACTION_ID, QO_RESULT, QW_RESULT, QG_RESULT, EST_INC_GASTO_COMPROMISO_QO, EST_INC_QW, EST_INC_GASTO_COMPROMISO_QG, ${select} ${selectAcido}
@@ -758,7 +762,13 @@ JOIN IntervencionesTermico ia ON r.PROPUESTA_ID = ia.TRANSACTION_ID
             avgQw: i.AVG_EST_INC_Qw,
             avgQoResult: i.AVG_QO_RESULT,
             avgQgResult: i.AVG_QG_RESULT,
-            avgQwResult: i.AVG_QW_RESULT
+            avgQwResult: i.AVG_QW_RESULT,
+            qoDeviation: i.QO_DEVIATION,
+            qgDeviation: i.QG_DEVIATION,
+            qwDeviation: i.QW_DEVIATION,
+            avgQoDeviation: i.AVG_QO_DEVIATION,
+            avgQgDeviation: i.AVG_QG_DEVIATION,
+            avgQwDeviation: i.AVG_QW_DEVIATION
           }
         })
         res.json(results)
@@ -902,7 +912,7 @@ router.get('/countData', (req, res) => {
   let whereClause = 'WHERE 1 = 1'
 
   if (lowDate) {
-    whereClause += ' AND FECHA_INTERVENCION >= ?'
+    whereClause += ' AND IF(FECHA_INTERVENCION, FECHA_INTERVENCION, FECHA_PROGRAMADA_INTERVENCION) >= ?'
     let year = Math.floor((lowDate - 1) / 12)
     let month = lowDate % 12
     month === 0 ? month = 12 : null
@@ -910,7 +920,7 @@ router.get('/countData', (req, res) => {
     values.push(lowDateString)
   }
   if (highDate) {
-    whereClause += ' AND FECHA_INTERVENCION <= ?'
+    whereClause += ' AND IF(FECHA_INTERVENCION, FECHA_INTERVENCION, FECHA_PROGRAMADA_INTERVENCION) <= ?'
     let year = Math.floor((highDate - 1) / 12)
     let month = highDate % 12
     month === 0 ? month = 12 : null
@@ -933,6 +943,8 @@ JOIN FieldWellMapping ON t.WELL_FORMACION_ID = FieldWellMapping.WELL_FORMACION_I
 ${whereClause} 
 GROUP BY TIPO_DE_INTERVENCIONES
 `
+
+console.log(query, values)
 
   connection.query(query, values, (err, results) => {
       console.log('comment err', err)

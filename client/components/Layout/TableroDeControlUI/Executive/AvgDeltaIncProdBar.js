@@ -29,11 +29,13 @@ let colorWheel = [
   render() {
     let { data, groupBy } = this.props
 
+    console.log(data)
+    
     if (data.length > 0) {
       if (!groupBy) {
         data = [{
           name: 'Average Inc Prod Deviation',
-          data: [data[0].avgQoResult / data[0].avgQo]
+          data: [data[0].avgQoDeviation]
         }]
       }
       else {
@@ -41,7 +43,7 @@ let colorWheel = [
           return {
             name: i.groupedName,
             borderColor: 'black',
-            data: [((i.avgQoResult / i.avgQo) - 1) * 100]
+            data: [i.avgQoDeviation]
           }
         })
       }   

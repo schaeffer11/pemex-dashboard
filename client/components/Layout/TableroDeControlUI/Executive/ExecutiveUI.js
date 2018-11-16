@@ -148,7 +148,7 @@ import AvgDeltaIncProdBar from './AvgDeltaIncProdBar'
           <CardDeck className="content-deck">
             <Card
                 id="productionGraphs"
-                title="Delta Production Graphs"
+                title="Delta Incremental Production"
                 ref={this.cards[0]}
               >
               <DeltaOil label='Oil' data={singularEstIncData} groupBy={groupBy} />

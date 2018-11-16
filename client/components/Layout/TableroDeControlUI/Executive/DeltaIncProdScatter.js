@@ -39,7 +39,7 @@ let colorWheel = [
           data: data.map(i => {
             return {
               x: 0,
-              y: ((i.qoResult / i.qo) - 1) * 100
+              y: i.qoDeviation
             }
           })
         }]
@@ -62,7 +62,7 @@ let colorWheel = [
             let val = ((j.qoResult / j.qo) - 1) * 100
             dataPoints.push({
               x: index, 
-              y: val, 
+              y: j.qoDeviation, 
               color: colorWheel[colorIndex]})
           })
         })
