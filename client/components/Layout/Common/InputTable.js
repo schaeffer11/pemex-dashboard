@@ -60,6 +60,8 @@ import { checkDate, checkEmpty, checkEmptySingular, checkDateSingular } from '..
               err = checkEmptySingular(row[name])
             } else if (type === 'date') {
               err = checkDateSingular(row[name])
+            } else if (type === 'text') {
+              err = checkEmptySingular(row[name])
             }
             newRow[name] = { value: err, type }
           })
