@@ -13,12 +13,12 @@ import StickySubtabs from '../../Components/StickySubtabs'
 
 
     const forms = [
-      {'title' : 'Propuesta de Fracturamiento Apuntalado', 'content': <PropuestaDeApuntalado /> },  
-      {'title' : 'Pruebas de Laboratorio', 'content': <PruebasDeLaboratorio /> },
-      {'title' : 'Pruebas de Laboratorio de Fracturamiento Apuntalado', 'content': <PruebasDeLaboratorioExtra /> },
-      {'title' : 'Resultados de la Simulación de Fracturamiento Apuntalado', 'content': <ResultadosDeLaSimulacionApuntalado /> },
-      {'title' : 'Estimación del Incremento de Producción', 'content': <EstimacionIncProduccionApuntalado /> },
-      {'title' : 'Estimación de Costos de Fracturamiento Apuntalado', 'content': <EstimacionCostos /> }
+      {'title' : 'Propuesta de Fracturamiento Apuntalado', 'content': <PropuestaDeApuntalado />, className: 'PropuestaDeApuntalado' },  
+      {'title' : 'Pruebas de Laboratorio', 'content': <PruebasDeLaboratorio />, className: 'PruebasDeLaboratorio' },
+      {'title' : 'Pruebas de Laboratorio de Fracturamiento Apuntalado', 'content': <PruebasDeLaboratorioExtra />, className: 'PruebasDeLaboratorioExtra' },
+      {'title' : 'Resultados de la Simulación de Fracturamiento Apuntalado', 'content': <ResultadosDeLaSimulacionApuntalado />, className: 'ResultadosDeLaSimulacionApuntalado' },
+      {'title' : 'Estimación del Incremento de Producción', 'content': <EstimacionIncProduccionApuntalado />, className: 'EstimacionIncProduccionApuntalado' },
+      {'title' : 'Estimación de Costos de Fracturamiento Apuntalado', 'content': <EstimacionCostos />, className: 'EstimacionCostos' }
     ];
 
 
@@ -72,7 +72,7 @@ import StickySubtabs from '../../Components/StickySubtabs'
 
     let errors = [propuestaHasErrors, false, false, resultadosSimulacionHasErrors, estIncProduccionHasErrors, estCostsHasErrors]
     let title = forms[this.state.currentStep].title
-    let formClassName = forms[this.state.currentStep].content.type.WrappedComponent.name
+    let formClassName = forms[this.state.currentStep].className
 
      return (
          <div className={`multistep-form`}>

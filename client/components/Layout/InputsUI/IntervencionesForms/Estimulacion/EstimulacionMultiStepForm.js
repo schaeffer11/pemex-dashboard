@@ -13,12 +13,12 @@ import StickySubtabs from '../../Components/StickySubtabs'
 
 
     const forms = [
-      {'title' : 'Propuesta de Tratamiento de Estimulación', 'content': <PropuestaDeEstimulacion /> },  
-      {'title' : 'Pruebas de Laboratorio', 'content': <PruebasDeLaboratorio /> },
-      {'title' : 'Pruebas de Laboratorio de Estimulación', 'content': <PruebasDeLaboratorioExtra /> },
-      {'title' : 'Resultados de la Simulación de Estimulación', 'content': <ResultadosDeLaSimulacionEstimulacion /> },
-      {'title' : 'Estimación del Incremento de Producción', 'content': <EstimacionIncProduccionEstimulacion  /> },
-      {'title' : 'Estimación de Costos de Estimulación', 'content': <EstimacionCostos /> }
+      {'title' : 'Propuesta de Tratamiento de Estimulación', 'content': <PropuestaDeEstimulacion />, className: 'PropuestaDeEstimulacion' },  
+      {'title' : 'Pruebas de Laboratorio', 'content': <PruebasDeLaboratorio />, className: 'PruebasDeLaboratorio' },
+      {'title' : 'Pruebas de Laboratorio de Estimulación', 'content': <PruebasDeLaboratorioExtra />, className: 'PruebasDeLaboratorioExtra' },
+      {'title' : 'Resultados de la Simulación de Estimulación', 'content': <ResultadosDeLaSimulacionEstimulacion />, className: 'ResultadosDeLaSimulacionEstimulacion' },
+      {'title' : 'Estimación del Incremento de Producción', 'content': <EstimacionIncProduccionEstimulacion  />, className: 'EstimacionIncProduccionEstimulacion' },
+      {'title' : 'Estimación de Costos de Estimulación', 'content': <EstimacionCostos />, className: 'EstimacionCostos' }
     ]
 
 @autobind class EstimulacionMultiStepForm extends Component {
@@ -72,7 +72,7 @@ import StickySubtabs from '../../Components/StickySubtabs'
    let errors = [propuestaHasErrors, false, false, resultadosSimulacionHasErrors, estIncProduccionHasErrors, estCostsHasErrors]
 
      let title = forms[this.state.currentStep].title
-     let formClassName = forms[this.state.currentStep].content.type.WrappedComponent.name
+     let formClassName = forms[this.state.currentStep].className
 
      return (
          <div className={`multistep-form`}>

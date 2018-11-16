@@ -13,12 +13,12 @@ import ResultadosDeLaSimulacionAcido from './ResultadosDeLaSimulacionAcido'
 import StickySubtabs from '../../Components/StickySubtabs'
 
      const forms = [
-      {'title' : 'Propuesta de Fracturamiento Ácido', 'content': <PropuestaDeAcido /> },  
-      {'title' : 'Pruebas de Laboratorio', 'content': <PruebasDeLaboratorio /> },
-      {'title' : 'Pruebas de Laboratorio de Fracturamiento Ácido', 'content': <PruebasDeLaboratorioExtra /> },
-      {'title' : 'Resultados de la Simulación de Fracturamiento Ácido', 'content': <ResultadosDeLaSimulacionAcido /> },
-      {'title' : 'Estimación del Incremento de Producción', 'content': <EstimacionIncProduccionAcido /> },
-      {'title' : 'Estimación de Costos de Fracturamiento Acido', 'content': <EstimacionCostos /> }
+      {'title' : 'Propuesta de Fracturamiento Ácido', 'content': <PropuestaDeAcido />, className: 'PropuestaDeAcido' },  
+      {'title' : 'Pruebas de Laboratorio', 'content': <PruebasDeLaboratorio />, className: 'PruebasDeLaboratorio' },
+      {'title' : 'Pruebas de Laboratorio de Fracturamiento Ácido', 'content': <PruebasDeLaboratorioExtra />, className: 'PruebasDeLaboratorioExtra' },
+      {'title' : 'Resultados de la Simulación de Fracturamiento Ácido', 'content': <ResultadosDeLaSimulacionAcido />, className: 'ResultadosDeLaSimulacionAcido' },
+      {'title' : 'Estimación del Incremento de Producción', 'content': <EstimacionIncProduccionAcido />, className: 'EstimacionIncProduccionAcido' },
+      {'title' : 'Estimación de Costos de Fracturamiento Acido', 'content': <EstimacionCostos />, className: 'EstimacionCostos' }
     ]
 
 
@@ -72,7 +72,7 @@ import StickySubtabs from '../../Components/StickySubtabs'
     
     let errors = [propuestaHasErrors, false, false, resultadosSimulacionHasErrors, estIncProduccionHasErrors, estCostsHasErrors]
     let title = forms[this.state.currentStep].title
-    let formClassName = forms[this.state.currentStep].content.type.WrappedComponent.name
+    let formClassName = forms[this.state.currentStep].className
 
      return (
          <div className={`multistep-form`}>

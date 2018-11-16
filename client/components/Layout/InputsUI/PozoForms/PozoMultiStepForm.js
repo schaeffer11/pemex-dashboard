@@ -25,17 +25,17 @@ import { setFichaTecnicaDelCampo, setHistorialDeIntervenciones, setFichaTecnicaD
 import { setCurrentPage } from '../../../../redux/actions/global'
 
 const forms = [
-  {'title' : 'Ficha Técnica del Campo', content: <TecnicaDelCampo /> },
-  {'title' : 'Ficha Técnica del Pozo' , content:<TecnicaDelPozo /> },
-  {'title' : 'Histórico De Intervenciones', content: <HistoricoDeIntervenciones />},
-  {'title' : 'Evaluación Petrofísica', content: <EvaluacionPetrofisica /> },
-  {'title' : 'Edo. Mecánico y Aparejo de Producción', content: <MecanicoYAparejo /> },
-  {'title' : 'Análisis del Agua', content: <AnalisisDelAgua  /> }, 
-  {'title' : 'Información de Sistemas Artificiales de Producción', content: <SistemasArtificialesDeProduccion  /> },
-  {'title' : 'Histórico de Presión - Campo', content: <HistoricoDePresionCampo  /> },
-  {'title' : 'Histórico de Presión - Pozo', content: <HistoricoDePresionPozo  /> },
-  {'title' : 'Histórico de Aforos', content: <HistoricoDeAforos /> },
-  {'title' : 'Histórico de Producción', content: <HistoricoDeProduccion  /> },
+  {'title' : 'Ficha Técnica del Campo', content: <TecnicaDelCampo />, className: 'TecnicaDelCampo' },
+  {'title' : 'Ficha Técnica del Pozo' , content:<TecnicaDelPozo /> , className: 'TechnicaDelPozo'},
+  {'title' : 'Histórico De Intervenciones', content: <HistoricoDeIntervenciones />, className: 'HistorialDeIntervenciones'},
+  {'title' : 'Evaluación Petrofísica', content: <EvaluacionPetrofisica /> , className: 'EvaluacionPetrofisica'},
+  {'title' : 'Edo. Mecánico y Aparejo de Producción', content: <MecanicoYAparejo /> , className: 'MecanicoYAparejo'},
+  {'title' : 'Análisis del Agua', content: <AnalisisDelAgua  /> , className: 'AnalisisDelAgua'}, 
+  {'title' : 'Información de Sistemas Artificiales de Producción', content: <SistemasArtificialesDeProduccion  /> , className: 'SistemasArtificialesDeProduccion'},
+  {'title' : 'Histórico de Presión - Campo', content: <HistoricoDePresionCampo  /> , className: 'HistoricoDePresionCampo'},
+  {'title' : 'Histórico de Presión - Pozo', content: <HistoricoDePresionPozo  /> , className: 'HistoricoDePresionPozo'},
+  {'title' : 'Histórico de Aforos', content: <HistoricoDeAforos /> , className: 'HistoricoDeAforos'},
+  {'title' : 'Histórico de Producción', content: <HistoricoDeProduccion  /> , className: 'HistoricoDeProduccion'},
 ];
 
 
@@ -825,7 +825,7 @@ const forms = [
     let { isOpen } = this.state
     let className = 'subtab'
     let title = forms[this.state.currentStep].title
-    let formClassName = forms[this.state.currentStep].content.type.WrappedComponent.name
+    let formClassName = forms[this.state.currentStep].className
     
     let errors = [fichaTecnicaDelCampoHasErrors, fichaTecnicaDelPozoHasErrors, historialDeIntervencionesHasErrors, evaluacionPetrofisicaHasErrors, mecanicoYAparejoDeProduccionHasErrors, analisisDelAguaHasErrors, sistemasArtificialesDeProduccionHasErrors, historicoDePresionCampoHasErrors, historicoDePresionPozoHasErrors, historicoDeAforosHasErrors, historicoDeProduccionHasErrors]
 

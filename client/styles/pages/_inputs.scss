@@ -1155,7 +1155,9 @@
 		&.SistemasArtificialesDeProduccion {
 			background-image: url('/images/sistemasBanner.png');
 		}
-
+		&.EstimacionIncProduccionTermico {
+			background-image: url('/images/estIncBanner.png');
+		}
 		&.PropuestaTermica {
 			background-image: url('/images/propuestaBanner.png');
 		}
