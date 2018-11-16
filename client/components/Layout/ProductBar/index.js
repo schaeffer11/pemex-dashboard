@@ -62,7 +62,7 @@ class Productbar extends Component {
           {this.showTabs() && (
               <div>
                   <span className="selectedPozo">Pozo: {pozoName}</span>
-                  <div class="links">
+                  <div className="links">
                       <a className={selectedTab == 'Pozo' ? 'active': ''} tabIndex="Pozo" onClick={e => setTab('Pozo')}>Pozo</a>
                       <a className={selectedTab == 'Intervenciones' ? 'active': ''} tabIndex="Intervenciones" onClick={e => setTab('Intervenciones')}>Intervenciones</a>
                   </div>

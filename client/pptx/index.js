@@ -212,11 +212,11 @@ export async function generatePowerPoint(token, jobID, wellID, jobType) {
   buildSectionSlide(pptx, 'Información de la propuesta')
   await buildProposalCedula(pptx, token, jobID)
   await buildGeneralProposal(pptx, token, jobID)
-  // await buildLabReports(pptx, token, jobID, images.pruebasDeLaboratorio)
-  // if (hasResults) {
-  //   buildSectionSlide(pptx, 'Información de los resultados')
-  //   await buildResultsCedula(pptx, token, jobID, jobType)
-  //   await buildGeneralResults(pptx, token, jobID, jobType)
-  // }
+  await buildLabReports(pptx, token, jobID, images.pruebasDeLaboratorio)
+  if (hasResults) {
+    buildSectionSlide(pptx, 'Información de los resultados')
+    await buildResultsCedula(pptx, token, jobID, jobType)
+    await buildGeneralResults(pptx, token, jobID, jobType)
+  }
   pptx.save()
 }

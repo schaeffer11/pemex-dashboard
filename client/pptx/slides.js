@@ -162,18 +162,16 @@ export async function buildResultsCedula(pptx, token, id, interventionType) {
   const { layerData } = layers.evaluacionPetrofisica
   const intervals = layerData.map(elem => `${elem.cimaMD}-${elem.baseMD}`).join('\n')
   const cedulaMap = maps.propuesta[interventionType.toLowerCase()].cedulaData
-  const cedulaTable = buildTable('Cedula de tratamiento', cedulaMap, cedulaData)
-  const generalTable = buildSimpleTable('', maps.generalResults, { ...generalResults, intervals }, false)
+  const cedula = buildTable('Cedula de tratamiento', cedulaMap, cedulaData)
+  const general = buildSimpleTable('', maps.generalResults, { ...generalResults, intervals }, false)
   
   const mainSlide = pptx.addNewSlide('MASTER_SLIDE')
   mainSlide.addText('Tratamiento', { placeholder: 'slide_title' })
-  mainSlide.addTable(generalTable, { x: getMiddle(10), y: 1.0, colW: [2.0, 8.0], fontSize: 24 })
+  mainSlide.addTable(general.table, { x: getPositions(10).middle, y: 1.0, colW: [2.0, 8.0], fontSize: 24 })
 
-  const tableOptionsCopy = { ...tableOptions }
   const slide = pptx.addNewSlide('MASTER_SLIDE')
   slide.addText('Cédula de tratamiento', { placeholder: 'slide_title' })
-  delete tableOptionsCopy.w
-  slide.addTable(cedulaTable, { x: 0.5, y: 1.0, ...tableOptionsCopy })
+  slide.addTable(cedula.table, { x: getPositions(cedula.options.w).middle, y: 1.0, ...cedula.options })
 }
 
 export async function buildProposalCedula(pptx, token, id, isResults=false) {
@@ -228,23 +226,23 @@ export async function buildGeneralResults(pptx, token, id, interventionType) {
   const slide = pptx.addNewSlide('MASTER_SLIDE')
   slide.addText('Resultados de tratamiento', { placeholder: 'slide_title' })
 
-  const tableOptionsCopy = { ...tableOptions }
   const map = maps.propuesta[interventionType.toLowerCase()]
-  const volumesTable = buildSimpleTable('Volúmenes', map.volumes, data)
-  slide.addTable(volumesTable, { x: 0.5, y: 1.0, ...tableOptionsCopy })
+  const { left, right, middle } = getPositions(4)
+  const volumes = buildSimpleTable('Volúmenes', map.volumes, data)
+  slide.addTable(volumes.table, { x: left, y: 1.0, ...volumes.options })
 
   if (map.geoMechanicInformation) {
-    const geoMechanicTable = buildSimpleTable('Información de Geomecánica', map.geoMechanicInformation, data)
-    slide.addTable(geoMechanicTable, { x: 3.5, y: 1.0, ...tableOptionsCopy })
+    const geoMechanic = buildSimpleTable('Información de Geomecánica', map.geoMechanicInformation, data)
+    slide.addTable(geoMechanic.table, { x: left, y: 3.0, ...geoMechanic.options })
   }
 
   if (interventionType === 'estimulacion' && data.tipoDeEstimulacion === 'limpieza') {
-    const limpiezaTable = buildSimpleTable('Limpieza de Aparejo', map.general, data)
-    slide.addTable(limpiezaTable, { x: 3.5, y: 1.0, ...tableOptionsCopy })
+    const limpieza = buildSimpleTable('Limpieza de Aparejo', map.general, data)
+    slide.addTable(limpieza.table, { x: left, y: 3.0, ...limpieza.options })
   }
 
-  const simulacionTable = buildSimpleTable('Resultados de la simulacion', map.resultadosSimulacion, data)
-  slide.addTable(simulacionTable, { x: 3.5, y: 2.0, ...tableOptionsCopy })
+  const simulacion = buildSimpleTable('Resultados de la simulacion', map.resultadosSimulacion, data)
+  slide.addTable(simulacion.table, { x: middle, y: 1.0, ...simulacion.options })
   return slide
 }
 
@@ -315,17 +313,16 @@ export async function buildGeneralProposal(pptx, token, id) {
 
 async function buildMainLabSlide(pptx, labTitle, lab, image) {
   const mainSlide = pptx.addNewSlide('MASTER_SLIDE')
-  mainSlide.addText('Pruebas de laboratorio', { placeholder: 'slide_title' })
-  mainSlide.addText(labTitle, { x: 0.5, y: 1.0, fontSize: 18, fontFace: 'Arial Narrow' })
-  const tableOptionsCopy = { ...tableOptions }
-  delete tableOptionsCopy.colW
-  const generalTable = buildSimpleTable('Datos generales', maps.pruebasDeLaboratorio.general, lab, false)
-  mainSlide.addTable(generalTable, { x: 0.5, y: 1.5, ...tableOptionsCopy })
+  mainSlide.addText(`Pruebas de laboratorio - ${labTitle}`, { placeholder: 'slide_title' })
+  // mainSlide.addText(labTitle, { x: 0.5, y: 1.0, fontSize: 18, fontFace: 'Arial Narrow' })
+  const { table, options } = buildSimpleTable('Datos generales', maps.pruebasDeLaboratorio.general, lab, false)
+  mainSlide.addTable(table, { x: getPositions(options.w).middle, y: 1.0, ...options })
   if (image) {
+    const { middle } = getPositions(4.5)
     const base64 = await getBase64FromURL(image.imgURL).catch(e => e)
     if (!base64.error) {
       mainSlide.addImage({
-        data: `image/png;base64,${base64}`, x: 4.4, y: 3.3, w: 4.5, h: 3.5,
+        data: `image/png;base64,${base64}`, x: middle, y: 3.3, w: 4.5, h: 3.5,
         sizing: { type: 'contain', h: 4.5, w: 4.5 }
       })
     }
@@ -342,21 +339,21 @@ function buildLabDataSlide(pptx, map, lab, labTitle) {
     return false
   }).length > 0
   if (isTable) {
-    const tableOptionsCopy = { ...tableOptions }
-    delete tableOptionsCopy.colW
+    // const tableOptionsCopy = { ...tableOptions }
+    // delete tableOptionsCopy.colW
     const dataSlide = pptx.addNewSlide('MASTER_SLIDE')
     dataSlide.addText('Pruebas de laboratorio', { placeholder: 'slide_title' })
-    dataSlide.addText(labTitle, { x: 0.5, y: 1.0, fontSize: 18, fontFace: 'Arial Narrow' })
-    const table = buildTable('', map[tableName], lab[tableName])
-    dataSlide.addTable(table, { x: 0.5, y: 1.5, ...tableOptionsCopy })
+    // dataSlide.addText(labTitle, { x: 0.5, y: 1.0, fontSize: 18, fontFace: 'Arial Narrow' })
+    const { table, options } = buildTable(labTitle, map[tableName], lab[tableName])
+    dataSlide.addTable(table, { x: getPositions(options.w).middle, y: 1.0, ...options })
   } else {
     if (Object.keys(map).length > 0) {
-      const tableOptionsCopy = { ...tableOptions }
+      // const tableOptionsCopy = { ...tableOptions }
       const dataSlide = pptx.addNewSlide('MASTER_SLIDE')
       dataSlide.addText('Pruebas de laboratorio', { placeholder: 'slide_title' })
-      dataSlide.addText(labTitle, { x: 0.5, y: 1.0, fontSize: 18, fontFace: 'Arial Narrow' })
-      const table = buildSimpleTable('', map, lab)
-      dataSlide.addTable(table, { x: 0.5, y: 1.5, ...tableOptionsCopy })
+      // dataSlide.addText(labTitle, { x: 0.5, y: 1.0, fontSize: 18, fontFace: 'Arial Narrow' })
+      const { table, options } = buildSimpleTable(labTitle, map, lab)
+      dataSlide.addTable(table, { x: getPositions(options.w).middle, y: 1.0, ...options })
     }
   }
 }
