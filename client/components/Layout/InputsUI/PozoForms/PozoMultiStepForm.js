@@ -25,17 +25,25 @@ import { setFichaTecnicaDelCampo, setHistorialDeIntervenciones, setFichaTecnicaD
 import { setCurrentPage } from '../../../../redux/actions/global'
 
 const forms = [
-  {'title' : 'Ficha Técnica del Campo', content: <TecnicaDelCampo />, className: 'TecnicaDelCampo' },
-  {'title' : 'Ficha Técnica del Pozo' , content:<TecnicaDelPozo /> , className: 'TechnicaDelPozo'},
-  {'title' : 'Histórico De Intervenciones', content: <HistoricoDeIntervenciones />, className: 'HistorialDeIntervenciones'},
-  {'title' : 'Evaluación Petrofísica', content: <EvaluacionPetrofisica /> , className: 'EvaluacionPetrofisica'},
-  {'title' : 'Edo. Mecánico y Aparejo de Producción', content: <MecanicoYAparejo /> , className: 'MecanicoYAparejo'},
-  {'title' : 'Análisis del Agua', content: <AnalisisDelAgua  /> , className: 'AnalisisDelAgua'}, 
-  {'title' : 'Información de Sistemas Artificiales de Producción', content: <SistemasArtificialesDeProduccion  /> , className: 'SistemasArtificialesDeProduccion'},
-  {'title' : 'Histórico de Presión - Campo', content: <HistoricoDePresionCampo  /> , className: 'HistoricoDePresionCampo'},
-  {'title' : 'Histórico de Presión - Pozo', content: <HistoricoDePresionPozo  /> , className: 'HistoricoDePresionPozo'},
-  {'title' : 'Histórico de Aforos', content: <HistoricoDeAforos /> , className: 'HistoricoDeAforos'},
-  {'title' : 'Histórico de Producción', content: <HistoricoDeProduccion  /> , className: 'HistoricoDeProduccion'},
+  {'title' : 'Ficha Técnica del Campo', menuTitle: 'Ficha Técnica del Campo', content: <TecnicaDelCampo />, className: 'TecnicaDelCampo' },
+  {'title' : 'Ficha Técnica del Pozo', menuTitle: 'Ficha Técnica del Pozo', content:<TecnicaDelPozo /> , className: 'TechnicaDelPozo'},
+  {'title' : 'Histórico De Intervenciones', menuTitle: 'Histórico De Intervenciones', content: <HistoricoDeIntervenciones />, className: 'HistorialDeIntervenciones'},
+  {'title' : 'Evaluación Petrofísica', menuTitle: 'Petrofísica', content: <EvaluacionPetrofisica /> , className: 'EvaluacionPetrofisica'},
+  {'title' : 'Estado Mecánico y Aparejo de Producción', menuTitle: 'Estado Mecánico', content: <MecanicoYAparejo /> , className: 'MecanicoYAparejo'},
+  {'title' : 'Análisis del Agua', menuTitle: 'Análisis Agua', content: <AnalisisDelAgua  /> , className: 'AnalisisDelAgua'}, 
+  {'title' : 'Información de Sistemas Artificiales de Producción', menuTitle: 'SAP', content: <SistemasArtificialesDeProduccion  /> , className: 'SistemasArtificialesDeProduccion'},
+  {'title' : 'Histórico de Presión - Campo',
+    menuTitle: 'Histórico de Presión - Campo', 
+    content: <HistoricoDePresionCampo  /> , className: 'HistoricoDePresionCampo'},
+  {'title' : 'Histórico de Presión - Pozo',
+    menuTitle: 'Histórico de Presión - Pozo', 
+    content: <HistoricoDePresionPozo  /> , className: 'HistoricoDePresionPozo'},
+  {'title' : 'Histórico de Aforos',
+    menuTitle: 'Histórico de Aforos', 
+    content: <HistoricoDeAforos /> , className: 'HistoricoDeAforos'},
+  {'title' : 'Histórico de Producción',
+    menuTitle: 'Histórico de Producción', 
+    content: <HistoricoDeProduccion  /> , className: 'HistoricoDeProduccion'},
 ];
 
 
@@ -838,7 +846,7 @@ const forms = [
                let error = errors[index]
                const errorClass = (error && hasSubmitted) ? 'error' : '';
 
-               return <div className={`${className} ${active} ${errorClass}`} onClick={() => this.handleClick(index)} key={index}><span></span> {tab.title} </div>
+               return <div className={`${className} ${active} ${errorClass}`} onClick={() => this.handleClick(index)} key={index}><span></span> {tab.menuTitle} </div>
                }
             )}
         </StickySubtabs>

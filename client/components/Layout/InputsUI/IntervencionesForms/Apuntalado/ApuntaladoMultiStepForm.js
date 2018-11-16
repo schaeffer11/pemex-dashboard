@@ -95,7 +95,6 @@ import StickySubtabs from '../../Components/StickySubtabs'
                   <button className="cta clear" onClick={(e) => setShowForms(false)}><i className="fa fa-undo">&nbsp;</i></button>
                   <button className="cta next" onClick={this.handleNextSubtab}>Siguiente</button>
                   <button className="cta prev" onClick={this.handlePrevSubtab}>Anterior</button>
-                  <button className="cta clear load" onClick={this.activateModal}><i className="fa fa-download">&nbsp;</i></button>
               </div>
 
             {forms[this.state.currentStep].content}
