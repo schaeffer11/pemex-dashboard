@@ -367,7 +367,7 @@ import ButtonGroup from './ButtonGroup'
         })
 
         activoOptions = activos.map(i => ({label: i.ACTIVO_NAME, value: i.ACTIVO_ID})).sort(sortLabels)
-                console.log(activoOptions, activos, fieldWellOptions)
+        console.log(activoOptions, activos, fieldWellOptions)
       }
 
       if (activo) {

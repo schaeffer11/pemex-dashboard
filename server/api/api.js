@@ -76,6 +76,221 @@ async function handleImageResponse(data) {
   return final
 }
 
+async function labTests(transactionID, action) {
+  return new Promise((resolve, reject) => {
+    console.log('loading lab tests!', transactionID, action)
+    getLabTest(transactionID, action, (data) => {
+      console.log('in here', data)
+      let labIDs = []
+      let outData = []
+  
+      data.forEach(i => {
+        if (!labIDs.includes(i.LAB_ID)) {
+          labIDs.push(i.LAB_ID)
+        }
+      })
+  
+      labIDs.forEach((id, index) => {
+        let subset = data.filter(i => i.LAB_ID === id)
+        let type
+        if (subset.length > 0) {
+          type = subset[0].TIPO_DE_ANALISIS
+          let i = subset[0]
+          if (type === 'caracterizacionFisico') {
+            console.log('what is my type', type)
+            outData.push({
+              edited: true,
+              labID: i.LAB_ID,
+              index: index,
+              length: labIDs.length,
+              type: type,
+              fechaMuestreo: (i.FECHA_DE_MUESTREO ? i.FECHA_DE_MUESTREO = i.FECHA_DE_MUESTREO.toJSON().slice(0, 10) : null),
+              fechaPrueba : (i.FECHA_DE_PRUEBA ? i.FECHA_DE_PRUEBA = i.FECHA_DE_PRUEBA.toJSON().slice(0, 10) : null),
+              compania: i.COMPANIA,
+              superviso: i.PERSONAL_DE_PEMEX_QUE_SUPERVISO,
+              obervaciones: i.OBSERVACIONES,
+              percentAceite: i.PORENTAJE_DE_ACEITE,
+              percentAgua: i.PORENTAJE_DE_AGUA,
+              percentEmulsion: i.PORENTAJE_DE_EMULSION,
+              percentSolidos: i.PORENTAJE_DE_SOLIDOS,
+              percentAsfaltenos: i.PORENTAJE_DE_ASFALTENOS,
+              percentParafinas: i.PORENTAJE_DE_PARAFINAS,
+              percentResinasAsfalticas: i.PORENTAJE_DE_RESINAS_ASFALTICAS,
+              percentContenidoDeSolidos: i.PORENTAJE_DE_CONTENIDO_DE_SOLIDOS,
+              densityAceite: i.DENSIDAD_DEL_ACEITE,
+              densityAgua: i.DENSIDAD_DEL_AGUA,
+              densityEmulsion: i.DENSIDAD_DE_LA_EMULSION,
+              viscosityAceite: i.VISCOSIDAD_DEL_ACEITE,
+              viscosityEmulsion: i.VISCOSIDAD_DE_LA_EMULSION,
+              phDelAgua: i.PH_DEL_AGUA,
+              salinidadDelAgua: i.SALINIDAD_DEL_AGUA,
+              salinidadDelAceite: i.SALINIDAD_DEL_ACEITE,
+            })
+          }
+          else if (type === 'pruebasDeCompatibilidad') {
+            let table = []
+            subset.forEach(point => {
+              table.push({
+                diseno: point.DISENO,
+                sistema: point.SISTEMA,
+                aceiteDelPozo: point.ACEITE_DEL_POZO,
+                tiempoDeRompimiento: point.TIEMPO_DE_ROMPIMIENTO,
+                separacionDeFases: point.SEPARACION_DE_FASES,
+                solidos: point.SOLIDOS,
+                condicion: point.CONDICION,
+              })
+            })
+  
+            outData.push({
+              edited: true,
+              labID: i.LAB_ID,
+              index: index,
+              length: labIDs.length,
+              type: type,
+              fechaMuestreo: (i.FECHA_DE_MUESTREO ? i.FECHA_DE_MUESTREO = i.FECHA_DE_MUESTREO.toJSON().slice(0, 10) : null),
+              fechaPrueba : (i.FECHA_DE_PRUEBA ? i.FECHA_DE_PRUEBA = i.FECHA_DE_PRUEBA.toJSON().slice(0, 10) : null),
+              compania: i.COMPANIA,
+              superviso: i.PERSONAL_DE_PEMEX_QUE_SUPERVISO,
+              obervaciones: i.OBSERVACIONES,
+              compatabilidadTable: table
+            })
+          }
+          else if (type === 'pruebasDeGrabado') {
+            let table = []
+            subset.forEach(point => {
+              table.push({
+                sistemaAcido: point.SISTEMA_ACIDO,
+                tiempoDeContacto: point.TIEMPO_DE_CONTACTO,
+                grabado: point.GRABADO,
+              })
+            })
+            outData.push({
+              edited: true,
+              labID: i.LAB_ID,
+              index: index,
+              length: labIDs.length,
+              type: type,
+              fechaMuestreo: (i.FECHA_DE_MUESTREO ? i.FECHA_DE_MUESTREO = i.FECHA_DE_MUESTREO.toJSON().slice(0, 10) : null),
+              fechaPrueba : (i.FECHA_DE_PRUEBA ? i.FECHA_DE_PRUEBA = i.FECHA_DE_PRUEBA.toJSON().slice(0, 10) : null),
+              compania: i.COMPANIA,
+              superviso: i.PERSONAL_DE_PEMEX_QUE_SUPERVISO,
+              obervaciones: i.OBSERVACIONES,
+              grabadoTable: table
+            })
+          }
+          else if (type === 'pruebasDeSolubilidad') {
+            outData.push({
+              edited: true,
+              labID: i.LAB_ID,
+              index: index,
+              length: labIDs.length,
+              type: type,
+              fechaMuestreo: (i.FECHA_DE_MUESTREO ? i.FECHA_DE_MUESTREO = i.FECHA_DE_MUESTREO.toJSON().slice(0, 10) : null),
+              fechaPrueba : (i.FECHA_DE_PRUEBA ? i.FECHA_DE_PRUEBA = i.FECHA_DE_PRUEBA.toJSON().slice(0, 10) : null),
+              compania: i.COMPANIA,
+              superviso: i.PERSONAL_DE_PEMEX_QUE_SUPERVISO,
+              obervaciones: i.OBSERVACIONES,
+              tipoDeMuestra: i.TIPO_DE_MUESTRA,
+              pesoDeLaMuestra: i.PESO_DE_LA_MUESTRA,
+              tipoDeSistemaEmpleado: i.TIPO_DE_SISTEMA_QUIMICO,
+              pesoDeLaMuestraFinal: i.PESO_FINAL_DE_LA_MUESTRA,
+              solubilidad: i.SOLUBILIDAD,
+            })
+          }
+          else if (type === 'pruebasGelDeFractura') {
+            outData.push({
+              edited: true,
+              labID: i.LAB_ID,
+              index: index,
+              length: labIDs.length,
+              type: type,
+              fechaMuestreo: (i.FECHA_DE_MUESTREO ? i.FECHA_DE_MUESTREO = i.FECHA_DE_MUESTREO.toJSON().slice(0, 10) : null),
+              fechaPrueba : (i.FECHA_DE_PRUEBA ? i.FECHA_DE_PRUEBA = i.FECHA_DE_PRUEBA.toJSON().slice(0, 10) : null),
+              compania: i.COMPANIA,
+              superviso: i.PERSONAL_DE_PEMEX_QUE_SUPERVISO,
+              obervaciones: i.OBSERVACIONES,
+              hidratacionDelFluido: i.HIDRATACION,
+              tiempoDeActivacion: i.TIEMPO_DE_ACTIVACION_DEL_GEL,
+              determinacionDePh: i.DETERMINACION_DE_PH,
+              tiempoDeRompimiento: i.TIEMPO_DE_ROMPIMIENTO_GEL,
+              dosificacionDeQuebradors: i.DOSIFICATION_DE_QUEBRADORES,
+              viscosidadDelGelDeFractura: i.VISCOSIDAD_DEL_GEL_DE_FRACTURA,
+            })
+          }
+          else if (type === 'pruebasParaApuntalante') {
+            outData.push({
+              edited: true,
+              labID: i.LAB_ID,
+              index: index,
+              length: labIDs.length,
+              type: type,
+              fechaMuestreo: (i.FECHA_DE_MUESTREO ? i.FECHA_DE_MUESTREO = i.FECHA_DE_MUESTREO.toJSON().slice(0, 10) : null),
+              fechaPrueba : (i.FECHA_DE_PRUEBA ? i.FECHA_DE_PRUEBA = i.FECHA_DE_PRUEBA.toJSON().slice(0, 10) : null),
+              compania: i.COMPANIA,
+              superviso: i.PERSONAL_DE_PEMEX_QUE_SUPERVISO,
+              obervaciones: i.OBSERVACIONES,
+              esfericidad: i.ESFERICIDAD,
+              redondez: i.REDONDEZ,
+              resistenciaCompresion: i.RESISTENCIA_A_LA_COMPRESION,
+              malla: i.MALLA, 
+              aglutinamiento: i.AGLUTINAMIENTO,
+              turbidez: i.TURBIDEZ,
+              solubilidad: i.SOLUBILIDAD_APUNTALANTE
+            })
+          }
+          else if (type === 'cromatografiaDelGas') {
+            outData.push({
+              edited: true,
+              labID: i.LAB_ID,
+              index: index,
+              length: labIDs.length,
+              type: type,
+              fechaMuestreo: (i.FECHA_DE_MUESTREO ? i.FECHA_DE_MUESTREO = i.FECHA_DE_MUESTREO.toJSON().slice(0, 10) : null),
+              fechaPrueba : (i.FECHA_DE_PRUEBA ? i.FECHA_DE_PRUEBA = i.FECHA_DE_PRUEBA.toJSON().slice(0, 10) : null),
+              compania: i.COMPANIA,
+              superviso: i.PERSONAL_DE_PEMEX_QUE_SUPERVISO,
+              obervaciones: i.OBSERVACIONES,
+            })
+          }
+          else if (type === 'pruebaDeDureza') {
+            outData.push({
+              edited: true,
+              labID: i.LAB_ID,
+              index: index,
+              length: labIDs.length,
+              type: type,
+              fechaMuestreo: (i.FECHA_DE_MUESTREO ? i.FECHA_DE_MUESTREO = i.FECHA_DE_MUESTREO.toJSON().slice(0, 10) : null),
+              fechaPrueba : (i.FECHA_DE_PRUEBA ? i.FECHA_DE_PRUEBA = i.FECHA_DE_PRUEBA.toJSON().slice(0, 10) : null),
+              compania: i.COMPANIA,
+              superviso: i.PERSONAL_DE_PEMEX_QUE_SUPERVISO,
+              obervaciones: i.OBSERVACIONES,
+            })
+          }
+          else if (type === 'determinacionDeLaCalidad') {
+            outData.push({
+              edited: true,
+              labID: i.LAB_ID,
+              index: index,
+              length: labIDs.length,
+              type: type,
+              fechaMuestreo: (i.FECHA_DE_MUESTREO ? i.FECHA_DE_MUESTREO = i.FECHA_DE_MUESTREO.toJSON().slice(0, 10) : null),
+              fechaPrueba : (i.FECHA_DE_PRUEBA ? i.FECHA_DE_PRUEBA = i.FECHA_DE_PRUEBA.toJSON().slice(0, 10) : null),
+              compania: i.COMPANIA,
+              superviso: i.PERSONAL_DE_PEMEX_QUE_SUPERVISO,
+              obervaciones: i.OBSERVACIONES,
+            })
+          }
+        }
+      })
+  
+      if (outData.length === 0) {
+        outData = [{}]
+      }
+      resolve(outData)
+    })
+  })
+}
+
 // We do not want to check authorization for templates so we put above middleware!
 router.get('/get_template/:template', (req, res) => {
   const { template } = req.params
@@ -431,7 +646,17 @@ router.post('/wellSave', async (req, res) => {
     } else {
       console.log('all good in the saving neighborhood')
       const images = await getImagesForClient(transactionID, 'loadSave')
-      res.json({ isSaved: true, images })
+      // Need pruebas de laboratorio so lab images can be correctly saved in redux 
+      const pruebasDeLaboratorioData = await labTests(transactionID, 'loadSave').catch(e => e)
+      let finalObj = {
+        images,
+        isSaved: true,
+        pruebasDeLaboratorio: {
+          pruebasDeLaboratorioData,
+          checked: [],
+        },
+      }
+      res.json(finalObj)
     }
   })
 })
@@ -2001,230 +2226,17 @@ router.get('/getInterventionTermico', async (req, res) => {
   })
 })
 
-
-
-
 router.get('/getLabTest', async (req, res) => {
   let { transactionID, saved } = req.query
-
   let action = saved ? 'loadSave' : 'loadTransaction'
-
-
-  getLabTest(transactionID, action, (data) => {
-    let labIDs = []
-    let outData = []
-
-    data.forEach(i => {
-      if (!labIDs.includes(i.LAB_ID)) {
-        labIDs.push(i.LAB_ID)
-      }
-    })
-
-    labIDs.forEach((id, index) => {
-      let subset = data.filter(i => i.LAB_ID === id)
-      let type
-      if (subset.length > 0) {
-        type = subset[0].TIPO_DE_ANALISIS
-        let i = subset[0]
-        if (type === 'caracterizacionFisico') {
-          console.log('what is my type', type)
-          outData.push({
-            edited: true,
-            labID: i.LAB_ID,
-            index: index,
-            length: labIDs.length,
-            type: type,
-            fechaMuestreo: (i.FECHA_DE_MUESTREO ? i.FECHA_DE_MUESTREO = i.FECHA_DE_MUESTREO.toJSON().slice(0, 10) : null),
-            fechaPrueba : (i.FECHA_DE_PRUEBA ? i.FECHA_DE_PRUEBA = i.FECHA_DE_PRUEBA.toJSON().slice(0, 10) : null),
-            compania: i.COMPANIA,
-            superviso: i.PERSONAL_DE_PEMEX_QUE_SUPERVISO,
-            obervaciones: i.OBSERVACIONES,
-            percentAceite: i.PORENTAJE_DE_ACEITE,
-            percentAgua: i.PORENTAJE_DE_AGUA,
-            percentEmulsion: i.PORENTAJE_DE_EMULSION,
-            percentSolidos: i.PORENTAJE_DE_SOLIDOS,
-            percentAsfaltenos: i.PORENTAJE_DE_ASFALTENOS,
-            percentParafinas: i.PORENTAJE_DE_PARAFINAS,
-            percentResinasAsfalticas: i.PORENTAJE_DE_RESINAS_ASFALTICAS,
-            percentContenidoDeSolidos: i.PORENTAJE_DE_CONTENIDO_DE_SOLIDOS,
-            densityAceite: i.DENSIDAD_DEL_ACEITE,
-            densityAgua: i.DENSIDAD_DEL_AGUA,
-            densityEmulsion: i.DENSIDAD_DE_LA_EMULSION,
-            viscosityAceite: i.VISCOSIDAD_DEL_ACEITE,
-            viscosityEmulsion: i.VISCOSIDAD_DE_LA_EMULSION,
-            phDelAgua: i.PH_DEL_AGUA,
-            salinidadDelAgua: i.SALINIDAD_DEL_AGUA,
-            salinidadDelAceite: i.SALINIDAD_DEL_ACEITE,
-          })
-        }
-        else if (type === 'pruebasDeCompatibilidad') {
-          let table = []
-          subset.forEach(point => {
-            table.push({
-              diseno: point.DISENO,
-              sistema: point.SISTEMA,
-              aceiteDelPozo: point.ACEITE_DEL_POZO,
-              tiempoDeRompimiento: point.TIEMPO_DE_ROMPIMIENTO,
-              separacionDeFases: point.SEPARACION_DE_FASES,
-              solidos: point.SOLIDOS,
-              condicion: point.CONDICION,
-            })
-          })
-
-          outData.push({
-            edited: true,
-            labID: i.LAB_ID,
-            index: index,
-            length: labIDs.length,
-            type: type,
-            fechaMuestreo: (i.FECHA_DE_MUESTREO ? i.FECHA_DE_MUESTREO = i.FECHA_DE_MUESTREO.toJSON().slice(0, 10) : null),
-            fechaPrueba : (i.FECHA_DE_PRUEBA ? i.FECHA_DE_PRUEBA = i.FECHA_DE_PRUEBA.toJSON().slice(0, 10) : null),
-            compania: i.COMPANIA,
-            superviso: i.PERSONAL_DE_PEMEX_QUE_SUPERVISO,
-            obervaciones: i.OBSERVACIONES,
-            compatabilidadTable: table
-          })
-        }
-        else if (type === 'pruebasDeGrabado') {
-          let table = []
-          subset.forEach(point => {
-            table.push({
-              sistemaAcido: point.SISTEMA_ACIDO,
-              tiempoDeContacto: point.TIEMPO_DE_CONTACTO,
-              grabado: point.GRABADO,
-            })
-          })
-          outData.push({
-            edited: true,
-            labID: i.LAB_ID,
-            index: index,
-            length: labIDs.length,
-            type: type,
-            fechaMuestreo: (i.FECHA_DE_MUESTREO ? i.FECHA_DE_MUESTREO = i.FECHA_DE_MUESTREO.toJSON().slice(0, 10) : null),
-            fechaPrueba : (i.FECHA_DE_PRUEBA ? i.FECHA_DE_PRUEBA = i.FECHA_DE_PRUEBA.toJSON().slice(0, 10) : null),
-            compania: i.COMPANIA,
-            superviso: i.PERSONAL_DE_PEMEX_QUE_SUPERVISO,
-            obervaciones: i.OBSERVACIONES,
-            grabadoTable: table
-          })
-        }
-        else if (type === 'pruebasDeSolubilidad') {
-          outData.push({
-            edited: true,
-            labID: i.LAB_ID,
-            index: index,
-            length: labIDs.length,
-            type: type,
-            fechaMuestreo: (i.FECHA_DE_MUESTREO ? i.FECHA_DE_MUESTREO = i.FECHA_DE_MUESTREO.toJSON().slice(0, 10) : null),
-            fechaPrueba : (i.FECHA_DE_PRUEBA ? i.FECHA_DE_PRUEBA = i.FECHA_DE_PRUEBA.toJSON().slice(0, 10) : null),
-            compania: i.COMPANIA,
-            superviso: i.PERSONAL_DE_PEMEX_QUE_SUPERVISO,
-            obervaciones: i.OBSERVACIONES,
-            tipoDeMuestra: i.TIPO_DE_MUESTRA,
-            pesoDeLaMuestra: i.PESO_DE_LA_MUESTRA,
-            tipoDeSistemaEmpleado: i.TIPO_DE_SISTEMA_QUIMICO,
-            pesoDeLaMuestraFinal: i.PESO_FINAL_DE_LA_MUESTRA,
-            solubilidad: i.SOLUBILIDAD,
-          })
-        }
-        else if (type === 'pruebasGelDeFractura') {
-          outData.push({
-            edited: true,
-            labID: i.LAB_ID,
-            index: index,
-            length: labIDs.length,
-            type: type,
-            fechaMuestreo: (i.FECHA_DE_MUESTREO ? i.FECHA_DE_MUESTREO = i.FECHA_DE_MUESTREO.toJSON().slice(0, 10) : null),
-            fechaPrueba : (i.FECHA_DE_PRUEBA ? i.FECHA_DE_PRUEBA = i.FECHA_DE_PRUEBA.toJSON().slice(0, 10) : null),
-            compania: i.COMPANIA,
-            superviso: i.PERSONAL_DE_PEMEX_QUE_SUPERVISO,
-            obervaciones: i.OBSERVACIONES,
-            hidratacionDelFluido: i.HIDRATACION,
-            tiempoDeActivacion: i.TIEMPO_DE_ACTIVACION_DEL_GEL,
-            determinacionDePh: i.DETERMINACION_DE_PH,
-            tiempoDeRompimiento: i.TIEMPO_DE_ROMPIMIENTO_GEL,
-            dosificacionDeQuebradors: i.DOSIFICATION_DE_QUEBRADORES,
-            viscosidadDelGelDeFractura: i.VISCOSIDAD_DEL_GEL_DE_FRACTURA,
-          })
-        }
-        else if (type === 'pruebasParaApuntalante') {
-          outData.push({
-            edited: true,
-            labID: i.LAB_ID,
-            index: index,
-            length: labIDs.length,
-            type: type,
-            fechaMuestreo: (i.FECHA_DE_MUESTREO ? i.FECHA_DE_MUESTREO = i.FECHA_DE_MUESTREO.toJSON().slice(0, 10) : null),
-            fechaPrueba : (i.FECHA_DE_PRUEBA ? i.FECHA_DE_PRUEBA = i.FECHA_DE_PRUEBA.toJSON().slice(0, 10) : null),
-            compania: i.COMPANIA,
-            superviso: i.PERSONAL_DE_PEMEX_QUE_SUPERVISO,
-            obervaciones: i.OBSERVACIONES,
-            esfericidad: i.ESFERICIDAD,
-            redondez: i.REDONDEZ,
-            resistenciaCompresion: i.RESISTENCIA_A_LA_COMPRESION,
-            malla: i.MALLA, 
-            aglutinamiento: i.AGLUTINAMIENTO,
-            turbidez: i.TURBIDEZ,
-            solubilidad: i.SOLUBILIDAD_APUNTALANTE
-          })
-        }
-        else if (type === 'cromatografiaDelGas') {
-          outData.push({
-            edited: true,
-            labID: i.LAB_ID,
-            index: index,
-            length: labIDs.length,
-            type: type,
-            fechaMuestreo: (i.FECHA_DE_MUESTREO ? i.FECHA_DE_MUESTREO = i.FECHA_DE_MUESTREO.toJSON().slice(0, 10) : null),
-            fechaPrueba : (i.FECHA_DE_PRUEBA ? i.FECHA_DE_PRUEBA = i.FECHA_DE_PRUEBA.toJSON().slice(0, 10) : null),
-            compania: i.COMPANIA,
-            superviso: i.PERSONAL_DE_PEMEX_QUE_SUPERVISO,
-            obervaciones: i.OBSERVACIONES,
-          })
-        }
-        else if (type === 'pruebaDeDureza') {
-          outData.push({
-            edited: true,
-            labID: i.LAB_ID,
-            index: index,
-            length: labIDs.length,
-            type: type,
-            fechaMuestreo: (i.FECHA_DE_MUESTREO ? i.FECHA_DE_MUESTREO = i.FECHA_DE_MUESTREO.toJSON().slice(0, 10) : null),
-            fechaPrueba : (i.FECHA_DE_PRUEBA ? i.FECHA_DE_PRUEBA = i.FECHA_DE_PRUEBA.toJSON().slice(0, 10) : null),
-            compania: i.COMPANIA,
-            superviso: i.PERSONAL_DE_PEMEX_QUE_SUPERVISO,
-            obervaciones: i.OBSERVACIONES,
-          })
-        }
-        else if (type === 'determinacionDeLaCalidad') {
-          outData.push({
-            edited: true,
-            labID: i.LAB_ID,
-            index: index,
-            length: labIDs.length,
-            type: type,
-            fechaMuestreo: (i.FECHA_DE_MUESTREO ? i.FECHA_DE_MUESTREO = i.FECHA_DE_MUESTREO.toJSON().slice(0, 10) : null),
-            fechaPrueba : (i.FECHA_DE_PRUEBA ? i.FECHA_DE_PRUEBA = i.FECHA_DE_PRUEBA.toJSON().slice(0, 10) : null),
-            compania: i.COMPANIA,
-            superviso: i.PERSONAL_DE_PEMEX_QUE_SUPERVISO,
-            obervaciones: i.OBSERVACIONES,
-          })
-        }
-      }
-    })
-
-    if (outData.length === 0) {
-      outData = [{}]
+  const outData = await labTests(transactionID, action).catch(e => e)
+  let finalObj = {
+    pruebasDeLaboratorio: {
+      pruebasDeLaboratorioData: outData,
+      checked: []
     }
-    
-    let finalObj = {
-      pruebasDeLaboratorio: {
-        pruebasDeLaboratorioData: outData,
-        checked: []
-      }
-    }
-    res.json(finalObj)
-  })
+  }
+  res.json(finalObj)
 })
 
 router.get('/getCedulaEstimulacion', async (req, res) => {
