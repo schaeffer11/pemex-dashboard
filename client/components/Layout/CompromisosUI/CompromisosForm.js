@@ -26,6 +26,7 @@ import { setIsLoading, setShowForms } from '../../../redux/actions/global'
       fechaCumplimiento: "",
       responsable: "",
       minuta: "",
+      avance: 0,
       notas: ""
     }
 
@@ -208,6 +209,11 @@ import { setIsLoading, setShowForms } from '../../../redux/actions/global'
                 {errors.minuta && touched.minuta && <div class="error">{errors.minuta}</div>}
               </div>
 
+              <div className="avance field">
+                  <label>Porcentage de Avance</label>
+                  <RangeInput name="avance"/>
+              </div>
+
               <div className="compromiso field">
                 <label>Compromiso</label>
                 <Field component="textarea" name="descripcion" />
@@ -254,6 +260,27 @@ const Dropdown = (props) => {
       )}
     </Field>
   )
+}
+
+const RangeInput = (props) => {
+    return (
+        <Field name={props.name}>
+            {({field, form}) => (
+                <div>
+                  <input
+                      name={props.name}
+                      type="range"
+                      min="0" max="100"
+                      value={field.value}
+                      onChange={e => {
+                          form.setFieldValue(props.name, e.currentTarget.value)
+                      }}
+                      step="1"/>
+                  <span className="fieldValue">{field.value}%</span>
+                </div>
+            )}
+        </Field>
+    )
 }
 
 const DateInput = (props) => {

@@ -291,8 +291,6 @@ var uniqueArray = function(arrArg) {
 const OptionsFilter = ({column, filter, onChange}) => {
     let values = column.data.map(val => val[column.id])
     let uniqueVals = uniqueArray(values).map(val => {return {'value': val, 'label': val}})
-    console.log('values', values)
-    console.log('filter', filter)
     return(
         <Select
             isClearable
@@ -424,9 +422,7 @@ const CompromisosTable = (props) => {
             {
                 Header: "No.",
                 accessor: "id",
-                width: 100,
-                filterAll: true,
-                filterMethod: fuzzyFilterMethod
+                width: 100
             },{
                 Header: "Compromiso",
                 accessor: "descripcion",
@@ -488,10 +484,33 @@ const CompromisosTable = (props) => {
                 Header: "Minuta",
                 accessor: "minuta",
                 className: 'center',
-                width: 120,
-                filterAll: true,
-                filterMethod: fuzzyFilterMethod
+                width: 120
             }, {
+                Header: 'Porcentage de Avance',
+                accessor: 'avance',
+                Cell: row => (
+                    <div
+                        style={{
+                            width: '100%',
+                            height: '100%',
+                            backgroundColor: '#dadada',
+                            borderRadius: '2px'
+                        }}
+                    >
+                        <div
+                            style={{
+                                width: `${row.value}%`,
+                                height: '100%',
+                                backgroundColor: row.value > 66 ? '#85cc00'
+                                    : row.value > 33 ? '#ffbf00'
+                                        : '#ff2e00',
+                                borderRadius: '2px',
+                                transition: 'all .2s ease-out'
+                            }}
+                        />
+                    </div>
+                )
+            },{
                 Header: "Estado",
                 id: 'estado',
                 className: 'center',
@@ -523,13 +542,15 @@ const CompromisosTable = (props) => {
 
 const Status = ({ row, original }) => {
     if(original.fechaCumplimiento){
-        return (<span className="complete">Completo</span>)
+        return (<span className="complete">Completo <i class="fas fa-check-square"></i></span>)
     }
 
     const pastDue = moment(new Date()) > moment(original.fechaCompromiso);
     return (
         <span className={pastDue ? 'incomplete' : 'open'}>
-            {pastDue ? 'Vencido' : 'Abierto' }
+            {pastDue ?
+                <span>Vencido <i class="fas fa-times-circle"></i></span> :
+                <span>Abierto <i class="fas fa-exclamation-circle"></i></span>}
         </span>
     )
 }
