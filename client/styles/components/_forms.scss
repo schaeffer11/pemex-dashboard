@@ -1,6 +1,14 @@
 $buttonBorderRadius: 0.3em;
 
-input[type=text], input[type=password], {
+input[type=text],
+input[type=password],
+textarea,
+.input > div div{
+  background: $input-background;
+
+}
+
+input[type=text], input[type=password] {
   font-size: 1.2em;
   padding: 0.2em 0.4em;
   border-radius: 0.3em;
@@ -8,12 +16,21 @@ input[type=text], input[type=password], {
   font-weight: 200;
   outline: none;
 
+  &.error {
+    border: 2px solid $red;
+  }
+
   &:focus {
     box-shadow: 0 0 0.05em 0.15em #def
   }
 }
 
 .ReactTable {
+  * {
+    text-align: center;
+    max-width: 100%;
+  }
+
   input[type="number"] {
    width: 100%;
   }
@@ -174,7 +191,7 @@ input[type=text], input[type=password], {
 
   button.submit {
     display: block;
-    margin: 20px auto;
+    margin: 20px 0;
   }
 
 }
