@@ -18,7 +18,6 @@ export function getBase64FromURL(imgURL) {
       console.log('image status', this.status)
       if (this.status == 200) {
         var uInt8Array = new Uint8Array(this.response);
-        var byte3 = uInt8Array[4]; 
         const base64 = bufferToBase64(uInt8Array)
         resolve(base64)
       } else {

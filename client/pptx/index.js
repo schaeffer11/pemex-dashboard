@@ -196,6 +196,7 @@ async function getHasresults(token, id) {
 }
 
 export async function generatePowerPoint(token, jobID, jobType) {
+  console.log('generating powerpoint')
   const slideWidth = 13.3
   const slideHeight = 7.5
   const pptx = new PptxGenJS()
@@ -231,15 +232,16 @@ export async function generatePowerPoint(token, jobID, jobType) {
   await buildProposalCedula(pptx, token, jobID)
   await buildGeneralProposal(pptx, token, jobID)
   await buildLabReports(pptx, token, jobID, images.pruebasDeLaboratorio)
-  if (hasResults) {
-    const imageResults = await getData(`/job/getResultsImages`, token, { transactionID: jobID })
-    console.log('image results', imageResults)
-    buildSectionSlide(pptx, 'Información de los resultados')
-    await buildResultsCedula(pptx, token, jobID, jobType)
-    await buildGeneralResults(pptx, token, jobID, jobType)
-    await buildGeometry(pptx, imageResults[`evaluacion${jobType}`])
-    await buildAforoChart(pptx, token, jobID)
-    await buildGraficaDeTratamiento(pptx, imageResults.graficaTratamiento)
-  }
+  // if (hasResults) {
+  //   const imageResults = await getData(`/job/getResultsImages`, token, { transactionID: jobID })
+  //   console.log('image results', imageResults)
+  //   buildSectionSlide(pptx, 'Información de los resultados')
+  //   await buildResultsCedula(pptx, token, jobID, jobType)
+  //   await buildGeneralResults(pptx, token, jobID, jobType)
+  //   await buildGeometry(pptx, imageResults[`evaluacion${jobType}`])
+  //   await buildAforoChart(pptx, token, jobID)
+  //   await buildGraficaDeTratamiento(pptx, imageResults.graficaTratamiento)
+  // }
+  console.log('done')
   pptx.save()
 }

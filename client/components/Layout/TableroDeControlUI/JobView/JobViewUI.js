@@ -14,6 +14,9 @@ import { CardDeck } from 'reactstrap';
 import AforoScatter from './AforoScatter'
 import CedulaTable from './CedulaTable'
 import LabTable from './LabTable'
+import Export from './Export'
+import LocalModal from './../Common/LocalModal'
+import { generatePowerPoint } from '../../../../pptx';
 
 @autobind class jobViewUI extends Component {
   constructor(props) {
@@ -33,6 +36,7 @@ import LabTable from './LabTable'
       date: null,
       labData: [],
       specificLabData: [],
+      modalIsOpen: false,
     }    
     this.cards = []
     for (let i = 0; i < 7; i += 1) {
@@ -255,9 +259,17 @@ import LabTable from './LabTable'
     }
   } 
 
+  // activateModal() {
+  //   this.setState({ modalIsOpen: true })
+  // }
+
+  // deactivateModal() {
+  //   this.setState({ modalIsOpen: false })
+  // }
+
   render() {
-    let { fieldWellOptions, jobOptions, imageData, costData, estCostData, volumeData, estVolumeData, cedulaData, cedulaResultData, date, aforoData, interventionData, interventionResultsData, labData, specificLabData } = this.state
-    let { globalAnalysis } = this.props
+    let { fieldWellOptions, jobOptions, imageData, costData, estCostData, volumeData, estVolumeData, cedulaData, cedulaResultData, date, aforoData, interventionData, interventionResultsData, labData, specificLabData, modalIsOpen } = this.state
+    let { globalAnalysis, token } = this.props
 
     globalAnalysis = globalAnalysis.toJS()
     let { job, jobType } = globalAnalysis
@@ -273,14 +285,18 @@ import LabTable from './LabTable'
     console.log('date', date)
     console.log('labData', labData)
     console.log('specificLabData', specificLabData)
-
     return (
       <div className="data job-view">
         <div className='header' >
           <WellSelect fieldWellOptions={fieldWellOptions}/>
           <JobSelect options={jobOptions}/>
         </div>
-        <div className='content'>
+        <div className='content tablero-content'>
+          {/* <button className={'open-export-btn'} disabled={!job} onClick={() => this.activateModal()}>generar presentacion {}</button> */}
+          {/* <Export /> */}
+          <LocalModal>
+            <Export />
+          </LocalModal>
           <CostKPIs estData={estCostData} data={costData} />
           <CardDeck className="content-deck">
             <Card
@@ -302,9 +318,9 @@ import LabTable from './LabTable'
                 title="Simulation Results"
                 ref={this.cards[2]}
                 isTable={true}
-              >          
+              >
               <SimulationTreatmentTable type={jobType} interventionData={interventionData} interventionResultsData={interventionResultsData} />
-            </Card>            
+            </Card>
             <Card
                 id="aforos"
                 title="Aforos"
@@ -337,7 +353,7 @@ import LabTable from './LabTable'
                 isImage={true}
               >
               <LabTable data={labData} labData={specificLabData} handleChange={this.fetchLabData} />
-            </Card> 
+            </Card>
           </CardDeck>
           <div style={{height: '500px'}}/>
         </div>
