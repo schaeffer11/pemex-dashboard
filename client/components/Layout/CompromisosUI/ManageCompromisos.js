@@ -501,9 +501,9 @@ const CompromisosTable = (props) => {
                             style={{
                                 width: `${row.value}%`,
                                 height: '100%',
-                                backgroundColor: row.value > 66 ? '#85cc00'
-                                    : row.value > 33 ? '#ffbf00'
-                                        : '#ff2e00',
+                                backgroundColor: row.value > 66 ? '#33754a'
+                                    : row.value > 33 ? '#efd23b'
+                                        : '#d03c28',
                                 borderRadius: '2px',
                                 transition: 'all .2s ease-out'
                             }}

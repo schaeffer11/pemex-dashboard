@@ -369,6 +369,7 @@ import { checkDate, checkEmpty, checkEmptySingular, checkDateSingular } from '..
   render() {
     let {columns, data} = this.props;
     columns.forEach(column => {
+      column.minWidth = 150
       if(column.cell === 'renderEditable')
         column.Cell = this.renderEditable
       else if(column.cell === 'renderDate')
