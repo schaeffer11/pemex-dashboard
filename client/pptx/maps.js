@@ -639,4 +639,8 @@ maps.generalResults = {
   fecha: { text: 'Fecha', units: '' },
   justificacion: { text: 'Justificación', units: '' },
   comentarios: { text: 'Comentarios', units: '' },
+  qo: { text: 'Qo', units: units.barrelsPerDay },
+  qw: { text: 'Qw', units: units.barrelsPerDay },
+  qw: { text: 'Qw', units: units.barrelsPerDay },
+  qg: { text: 'Qg', units: units.cubicFeetPerDay },
 }

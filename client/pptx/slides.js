@@ -67,7 +67,7 @@ export async function buildEstadoMecanicoYAparejo(pptx, token, id, image) {
     const base64 = await getBase64FromURL(image.imgURL).catch(e => e)
     if (!base64.error) {
       slide.addImage({
-        data: `image/png;base64,${base64}`, x: middle, y: 0.5, w: 4, h: 3,
+        data: `image/png;base64,${base64}`, x: middle, y: 0.5,
         sizing: { type: 'contain', h: 4.0, w: 4.0 }
       })
     }
@@ -141,7 +141,7 @@ export async function buildEvaluacionPetrofisica(pptx, token, id, image) {
     const base64 = await getBase64FromURL(image.imgURL).catch(e => e)
     if (!base64.error) {
       imageSlide.addImage({
-        data: `image/png;base64,${base64}`, x: getPositions(6.5).middle, y: 1.0, w: 4, h: 3,
+        data: `image/png;base64,${base64}`, x: getPositions(6.5).middle, y: 1.0,
         sizing: { type: 'contain', h: 6.5, w: 6.5 }
       })
     }
@@ -223,6 +223,7 @@ export async function buildGeneralResults(pptx, token, id, interventionType) {
     },
   }
   const data = await fetch(`/job/getInterventionResultsData?transactionID=${id}&type=${interventionType}&shouldMapData=true`, headers).then(r => r.json())
+  console.log('da data is here', data)
   const slide = pptx.addNewSlide('MASTER_SLIDE')
   slide.addText('Resultados de tratamiento', { placeholder: 'slide_title' })
 
@@ -241,8 +242,11 @@ export async function buildGeneralResults(pptx, token, id, interventionType) {
     slide.addTable(limpieza.table, { x: left, y: 3.0, ...limpieza.options })
   }
 
-  const simulacion = buildSimpleTable('Resultados de la simulacion', map.resultadosSimulacion, data)
+  const simulacion = buildSimpleTable('Resultados de la simulación', map.resultadosSimulacion, data)
   slide.addTable(simulacion.table, { x: middle, y: 1.0, ...simulacion.options })
+
+  const deltaProduction = buildSimpleTable('Incremento de producción', maps.generalResults, data)
+  slide.addTable(deltaProduction.table, { x: right, y: 1.0, ...deltaProduction.options })
   return slide
 }
 
@@ -322,7 +326,7 @@ async function buildMainLabSlide(pptx, labTitle, lab, image) {
     const base64 = await getBase64FromURL(image.imgURL).catch(e => e)
     if (!base64.error) {
       mainSlide.addImage({
-        data: `image/png;base64,${base64}`, x: middle, y: 3.3, w: 4.5, h: 3.5,
+        data: `image/png;base64,${base64}`, x: middle, y: 3.3,
         sizing: { type: 'contain', h: 4.5, w: 4.5 }
       })
     }
@@ -701,3 +705,4 @@ export async function buildWaterAnalysis(pptx, token, id) {
   const { middle } = getPositions(4)
   slide.addTable(table, { x: middle, y: 1.0, ...options })
 }
+

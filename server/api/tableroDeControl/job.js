@@ -397,7 +397,12 @@ router.get('/getInterventionResultsData', (req, res) => {
       EFICIENCIA_DE_FLUIDO_DE_FRACTURA: 'eficienciaDeFluidoDeFractura',
     }
   }
-
+  map = {
+    QO_RESULT: 'qo',
+    QG_RESULT: 'qg',
+    QW_RESULT: 'qw',
+    ...map
+  }
   connection.query(query, transactionID, (err, results) => {
       console.log('comment err', err)
 

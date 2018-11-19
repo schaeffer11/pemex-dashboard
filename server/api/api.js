@@ -668,7 +668,7 @@ router.post('/results', async (req, res) => {
       console.log('we got an error saving', err)
       res.json({ isSubmitted: false })
     } else {
-      console.log('all good in the submitting neighborhood')
+      console.log('all good in the submitting results neighborhood,')
       res.json({ isSubmitted: true })
     }
   })

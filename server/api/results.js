@@ -166,7 +166,7 @@ export const createResults = async (body, action, cb) => {
   const finalObj = {}
 
   for(let k of allKeys) {
-    const innerObj = JSON.parse(body[k])
+    let innerObj = JSON.parse(body[k])
     const innerKeys = Object.keys(innerObj)
 
     // look for immediate images
@@ -186,6 +186,7 @@ export const createResults = async (body, action, cb) => {
         for (let j of property) {
           if (j.img) {
             j.imgName = [transactionID, j.imgName].join('.')
+            console.log('ok here are some imaages', j.imgName)
             const buf = Buffer.from(j.img, 'base64')
             const t = await addObject(buf, j.imgName).catch(reason => console.log('something went wrong', reason))
             j.img = t
@@ -212,7 +213,7 @@ export const createResults = async (body, action, cb) => {
 
   let { fechaIntervencion, justificacionIntervencion, comentariosIntervencion } = finalObj.resultadosGenerales
 
-  let treatmentGraphImg = finalObj.graficaTratamiento.imgUrl
+  let treatmentGraphImg = finalObj.graficaTratamiento.imgName
 
   if (interventionType === 'estimulacion') {
       var { tipoDeColocacion, tiempoDeContacto, volumenPrecolchonN2, volumenSistemaNoReativo, volumenSistemaReactivo, volumenSistemaDivergente,
@@ -306,7 +307,7 @@ export const createResults = async (body, action, cb) => {
           if (interventionType !== 'termico') {
             geometria.forEach(i => {
                 let name = 'geometry ' + i.intervalo
-                let newRow = [wellFormacionID, name, i.imgUrl, propuestaID, transactionID]
+                let newRow = [wellFormacionID, name, i.imgName, propuestaID, transactionID]
                 values.push(newRow)
             })
           }
