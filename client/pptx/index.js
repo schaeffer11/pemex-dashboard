@@ -1,6 +1,6 @@
 import PptxGenJS from 'pptxgenjs'
 import ReactHighcharts from 'react-highcharts'
-import { buildEstadoMecanicoYAparejo, buildFichaTecnicaDelCampo, buildFichaTecnicaDelPozo, buildSistemasArtificialesDeProduccion, buildEvaluacionPetrofisica, buildEvaluacionPetrofisicaImage, buildProposalCedula, buildGeneralProposal, buildLabReports, buildHistorialIntervenciones, buildChart, buildProductionChart, buildAforoChart, buildPressureChart, buildWaterAnalysis, buildResultsCedula, buildGeneralResults } from './slides'
+import { buildEstadoMecanicoYAparejo, buildFichaTecnicaDelCampo, buildFichaTecnicaDelPozo, buildSistemasArtificialesDeProduccion, buildEvaluacionPetrofisica, buildEvaluacionPetrofisicaImage, buildProposalCedula, buildGeneralProposal, buildLabReports, buildHistorialIntervenciones, buildChart, buildProductionChart, buildAforoChart, buildPressureChart, buildWaterAnalysis, buildResultsCedula, buildGeneralResults, buildGeometry, buildGraficaDeTratamiento } from './slides'
 
 function buildMasterSlide(slideWidth, slideHeight) {
   const logo = { x: 0.7, y: 0.15, w: 1.5, h: 0.5, path: '/images/pemex-logo-fpo.png' }
@@ -33,14 +33,15 @@ function buildMasterSlide(slideWidth, slideHeight) {
 
 export const getMiddle = (len) => (13.3 - len) / 2
 
-export async function getData(url, token, id) {
+export async function getData(url, token, queryObj=undefined) {
   const headers = {
     headers: {
       'Authorization': `Bearer ${token}`,
       'content-type': 'application/json',
     },
   }
-  return fetch(`/api/${url}?transactionID=${id}`, headers).then(r => r.json())
+  const queryStr = queryObj ? Object.keys(queryObj).map(key => `${key}=${queryObj[key]}`).join('&') : ''
+  return fetch(`${url}?${queryStr}`, headers).then(r => r.json())
 }
 
 export async function getPostData(url, token, transactionID) {
@@ -193,31 +194,35 @@ export async function generatePowerPoint(token, jobID, wellID, jobType) {
   pptx.setLayout({ name: 'LAYOUT_WIDE', width: slideWidth, height: slideHeight })
   const masterSlide = buildMasterSlide(slideWidth, slideHeight)
   pptx.defineSlideMaster(masterSlide)
-  const images = await getData('getImages', token, jobID)
+  const images = await getData('/api/getImages', token, { transactionID: jobID })
   const hasResults = await getHasresults(token, jobID)
   console.log('images', images)
-  // buildSectionSlide(pptx, 'Información del campo')
-  // await buildFichaTecnicaDelCampo(pptx, token, jobID)
-  // await buildPressureChart(pptx, token, jobID, true)
-  // buildSectionSlide(pptx, 'Información del pozo')
-  // await buildFichaTecnicaDelPozo(pptx, token, jobID)
-  // await buildHistorialIntervenciones(pptx, token, jobID)
-  // await buildEstadoMecanicoYAparejo(pptx, token, jobID, images.mecanicoYAparejoDeProduccion)
-  // await buildSistemasArtificialesDeProduccion(pptx, token, jobID)
-  // await buildEvaluacionPetrofisica(pptx, token, jobID, images.buildEvaluacionPetrofisica)
-  // await buildWaterAnalysis(pptx, token, jobID)
-  // await buildProductionChart(pptx, token, jobID)
-  // await buildAforoChart(pptx, token, jobID)
-  // await buildPressureChart(pptx, token, jobID)
-  // buildSectionSlide(pptx, 'Información de la propuesta')
-  // await buildProposalCedula(pptx, token, jobID)
-  // await buildGeneralProposal(pptx, token, jobID)
-  // await buildLabReports(pptx, token, jobID, images.pruebasDeLaboratorio)
+  buildSectionSlide(pptx, 'Información del campo')
+  await buildFichaTecnicaDelCampo(pptx, token, jobID)
+  await buildPressureChart(pptx, token, jobID, true)
+  buildSectionSlide(pptx, 'Información del pozo')
+  await buildFichaTecnicaDelPozo(pptx, token, jobID)
+  await buildHistorialIntervenciones(pptx, token, jobID)
+  await buildEstadoMecanicoYAparejo(pptx, token, jobID, images.mecanicoYAparejoDeProduccion)
+  await buildSistemasArtificialesDeProduccion(pptx, token, jobID)
+  await buildEvaluacionPetrofisica(pptx, token, jobID, images.buildEvaluacionPetrofisica)
+  await buildWaterAnalysis(pptx, token, jobID)
+  await buildProductionChart(pptx, token, jobID)
+  await buildAforoChart(pptx, token, jobID)
+  await buildPressureChart(pptx, token, jobID)
+  buildSectionSlide(pptx, 'Información de la propuesta')
+  await buildProposalCedula(pptx, token, jobID)
+  await buildGeneralProposal(pptx, token, jobID)
+  await buildLabReports(pptx, token, jobID, images.pruebasDeLaboratorio)
   if (hasResults) {
+    const imageResults = await getData(`/job/getResultsImages`, token, { transactionID: jobID })
+    console.log('image results', imageResults)
     buildSectionSlide(pptx, 'Información de los resultados')
     await buildResultsCedula(pptx, token, jobID, jobType)
     await buildGeneralResults(pptx, token, jobID, jobType)
+    await buildGeometry(pptx, imageResults[`evaluacion${jobType}`])
     await buildAforoChart(pptx, token, jobID)
+    await buildGraficaDeTratamiento(pptx, imageResults.graficaTratamiento)
   }
   pptx.save()
 }

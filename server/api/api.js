@@ -42,7 +42,7 @@ const getImagesForClient = async (transactionID, action) => new Promise((resolve
   })
 })
 
-async function handleImageResponse(data) {
+export async function handleImageResponse(data) {
   const filteredData = data.filter(well => well.IMG_URL !== null && well.IMG_URL !== '').sort((a, b) => {
     if(a.label < b.label) return -1;
     if(a.label > b.label) return 1;
@@ -56,7 +56,7 @@ async function handleImageResponse(data) {
     const imgInformation = well.IMG_URL.split('.')
     const parent = imgInformation[1]
     const index = imgInformation[imgInformation.length - 1]
-    const isNumber = /^[0-9]*$/.test(index)
+    const isNumber = /^([0-9])|([0-9]+(-[0-9]+))+$/.test(index)
     // get img url from s3
     const imgURL = await signedURL(imgName)
     const innerObj = {

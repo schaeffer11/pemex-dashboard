@@ -2,6 +2,7 @@ import { Router } from 'express'
 import db from '../../lib/db'
 import appConfig from '../../../app-config.js'
 import moment from 'moment'
+import { handleImageResponse } from '../api';
 // import path from 'path'
 // import fs from 'fs'
 // import objectPath from 'object-path'
@@ -30,6 +31,21 @@ WHERE TRANSACTION_ID = ?`
         res.json(results)
       }
     })
+})
+
+router.get('/getResultsImages', (req, res) => {
+  const { transactionID } = req.query
+  console.log('getting results images')
+  const query = `
+    SELECT * FROM ResultsImages WHERE PROPUESTA_ID = ?
+  `
+  connection.query(query, [transactionID], async (err, results) => {
+    if (err) {
+      return res.json({})
+    }
+    const images = await handleImageResponse(results)
+    res.json(images)
+  })
 })
 
 router.get('/getCostData', (req, res) => {
@@ -184,7 +200,7 @@ router.get('/getCedulaResults', (req, res) => {
       SELECT * FROM ResultsCedulaApuntalado
       WHERE PROPUESTA_ID = ?`
   }
-  else { 
+  else if (type === 'Termico') { 
     query =`
       SELECT * FROM ResultsCedulaTermico
       WHERE PROPUESTA_ID = ?`
@@ -369,7 +385,7 @@ router.get('/getInterventionResultsData', (req, res) => {
         EFICIENCIA_DE_FLUIDO_DE_FRACTURA: 'eficienciaDeFluidoDeFractura',
       }
   }
-  else {
+  else if (type === 'Apuntalado') {
     query = `
       SELECT * FROM ResultsApuntalado rap
       JOIN Results r ON rap.INTERVENTION_ID = r.INTERVENCIONES_ID
@@ -395,6 +411,18 @@ router.get('/getInterventionResultsData', (req, res) => {
       FCD: 'fcd',
       PRESION_NETA: 'presionNeta',
       EFICIENCIA_DE_FLUIDO_DE_FRACTURA: 'eficienciaDeFluidoDeFractura',
+    }
+  } else if (type === 'Termico') {
+    query = `
+      SELECT * FROM ResultsTermico rap
+      JOIN Results r ON rap.INTERVENTION_ID = r.INTERVENCIONES_ID
+      WHERE rap.PROPUESTA_ID = ?`
+    map = {
+    VOLUMEN_VAPOR_INYECTAR: 'volumenVapor',
+    CALIDAD: 'calidad',
+    GASTO_INYECCION: 'gastoInyeccion',
+    PRESION_MAXIMA_SALIDA_GENERADOR: 'presionMaximaSalidaGenerador',
+    TEMPERATURA_MAXIMA_GENERADOR: 'temperaturaMaximaGenerador',
     }
   }
   map = {

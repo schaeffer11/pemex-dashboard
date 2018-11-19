@@ -198,7 +198,7 @@ import { calculateValuesTermicaCedula } from '../../../../../lib/formatters';
           <InputRow
             header="Temperatura máxima del generador"
             name='temperaturaMaximaGenerador'
-            unit="psi"
+            unit="°C"
             value={temperaturaMaximaGenerador}
             onChange={(e) => setMergePropuestaTermica({ temperaturaMaximaGenerador: e })}
             errors={this.state.errors}
