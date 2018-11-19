@@ -1661,9 +1661,7 @@ export const create = async (body, action, cb) => {
                                       INSERT_LAB_TEST_QUERY.save = `SELECT(1) FROM Users LIMIT 1`
                                     }
 
-                                    query = 
-                                      tipoDeIntervenciones === 'termico' ? DUMMY_QUERY :
-                                        (action === 'save' ? INSERT_LAB_TEST_QUERY.save : INSERT_LAB_TEST_QUERY.submit)
+                                    query = action === 'save' ? INSERT_LAB_TEST_QUERY.save : INSERT_LAB_TEST_QUERY.submit
                                     
                                     connection.query(query, [values], (err, results) => {
                                       console.log('lab tests', err)
@@ -2047,10 +2045,10 @@ export const create = async (body, action, cb) => {
                                                                         }
 
                                                                         // FIXME: This deletes images that should not be deleted. fix in the futre!
-                                                                        if (deleteID !== null) {
+                                                                        if (deleteID !== null && action === 'save') {
                                                                           console.log('getting wellimages', deleteID)
-                                                                          // const deletedImages = await deleteImages(deleteID, action).catch(r => console.log('something went wrong'))
-                                                                          // console.log('i should get some deletions', deletedImages)
+                                                                          const deletedImages = await deleteImages(deleteID, action).catch(r => console.log('something went wrong'))
+                                                                          console.log('i should get some deletions', deletedImages)
                                                                         }
 
                                                                         connection.query(action === 'save' ? DELETE_QUERY : DUMMY_QUERY, values, (err, results) => {

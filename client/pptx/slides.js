@@ -10,10 +10,22 @@ function getPositions(len) {
   }
 }
 
+export async function buildObjectivoYAlcances(pptx, token, id) {
+  const data = await getData('/api/getInterventionBase', token, { transactionID: id })
+  const { intervencionProgramada } = data.objetivoYAlcancesIntervencion
+  data.objetivoYAlcancesIntervencion.intervencionProgramada = intervencionProgramada ? 'Si' : 'No'
+  const { table } = buildSimpleTable('', maps.general, data.objetivoYAlcancesIntervencion, false)
+  console.log('what is this table/?', table)
+  const slide = pptx.addNewSlide('MASTER_SLIDE')
+  slide.addText('Propuesta', { placeholder: 'slide_title' })
+  const { middle } = getPositions(10)
+  slide.addTable(table, { x: middle, y: 1.0, colW: [2.0, 8], fontSize: 18 })
+}
+
 export async function buildFichaTecnicaDelCampo(pptx, token, id) {
   const slide = pptx.addNewSlide('MASTER_SLIDE')
   slide.addText('Ficha Técnica del Campo', { placeholder: 'slide_title' })
-  const data = await getData('getFields', token, id)
+  const data = await getData('/api/getFields', token, { transactionID: id })
   const { field } = maps
   const generales = buildSimpleTable('Generales', field.generales, data.fichaTecnicaDelCampo, false)
   const explotacion = buildSimpleTable('Explotación', field.explotacion, data.fichaTecnicaDelCampo)
@@ -33,7 +45,7 @@ export async function buildFichaTecnicaDelCampo(pptx, token, id) {
 export async function buildFichaTecnicaDelPozo(pptx, token, id) {
   const slide = pptx.addNewSlide('MASTER_SLIDE')
   slide.addText('Ficha Técnica del Pozo', { placeholder: 'slide_title' })
-  const data = await getData('getWell', token, id)
+  const data = await getData('/api/getWell', token, { transactionID: id })
   const { well } = maps
   const datos = buildSimpleTable('Generales', well.datos, data.fichaTecnicaDelPozo)
   const fluido = buildSimpleTable('Fluido', well.fluido, data.fichaTecnicaDelPozo)
@@ -51,7 +63,7 @@ export async function buildFichaTecnicaDelPozo(pptx, token, id) {
 export async function buildEstadoMecanicoYAparejo(pptx, token, id, image) {
   const slide = pptx.addNewSlide('MASTER_SLIDE')
   slide.addText('Edo. Mecánico y Aparejo de Producción', { placeholder: 'slide_title' })
-  const data = await getData('getMecanico', token, id)
+  const data = await getData('/api/getMecanico', token, { transactionID: id })
   const { estadoMecanicoYAparejo } = maps
   const terminacion = buildSimpleTable('Tipo de Terminación', estadoMecanicoYAparejo.terminacion, data.mecanicoYAparejoDeProduccion)
   const liner = buildSimpleTable('Tipo de liner', estadoMecanicoYAparejo.liner, data.mecanicoYAparejoDeProduccion)
@@ -67,7 +79,7 @@ export async function buildEstadoMecanicoYAparejo(pptx, token, id, image) {
     const base64 = await getBase64FromURL(image.imgURL).catch(e => e)
     if (!base64.error) {
       slide.addImage({
-        data: `image/png;base64,${base64}`, x: middle, y: 0.5, w: 4, h: 3,
+        data: `image/png;base64,${base64}`, x: middle, y: 0.5,
         sizing: { type: 'contain', h: 4.0, w: 4.0 }
       })
     }
@@ -78,7 +90,7 @@ export async function buildEstadoMecanicoYAparejo(pptx, token, id, image) {
 export async function buildSistemasArtificialesDeProduccion(pptx, token, id) {
   const slide = pptx.addNewSlide('MASTER_SLIDE')
   slide.addText('Información de Sistemas Artificiales de Producción', { placeholder: 'slide_title' })
-  const wellData = await getData('getWell', token, id)
+  const wellData = await getData('/api/getWell', token, { transactionID: id })
   const tipoSistemaArtificial = wellData.sistemasArtificialesDeProduccion.tipoDeSistemo
   const { sistemasArtificialesDeProduccion } = maps
   let url
@@ -113,7 +125,7 @@ export async function buildSistemasArtificialesDeProduccion(pptx, token, id) {
     default:
       break;
   }
-  const data = await getData(url, token, id)
+  const data = await getData(`/api/${url}`, token, { transactionID: id })
   data.sistemasArtificialesDeProduccion.tipoDeSistema = title
   const { table, options } = buildSimpleTable(null, sistemasArtificialesDeProduccion[tipoSistemaArtificial], data.sistemasArtificialesDeProduccion)
   slide.addTable(table, { x: getPositions(4).middle, y: 1.0, ...options })
@@ -123,8 +135,9 @@ export async function buildSistemasArtificialesDeProduccion(pptx, token, id) {
 export async function buildEvaluacionPetrofisica(pptx, token, id, image) {
   const slide = pptx.addNewSlide('MASTER_SLIDE')
   slide.addText('Evaluación Petrofísica', { placeholder: 'slide_title' })
-  const layers = await getData('getLayer', token, id)
-  const mud = await getData('getMudLoss', token, id)
+  const queryObj = { transactionID: id }
+  const layers = await getData('/api/getLayer', token, queryObj)
+  const mud = await getData('/api/getMudLoss', token, queryObj)
 
   let { layerData } = layers.evaluacionPetrofisica
   let { mudLossData } = mud.evaluacionPetrofisica
@@ -141,7 +154,7 @@ export async function buildEvaluacionPetrofisica(pptx, token, id, image) {
     const base64 = await getBase64FromURL(image.imgURL).catch(e => e)
     if (!base64.error) {
       imageSlide.addImage({
-        data: `image/png;base64,${base64}`, x: getPositions(6.5).middle, y: 1.0, w: 4, h: 3,
+        data: `image/png;base64,${base64}`, x: getPositions(6.5).middle, y: 1.0,
         sizing: { type: 'contain', h: 6.5, w: 6.5 }
       })
     }
@@ -150,15 +163,9 @@ export async function buildEvaluacionPetrofisica(pptx, token, id, image) {
 }
 
 export async function buildResultsCedula(pptx, token, id, interventionType) {
-  const headers = {
-    headers: {
-      'Authorization': `Bearer ${token}`,
-      'content-type': 'application/json',
-    },
-  }
-  const generalResults = await fetch(`/job/generalResults?transactionID=${id}`, headers).then(r => r.json())
-  const cedulaData = await fetch(`/job/getCedulaResults?transactionID=${id}&type=${interventionType}`, headers).then(r => r.json())
-  const layers = await getData('getLayer', token, id)
+  const generalResults = await getData('/job/generalResults', token, { transactionID: id })
+  const cedulaData = await getData('/job/getCedulaResults', token, { transactionID: id, type: interventionType })
+  const layers = await getData('/api/getLayer', token, { transactionID: id })
   const { layerData } = layers.evaluacionPetrofisica
   const intervals = layerData.map(elem => `${elem.cimaMD}-${elem.baseMD}`).join('\n')
   const cedulaMap = maps.propuesta[interventionType.toLowerCase()].cedulaData
@@ -167,7 +174,7 @@ export async function buildResultsCedula(pptx, token, id, interventionType) {
   
   const mainSlide = pptx.addNewSlide('MASTER_SLIDE')
   mainSlide.addText('Tratamiento', { placeholder: 'slide_title' })
-  mainSlide.addTable(general.table, { x: getPositions(10).middle, y: 1.0, colW: [2.0, 8.0], fontSize: 24 })
+  mainSlide.addTable(general.table, { x: getPositions(10).middle, y: 1.0, colW: [2.0, 8.0], fontSize: 18 })
 
   const slide = pptx.addNewSlide('MASTER_SLIDE')
   slide.addText('Cédula de tratamiento', { placeholder: 'slide_title' })
@@ -175,7 +182,8 @@ export async function buildResultsCedula(pptx, token, id, interventionType) {
 }
 
 export async function buildProposalCedula(pptx, token, id, isResults=false) {
-  const interventionTypeData = await getData('getInterventionBase', token, id)
+  const queryObj = { transactionID: id }
+  const interventionTypeData = await getData('/api/getInterventionBase', token, queryObj)
   const interventionType = interventionTypeData.objetivoYAlcancesIntervencion.tipoDeIntervenciones
   let cedulaURL
   switch (interventionType) {
@@ -195,8 +203,8 @@ export async function buildProposalCedula(pptx, token, id, isResults=false) {
       return
   }
 
-  const data = await getData(cedulaURL, token, id)
-  const layers = await getData('getLayer', token, id)
+  const data = await getData(`/api/${cedulaURL}`, token, queryObj)
+  const layers = await getData('/api/getLayer', token, queryObj)
   const { cedulaData, propuestaCompany } = data[Object.keys(data)[0]]
   const { layerData } = layers.evaluacionPetrofisica
   const cedulaMap = maps.propuesta[interventionType].cedulaData
@@ -207,7 +215,7 @@ export async function buildProposalCedula(pptx, token, id, isResults=false) {
   const mainSlide = pptx.addNewSlide('MASTER_SLIDE')
   mainSlide.addText('Propuesta', { placeholder: 'slide_title' })
   const { middle } = getPositions(10)
-  mainSlide.addTable(general.table, { x: middle, y: 1.0, colW: [2.0, 8.0], fontSize: 24 })
+  mainSlide.addTable(general.table, { x: middle, y: 1.0, colW: [2.0, 8.0], fontSize: 18 })
 
   const slide = pptx.addNewSlide('MASTER_SLIDE')
   slide.addText('Propuesta de tratamiento', { placeholder: 'slide_title' })
@@ -215,39 +223,81 @@ export async function buildProposalCedula(pptx, token, id, isResults=false) {
   return slide
 }
 
-export async function buildGeneralResults(pptx, token, id, interventionType) {
-  const headers = {
-    headers: {
-      'Authorization': `Bearer ${token}`,
-      'content-type': 'application/json',
-    },
+export async function buildGeometry(pptx, images) {
+  if (images) {
+    for (let image of images) {
+      const { middle } = getPositions(4.5)
+      const base64 = await getBase64FromURL(image.imgURL).catch(e => e)
+      if (!base64.error) {
+        const interval = image.imgName.split('.').slice(-1)
+        const slide = pptx.addNewSlide('MASTER_SLIDE')
+        slide.addText(`Geometria de intervalo: ${interval[0]}`, { placeholder: 'slide_title' })
+        slide.addImage({
+          data: `image/png;base64,${base64}`, x: middle, y: 1,
+          sizing: { type: 'contain', h: 4.5, w: 4.5 }
+        })
+      }
+    }
   }
-  const data = await fetch(`/job/getInterventionResultsData?transactionID=${id}&type=${interventionType}&shouldMapData=true`, headers).then(r => r.json())
+}
+
+export async function buildGraficaDeTratamiento(pptx, image) {
+  if (image) {
+    const { middle } = getPositions(4.5)
+    const base64 = await getBase64FromURL(image.imgURL).catch(e => e)
+    if (!base64.error) {
+      const slide = pptx.addNewSlide('MASTER_SLIDE')
+      slide.addText('Grafica de tratamiento', { placeholder: 'slide_title' })
+      slide.addImage({
+        data: `image/png;base64,${base64}`, x: middle, y: 1,
+        sizing: { type: 'contain', h: 4.5, w: 4.5 }
+      })
+    }
+  }
+}
+
+export async function buildGeneralResults(pptx, token, id, interventionType) {
+  const data = await getData(`/job/getInterventionResultsData`, token, { transactionID: id, type: interventionType, shouldMapData: true })
+  console.log('da data is here', data)
   const slide = pptx.addNewSlide('MASTER_SLIDE')
   slide.addText('Resultados de tratamiento', { placeholder: 'slide_title' })
 
   const map = maps.propuesta[interventionType.toLowerCase()]
   const { left, right, middle } = getPositions(4)
-  const volumes = buildSimpleTable('Volúmenes', map.volumes, data)
-  slide.addTable(volumes.table, { x: left, y: 1.0, ...volumes.options })
+  if (map.volumes) {
+    const volumes = buildSimpleTable('Volúmenes', map.volumes, data)
+    slide.addTable(volumes.table, { x: left, y: 1.0, ...volumes.options })
+  }
 
   if (map.geoMechanicInformation) {
     const geoMechanic = buildSimpleTable('Información de Geomecánica', map.geoMechanicInformation, data)
     slide.addTable(geoMechanic.table, { x: left, y: 3.0, ...geoMechanic.options })
   }
-
-  if (interventionType === 'estimulacion' && data.tipoDeEstimulacion === 'limpieza') {
+  console.log('da interventionType', interventionType)
+  if (interventionType === 'Estimulacion' && data.tipoDeEstimulacion === 'limpieza') {
     const limpieza = buildSimpleTable('Limpieza de Aparejo', map.general, data)
     slide.addTable(limpieza.table, { x: left, y: 3.0, ...limpieza.options })
   }
 
-  const simulacion = buildSimpleTable('Resultados de la simulacion', map.resultadosSimulacion, data)
-  slide.addTable(simulacion.table, { x: middle, y: 1.0, ...simulacion.options })
+  if (map.resultadosSimulacion) {
+    const simulacion = buildSimpleTable('Resultados de la simulación', map.resultadosSimulacion, data)
+    slide.addTable(simulacion.table, { x: middle, y: 1.0, ...simulacion.options })
+  }
+
+  if (interventionType === 'Termico') {
+    const general = buildSimpleTable('General', map.general, data)
+    console.log('i think i am here', general)
+    slide.addTable(general.table, { x: left, y: 1.0, ...general.options })
+  }
+
+  const deltaProduction = buildSimpleTable('Incremento de producción', maps.incrementoProduccionResults, data)
+  slide.addTable(deltaProduction.table, { x: right, y: 1.0, ...deltaProduction.options })
   return slide
 }
 
 export async function buildGeneralProposal(pptx, token, id) {
-  const interventionTypeData = await getData('getInterventionBase', token, id)
+  const queryObj = { transactionID: id }
+  const interventionTypeData = await getData('/api/getInterventionBase', token, queryObj)
   const interventionType = interventionTypeData.objetivoYAlcancesIntervencion.tipoDeIntervenciones
   let interventionURL
   let propuestaData
@@ -274,13 +324,16 @@ export async function buildGeneralProposal(pptx, token, id) {
       break;
     case 'termico':
       interventionURL = 'getInterventionTermico'
+      estimacionProduccionData = 'estIncProduccionTermico'
+      propuestaData = 'propuestaTermica'
       break;
     default:
       return
   }
 
 
-  const data = await getData(interventionURL, token, id)
+  const data = await getData(`/api/${interventionURL}`, token, queryObj)
+  console.log('general proposal data', data, estimacionProduccionData)
   const map = maps.propuesta[interventionType]
   
   const slide = pptx.addNewSlide('MASTER_SLIDE')
@@ -306,6 +359,13 @@ export async function buildGeneralProposal(pptx, token, id) {
     slide.addTable(simulacion.table, { x: middle, y: 1.0, ...simulacion.options })
   }
 
+  if (interventionType === 'termico') {
+    console.log('building general proposal', data[propuestaData], map.general)
+    const general = buildSimpleTable('General', map.general, data[propuestaData])
+    console.log('what is general', general)
+    slide.addTable(general.table, { x: left, y: 1.0, ...general.options })
+  }
+
   const estimacion = buildSimpleTable('Estimación', maps.estimacionProduccion, data[estimacionProduccionData])
   slide.addTable(estimacion.table, { x: right, y: 1.0, ...estimacion.options })
   return slide
@@ -314,7 +374,6 @@ export async function buildGeneralProposal(pptx, token, id) {
 async function buildMainLabSlide(pptx, labTitle, lab, image) {
   const mainSlide = pptx.addNewSlide('MASTER_SLIDE')
   mainSlide.addText(`Pruebas de laboratorio - ${labTitle}`, { placeholder: 'slide_title' })
-  // mainSlide.addText(labTitle, { x: 0.5, y: 1.0, fontSize: 18, fontFace: 'Arial Narrow' })
   const { table, options } = buildSimpleTable('Datos generales', maps.pruebasDeLaboratorio.general, lab, false)
   mainSlide.addTable(table, { x: getPositions(options.w).middle, y: 1.0, ...options })
   if (image) {
@@ -322,7 +381,7 @@ async function buildMainLabSlide(pptx, labTitle, lab, image) {
     const base64 = await getBase64FromURL(image.imgURL).catch(e => e)
     if (!base64.error) {
       mainSlide.addImage({
-        data: `image/png;base64,${base64}`, x: middle, y: 3.3, w: 4.5, h: 3.5,
+        data: `image/png;base64,${base64}`, x: middle, y: 3.3,
         sizing: { type: 'contain', h: 4.5, w: 4.5 }
       })
     }
@@ -339,19 +398,14 @@ function buildLabDataSlide(pptx, map, lab, labTitle) {
     return false
   }).length > 0
   if (isTable) {
-    // const tableOptionsCopy = { ...tableOptions }
-    // delete tableOptionsCopy.colW
     const dataSlide = pptx.addNewSlide('MASTER_SLIDE')
     dataSlide.addText('Pruebas de laboratorio', { placeholder: 'slide_title' })
-    // dataSlide.addText(labTitle, { x: 0.5, y: 1.0, fontSize: 18, fontFace: 'Arial Narrow' })
     const { table, options } = buildTable(labTitle, map[tableName], lab[tableName])
     dataSlide.addTable(table, { x: getPositions(options.w).middle, y: 1.0, ...options })
   } else {
     if (Object.keys(map).length > 0) {
-      // const tableOptionsCopy = { ...tableOptions }
       const dataSlide = pptx.addNewSlide('MASTER_SLIDE')
       dataSlide.addText('Pruebas de laboratorio', { placeholder: 'slide_title' })
-      // dataSlide.addText(labTitle, { x: 0.5, y: 1.0, fontSize: 18, fontFace: 'Arial Narrow' })
       const { table, options } = buildSimpleTable(labTitle, map, lab)
       dataSlide.addTable(table, { x: getPositions(options.w).middle, y: 1.0, ...options })
     }
@@ -359,15 +413,18 @@ function buildLabDataSlide(pptx, map, lab, labTitle) {
 }
 
 export async function buildLabReports(pptx, token, id, images) {
-  const data = await getData('getLabTest', token, id)
+  const data = await getData('/api/getLabTest', token, { transactionID: id })
   const { pruebasDeLaboratorioData } = data.pruebasDeLaboratorio
-  for (let lab of pruebasDeLaboratorioData) {
-    const labImage = images ? images.find(elem => elem.labID.toString() === lab.labID.toString()) : null
-    const labTitle = maps.pruebasDeLaboratorioTitles[lab.type].text
-    const map = maps.pruebasDeLaboratorio[lab.type]
-    await buildMainLabSlide(pptx, labTitle, lab, labImage)
-    if (map) {
-      buildLabDataSlide(pptx, map, lab, labTitle)
+  console.log('pruebasd de laboratorio data', pruebasDeLaboratorioData)
+  if (Object.keys(pruebasDeLaboratorioData[0]).length > 0) {
+    for (let lab of pruebasDeLaboratorioData) {
+      const labImage = images ? images.find(elem => elem.labID.toString() === lab.labID.toString()) : null
+      const labTitle = maps.pruebasDeLaboratorioTitles[lab.type].text
+      const map = maps.pruebasDeLaboratorio[lab.type]
+      await buildMainLabSlide(pptx, labTitle, lab, labImage)
+      if (map) {
+        buildLabDataSlide(pptx, map, lab, labTitle)
+      }
     }
   }
 }
@@ -392,11 +449,12 @@ function shouldBuild(data) {
 }
 
 export async function buildHistorialIntervenciones(pptx, token, id) {
-  const dataGeneral = await getData('getHistIntervenciones', token, id)
-  const dataStimulation = await getData('getHistIntervencionesEstimulacionNew', token, id)
-  const dataAcido = await getData('getHistIntervencionesAcidoNew', token, id)
-  const dataApuntalado = await getData('getHistIntervencionesApuntaladoNew', token, id)
-  const dataTermico = await getData('getHistIntervencionesTermicoNew', token, id)
+  const queryObj = { transactionID: id }
+  const dataGeneral = await getData('/api/getHistIntervenciones', token, queryObj)
+  const dataStimulation = await getData('/api/getHistIntervencionesEstimulacionNew', token, queryObj)
+  const dataAcido = await getData('/api/getHistIntervencionesAcidoNew', token, queryObj)
+  const dataApuntalado = await getData('/api/getHistIntervencionesApuntaladoNew', token, queryObj)
+  const dataTermico = await getData('/api/getHistIntervencionesTermicoNew', token, queryObj)
   const { historicoEstimulacionData } = dataStimulation.historialDeIntervenciones
   const { historicoAcidoData } = dataAcido.historialDeIntervenciones
   const { historicoApuntaladoData } = dataApuntalado.historialDeIntervenciones
@@ -406,10 +464,7 @@ export async function buildHistorialIntervenciones(pptx, token, id) {
   if (shouldBuild(dataGeneral.fichaTecnicaDelPozo.historialIntervencionesData)) {
     buildHistoricSlides(pptx, dataGeneral.fichaTecnicaDelPozo.historialIntervencionesData, general, 'Historial de intervenciones', { x: getPositions(7).middle, colW: [1, 6], fontSize: 8 })
   }
-  // const tableOptionsCopy = tableOptions
-  // tableOptionsCopy.w = 10
   const { middle } = getPositions(10)
-  // const options = { x: getPositions(10).middle, w: 10, fontSize: 8 }
   const tableOptions = largeTableOptions()
   if (shouldBuild(historicoEstimulacionData)) {
     buildHistoricSlides(pptx, historicoEstimulacionData, estimulacion, 'Historial de intervenciones de estimulacion', { x: middle, ...tableOptions })
@@ -433,7 +488,6 @@ export async function buildProductionChart(pptx, token, id) {
       type: 'line',
       zoomType: 'xy',
       renderTo: 'hiddenChart',
-      // width: 800,
     },
     title: {
       text: ''
@@ -691,7 +745,7 @@ export async function buildPressureChart(pptx, token, id, isField = false) {
 }
 
 export async function buildWaterAnalysis(pptx, token, id) {
-  const data = await getData('getAnalisisAgua', token, id)
+  const data = await getData('/api/getAnalisisAgua', token, { transactionID: id })
   if (data.err) {
     return
   }
@@ -701,3 +755,4 @@ export async function buildWaterAnalysis(pptx, token, id) {
   const { middle } = getPositions(4)
   slide.addTable(table, { x: middle, y: 1.0, ...options })
 }
+

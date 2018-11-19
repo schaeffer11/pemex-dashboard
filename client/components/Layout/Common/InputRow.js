@@ -117,7 +117,7 @@ export const InputRowSelectMulti = ({ header, name, value, options, callback, on
     )
 }
 
-export const InputRowSelectUnitless = ({ header, name, value, options, callback, onBlur, index, errors=[] }) => {
+export const InputRowSelectUnitless = ({ header, name, value, options, callback, onBlur, index, errors=[], disabled }) => {
 
   if (!options) {
     options = []
@@ -140,6 +140,7 @@ export const InputRowSelectUnitless = ({ header, name, value, options, callback,
         {header}
       </div>
       <Select
+        isDisabled={disabled}
         placeholder="Seleccionar..."
         className='input'
         simpleValue={true}

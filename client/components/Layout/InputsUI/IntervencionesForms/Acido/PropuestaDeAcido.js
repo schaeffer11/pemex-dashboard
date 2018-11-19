@@ -2,16 +2,16 @@ import React, { Component } from 'react'
 import autobind from 'autobind-decorator'
 import { connect } from 'react-redux'
 import Select from 'react-select'
+import ReactTable from 'react-table'
 
 import InputTable from '../../../Common/InputTable'
-import ReactTable from 'react-table'
 import { InputRowUnitless, CalculatedValue, InputRow, InputRowSelectUnitless, InputRowSelectMulti } from '../../../Common/InputRow'
 import { setHasErrorsPropuestaAcido, setCedulaData, setModuloYoungArena, setModuloYoungLutitas, setRelacPoissonArena, 
   setRelacPoissonLutatas, setGradienteDeFractura, setDensidadDeDisparos, setDiametroDeDisparos, setIntervalo,
    setLongitudDeIntervalo, setVolAparejo, setCapacidadTotalDelPozo, setVolumenPrecolchonN2,
     setVolumenSistemaNoReativo, setVolumenSistemaReactivo, setVolumenSistemaDivergente, 
     setVolumenDesplazamientoLiquido, setVolumenDesplazamientoGelLineal, setPropuestaCompany } from '../../../../../redux/actions/intervencionesAcido'
-import { round, calculateVolumes, getSistemaOptions, getDisabledColumnForGeneralCedula } from '../../../../../lib/helpers'
+import { round, calculateVolumes, getSistemaOptions, getDisabledColumnForGeneralCedula, companyOptions } from '../../../../../lib/helpers'
 import { checkEmpty, checkDate } from '../../../../../lib/errorCheckers'
 import { calculateValuesGeneralCedula } from '../../../../../lib/formatters';
 
@@ -142,14 +142,7 @@ import { calculateValuesGeneralCedula } from '../../../../../lib/formatters';
     formData = formData.toJS()
     intervalos = intervalos.toJS()
     let { propuestaCompany } = formData
-    const companyOptions = [
-      { label: 'Halliburton', value: 'Halliburton' },
-      { label: 'Schlumberger', value: 'Schlumberger' },
-      { label: 'PFM', value: 'PFM' },
-      { label: 'Chemiservices', value: 'Chemiservices' },
-      { label: 'BJ', value: 'BJ' },
-      { label: 'Weatherford', value: 'Weatherford' }
-    ]
+
     const intervals = intervalos.map(elem => <div key={`intervalo_${elem.cimaMD}-${elem.baseMD}`}>{`${elem.cimaMD}-${elem.baseMD}`}</div>)
 
     return (

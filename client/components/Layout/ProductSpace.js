@@ -60,3 +60,21 @@ const PrivateRoute = ({ component: Component, user: user, ...properties}) => (
 )
 
 
+const AdminPrivateRoute = ({ component: Component, user: user, ...properties}) => {
+  if (user) {
+    fetch(`api/isAdmin?id=${user.id}`)
+    .then(res => res.json)
+    .then(res => {
+
+    })
+  } 
+  else {
+    return <Route {...properties} render={(props) => (
+     <Redirect to={{pathname:'/', state: {referrer: props.location} }}/>
+    )} />
+  }
+
+}
+
+
+

@@ -117,7 +117,8 @@ app.use('/auth', (req, res) => {
     let user = {
       id: userData.id,
       name: userData.username,
-      activoID: userData.ACTIVO_ID
+      activoID: userData.ACTIVO_ID,
+      subdireccionID: userData.SUBDIRECCION_ID
     }
 
     // embed user in request.session

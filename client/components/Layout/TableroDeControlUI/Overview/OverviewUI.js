@@ -191,7 +191,7 @@ import TimeSlider from '../TimeSeries/TimeSlider'
 
     return (
       <div className='data'>
-        <div style={{padding: '40px'}}>
+        <div style={{padding: '40px', paddingBottom: '0px'}}>
           <TimeSlider />
         </div>
         <div className="overview">

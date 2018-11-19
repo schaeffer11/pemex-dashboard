@@ -12,6 +12,8 @@ const units = {
   depthUnderSeaLevel: 'mvbnm',
   rga: 'm3/m3',
   ppm: 'ppm',
+  ton: 'ton',
+  gallonsPerMinute: 'gpm',
   length: 'm',
   percent: '%',
   rateOverPressure: 'bpd/psi',
@@ -50,6 +52,14 @@ const units = {
 }
 
 export const maps = {}
+
+maps.general = {
+  objetivo: { text: 'Objectivo', unit: '' },
+  alcances: { text: 'Alcances', unit: '' },
+  fechaProgramadaIntervencion: { text: 'Fecha programada', unit: '' },
+  intervencionProgramada: { text: 'Intervención fue programada', unit: '' },
+  tipoDeIntervenciones: { text: 'Tipo de intervención', unit: '' },
+}
 
 maps.field = {
   generales: {
@@ -438,11 +448,11 @@ maps.propuesta = {
       justificacion: { text: 'Justificación', unit: '' },
     },
     general: {
-      volumenVapor: { text: '', unit: units },
-      calidad: { text: '', unit: units },
-      gastoInyeccion: { text: '', unit: units },
-      presionMaximaSalidaGenerador: { text: '', unit: units },
-      temperaturaMaximaGenerador: { text: '', unit: units },
+      volumenVapor: { text: 'Volumen de vapor a inyectado', unit: units.ton },
+      calidad: { text: 'Calidad', unit: units.percent },
+      gastoInyeccion: { text: 'Gasto de inyección', unit: units.gallonsPerMinute },
+      presionMaximaSalidaGenerador: { text: 'Presión máxima de salida del generador', unit: units.pressureEnglish },
+      temperaturaMaximaGenerador: { text: 'Temperatura máxima del generador', unit: units.temperature },
     }
   },
 }
@@ -639,4 +649,10 @@ maps.generalResults = {
   fecha: { text: 'Fecha', units: '' },
   justificacion: { text: 'Justificación', units: '' },
   comentarios: { text: 'Comentarios', units: '' },
+}
+
+maps.incrementoProduccionResults = {
+  qo: { text: 'Qo', units: units.barrelsPerDay },
+  qw: { text: 'Qw', units: units.barrelsPerDay },
+  qg: { text: 'Qg', units: units.cubicFeetPerDay },
 }

@@ -1,7 +1,12 @@
 export const setShowForms = value => ({ type: 'set_showForms', value })
 export const setSaved = value => ({ type: 'set_saved', value })
 export const setIsLoading = obj => ({ type: 'set_isLoading', obj })
-export const setImagesInState = images => ({ type: 'set_imagesInState', images })
+export const setImagesInState = (images, pruebasDeLaboratorio, isSaved) => ({ 
+  type: 'set_imagesInState',
+  images,
+  pruebasDeLaboratorio,
+  isSaved 
+})
 export const resetNotification = () => ({ type: 'reset_notification' })
 export const setTab = value => ({ type: 'set_tab', value })
 export const setCurrentPage = value => ({ type: 'set_currentPage', value })
