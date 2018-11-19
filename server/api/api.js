@@ -310,47 +310,9 @@ router.get('/ping', (req, res) => {
   res.json({ response: 'pong' })
 })
 
-router.get('/woop', async (req, res) => {
-  getBuckets()
-  res.send('done')
-})
-
-router.get('/what', (req, res) => {
-  const buf = fs.readFileSync(path.join(__dirname, '../../', 'screenshot_test.png'))
-  console.log('buf', buf)
-  res.send('done')
-})
-
-router.get('/geturl?', async (req, res) => {
-  const url = await signedURL(req.query.img).catch(reason => console.log(reason))
-  res.send(url)
-})
-
-router.get('/deleteobj', async (req, res) => {
-  const imgsToDelete = [
-    'dareal.pruebasDeLaboratorio.caracterizacinSolubilidad.1536860807755',
-    'dareal.pruebasDeLaboratorio.caracterizacinAgua.1536860807755',
-    'dareal.evaluacionPetrofisica.1536860807755'
-  ]
-
-  const done = await Promise.all(imgsToDelete.map(elem => deleteObject(elem)))
-  // const test = await deleteObject(req.query.img)
-  console.log('data', done)
-  res.send('done')
-})
-
-router.post('/testing', (req, res) => {
-  // console.log('this is about to get fucked', req.body)
-  const buf = Buffer.from(req.body.file, 'base64')
-  addObject(buf)
-
-  res.json({ yeah: 'boy' })
-})
 
 router.post('/comment', (req, res) => {
-
   let { comment, page, user } = req.body
-
   connection.query(`INSERT INTO Feedback (USER, COMMENT, PAGE) VALUES (?, ?, ?)`, [user, comment, page], (err, results) => {
       console.log('comment err', err)
       console.log('comment results', results)
@@ -498,6 +460,25 @@ router.get('/getFieldWellMapping', (req, res) => {
     connection.query(`SELECT * FROM FieldWellMapping`, (err, results) => {
       res.json(results)
     })
+})
+
+router.get('/getSpecificFieldWell', (req, res) => {
+  const { transactionID } = req.query
+  const query = `
+    SELECT t.FORMACION, fwm.WELL_NAME, fwm.FIELD_NAME
+    FROM Transactions t JOIN FieldWellMapping fwm ON t.WELL_FORMACION_ID = fwm.WELL_FORMACION_ID
+    WHERE t.TRANSACTION_ID = ?`
+  connection.query(query, transactionID, (err, results) => {
+    if (err) {
+      console.log('err', err)
+      return res.json({ success: false })
+    }
+    res.json({
+      well: results[0].WELL_NAME,
+      field: results[0].FIELD_NAME,
+      formation: results[0].FORMACION,
+    })
+  })
 })
 
 router.get('/getFieldWellMappingHasData', (req, res) => {

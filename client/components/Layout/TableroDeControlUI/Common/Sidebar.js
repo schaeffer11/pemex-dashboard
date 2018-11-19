@@ -386,7 +386,7 @@ const filterArr = arr => {
             />
           </div>
           <div>
-            <button disabled={!job} onClick={() => generatePowerPoint(token, job, well, jobType)}>generar presentacion</button>
+            <button disabled={!job} onClick={() => generatePowerPoint(token, job, jobType)}>generar presentacion</button>
           </div>
         </Menu>
       </div>

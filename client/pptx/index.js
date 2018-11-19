@@ -1,8 +1,8 @@
 import PptxGenJS from 'pptxgenjs'
 import ReactHighcharts from 'react-highcharts'
-import { buildEstadoMecanicoYAparejo, buildFichaTecnicaDelCampo, buildFichaTecnicaDelPozo, buildSistemasArtificialesDeProduccion, buildEvaluacionPetrofisica, buildEvaluacionPetrofisicaImage, buildProposalCedula, buildGeneralProposal, buildLabReports, buildHistorialIntervenciones, buildChart, buildProductionChart, buildAforoChart, buildPressureChart, buildWaterAnalysis, buildResultsCedula, buildGeneralResults, buildGeometry, buildGraficaDeTratamiento } from './slides'
+import { buildEstadoMecanicoYAparejo, buildFichaTecnicaDelCampo, buildFichaTecnicaDelPozo, buildSistemasArtificialesDeProduccion, buildEvaluacionPetrofisica, buildEvaluacionPetrofisicaImage, buildProposalCedula, buildGeneralProposal, buildLabReports, buildHistorialIntervenciones, buildChart, buildProductionChart, buildAforoChart, buildPressureChart, buildWaterAnalysis, buildResultsCedula, buildGeneralResults, buildGeometry, buildGraficaDeTratamiento, buildObjectivoYAlcances } from './slides'
 
-function buildMasterSlide(slideWidth, slideHeight) {
+function buildMasterSlide(slideWidth, slideHeight, names) {
   const logo = { x: 0.7, y: 0.15, w: 1.5, h: 0.5, path: '/images/pemex-logo-fpo.png' }
   const bottomBarLight = { x: 0, get y() { return slideHeight - this.h }, w:'100%', h: 0.15, fill:'00a02d' }
   const bottomBarDarkLeft = { x: 0.6, y: bottomBarLight.y, w:'18%', h: 0.15, fill:'005618' }
@@ -13,6 +13,14 @@ function buildMasterSlide(slideWidth, slideHeight) {
     options: { name: 'slide_title', type: 'body', w: '100%', y: logo.h - 0.15, fontSize: 24, align: 'center', fontFace: 'Arial Narrow' },
     text: '(title)'
   }
+  const namesOptions = {
+    fontFace: 'Arial Narrow',
+    x: 10.5,
+    fontSize: 11,
+  }
+  const field = { text: `Campo: ${names.field}`, options:{ y: 0.15, ...namesOptions } }
+  const well = { text: `Pozo: ${names.well}`, options:{ y: 0.30, ...namesOptions } }
+  const formation = { text: `Formación: ${names.formation}`, options:{ y: 0.45, ...namesOptions } }
   return {
     title: 'MASTER_SLIDE',
     bkgd: 'e2e2e2',
@@ -27,11 +35,12 @@ function buildMasterSlide(slideWidth, slideHeight) {
       { rect: topLine },
       { image: logo },
       { placeholder: slideTitle },
+      { text: field },
+      { text: well },
+      { text: formation },
     ]
   }
 }
-
-export const getMiddle = (len) => (13.3 - len) / 2
 
 export async function getData(url, token, queryObj=undefined) {
   const headers = {
@@ -186,17 +195,25 @@ async function getHasresults(token, id) {
   return Object.keys(data).length > 0
 }
 
-export async function generatePowerPoint(token, jobID, wellID, jobType) {
+export async function generatePowerPoint(token, jobID, jobType) {
   const slideWidth = 13.3
   const slideHeight = 7.5
   const pptx = new PptxGenJS()
   pptx.setBrowser(true)
   pptx.setLayout({ name: 'LAYOUT_WIDE', width: slideWidth, height: slideHeight })
-  const masterSlide = buildMasterSlide(slideWidth, slideHeight)
+  const names = await getData('/api/getSpecificFieldWell', token, { transactionID: jobID })
+  console.log('names', names)
+  const masterSlide = buildMasterSlide(slideWidth, slideHeight, names)
   pptx.defineSlideMaster(masterSlide)
   const images = await getData('/api/getImages', token, { transactionID: jobID })
   const hasResults = await getHasresults(token, jobID)
   console.log('images', images)
+  try {
+    await buildObjectivoYAlcances(pptx, token, jobID)
+  } catch (error) {
+    console.log('just kidding!!!')
+    return
+  }
   buildSectionSlide(pptx, 'Información del campo')
   await buildFichaTecnicaDelCampo(pptx, token, jobID)
   await buildPressureChart(pptx, token, jobID, true)

@@ -53,6 +53,14 @@ const units = {
 
 export const maps = {}
 
+maps.general = {
+  objetivo: { text: 'Objectivo', unit: '' },
+  alcances: { text: 'Alcances', unit: '' },
+  fechaProgramadaIntervencion: { text: 'Fecha programada', unit: '' },
+  intervencionProgramada: { text: 'Intervención fue programada', unit: '' },
+  tipoDeIntervenciones: { text: 'Tipo de intervención', unit: '' },
+}
+
 maps.field = {
   generales: {
     descubrimientoField: { text: 'Descubrimiento', unit: '' },

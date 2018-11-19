@@ -10,6 +10,18 @@ function getPositions(len) {
   }
 }
 
+export async function buildObjectivoYAlcances(pptx, token, id) {
+  const data = await getData('/api/getInterventionBase', token, { transactionID: id })
+  const { intervencionProgramada } = data.objetivoYAlcancesIntervencion
+  data.objetivoYAlcancesIntervencion.intervencionProgramada = intervencionProgramada ? 'Si' : 'No'
+  const { table } = buildSimpleTable('', maps.general, data.objetivoYAlcancesIntervencion, false)
+  console.log('what is this table/?', table)
+  const slide = pptx.addNewSlide('MASTER_SLIDE')
+  slide.addText('Propuesta', { placeholder: 'slide_title' })
+  const { middle } = getPositions(10)
+  slide.addTable(table, { x: middle, y: 1.0, colW: [2.0, 8], fontSize: 18 })
+}
+
 export async function buildFichaTecnicaDelCampo(pptx, token, id) {
   const slide = pptx.addNewSlide('MASTER_SLIDE')
   slide.addText('Ficha Técnica del Campo', { placeholder: 'slide_title' })
@@ -162,7 +174,7 @@ export async function buildResultsCedula(pptx, token, id, interventionType) {
   
   const mainSlide = pptx.addNewSlide('MASTER_SLIDE')
   mainSlide.addText('Tratamiento', { placeholder: 'slide_title' })
-  mainSlide.addTable(general.table, { x: getPositions(10).middle, y: 1.0, colW: [2.0, 8.0], fontSize: 24 })
+  mainSlide.addTable(general.table, { x: getPositions(10).middle, y: 1.0, colW: [2.0, 8.0], fontSize: 18 })
 
   const slide = pptx.addNewSlide('MASTER_SLIDE')
   slide.addText('Cédula de tratamiento', { placeholder: 'slide_title' })
@@ -203,7 +215,7 @@ export async function buildProposalCedula(pptx, token, id, isResults=false) {
   const mainSlide = pptx.addNewSlide('MASTER_SLIDE')
   mainSlide.addText('Propuesta', { placeholder: 'slide_title' })
   const { middle } = getPositions(10)
-  mainSlide.addTable(general.table, { x: middle, y: 1.0, colW: [2.0, 8.0], fontSize: 24 })
+  mainSlide.addTable(general.table, { x: middle, y: 1.0, colW: [2.0, 8.0], fontSize: 18 })
 
   const slide = pptx.addNewSlide('MASTER_SLIDE')
   slide.addText('Propuesta de tratamiento', { placeholder: 'slide_title' })
@@ -407,7 +419,6 @@ export async function buildLabReports(pptx, token, id, images) {
   if (Object.keys(pruebasDeLaboratorioData[0]).length > 0) {
     for (let lab of pruebasDeLaboratorioData) {
       const labImage = images ? images.find(elem => elem.labID.toString() === lab.labID.toString()) : null
-      console.log('what is this', lab.type, lab)
       const labTitle = maps.pruebasDeLaboratorioTitles[lab.type].text
       const map = maps.pruebasDeLaboratorio[lab.type]
       await buildMainLabSlide(pptx, labTitle, lab, labImage)
