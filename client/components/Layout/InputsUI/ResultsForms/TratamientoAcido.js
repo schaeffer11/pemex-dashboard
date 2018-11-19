@@ -5,7 +5,7 @@ import { connect } from 'react-redux'
 import InputTable from '../../Common/InputTable'
 import { CalculatedValue, InputRow, InputRowSelectUnitless } from '../../Common/InputRow'
 import { setMergeTratamientoAcido, setCedulaTratamientoAcido } from '../../../../redux/actions/results'
-import { round, calculateVolumes, getSistemaOptions, getDisabledColumnForGeneralCedula } from '../../../../lib/helpers'
+import { round, calculateVolumes, getSistemaOptions, getDisabledColumnForGeneralCedula, companyOptions } from '../../../../lib/helpers'
 import { checkEmpty, checkDate } from '../../../../lib/errorCheckers'
 import { calculateValuesGeneralCedula } from '../../../../lib/formatters';
 
@@ -129,17 +129,7 @@ import { calculateValuesGeneralCedula } from '../../../../lib/formatters';
 
   makeGeneralForm() {
     let { formData, setMergeTratamientoAcido, intervals } = this.props
-    // formData = formData.toJS()
-    // intervalos = intervalos.toJS()
     let { tratamientoCompany } = formData
-    const companyOptions = [
-      { label: 'Halliburton', value: 'Halliburton' },
-      { label: 'Schlumberger', value: 'Schlumberger' },
-      { label: 'PFM', value: 'PFM' },
-      { label: 'Chemiservices', value: 'Chemiservices' },
-      { label: 'BJ', value: 'BJ' },
-      { label: 'Weatherford', value: 'Weatherford' }
-    ]
 
     const intervalsDiv = intervals.map(elem => <div key={`intervalo_${elem}`}>{elem}</div>)
 

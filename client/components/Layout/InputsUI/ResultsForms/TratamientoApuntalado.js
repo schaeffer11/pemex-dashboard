@@ -1,12 +1,13 @@
 import React, { Component } from 'react'
 import autobind from 'autobind-decorator'
-import InputTable from '../../Common/InputTable'
 import { connect } from 'react-redux'
+
+import InputTable from '../../Common/InputTable'
 import { InputRow, CalculatedValue, InputRowSelectUnitless } from '../../Common/InputRow'
-import { round, calculateVolumes, getSistemaOptions, getSistemaApuntaladoOptions, getDisabledColumnForApuntaladoCeluda } from '../../../../lib/helpers'
+import { round, calculateVolumes, getSistemaOptions, getSistemaApuntaladoOptions, getDisabledColumnForApuntaladoCeluda, companyOptions } from '../../../../lib/helpers'
 import { checkEmpty, checkDate } from '../../../../lib/errorCheckers'
 import { setMergeTratamientoApuntalado, setCedulaTratamientoApuntalado } from '../../../../redux/actions/results'
-import { calculateValuesApuntaladoCedula } from '../../../../lib/formatters';
+import { calculateValuesApuntaladoCedula } from '../../../../lib/formatters'
 
 @autobind class TratamientoApuntalado extends Component {
   constructor(props) {
@@ -125,15 +126,6 @@ import { calculateValuesApuntaladoCedula } from '../../../../lib/formatters';
   makeGeneralForm() {
     let { formData, setMergeTratamientoApuntalado, intervals } = this.props
     let { tratamientoCompany } = formData
-    const companyOptions = [
-      { label: 'Halliburton', value: 'Halliburton' },
-      { label: 'Schlumberger', value: 'Schlumberger' },
-      { label: 'PFM', value: 'PFM' },
-      { label: 'Chemiservices', value: 'Chemiservices' },
-      { label: 'BJ', value: 'BJ' },
-      { label: 'Weatherford',
-      value: 'Weatherford' }
-    ]
 
     const intervalsDiv = intervals.map(elem => <div key={`intervalo_${elem}`}>{elem}</div>)
 

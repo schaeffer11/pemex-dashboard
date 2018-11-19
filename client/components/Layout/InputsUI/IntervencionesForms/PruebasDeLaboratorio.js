@@ -4,9 +4,11 @@ import ReactTable from 'react-table'
 import { connect } from 'react-redux'
 import 'react-table/react-table.css'
 import Select from 'react-select'
+
 import InputTable from '../../Common/InputTable'
 import { InputRow, InputRowUnitless, InputRowSelectUnitless, TextAreaUnitless } from '../../Common/InputRow'
 import { setPruebasDeLaboratorioData } from '../../../../redux/actions/intervencionesEstimulacion'
+import { companyOptions } from '../../../../lib/helpers'
 
 export const options = [
   { label: 'Caracterización fisico-química de fluidos', value: 'caracterizacionFisico' },
@@ -19,15 +21,6 @@ export const options = [
   { label: 'Prueba de dureza', value: 'pruebaDeDureza' },
   { label: 'Determinación de la calidad método de los cloruros', value: 'determinacionDeLaCalidad' },
   { label: 'Curva de Viscosidad', value: 'curvaDeViscosidad' },
-]
-
-const companyOptions = [
-  { label: 'Halliburton', value: 'Halliburton' },
-  { label: 'Schlumberger', value: 'Schlumberger' },
-  { label: 'PFM', value: 'PFM' },
-  { label: 'Chemiservices', value: 'Chemiservices' },
-  { label: 'BJ', value: 'BJ' },
-  { label: 'Weatherford', value: 'Weatherford' },
 ]
 
 @autobind class PruebasDeLaboratorio extends Component {

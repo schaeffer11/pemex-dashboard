@@ -6,6 +6,7 @@ import { InputRow, InputRowSelectUnitless, CalculatedValue } from '../../../Comm
 import { setMergePropuestaTermica, setCedulaPropuestaTermica } from '../../../../../redux/actions/intervencionesTermica'
 import { checkEmpty, checkDate } from '../../../../../lib/errorCheckers'
 import { calculateValuesTermicaCedula } from '../../../../../lib/formatters';
+import { companyOptions } from '../../../../../lib/helpers'
 
 @autobind class PropuestaTermica extends Component {
   constructor(props) {
@@ -125,15 +126,7 @@ import { calculateValuesTermicaCedula } from '../../../../../lib/formatters';
   makeGeneralForm() {
     let { formData, setMergePropuestaTermica, intervals } = this.props
     let { propuestaCompany, volumenVapor, calidad, gastoInyeccion, presionMaximaSalidaGenerador, temperaturaMaximaGenerador } = formData
-    const companyOptions = [
-      { label: 'Halliburton', value: 'Halliburton' },
-      { label: 'Schlumberger', value: 'Schlumberger' },
-      { label: 'PFM', value: 'PFM' },
-      { label: 'Chemiservices', value: 'Chemiservices' },
-      { label: 'BJ', value: 'BJ' },
-      { label: 'Weatherford',
-      value: 'Weatherford' }
-    ]
+
     const intervalsDiv = intervals.map(elem => (
       <div key={`intervalo_${elem.cimaMD}-${elem.baseMD}`}>
         {`${elem.cimaMD}-${elem.baseMD}`}
