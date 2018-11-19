@@ -294,7 +294,7 @@ const arraysAreEqual = (arr1, arr2) => {
       userOptionsOpen,
       userOptionsTooltip,
     } = this.state
-    const { title, id, chartOptions, isImage, isTable } = this.props
+    const { title, id, chartOptions, isImage, isTable, width } = this.props
 
     let { children } = this.props
     // Only consider children that are react elements and cast result to array
@@ -317,7 +317,9 @@ const arraysAreEqual = (arr1, arr2) => {
     const viewing = Array.isArray(children) ? children[showing] : children
     const cardHasOptions = Array.isArray(chartOptions)
 
-    let style = isImage || isTable ? {width: '100%'} : null 
+    let style = width ? {width: width} : isImage || isTable ? {width: '100%'} :  null 
+
+    console.log(width, style)
     return (
       <div style={style}>
         <RSCard>

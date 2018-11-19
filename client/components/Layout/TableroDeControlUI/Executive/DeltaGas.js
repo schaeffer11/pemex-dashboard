@@ -10,26 +10,6 @@ let classificationSeries = [{
     color: 'red'
 }]
 
-let companySeries = [{
-  name: 'Halliburton',
-  color: '#C26A1B'
-},{
-  name: 'Schlumberger',
-  color: '#5D2311'
-},{
-  name: 'PFM',
-  color: '#141551'
-},{
-  name: 'Chemiservices',
-  color: '#355695'
-},{
-  name: 'BJ',
-  color: '#90D2CE'
-},{
-  name: 'Weatherford',
-  color: '#F4F296'
-}]
-
 let tipoDeInterventionSeries = [{
     name: 'acido',
     color: '#56B3D8',
@@ -89,12 +69,6 @@ let tipoDeInterventionSeries = [{
     if (!groupBy) {
       series = classificationSeries.map(i => {
         i.data = i.name === 'Successful' ? data.filter(j => j.qgResult > j.qg) : data.filter(j => j.qgResult <= j.qg)
-        return i
-      })
-    }
-    else if (groupBy === 'company') {
-      series = companySeries.map(i => {
-        i.data = data.filter(j => j.groupedName === i.name)
         return i
       })
     }

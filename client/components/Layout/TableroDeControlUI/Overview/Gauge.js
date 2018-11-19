@@ -14,30 +14,25 @@ export const Gauge = ({ topLabel, botLabel, value, topSubLabel, botSubLabel, cla
 
   let config = {
     chart: {
-      type: 'solidgauge'
+      type: 'solidgauge',
+      backgroundColor: 'transparent'
     },
     title: {
       text: ''
     },
     pane: {
       center: ['50%', '70%'],
-      size: '80%',
       startAngle: -90,
       endAngle: 90,
-      background: {
-        backgroundColor: 'red',
+      background: [{
+        backgroundColor: 'blue',
         innerRadius: '50%',
         outerRadius: '100%',
         shape: 'arc'
-      }
+      }]
     },
     tooltip: {
       enabled: false
-    },
-    plotOptions: {
-      solidgauge: {
-
-      }
     },
     yAxis: {
       min: 0,
@@ -47,8 +42,7 @@ export const Gauge = ({ topLabel, botLabel, value, topSubLabel, botSubLabel, cla
       stops: [
           [0.1, '#C71C31'],
           [0.5, '#DDDF0D'], 
-          [0.9, '#70AD46'] 
-        // [0.9, 'blue'] 
+          [0.9, '#70AD46']
             
       ],
       tickAmount: 9,

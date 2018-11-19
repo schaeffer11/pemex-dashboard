@@ -263,6 +263,7 @@ import { generatePowerPoint } from '../../../../pptx';
                 id="production"
                 title="Productions"
                 ref={this.cards[1]}
+                width={'50%'}
               >
                <ProductionGraph data={productionData} />
             </Card>
@@ -270,15 +271,25 @@ import { generatePowerPoint } from '../../../../pptx';
                 id="pressure"
                 title="Pressure"
                 ref={this.cards[2]}
+                width={'50%'}
               >
                <PressureGraph data={pressureData} />
             </Card>
             <Card
                 id="aforos"
                 title="Aforos"
+                width={'50%'}
                 ref={this.cards[3]}
               >
                <AforosGraph data={aforosData} dates={interventionDates}/>
+            </Card>
+              <Card
+                id="aforos"
+                title="Placeholder"
+                width={'50%'}
+                ref={this.cards[3]}
+              >
+               <div>Anything</div>
             </Card>
             <Card
                 id="images"

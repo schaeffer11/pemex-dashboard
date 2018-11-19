@@ -284,9 +284,19 @@ import LabTable from './LabTable'
           <CostKPIs estData={estCostData} data={costData} />
           <CardDeck className="content-deck">
             <Card
+                id="cedula"
+                title="Cedulas"
+                ref={this.cards[4]}
+                isTable={true}
+              >          
+              <CedulaTable label='Proposed' data={cedulaData} type={jobType} />
+              <CedulaTable label='Actual' data={cedulaResultData} type={jobType} />
+            </Card>  
+            <Card
                 id="costs"
                 title="Estimated Vs Actual Costs"
                 ref={this.cards[0]}
+                width={'50%'}
               >          
               <CostBar estData={estCostData} data={costData} />
             </Card>
@@ -294,6 +304,7 @@ import LabTable from './LabTable'
                 id="volumes"
                 title="Estimated Vs Actual Volumes"
                 ref={this.cards[1]}
+                width={'50%'}
               >          
               <VolumeBar estData={estVolumeData} data={volumeData} />
             </Card>
@@ -302,6 +313,7 @@ import LabTable from './LabTable'
                 title="Simulation Results"
                 ref={this.cards[2]}
                 isTable={true}
+                width={'50%'}
               >          
               <SimulationTreatmentTable type={jobType} interventionData={interventionData} interventionResultsData={interventionResultsData} />
             </Card>            
@@ -309,26 +321,9 @@ import LabTable from './LabTable'
                 id="aforos"
                 title="Aforos"
                 ref={this.cards[3]}
+                width={'50%'}
               >          
               <AforoScatter data={aforoData} interventionDate={date}/>   
-            </Card>
-            <Card
-                id="cedula"
-                title="Cedulas"
-                ref={this.cards[4]}
-                isTable={true}
-              >          
-              <CedulaTable label='Proposed' data={cedulaData} type={jobType} />
-              <CedulaTable label='Actual' data={cedulaResultData} type={jobType} />
-            </Card>   
-             <Card
-
-                id="images"
-                title="Images"
-                ref={this.cards[5]}
-                isImage={true}
-              >
-              {this.makeImages()}
             </Card> 
             <Card
                 id="labs"
@@ -338,6 +333,16 @@ import LabTable from './LabTable'
               >
               <LabTable data={labData} labData={specificLabData} handleChange={this.fetchLabData} />
             </Card> 
+             <Card
+
+                id="images"
+                title="Images"
+                ref={this.cards[5]}
+                isImage={true}
+              >
+              {this.makeImages()}
+            </Card> 
+
           </CardDeck>
           <div style={{height: '500px'}}/>
         </div>
