@@ -1661,9 +1661,7 @@ export const create = async (body, action, cb) => {
                                       INSERT_LAB_TEST_QUERY.save = `SELECT(1) FROM Users LIMIT 1`
                                     }
 
-                                    query = 
-                                      tipoDeIntervenciones === 'termico' ? DUMMY_QUERY :
-                                        (action === 'save' ? INSERT_LAB_TEST_QUERY.save : INSERT_LAB_TEST_QUERY.submit)
+                                    query = action === 'save' ? INSERT_LAB_TEST_QUERY.save : INSERT_LAB_TEST_QUERY.submit
                                     
                                     connection.query(query, [values], (err, results) => {
                                       console.log('lab tests', err)

@@ -250,7 +250,7 @@ export const createResults = async (body, action, cb) => {
 
   }
   else if (interventionType === 'termico') {
-      var { volumenVapor, calidad, gastoInyeccion, presionMaximaSalidaGenerador, temperaturaMaximaGenerador, tratamientoCompany } = finalObj.tratamientoTermico
+      var { volumenVapor, calidad, gastoInyeccion, presionMaximaSalidaGenerador, temperaturaMaximaGenerador, tratamientoCompany, cedulaData } = finalObj.tratamientoTermico
       
       var { qo, qw, qg }  = finalObj.evaluacionTermica
   }
