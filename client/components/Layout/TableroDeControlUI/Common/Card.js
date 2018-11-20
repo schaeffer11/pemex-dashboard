@@ -274,7 +274,7 @@ const replaceAll = function(str, search, replacement) {
               )
             })}
             <h6>
-              {`${selectedGrouping}: ${groupProps}`}
+              {`${groupProps}`}
             </h6>
           </div>
           <button className="right" type="button" onClick={() => this.handleGroupChangeChevron('right')}>

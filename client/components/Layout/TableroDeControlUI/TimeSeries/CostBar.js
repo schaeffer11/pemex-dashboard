@@ -30,7 +30,7 @@ import { KPI } from '../Common/KPIs'
 
 
       series.push({
-        name: name !== 1 ? name : 'Cost Data',
+        name: name !== 1 ? name : 'Costos',
         data: filteredData
       })
     })
@@ -46,14 +46,14 @@ import { KPI } from '../Common/KPIs'
       },
       xAxis: {
         title: {
-          text: 'Item'
+          text: 'Fecha'
         },
         tickInterval   : 24 * 3600 * 1000*30,
         type: 'datetime',
       },
       yAxis: {
         title: {
-          text: 'Costs'
+          text: 'Costos ($MNX)'
         }
       },
       plotOptions: {

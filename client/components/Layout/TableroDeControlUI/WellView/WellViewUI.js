@@ -315,9 +315,6 @@ import ZoneTable from './ZoneTable'
     let zoneExportData = this.makeZoneExportData(zoneData)
     let layerExportData = this.makeLayerExportData(layerData)
 
-    console.log(zoneData)
-    console.log(layerData)
-
     return (
       <div className="data well-view">
         <div className='header'>

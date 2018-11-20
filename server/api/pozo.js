@@ -695,15 +695,6 @@ DELETE FROM _IntervencionesLabTestsPruebasGelDeFracturaSave WHERE TRANSACTION_ID
 DELETE FROM _IntervencionesLabTestsPruebasParaApuntalanteSave WHERE TRANSACTION_ID = ?;
 DELETE FROM _IntervencionesLabTestsSave WHERE TRANSACTION_ID = ?;
 DELETE FROM _IntervencionesSave WHERE TRANSACTION_ID = ?;
-DELETE FROM _ResultsAcidoSave WHERE TRANSACTION_ID = ?;
-DELETE FROM _ResultsAforosSave WHERE TRANSACTION_ID = ?;
-DELETE FROM _ResultsApuntaladoSave WHERE TRANSACTION_ID = ?;
-DELETE FROM _ResultsCedulaAcidoSave WHERE TRANSACTION_ID = ?;
-DELETE FROM _ResultsCedulaApuntaladoSave WHERE TRANSACTION_ID = ?;
-DELETE FROM _ResultsCedulaEstimulacionSave WHERE TRANSACTION_ID = ?;
-DELETE FROM _ResultsCostsSave WHERE TRANSACTION_ID = ?;
-DELETE FROM _ResultsEstimulacionsSave WHERE TRANSACTION_ID = ?;
-DELETE FROM _ResultsImagesSave WHERE TRANSACTION_ID = ?;
 DELETE FROM _WellAforosSave WHERE TRANSACTION_ID = ?;
 DELETE FROM _WellAnalisisDelAguaSave WHERE TRANSACTION_ID = ?;
 DELETE FROM _WellHistorialIntervencionesSave WHERE TRANSACTION_ID = ?;

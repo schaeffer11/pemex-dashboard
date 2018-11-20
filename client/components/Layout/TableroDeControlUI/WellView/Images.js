@@ -41,7 +41,6 @@ import { KPI } from '../Common/KPIs'
   render() {
     let { data } = this.props
 
-    console.log(data)
     var settings = {
         dots: true,
     }

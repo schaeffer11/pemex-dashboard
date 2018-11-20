@@ -122,7 +122,7 @@ import TimeSlider from '../TimeSeries/TimeSlider'
         estCost: costData.find(i => i.type === 'total').estCost,
         days: dateDiffData.reduce((sum, curr) => sum + (curr.avgDateDiff * curr.COUNT), 0) / dateDiffData.reduce((sum, curr) => sum + curr.COUNT, 0) 
     }, {
-        name: 'Fractuarmiento Acido',
+        name: 'Fracturamiento Ácido',
         classname: 'Acido',
         numProposals: countData.find(i => i.TIPO_DE_INTERVENCIONES === 'acido') ? countData.find(i => i.TIPO_DE_INTERVENCIONES === 'acido').COUNT : null,
         numResults: countData.find(i => i.TIPO_DE_INTERVENCIONES === 'acido') ? countData.find(i => i.TIPO_DE_INTERVENCIONES === 'acido').COUNT_RESULTS : null,
@@ -134,7 +134,7 @@ import TimeSlider from '../TimeSeries/TimeSlider'
         estCost: costData.find(i => i.type === 'acido').estCost,
         days: dateDiffData.find(i => i.type === 'acido') ? dateDiffData.find(i => i.type === 'acido').avgDateDiff : null
     }, {
-        name: 'Fractuaramiento Apuntalado',
+        name: 'Fracturaamiento Apuntalado',
         classname: 'Apuntalado',
         numProposals: countData.find(i => i.TIPO_DE_INTERVENCIONES === 'apuntalado') ? countData.find(i => i.TIPO_DE_INTERVENCIONES === 'apuntalado').COUNT : null,
         numResults: countData.find(i => i.TIPO_DE_INTERVENCIONES === 'apuntalado') ? countData.find(i => i.TIPO_DE_INTERVENCIONES === 'apuntalado').COUNT_RESULTS : null,
@@ -146,7 +146,7 @@ import TimeSlider from '../TimeSeries/TimeSlider'
         estCost: costData.find(i => i.type === 'apuntalado').estCost,
         days: dateDiffData.find(i => i.type === 'apuntalado') ? dateDiffData.find(i => i.type === 'apuntalado').avgDateDiff : null
     }, {
-        name: 'Estimulacion Limpieza',
+        name: 'Estimulación Limpiezas',
         classname: 'Estimulacion',
         numProposals: countData.find(i => i.TIPO_DE_INTERVENCIONES === 'estimulacionLimpieza') ? countData.find(i => i.TIPO_DE_INTERVENCIONES === 'estimulacionLimpieza').COUNT : null,
         numResults: countData.find(i => i.TIPO_DE_INTERVENCIONES === 'estimulacionLimpieza') ? countData.find(i => i.TIPO_DE_INTERVENCIONES === 'estimulacionLimpieza').COUNT_RESULTS : null,
@@ -158,7 +158,7 @@ import TimeSlider from '../TimeSeries/TimeSlider'
         estCost: costData.find(i => i.type === 'estimulacionLimpieza').estCost,
         days: dateDiffData.find(i => i.type === 'estimulacionLimpieza') ? dateDiffData.find(i => i.type === 'estimulacionLimpieza').avgDateDiff : null
     }, {
-        name: 'Estimulacion Matricial',
+        name: 'Estimulación Matricial',
         classname: 'estimMatricial',
         numProposals: countData.find(i => i.TIPO_DE_INTERVENCIONES === 'estimulacionMatricial') ? countData.find(i => i.TIPO_DE_INTERVENCIONES === 'estimulacionMatricial').COUNT : null,
         numResults: countData.find(i => i.TIPO_DE_INTERVENCIONES === 'estimulacionMatricial') ? countData.find(i => i.TIPO_DE_INTERVENCIONES === 'estimulacionMatricial').COUNT_RESULTS : null,
@@ -170,7 +170,7 @@ import TimeSlider from '../TimeSeries/TimeSlider'
         estCost: costData.find(i => i.type === 'estimulacionMatricial').estCost,
         days: dateDiffData.find(i => i.type === 'estimulacionMatricial') ? dateDiffData.find(i => i.type === 'estimulacionMatricial').avgDateDiff : null
     }, {
-        name: 'Estimulacion Termica',
+        name: 'Estimulación Termica',
         classname: 'Termico',
         numProposals: countData.find(i => i.TIPO_DE_INTERVENCIONES === 'termico') ? countData.find(i => i.TIPO_DE_INTERVENCIONES === 'termico').COUNT : null,
         numResults: countData.find(i => i.TIPO_DE_INTERVENCIONES === 'termico') ? countData.find(i => i.TIPO_DE_INTERVENCIONES === 'termico').COUNT_RESULTS : null,

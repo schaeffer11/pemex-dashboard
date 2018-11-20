@@ -52,7 +52,7 @@ const numWithCommas = (x) => {
                     {days ? days.toFixed(2) : '-'}
                 </div>
                 <div className='header'>
-                    Desviacion Promedio (dias)
+                    Desviacion Promedio (días)
                 </div>
             </div>
 

@@ -53,7 +53,7 @@ import { KPI } from '../Common/KPIs'
       })
 
       series.push({
-        name: name ? name : 'Inc Production Data',
+        name: name !== 1 ? name : 'Producción Incremental',
         data: filteredData,         
       })
     })
@@ -75,7 +75,7 @@ import { KPI } from '../Common/KPIs'
       },
       yAxis: {
         title: {
-          text: 'Inc Qo'
+          text: 'Aceite (bbl/d)'
         }
       },
       credits: {

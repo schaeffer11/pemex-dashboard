@@ -52,7 +52,7 @@ import { generatePowerPoint } from '../../../../pptx';
       `Sistema`,
       `Nombre Comercial`,
       `Vol. Liq. (m3)`,
-      `Gasto Liquido (bpm)`,
+      `Gasto Líquido (bpm)`,
       `Rel. N2/Liq (m3std/m3)`,
       `Calidad (%)`,
       `Gasto en fondo (bpm)`,
@@ -92,8 +92,8 @@ import { generatePowerPoint } from '../../../../pptx';
       `Tipo de Analisis`,
       `Fecha de Muestreo`,
       `Fecha de prueba`,
-      `Compania`,
-      `Personal de Pemex que superviso`,
+      `Compañía`,
+      `Personal de Pemex que supervisó`,
     ])
 
 
@@ -110,6 +110,28 @@ import { generatePowerPoint } from '../../../../pptx';
     return exportData
   }
 
+  makeSimulationExportData(data) {
+    let exportData = []
+
+    exportData.push([
+      `Concepto`,
+      `Unidad`,
+      `Simulación`,
+      `Real`,
+    ])
+
+
+    data.forEach(i => {
+      exportData.push([
+        i.item,
+        i.unit,
+        i.sim,
+        i.actual,
+      ])
+    })
+
+    return exportData
+  }
 
   fetchJobs() {
     let { globalAnalysis } = this.props
@@ -335,22 +357,117 @@ import { generatePowerPoint } from '../../../../pptx';
     globalAnalysis = globalAnalysis.toJS()
     let { job, jobType } = globalAnalysis
 
-    console.log('images', imageData)
-    console.log('costs', costData)
-    console.log('est costs', estCostData)
-    console.log('cedula', cedulaData)
-    console.log('cedula results', cedulaResultData)
-    console.log('intervention', interventionData)
-    console.log('intervention results', interventionResultsData)
-    console.log('aforo data', aforoData)
-    console.log('date', date)
-    console.log('labData', labData)
-    console.log('specificLabData', specificLabData)
-    console.log('estIncData', estIncData)
+    // console.log('images', imageData)
+    // console.log('costs', costData)
+    // console.log('est costs', estCostData)
+    // console.log('cedula', cedulaData)
+    // console.log('cedula results', cedulaResultData)
+    // console.log('intervention', interventionData)
+    // console.log('intervention results', interventionResultsData)
+    // console.log('aforo data', aforoData)
+    // console.log('date', date)
+    // console.log('labData', labData)
+    // console.log('specificLabData', specificLabData)
+    // console.log('estIncData', estIncData)
+
+
+    let simulationData = []
+    let hide = false
+    interventionData ? interventionData = interventionData[0] : null
+    interventionResultsData ? interventionResultsData = interventionResultsData[0] : null
+
+    if (interventionData && interventionResultsData)  {
+      if (jobType === 'Estimulacion') {
+        if (!interventionData.LONGITUD_DE_AGUJERO_DE_GUSANO || !interventionData.PENETRACION_RADIAL) {
+          hide = true
+        }
+        else {
+          simulationData = [{
+            item: 'Longitud de agujero de gusano', unit: 'pg', sim: interventionData.LONGITUD_DE_AGUJERO_DE_GUSANO, actual: interventionResultsData.LONGITUD_DE_AGUJERO_DE_GUSANO
+          },{
+            item: 'Penetración radial', unit: 'pg', sim: interventionData.PENETRACION_RADIAL, actual: interventionResultsData.PENETRACION_RADIAL
+          }]
+        }
+      }
+      else if (jobType === 'Acido') {
+        simulationData = [{
+          item: 'Longitud total', unit: 'm', sim: interventionData.LONGITUD_TOTAL, actual: interventionResultsData.LONGITUD_TOTAL
+        },{
+          item: 'Longitud efectiva grabada', unit: 'm', sim: interventionData.LONGITUD_EFECTIVA_GRABADA, actual: interventionResultsData.LONGITUD_EFECTIVA_GRABADA
+        },{
+          item: 'Altura grabada', unit: 'm', sim: interventionData.ALTURA_GRABADA, actual: interventionResultsData.ALTURA_GRABADA
+        },{
+          item: 'Ancho promedio', unit: 'pg', sim: interventionData.ANCHO_PROMEDIO, actual: interventionResultsData.ANCHO_PROMEDIO
+        },{
+          item: 'Concentración del ácido', unit: <div>lb/pg<sup>2</sup></div>, sim: interventionData.CONCENTRACION_DEL_ACIDO, actual: interventionResultsData.CONCENTRACION_DEL_ACIDO
+        },{
+          item: 'Conductividad', unit: 'mD*ft', sim: interventionData.CONDUCTIVIDAD, actual: interventionResultsData.CONDUCTIVIDAD
+        },{
+          item: 'FCD', unit: 'adim.', sim: interventionData.FCD, actual: interventionResultsData.FCD
+        },{
+          item: 'Presión neta', unit: 'psi', sim: interventionData.PRESION_NETA, actual: interventionResultsData.PRESION_NETA
+        },{
+          item: 'Eficiencia de fluido de fractura', unit: '%', sim: interventionData.EFICIENCIA_DE_FLUIDO_DE_FRACTURA, actual: interventionResultsData.EFICIENCIA_DE_FLUIDO_DE_FRACTURA
+        }]
+      }
+      else if (jobType === 'Apuntalado') {
+        simulationData = [{
+          item: 'Longitud apuntalada', unit: 'm', sim: interventionData.LONGITUD_APUNTALADA, actual: interventionResultsData.LONGITUD_APUNTALADA
+        },{
+          item: 'Altura total de fractura', unit: 'm', sim: interventionData.ALTURA_TOTAL_DE_FRACTURA, actual: interventionResultsData.ALTURA_TOTAL_DE_FRACTURA
+        },{
+          item: 'Ancho promedio', unit: 'pg', sim: interventionData.ANCHO_PROMEDIO, actual: interventionResultsData.ANCHO_PROMEDIO
+        },{
+          item: 'Concentración areal', unit: <div>lb/pg<sup>2</sup></div>, sim: interventionData.CONCENTRACION_AREAL, actual: interventionResultsData.CONCENTRACION_AREAL
+        },{
+          item: 'Conductividad', unit: 'mD*ft', sim: interventionData.CONDUCTIVIDAD, actual: interventionResultsData.CONDUCTIVIDAD
+        },{
+          item: 'FCD', unit: 'adim.', sim: interventionData.FCD, actual: interventionResultsData.FCD
+        },{
+          item: 'Presión neta', unit: 'psi', sim: interventionData.PRESION_NETA, actual: interventionResultsData.PRESION_NETA
+        },{
+          item: 'Eficiencia de fluido  de fractura', unit: '%', sim: interventionData.EFICIENCIA_DE_FLUIDO_DE_FRACTURA, actual: interventionResultsData.EFICIENCIA_DE_FLUIDO_DE_FRACTURA
+        }]
+      }
+      else {
+        hide = true
+      }  
+    }
+
+
+    let labDataFixed = []
+
+      labData.forEach(i => {
+       let muestreoDate = new Date(i.fechaMuestreo)
+        muestreoDate = `${muestreoDate.getDate()}/${muestreoDate.getMonth() + 1}/${muestreoDate.getFullYear()}`
+       
+       let pruebaDate = new Date(i.fechaPrueba)
+        pruebaDate = `${pruebaDate.getDate()}/${pruebaDate.getMonth() + 1}/${pruebaDate.getFullYear()}`
+
+        labDataFixed.push({
+            id: i.id,
+            type: i.type,
+            fechaMuestreo: muestreoDate,
+            fechaPrueba: pruebaDate,
+            compania: i.compania,
+            superviso: i.superviso,
+            observaciones: i.observaciones,
+        })
+  
+      
+    })
+
+
+
+
+
+
+
 
     let cedulaExportData = this.makeCedulaExportData(cedulaData)
     let cedulaResultExportData = this.makeCedulaExportData(cedulaResultData)
-    let labExportData = this.makeLabExportData(labData)
+    let labExportData = this.makeLabExportData(labDataFixed)
+    let simulationExportData = this.makeSimulationExportData(simulationData)
 
     return (
       <div className="data job-view">
@@ -391,12 +508,12 @@ import { generatePowerPoint } from '../../../../pptx';
             </Card>
             <Card
                 id="simulationResults"
-                title="Simulation Results"
+                title="Simulación vs Resultados"
                 ref={this.cards[2]}
                 isTable={true}
                 width={'50%'}
               >          
-              <SimulationTreatmentTable type={jobType} interventionData={interventionData} interventionResultsData={interventionResultsData} />
+              <SimulationTreatmentTable hide={hide} data={simulationData} exportData={simulationExportData} />
             </Card>
             <Card
                 id="aforos"
@@ -412,7 +529,7 @@ import { generatePowerPoint } from '../../../../pptx';
                 ref={this.cards[5]}
                 isTable={true}
               >
-              <LabTable data={labData} exportData={labExportData} labData={specificLabData} handleChange={this.fetchLabData} />
+              <LabTable data={labDataFixed} exportData={labExportData} labData={specificLabData} handleChange={this.fetchLabData} />
             </Card> 
              <Card
 

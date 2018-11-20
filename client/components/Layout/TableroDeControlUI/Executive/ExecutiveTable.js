@@ -21,39 +21,39 @@ import { CategoryDist, TrafficLight, Currency, Integer, numWithCommas } from '..
 
     switch(groupBy) {
       case 'subdireccion':
-        header = 'Subdireccion Name'
+        header = 'Subdirección'
         break
       case 'activo':
-        header = 'Activo Name'
+        header = 'Activo'
         break
       case 'field':
-        header = 'Field Name'
+        header = 'Campo'
         break
       case 'well':
-        header = 'Well Name'
+        header = 'Pozo'
         break
       case 'formation':
-        header = 'Formacion'
+        header = 'Formación'
         break
       case 'company':
-        header = 'Propuesta Compania'
+        header = 'Companñía'
         break
       case 'interventionType':
-        header = 'Tipo De Intervenciones'
+        header = 'Tipo De Intervención'
         break
       case 'terminationType':
-        header = 'Tipo De Terminacion'
+        header = 'Tipo De Terminación'
         break
     }
 
 
       let columns = [{
-        Header: <div>Total de<br/>Tratamientos</div>,
+        Header: <div>Total de Tratamientos</div>,
         accessor: 'numTreatments',
         minWidth: 150,
         Cell: Integer,
       },{
-        Header: '% Category',
+        Header: <div>% de Tratamientos</div>,
         accessor: 'bar', 
         minWidth: 150,
         Cell: CategoryDist
@@ -63,12 +63,12 @@ import { CategoryDist, TrafficLight, Currency, Integer, numWithCommas } from '..
         minWidth: 150,
         Cell: Currency,
       },{
-        Header: 'Produccion Incremental Estimada',
+        Header: 'Producción Incremental Estimada',
         accessor: 'estProd', 
         minWidth: 150,
         Cell: Integer
       },{
-        Header: 'Produccion Incremental Real',
+        Header: 'Producción Incremental Real',
         accessor: 'realProd', 
         minWidth: 150,
         Cell: row => {
@@ -90,61 +90,61 @@ import { CategoryDist, TrafficLight, Currency, Integer, numWithCommas } from '..
           </div>
         )}
       },{
-        Header: <div>Date / Type of<br/>Last Treatment</div>,
+        Header: <div>Fecha y Tipo del Último Tratamiento</div>,
         accessor: 'dateType', 
         minWidth: 150
       }, {
-        Header: <div>Total Sistema<br/>No Reactivo<br/>(m<sup>3</sup>)</div>,
+        Header: <div>Sistema No Reactivo<br/>(m<sup>3</sup>)</div>,
         accessor: 'sistemaNoReactivo', 
         Cell: Integer,
         minWidth: 150
       },{
-        Header: <div>Total Sistema<br/>Reactivo<br/>(m<sup>3</sup>)</div>,
+        Header: <div>Sistema Reactivo<br/>(m<sup>3</sup>)</div>,
         accessor: 'sistemaReactivo', 
         Cell: Integer,
         minWidth: 150
       },{
-        Header: <div>Total Sistema<br/>Divergente<br/>(m<sup>3</sup>)</div>,
+        Header: <div>Sistema Divergente<br/>(m<sup>3</sup>)</div>,
         accessor: 'sistemaDivergente', 
         Cell: Integer,
         minWidth: 150
       },{
-        Header: <div>Total Desplazamiento<br/>Liquido<br/>(m<sup>3</sup>)</div>,
+        Header: <div>Desplazamiento Líquido<br/>(m<sup>3</sup>)</div>,
         accessor: 'desplazamientoLiquido', 
         Cell: Integer,
         minWidth: 150
       },{
-        Header: <div>Total Desplazamiento<br/>N2<br/>(m<sup>3</sup>)</div>,
+        Header: <div>Desplazamiento N<sub>2</sub><br/>(m<sup>3</sup>)</div>,
         accessor: 'desplazamientoN2', 
         Cell: Integer,
         minWidth: 150
       },{
-        Header: <div>Total Precolchon<br/>N2<br/>(m<sup>3</sup>)</div>,
+        Header: <div>Precolchón N<sub>2</sub><br/>(m<sup>3</sup>)</div>,
         accessor: 'precolchonN2', 
         Cell: Integer,
         minWidth: 150
       },{
-        Header: <div>Total Liquido<br/>(m<sup>3</sup>)</div>,
+        Header: <div>Líquidos Totales<br/>(m<sup>3</sup>)</div>,
         accessor: 'liquido', 
         Cell: Integer,
         minWidth: 150
       },{
-        Header: <div>Total Apuntalante<br/>(sacos)</div>,
+        Header: <div>Apuntalante<br/>(sacos)</div>,
         accessor: 'apuntalante', 
         Cell: Integer,
         minWidth: 150
       },{
-        Header: <div>Total Gel de<br/>Fractura<br/>(U.S. gal)</div>,
+        Header: <div>Gel de Fractura<br/>(U.S. gal)</div>,
         accessor: 'gelDeFractura', 
         Cell: Integer,
         minWidth: 150
       },{
-        Header: <div>Total Precolchon<br/>apuntalante<br/>(U.S. gal)</div>,
+        Header: <div>Precolchón apuntalante<br/>(U.S. gal)</div>,
         accessor: 'precolchonApuntalante', 
         Cell: Integer,
         minWidth: 150
       },{
-        Header: <div>Total Vapor<br/>Injected<br/>(ton)</div>,
+        Header: <div>Vapor Inyectado<br/>(ton)</div>,
         accessor: 'vapor', 
         Cell: Integer,
         minWidth: 150

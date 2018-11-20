@@ -14,7 +14,7 @@ import { KPI } from '../Common/KPIs'
 
     return (        
       <div className="KPIs" style={{padding: '0px 20px 20px 20px'}}>
-        <KPI header='Field' value={data.FIELD_NAME} />
+        <KPI header='Field' value={data.FIELD_NAME} unit='test'/>
         <KPI header='Formation' value={data.FORMACION} />
         <KPI header='Tipo De Pozo' value={data.TIPO_DE_POZO} />
         <KPI header='Caliza' value={data.CALIZA} />

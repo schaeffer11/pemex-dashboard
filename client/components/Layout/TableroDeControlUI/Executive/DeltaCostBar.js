@@ -91,7 +91,7 @@ let colorWheel = [
         min: -100,
         max: 100,
         title: {
-          text: 'Percentage'
+          text: 'Desviación (en porcentaje)'
         },
         plotLines: [{
           value: 0,
@@ -123,8 +123,6 @@ let colorWheel = [
       },
 	    series: series
 		}
-
-    console.log(series)
 
     return (
     	<ReactHighcharts

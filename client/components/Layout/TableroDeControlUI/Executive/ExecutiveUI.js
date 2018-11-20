@@ -257,7 +257,7 @@ import AvgDeltaIncProdBar from './AvgDeltaIncProdBar'
           <CardDeck className="content-deck">
               <Card
                 id="execTable"
-                title="Some Table"
+                title="Análisis de los Trabajos de Estimulación y Fracturamiento"
                 ref={this.cards[6]}
                 isTable={true}
               >       
@@ -265,59 +265,59 @@ import AvgDeltaIncProdBar from './AvgDeltaIncProdBar'
             </Card>
             <Card
                 id="productionGraphs"
-                title="Delta Incremental Production"
+                title="Desviación Real vs Estimada"
                 ref={this.cards[0]}
                 width={'50%'}
               >
-              <DeltaOil label='Oil' data={singularEstIncData} groupBy={groupBy} />
-              <DeltaWater label='Water' data={singularEstIncData} groupBy={groupBy} />
+              <DeltaOil label='Aceite' data={singularEstIncData} groupBy={groupBy} />
+              <DeltaWater label='Agua' data={singularEstIncData} groupBy={groupBy} />
               <DeltaGas label='Gas' data={singularEstIncData} groupBy={groupBy} />
             </Card>
             <Card
                 id="classifications"
-                title="Classification"
+                title="Clasificación"
                 ref={this.cards[1]}
                 width={'50%'}
                 multiplyChartsOnGrouping
               >
-              <JobBreakdown label='Job Type' data={jobBreakdownData} />
-{/*              <JobBreakdown label='Success' data={aforosCarouselData} />*/}
+              <JobBreakdown label='Tipo' data={jobBreakdownData} />
+{/*              <JobBreakdown label='Éxito' data={aforosCarouselData} />*/}
             </Card>
             <Card
                 id="incProd"
-                title="Incremental Production"
+                title="Producción Incremental"
                 ref={this.cards[2]}
                 width={'50%'}
               >
               <IncProdBar label={'Total'} data={estIncData} groupBy={groupBy} />  
-              <AvgIncProdBar label={'Average'} data={estIncData} groupBy={groupBy} />  
+              <AvgIncProdBar label={'Promedio'} data={estIncData} groupBy={groupBy} />  
             </Card>
             <Card
                 id="incProdDeviations"
-                title="Incremental Production Deviations"
+                title="Desviación de Producción Incremental"
                 ref={this.cards[3]}
                 width={'50%'}
               >       
               <DeltaIncProdScatter label={'Individual'} data={singularEstIncData} groupBy={groupBy} />
-              <AvgDeltaIncProdBar label={'Avg'} data={estIncData} groupBy={groupBy} />
+              <AvgDeltaIncProdBar label={'Promedio'} data={estIncData} groupBy={groupBy} />
             </Card>
             <Card
                 id="costs"
-                title="Costs"
+                title="Costos"
                 ref={this.cards[4]}
                 width={'50%'}
               >
               <CostBar label={'Total'} data={costData} groupBy={groupBy} />  
-              <AvgCostBar label={'Average'} data={costData} groupBy={groupBy} />  
+              <AvgCostBar label={'Promedio'} data={costData} groupBy={groupBy} />  
             </Card>
             <Card
                 id="costDeviations"
-                title="Cost Deviations"
+                title="Desviación de Costos"
                 ref={this.cards[5]}
                 width={'50%'}
               >       
               <DeltaCostBar label={'Individual'} data={singularCostData} groupBy={groupBy} />
-              <AvgDeltaCostBar label={'Avg'} data={costData} groupBy={groupBy} />
+              <AvgDeltaCostBar label={'Promedio'} data={costData} groupBy={groupBy} />
             </Card>
           </CardDeck>
           
