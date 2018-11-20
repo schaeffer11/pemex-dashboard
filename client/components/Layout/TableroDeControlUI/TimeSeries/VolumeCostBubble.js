@@ -75,7 +75,7 @@ import { KPI } from '../Common/KPIs'
       series: series
   }
 
-  console.log(series)
+  // console.log(series)
 
     return (
       <div className="production-bubble test">

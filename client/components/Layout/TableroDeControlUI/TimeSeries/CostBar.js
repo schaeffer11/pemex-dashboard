@@ -70,7 +70,7 @@ import { KPI } from '../Common/KPIs'
   }
 
 
-  console.log(series)
+  // console.log(series)
     return (
       <div className="cost-bar test">
         <div className='chart'>
