@@ -55,7 +55,7 @@ router.get('/costData', (req, res) => {
     values.push(highDateString)
   }
 
-  let select = '1 as groupedName'
+  let select = '1 as groupedName,'
 
   switch(groupBy) {
     case 'subdireccion':
@@ -272,7 +272,7 @@ router.get('/incProdData', (req, res) => {
     values.push(highDateString)
   }
 
-  let select = '1 groupedName'
+  let select = '1 as groupedName,'
 
   switch(groupBy) {
     case 'subdireccion':
@@ -531,7 +531,7 @@ router.get('/numTreatmentData', (req, res) => {
     values.push(highDateString)
   }
 
-  let select = '1 as groupedName'
+  let select = '1 as groupedName,'
 
   switch(groupBy) {
     case 'subdireccion':

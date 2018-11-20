@@ -173,7 +173,8 @@ import VolumeGasTreatments from './VolumeGasTreatments'
       }
     }
 
-    console.log(incProdCarouselData)
+    // console.log(incProdCarouselData)
+    console.log(volumeData)
     return (
       <div className="data statistics">
         <div className='content'>
