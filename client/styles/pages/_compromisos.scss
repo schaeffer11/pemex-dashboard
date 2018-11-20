@@ -110,6 +110,17 @@
     textarea {
       width: 100%;
     }
+
+    .avance {
+      input {
+        display: inline-block;
+      }
+
+      span.fieldValue {
+        display: inline-block;
+        margin-left: 20px;
+      }
+    }
   }
 }
 

@@ -957,6 +957,7 @@ const BoolInput = (props) => {
                                 form.setFieldValue(props.name, 1)
                             }}
                         />
+                        <span>Si</span>
                     </label>
                     <label>
                         <input
@@ -968,6 +969,7 @@ const BoolInput = (props) => {
                                 form.setFieldValue(props.name,0)
                             }}
                         />
+                        <span>No</span>
                     </label>
                 </div>
             )}

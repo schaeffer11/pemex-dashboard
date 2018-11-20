@@ -106,13 +106,14 @@ import { checkDate, checkEmpty, checkEmptySingular, checkDateSingular } from '..
     const { errors, rowError } = this.getErrors(cellInfo.index)
     const name = cellInfo.column.id
     const value = data[cellInfo.index][cellInfo.column.id]
-    let style = { }
+    let errorClasses = ""
     if(rowError && rowError[name] !== undefined && rowError[name].value !== null) {
-      style.border = 'solid 2px red'
+        errorClasses = "error"
     }
     return (
-      <div style={style}>
+      <div>
         <input
+          className={errorClasses}
           contentEditable
           suppressContentEditableWarning
           value={value}
@@ -131,13 +132,14 @@ import { checkDate, checkEmpty, checkEmptySingular, checkDateSingular } from '..
     const { errors, rowError } = this.getErrors(cellInfo.index)
     const name = cellInfo.column.id
     const value = data[cellInfo.index][cellInfo.column.id]
-    let style = { }
+    let errorClasses = ""
     if(rowError && rowError[name] !== undefined && rowError[name].value !== null) {
-      style.border = 'solid 2px red'
+       errorClasses = "error"
     }
     return (
-      <div style={style}>
+      <div>
         <textarea
+          className={errorClasses}
           contentEditable
           suppressContentEditableWarning
           value={value}
@@ -158,14 +160,15 @@ import { checkDate, checkEmpty, checkEmptySingular, checkDateSingular } from '..
     const isDisabled = disabledColumns(sistema, id)
     const name = cellInfo.column.id
     const { rowError } = this.getErrors(cellInfo.index)
-    let style = {}
+    let errorClasses = ""
     if (rowError && rowError[name] !== undefined && rowError[name].value !== null) {
-      style.border = 'solid 2px red'
+        errorClasses = "error"
     }
 
     return (
-      <div style={style}>
+      <div>
         <input
+          className={errorClasses}
           type="number"
           disabled={isDisabled}
           contentEditable
@@ -218,14 +221,15 @@ import { checkDate, checkEmpty, checkEmptySingular, checkDateSingular } from '..
     const { errors, rowError } = this.getErrors(cellInfo.index)
     const name = cellInfo.column.id
     const value = data[cellInfo.index][cellInfo.column.id]
-    let style = { }
+    let errorClasses = ""
     if(rowError && rowError[name] !== undefined && rowError[name].value !== null) {
-      style.border = 'solid 2px red'
+        errorClasses = "error"
     }
     return (
-      <div style={style}>
+      <div>
         <input
           type="number"
+          className={errorClasses}
           contentEditable
           suppressContentEditableWarning
           value={value}
@@ -242,16 +246,16 @@ import { checkDate, checkEmpty, checkEmptySingular, checkDateSingular } from '..
     let {data, selectOptions } = this.props
     const name = cellInfo.column.id
     const { rowError } = this.getErrors(cellInfo.index)
-    let style = {}
+    let errorClasses = ""
     if(rowError && rowError[name] !== undefined && rowError[name].value !== null) {
-      style.border = 'solid 2px red'
+        errorClasses = "error"
     }
     return (
-      <div style={style}>
+      <div>
         <Select
           simpleValue
           placeholder="Seleccionar"
-          className='input'
+          className='input ${errorClasses}'
           options={selectOptions}
           value={selectOptions.find(i=>i.value === cellInfo.row[name]) || null}
           onChange={e => {
@@ -284,14 +288,14 @@ import { checkDate, checkEmpty, checkEmptySingular, checkDateSingular } from '..
       }
     }
 
-    let style = {}
+    let errorClasses = ""
     if(rowError && rowError[name] !== undefined && rowError[name].value !== null) {
-      style.border = 'solid 2px red'
+        errorClasses = "error"
     }
     const date = data[cellInfo.index][cellInfo.column.id]
     const objValue = date ? moment(date) : null 
     return (
-      <div className='test' style={style}>
+      <div className='test'>
         <DatePicker
           customInput={
             <MaskedTextInput
@@ -304,6 +308,7 @@ import { checkDate, checkEmpty, checkEmptySingular, checkDateSingular } from '..
           name={name}
           onChange={handleSelect}
           onBlur={handleBlur}
+          className={errorClasses}
           selected={objValue}
           locale="es-mx"
           showMonthDropdown
@@ -364,6 +369,7 @@ import { checkDate, checkEmpty, checkEmptySingular, checkDateSingular } from '..
   render() {
     let {columns, data} = this.props;
     columns.forEach(column => {
+      column.minWidth = 150
       if(column.cell === 'renderEditable')
         column.Cell = this.renderEditable
       else if(column.cell === 'renderDate')
