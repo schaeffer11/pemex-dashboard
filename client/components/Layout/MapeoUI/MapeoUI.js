@@ -108,7 +108,7 @@ const ImportModal = (props) => {
             dialogStyle={{verticalAlign: '', textAlign: 'center', maxHeight: '80%', marginTop: '10%'}}
         >
             <div className="compromisosModal" >
-                <ImportForm mapeo={props.mapeo} select={props.select} closeImportModal={props.closeImportModal} />
+                <ImportForm mapeos={props.mapeos} select={props.select} closeImportModal={props.closeImportModal} />
             </div>
         </AriaModal>
     )

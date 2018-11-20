@@ -23,6 +23,9 @@ import { create as createCompromiso, mine as myCompromisos, collection as getCom
 import { createResults } from './results'
 
 import { create as createDiagnostico, get as getDiagnostico, getAll as getDiagnosticos } from './diagnosticos';
+
+import { create as createMapeo, get as getMapeo, getAll as getMapeos } from './mapeo';
+
 import { getAuthorization } from '../middleware';
 
 const connection = db.getConnection(appConfig.users.database)
@@ -372,6 +375,18 @@ router.get('/diagnostico', (req, res) => {
 
 router.get('/diagnostico/:id', (req, res) => {
     getDiagnostico(req, res)
+})
+
+router.post('/mapeo', (req, res) => {
+    createMapeo(req, res)
+})
+
+router.get('/mapeo', (req, res) => {
+    getMapeos(req, res)
+})
+
+router.get('/mapeo/:id', (req, res) => {
+    getMapeo(req, res)
 })
 
 

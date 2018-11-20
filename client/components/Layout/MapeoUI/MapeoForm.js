@@ -93,6 +93,8 @@ import { setIsLoading, setShowForms } from '../../../redux/actions/global'
             saraObs: "",
             estabilidadColoidal: null,
             estabilidadColoidalObs: "",
+            gravadoRoca: null,
+            gravadoRocaObs: "",
             esfericidad: null,
             esfericidadObs: "",
             redondez: null,
@@ -105,8 +107,8 @@ import { setIsLoading, setShowForms } from '../../../redux/actions/global'
             aglutinamientoObs: "",
             turbidez: null,
             turbidezObs: "",
-            gravadoRoca: null,
-            gravadoRocaObs: "",
+            solubilidadApunt: 0,
+            solubilidadApuntObs: "",
             viscosidad: null,
             viscosidadObs: "",
             hidratacionFluido: null,
@@ -478,7 +480,7 @@ import { setIsLoading, setShowForms } from '../../../redux/actions/global'
                                 </div>
                                 <div className="trow">
                                     <div className="description">¿Quién supervisa las pruebas de laboratorio?</div>
-                                    <div className="bool">/div>
+                                    <div className="bool"></div>
                                     <div className="observations"><Field component="textarea" name="quienSuprvLabObs" /></div>
                                     {errors.quienSuprvLabObs  && touched.quienSuprvLabObs && <div class="error">{errors.quienSuprvLabObs}</div>}
                                 </div>
@@ -763,7 +765,6 @@ import { setIsLoading, setShowForms } from '../../../redux/actions/global'
                                 </div>
                             </div>
                         </div>
-
                         <div className="table">
                             <div className="header">
                                 <div className="description">Descripción</div>
@@ -868,34 +869,34 @@ import { setIsLoading, setShowForms } from '../../../redux/actions/global'
                                     {errors.controlCalidad  && touched.controlCalidad && <div class="error">{errors.controlCalidad}</div>}
                                 </div>
                                 <div className="trow">
-                                    <div className="indented description">¿Efectúa monitoreo durante la ejecución del tratamiento?</div>
+                                    <div className=" description">¿Efectúa monitoreo durante la ejecución del tratamiento?</div>
                                     <div className="bool"><BoolInput name="monitoreoEjecucion" /></div>
                                     <div className="observations"><Field type="text" name="monitoreoEjecucionObs" /></div>
-                                    {errors.monitoreoEjecucion  && touched.monitoreoEjecucion && <div class="error">{errors.monitoreoEjecucion}</div>}
+                                    {errors.monitoreoEjecucion && touched.monitoreoEjecucion && <div class="error">{errors.monitoreoEjecucion}</div>}
                                 </div>
                                 <div className="trow">
-                                    <div className="indented description">¿Se realizan ajustes al diseño durante la operación?</div>
+                                    <div className=" description">¿Se realizan ajustes al diseño durante la operación?</div>
                                     <div className="bool"><BoolInput name="ajustesDisenio" /></div>
                                     <div className="observations"><Field type="text" name="ajustesDisenioObs" /></div>
-                                    {errors.ajustesDisenio  && touched.ajustesDisenio && <div class="error">{errors.ajustesDisenio}</div>}
+                                    {errors.ajustesDisenio && touched.ajustesDisenio && <div class="error">{errors.ajustesDisenio}</div>}
                                 </div>
                                 <div className="trow">
                                     <div className="description">¿Se realiza un reporte pos-tratamiento?</div>
-                                    <div className="bool"><BoolInput name="reportePost" />/div>
+                                    <div className="bool"><BoolInput name="reportePost" /></div>
                                     <div className="observations"><Field type="text" name="reportePostObs" /></div>
-                                    {errors.reportePost  && touched.reportePost && <div class="error">{errors.reportePost}</div>}
+                                    {errors.reportePost && touched.reportePost && <div class="error">{errors.reportePost}</div>}
                                 </div>
                                 <div className="trow">
                                     <div className="description">¿Quién abre a producción el pozo?</div>
                                     <div className="bool"></div>
                                     <div className="observations"><Field component="textarea" name="abreProdObs" /></div>
-                                    {errors.abreProdObs  && touched.abreProdObs && <div class="error">{errors.abreProdObs}</div>}
+                                    {errors.abreProdObs && touched.abreProdObs && <div class="error">{errors.abreProdObs}</div>}
                                 </div>
                                 <div className="trow">
                                     <div className="description">¿Se realiza medición del pozo después del tratamiento?</div>
                                     <div className="bool"><BoolInput name="medicionPozoPost" /></div>
                                     <div className="observations"><Field component="textarea" name="medicionPozoPostObs" /></div>
-                                    {errors.medicionPozoPost  && touched.medicionPozoPost && <div class="error">{errors.medicionPozoPost}</div>}
+                                    {errors.medicionPozoPost && touched.medicionPozoPost && <div class="error">{errors.medicionPozoPost}</div>}
                                 </div>
                                 <div className="trow">
                                     <div className="description">¿Se tiene un programa de toma de muestras para su análisis?</div>

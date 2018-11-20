@@ -14,7 +14,7 @@ import { setIsLoading, setShowForms } from '../../../redux/actions/global'
     constructor(props) {
         super(props)
         this.initialValues = {
-            compromiso: null
+            mapeo: null
         }
     }
 
@@ -28,9 +28,9 @@ import { setIsLoading, setShowForms } from '../../../redux/actions/global'
     onSubmit(values, actions ){
         let { setLoading, select } = this.props
         setTimeout(() => {
-            console.log(values.compromiso)
+            console.log(values.mapeo)
 
-            select(values.compromiso)
+            select(values.mapeo)
 
         }, 400);
     }
@@ -53,22 +53,22 @@ import { setIsLoading, setShowForms } from '../../../redux/actions/global'
                         <Form>
 
                             <div className="diagnostico-list">
-                                {this.props.compromisos.map(compromiso => (
+                                {this.props.mapeos.map(mapeo => (
                                     <Field
-                                        name={compromiso.ID}
+                                        name={mapeo.ID}
                                         render={({ field, form }) => (
-                                            <div key={compromiso.ID}>
+                                            <div key={mapeo.ID}>
                                                 <label>
                                                     <input
-                                                        name="diagnostico"
+                                                        name="mapeo"
                                                         type="radio"
-                                                        value={diagnostico.ID}
-                                                        checked={values.compromiso == compromiso.ID}
+                                                        value={mapeo.ID}
+                                                        checked={values.mapeo == mapeo.ID}
                                                         onChange={e => {
-                                                            if (e.target.checked) form.setFieldValue('compromiso', compromiso.ID);
+                                                            if (e.target.checked) form.setFieldValue('mapeo', mapeo.ID);
                                                         }}
                                                     />{" "}
-                                                    <span>{compromiso.asignacion} - {moment(compromiso.fechaRevision).format('DD/MM/YYYY')}</span>
+                                                    <span>{mapeo.asignacion} - {moment(mapeo.fechaRevision).format('DD/MM/YYYY')}</span>
                                                 </label>
                                             </div>
                                         )}
