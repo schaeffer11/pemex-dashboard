@@ -11,7 +11,7 @@ import { setHasErrorsResultadosSimulacionEstimulacion, setHasErrorsPropuestaEsti
   setVolumenSistemaDivergente, setVolumenDesplazamientoLiquido, setVolumenDesplazamientoN2, setVolumenTotalDeLiquido, 
   setPropuestaCompany, setTipoDeEstimulacion, setTipoDeColocacion, setTiempoDeContacto } from '../../../../../redux/actions/intervencionesEstimulacion'
 import { setEspesorBruto } from '../../../../../redux/actions/pozo'
-import { round, calculateVolumes, getSistemaOptions, getDisabledColumnForGeneralCedula } from '../../../../../lib/helpers'
+import { round, calculateVolumes, getSistemaOptions, getDisabledColumnForGeneralCedula, companyOptions } from '../../../../../lib/helpers'
 import { setPenetracionRadial, setLongitudDeAgujeroDeGusano } from '../../../../../redux/actions/intervencionesEstimulacion'
 import { checkEmpty, checkDate } from '../../../../../lib/errorCheckers'
 import { calculateValuesGeneralCedula } from '../../../../../lib/formatters';
@@ -170,15 +170,6 @@ import { calculateValuesGeneralCedula } from '../../../../../lib/formatters';
     formData = formData.toJS()
     intervalos = intervalos.toJS()
     let { propuestaCompany, tipoDeEstimulacion } = formData
-    const companyOptions = [
-      { label: 'Halliburton', value: 'Halliburton' },
-      { label: 'Schlumberger', value: 'Schlumberger' },
-      { label: 'PFM', value: 'PFM' },
-      { label: 'Chemiservices', value: 'Chemiservices' },
-      { label: 'BJ', value: 'BJ' },
-      { label: 'Weatherford',
-      value: 'Weatherford' }
-    ]
 
     const estimulacionOptions = [
       { label: 'Limpieza', value: 'limpieza'},

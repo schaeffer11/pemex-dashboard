@@ -55,6 +55,23 @@ export const getJustificacionesOptions = () => {
   }))
 }
 
+
+export const companyOptions = [
+    { label: 'Halliburton', value: 'Halliburton' },
+    { label: 'Schlumberger', value: 'Schlumberger' },
+    { label: 'PFM', value: 'PFM' },
+    { label: 'Chemiservices', value: 'Chemiservices' },
+    { label: 'BJ', value: 'BJ' },
+    { label: 'Weatherford', value: 'Weatherford' },
+    { label: 'Diavaz', value: 'Diavaz'},
+    { label: 'Cystos Oil Well', value: 'Cystos Oil Well'},
+    { label: 'MXCompressor', value: 'MXCompressor'},
+    { label: 'Otra', value: 'Otra'}
+  ]
+
+
+
+
 export const getSistemaOptions = () => [
   { value: 'reactivo', label: 'Reactivo' },
   { value: 'no-reactivo', label: 'No Reactivo' },

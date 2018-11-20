@@ -7,7 +7,7 @@ import JobSelect from '../Common/JobSelect'
 import Images from './Images'
 import CostBar from './CostBar'
 import VolumeBar from './VolumeBar'
-import CostKPIs from './CostKPIs'
+import KPIs from './KPIs'
 import SimulationTreatmentTable from './SimulationTreatmentTable'
 import Card from '../Common/Card'
 import { CardDeck } from 'reactstrap';
@@ -36,6 +36,7 @@ import { generatePowerPoint } from '../../../../pptx';
       date: null,
       labData: [],
       specificLabData: [],
+      estIncData: []
     }    
     this.cards = []
     for (let i = 0; i < 7; i += 1) {
@@ -134,7 +135,8 @@ import { generatePowerPoint } from '../../../../pptx';
       date: null,
       volumeData: [],
       estVolumeData: [],
-      labData: []
+      labData: [],
+      estIncData: []
     })
 
     let fieldWellOptionsQuery = `/api/getFieldWellMappingHasData`
@@ -149,6 +151,7 @@ import { generatePowerPoint } from '../../../../pptx';
     let volumeQuery = `/job/getVolumeData?transactionID=${job}&type=${jobType}`
     let estVolumeQuery = `/job/getEstimatedVolumeData?transactionID=${job}&type=${jobType}`
     let labsQuery = `/job/getLabs?transactionID=${job}`
+    let estIncQuery = `/job/getEstIncData?transactionID=${job}&type=${jobType}`
 
     const headers = {
       headers: {
@@ -179,7 +182,8 @@ import { generatePowerPoint } from '../../../../pptx';
         fetch(aforosQuery, headers).then(r => r.json()),
         fetch(volumeQuery, headers).then(r => r.json()),
         fetch(estVolumeQuery, headers).then(r => r.json()),
-        fetch(labsQuery, headers).then(r => r.json())
+        fetch(labsQuery, headers).then(r => r.json()),
+        fetch(estIncQuery, headers).then(r => r.json())
       ])
         .catch(error => {
           console.log('err', error)
@@ -197,7 +201,8 @@ import { generatePowerPoint } from '../../../../pptx';
         data: data[6] ? data[6].FECHA_INTERVENCION : null,
         volumeData: data[8],
         estVolumeData: data[9],
-        labData: data[10]
+        labData: data[10],
+        estIncData: data[11]
       }
 
       this.setState(newState) 
@@ -257,8 +262,8 @@ import { generatePowerPoint } from '../../../../pptx';
   } 
 
   render() {
-    let { fieldWellOptions, jobOptions, imageData, costData, estCostData, volumeData, estVolumeData, cedulaData, cedulaResultData, date, aforoData, interventionData, interventionResultsData, labData, specificLabData, modalIsOpen } = this.state
-    let { globalAnalysis, token } = this.props
+    let { fieldWellOptions, jobOptions, imageData, costData, estCostData, volumeData, estIncData, estVolumeData, cedulaData, cedulaResultData, date, aforoData, interventionData, interventionResultsData, labData, specificLabData } = this.state
+    let { globalAnalysis } = this.props
 
     globalAnalysis = globalAnalysis.toJS()
     let { job, jobType } = globalAnalysis
@@ -274,47 +279,20 @@ import { generatePowerPoint } from '../../../../pptx';
     console.log('date', date)
     console.log('labData', labData)
     console.log('specificLabData', specificLabData)
+
+    console.log('estIncData', estIncData)
     return (
       <div className="data job-view">
-        <div className='header' >
-          <WellSelect fieldWellOptions={fieldWellOptions}/>
-          <JobSelect options={jobOptions}/>
-        </div>
         <div className='content tablero-content'>
-          <LocalModal>
-            <Export />
-          </LocalModal>
-          <CostKPIs estData={estCostData} data={costData} />
+         <div className='selectors'>
+            <WellSelect fieldWellOptions={fieldWellOptions}/>
+            <JobSelect options={jobOptions}/>
+            <LocalModal>
+              <Export />
+            </LocalModal>
+          </div>
+          <KPIs estData={estCostData} data={costData} estIncData={estIncData}/>
           <CardDeck className="content-deck">
-            <Card
-                id="costs"
-                title="Estimated Vs Actual Costs"
-                ref={this.cards[0]}
-              >          
-              <CostBar estData={estCostData} data={costData} />
-            </Card>
-             <Card
-                id="volumes"
-                title="Estimated Vs Actual Volumes"
-                ref={this.cards[1]}
-              >          
-              <VolumeBar estData={estVolumeData} data={volumeData} />
-            </Card>
-            <Card
-                id="simulationResults"
-                title="Simulation Results"
-                ref={this.cards[2]}
-                isTable={true}
-              >
-              <SimulationTreatmentTable type={jobType} interventionData={interventionData} interventionResultsData={interventionResultsData} />
-            </Card>
-            <Card
-                id="aforos"
-                title="Aforos"
-                ref={this.cards[3]}
-              >          
-              <AforoScatter data={aforoData} interventionDate={date}/>   
-            </Card>
             <Card
                 id="cedula"
                 title="Cedulas"
@@ -323,7 +301,48 @@ import { generatePowerPoint } from '../../../../pptx';
               >          
               <CedulaTable label='Proposed' data={cedulaData} type={jobType} />
               <CedulaTable label='Actual' data={cedulaResultData} type={jobType} />
-            </Card>   
+            </Card>  
+            <Card
+                id="costs"
+                title="Estimated Vs Actual Costs"
+                ref={this.cards[0]}
+                width={'50%'}
+              >          
+              <CostBar estData={estCostData} data={costData} />
+            </Card>
+             <Card
+                id="volumes"
+                title="Estimated Vs Actual Volumes"
+                ref={this.cards[1]}
+                width={'50%'}
+              >          
+              <VolumeBar estData={estVolumeData} data={volumeData} />
+            </Card>
+            <Card
+                id="simulationResults"
+                title="Simulation Results"
+                ref={this.cards[2]}
+                isTable={true}
+                width={'50%'}
+              >          
+              <SimulationTreatmentTable type={jobType} interventionData={interventionData} interventionResultsData={interventionResultsData} />
+            </Card>
+            <Card
+                id="aforos"
+                title="Aforos"
+                ref={this.cards[3]}
+                width={'50%'}
+              >          
+              <AforoScatter data={aforoData} interventionDate={date}/>   
+            </Card> 
+            <Card
+                id="labs"
+                title="Lab Tests"
+                ref={this.cards[5]}
+                isImage={true}
+              >
+              <LabTable data={labData} labData={specificLabData} handleChange={this.fetchLabData} />
+            </Card> 
              <Card
 
                 id="images"
@@ -333,14 +352,6 @@ import { generatePowerPoint } from '../../../../pptx';
               >
               {this.makeImages()}
             </Card> 
-            <Card
-                id="labs"
-                title="Lab Tests"
-                ref={this.cards[5]}
-                isImage={true}
-              >
-              <LabTable data={labData} labData={specificLabData} handleChange={this.fetchLabData} />
-            </Card>
           </CardDeck>
           <div style={{height: '500px'}}/>
         </div>

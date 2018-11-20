@@ -456,6 +456,15 @@ router.get('/getJobs', (req, res) => {
 })
 
 
+router.get('/isAdmin', (req, res) => {
+    let { id } = req.query
+
+    connection.query(`SELECT IS_ADMIN FROM Users WHERE id = ?`, id, (err, results) => {
+      let isAdmin = results.length > 0 && results[0].IS_ADMIN === 1 ? 1 : 0
+      res.json({isAdmin})
+    })
+})
+
 router.get('/getFieldWellMapping', (req, res) => {
     connection.query(`SELECT * FROM FieldWellMapping`, (err, results) => {
       res.json(results)

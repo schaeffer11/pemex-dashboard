@@ -55,7 +55,7 @@ router.get('/costData', (req, res) => {
     values.push(highDateString)
   }
 
-  let select = ''
+  let select = '1 as groupedName'
 
   switch(groupBy) {
     case 'subdireccion':
@@ -94,7 +94,8 @@ JOIN FieldWellMapping fwm ON i.WELL_FORMACION_ID = fwm.WELL_FORMACION_ID
 LEFT JOIN Transactions t ON rc.PROPUESTA_ID = t.TRANSACTION_ID
 LEFT JOIN TransactionsResults tr ON rc.TRANSACTION_ID = tr.TRANSACTION_ID
 ${whereClause}
-GROUP BY ${groupByClause} YEAR(FECHA_INTERVENCION), MONTH(FECHA_INTERVENCION);
+GROUP BY ${groupByClause} YEAR(FECHA_INTERVENCION), MONTH(FECHA_INTERVENCION)
+ORDER BY groupedName;
   `
 
   console.log(query, values)
@@ -271,7 +272,7 @@ router.get('/incProdData', (req, res) => {
     values.push(highDateString)
   }
 
-  let select = ''
+  let select = '1 groupedName'
 
   switch(groupBy) {
     case 'subdireccion':
@@ -310,7 +311,8 @@ router.get('/incProdData', (req, res) => {
   JOIN Transactions t ON Results.PROPUESTA_ID = t.TRANSACTION_ID
   JOIN TransactionsResults tr ON Results.TRANSACTION_ID = tr.TRANSACTION_ID
 ${whereClause} 
-GROUP BY ${groupByClause} YEAR, MONTH`
+GROUP BY ${groupByClause} YEAR, MONTH
+ORDER BY groupedName`
 
   connection.query(query, values, (err, results) => {
       console.log('comment err', err)
@@ -373,7 +375,7 @@ router.get('/volumeData', (req, res) => {
     values.push(highDateString)
   }
 
-  let select = 1
+  let select = `1 as groupedName`
 
   switch(groupBy) {
     case 'subdireccion':
@@ -452,6 +454,7 @@ LEFT JOIN Transactions t ON i.PROPUESTA_ID = t.TRANSACTION_ID
 LEFT JOIN TransactionsResults tr ON i.TRANSACTION_ID = tr.TRANSACTION_ID
 ${whereClause}
 GROUP BY ${groupByClause} YEAR(FECHA_INTERVENCION), MONTH(FECHA_INTERVENCION)
+ORDER BY groupedName
 `
 
   console.log('rererere', query, values)
@@ -528,7 +531,7 @@ router.get('/numTreatmentData', (req, res) => {
     values.push(highDateString)
   }
 
-  let select = ''
+  let select = '1 as groupedName'
 
   switch(groupBy) {
     case 'subdireccion':
@@ -565,7 +568,8 @@ FROM TransactionsResults tr
 LEFT JOIN FieldWellMapping fwm ON tr.WELL_FORMACION_ID = fwm.WELL_FORMACION_ID
 LEFT JOIN Transactions t ON tr.PROPUESTA_ID = t.TRANSACTION_ID
 ${whereClause}
-GROUP BY ${groupByClause} YEAR(FECHA_INTERVENCION), MONTH(FECHA_INTERVENCION);
+GROUP BY ${groupByClause} YEAR(FECHA_INTERVENCION), MONTH(FECHA_INTERVENCION)
+ORDER BY groupedName;
   `
 
   connection.query(query, values, (err, results) => {

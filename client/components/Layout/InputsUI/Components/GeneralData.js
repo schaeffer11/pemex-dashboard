@@ -308,9 +308,9 @@ import ButtonGroup from './ButtonGroup'
   }
 
   makeGeneralForm() {
-    let { setActivo, setCampo, setPozo, setFormacion, formData, fieldWellOptions } = this.props
+    let { setSubdireccion, setActivo, setCampo, setPozo, setFormacion, formData, fieldWellOptions, user } = this.props
 
-
+    user = user ? user.toJS() : {}
     formData = formData ? formData.toJS() : {}
     
     let { subdireccion, activo, campo, pozo, formacion } = formData
@@ -336,7 +336,21 @@ import ButtonGroup from './ButtonGroup'
       {label: 'KS-KM', value: 'KS-KM'},
       {label: 'KM-KI', value: 'KM-KI'},
     ]
+    let disabled = false
 
+    if (user.activoID && user.subdireccionID) {
+      disabled = true
+      if (user.activoID !== activo) {
+        activo = user.activoID
+        setActivo(user.activoID)
+      }
+
+      if (user.subdireccionID !== subdireccion) {
+        subdireccion = user.subdireccionID  
+        setSubdireccion(user.subdireccionID)
+      }
+
+    }
 
     let subdireccionOptions = []
     let activoOptions = []
@@ -406,8 +420,8 @@ import ButtonGroup from './ButtonGroup'
           Pozo
         </div>
         <div className="input-table">
-          <InputRowSelectUnitless header='Subdirección' name="subdireccion" value={subdireccion} options={subdireccionOptions} callback={this.handleSelectSubdireccion}  />
-          <InputRowSelectUnitless header='Activo' name="activo" value={activo} options={activoOptions} callback={this.handleSelectActivo}  />
+          <InputRowSelectUnitless header='Subdirección' name="subdireccion" value={subdireccion} disabled={disabled} options={subdireccionOptions} callback={this.handleSelectSubdireccion}  />
+          <InputRowSelectUnitless header='Activo' name="activo" value={activo} disabled={disabled} options={activoOptions} callback={this.handleSelectActivo}  />
           <InputRowSelectUnitless header="Campo" name="campo" value={campo} options={fieldOptions} callback={this.handleSelectField} name='campo'  />
           <InputRowSelectUnitless header="Pozo" name="pozo" value={pozo} options={wellOptions} callback={this.handleSelectWell} name='pozo'  />
           <InputRowSelectUnitless header="Formación" value={formacion} options={formacionOptions} callback={(e) => setFormacion(e.value)} name='formacion'  />
