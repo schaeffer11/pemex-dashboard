@@ -4,8 +4,8 @@ const ProgressBar = ({ percentage }) => {
   percentage = percentage > 100 ? 100 : percentage
   console.log('da percentage', percentage)
   return (
-    <div className="progress-bar">
-      <div className="filler" style={{ width: `${percentage}%` }} />
+    <div className="my-progress-bar">
+      <div className="my-filler" style={{ width: `${percentage}%` }} />
     </div>
   )
 }

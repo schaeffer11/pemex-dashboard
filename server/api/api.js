@@ -2095,7 +2095,7 @@ router.get('/getInterventionApuntalado', async (req, res) => {
     // VOLUMEN_SISTEMA_NO_REACTIVO: { parent: 'propuestaApuntalado', child: 'volumenSistemaNoReativo' }, 
     // VOLUMEN_SISTEMA_REACTIVO: { parent: 'propuestaApuntalado', child: 'volumenSistemaReactivo' }, 
     // VOLUMEN_SISTEMA_DIVERGENTE: { parent: 'propuestaApuntalado', child: 'volumenSistemaDivergente' }, 
-    // VOLUMEN_DISPLAZAMIENTO_LIQUIDO: { parent: 'propuestaApuntalado', child: 'volumenDesplazamientoLiquido' }, 
+    // VOLUMEN_DESPLAZAMIENTO_LIQUIDO: { parent: 'propuestaApuntalado', child: 'volumenDesplazamientoLiquido' }, 
     // VOLUMEN_DESPLAZAMIENTO_N2: { parent: 'propuestaApuntalado', child: 'volumenDesplazamientoN2' },
     // VOLUMEN_TOTAL_DE_LIQUIDO: { parent: 'propuestaApuntalado', child: 'volumenTotalDeLiquido' }, 
     MODULO_YOUNG_ARENA: { parent: 'propuestaApuntalado', child: 'moduloYoungArena' },
