@@ -32,8 +32,6 @@ let colorWheel = [
     let categories = []
 
 
-    console.log(data)
-
     if (data.length > 0) {
       if (!groupBy) {
         categories.push('Individual Cost Devations')
@@ -46,7 +44,6 @@ let colorWheel = [
             }
           })
         }]
-        console.log(series)
       }
       else {
         data.forEach(i => {
@@ -62,7 +59,6 @@ let colorWheel = [
           let subData = data.filter(j => j[groupBy] === i)
 
           subData.forEach(j => {
-            console.log(j)
             dataPoints.push({
               x: index, 
               y: j.deviation, 

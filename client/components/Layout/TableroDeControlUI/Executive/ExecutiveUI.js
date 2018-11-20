@@ -41,6 +41,74 @@ import AvgDeltaIncProdBar from './AvgDeltaIncProdBar'
     }
   }
 
+  buildExecTableExport(data, groupBy) {
+    let exportData = []
+
+    let newRow = []
+    groupBy ? newRow.push('Name') : null
+
+    newRow = newRow.concat([
+      'Num Treatments', 
+      'Num Acido', 
+      'Num Apuntalado', 
+      'Num Estimulacion Limpieza', 
+      'Num Etimulacion Matricial', 
+      'Num Termico', 
+      'Total Cost', 
+      'Est Inc Prod', 
+      'Inc Prod', 
+      'Date of Last Treatment', 
+      'Type of Last Treatment', 
+      'Total Sistema No Reactivo (m3)',
+      'Total Sistema Reactivo (m3)',
+      'Total Sistema Divergente (m3)',
+      'Total Desplazamimento Liquido (m3)',
+      'Total Desplazamiento N2 (m3)',
+      'Total Precolchon N2 (m3)',
+      'Total Liquido (m3)',
+      'Total Apuntalante (sacos)',
+      'Total Gel de Fractura (U.S. gal)',
+      'Total Precolchon apuntalante (U.S. gal)',
+      'Total Vapor Injected (ton)'])
+
+    exportData.push(newRow)
+
+    data.forEach(i => {
+      newRow = []
+
+      groupBy ? newRow.push(i.name) : null
+
+      newRow = newRow.concat([
+        i.numTreatments,
+        i.numAcido,
+        i.numApuntalado,
+        i.numEstimulacionLimpieza,
+        i.numEstimulacionMatricial,
+        i.numTermico,
+        i.cost,
+        i.estProd,
+        i.realProd,
+        '-',
+        '-',
+        i.sistemaNoReactivo,
+        i.sistemaReactivo,
+        i.sistemaDivergente,
+        i.desplazamientoLiquido,
+        i.desplazamientoN2,
+        i.precolchonN2,
+        i.liquido,
+        i.apuntalante,
+        i.gelDeFractura,
+        i.precolchonApuntalante,
+        i.vapor
+      ])
+
+      exportData.push(newRow)
+    })
+
+    return exportData
+  }
+
   async fetchData() {
     let { globalAnalysis } = this.props
     globalAnalysis = globalAnalysis.toJS()
@@ -139,7 +207,48 @@ import AvgDeltaIncProdBar from './AvgDeltaIncProdBar'
     globalAnalysis = globalAnalysis.toJS()
     let { groupBy } = globalAnalysis
 
-    console.log(costData)
+    execTableData = execTableData.map(i => {
+
+        let estProd = estIncData.find(j => j.groupedName === i.groupedName) ? estIncData.find(j => j.groupedName === i.groupedName).qo : undefined
+        let realProd = estIncData.find(j => j.groupedName === i.groupedName) ? estIncData.find(j => j.groupedName === i.groupedName).qoResult : undefined
+
+        let volumen = groupBy 
+                  ? (volumeData.find(j => j.groupedName === i.groupedName) ? volumeData.find(j => j.groupedName === i.groupedName) : {}) 
+                  : (volumeData ? volumeData[0] : {})
+
+        return {
+            name: i.groupedName,
+            numTreatments: i.NUM_TREATMENTS,
+            numAcido: i.NUM_ACIDO,
+            percAcido: i.NUM_ACIDO / i.NUM_TREATMENTS * 100,
+            numApuntalado: i.NUM_APUNTALADO,
+            percApuntalado: i.NUM_APUNTALADO / i.NUM_TREATMENTS * 100,
+            numEstimulacionLimpieza: i.NUM_ESTIMULACION_LIMPIEZA,
+            percEstimulacionLimpieza: i.NUM_ESTIMULACION_LIMPIEZA / i.NUM_TREATMENTS * 100,
+            numEstimulacionMatricial: i.NUM_ESTIMULACION_MATRICIAL,
+            percEstimulacionMatricial: i.NUM_ESTIMULACION_MATRICIAL / i.NUM_TREATMENTS * 100,
+            numTermico: i.NUM_TERMICO,
+            percTermico: i.NUM_TERMICO / i.NUM_TREATMENTS * 100,
+            cost: i.COST ? i.COST.toFixed(0) : 0 ,
+            estProd: estProd,
+            realProd: realProd,
+            dateType: '-',
+            sistemaNoReactivo: volumen ? volumen.TOTAL_SISTEMA_NO_REACTIVO : undefined,
+            sistemaReactivo: volumen ? volumen.TOTAL_SISTEMA_REACTIVO : undefined,
+            sistemaDivergente: volumen ? volumen.TOTAL_SISTEMA_DIVERGENTE : undefined,
+            desplazamientoLiquido: volumen ? volumen.TOTAL_DESPLAZAMIENTO_LIQUIDO : undefined,
+            desplazamientoN2: volumen ? volumen.TOTAL_DESPLAZAMIENTO_N2 : undefined,
+            precolchonN2: volumen ? volumen.TOTAL_PRECOLCHON_N2 : undefined,
+            liquido: volumen ? volumen.TOTAL_LIQUIDO : undefined,
+            apuntalante: volumen ? volumen.TOTAL_APUNTALANTE : undefined,
+            gelDeFractura: volumen ? volumen.TOTAL_GEL_DE_FRACTURA : undefined,
+            precolchonApuntalante: volumen ? volumen.TOTAL_PRECOLCHON_APUNTALANTE : undefined,
+            vapor: volumen ? volumen.TOTAL_VAPOR_INJECTED : undefined,
+        }
+    })
+
+    let exportData = this.buildExecTableExport(execTableData, groupBy)
+
 
     return (
       <div className="data executive">
@@ -152,7 +261,7 @@ import AvgDeltaIncProdBar from './AvgDeltaIncProdBar'
                 ref={this.cards[6]}
                 isTable={true}
               >       
-              <ExecutiveTable data={execTableData} estIncData={estIncData} volumeData={volumeData} groupBy={groupBy} />
+              <ExecutiveTable data={execTableData} exportData={exportData} groupBy={groupBy} />
             </Card>
             <Card
                 id="productionGraphs"

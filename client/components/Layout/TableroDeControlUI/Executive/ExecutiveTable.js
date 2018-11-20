@@ -158,46 +158,7 @@ import { CategoryDist, TrafficLight, Currency, Integer, numWithCommas } from '..
         })
       }
 
-    data = data.map(i => {
 
-        let estProd = estIncData.find(j => j.groupedName === i.groupedName) ? estIncData.find(j => j.groupedName === i.groupedName).qo : undefined
-        let realProd = estIncData.find(j => j.groupedName === i.groupedName) ? estIncData.find(j => j.groupedName === i.groupedName).qoResult : undefined
-
-        let volumen = groupBy 
-                  ? (volumeData.find(j => j.groupedName === i.groupedName) ? volumeData.find(j => j.groupedName === i.groupedName) : {}) 
-                  : (volumeData ? volumeData[0] : {})
-
-
-        return {
-            name: i.groupedName,
-            numTreatments: i.NUM_TREATMENTS,
-            numAcido: i.NUM_ACIDO,
-            percAcido: i.NUM_ACIDO / i.NUM_TREATMENTS * 100,
-            numApuntalado: i.NUM_APUNTALADO,
-            percApuntalado: i.NUM_APUNTALADO / i.NUM_TREATMENTS * 100,
-            numEstimulacionLimpieza: i.NUM_ESTIMULACION_LIMPIEZA,
-            percEstimulacionLimpieza: i.NUM_ESTIMULACION_LIMPIEZA / i.NUM_TREATMENTS * 100,
-            numEstimulacionMatricial: i.NUM_ESTIMULACION_MATRICIAL,
-            percEstimulacionMatricial: i.NUM_ESTIMULACION_MATRICIAL / i.NUM_TREATMENTS * 100,
-            numTermico: i.NUM_TERMICO,
-            percTermico: i.NUM_TERMICO / i.NUM_TREATMENTS * 100,
-            cost: i.COST ? i.COST.toFixed(0) : 0 ,
-            estProd: estProd,
-            realProd: realProd,
-            dateType: '-',
-            sistemaNoReactivo: volumen ? volumen.TOTAL_SISTEMA_NO_REACTIVO : undefined,
-            sistemaReactivo: volumen ? volumen.TOTAL_SISTEMA_REACTIVO : undefined,
-            sistemaDivergente: volumen ? volumen.TOTAL_SISTEMA_DIVERGENTE : undefined,
-            desplazamientoLiquido: volumen ? volumen.TOTAL_DESPLAZAMIENTO_LIQUIDO : undefined,
-            desplazamientoN2: volumen ? volumen.TOTAL_DESPLAZAMIENTO_N2 : undefined,
-            precolchonN2: volumen ? volumen.TOTAL_PRECOLCHON_N2 : undefined,
-            liquido: volumen ? volumen.TOTAL_LIQUIDO : undefined,
-            apuntalante: volumen ? volumen.TOTAL_APUNTALANTE : undefined,
-            gelDeFractura: volumen ? volumen.TOTAL_GEL_DE_FRACTURA : undefined,
-            precolchonApuntalante: volumen ? volumen.TOTAL_PRECOLCHON_APUNTALANTE : undefined,
-            vapor: volumen ? volumen.TOTAL_VAPOR_INJECTED : undefined,
-        }
-    })
 
     return (
       <div className='table'>

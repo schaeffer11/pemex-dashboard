@@ -16,6 +16,9 @@ import ReactTable from 'react-table'
     let columns = [{
         Header: 'Tipo de Analisis',
         accessor: 'type',
+        style: {
+          cursor: 'pointer'
+        },
         width: 420,
       }, { 
         Header: 'Fecha de Muestreo',

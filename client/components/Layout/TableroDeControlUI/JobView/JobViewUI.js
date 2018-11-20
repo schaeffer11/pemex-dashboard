@@ -44,6 +44,73 @@ import { generatePowerPoint } from '../../../../pptx';
     }
   }
 
+  makeCedulaExportData(data) {
+    let exportData = []
+
+    exportData.push([
+      `Etapa`,
+      `Sistema`,
+      `Nombre Comercial`,
+      `Vol. Liq. (m3)`,
+      `Gasto Liquido (bpm)`,
+      `Rel. N2/Liq (m3std/m3)`,
+      `Calidad (%)`,
+      `Gasto en fondo (bpm)`,
+      `Gasto N2 (m3/min)`,
+      `Vol. N2 (m3 std)`,
+      `Vol. Liq. Acum (m3)`,
+      `Vol. N2 Acum (m3 std)`,
+      `Tiempo (min)`
+    ])
+
+
+    data.forEach(i => {
+      exportData.push([
+        i.etapa,
+        i.sistema,
+        i.nombreComercial,
+        i.volLiquid,
+        i.gastoLiqudo,
+        i.relN2Liq,
+        i.calidad,
+        i.gastoEnFondo,
+        i.gastoN2,
+        i.volN2,
+        i.volLiquidoAcum,
+        i.volN2Acum,
+        i.tiempo
+      ])
+    })
+
+    return exportData
+  }
+
+  makeLabExportData(data) {
+    let exportData = []
+
+    exportData.push([
+      `Tipo de Analisis`,
+      `Fecha de Muestreo`,
+      `Fecha de prueba`,
+      `Compania`,
+      `Personal de Pemex que superviso`,
+    ])
+
+
+    data.forEach(i => {
+      exportData.push([
+        i.type,
+        i.fechaMuestreo,
+        i.fechaPrueba,
+        i.compania,
+        i.superviso,
+      ])
+    })
+
+    return exportData
+  }
+
+
   fetchJobs() {
     let { globalAnalysis } = this.props
     globalAnalysis = globalAnalysis.toJS()
@@ -279,8 +346,12 @@ import { generatePowerPoint } from '../../../../pptx';
     console.log('date', date)
     console.log('labData', labData)
     console.log('specificLabData', specificLabData)
-
     console.log('estIncData', estIncData)
+
+    let cedulaExportData = this.makeCedulaExportData(cedulaData)
+    let cedulaResultExportData = this.makeCedulaExportData(cedulaResultData)
+    let labExportData = this.makeLabExportData(labData)
+
     return (
       <div className="data job-view">
         <div className='content tablero-content'>
@@ -299,8 +370,8 @@ import { generatePowerPoint } from '../../../../pptx';
                 ref={this.cards[4]}
                 isTable={true}
               >          
-              <CedulaTable label='Proposed' data={cedulaData} type={jobType} />
-              <CedulaTable label='Actual' data={cedulaResultData} type={jobType} />
+              <CedulaTable label='Proposed' data={cedulaData} exportData={cedulaExportData} type={jobType} />
+              <CedulaTable label='Actual' data={cedulaResultData} exportData={cedulaResultExportData} type={jobType} />
             </Card>  
             <Card
                 id="costs"
@@ -339,9 +410,9 @@ import { generatePowerPoint } from '../../../../pptx';
                 id="labs"
                 title="Lab Tests"
                 ref={this.cards[5]}
-                isImage={true}
+                isTable={true}
               >
-              <LabTable data={labData} labData={specificLabData} handleChange={this.fetchLabData} />
+              <LabTable data={labData} exportData={labExportData} labData={specificLabData} handleChange={this.fetchLabData} />
             </Card> 
              <Card
 
