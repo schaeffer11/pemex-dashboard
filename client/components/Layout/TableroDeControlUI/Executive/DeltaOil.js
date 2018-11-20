@@ -10,21 +10,6 @@ let classificationSeries = [{
     color: 'red'
 }]
 
-
-let tipoDeInterventionSeries = [{
-    name: 'acido',
-    color: '#56B3D8',
-  }, {
-    name: 'apuntalado',
-    color: '#C3E4CC',
-  }, {
-    name: 'estimulacion',
-    color: '#E4CE5E',
-  }, {
-    name: 'termico',
-    color: '#C26A1B',
-  }]
-
 @autobind class DeltaOil extends PureComponent {
 
   shouldComponentUpdate(nextProps) {
@@ -72,12 +57,6 @@ let tipoDeInterventionSeries = [{
         return i
       })
     }
-    else if (groupBy === 'type') {
-      series = tipoDeInterventionSeries.map(i => {
-        i.data = data.filter(j => j.groupedName === i.name)
-        return i
-      })  
-    }
     else {
       series = groupByList.map(i => {
         return {
@@ -93,6 +72,7 @@ let tipoDeInterventionSeries = [{
     series.push({
     	name: '',
     	type: 'line',
+      color: 'black',
     	dashStyle: 'Dash',
     	lineWidth: 1,
     	showInLegend: false,

@@ -33,6 +33,48 @@ WHERE TRANSACTION_ID = ?`
     })
 })
 
+router.get('/getEstIncData', (req, res) => {
+  let { transactionID, type } = req.query
+
+  if (type === 'Estimulacion') {
+    type = `IntervencionesEstimulacions`
+  }
+  else if (type === 'Acido') {
+    type = 'IntervencionesAcido'
+  }
+  else if (type === 'Apuntalado') {
+    type = `IntervencionesApuntalado`
+  }
+  else {
+    type = `IntervencionesTermico`
+  }
+
+
+
+  let query = 
+
+`select r.TRANSACTION_ID, tr.COMPANY, QO_RESULT, QW_RESULT, QG_RESULT, EST_INC_GASTO_COMPROMISO_QO, EST_INC_QW, EST_INC_GASTO_COMPROMISO_QG
+from Results r
+JOIN ?? ia ON r.PROPUESTA_ID = ia.TRANSACTION_ID
+ JOIN FieldWellMapping fwm ON ia.WELL_FORMACION_ID = fwm.WELL_FORMACION_ID
+ JOIN Transactions t ON ia.TRANSACTION_ID = t.TRANSACTION_ID
+ JOIN TransactionsResults tr on tr.PROPUESTA_ID = ia.TRANSACTION_ID
+WHERE r.PROPUESTA_ID = ?`
+ 
+console.log(query, type, transactionID)
+  connection.query(query, [type, transactionID], (err, results) => {
+      console.log('comment err', err)
+
+     if (err) {
+        res.json({ success: false})
+      }
+      else {
+        res.json(results)
+      }
+    })
+})
+
+
 router.get('/getResultsImages', (req, res) => {
   const { transactionID } = req.query
   console.log('getting results images')

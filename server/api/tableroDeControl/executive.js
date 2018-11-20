@@ -100,8 +100,8 @@ router.get('/jobBreakdown', (req, res) => {
   JOIN TransactionsResults tr on tr.TRANSACTION_ID = r.TRANSACTION_ID
   JOIN FieldWellMapping fwm ON r.WELL_FORMACION_ID = fwm.WELL_FORMACION_ID
   ${whereClause}
-  GROUP BY TIPO_DE_INTERVENCIONES ${groupByClause}`
-  
+  GROUP BY TIPO_DE_INTERVENCIONES ${groupByClause}
+  ORDER BY TIPO_DE_INTERVENCIONES`
 
   connection.query(query, values, (err, results) => {
       // console.log('comment err', err)
@@ -248,7 +248,8 @@ FROM
 ) A INNER JOIN WellAforos B USING(TRANSACTION_ID, FECHA)) as aforos
 
 WHERE aforos.TRANSACTION_ID = aforo_results.PROPUESTA_ID
-${groupByClause}`
+${groupByClause}
+ORDER BY groupedName`
 
   connection.query(query, values, (err, results) => {
       console.log('comment err', err)
@@ -313,6 +314,7 @@ router.get('/costData', (req, res) => {
 
   let whereClause = 'WHERE 1 = 1'
   let groupByClause = ''
+  let orderByClause = ''
 
   if (level) {
     whereClause += ` AND ${level} = ?`
@@ -354,27 +356,35 @@ router.get('/costData', (req, res) => {
   switch(groupBy) {
     case 'subdireccion':
       groupByClause = `GROUP BY SUBDIRECCION_NAME`
+      orderByClause = `ORDER BY SUBDIRECCION_NAME`
       break
     case 'activo':
       groupByClause = `GROUP BY ACTIVO_NAME`
+      orderByClause = `ORDER BY ACTIVO_NAME`
       break
     case 'field':
       groupByClause = `GROUP BY FIELD_NAME`
+      orderByClause = `ORDER BY FIELD_NAME`
       break
     case 'well':
       groupByClause = `GROUP BY WELL_FORMACION_ID`
+      orderByClause = `ORDER BY WELL_FORMACION_ID`
       break
     case 'formation':
       groupByClause = `GROUP BY FORMACION`
+      orderByClause = `ORDER BY FORMACION`
       break
     case 'company':
       groupByClause = `GROUP BY COMPANY`
+      orderByClause = `ORDER BY COMPANY`
       break
     case 'interventionType':
       groupByClause = `GROUP BY TIPO_DE_INTERVENCIONES`
+      orderByClause = `ORDER BY TIPO_DE_INTERVENCIONES`
       break
     case 'terminationType':
       groupByClause = `GROUP BY TIPO_DE_TERMINACION`
+      orderByClause = `ORDER BY TIPO_DE_TERMINACION`
       break
   }
 
@@ -420,6 +430,7 @@ router.get('/costData', (req, res) => {
     
   ON a.PROPUESTA_ID = b.TRANSACTION_ID
 ${groupByClause}
+${orderByClause}
 
 `
 
@@ -736,7 +747,8 @@ JOIN IntervencionesTermico ia ON r.PROPUESTA_ID = ia.TRANSACTION_ID
  JOIN Transactions t ON ia.TRANSACTION_ID = t.TRANSACTION_ID
  JOIN TransactionsResults tr on tr.PROPUESTA_ID = ia.TRANSACTION_ID
  ${whereClause}) as a
- ${groupByClause}`
+ ${groupByClause}
+ ORDER BY groupedName`
 
  console.log(query, values)
 

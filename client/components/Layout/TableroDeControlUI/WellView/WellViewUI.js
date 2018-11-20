@@ -12,6 +12,8 @@ import Images from './Images'
 import Card from '../Common/Card'
 import { CardDeck } from 'reactstrap';
 import { generatePowerPoint } from '../../../../pptx';
+import LayerTable from './LayerTable'
+import ZoneTable from './ZoneTable'
 
 @autobind class wellViewUI extends Component {
   constructor(props) {
@@ -246,7 +248,9 @@ import { generatePowerPoint } from '../../../../pptx';
     return (
       <div className="data well-view">
         <div className='header'>
-          <WellSelect fieldWellOptions={fieldWellOptions}/>
+          <div className='selectors'>
+            <WellSelect fieldWellOptions={fieldWellOptions}/>
+          </div>
         </div>
         <div className='content'>
           <CardDeck className="content-deck">
@@ -284,12 +288,13 @@ import { generatePowerPoint } from '../../../../pptx';
                <AforosGraph data={aforosData} dates={interventionDates}/>
             </Card>
               <Card
-                id="aforos"
-                title="Placeholder"
+                id="evalPetrofisica"
+                title="Evaluacion Petrofisica"
                 width={'50%'}
                 ref={this.cards[3]}
               >
-               <div>Anything</div>
+               <LayerTable label='Propiedades Promedio' data={layerData} />
+               <ZoneTable label='Zona de pérdida' data={zoneData} />
             </Card>
             <Card
                 id="images"

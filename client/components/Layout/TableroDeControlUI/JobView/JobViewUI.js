@@ -7,7 +7,7 @@ import JobSelect from '../Common/JobSelect'
 import Images from './Images'
 import CostBar from './CostBar'
 import VolumeBar from './VolumeBar'
-import CostKPIs from './CostKPIs'
+import KPIs from './KPIs'
 import SimulationTreatmentTable from './SimulationTreatmentTable'
 import Card from '../Common/Card'
 import { CardDeck } from 'reactstrap';
@@ -33,6 +33,7 @@ import LabTable from './LabTable'
       date: null,
       labData: [],
       specificLabData: [],
+      estIncData: []
     }    
     this.cards = []
     for (let i = 0; i < 7; i += 1) {
@@ -133,7 +134,8 @@ import LabTable from './LabTable'
       date: null,
       volumeData: [],
       estVolumeData: [],
-      labData: []
+      labData: [],
+      estIncData: []
     })
 
     let fieldWellOptionsQuery = `/api/getFieldWellMappingHasData`
@@ -148,6 +150,7 @@ import LabTable from './LabTable'
     let volumeQuery = `/job/getVolumeData?transactionID=${job}&type=${jobType}`
     let estVolumeQuery = `/job/getEstimatedVolumeData?transactionID=${job}&type=${jobType}`
     let labsQuery = `/job/getLabs?transactionID=${job}`
+    let estIncQuery = `/job/getEstIncData?transactionID=${job}&type=${jobType}`
 
     const headers = {
       headers: {
@@ -178,7 +181,8 @@ import LabTable from './LabTable'
         fetch(aforosQuery, headers).then(r => r.json()),
         fetch(volumeQuery, headers).then(r => r.json()),
         fetch(estVolumeQuery, headers).then(r => r.json()),
-        fetch(labsQuery, headers).then(r => r.json())
+        fetch(labsQuery, headers).then(r => r.json()),
+        fetch(estIncQuery, headers).then(r => r.json())
       ])
         .catch(error => {
           console.log('err', error)
@@ -196,7 +200,8 @@ import LabTable from './LabTable'
         data: data[6] ? data[6].FECHA_INTERVENCION : null,
         volumeData: data[8],
         estVolumeData: data[9],
-        labData: data[10]
+        labData: data[10],
+        estIncData: data[11]
       }
 
       this.setState(newState) 
@@ -256,7 +261,7 @@ import LabTable from './LabTable'
   } 
 
   render() {
-    let { fieldWellOptions, jobOptions, imageData, costData, estCostData, volumeData, estVolumeData, cedulaData, cedulaResultData, date, aforoData, interventionData, interventionResultsData, labData, specificLabData } = this.state
+    let { fieldWellOptions, jobOptions, imageData, costData, estCostData, volumeData, estIncData, estVolumeData, cedulaData, cedulaResultData, date, aforoData, interventionData, interventionResultsData, labData, specificLabData } = this.state
     let { globalAnalysis } = this.props
 
     globalAnalysis = globalAnalysis.toJS()
@@ -273,15 +278,16 @@ import LabTable from './LabTable'
     console.log('date', date)
     console.log('labData', labData)
     console.log('specificLabData', specificLabData)
+    console.log('estIncData', estIncData)
 
     return (
       <div className="data job-view">
-        <div className='header' >
-          <WellSelect fieldWellOptions={fieldWellOptions}/>
-          <JobSelect options={jobOptions}/>
-        </div>
         <div className='content'>
-          <CostKPIs estData={estCostData} data={costData} />
+         <div className='selectors'>
+            <WellSelect fieldWellOptions={fieldWellOptions}/>
+            <JobSelect options={jobOptions}/>
+          </div>
+          <KPIs estData={estCostData} data={costData} estIncData={estIncData}/>
           <CardDeck className="content-deck">
             <Card
                 id="cedula"

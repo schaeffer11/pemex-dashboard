@@ -319,7 +319,6 @@ const arraysAreEqual = (arr1, arr2) => {
 
     let style = width ? {width: width} : isImage || isTable ? {width: '100%'} :  null 
 
-    console.log(width, style)
     return (
       <div style={style}>
         <RSCard>
