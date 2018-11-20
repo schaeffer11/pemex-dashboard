@@ -36,7 +36,7 @@ import AvgDeltaIncProdBar from './AvgDeltaIncProdBar'
     }
 
     this.cards = []
-    for (let i = 0; i < 5; i += 1) {
+    for (let i = 0; i < 7; i += 1) {
       this.cards.push(React.createRef())
     }
   }
@@ -146,10 +146,19 @@ import AvgDeltaIncProdBar from './AvgDeltaIncProdBar'
         <div className='content'>
           <TimeSlider />
           <CardDeck className="content-deck">
+              <Card
+                id="execTable"
+                title="Some Table"
+                ref={this.cards[6]}
+                isTable={true}
+              >       
+              <ExecutiveTable data={execTableData} estIncData={estIncData} volumeData={volumeData} groupBy={groupBy} />
+            </Card>
             <Card
                 id="productionGraphs"
                 title="Delta Incremental Production"
                 ref={this.cards[0]}
+                width={'50%'}
               >
               <DeltaOil label='Oil' data={singularEstIncData} groupBy={groupBy} />
               <DeltaWater label='Water' data={singularEstIncData} groupBy={groupBy} />
@@ -159,6 +168,7 @@ import AvgDeltaIncProdBar from './AvgDeltaIncProdBar'
                 id="classifications"
                 title="Classification"
                 ref={this.cards[1]}
+                width={'50%'}
                 multiplyChartsOnGrouping
               >
               <JobBreakdown label='Job Type' data={jobBreakdownData} />
@@ -168,6 +178,7 @@ import AvgDeltaIncProdBar from './AvgDeltaIncProdBar'
                 id="incProd"
                 title="Incremental Production"
                 ref={this.cards[2]}
+                width={'50%'}
               >
               <IncProdBar label={'Total'} data={estIncData} groupBy={groupBy} />  
               <AvgIncProdBar label={'Average'} data={estIncData} groupBy={groupBy} />  
@@ -176,6 +187,7 @@ import AvgDeltaIncProdBar from './AvgDeltaIncProdBar'
                 id="incProdDeviations"
                 title="Incremental Production Deviations"
                 ref={this.cards[3]}
+                width={'50%'}
               >       
               <DeltaIncProdScatter label={'Individual'} data={singularEstIncData} groupBy={groupBy} />
               <AvgDeltaIncProdBar label={'Avg'} data={estIncData} groupBy={groupBy} />
@@ -184,6 +196,7 @@ import AvgDeltaIncProdBar from './AvgDeltaIncProdBar'
                 id="costs"
                 title="Costs"
                 ref={this.cards[4]}
+                width={'50%'}
               >
               <CostBar label={'Total'} data={costData} groupBy={groupBy} />  
               <AvgCostBar label={'Average'} data={costData} groupBy={groupBy} />  
@@ -192,12 +205,13 @@ import AvgDeltaIncProdBar from './AvgDeltaIncProdBar'
                 id="costDeviations"
                 title="Cost Deviations"
                 ref={this.cards[5]}
+                width={'50%'}
               >       
               <DeltaCostBar label={'Individual'} data={singularCostData} groupBy={groupBy} />
               <AvgDeltaCostBar label={'Avg'} data={costData} groupBy={groupBy} />
             </Card>
           </CardDeck>
-          <ExecutiveTable data={execTableData} estIncData={estIncData} volumeData={volumeData} groupBy={groupBy} />
+          
         </div>
       </div>
     )

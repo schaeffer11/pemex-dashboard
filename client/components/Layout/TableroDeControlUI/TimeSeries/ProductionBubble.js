@@ -13,7 +13,7 @@ import { KPI } from '../Common/KPIs'
     let groups = []
 
 
-    console.log(data)
+    // console.log(data)
 
     data.forEach(i => {
       if (!groups.includes(i.groupedName)) {
@@ -84,7 +84,7 @@ import { KPI } from '../Common/KPIs'
       series: series
   }
 
-  console.log(series)
+  // console.log(series)
 
     return (
       <div className="production-bubble test">

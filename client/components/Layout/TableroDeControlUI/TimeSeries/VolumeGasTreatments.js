@@ -23,6 +23,8 @@ import { KPI } from '../Common/KPIs'
         }
       }).sort((a, b) => {return a.x - b.x})
 
+
+
       data = data.map(j => {
         let utc = Date.UTC(j.YEAR, j.MONTH - 1)
 
@@ -34,6 +36,7 @@ import { KPI } from '../Common/KPIs'
 
       series.push({
         name: 'Volume Used',
+        data: data,
         yAxis: 0,
         zIndex: 0             
       })

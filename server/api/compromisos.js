@@ -3,8 +3,8 @@ import appConfig from '../../app-config.js'
 const connection = db.getConnection(appConfig.users.database)
 
 export const create = function(req, res){
-    let { fechaCompromiso, fechaCumplimiento, descripcion, activo, responsable, minuta, notas } = req.body
-    connection.query(`INSERT INTO Compromisos (ID, FECHA_COMPROMISO, FECHA_CUMPLIMIENTO, DESCRIPCION, ACTIVO, RESPONSABLE, MINUTA, NOTAS) VALUES (null, ?, ?, ?, ?, ?, ?, ?)`, [fechaCompromiso, fechaCumplimiento, descripcion, activo, responsable, minuta, notas], (err, results) => {
+    let { fechaCompromiso, fechaCumplimiento, descripcion, activo, responsable, minuta, avance, notas } = req.body
+    connection.query(`INSERT INTO Compromisos (ID, FECHA_COMPROMISO, FECHA_CUMPLIMIENTO, DESCRIPCION, ACTIVO, RESPONSABLE, MINUTA, AVANCE, NOTAS) VALUES (null, ?, ?, ?, ?, ?, ?, ?)`, [fechaCompromiso, fechaCumplimiento, descripcion, activo, responsable, minuta, avance, notas], (err, results) => {
         if (err) {
             res.status(400)
             res.send({})
@@ -17,8 +17,8 @@ export const create = function(req, res){
 
 export const put = function(req, res){
     let id = req.params.id
-    let { fechaCompromiso, fechaCumplimiento, descripcion, activo, responsable, minuta, notas } = req.body
-    connection.query(`UPDATE Compromisos SET FECHA_COMPROMISO = ?, DESCRIPCION = ?, ACTIVO = ?, RESPONSABLE = ?, MINUTA = ?, FECHA_CUMPLIMIENTO = ?, NOTAS = ? WHERE id = ? `, [fechaCompromiso, descripcion, activo, responsable, minuta, fechaCumplimiento, notas, id], (err, results) => {
+    let { fechaCompromiso, fechaCumplimiento, descripcion, activo, responsable, minuta, avance, notas } = req.body
+    connection.query(`UPDATE Compromisos SET FECHA_COMPROMISO = ?, DESCRIPCION = ?, ACTIVO = ?, RESPONSABLE = ?, MINUTA = ?, FECHA_CUMPLIMIENTO = ?, AVANCE = ?, NOTAS = ? WHERE id = ? `, [fechaCompromiso, descripcion, activo, responsable, minuta, fechaCumplimiento, avance, notas, id], (err, results) => {
         if (err) {
             res.status(400)
             res.json({})
@@ -47,6 +47,7 @@ export const mine = function(req, res) {
         activos.ACTIVO_NAME as nombreActivo, 
         activos.SUBDIRECCION_NAME as subdireccion,
         c.RESPONSABLE as responsable, 
+        c.AVANCE as avance,
         c.MINUTA as minuta,
         c.NOTAS as notas
       FROM Compromisos AS c 
@@ -77,6 +78,7 @@ export const collection = function(req, res) {
       c.RESPONSABLE as responsable, 
       Users.username as nombreResponable,
       c.MINUTA as minuta,
+      c.AVANCE as avance,
       c.NOTAS as notas
     FROM Compromisos AS c 
     LEFT JOIN Users ON c.RESPONSABLE = Users.id 
@@ -101,6 +103,7 @@ export const get = function(req, res) {
           c.RESPONSABLE as responsable, 
           Users.username as nombreResponable,
           c.MINUTA as minuta,
+          c.AVANCE as avance,
           c.NOTAS as notas
         FROM Compromisos AS c 
         LEFT JOIN Users ON c.RESPONSABLE = Users.id 

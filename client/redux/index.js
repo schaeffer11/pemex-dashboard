@@ -108,7 +108,11 @@ const rootReducer = (state, action) => {
       return state = fromJS(newState)
     }
     if (action.type === 'set_imagesInState') {
-      const newState = handleImagesFromServer(action.images, state.toJS())
+      let newState = {...state.toJS()}
+      if (action.isSaved) {
+        newState.pruebasDeLaboratorio = action.pruebasDeLaboratorio
+      }
+      newState = handleImagesFromServer(action.images, newState)
       return state = fromJS(newState)
     }
     if (action.type === 'RESET_APP') {

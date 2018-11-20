@@ -173,7 +173,8 @@ import VolumeGasTreatments from './VolumeGasTreatments'
       }
     }
 
-    console.log(incProdCarouselData)
+    // console.log(incProdCarouselData)
+    console.log(volumeData)
     return (
       <div className="data statistics">
         <div className='content'>
@@ -183,6 +184,7 @@ import VolumeGasTreatments from './VolumeGasTreatments'
                 id="productionCost"
                 title="Inc Production & Cost"
                 ref={this.cards[0]}
+                width={'50%'}
               >
               <ProductionBubble data={incProdData} costData={costData} groupBy={groupBy} />
             </Card>
@@ -190,6 +192,7 @@ import VolumeGasTreatments from './VolumeGasTreatments'
                 id="productionCost"
                 title="Volume & Cost"
                 ref={this.cards[0]}
+                width={'50%'}
               >
               <VolumeCostBubble label='Liquids' data={volumeData} costData={costData} groupBy={groupBy} />
               <VolumeGasCostBubble label='Gases' data={volumeData} costData={costData} groupBy={groupBy} />
@@ -198,6 +201,7 @@ import VolumeGasTreatments from './VolumeGasTreatments'
                 id="productionTreatments"
                 title="Inc Production & Number of Treatments"
                 ref={this.cards[0]}
+                width={'50%'}
                 multiplyChartsOnGrouping
               >
               <ProductionTreatmentsBar data={incProdCarouselData} numTreatmentData={numTreatmentData} groupBy={groupBy} />
@@ -206,6 +210,7 @@ import VolumeGasTreatments from './VolumeGasTreatments'
                 id="volumeTreatments"
                 title="Volume & Number of Treatments"
                 ref={this.cards[0]}
+                width={'50%'}
                 multiplyChartsOnGrouping
               >
               <VolumeTreatments label='Liquids' data={volumeData} numTreatmentData={numTreatmentData} groupBy={groupBy} />
@@ -215,6 +220,7 @@ import VolumeGasTreatments from './VolumeGasTreatments'
                 id="costs"
                 title="Costs"
                 ref={this.cards[1]}
+                width={'50%'}
               >
               <CostBar data={costData} />
             </Card>
@@ -222,6 +228,7 @@ import VolumeGasTreatments from './VolumeGasTreatments'
                 id="volume"
                 title="Volume Usage"
                 ref={this.cards[2]}
+                width={'50%'}
                 multiplyChartsOnGrouping
               >
               <VolumeLine label='Liquids' data={volumeData} />

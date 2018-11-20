@@ -18,7 +18,6 @@ export function getBase64FromURL(imgURL) {
       console.log('image status', this.status)
       if (this.status == 200) {
         var uInt8Array = new Uint8Array(this.response);
-        var byte3 = uInt8Array[4]; 
         const base64 = bufferToBase64(uInt8Array)
         resolve(base64)
       } else {
@@ -125,14 +124,15 @@ export function submitForm(action, token, saveName) {
         body: formData,
       })
         .then(r => r.json())
-        .then(({ isSaved, images }) => {
+        .then((r) => {
           console.log('i got back images?', isSaved, images)
           let notificationType = ''
           let notificationText = ''
+          const { isSaved, images, pruebasDeLaboratorio } = r
           if (isSaved) {
             notificationType = 'success'
             notificationText = 'Su información se ha guardado'
-            dispatch(setImagesInState(images))
+            dispatch(setImagesInState(images, pruebasDeLaboratorio, isSaved))
           } else {
             notificationType = 'error'
             notificationText = 'Su información no se guardó'

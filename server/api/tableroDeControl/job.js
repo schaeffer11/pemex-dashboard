@@ -2,6 +2,7 @@ import { Router } from 'express'
 import db from '../../lib/db'
 import appConfig from '../../../app-config.js'
 import moment from 'moment'
+import { handleImageResponse } from '../api';
 // import path from 'path'
 // import fs from 'fs'
 // import objectPath from 'object-path'
@@ -30,6 +31,63 @@ WHERE TRANSACTION_ID = ?`
         res.json(results)
       }
     })
+})
+
+router.get('/getEstIncData', (req, res) => {
+  let { transactionID, type } = req.query
+
+  if (type === 'Estimulacion') {
+    type = `IntervencionesEstimulacions`
+  }
+  else if (type === 'Acido') {
+    type = 'IntervencionesAcido'
+  }
+  else if (type === 'Apuntalado') {
+    type = `IntervencionesApuntalado`
+  }
+  else {
+    type = `IntervencionesTermico`
+  }
+
+
+
+  let query = 
+
+`select r.TRANSACTION_ID, tr.COMPANY, QO_RESULT, QW_RESULT, QG_RESULT, EST_INC_GASTO_COMPROMISO_QO, EST_INC_QW, EST_INC_GASTO_COMPROMISO_QG
+from Results r
+JOIN ?? ia ON r.PROPUESTA_ID = ia.TRANSACTION_ID
+ JOIN FieldWellMapping fwm ON ia.WELL_FORMACION_ID = fwm.WELL_FORMACION_ID
+ JOIN Transactions t ON ia.TRANSACTION_ID = t.TRANSACTION_ID
+ JOIN TransactionsResults tr on tr.PROPUESTA_ID = ia.TRANSACTION_ID
+WHERE r.PROPUESTA_ID = ?`
+ 
+console.log(query, type, transactionID)
+  connection.query(query, [type, transactionID], (err, results) => {
+      console.log('comment err', err)
+
+     if (err) {
+        res.json({ success: false})
+      }
+      else {
+        res.json(results)
+      }
+    })
+})
+
+
+router.get('/getResultsImages', (req, res) => {
+  const { transactionID } = req.query
+  console.log('getting results images')
+  const query = `
+    SELECT * FROM ResultsImages WHERE PROPUESTA_ID = ?
+  `
+  connection.query(query, [transactionID], async (err, results) => {
+    if (err) {
+      return res.json({})
+    }
+    const images = await handleImageResponse(results)
+    res.json(images)
+  })
 })
 
 router.get('/getCostData', (req, res) => {
@@ -184,7 +242,7 @@ router.get('/getCedulaResults', (req, res) => {
       SELECT * FROM ResultsCedulaApuntalado
       WHERE PROPUESTA_ID = ?`
   }
-  else { 
+  else if (type === 'Termico') { 
     query =`
       SELECT * FROM ResultsCedulaTermico
       WHERE PROPUESTA_ID = ?`
@@ -369,7 +427,7 @@ router.get('/getInterventionResultsData', (req, res) => {
         EFICIENCIA_DE_FLUIDO_DE_FRACTURA: 'eficienciaDeFluidoDeFractura',
       }
   }
-  else {
+  else if (type === 'Apuntalado') {
     query = `
       SELECT * FROM ResultsApuntalado rap
       JOIN Results r ON rap.INTERVENTION_ID = r.INTERVENCIONES_ID
@@ -396,8 +454,25 @@ router.get('/getInterventionResultsData', (req, res) => {
       PRESION_NETA: 'presionNeta',
       EFICIENCIA_DE_FLUIDO_DE_FRACTURA: 'eficienciaDeFluidoDeFractura',
     }
+  } else if (type === 'Termico') {
+    query = `
+      SELECT * FROM ResultsTermico rap
+      JOIN Results r ON rap.INTERVENTION_ID = r.INTERVENCIONES_ID
+      WHERE rap.PROPUESTA_ID = ?`
+    map = {
+    VOLUMEN_VAPOR_INYECTAR: 'volumenVapor',
+    CALIDAD: 'calidad',
+    GASTO_INYECCION: 'gastoInyeccion',
+    PRESION_MAXIMA_SALIDA_GENERADOR: 'presionMaximaSalidaGenerador',
+    TEMPERATURA_MAXIMA_GENERADOR: 'temperaturaMaximaGenerador',
+    }
   }
-
+  map = {
+    QO_RESULT: 'qo',
+    QG_RESULT: 'qg',
+    QW_RESULT: 'qw',
+    ...map
+  }
   connection.query(query, transactionID, (err, results) => {
       console.log('comment err', err)
 
@@ -431,7 +506,7 @@ router.get('/getVolumeData', (req, res) => {
         VOLUMEN_SISTEMA_NO_REACTIVO,
         VOLUMEN_SISTEMA_REACTIVO,
         VOLUMEN_SISTEMA_DIVERGENTE,
-        VOLUMEN_DISPLAZAMIENTO_LIQUIDO,
+        VOLUMEN_DESPLAZAMIENTO_LIQUIDO,
         VOLUMEN_DESPLAZAMIENTO_N2,
         VOLUMEN_PRECOLCHON_N2,
         VOLUMEN_TOTAL_DE_LIQUIDO
@@ -492,7 +567,7 @@ router.get('/getEstimatedVolumeData', (req, res) => {
         VOLUMEN_SISTEMA_NO_REACTIVO,
         VOLUMEN_SISTEMA_REACTIVO,
         VOLUMEN_SISTEMA_DIVERGENTE,
-        VOLUMEN_DISPLAZAMIENTO_LIQUIDO,
+        VOLUMEN_DESPLAZAMIENTO_LIQUIDO,
         VOLUMEN_DESPLAZAMIENTO_N2,
         VOLUMEN_PRECOLCHON_N2,
         VOLUMEN_TOTAL_DE_LIQUIDO

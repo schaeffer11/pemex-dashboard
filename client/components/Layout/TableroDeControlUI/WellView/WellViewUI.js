@@ -12,6 +12,8 @@ import Images from './Images'
 import Card from '../Common/Card'
 import { CardDeck } from 'reactstrap';
 import { generatePowerPoint } from '../../../../pptx';
+import LayerTable from './LayerTable'
+import ZoneTable from './ZoneTable'
 
 @autobind class wellViewUI extends Component {
   constructor(props) {
@@ -246,7 +248,9 @@ import { generatePowerPoint } from '../../../../pptx';
     return (
       <div className="data well-view">
         <div className='header'>
-          <WellSelect fieldWellOptions={fieldWellOptions}/>
+          <div className='selectors'>
+            <WellSelect fieldWellOptions={fieldWellOptions}/>
+          </div>
         </div>
         <div className='content'>
           <CardDeck className="content-deck">
@@ -263,6 +267,7 @@ import { generatePowerPoint } from '../../../../pptx';
                 id="production"
                 title="Productions"
                 ref={this.cards[1]}
+                width={'50%'}
               >
                <ProductionGraph data={productionData} />
             </Card>
@@ -270,15 +275,26 @@ import { generatePowerPoint } from '../../../../pptx';
                 id="pressure"
                 title="Pressure"
                 ref={this.cards[2]}
+                width={'50%'}
               >
                <PressureGraph data={pressureData} />
             </Card>
             <Card
                 id="aforos"
                 title="Aforos"
+                width={'50%'}
                 ref={this.cards[3]}
               >
                <AforosGraph data={aforosData} dates={interventionDates}/>
+            </Card>
+              <Card
+                id="evalPetrofisica"
+                title="Evaluacion Petrofisica"
+                width={'50%'}
+                ref={this.cards[3]}
+              >
+               <LayerTable label='Propiedades Promedio' data={layerData} />
+               <ZoneTable label='Zona de pérdida' data={zoneData} />
             </Card>
             <Card
                 id="images"

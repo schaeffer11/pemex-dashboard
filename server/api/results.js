@@ -57,7 +57,7 @@ const INSERT_CEDULA_ACIDO_QUERY = {
 
 const INSERT_CEDULA_APUNTALADO_QUERY = {
     save: ``   ,
-    submit: `INSERT INTO ResultsCedulaApuntalado_testtest (
+    submit: `INSERT INTO ResultsCedulaApuntalado (
         CEDULA_ID, INTERVENTION_ID, WELL_FORMACION_ID, ETAPA, SISTEMA, NOMBRE_COMERCIAL, TIPO_DE_FLUIDO, TIPO_DE_APUNTALANTE, VOL_LIQUIDO, 
         VOL_LECHADA, GASTO_EN_SUPERFICIE, GASTO_N2_SUPERFICIE, GASTO_TOTAL_FONDO, CALIDAD_N2, VOL_ESPUMA_FONDO, CONCENTRACION_APUNTALANTE_SUPERFICIE, 
         CONCENTRACION_APUNTALANTE_FONDO, APUNTALANTE_ACUMULADO, TIEMPO, COMPANIA, PROPUESTA_ID, TRANSACTION_ID) VALUES ?`        ,
@@ -79,7 +79,7 @@ const INSERT_RESULTS_ESIMULACION_QUERY = {
     submit: `INSERT INTO ResultsEstimulacions (
         INTERVENTION_ID, WELL_FORMACION_ID, TIPO_DE_ESTIMULACION,
         VOLUMEN_PRECOLCHON_N2, VOLUMEN_SISTEMA_NO_REACTIVO, VOLUMEN_SISTEMA_REACTIVO, 
-        VOLUMEN_SISTEMA_DIVERGENTE, VOLUMEN_DISPLAZAMIENTO_LIQUIDO, VOLUMEN_DESPLAZAMIENTO_N2,
+        VOLUMEN_SISTEMA_DIVERGENTE, VOLUMEN_DESPLAZAMIENTO_LIQUIDO, VOLUMEN_DESPLAZAMIENTO_N2,
         VOLUMEN_TOTAL_DE_LIQUIDO, TIPO_DE_COLOCACION,
         TIEMPO_DE_CONTACTO, PENETRACION_RADIAL, LONGITUD_DE_AGUJERO_DE_GUSANO,
         PROPUESTA_ID, TRANSACTION_ID) VALUES
@@ -166,7 +166,7 @@ export const createResults = async (body, action, cb) => {
   const finalObj = {}
 
   for(let k of allKeys) {
-    const innerObj = JSON.parse(body[k])
+    let innerObj = JSON.parse(body[k])
     const innerKeys = Object.keys(innerObj)
 
     // look for immediate images
@@ -186,6 +186,7 @@ export const createResults = async (body, action, cb) => {
         for (let j of property) {
           if (j.img) {
             j.imgName = [transactionID, j.imgName].join('.')
+            console.log('ok here are some imaages', j.imgName)
             const buf = Buffer.from(j.img, 'base64')
             const t = await addObject(buf, j.imgName).catch(reason => console.log('something went wrong', reason))
             j.img = t
@@ -212,7 +213,7 @@ export const createResults = async (body, action, cb) => {
 
   let { fechaIntervencion, justificacionIntervencion, comentariosIntervencion } = finalObj.resultadosGenerales
 
-  let treatmentGraphImg = finalObj.graficaTratamiento.imgUrl
+  let treatmentGraphImg = finalObj.graficaTratamiento.imgName
 
   if (interventionType === 'estimulacion') {
       var { tipoDeColocacion, tiempoDeContacto, volumenPrecolchonN2, volumenSistemaNoReativo, volumenSistemaReactivo, volumenSistemaDivergente,
@@ -249,7 +250,7 @@ export const createResults = async (body, action, cb) => {
 
   }
   else if (interventionType === 'termico') {
-      var { volumenVapor, calidad, gastoInyeccion, presionMaximaSalidaGenerador, temperaturaMaximaGenerador, tratamientoCompany } = finalObj.tratamientoTermico
+      var { volumenVapor, calidad, gastoInyeccion, presionMaximaSalidaGenerador, temperaturaMaximaGenerador, tratamientoCompany, cedulaData } = finalObj.tratamientoTermico
       
       var { qo, qw, qg }  = finalObj.evaluacionTermica
   }
@@ -306,7 +307,7 @@ export const createResults = async (body, action, cb) => {
           if (interventionType !== 'termico') {
             geometria.forEach(i => {
                 let name = 'geometry ' + i.intervalo
-                let newRow = [wellFormacionID, name, i.imgUrl, propuestaID, transactionID]
+                let newRow = [wellFormacionID, name, i.imgName, propuestaID, transactionID]
                 values.push(newRow)
             })
           }
@@ -323,18 +324,19 @@ export const createResults = async (body, action, cb) => {
               })
             }
 
-            let query = 
-              interventionType === 'estimulacion' 
-                ? INSERT_CEDULA_ESTIMULACION_QUERY.submit 
-                : interventionType === 'acido' 
-                  ? INSERT_CEDULA_ACIDO_QUERY.submit 
-                  : interventionType === 'apuntalado'
-                    ? INSERT_CEDULA_APUNTALADO_QUERY.submit
-                    : INSERT_CEDULA_TERMICO_QUERY.submit
-
+            // let query = 
+            //   interventionType === 'estimulacion' 
+            //     ? INSERT_CEDULA_ESTIMULACION_QUERY.submit 
+            //     : interventionType === 'acido' 
+            //       ? INSERT_CEDULA_ACIDO_QUERY.submit 
+            //       : interventionType === 'apuntalado'
+            //         ? INSERT_CEDULA_APUNTALADO_QUERY.submit
+            //         : INSERT_CEDULA_TERMICO_QUERY.submit
+            let query
             values = []
 
             if (interventionType === 'estimulacion') {
+              query = INSERT_CEDULA_ESTIMULACION_QUERY.submit
               if (cedulaData) {
                 cedulaData.forEach(i => {
                   let cedulaID = Math.floor(Math.random() * 1000000000)
@@ -345,6 +347,7 @@ export const createResults = async (body, action, cb) => {
               }
             } 
             else if (interventionType === 'acido') {
+              query = INSERT_CEDULA_ACIDO_QUERY.submit
               if (cedulaData) {
                 cedulaData.forEach(i => {
                   let cedulaID = Math.floor(Math.random() * 1000000000)
@@ -355,6 +358,7 @@ export const createResults = async (body, action, cb) => {
               }
             }
             else if (interventionType === 'apuntalado') {
+              query = INSERT_CEDULA_APUNTALADO_QUERY.submit
               if (cedulaData) {
                 cedulaData.forEach(i => {
                   let cedulaID = Math.floor(Math.random() * 1000000000)
@@ -365,6 +369,7 @@ export const createResults = async (body, action, cb) => {
               }
             }
             else if (interventionType === 'termico') {
+              query = INSERT_CEDULA_TERMICO_QUERY.submit
               if (cedulaData) {
                 cedulaData.forEach(i => {
                   let cedulaID = Math.floor(Math.random() * 1000000000)
@@ -384,17 +389,18 @@ export const createResults = async (body, action, cb) => {
                   cb(err)
                 })
               }
-
-              query = 
-                interventionType === 'estimulacion' 
-                  ? INSERT_RESULTS_ESIMULACION_QUERY.submit 
-                  : interventionType === 'acido' 
-                    ? INSERT_RESULTS_ACIDO_QUERY.submit 
-                    : interventionType === 'apuntalado'
-                      ? INSERT_RESULTS_APUNTALADO_QUERY.submit
-                      : INSERT_RESULTS_TERMICO_QUERY.submit
+              // let INSERT_CEDULA_APUNTALADO_QUERY
+              // query = 
+              //   interventionType === 'estimulacion' 
+              //     ? INSERT_RESULTS_ESIMULACION_QUERY.submit 
+              //     : interventionType === 'acido' 
+              //       ? INSERT_RESULTS_ACIDO_QUERY.submit 
+              //       : interventionType === 'apuntalado'
+              //         ? INSERT_RESULTS_APUNTALADO_QUERY.submit
+              //         : INSERT_RESULTS_TERMICO_QUERY.submit
 
               if (interventionType === 'estimulacion') {
+                query = INSERT_RESULTS_ESIMULACION_QUERY.submit
                 values = [
                   interventionID, wellFormacionID, stimulationType, volumenPrecolchonN2, volumenSistemaNoReativo, volumenSistemaReactivo, volumenSistemaDivergente,
                   volumenDesplazamientoLiquido, volumenDesplazamientoN2, volumenTotalDeLiquido,
@@ -402,7 +408,8 @@ export const createResults = async (body, action, cb) => {
                   propuestaID, transactionID
                 ]
               }
-              else if (interventionType === 'acido'){ 
+              else if (interventionType === 'acido') {
+                query = INSERT_RESULTS_ACIDO_QUERY.submit
                 values = [
                   interventionID, wellFormacionID, 
                   volumenPrecolchonN2, volumenSistemaNoReativo, volumenSistemaReactivo, volumenSistemaDivergente,
@@ -415,6 +422,7 @@ export const createResults = async (body, action, cb) => {
                 ]
               }
               else if (interventionType === 'apuntalado') {
+                query = INSERT_RESULTS_APUNTALADO_QUERY.submit
                 values = [
                     interventionID, wellFormacionID, volumenDesplazamientoLiquido, volumenTotalDeLiquido, 
                     volumenApuntalante, volumenGelFractura, volumenPrecolchonN2,
@@ -428,6 +436,7 @@ export const createResults = async (body, action, cb) => {
                   ]
               } 
               else if (interventionType === 'termico') {
+                query = INSERT_RESULTS_TERMICO_QUERY.submit
                 values = [
                     interventionID, wellFormacionID, volumenVapor, calidad, gastoInyeccion, 
                     presionMaximaSalidaGenerador, temperaturaMaximaGenerador, propuestaID, transactionID

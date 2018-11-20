@@ -24,6 +24,8 @@
 @import './components/_excelUpload.scss';
 @import './components/card';
 @import './components/_sidebar.scss';
+@import './components/_query_modal.scss';
+@import './components/_dropbox.scss';
 
 // Local variables
 $baseTextColor: #222;
@@ -37,6 +39,7 @@ body {
   margin: 0;
   padding: 0;
 }
+
 
 a {
   text-decoration: none;

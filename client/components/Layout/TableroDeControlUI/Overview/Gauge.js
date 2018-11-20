@@ -8,55 +8,54 @@ import ReactHighCharts from 'react-highcharts';
 require('highcharts/js/highcharts-more.js')(ReactHighCharts.Highcharts);
 require('highcharts/modules/solid-gauge.js')(ReactHighCharts.Highcharts);
 
-export const Gauge = ({ label, value, subLabel, className }) => {
+export const Gauge = ({ topLabel, botLabel, value, topSubLabel, botSubLabel, className }) => {
 
 
 
   let config = {
     chart: {
-      type: 'solidgauge'
+      type: 'solidgauge',
+      backgroundColor: 'transparent'
     },
     title: {
       text: ''
     },
     pane: {
       center: ['50%', '70%'],
-      size: '80%',
       startAngle: -90,
       endAngle: 90,
-      background: {
-        backgroundColor: '#EFEFEF',
-        innerRadius: '80%',
-        outerRadius: '95%',
+      background: [{
+        backgroundColor: 'blue',
+        innerRadius: '50%',
+        outerRadius: '100%',
         shape: 'arc'
-      }
+      }]
     },
     tooltip: {
       enabled: false
-    },
-    plotOptions: {
-      solidgauge: {
-        dataLabels: {
-          y: 5,
-          borderWidth: 0,        }
-      }
     },
     yAxis: {
       min: 0,
       max: 100,
       minorTickInterval: null,
-      stops: [[0.5, '#3e8bc7'],],
-      lineWidth: 0,
-      tickAmount: 5,
-      title: {
-        text: ''
-      },
+      // stops: [[0.5, '#70AD46'],],
+      stops: [
+          [0.1, '#C71C31'],
+          [0.5, '#DDDF0D'], 
+          [0.9, '#70AD46']
+            
+      ],
+      tickAmount: 9,
+      tickWidth: 0,
       labels: {
-        style: {
-          color: '#C6C6C6',
-          fontSize: '14px',
-        },
-        distance: 15
+          formatter: function () {
+              return '.';
+          },
+          y: -10,
+          style: {
+            color: 'white',
+            fontSize: '24px'
+          }
       }
     },
     credits: {
@@ -64,36 +63,35 @@ export const Gauge = ({ label, value, subLabel, className }) => {
     },
     series: [{
       name: 'Test',
-      data: [parseInt(value)],
-      innerRadius: '80%',
-      radius: '95%',
+      data: [parseInt(value) * 1.2],
+      innerRadius: '50%',
+      radius: '100%',
       dataLabels: {
-        format: '<div style="text-align:center"><span style="font-size:42px;color:#4e8bc7;font-weight:regular !important;font-family:Roboto">{y}</span>'
+        enabled: false
       }
     }],
-    plotOptions: {
-      solidgauge: {
-        dataLabels: {
-          y: 5,
-          borderWidth: 0,
-          useHTML: true
-        }
-      }
-    }
   }
 
-  console.log(subLabel)
+  console.log(value)
+
+  botLabel ? botLabel = parseFloat(botLabel).toFixed(2) : null
 
   return (
     <div className={classnames("Gauge")} style={{height: '100%'}}>
       <div className='chart gauge-chart'>
         <ReactHighCharts className="chart" config={config} />
       </div>
-      <div className="gaugeLabel" style={{color:'#505050', fontSize:'16px', textAlign: 'center', fontWeight: 'bold', position: 'relative', top: '-55px'}}>
-        { label }
+      <div className="gaugeLabel" style={{top: '-205px'}}>
+        { topLabel }
       </div>
-      <div className="gaugeSubLabel" style={{color:'#808080', fontSize:'12px', textAlign: 'center', fontWeight: 'normal', position: 'relative', top: '-55px'}}>
-        { subLabel }
+      <div className="gaugeSubLabel" style={{top: '-205px'}}>
+        { topSubLabel }
+      </div>
+      <div className="gaugeLabel" style={{top: '-107px'}}>
+        { botLabel }%
+      </div>
+      <div className="gaugeSubLabel" style={{top: '-107px'}}>
+        { botSubLabel }
       </div>
     </div>
 

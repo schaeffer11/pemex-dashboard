@@ -27,52 +27,49 @@ const numWithCommas = (x) => {
         <div className='name'>
             {name}
         </div>
-        <div className = 'gauge' style={{height: '200px', width: '50%', display: 'inline-block', verticalAlign: 'top'}}>
-            <Gauge label={`${numResults}/${numProposals}`} subLabel={'% de Avance'} value={percResults} />
+        <div className = 'gauge' style={{height: '210px', width: '50%', display: 'inline-block', borderBottom: 'solid 2px #b1b1b1', verticalAlign: 'top'}}>
+            <Gauge topLabel={`${numResults}/${numProposals}`} topSubLabel={'# de Trataientos'} botLabel={`${percResults}`} botSubLabel={'% de Avance'} value={percResults} />
          </div>
-        <div className = 'bar' style={{height: '200px', paddingTop: '20px', width: '50%', position: 'relative', left: '-10px', display: 'inline-block', verticalAlign: 'top'}}>
+         <div className = 'kpis' style={{height: '210px', width: '50%', display: 'inline-block', borderBottom: 'solid 2px #b1b1b1', borderLeft: 'solid 2px #b1b1b1'}}>
+            <div className='kpi'>
+                <div className='value'>
+                    {estCost ? `$${numWithCommas(estCost.toFixed(0))}` : '-' }
+                </div>
+                <div className='header'>
+                    Est Costo Total (MNX)
+                </div>
+            </div>
+            <div className='kpi'>
+                <div className='value'>
+                    {cost ? `$${numWithCommas(cost.toFixed(0))}` : '-' }
+                </div>
+                <div className='header'>
+                    Costo Total (MNX)
+                </div>
+            </div>
+            <div className='kpi'>
+                <div className='value'>
+                    {days ? days.toFixed(2) : '-'}
+                </div>
+                <div className='header'>
+                    Desviacion Promedio (dias)
+                </div>
+            </div>
+
+         </div>
+
+        <div className = 'bar' style={{height: '235px', width: '100%', position: 'relative'}}>
+             <div className='kpi' style={{paddingTop: '10px'}}>
+                <div className='value'>
+                    {percEstimated ? `${percEstimated.toFixed(2)}%` : '-' } 
+                </div>
+                <div className='header'>
+                    % de Cumplimento
+                </div>
+            </div>
             <Bar estimated={prodEstimated} actual={prodReal} />
          </div>
-        <div className='kpi'>
-            <div className='value'>
-                {numProposals ? numProposals : '-'}
-            </div>
-            <div className='header'>
-                # De Tratamientos
-            </div>
-        </div>
-        <div className='kpi'>
-            <div className='value'>
-                {cost ? `$${numWithCommas(cost.toFixed(0))}` : '-' }
-            </div>
-            <div className='header'>
-                Costo Total (MNX)
-            </div>
-        </div>
-        <div className='kpi'>
-            <div className='value'>
-                {estCost ? `$${numWithCommas(estCost.toFixed(0))}` : '-' }
-            </div>
-            <div className='header'>
-                Est Costo Total (MNX)
-            </div>
-        </div>
-        <div className='kpi'>
-            <div className='value'>
-                {days ? days.toFixed(2) : '-'}
-            </div>
-            <div className='header'>
-                Desviacion Promedio (days)
-            </div>
-        </div>
-        <div className='kpi'>
-            <div className='value'>
-                {percEstimated ? `${percEstimated.toFixed(2)}%` : '-' } 
-            </div>
-            <div className='header'>
-                % de Cumplimento
-            </div>
-        </div>
+       
       </div>
     )
   }

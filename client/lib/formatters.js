@@ -42,6 +42,7 @@ export function handleImagesFromServer(images, state) {
         images[parent].forEach((elem, index) => {
           const { imgURL, imgName, imgSource, labID } = elem
           for (let lab of shallowStateCopy.pruebasDeLaboratorio.pruebasDeLaboratorioData) {
+            console.log('da lab', lab, labID)
             if (lab.labID.toString() === labID) {
               lab.imgURL = imgURL
               lab.imgName = imgName

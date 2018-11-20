@@ -9,7 +9,7 @@ import { setHasErrorsPropuestaApuntalado, setCedulaData, setModuloYoungArena, se
   setIntervalo, setLongitudDeIntervalo, setVolAparejo, setCapacidadTotalDelPozo, setVolumenPrecolchonN2, 
   setVolumenDeApuntalante, setVolumenDeGelDeFractura, setVolumenDesplazamiento, setVolumenTotalDeLiquido, 
   setPropuestaCompany } from '../../../../../redux/actions/intervencionesApuntalado'
-import { round, calculateVolumes, getSistemaApuntaladoOptions, getDisabledColumnForApuntaladoCeluda } from '../../../../../lib/helpers'
+import { round, calculateVolumes, getSistemaApuntaladoOptions, getDisabledColumnForApuntaladoCeluda, companyOptions } from '../../../../../lib/helpers'
 import { checkEmpty, checkDate } from '../../../../../lib/errorCheckers'
 import { calculateValuesApuntaladoCedula } from '../../../../../lib/formatters';
 
@@ -137,15 +137,6 @@ import { calculateValuesApuntaladoCedula } from '../../../../../lib/formatters';
     formData = formData.toJS()
     intervalos = intervalos.toJS()
     let { propuestaCompany } = formData
-    const companyOptions = [
-      { label: 'Halliburton', value: 'Halliburton' },
-      { label: 'Schlumberger', value: 'Schlumberger' },
-      { label: 'PFM', value: 'PFM' },
-      { label: 'Chemiservices', value: 'Chemiservices' },
-      { label: 'BJ', value: 'BJ' },
-      { label: 'Weatherford',
-      value: 'Weatherford' }
-    ]
 
     const intervals = intervalos.map(elem => <div key={`intervalo_${elem.cimaMD}-${elem.baseMD}`}>{`${elem.cimaMD}-${elem.baseMD}`}</div>)
 

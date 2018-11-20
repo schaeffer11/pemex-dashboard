@@ -100,8 +100,8 @@ router.get('/jobBreakdown', (req, res) => {
   JOIN TransactionsResults tr on tr.TRANSACTION_ID = r.TRANSACTION_ID
   JOIN FieldWellMapping fwm ON r.WELL_FORMACION_ID = fwm.WELL_FORMACION_ID
   ${whereClause}
-  GROUP BY TIPO_DE_INTERVENCIONES ${groupByClause}`
-  
+  GROUP BY TIPO_DE_INTERVENCIONES ${groupByClause}
+  ORDER BY TIPO_DE_INTERVENCIONES`
 
   connection.query(query, values, (err, results) => {
       // console.log('comment err', err)
@@ -248,7 +248,8 @@ FROM
 ) A INNER JOIN WellAforos B USING(TRANSACTION_ID, FECHA)) as aforos
 
 WHERE aforos.TRANSACTION_ID = aforo_results.PROPUESTA_ID
-${groupByClause}`
+${groupByClause}
+ORDER BY groupedName`
 
   connection.query(query, values, (err, results) => {
       console.log('comment err', err)
@@ -313,6 +314,7 @@ router.get('/costData', (req, res) => {
 
   let whereClause = 'WHERE 1 = 1'
   let groupByClause = ''
+  let orderByClause = ''
 
   if (level) {
     whereClause += ` AND ${level} = ?`
@@ -354,27 +356,35 @@ router.get('/costData', (req, res) => {
   switch(groupBy) {
     case 'subdireccion':
       groupByClause = `GROUP BY SUBDIRECCION_NAME`
+      orderByClause = `ORDER BY SUBDIRECCION_NAME`
       break
     case 'activo':
       groupByClause = `GROUP BY ACTIVO_NAME`
+      orderByClause = `ORDER BY ACTIVO_NAME`
       break
     case 'field':
       groupByClause = `GROUP BY FIELD_NAME`
+      orderByClause = `ORDER BY FIELD_NAME`
       break
     case 'well':
       groupByClause = `GROUP BY WELL_FORMACION_ID`
+      orderByClause = `ORDER BY WELL_FORMACION_ID`
       break
     case 'formation':
       groupByClause = `GROUP BY FORMACION`
+      orderByClause = `ORDER BY FORMACION`
       break
     case 'company':
       groupByClause = `GROUP BY COMPANY`
+      orderByClause = `ORDER BY COMPANY`
       break
     case 'interventionType':
       groupByClause = `GROUP BY TIPO_DE_INTERVENCIONES`
+      orderByClause = `ORDER BY TIPO_DE_INTERVENCIONES`
       break
     case 'terminationType':
       groupByClause = `GROUP BY TIPO_DE_TERMINACION`
+      orderByClause = `ORDER BY TIPO_DE_TERMINACION`
       break
   }
 
@@ -420,6 +430,7 @@ router.get('/costData', (req, res) => {
     
   ON a.PROPUESTA_ID = b.TRANSACTION_ID
 ${groupByClause}
+${orderByClause}
 
 `
 
@@ -736,7 +747,8 @@ JOIN IntervencionesTermico ia ON r.PROPUESTA_ID = ia.TRANSACTION_ID
  JOIN Transactions t ON ia.TRANSACTION_ID = t.TRANSACTION_ID
  JOIN TransactionsResults tr on tr.PROPUESTA_ID = ia.TRANSACTION_ID
  ${whereClause}) as a
- ${groupByClause}`
+ ${groupByClause}
+ ORDER BY groupedName`
 
  console.log(query, values)
 
@@ -869,7 +881,7 @@ r.WELL_FORMACION_ID,
 SUM(IF(ra.VOLUMEN_SISTEMA_NO_REACTIVO, ra.VOLUMEN_SISTEMA_NO_REACTIVO, 0) + IF(re.VOLUMEN_SISTEMA_NO_REACTIVO, re.VOLUMEN_SISTEMA_NO_REACTIVO, 0)) as TOTAL_SISTEMA_NO_REACTIVO,
 SUM(IF(ra.VOLUMEN_SISTEMA_REACTIVO, ra.VOLUMEN_SISTEMA_REACTIVO, 0) + IF(re.VOLUMEN_SISTEMA_REACTIVO, re.VOLUMEN_SISTEMA_REACTIVO, 0)) as TOTAL_SISTEMA_REACTIVO,
 SUM(IF(ra.VOLUMEN_SISTEMA_DIVERGENTE, ra.VOLUMEN_SISTEMA_DIVERGENTE, 0) + IF(re.VOLUMEN_SISTEMA_DIVERGENTE, re.VOLUMEN_SISTEMA_DIVERGENTE, 0)) as TOTAL_SISTEMA_DIVERGENTE,
-SUM(IF(ra.VOLUMEN_DESPLAZAMIENTO_LIQUIDO, ra.VOLUMEN_DESPLAZAMIENTO_LIQUIDO, 0) + (IF(rap.VOLUMEN_DESPLAZAMIENTO_LIQUIDO, rap.VOLUMEN_DESPLAZAMIENTO_LIQUIDO, 0) / 264.172) + IF(re.VOLUMEN_DISPLAZAMIENTO_LIQUIDO, re.VOLUMEN_DISPLAZAMIENTO_LIQUIDO, 0)) as TOTAL_DESPLAZAMIENTO_LIQUIDO,
+SUM(IF(ra.VOLUMEN_DESPLAZAMIENTO_LIQUIDO, ra.VOLUMEN_DESPLAZAMIENTO_LIQUIDO, 0) + (IF(rap.VOLUMEN_DESPLAZAMIENTO_LIQUIDO, rap.VOLUMEN_DESPLAZAMIENTO_LIQUIDO, 0) / 264.172) + IF(re.VOLUMEN_DESPLAZAMIENTO_LIQUIDO, re.VOLUMEN_DESPLAZAMIENTO_LIQUIDO, 0)) as TOTAL_DESPLAZAMIENTO_LIQUIDO,
 SUM(IF(ra.VOLUMEN_DESPLAZAMIENTO_N2, ra.VOLUMEN_DESPLAZAMIENTO_N2, 0) + IF(re.VOLUMEN_DESPLAZAMIENTO_N2, re.VOLUMEN_DESPLAZAMIENTO_N2, 0)) as TOTAL_DESPLAZAMIENTO_N2,
 SUM(IF(ra.VOLUMEN_PRECOLCHON_N2, ra.VOLUMEN_PRECOLCHON_N2, 0) + IF(re.VOLUMEN_PRECOLCHON_N2, re.VOLUMEN_PRECOLCHON_N2, 0)) as TOTAL_PRECOLCHON_N2,
 SUM(IF(ra.VOLUMEN_TOTAL_DE_LIQUIDO, ra.VOLUMEN_TOTAL_DE_LIQUIDO, 0) + (IF(rap.VOLUMEN_TOTAL_DE_LIQUIDO, rap.VOLUMEN_TOTAL_DE_LIQUIDO, 0) / 264.172) + IF(re.VOLUMEN_TOTAL_DE_LIQUIDO, re.VOLUMEN_TOTAL_DE_LIQUIDO, 0)) as TOTAL_LIQUIDO,

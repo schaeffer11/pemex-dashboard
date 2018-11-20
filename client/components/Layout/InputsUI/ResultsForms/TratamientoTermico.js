@@ -1,11 +1,13 @@
 import React, { Component } from 'react'
 import autobind from 'autobind-decorator'
 import { connect } from 'react-redux'
+
 import InputTable from '../../Common/InputTable'
 import { InputRow, InputRowSelectUnitless, CalculatedValue } from '../../Common/InputRow'
 import { setMergeTratamientoTermico, setCedulaTratamientoTermico } from '../../../../redux/actions/results'
 import { checkEmpty, checkDate } from '../../../../lib/errorCheckers'
-import { calculateValuesTermicaCedula } from '../../../../lib/formatters';
+import { calculateValuesTermicaCedula } from '../../../../lib/formatters'
+import { companyOptions } from '../../../../lib/helpers'
 
 @autobind class TratamientoTermico extends Component {
   constructor(props) {
@@ -125,15 +127,7 @@ import { calculateValuesTermicaCedula } from '../../../../lib/formatters';
   makeGeneralForm() {
     let { formData, setMergeTratamientoTermico, intervals } = this.props
     let { tratamientoCompany, volumenVapor, calidad, gastoInyeccion, presionMaximaSalidaGenerador, temperaturaMaximaGenerador } = formData
-    const companyOptions = [
-      { label: 'Halliburton', value: 'Halliburton' },
-      { label: 'Schlumberger', value: 'Schlumberger' },
-      { label: 'PFM', value: 'PFM' },
-      { label: 'Chemiservices', value: 'Chemiservices' },
-      { label: 'BJ', value: 'BJ' },
-      { label: 'Weatherford',
-      value: 'Weatherford' }
-    ]
+
     const intervalsDiv = intervals.map(elem => <div key={`intervalo_${elem}`}>{elem}</div>)
     return (
       <div className='general-form' >
@@ -193,7 +187,7 @@ import { calculateValuesTermicaCedula } from '../../../../lib/formatters';
           <InputRow
             header="Temperatura máxima del generador"
             name='temperaturaMaximaGenerador'
-            unit="psi"
+            unit="°C"
             value={temperaturaMaximaGenerador}
             onChange={(e) => setMergeTratamientoTermico({ temperaturaMaximaGenerador: e })}
             errors={this.state.errors}

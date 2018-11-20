@@ -1,11 +1,27 @@
 .well-view {
 	display: grid;
-	grid-template-rows: 77px calc(100vh - 77px);
+	grid-template-rows: 130px calc(100vh - 130px);
 	grid-template-areas: 	'header' 
 							'content';
 
 	.header {
 		grid-area: header;
+		padding-top: 20px;
+
+		.selectors {
+			padding: 15px;
+    		border: solid 2px #b1b1b1;
+    		border-radius: 10px;
+    		width: calc(50% - 15px);
+    		margin-right: 30px;
+    		display: inline-block;
+    		vertical-align: top;
+    		height: 95px;
+    		margin-bottom: 30px;
+		}
+
+
+
 	}
 
 	.content {

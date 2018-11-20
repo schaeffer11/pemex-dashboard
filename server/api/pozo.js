@@ -337,7 +337,7 @@ const INSERT_INTERVENTION_ESIMULACION_QUERY = {
     save: `INSERT INTO _IntervencionesEstimulacionsSave (
         INTERVENTION_ID, WELL_FORMACION_ID, TIPO_DE_ESTIMULACION,
         VOLUMEN_PRECOLCHON_N2,
-        VOLUMEN_SISTEMA_NO_REACTIVO, VOLUMEN_SISTEMA_REACTIVO, VOLUMEN_SISTEMA_DIVERGENTE, VOLUMEN_DISPLAZAMIENTO_LIQUIDO, VOLUMEN_DESPLAZAMIENTO_N2,
+        VOLUMEN_SISTEMA_NO_REACTIVO, VOLUMEN_SISTEMA_REACTIVO, VOLUMEN_SISTEMA_DIVERGENTE, VOLUMEN_DESPLAZAMIENTO_LIQUIDO, VOLUMEN_DESPLAZAMIENTO_N2,
         VOLUMEN_TOTAL_DE_LIQUIDO, TIPO_DE_COLOCACION,
         TIEMPO_DE_CONTACTO, PENETRACION_RADIAL, LONGITUD_DE_AGUJERO_DE_GUSANO,
         EST_INC_ESTRANGULADOR, EST_INC_Ptp, EST_INC_Ttp, EST_INC_Pbaj, EST_INC_Tbaj,
@@ -351,7 +351,7 @@ const INSERT_INTERVENTION_ESIMULACION_QUERY = {
     submit: `INSERT INTO IntervencionesEstimulacions (
         INTERVENTION_ID, WELL_FORMACION_ID, TIPO_DE_ESTIMULACION,
         VOLUMEN_PRECOLCHON_N2,
-        VOLUMEN_SISTEMA_NO_REACTIVO, VOLUMEN_SISTEMA_REACTIVO, VOLUMEN_SISTEMA_DIVERGENTE, VOLUMEN_DISPLAZAMIENTO_LIQUIDO, VOLUMEN_DESPLAZAMIENTO_N2,
+        VOLUMEN_SISTEMA_NO_REACTIVO, VOLUMEN_SISTEMA_REACTIVO, VOLUMEN_SISTEMA_DIVERGENTE, VOLUMEN_DESPLAZAMIENTO_LIQUIDO, VOLUMEN_DESPLAZAMIENTO_N2,
         VOLUMEN_TOTAL_DE_LIQUIDO, TIPO_DE_COLOCACION,
         TIEMPO_DE_CONTACTO, PENETRACION_RADIAL, LONGITUD_DE_AGUJERO_DE_GUSANO,
         EST_INC_ESTRANGULADOR, EST_INC_Ptp, EST_INC_Ttp, EST_INC_Pbaj, EST_INC_Tbaj,
@@ -370,7 +370,7 @@ const INSERT_INTERVENTION_ACIDO_QUERY = {
     save: `INSERT INTO _IntervencionesAcidoSave (
         INTERVENTION_ID, WELL_FORMACION_ID,
         VOLUMEN_PRECOLCHON_N2,
-        VOLUMEN_SISTEMA_NO_REACTIVO, VOLUMEN_SISTEMA_REACTIVO, VOLUMEN_SISTEMA_DIVERGENTE, VOLUMEN_DISPLAZAMIENTO_LIQUIDO, VOLUMEN_DESPLAZAMIENTO_N2,
+        VOLUMEN_SISTEMA_NO_REACTIVO, VOLUMEN_SISTEMA_REACTIVO, VOLUMEN_SISTEMA_DIVERGENTE, VOLUMEN_DESPLAZAMIENTO_LIQUIDO, VOLUMEN_DESPLAZAMIENTO_N2,
         VOLUMEN_TOTAL_DE_LIQUIDO, MODULO_YOUNG_ARENA,
         MODULO_YOUNG_LUTITAS, RELAC_POISSON_ARENA, RELAC_POISSON_LUTITAS, GRADIENTE_DE_FRACTURA, DENSIDAD_DE_DISPAROS,
         DIAMETRO_DE_DISPAROS, LONGITUD_TOTAL, LONGITUD_EFECTIVA_GRABADA,
@@ -408,7 +408,7 @@ const INSERT_INTERVENTION_ACIDO_QUERY = {
 const INSERT_INTERVENTION_APUNTALADO_QUERY = {
     save: `INSERT INTO _IntervencionesApuntaladoSave (
         INTERVENTION_ID, WELL_FORMACION_ID, 
-        VOLUMEN_DISPLAZAMIENTO_LIQUIDO,
+        VOLUMEN_DESPLAZAMIENTO_LIQUIDO,
         VOLUMEN_TOTAL_DE_LIQUIDO, MODULO_YOUNG_ARENA,
         MODULO_YOUNG_LUTITAS, RELAC_POISSON_ARENA, RELAC_POISSON_LUTITAS, GRADIENTE_DE_FRACTURA, DENSIDAD_DE_DISPAROS,
         DIAMETRO_DE_DISPAROS, LONGITUD_APUNTALADA, ALTURA_TOTAL_DE_FRACTURA, ANCHO_PROMEDIO,
@@ -1661,9 +1661,7 @@ export const create = async (body, action, cb) => {
                                       INSERT_LAB_TEST_QUERY.save = `SELECT(1) FROM Users LIMIT 1`
                                     }
 
-                                    query = 
-                                      tipoDeIntervenciones === 'termico' ? DUMMY_QUERY :
-                                        (action === 'save' ? INSERT_LAB_TEST_QUERY.save : INSERT_LAB_TEST_QUERY.submit)
+                                    query = action === 'save' ? INSERT_LAB_TEST_QUERY.save : INSERT_LAB_TEST_QUERY.submit
                                     
                                     connection.query(query, [values], (err, results) => {
                                       console.log('lab tests', err)
@@ -2047,10 +2045,10 @@ export const create = async (body, action, cb) => {
                                                                         }
 
                                                                         // FIXME: This deletes images that should not be deleted. fix in the futre!
-                                                                        if (deleteID !== null) {
+                                                                        if (deleteID !== null && action === 'save') {
                                                                           console.log('getting wellimages', deleteID)
-                                                                          // const deletedImages = await deleteImages(deleteID, action).catch(r => console.log('something went wrong'))
-                                                                          // console.log('i should get some deletions', deletedImages)
+                                                                          const deletedImages = await deleteImages(deleteID, action).catch(r => console.log('something went wrong'))
+                                                                          console.log('i should get some deletions', deletedImages)
                                                                         }
 
                                                                         connection.query(action === 'save' ? DELETE_QUERY : DUMMY_QUERY, values, (err, results) => {

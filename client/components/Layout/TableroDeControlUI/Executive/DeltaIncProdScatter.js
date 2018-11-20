@@ -89,6 +89,8 @@ let colorWheel = [
         categories: categories
       },
       yAxis: {
+        min: -100,
+        max: 100,
         title: {
           text: 'Percentage'
         },
