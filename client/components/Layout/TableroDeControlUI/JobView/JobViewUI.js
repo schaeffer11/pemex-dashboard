@@ -347,7 +347,7 @@ import { generatePowerPoint } from '../../../../pptx';
 
                 id="images"
                 title="Images"
-                ref={this.cards[5]}
+                ref={this.cards[6]}
                 isImage={true}
               >
               {this.makeImages()}

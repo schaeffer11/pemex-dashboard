@@ -189,7 +189,7 @@ import VolumeGasTreatments from './VolumeGasTreatments'
               <ProductionBubble data={incProdData} costData={costData} groupBy={groupBy} />
             </Card>
               <Card
-                id="productionCost"
+                id="volumeCost"
                 title="Volume & Cost"
                 ref={this.cards[0]}
                 width={'50%'}

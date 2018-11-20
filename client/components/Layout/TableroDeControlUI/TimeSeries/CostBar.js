@@ -28,13 +28,12 @@ import { KPI } from '../Common/KPIs'
         }
       })
 
+
       series.push({
-        name: name ? name : 'Cost Data',
+        name: name !== 1 ? name : 'Cost Data',
         data: filteredData
       })
     })
-
-
 
 
     let config = {
@@ -69,8 +68,6 @@ import { KPI } from '../Common/KPIs'
       series: series
   }
 
-
-  // console.log(series)
     return (
       <div className="cost-bar test">
         <div className='chart'>
