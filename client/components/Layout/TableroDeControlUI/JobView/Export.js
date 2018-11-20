@@ -14,6 +14,8 @@ import ProgressBar from '../Common/ProgressBar'
       isBuildingPowerpoint: false,
       percentage: 0,
       isModalOpen: false,
+      progress: 0,
+      hasResults: false,
       firstHalf: {
         objectivoYAlcances: { text: 'Objectivo y alcances', error: null },
         fichaTecnicalDelCampo: { text:'Ficha técnica - campo', error: null },
@@ -38,8 +40,6 @@ import ProgressBar from '../Common/ProgressBar'
         historicoDeAforosResultados: { text: 'Histórico de aforos - resultados', error: null },
         graficaDeTratamiento: { text: 'Gráfica de tratamiento', error: null },
       },
-      progress: 0,
-      hasResults: false,
     }
   }
 
@@ -90,13 +90,16 @@ import ProgressBar from '../Common/ProgressBar'
       secondHalfCopy[name].error = error
       newState.secondHalf = secondHalfCopy
     }
-    console.log('index', index, total)
     const progress = (index / total) * 100
+
     this.setState({ ...newState, progress, hasResults })
   }
 
   handlePptxClick() {
     const { token, jobID, jobType } = this.props
+    if (!jobID) {
+      return
+    }
     this.setState({
       isBuildingPowerpoint: true,
     })
@@ -125,6 +128,7 @@ import ProgressBar from '../Common/ProgressBar'
 
   render() {
     const { excelOption, isBuildingPowerpoint } = this.state
+    const { jobID } = this.props
     const excelExportOptions = [
       { label: 'Histórico de produccion', value: 'historicoProduccion' },
       { label: 'Histórico de Presión - Campo ', value: 'historicoPresionCampo' },
@@ -138,7 +142,7 @@ import ProgressBar from '../Common/ProgressBar'
           <div className="pptx-export">
             <label>Generar Presentacion</label>
             <div>
-              <button className="cta" disabled={isBuildingPowerpoint} onClick={() => this.handlePptxClick()}>Exportar PPTX</button>
+              <button className="cta" disabled={isBuildingPowerpoint || !jobID} onClick={() => this.handlePptxClick()}>Exportar PPTX</button>
             </div>
           </div>
           <div className="excel-export">
