@@ -15,23 +15,29 @@ import ProgressBar from '../Common/ProgressBar'
       percentage: 0,
       isModalOpen: false,
       firstHalf: {
-        objectivoYAlcances: { text: 'Objectivo y alcances', isComplete: false, error: null },
-        fichaTecnicalDelCampo: { text:'Ficha técnica - campo', isComplete: false, error: null },
-        historicoPresionCampo: { text: 'Histórico de presión - campo', isComplete: false, error: null },
-        fichaTecnicaDelPozo: { text: 'Ficha técnica - pozo', isComplete: false, error: null },
-        historialDeIntervenciones: { text: 'Historial de intervenciones', isComplete: false, error: null },
-        estadoMecanicoYAparejo: { text: 'Edo. mecánico y aparejo de producción', isComplete: false, error: null },
-        sistemasArtificialesDeProduccion: { text: 'Información de Sistemas Artificiales de Producción', isComplete: false, error: null },
-        evaluacionPetrofisica: { text: 'Evaluación petrofísica', isComplete: false, error: null },
-        analisisDeAgua: { text: 'Análisis del agua', isComplete: false, error: null },
-        historicoDeProduccion: { text: 'Histórico de producción', isComplete: false, error: null },
-        historicoDeAforo: { text: 'Histórico de aforos - propuesta', isComplete: false, error: null },
-        historicoDePresionPozo: { text: 'Histórico de presión - pozo', isComplete: false, error: null },
-        propuestaCedula: { text: 'Cédula de tratamiento - propuesta', isComplete: false, error: null },
-        propuesta: { text: 'Propuesta de tratamiento', isComplete: false, error: null },
-        laboratorios: { text: 'Pruebas de laboratorio', isComplete: false, error: null },
+        objectivoYAlcances: { text: 'Objectivo y alcances', error: null },
+        fichaTecnicalDelCampo: { text:'Ficha técnica - campo', error: null },
+        historicoPresionCampo: { text: 'Histórico de presión - campo', error: null },
+        fichaTecnicaDelPozo: { text: 'Ficha técnica - pozo', error: null },
+        historialDeIntervenciones: { text: 'Historial de intervenciones', error: null },
+        estadoMecanicoYAparejo: { text: 'Edo. mecánico y aparejo de producción', error: null },
+        sistemasArtificialesDeProduccion: { text: 'Información de Sistemas Artificiales de Producción', error: null },
+        evaluacionPetrofisica: { text: 'Evaluación petrofísica', error: null },
+        analisisDeAgua: { text: 'Análisis del agua', error: null },
+        historicoDeProduccion: { text: 'Histórico de producción', error: null },
+        historicoDeAforosPropuesta: { text: 'Histórico de aforos - propuesta', error: null },
+        historicoDePresionPozo: { text: 'Histórico de presión - pozo', error: null },
+        propuestaCedula: { text: 'Cédula de tratamiento - propuesta', error: null },
+        propuesta: { text: 'Propuesta de tratamiento', error: null },
+        laboratorios: { text: 'Pruebas de laboratorio', error: null },
       },
-      secondHalf: {},
+      secondHalf: {
+        resultadosCedula: { text: 'Cédula de tratamiento - resultados', error: null },
+        resultados: { text: 'Resultados', error: null },
+        geometria: { text: 'Geometría de intervalos', error: null },
+        historicoDeAforosResultados: { text: 'Histórico de aforos - resultados', error: null },
+        graficaDeTratamiento: { text: 'Gráfica de tratamiento', error: null },
+      },
       progress: 0,
       hasResults: false,
     }
@@ -65,21 +71,28 @@ import ProgressBar from '../Common/ProgressBar'
       const secondHalfTasks = this.buildIndividualTask(secondHalf, type)
       return [...firstHalfTasks, ...secondHalfTasks]
     }
-    console.log('first half tasks', firstHalfTasks)
     return firstHalfTasks
   }
 
   updateProgress(index, name, hasResults, error=false) {
-    console.log('updating progress', index, name, hasResults, error)
     const { firstHalf, secondHalf } = this.state
+    const newState = {}
     let total = Object.keys(firstHalf).length
     if (hasResults) {
       total += Object.keys(secondHalf).length
     }
-    const firstHalfCopy = JSON.parse(JSON.stringify(firstHalf))
-    firstHalfCopy[name].error = error
+    if (firstHalf.hasOwnProperty(name)) {
+      const firstHalfCopy = JSON.parse(JSON.stringify(firstHalf))
+      firstHalfCopy[name].error = error
+      newState.firstHalf = firstHalfCopy
+    } else if (secondHalf.hasOwnProperty(name)) {
+      const secondHalfCopy = JSON.parse(JSON.stringify(secondHalf))
+      secondHalfCopy[name].error = error
+      newState.secondHalf = secondHalfCopy
+    }
+    console.log('index', index, total)
     const progress = (index / total) * 100
-    this.setState({ firstHalf: firstHalfCopy, progress, hasResults })
+    this.setState({ ...newState, progress, hasResults })
   }
 
   handlePptxClick() {
@@ -137,7 +150,7 @@ import ProgressBar from '../Common/ProgressBar'
                 onChange={(excelOption) => this.setState({ excelOption })}
                 value={excelOption}
               />
-              <button className="cta">Exportar XLXS</button>
+              <button disabled className="cta">Exportar XLXS</button>
             </div>
           </div>
         </div>
