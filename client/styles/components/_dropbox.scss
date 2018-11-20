@@ -58,9 +58,23 @@
           margin-right: 1em;
         }
       }
-      
+    }
+    .pptx-task-list {
+      display: flex;
+      ul {
+        list-style-type: none;
+        padding: 0;
+      }
+      .icons {
+        width: 2em;
+        padding-left: 2em;
+      }
     }
   }
+}
+
+.pptx-progress {
+  margin-top: 1em;
 }
 
 .progress-bar {

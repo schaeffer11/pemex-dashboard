@@ -36,7 +36,6 @@ import { generatePowerPoint } from '../../../../pptx';
       date: null,
       labData: [],
       specificLabData: [],
-      modalIsOpen: false,
     }    
     this.cards = []
     for (let i = 0; i < 7; i += 1) {
@@ -115,8 +114,6 @@ import { generatePowerPoint } from '../../../../pptx';
       })
 
   }
-
-
 
 
   async fetchData() {
@@ -259,14 +256,6 @@ import { generatePowerPoint } from '../../../../pptx';
     }
   } 
 
-  // activateModal() {
-  //   this.setState({ modalIsOpen: true })
-  // }
-
-  // deactivateModal() {
-  //   this.setState({ modalIsOpen: false })
-  // }
-
   render() {
     let { fieldWellOptions, jobOptions, imageData, costData, estCostData, volumeData, estVolumeData, cedulaData, cedulaResultData, date, aforoData, interventionData, interventionResultsData, labData, specificLabData, modalIsOpen } = this.state
     let { globalAnalysis, token } = this.props
@@ -292,8 +281,6 @@ import { generatePowerPoint } from '../../../../pptx';
           <JobSelect options={jobOptions}/>
         </div>
         <div className='content tablero-content'>
-          {/* <button className={'open-export-btn'} disabled={!job} onClick={() => this.activateModal()}>generar presentacion {}</button> */}
-          {/* <Export /> */}
           <LocalModal>
             <Export />
           </LocalModal>

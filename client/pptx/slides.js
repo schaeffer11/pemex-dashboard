@@ -12,8 +12,8 @@ function getPositions(len) {
 
 export async function buildObjectivoYAlcances(pptx, token, id) {
   const data = await getData('/api/getInterventionBase', token, { transactionID: id })
-  const { intervencionProgramada } = data.objetivoYAlcancesIntervencion
-  data.objetivoYAlcancesIntervencion.intervencionProgramada = intervencionProgramada ? 'Si' : 'No'
+  // const { intervencionProgramada } = data.objetivoYAlcancesIntervencion
+  // data.objetivoYAlcancesIntervencion.intervencionProgramada = intervencionProgramada ? 'Si' : 'No'
   const { table } = buildSimpleTable('', maps.general, data.objetivoYAlcancesIntervencion, false)
   const slide = pptx.addNewSlide('MASTER_SLIDE')
   slide.addText('Propuesta', { placeholder: 'slide_title' })

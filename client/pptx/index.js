@@ -195,7 +195,47 @@ async function getHasresults(token, id) {
   return Object.keys(data).length > 0
 }
 
-export async function generatePowerPoint(token, jobID, jobType) {
+const firstHalf = (pptx, token, jobID, images) => [
+  { func: async () => buildObjectivoYAlcances(pptx, token, jobID), name: 'objectivoYAlcances' },
+  { func: () => buildSectionSlide(pptx, 'Información del campo') },
+  { func: async () => buildFichaTecnicaDelCampo(pptx, token, jobID), name: 'fichaTecnicalDelCampo' },
+  { func: async () => buildPressureChart(pptx, token, jobID, true), name: 'historicoPresionCampo' },
+  { func: () => buildSectionSlide(pptx, 'Información del pozo') },
+  { func: async () => buildFichaTecnicaDelPozo(pptx, token, jobID), name: 'fichaTecnicaDelPozo' },
+  { func: async () => buildHistorialIntervenciones(pptx, token, jobID), name: 'historialDeIntervenciones' },
+  { func: async () => buildEstadoMecanicoYAparejo(pptx, token, jobID, images.mecanicoYAparejoDeProduccion), name: 'estadoMecanicoYAparejo' },
+  { func: async () => buildSistemasArtificialesDeProduccion(pptx, token, jobID), name: 'sistemasArtificialesDeProduccion' },
+  { func: async () => buildEvaluacionPetrofisica(pptx, token, jobID, images.buildEvaluacionPetrofisica), name: 'evaluacionPetrofisica' },
+  { func: async () => buildWaterAnalysis(pptx, token, jobID), name: 'analisisDeAgua' },
+  { func: async () => buildProductionChart(pptx, token, jobID), name: 'historicoDeProduccion' },
+  { func: async () => buildAforoChart(pptx, token, jobID), name: 'historicoDeAforo' },
+  { func: async () => buildPressureChart(pptx, token, jobID), name: 'historicoDePresionPozo' },
+  { func: () => buildSectionSlide(pptx, 'Información de la propuesta') },
+  { func: async () => buildProposalCedula(pptx, token, jobID), name: 'propuestaCedula' },
+  { func: async () => buildGeneralProposal(pptx, token, jobID), name: 'propuesta' },
+  { func: async () => buildLabReports(pptx, token, jobID, images.pruebasDeLaboratorio), name: 'laboratorios' },
+]
+
+async function buildAndSkipError(everything, hasResults, updateProgress) {
+  let index = 1
+  for (let e of everything) {
+    console.log('buidling and skippihg', e.name, typeof updateProgress)
+    try {
+      await e.func()
+      if (e.name) {
+        updateProgress(index, e.name, hasResults)
+      }
+    } catch (error) {
+      console.log('just kidding!!!')
+      if (e.name) {
+        updateProgress(index, e.name, hasResults, true)
+      }
+    }
+    index++
+  }
+}
+
+export async function generatePowerPoint(token, jobID, jobType, updateProgress) {
   console.log('generating powerpoint')
   const slideWidth = 13.3
   const slideHeight = 7.5
@@ -207,31 +247,30 @@ export async function generatePowerPoint(token, jobID, jobType) {
   const masterSlide = buildMasterSlide(slideWidth, slideHeight, names)
   pptx.defineSlideMaster(masterSlide)
   const images = await getData('/api/getImages', token, { transactionID: jobID })
-  const hasResults = await getHasresults(token, jobID)
+  // const hasResults = await getHasresults(token, jobID)
+  const hasResults = false
   console.log('images', images)
-  try {
-    await buildObjectivoYAlcances(pptx, token, jobID)
-  } catch (error) {
-    console.log('just kidding!!!')
-    return
-  }
-  buildSectionSlide(pptx, 'Información del campo')
-  await buildFichaTecnicaDelCampo(pptx, token, jobID)
-  await buildPressureChart(pptx, token, jobID, true)
-  buildSectionSlide(pptx, 'Información del pozo')
-  await buildFichaTecnicaDelPozo(pptx, token, jobID)
-  await buildHistorialIntervenciones(pptx, token, jobID)
-  await buildEstadoMecanicoYAparejo(pptx, token, jobID, images.mecanicoYAparejoDeProduccion)
-  await buildSistemasArtificialesDeProduccion(pptx, token, jobID)
-  await buildEvaluacionPetrofisica(pptx, token, jobID, images.buildEvaluacionPetrofisica)
-  await buildWaterAnalysis(pptx, token, jobID)
-  await buildProductionChart(pptx, token, jobID)
-  await buildAforoChart(pptx, token, jobID)
-  await buildPressureChart(pptx, token, jobID)
-  buildSectionSlide(pptx, 'Información de la propuesta')
-  await buildProposalCedula(pptx, token, jobID)
-  await buildGeneralProposal(pptx, token, jobID)
-  await buildLabReports(pptx, token, jobID, images.pruebasDeLaboratorio)
+  // await buildObjectivoYAlcances(pptx, token, jobID)
+  // buildSectionSlide(pptx, 'Información del campo')
+  // await buildFichaTecnicaDelCampo(pptx, token, jobID)
+  // await buildPressureChart(pptx, token, jobID, true)
+  // buildSectionSlide(pptx, 'Información del pozo')
+  // await buildFichaTecnicaDelPozo(pptx, token, jobID)
+  // await buildHistorialIntervenciones(pptx, token, jobID)
+  // await buildEstadoMecanicoYAparejo(pptx, token, jobID, images.mecanicoYAparejoDeProduccion)
+  // await buildSistemasArtificialesDeProduccion(pptx, token, jobID)
+  // await buildEvaluacionPetrofisica(pptx, token, jobID, images.buildEvaluacionPetrofisica)
+  // await buildWaterAnalysis(pptx, token, jobID)
+  // await buildProductionChart(pptx, token, jobID)
+  // await buildAforoChart(pptx, token, jobID)
+  // await buildPressureChart(pptx, token, jobID)
+  // buildSectionSlide(pptx, 'Información de la propuesta')
+  // await buildProposalCedula(pptx, token, jobID)
+  // await buildGeneralProposal(pptx, token, jobID)
+  // await buildLabReports(pptx, token, jobID, images.pruebasDeLaboratorio)
+  const firstHalfTasks = firstHalf(pptx, token, jobID, images)
+  console.log('what is this', typeof updateProgress)
+  await buildAndSkipError(firstHalfTasks, hasResults, updateProgress)
   // if (hasResults) {
   //   const imageResults = await getData(`/job/getResultsImages`, token, { transactionID: jobID })
   //   console.log('image results', imageResults)

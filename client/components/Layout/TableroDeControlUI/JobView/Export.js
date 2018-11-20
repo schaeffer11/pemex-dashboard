@@ -33,40 +33,53 @@ import ProgressBar from '../Common/ProgressBar'
       },
       secondHalf: {},
       progress: 0,
+      hasResults: false,
     }
   }
 
-  componentDidMount() {}
+  determineError(error) {
+    if (error === null) {
+      return <i style={{ color: 'grey' }} className="fas fa-angle-right" />
+    } else if (error) {
+      return <i style={{ color: '#d84040' }} className="fas fa-times" />
+    } else {
+      return <i style={{ color: 'green' }} className="fas fa-check" />
+    }
+  }
 
-  // buildTasks(name, taskSequence, hasResults, error) {
-  //   const { firstHalf, secondHalf } = this.state
-  //   let firstHalfTasks = Object.keys(firstHalf).map(task => {
-  //     const { error, text } = firstHalf[task]
-  //     return (
-  //       <li>{error ? 'sad' : 'happy'} - {text}</li>
-  //     )
-  //   })
+  buildIndividualTask(tasks, type) {
+    return Object.keys(tasks).map(task => {
+      if (type === 'error') {
+        return<li>{this.determineError(tasks[task][type])}</li>
+      }
+      return (
+        <li>{tasks[task][type]}</li>
+      )
+    })
+  }
 
-  // }
+  buildList(hasResults, type) {
+    const { firstHalf, secondHalf } = this.state
+    const firstHalfTasks = this.buildIndividualTask(firstHalf, type)
+    if (hasResults) {
+      const secondHalfTasks = this.buildIndividualTask(secondHalf, type)
+      return [...firstHalfTasks, ...secondHalfTasks]
+    }
+    console.log('first half tasks', firstHalfTasks)
+    return firstHalfTasks
+  }
 
-  updateProgress(index, name, hasResults, error) {
-    console.log('updating progress')
+  updateProgress(index, name, hasResults, error=false) {
+    console.log('updating progress', index, name, hasResults, error)
     const { firstHalf, secondHalf } = this.state
     let total = Object.keys(firstHalf).length
     if (hasResults) {
       total += Object.keys(secondHalf).length
     }
+    const firstHalfCopy = JSON.parse(JSON.stringify(firstHalf))
+    firstHalfCopy[name].error = error
     const progress = (index / total) * 100
-    this.setState({ progress })
-    // console.log('what is the progress?', progress)
-    // return (
-    //   <div>
-    //     <ProgressBar percentage={progress} />
-    //     <ul>
-    //       {/* {this.buildTasks(name, hasResults, error)} */}
-    //     </ul>
-    //   </div>
-    // )
+    this.setState({ firstHalf: firstHalfCopy, progress, hasResults })
   }
 
   handlePptxClick() {
@@ -78,24 +91,19 @@ import ProgressBar from '../Common/ProgressBar'
   }
 
   powerPointExport() {
-    const { isBuildingPowerpoint, progress } = this.state
+    const { isBuildingPowerpoint, progress, hasResults } = this.state
     if (isBuildingPowerpoint) {
       return (
-        <div>
-        <ProgressBar percentage={progress} />
-        <ul>
-          <p>one</p>
-          <p>one</p>
-          <p>one</p>
-          <p>one</p>
-          <p>one</p>
-          <p>one</p>
-          <p>one</p>
-          <p>one</p>
-          <p>one</p>
-          <p>one</p>
-          <p>one</p>
-        </ul>
+        <div className="pptx-progress">
+          <ProgressBar percentage={progress} />
+          <div className="pptx-task-list">
+            <ul className="icons">
+              {this.buildList(hasResults, 'error')}
+            </ul>
+            <ul>
+              {this.buildList(hasResults, 'text')}
+            </ul>
+          </div>
         </div>
       )
     }
@@ -103,7 +111,7 @@ import ProgressBar from '../Common/ProgressBar'
   }
 
   render() {
-    const { excelOption } = this.state
+    const { excelOption, isBuildingPowerpoint } = this.state
     const excelExportOptions = [
       { label: 'Histórico de produccion', value: 'historicoProduccion' },
       { label: 'Histórico de Presión - Campo ', value: 'historicoPresionCampo' },
@@ -117,7 +125,7 @@ import ProgressBar from '../Common/ProgressBar'
           <div className="pptx-export">
             <label>Generar Presentacion</label>
             <div>
-              <button className="cta" onClick={() => this.handlePptxClick()}>Exportar PPTX</button>
+              <button className="cta" disabled={isBuildingPowerpoint} onClick={() => this.handlePptxClick()}>Exportar PPTX</button>
             </div>
           </div>
           <div className="excel-export">
@@ -126,7 +134,7 @@ import ProgressBar from '../Common/ProgressBar'
               <Select
                 className="export-select"
                 options={excelExportOptions}
-                onChange={(excelOption) => this.setState({ excelOption, isBuildingPowerpoint: false })}
+                onChange={(excelOption) => this.setState({ excelOption })}
                 value={excelOption}
               />
               <button className="cta">Exportar XLXS</button>
