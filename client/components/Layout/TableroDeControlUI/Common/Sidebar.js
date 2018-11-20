@@ -373,7 +373,7 @@ const filterArr = arr => {
               value={selectSimpleValue(highMonth, monthOptions)}
               options={monthOptions}
               onChange={c => this.handleSelect(c, 'highMonth')}
-              isClearable={true}
+              isClearable={truee}
             />
           </div>*/}
           <div className='formation-selector'>
