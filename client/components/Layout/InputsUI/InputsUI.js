@@ -3,7 +3,6 @@ import autobind from 'autobind-decorator'
 import axios from 'axios';
 import { connect } from 'react-redux'
 import AriaModal from 'react-aria-modal'
-import '../../../styles/components/_query_modal.css'
 
 import GeneralData from './Components/GeneralData'
 import Tabs from './Components/Tabs'

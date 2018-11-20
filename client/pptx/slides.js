@@ -15,7 +15,6 @@ export async function buildObjectivoYAlcances(pptx, token, id) {
   const { intervencionProgramada } = data.objetivoYAlcancesIntervencion
   data.objetivoYAlcancesIntervencion.intervencionProgramada = intervencionProgramada ? 'Si' : 'No'
   const { table } = buildSimpleTable('', maps.general, data.objetivoYAlcancesIntervencion, false)
-  console.log('what is this table/?', table)
   const slide = pptx.addNewSlide('MASTER_SLIDE')
   slide.addText('Propuesta', { placeholder: 'slide_title' })
   const { middle } = getPositions(10)
@@ -154,8 +153,8 @@ export async function buildEvaluacionPetrofisica(pptx, token, id, image) {
     const base64 = await getBase64FromURL(image.imgURL).catch(e => e)
     if (!base64.error) {
       imageSlide.addImage({
-        data: `image/png;base64,${base64}`, x: getPositions(6.5).middle, y: 1.0,
-        sizing: { type: 'contain', h: 6.5, w: 6.5 }
+        data: `image/png;base64,${base64}`, x: getPositions(10.5).middle, y: 2.0,
+        sizing: { type: 'contain', h: 5.5, w: 10.5 }
       })
     }
   }
@@ -231,7 +230,7 @@ export async function buildGeometry(pptx, images) {
       if (!base64.error) {
         const interval = image.imgName.split('.').slice(-1)
         const slide = pptx.addNewSlide('MASTER_SLIDE')
-        slide.addText(`Geometria de intervalo: ${interval[0]}`, { placeholder: 'slide_title' })
+        slide.addText(`Geometría de intervalo: ${interval[0]}`, { placeholder: 'slide_title' })
         slide.addImage({
           data: `image/png;base64,${base64}`, x: middle, y: 1,
           sizing: { type: 'contain', h: 4.5, w: 4.5 }
@@ -247,7 +246,7 @@ export async function buildGraficaDeTratamiento(pptx, image) {
     const base64 = await getBase64FromURL(image.imgURL).catch(e => e)
     if (!base64.error) {
       const slide = pptx.addNewSlide('MASTER_SLIDE')
-      slide.addText('Grafica de tratamiento', { placeholder: 'slide_title' })
+      slide.addText('Gráfica de tratamiento', { placeholder: 'slide_title' })
       slide.addImage({
         data: `image/png;base64,${base64}`, x: middle, y: 1,
         sizing: { type: 'contain', h: 4.5, w: 4.5 }

@@ -14,6 +14,9 @@ import { CardDeck } from 'reactstrap';
 import AforoScatter from './AforoScatter'
 import CedulaTable from './CedulaTable'
 import LabTable from './LabTable'
+import Export from './Export'
+import LocalModal from './../Common/LocalModal'
+import { generatePowerPoint } from '../../../../pptx';
 
 @autobind class jobViewUI extends Component {
   constructor(props) {
@@ -112,8 +115,6 @@ import LabTable from './LabTable'
       })
 
   }
-
-
 
 
   async fetchData() {
@@ -278,14 +279,17 @@ import LabTable from './LabTable'
     console.log('date', date)
     console.log('labData', labData)
     console.log('specificLabData', specificLabData)
-    console.log('estIncData', estIncData)
 
+    console.log('estIncData', estIncData)
     return (
       <div className="data job-view">
-        <div className='content'>
+        <div className='content tablero-content'>
          <div className='selectors'>
             <WellSelect fieldWellOptions={fieldWellOptions}/>
             <JobSelect options={jobOptions}/>
+            <LocalModal>
+              <Export />
+            </LocalModal>
           </div>
           <KPIs estData={estCostData} data={costData} estIncData={estIncData}/>
           <CardDeck className="content-deck">
@@ -322,7 +326,7 @@ import LabTable from './LabTable'
                 width={'50%'}
               >          
               <SimulationTreatmentTable type={jobType} interventionData={interventionData} interventionResultsData={interventionResultsData} />
-            </Card>            
+            </Card>
             <Card
                 id="aforos"
                 title="Aforos"
@@ -348,7 +352,6 @@ import LabTable from './LabTable'
               >
               {this.makeImages()}
             </Card> 
-
           </CardDeck>
           <div style={{height: '500px'}}/>
         </div>
