@@ -12,7 +12,7 @@ export const KPI = ({ header, value, unit, className }) => {
       </span>
       { unit ?
         <span>
-          {" " + unit}
+          {unit}
         </span>
         : null
       }
