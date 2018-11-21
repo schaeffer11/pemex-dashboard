@@ -35,6 +35,73 @@ import ZoneTable from './ZoneTable'
     }
   }
 
+  makeZoneExportData(data) {
+    let exportData = []
+
+    exportData.push([
+      `Cima (md)`,
+      `Base (md)`,
+      `Lodo perdido (m3)`,
+      `Dens. (gr/cm3)`
+    ])
+
+
+    data.forEach(i => {
+      exportData.push([
+        i.CIMA_MD,
+        i.BASE_MD,
+        i.LODO_PERDIDO,
+        i.DENSIDAD
+      ])
+    })
+
+    return exportData
+  }
+
+
+  makeLayerExportData(data) {
+    let exportData = []
+
+    exportData.push([
+      `Intervalo`,
+      `Cima (md)`,
+      `Base (md)`,
+      `Espesor Bruto (md)`,
+      `Espesor Neto (md`,
+      `V Arc. (%)`,
+      `V Cal. (%)`,
+      `V Dol. (%)`,
+      `Porosidad (%)`,
+      `Sw. (%)`,
+      `Dens. (gr/cm3)`,
+      `Resis. (ohm)`,
+      `Perm (md)`
+    ])
+
+
+    data.forEach(i => {
+      exportData.push([
+        i.INTERVALO,
+        i.CIMA_MD,
+        i.BASE_MD,
+        i.ESPESOR_BRUTO,
+        i.ESPESOR_NETO,
+        i.V_ARC,
+        i.V_CAL,
+        i.V_DOL,
+        i.POROSITY,
+        i.SW,
+        i.DENS,
+        i.RESIS,
+        i.PERMEABILIDAD,
+      ])
+    })
+
+    return exportData
+  }
+
+
+
   fetchData() {
   	console.log('fetching')
     let { globalAnalysis } = this.props
@@ -245,6 +312,9 @@ import ZoneTable from './ZoneTable'
     // console.log('images', imageData, imageData)
     // console.log('interventionDates', interventionDates)
 
+    let zoneExportData = this.makeZoneExportData(zoneData)
+    let layerExportData = this.makeLayerExportData(layerData)
+
     return (
       <div className="data well-view">
         <div className='header'>
@@ -258,7 +328,8 @@ import ZoneTable from './ZoneTable'
                 id="kpis"
                 title="KPIs"
                 ref={this.cards[0]}
-                isTable={true}
+                isNotGraph={true}
+                width={'100%'}
               >
                 <KPIFichaTecnica label='Ficha Tecnica' data={wellData} />
                 <KPIMecanico label='Mecanico Data' data={wellData} />
@@ -292,9 +363,10 @@ import ZoneTable from './ZoneTable'
                 title="Evaluacion Petrofisica"
                 width={'50%'}
                 ref={this.cards[3]}
+                isTable={true}
               >
-               <LayerTable label='Propiedades Promedio' data={layerData} />
-               <ZoneTable label='Zona de pérdida' data={zoneData} />
+               <LayerTable label='Propiedades Promedio' data={layerData} exportData={layerExportData} />
+               <ZoneTable label='Zona de pérdida' data={zoneData} exportData={zoneExportData} />
             </Card>
             <Card
                 id="images"

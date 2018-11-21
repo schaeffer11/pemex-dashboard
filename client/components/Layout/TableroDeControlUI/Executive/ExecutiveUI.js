@@ -43,6 +43,74 @@ import AvgDeltaIncProdBar from './AvgDeltaIncProdBar'
     }
   }
 
+  buildExecTableExport(data, groupBy) {
+    let exportData = []
+
+    let newRow = []
+    groupBy ? newRow.push('Name') : null
+
+    newRow = newRow.concat([
+      'Num Treatments', 
+      'Num Acido', 
+      'Num Apuntalado', 
+      'Num Estimulacion Limpieza', 
+      'Num Etimulacion Matricial', 
+      'Num Termico', 
+      'Total Cost', 
+      'Est Inc Prod', 
+      'Inc Prod', 
+      'Date of Last Treatment', 
+      'Type of Last Treatment', 
+      'Total Sistema No Reactivo (m3)',
+      'Total Sistema Reactivo (m3)',
+      'Total Sistema Divergente (m3)',
+      'Total Desplazamimento Liquido (m3)',
+      'Total Desplazamiento N2 (m3)',
+      'Total Precolchon N2 (m3)',
+      'Total Liquido (m3)',
+      'Total Apuntalante (sacos)',
+      'Total Gel de Fractura (U.S. gal)',
+      'Total Precolchon apuntalante (U.S. gal)',
+      'Total Vapor Injected (ton)'])
+
+    exportData.push(newRow)
+
+    data.forEach(i => {
+      newRow = []
+
+      groupBy ? newRow.push(i.name) : null
+
+      newRow = newRow.concat([
+        i.numTreatments,
+        i.numAcido,
+        i.numApuntalado,
+        i.numEstimulacionLimpieza,
+        i.numEstimulacionMatricial,
+        i.numTermico,
+        i.cost,
+        i.estProd,
+        i.realProd,
+        '-',
+        '-',
+        i.sistemaNoReactivo,
+        i.sistemaReactivo,
+        i.sistemaDivergente,
+        i.desplazamientoLiquido,
+        i.desplazamientoN2,
+        i.precolchonN2,
+        i.liquido,
+        i.apuntalante,
+        i.gelDeFractura,
+        i.precolchonApuntalante,
+        i.vapor
+      ])
+
+      exportData.push(newRow)
+    })
+
+    return exportData
+  }
+
   async fetchData() {
     let { globalAnalysis } = this.props
     globalAnalysis = globalAnalysis.toJS()
@@ -141,7 +209,48 @@ import AvgDeltaIncProdBar from './AvgDeltaIncProdBar'
     globalAnalysis = globalAnalysis.toJS()
     let { groupBy } = globalAnalysis
 
-    console.log(costData)
+    execTableData = execTableData.map(i => {
+
+        let estProd = estIncData.find(j => j.groupedName === i.groupedName) ? estIncData.find(j => j.groupedName === i.groupedName).qo : undefined
+        let realProd = estIncData.find(j => j.groupedName === i.groupedName) ? estIncData.find(j => j.groupedName === i.groupedName).qoResult : undefined
+
+        let volumen = groupBy 
+                  ? (volumeData.find(j => j.groupedName === i.groupedName) ? volumeData.find(j => j.groupedName === i.groupedName) : {}) 
+                  : (volumeData ? volumeData[0] : {})
+
+        return {
+            name: i.groupedName,
+            numTreatments: i.NUM_TREATMENTS,
+            numAcido: i.NUM_ACIDO,
+            percAcido: i.NUM_ACIDO / i.NUM_TREATMENTS * 100,
+            numApuntalado: i.NUM_APUNTALADO,
+            percApuntalado: i.NUM_APUNTALADO / i.NUM_TREATMENTS * 100,
+            numEstimulacionLimpieza: i.NUM_ESTIMULACION_LIMPIEZA,
+            percEstimulacionLimpieza: i.NUM_ESTIMULACION_LIMPIEZA / i.NUM_TREATMENTS * 100,
+            numEstimulacionMatricial: i.NUM_ESTIMULACION_MATRICIAL,
+            percEstimulacionMatricial: i.NUM_ESTIMULACION_MATRICIAL / i.NUM_TREATMENTS * 100,
+            numTermico: i.NUM_TERMICO,
+            percTermico: i.NUM_TERMICO / i.NUM_TREATMENTS * 100,
+            cost: i.COST ? i.COST.toFixed(0) : 0 ,
+            estProd: estProd,
+            realProd: realProd,
+            dateType: '-',
+            sistemaNoReactivo: volumen ? volumen.TOTAL_SISTEMA_NO_REACTIVO : undefined,
+            sistemaReactivo: volumen ? volumen.TOTAL_SISTEMA_REACTIVO : undefined,
+            sistemaDivergente: volumen ? volumen.TOTAL_SISTEMA_DIVERGENTE : undefined,
+            desplazamientoLiquido: volumen ? volumen.TOTAL_DESPLAZAMIENTO_LIQUIDO : undefined,
+            desplazamientoN2: volumen ? volumen.TOTAL_DESPLAZAMIENTO_N2 : undefined,
+            precolchonN2: volumen ? volumen.TOTAL_PRECOLCHON_N2 : undefined,
+            liquido: volumen ? volumen.TOTAL_LIQUIDO : undefined,
+            apuntalante: volumen ? volumen.TOTAL_APUNTALANTE : undefined,
+            gelDeFractura: volumen ? volumen.TOTAL_GEL_DE_FRACTURA : undefined,
+            precolchonApuntalante: volumen ? volumen.TOTAL_PRECOLCHON_APUNTALANTE : undefined,
+            vapor: volumen ? volumen.TOTAL_VAPOR_INJECTED : undefined,
+        }
+    })
+
+    let exportData = this.buildExecTableExport(execTableData, groupBy)
+
 
     return (
       <div className="data executive">
@@ -158,67 +267,67 @@ import AvgDeltaIncProdBar from './AvgDeltaIncProdBar'
           <CardDeck className="content-deck">
               <Card
                 id="execTable"
-                title="Some Table"
+                title="Análisis de los Trabajos de Estimulación y Fracturamiento"
                 ref={this.cards[6]}
                 isTable={true}
               >       
-              <ExecutiveTable data={execTableData} estIncData={estIncData} volumeData={volumeData} groupBy={groupBy} />
+              <ExecutiveTable data={execTableData} exportData={exportData} groupBy={groupBy} />
             </Card>
             <Card
                 id="productionGraphs"
-                title="Delta Incremental Production"
+                title="Desviación Real vs Estimada"
                 ref={this.cards[0]}
                 width={'50%'}
               >
-              <DeltaOil label='Oil' data={singularEstIncData} groupBy={groupBy} />
-              <DeltaWater label='Water' data={singularEstIncData} groupBy={groupBy} />
+              <DeltaOil label='Aceite' data={singularEstIncData} groupBy={groupBy} />
+              <DeltaWater label='Agua' data={singularEstIncData} groupBy={groupBy} />
               <DeltaGas label='Gas' data={singularEstIncData} groupBy={groupBy} />
             </Card>
             <Card
                 id="classifications"
-                title="Classification"
+                title="Clasificación"
                 ref={this.cards[1]}
                 width={'50%'}
                 multiplyChartsOnGrouping
               >
-              <JobBreakdown label='Job Type' data={jobBreakdownData} />
-{/*              <JobBreakdown label='Success' data={aforosCarouselData} />*/}
+              <JobBreakdown label='Tipo' data={jobBreakdownData} />
+{/*              <JobBreakdown label='Éxito' data={aforosCarouselData} />*/}
             </Card>
             <Card
                 id="incProd"
-                title="Incremental Production"
+                title="Producción Incremental"
                 ref={this.cards[2]}
                 width={'50%'}
               >
               <IncProdBar label={'Total'} data={estIncData} groupBy={groupBy} />  
-              <AvgIncProdBar label={'Average'} data={estIncData} groupBy={groupBy} />  
+              <AvgIncProdBar label={'Promedio'} data={estIncData} groupBy={groupBy} />  
             </Card>
             <Card
                 id="incProdDeviations"
-                title="Incremental Production Deviations"
+                title="Desviación de Producción Incremental"
                 ref={this.cards[3]}
                 width={'50%'}
               >       
               <DeltaIncProdScatter label={'Individual'} data={singularEstIncData} groupBy={groupBy} />
-              <AvgDeltaIncProdBar label={'Avg'} data={estIncData} groupBy={groupBy} />
+              <AvgDeltaIncProdBar label={'Promedio'} data={estIncData} groupBy={groupBy} />
             </Card>
             <Card
                 id="costs"
-                title="Costs"
+                title="Costos"
                 ref={this.cards[4]}
                 width={'50%'}
               >
               <CostBar label={'Total'} data={costData} groupBy={groupBy} />  
-              <AvgCostBar label={'Average'} data={costData} groupBy={groupBy} />  
+              <AvgCostBar label={'Promedio'} data={costData} groupBy={groupBy} />  
             </Card>
             <Card
                 id="costDeviations"
-                title="Cost Deviations"
+                title="Desviación de Costos"
                 ref={this.cards[5]}
                 width={'50%'}
               >       
               <DeltaCostBar label={'Individual'} data={singularCostData} groupBy={groupBy} />
-              <AvgDeltaCostBar label={'Avg'} data={costData} groupBy={groupBy} />
+              <AvgDeltaCostBar label={'Promedio'} data={costData} groupBy={groupBy} />
             </Card>
           </CardDeck>
           

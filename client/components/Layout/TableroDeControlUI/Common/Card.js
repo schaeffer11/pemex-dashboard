@@ -24,6 +24,10 @@ const arraysAreEqual = (arr1, arr2) => {
   return true
 }
 
+const replaceAll = function(str, search, replacement) {
+    return str.split(search).join(replacement);
+}
+
 @autobind class Card extends Component {
   ///////////////////////
   // Lifecycle Methods //
@@ -97,6 +101,37 @@ const arraysAreEqual = (arr1, arr2) => {
     this.setState(prevState => ({
         userOptionsOpen: !prevState.userOptionsOpen,
       }))
+  }
+
+
+  handleCardExportTable(data) {
+    let duplicate = []
+
+    data.forEach(row => {
+      let newRow = []
+      for (var i in row) {
+        newRow.push(`"` + row[i] + `"`)
+      }
+     
+      duplicate.push(newRow)
+    })
+
+    duplicate.forEach(i => i.join(','))
+
+   
+    let dataString = duplicate.join("%0A");
+
+    dataString = replaceAll(dataString, ' ', '%20')
+
+
+    let a = document.createElement('a');
+    a.href = 'data:attachment/csv,' + dataString;
+    a.target = '_blank';
+    a.download = 'exportData.csv';
+
+    document.body.appendChild(a);
+    a.click(); 
+
   }
 
   handleCardExport() {
@@ -180,7 +215,7 @@ const arraysAreEqual = (arr1, arr2) => {
 
   renderUserOptions() {
     const { userOptionsOpen, showing } = this.state
-    const { id, children, isImage, isTable } = this.props
+    const { id, children, isImage, isTable, isNotGraph } = this.props
 
     const viewing = Array.isArray(children) ? children[showing] : children
 
@@ -199,8 +234,12 @@ const arraysAreEqual = (arr1, arr2) => {
             {isImage 
               ? <a href={viewing.props.src} target="_blank"><Button>Export</Button></a>
               : isTable 
-                ? null
-                : <Button onClick={this.handleCardExport}>
+                ? <Button onClick={e => this.handleCardExportTable(viewing.props.exportData)}>
+                    Export
+                  </Button>
+                : isNotGraph 
+                  ? null
+                  :<Button onClick={this.handleCardExport}>
                     Export
                   </Button> }
           </PopoverBody>
@@ -235,7 +274,7 @@ const arraysAreEqual = (arr1, arr2) => {
               )
             })}
             <h6>
-              {`${selectedGrouping}: ${groupProps}`}
+              {`${groupProps}`}
             </h6>
           </div>
           <button className="right" type="button" onClick={() => this.handleGroupChangeChevron('right')}>

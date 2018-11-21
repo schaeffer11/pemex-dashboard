@@ -67,6 +67,11 @@ let colorWheel = [
       xAxis: {
         categories: categories,
       },
+      yAxis: {
+        title: {
+          text: 'MNX'
+        }
+      },
 	    credits: {
 	    	enabled: false
 	    },

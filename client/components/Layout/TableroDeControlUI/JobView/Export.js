@@ -140,7 +140,7 @@ import ProgressBar from '../Common/ProgressBar'
       <div className='export-modal'>
         <div className='export-buttons'>
           <div className="pptx-export">
-            <label>Generar Presentacion</label>
+            <label>Generar Presentación</label>
             <div>
               <button className="cta" disabled={isBuildingPowerpoint || !jobID} onClick={() => this.handlePptxClick()}>Exportar PPTX</button>
             </div>

@@ -123,34 +123,6 @@ import VolumeGasTreatments from './VolumeGasTreatments'
     globalAnalysis = globalAnalysis.toJS()
 
     let { groupBy } = globalAnalysis
-
-    // console.log('costData', costData)
-    // console.log('aforosData', aforosData)
-    // console.log('volumeData', volumeData)
-    // let aforosCarouselData = {}
-
-    // if (aforosData.length > 0) {
-    //   if (groupBy) {
-    //     let groups = []
-
-    //     aforosData.forEach(i => {
-    //       if (!groups.includes(i.groupedName)) {
-    //         groups.push(i.groupedName)
-    //       }
-    //     })
-
-
-    //     groups.forEach(name => {
-    //       aforosCarouselData[name] = aforosData.filter(j => j.groupedName === name)
-    //     }) 
-    //   }
-    //   else {
-    //     aforosCarouselData = {
-    //       undefined: aforosData
-    //     }
-    //   }
-    // }
-
     let incProdCarouselData = {}
 
     if (incProdData.length > 0) {
@@ -175,8 +147,6 @@ import VolumeGasTreatments from './VolumeGasTreatments'
       }
     }
 
-    // console.log(incProdCarouselData)
-    console.log(volumeData)
     return (
       <div className="data statistics">
         <div className='content'>
@@ -192,24 +162,24 @@ import VolumeGasTreatments from './VolumeGasTreatments'
           <CardDeck className="content-deck">
             <Card
                 id="productionCost"
-                title="Inc Production & Cost"
+                title="Producción Incremental vs Costo"
                 ref={this.cards[0]}
                 width={'50%'}
               >
               <ProductionBubble data={incProdData} costData={costData} groupBy={groupBy} />
             </Card>
               <Card
-                id="productionCost"
-                title="Volume & Cost"
+                id="volumeCost"
+                title="Volúmenes vs Costo"
                 ref={this.cards[0]}
                 width={'50%'}
               >
-              <VolumeCostBubble label='Liquids' data={volumeData} costData={costData} groupBy={groupBy} />
+              <VolumeCostBubble label='Líquidos' data={volumeData} costData={costData} groupBy={groupBy} />
               <VolumeGasCostBubble label='Gases' data={volumeData} costData={costData} groupBy={groupBy} />
             </Card>
               <Card
                 id="productionTreatments"
-                title="Inc Production & Number of Treatments"
+                title="Producción Incremental y Número de Tratamientos"
                 ref={this.cards[0]}
                 width={'50%'}
                 multiplyChartsOnGrouping
@@ -218,17 +188,17 @@ import VolumeGasTreatments from './VolumeGasTreatments'
             </Card>
               <Card
                 id="volumeTreatments"
-                title="Volume & Number of Treatments"
+                title="Volumen y Número de Tratamientos"
                 ref={this.cards[0]}
                 width={'50%'}
                 multiplyChartsOnGrouping
               >
-              <VolumeTreatments label='Liquids' data={volumeData} numTreatmentData={numTreatmentData} groupBy={groupBy} />
+              <VolumeTreatments label='Líquidos' data={volumeData} numTreatmentData={numTreatmentData} groupBy={groupBy} />
               <VolumeGasTreatments label='Gases' data={volumeData} numTreatmentData={numTreatmentData} groupBy={groupBy} />
             </Card>
             <Card
                 id="costs"
-                title="Costs"
+                title="Costos"
                 ref={this.cards[1]}
                 width={'50%'}
               >
@@ -236,12 +206,12 @@ import VolumeGasTreatments from './VolumeGasTreatments'
             </Card>
               <Card
                 id="volume"
-                title="Volume Usage"
+                title="Volumen Utilizado"
                 ref={this.cards[2]}
                 width={'50%'}
                 multiplyChartsOnGrouping
               >
-              <VolumeLine label='Liquids' data={volumeData} />
+              <VolumeLine label='Líquidos' data={volumeData} />
               <VolumeGasLine label="Gases" data={volumeData} />
             </Card>
           </CardDeck>

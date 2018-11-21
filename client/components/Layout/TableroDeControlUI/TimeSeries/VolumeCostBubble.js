@@ -43,8 +43,9 @@ import { KPI } from '../Common/KPIs'
         }
       })
 
+
       series.push({
-        name: name !== 'undefined' ? name : 'Volume Data',
+        name: name !== '1' ? name : 'Volumen',
         data: filteredData,         
       })
     })
@@ -66,7 +67,7 @@ import { KPI } from '../Common/KPIs'
       },
       yAxis: {
         title: {
-          text: 'Total Volume Used (m3)'
+          text: 'Volumen Total Utilizado (m3)'
         }
       },
       credits: {

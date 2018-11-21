@@ -21,39 +21,39 @@ import { CategoryDist, TrafficLight, Currency, Integer, numWithCommas } from '..
 
     switch(groupBy) {
       case 'subdireccion':
-        header = 'Subdireccion Name'
+        header = 'Subdirección'
         break
       case 'activo':
-        header = 'Activo Name'
+        header = 'Activo'
         break
       case 'field':
-        header = 'Field Name'
+        header = 'Campo'
         break
       case 'well':
-        header = 'Well Name'
+        header = 'Pozo'
         break
       case 'formation':
-        header = 'Formacion'
+        header = 'Formación'
         break
       case 'company':
-        header = 'Propuesta Compania'
+        header = 'Companñía'
         break
       case 'interventionType':
-        header = 'Tipo De Intervenciones'
+        header = 'Tipo De Intervención'
         break
       case 'terminationType':
-        header = 'Tipo De Terminacion'
+        header = 'Tipo De Terminación'
         break
     }
 
 
       let columns = [{
-        Header: <div>Total de<br/>Tratamientos</div>,
+        Header: <div>Total de Tratamientos</div>,
         accessor: 'numTreatments',
         minWidth: 150,
         Cell: Integer,
       },{
-        Header: '% Category',
+        Header: <div>% de Tratamientos</div>,
         accessor: 'bar', 
         minWidth: 150,
         Cell: CategoryDist
@@ -63,12 +63,12 @@ import { CategoryDist, TrafficLight, Currency, Integer, numWithCommas } from '..
         minWidth: 150,
         Cell: Currency,
       },{
-        Header: 'Produccion Incremental Estimada',
+        Header: 'Producción Incremental Estimada',
         accessor: 'estProd', 
         minWidth: 150,
         Cell: Integer
       },{
-        Header: 'Produccion Incremental Real',
+        Header: 'Producción Incremental Real',
         accessor: 'realProd', 
         minWidth: 150,
         Cell: row => {
@@ -90,61 +90,61 @@ import { CategoryDist, TrafficLight, Currency, Integer, numWithCommas } from '..
           </div>
         )}
       },{
-        Header: <div>Date / Type of<br/>Last Treatment</div>,
+        Header: <div>Fecha y Tipo del Último Tratamiento</div>,
         accessor: 'dateType', 
         minWidth: 150
       }, {
-        Header: <div>Total Sistema<br/>No Reactivo<br/>(m<sup>3</sup>)</div>,
+        Header: <div>Sistema No Reactivo<br/>(m<sup>3</sup>)</div>,
         accessor: 'sistemaNoReactivo', 
         Cell: Integer,
         minWidth: 150
       },{
-        Header: <div>Total Sistema<br/>Reactivo<br/>(m<sup>3</sup>)</div>,
+        Header: <div>Sistema Reactivo<br/>(m<sup>3</sup>)</div>,
         accessor: 'sistemaReactivo', 
         Cell: Integer,
         minWidth: 150
       },{
-        Header: <div>Total Sistema<br/>Divergente<br/>(m<sup>3</sup>)</div>,
+        Header: <div>Sistema Divergente<br/>(m<sup>3</sup>)</div>,
         accessor: 'sistemaDivergente', 
         Cell: Integer,
         minWidth: 150
       },{
-        Header: <div>Total Desplazamiento<br/>Liquido<br/>(m<sup>3</sup>)</div>,
+        Header: <div>Desplazamiento Líquido<br/>(m<sup>3</sup>)</div>,
         accessor: 'desplazamientoLiquido', 
         Cell: Integer,
         minWidth: 150
       },{
-        Header: <div>Total Desplazamiento<br/>N2<br/>(m<sup>3</sup>)</div>,
+        Header: <div>Desplazamiento N<sub>2</sub><br/>(m<sup>3</sup>)</div>,
         accessor: 'desplazamientoN2', 
         Cell: Integer,
         minWidth: 150
       },{
-        Header: <div>Total Precolchon<br/>N2<br/>(m<sup>3</sup>)</div>,
+        Header: <div>Precolchón N<sub>2</sub><br/>(m<sup>3</sup>)</div>,
         accessor: 'precolchonN2', 
         Cell: Integer,
         minWidth: 150
       },{
-        Header: <div>Total Liquido<br/>(m<sup>3</sup>)</div>,
+        Header: <div>Líquidos Totales<br/>(m<sup>3</sup>)</div>,
         accessor: 'liquido', 
         Cell: Integer,
         minWidth: 150
       },{
-        Header: <div>Total Apuntalante<br/>(sacos)</div>,
+        Header: <div>Apuntalante<br/>(sacos)</div>,
         accessor: 'apuntalante', 
         Cell: Integer,
         minWidth: 150
       },{
-        Header: <div>Total Gel de<br/>Fractura<br/>(U.S. gal)</div>,
+        Header: <div>Gel de Fractura<br/>(U.S. gal)</div>,
         accessor: 'gelDeFractura', 
         Cell: Integer,
         minWidth: 150
       },{
-        Header: <div>Total Precolchon<br/>apuntalante<br/>(U.S. gal)</div>,
+        Header: <div>Precolchón apuntalante<br/>(U.S. gal)</div>,
         accessor: 'precolchonApuntalante', 
         Cell: Integer,
         minWidth: 150
       },{
-        Header: <div>Total Vapor<br/>Injected<br/>(ton)</div>,
+        Header: <div>Vapor Inyectado<br/>(ton)</div>,
         accessor: 'vapor', 
         Cell: Integer,
         minWidth: 150
@@ -158,46 +158,7 @@ import { CategoryDist, TrafficLight, Currency, Integer, numWithCommas } from '..
         })
       }
 
-    data = data.map(i => {
 
-        let estProd = estIncData.find(j => j.groupedName === i.groupedName) ? estIncData.find(j => j.groupedName === i.groupedName).qo : undefined
-        let realProd = estIncData.find(j => j.groupedName === i.groupedName) ? estIncData.find(j => j.groupedName === i.groupedName).qoResult : undefined
-
-        let volumen = groupBy 
-                  ? (volumeData.find(j => j.groupedName === i.groupedName) ? volumeData.find(j => j.groupedName === i.groupedName) : {}) 
-                  : (volumeData ? volumeData[0] : {})
-
-
-        return {
-            name: i.groupedName,
-            numTreatments: i.NUM_TREATMENTS,
-            numAcido: i.NUM_ACIDO,
-            percAcido: i.NUM_ACIDO / i.NUM_TREATMENTS * 100,
-            numApuntalado: i.NUM_APUNTALADO,
-            percApuntalado: i.NUM_APUNTALADO / i.NUM_TREATMENTS * 100,
-            numEstimulacionLimpieza: i.NUM_ESTIMULACION_LIMPIEZA,
-            percEstimulacionLimpieza: i.NUM_ESTIMULACION_LIMPIEZA / i.NUM_TREATMENTS * 100,
-            numEstimulacionMatricial: i.NUM_ESTIMULACION_MATRICIAL,
-            percEstimulacionMatricial: i.NUM_ESTIMULACION_MATRICIAL / i.NUM_TREATMENTS * 100,
-            numTermico: i.NUM_TERMICO,
-            percTermico: i.NUM_TERMICO / i.NUM_TREATMENTS * 100,
-            cost: i.COST ? i.COST.toFixed(0) : 0 ,
-            estProd: estProd,
-            realProd: realProd,
-            dateType: '-',
-            sistemaNoReactivo: volumen ? volumen.TOTAL_SISTEMA_NO_REACTIVO : undefined,
-            sistemaReactivo: volumen ? volumen.TOTAL_SISTEMA_REACTIVO : undefined,
-            sistemaDivergente: volumen ? volumen.TOTAL_SISTEMA_DIVERGENTE : undefined,
-            desplazamientoLiquido: volumen ? volumen.TOTAL_DESPLAZAMIENTO_LIQUIDO : undefined,
-            desplazamientoN2: volumen ? volumen.TOTAL_DESPLAZAMIENTO_N2 : undefined,
-            precolchonN2: volumen ? volumen.TOTAL_PRECOLCHON_N2 : undefined,
-            liquido: volumen ? volumen.TOTAL_LIQUIDO : undefined,
-            apuntalante: volumen ? volumen.TOTAL_APUNTALANTE : undefined,
-            gelDeFractura: volumen ? volumen.TOTAL_GEL_DE_FRACTURA : undefined,
-            precolchonApuntalante: volumen ? volumen.TOTAL_PRECOLCHON_APUNTALANTE : undefined,
-            vapor: volumen ? volumen.TOTAL_VAPOR_INJECTED : undefined,
-        }
-    })
 
     return (
       <div className='table'>

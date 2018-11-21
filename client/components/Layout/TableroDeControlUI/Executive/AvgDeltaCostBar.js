@@ -59,7 +59,7 @@ let colorWheel = [
 	    },
       yAxis: {
         title: {
-          text: 'Percentage'
+          text: 'Desviación (en porcentaje)'
         },
         min: -100,
         max: 100,

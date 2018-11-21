@@ -32,7 +32,6 @@ let colorWheel = [
     let categories = []
 
 
-
     if (data.length > 0) {
       if (!groupBy) {
         categories.push('Individual Cost Devations')
@@ -92,7 +91,7 @@ let colorWheel = [
         min: -100,
         max: 100,
         title: {
-          text: 'Percentage'
+          text: 'Desviación (en porcentaje)'
         },
         plotLines: [{
           value: 0,
@@ -124,7 +123,6 @@ let colorWheel = [
       },
 	    series: series
 		}
-
 
     return (
     	<ReactHighcharts
