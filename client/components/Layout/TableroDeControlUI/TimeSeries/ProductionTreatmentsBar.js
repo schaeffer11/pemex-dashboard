@@ -13,14 +13,11 @@ import { KPI } from '../Common/KPIs'
     let groups = []
 
     if (data) {
-      console.log(data)
-
       data.forEach(i => {
         if (!groups.includes(i.groupedName)) {
           groups.push(i.groupedName)
         }
       })
-
 
       numTreatmentData = numTreatmentData.map(i => {
         let utc = Date.UTC(i.YEAR, i.MONTH - 1)
@@ -43,14 +40,14 @@ import { KPI } from '../Common/KPIs'
         })
 
         series.push({
-          name: 'Inc Qo',
+          name: 'Producción Incremental',
           data: filteredData,         
           yAxis: 0,
           zIndex: 0
         })
 
         series.push({
-          name: 'Num Treatments',
+          name: 'Número de Tratamientos',
           data: numTreatmentData.filter(i => i.groupedName === name),
           type: 'line',
           yAxis: 1,
@@ -77,11 +74,11 @@ import { KPI } from '../Common/KPIs'
       },
       yAxis: [{
         title: {
-          text: 'Inc Qo'
+          text: 'Aceite (bbl/d)'
         }
       }, {
         title: {
-          text: 'Count'
+          text: 'Número de Tratamientos'
         },
         opposite: true
       }],
@@ -96,9 +93,7 @@ import { KPI } from '../Common/KPIs'
       },
       series: series
   }
-
-  console.log(series)
-
+  
     return (
       <div className="production-bubble test">
         <div className='chart'>

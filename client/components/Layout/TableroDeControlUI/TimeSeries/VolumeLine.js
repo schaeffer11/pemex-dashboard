@@ -47,10 +47,10 @@ import { KPI } from '../Common/KPIs'
         name: 'Sistema Divergente',
         data: sistemaDivergente,
       },{
-        name: 'Desplazamiento Liquido',
+        name: 'Desplazamiento Líquido',
         data: desplazamientoLiquido,
       },{
-        name: 'Liquido',
+        name: 'Líquido',
         data: liquido,
       },{
         name: 'Apuntalante',
@@ -59,7 +59,7 @@ import { KPI } from '../Common/KPIs'
         name: 'Gel De Fractura',
         data: gelDeFractura,
       },{
-        name: 'Precolchon Apuntalante',
+        name: 'Precolchón Apuntalante',
         data: precolchonApuntalante,
       }]
 
@@ -75,7 +75,7 @@ import { KPI } from '../Common/KPIs'
       },
       xAxis: {
         title: {
-          text: 'Item'
+          text: 'Fecha'
         },
         tickInterval   : 24 * 3600 * 1000 * 30,
         type: 'datetime',
@@ -83,7 +83,7 @@ import { KPI } from '../Common/KPIs'
       },
       yAxis: {
         title: {
-          text: 'Volume (m3)'
+          text: 'Volumen (m3)'
         }
       },
       tooltip: {

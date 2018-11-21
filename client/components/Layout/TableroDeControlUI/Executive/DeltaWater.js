@@ -3,10 +3,10 @@ import autobind from 'autobind-decorator'
 import ReactHighcharts from 'react-highcharts'
 
 let classificationSeries = [{
-    name: 'Successful',
+    name: 'Exitosa',
     color: 'green'
 },{
-    name: 'Unsuccessful',
+    name: 'No Exitosa',
     color: 'red'
 }]
 
@@ -42,19 +42,15 @@ let classificationSeries = [{
 
       i.x = i.qw
       i.y = i.qwResult
-      i.group =  i.qw < i.qwResult ? 'Unsuccessful' : 'Successful'
         
       return i
     })
-
-
-    console.log('this', data)
 
     let series = []
 
     if (!groupBy) {
       series = classificationSeries.map(i => {
-        i.data = i.name === 'Successful' ? data.filter(j => j.qwResult < j.qw) : data.filter(j => j.qwResult >= j.qw)
+        i.data = i.name === 'Exitosa' ? data.filter(j => j.qwResult < j.qw) : data.filter(j => j.qwResult >= j.qw)
         return i
       })
     }
@@ -66,10 +62,6 @@ let classificationSeries = [{
         }
       })
     }
-
-
-    console.log(series)
-
 
     series.push({
         name: '',
@@ -100,12 +92,12 @@ let classificationSeries = [{
         },
         xAxis: {
             title: {
-                text: 'Est Inc Water (bbl/d)'
+                text: 'Producción Incremental Estimada (bbl/d)'
             }
         },
         yAxis: {
             title: {
-                text: 'Real Inc Water (bbl/d)'
+                text: 'Producción Incremental Real (bbl/d)'
             }
         },
         credits: {

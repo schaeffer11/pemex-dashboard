@@ -31,7 +31,7 @@ import { KPI } from '../Common/KPIs'
         data: desplazamientoN2,
 
       },{
-        name: 'Precolchon N2',
+        name: <div>Precolchón N<sub>2</sub></div>,
         data: totalPrecolchonN2,
 
       },{
@@ -51,14 +51,14 @@ import { KPI } from '../Common/KPIs'
       },
       xAxis: {
         title: {
-          text: 'Item'
+          text: 'Fecha'
         },
         tickInterval   : 24 * 3600 * 1000 *30,
         type: 'datetime'
       },
       yAxis: [{
         title: {
-          text: 'Volume (m3)'
+          text: 'Volumen (m3)'
         }
       }],
       tooltip: {
@@ -76,8 +76,6 @@ import { KPI } from '../Common/KPIs'
       },
       series: series
   }
-
-  console.log(series)
 
     return (
       <div className="cost-bar test">

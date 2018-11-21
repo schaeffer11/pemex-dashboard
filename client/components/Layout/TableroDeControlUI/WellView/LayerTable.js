@@ -57,7 +57,6 @@ data = data.sort((a,b) => {
   return a.INTERVALO - b.INTERVALO
 })
 
-console.log(data)
     return (
       <div className="layer-table">
         <ReactTable 

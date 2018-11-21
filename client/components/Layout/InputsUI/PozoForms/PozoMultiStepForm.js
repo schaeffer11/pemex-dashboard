@@ -2,7 +2,6 @@ import React, { Component } from 'react'
 import autobind from 'autobind-decorator'
 import { connect } from 'react-redux'
 import AriaModal from 'react-aria-modal'
-import '../../../../styles/components/_query_modal.css'
 
 import { setIsLoading, setShowForms } from '../../../../redux/actions/global'
 import TecnicaDelPozo from './TecnicaDelPozo'

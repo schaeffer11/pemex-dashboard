@@ -1,7 +1,7 @@
 .analysis-content {
 	background: $white;
 	display: grid;
-	grid-template-columns: 200px auto;
+	grid-template-columns: 210px auto;
 	grid-template-areas: 'menu data';
 	height: 100%;
 	overflow: hidden;
@@ -16,7 +16,7 @@
 
 	.menu-item {
 		height: 50px;
-		width: 180px;
+		width: 190px;
 		text-align: center;
 		line-height: 50px;
 	}
