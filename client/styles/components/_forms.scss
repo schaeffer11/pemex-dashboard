@@ -1,11 +1,12 @@
 $buttonBorderRadius: 0.3em;
 
+div[contenteditable=true],
 input[contenteditable=true],
 input[type=text],
 input[type=password],
 textarea,
 .input > div div{
-  background: $input-background;
+  background: $input-background ;
   color: $black;
 }
 

@@ -247,7 +247,6 @@ const grabadoOptions = [
 
     return (
       <div
-        style={{ backgroundColor: "#fafafa" }}
         contentEditable
         suppressContentEditableWarning
         onBlur={e => {
@@ -271,7 +270,6 @@ const grabadoOptions = [
 
     return (
       <div
-        style={{ backgroundColor: "#fafafa" }}
         contentEditable
         suppressContentEditableWarning
         onBlur={e => {
