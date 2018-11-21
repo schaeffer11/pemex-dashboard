@@ -1,4 +1,4 @@
-import { Map, fromJS } from 'immutable'
+import { fromJS } from 'immutable'
 
 const initialState = fromJS({
   subdireccion: null,
@@ -20,14 +20,16 @@ const initialState = fromJS({
   lowMonth: null,
   lowYear: null,
   highMonth: null,
-  highYear: null
+  highYear: null,
 })
 
 
-const global = (state = initialState, action) => {
+const globalAnalysis = (state = initialState, action) => {
   switch (action.type) {
-    case 'set_generalGlobalAnalysis': 
+    case 'set_generalGlobalAnalysis':
       return state.setIn(action.location, fromJS(action.value))
+    case 'set_groupByAndGroup':
+      return state.set('groupBy', action.groupBy).set('groups', fromJS(action.groups))
     case 'set_activo':
       return state.set('activo', fromJS(action.value))
     case 'set_field':
@@ -45,4 +47,4 @@ const global = (state = initialState, action) => {
   }
 }
 
-export default global
+export default globalAnalysis

@@ -29,10 +29,12 @@ import ProgressBar from '../Common/ProgressBar'
 
   render() {
     const { isModalOpen } = this.state
-    const { jobID, children } = this.props
+    const { children, title } = this.props
     return (
-      <div>
-        <button className={'open-export-btn'} onClick={() => this.toggleModal()}>generar presentacion {this.displayArrow()}</button>
+      <div className="localModal">
+        <button className={'open-export-btn'} onClick={() => this.toggleModal()}>
+          {title} {this.displayArrow()}
+        </button>
         {isModalOpen && children}
       </div>
     )
