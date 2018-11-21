@@ -28,7 +28,7 @@ const numWithCommas = (x) => {
             {name}
         </div>
         <div className = 'gauge' style={{height: '210px', width: '50%', display: 'inline-block', borderBottom: 'solid 2px #b1b1b1', verticalAlign: 'top'}}>
-            <Gauge topLabel={`${numResults}/${numProposals}`} topSubLabel={'# de Trataientos'} botLabel={`${percResults}`} botSubLabel={'% de Avance'} value={percResults} />
+            <Gauge topLabel={`${numResults}/${numProposals}`} topSubLabel={'# de Tratamientos'} botLabel={`${percResults}`} botSubLabel={'% de Avance'} value={percResults} />
          </div>
          <div className = 'kpis' style={{height: '210px', width: '50%', display: 'inline-block', borderBottom: 'solid 2px #b1b1b1', borderLeft: 'solid 2px #b1b1b1'}}>
             <div className='kpi'>
@@ -36,7 +36,7 @@ const numWithCommas = (x) => {
                     {estCost ? `$${numWithCommas(estCost.toFixed(0))}` : '-' }
                 </div>
                 <div className='header'>
-                    Est Costo Total (MNX)
+                    Est. Costo Total (MNX)
                 </div>
             </div>
             <div className='kpi'>
@@ -52,7 +52,7 @@ const numWithCommas = (x) => {
                     {days ? days.toFixed(2) : '-'}
                 </div>
                 <div className='header'>
-                    Desviacion Promedio (días)
+                    Desviación Promedio (días)
                 </div>
             </div>
 
@@ -64,7 +64,7 @@ const numWithCommas = (x) => {
                     {percEstimated ? `${percEstimated.toFixed(2)}%` : '-' } 
                 </div>
                 <div className='header'>
-                    % de Cumplimento
+                    % de Cumplimiento
                 </div>
             </div>
             <Bar estimated={prodEstimated} actual={prodReal} />

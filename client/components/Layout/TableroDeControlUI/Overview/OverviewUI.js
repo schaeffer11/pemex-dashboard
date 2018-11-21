@@ -134,7 +134,7 @@ import TimeSlider from '../TimeSeries/TimeSlider'
         estCost: costData.find(i => i.type === 'acido').estCost,
         days: dateDiffData.find(i => i.type === 'acido') ? dateDiffData.find(i => i.type === 'acido').avgDateDiff : null
     }, {
-        name: 'Fracturaamiento Apuntalado',
+        name: 'Fracturamiento Apuntalado',
         classname: 'Apuntalado',
         numProposals: countData.find(i => i.TIPO_DE_INTERVENCIONES === 'apuntalado') ? countData.find(i => i.TIPO_DE_INTERVENCIONES === 'apuntalado').COUNT : null,
         numResults: countData.find(i => i.TIPO_DE_INTERVENCIONES === 'apuntalado') ? countData.find(i => i.TIPO_DE_INTERVENCIONES === 'apuntalado').COUNT_RESULTS : null,
@@ -170,7 +170,7 @@ import TimeSlider from '../TimeSeries/TimeSlider'
         estCost: costData.find(i => i.type === 'estimulacionMatricial').estCost,
         days: dateDiffData.find(i => i.type === 'estimulacionMatricial') ? dateDiffData.find(i => i.type === 'estimulacionMatricial').avgDateDiff : null
     }, {
-        name: 'Estimulación Termica',
+        name: 'Estimulación Térmica',
         classname: 'Termico',
         numProposals: countData.find(i => i.TIPO_DE_INTERVENCIONES === 'termico') ? countData.find(i => i.TIPO_DE_INTERVENCIONES === 'termico').COUNT : null,
         numResults: countData.find(i => i.TIPO_DE_INTERVENCIONES === 'termico') ? countData.find(i => i.TIPO_DE_INTERVENCIONES === 'termico').COUNT_RESULTS : null,
