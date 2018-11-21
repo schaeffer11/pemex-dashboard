@@ -294,12 +294,6 @@ import { setIsLoading, setShowForms } from '../../../redux/actions/global'
                               <Field type="text" name="asignacion" />
                                 {errors.asignacion && touched.asignacion && <div class="error">{errors.asignacion}</div>}
                             </div>
-
-                            <div className="fecha">
-                                <label>Fecha de revisión</label>
-                                <DateInput name="fechaRevision"/>
-                                {errors.fechaRevision  && touched.fechaRevision && <div class="error">{errors.fechaRevision}</div>}
-                            </div>
                         </div>
 
                         <div className="activo">
@@ -1009,6 +1003,7 @@ const BoolInput = (props) => {
                                 form.setFieldValue(props.name, 1)
                             }}
                         />
+                        <span>Si</span>
                     </label>
                     <label>
                         <input
@@ -1020,6 +1015,7 @@ const BoolInput = (props) => {
                                 form.setFieldValue(props.name,0)
                             }}
                         />
+                        <span>No</span>
                     </label>
                 </div>
             )}
