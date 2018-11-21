@@ -3,6 +3,16 @@ import autobind from 'autobind-decorator'
 
 import { KPI } from '../Common/KPIs'
 
+const numWithCommas = (x) => {
+  if (x === 0) {
+    return 0
+  }
+  if (!x) {
+    return null
+  }
+  return x.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+}
+
 @autobind class KPIs extends PureComponent {
 
   render() {
@@ -37,11 +47,11 @@ import { KPI } from '../Common/KPIs'
     return (
       <div className="kpis">
         <KPI className='company' header='Company' value={company} />
-        <KPI className='est-cost' header='Estimated Cost' value={estCost} />
-        <KPI className='cost' header='Cost' value={cost} />
+        <KPI className='est-cost' header='Estimated Cost' value={'$' + numWithCommas(estCost)} unit=' MNX'/>
+        <KPI className='cost' header='Cost' value={'$' + numWithCommas(cost)} unit=' MNX'/>
         <KPI className='delta-cost' header='Delta' value={delta.toFixed(2) + '%'} />
-        <KPI className='est-prod' header='Estimated Inc Prod' value={estProd} />
-        <KPI className='prod' header='Inc Prod' value={prod} />
+        <KPI className='est-prod' header='Estimated Inc Prod' value={estProd} unit=' bbl/d'/>
+        <KPI className='prod' header='Inc Prod' value={prod} unit=' bbl/d'/>
         <KPI className='delta-prod' header='Delta' value={deltaProd.toFixed(2) + '%'} />
       </div>
     )

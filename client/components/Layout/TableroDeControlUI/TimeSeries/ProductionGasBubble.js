@@ -4,7 +4,7 @@ import ReactHighcharts from 'react-highcharts'
 
 import { KPI } from '../Common/KPIs'
 
-@autobind class ProductionBubble extends PureComponent {
+@autobind class ProductionGasBubble extends PureComponent {
 
   render() {
     let { data, costData, groupBy } = this.props
@@ -47,7 +47,7 @@ import { KPI } from '../Common/KPIs'
 
         return {
           x: utc,
-          y: j.QO_RESULT,
+          y: j.QG_RESULT,
           z: cost
         }
       })
@@ -75,7 +75,7 @@ import { KPI } from '../Common/KPIs'
       },
       yAxis: {
         title: {
-          text: 'Aceite (bbl/d)'
+          text: 'Gas (MMpc/d)'
         }
       },
       credits: {
@@ -102,4 +102,4 @@ import { KPI } from '../Common/KPIs'
 
 
 
-export default ProductionBubble
+export default ProductionGasBubble

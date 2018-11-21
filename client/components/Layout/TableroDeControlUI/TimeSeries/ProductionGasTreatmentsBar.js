@@ -4,7 +4,7 @@ import ReactHighcharts from 'react-highcharts'
 
 import { KPI } from '../Common/KPIs'
 
-@autobind class ProductionTreatmentsBar extends PureComponent {
+@autobind class ProductionGasTreatmentsBar extends PureComponent {
 
   render() {
     let { data, numTreatmentData, groupBy } = this.props
@@ -37,7 +37,7 @@ import { KPI } from '../Common/KPIs'
           let utc = Date.UTC(j.YEAR, j.MONTH - 1)
           return {
             x: utc,
-            y: j.QO_RESULT,
+            y: j.QG_RESULT,
           }
         })
 
@@ -76,7 +76,7 @@ import { KPI } from '../Common/KPIs'
       },
       yAxis: [{
         title: {
-          text: 'Aceite (bbl/d)'
+          text: 'Gas (MMpc/d)'
         }
       }, {
         title: {
@@ -112,4 +112,4 @@ import { KPI } from '../Common/KPIs'
 
 
 
-export default ProductionTreatmentsBar
+export default ProductionGasTreatmentsBar
