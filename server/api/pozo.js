@@ -1429,7 +1429,7 @@ export const create = async (body, action, cb) => {
 
                       values = []
 
-                      presionDataPozo.forEach(i => {
+                      presionDataCampo.forEach(i => {
                         let newRow = [wellFormacionID, i.fecha, i.Pws, pressureDepthCampo, transactionID]
                         if (action === 'save') {
                           newRow.push(i.error)
