@@ -72,7 +72,6 @@ import { CategoryDist, TrafficLight, Currency, Integer, numWithCommas } from '..
         accessor: 'realProd', 
         minWidth: 150,
         Cell: row => {
-          console.log(row)
           let color = row.original.realProd > row.original.estProd ? '#44A808' : '#AA1F40'
           let transform = row.original.realProd > row.original.estProd ? 'none' : 'rotate(180deg)'
 

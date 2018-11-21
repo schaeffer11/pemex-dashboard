@@ -52,7 +52,6 @@ let classificationSeries = [{
 
     if (!groupBy) {
       series = classificationSeries.map(i => {
-        console.log(i.name, data, data.filter(j => j.qoResult > j.qo), data.filter(j => j.qoResult <= j.qo))
         i.data = i.name === 'Successful' ? data.filter(j => j.qoResult > j.qo) : data.filter(j => j.qoResult <= j.qo)
         return i
       })
@@ -66,7 +65,6 @@ let classificationSeries = [{
       })
     }
 
-    console.log(series)
 
 
     series.push({

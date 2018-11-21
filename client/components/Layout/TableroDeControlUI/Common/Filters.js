@@ -3,6 +3,7 @@ import autobind from 'autobind-decorator'
 import { connect } from 'react-redux'
 import Select from 'react-select'
 import { selectSimpleValue, convertLowDate, convertHighDate, handleSelectValue } from '../../../../lib/formatters'
+import { checkForDifferencesInObjects } from '../../../../lib/helpers'
 import { setGeneralFilters, setGeneralGlobalAnalysis } from '../../../../redux/actions/global'
 import GroupBy from './GroupBy'
 
@@ -55,10 +56,17 @@ import GroupBy from './GroupBy'
   }
 
   async componentDidMount() {
-    const { setGeneralFilters } = this.props
+    let { setGeneralFilters, options } = this.props
+    options = options.toJS()
+    // check if we already have options. otherwise fetch data and build options
+    for (let key in options) {
+      if (options[key].length > 0) {
+        return
+      }
+    }
     const data = await this.getData()
-    const options = this.buildOptions(data)
-    setGeneralFilters(options)
+    const filterOptions = this.buildOptions(data)
+    setGeneralFilters(filterOptions)
   }
 
   async componentDidUpdate(prevProps) {
@@ -66,14 +74,9 @@ import GroupBy from './GroupBy'
     let prevGlobalAnalysis = prevProps.globalAnalysis
     globalAnalysis = globalAnalysis.toJS()
     prevGlobalAnalysis = prevGlobalAnalysis.toJS()
-    let somethingChanged = false
+    // let somethingChanged = false
     const optionKeys = [...Object.keys(this.filters), 'lowDate', 'highDate']
-    for (let option of optionKeys) {
-      if (globalAnalysis[option] !== prevGlobalAnalysis[option]) {
-        somethingChanged = true
-        break;
-      }
-    }
+    const somethingChanged = checkForDifferencesInObjects(optionKeys, globalAnalysis, prevGlobalAnalysis)
     if (somethingChanged) {
       const data = await this.getData()
       const newOptions = this.buildOptions(data)
@@ -129,12 +132,6 @@ import GroupBy from './GroupBy'
   handleSelect(selection, type) {
     const { setGeneralAnalysis } = this.props
     const value = handleSelectValue(selection)
-    // let valueToSet
-    // if (selection === null) {
-    //   valueToSet = null
-    // } else {
-    //   valueToSet = selection.value
-    // }
     setGeneralAnalysis([type], value)
   }
 
@@ -142,14 +139,16 @@ import GroupBy from './GroupBy'
     let { globalAnalysis, options } = this.props
     globalAnalysis = globalAnalysis.toJS()
     options = options.toJS()
+    const { groupBy } = globalAnalysis
     return Object.keys(options).map(k => {
       const { title } = this.filters[k]
       const selectValue = globalAnalysis[k]
       return (
-        <div className="filter-individual">
+        <div key={`filter_${k}`} className="filter-individual">
           <label>{title}</label>
           <Select
             isClearable
+            isDisabled={k === groupBy}
             className="export-select"
             options={options[k]}
             onChange={(selection) => this.handleSelect(selection, k)}
