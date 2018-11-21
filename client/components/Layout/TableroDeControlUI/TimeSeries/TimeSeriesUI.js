@@ -2,7 +2,6 @@ import React, { Component } from 'react'
 import autobind from 'autobind-decorator'
 import { connect } from 'react-redux'
 
-import Filters from '../Common/Filters'
 import Card from '../Common/Card'
 import { CardDeck } from 'reactstrap';
 import CostBar from './CostBar'

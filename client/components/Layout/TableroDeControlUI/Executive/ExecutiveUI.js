@@ -7,7 +7,6 @@ import DeltaOil from './DeltaOil'
 import DeltaWater from './DeltaWater'
 import DeltaGas from './DeltaGas'
 import Filters from '../Common/Filters'
-import FiltersNew from '../Common/Filters_new'
 import LocalModal from '../Common/LocalModal'
 import Card from '../Common/Card'
 import { CardDeck } from 'reactstrap';
@@ -148,7 +147,7 @@ import AvgDeltaIncProdBar from './AvgDeltaIncProdBar'
         <div className='content'>
           <TimeSlider />
           <LocalModal title="Filtros">
-            <FiltersNew />
+            <Filters />
           </LocalModal>
           <CardDeck className="content-deck">
               <Card
@@ -233,4 +232,3 @@ const mapDispatchToProps = dispatch => ({
 })
 
 export default connect(mapStateToProps, mapDispatchToProps)(executiveUI)
-    

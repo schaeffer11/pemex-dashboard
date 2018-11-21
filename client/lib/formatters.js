@@ -33,6 +33,16 @@ export const selectSimpleValue = (val, options) => {
   return simpleValue
 }
 
+export const handleSelectValue = (selection) => {
+  let valueToSet
+  if (selection === null) {
+    valueToSet = null
+  } else {
+    valueToSet = selection.value
+  }
+  return valueToSet
+}
+
 export const convertLowDate = (date) => {
   const year = Math.floor((date - 1) / 12)
   let month = date % 12
