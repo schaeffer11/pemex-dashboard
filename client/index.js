@@ -67,6 +67,11 @@ store.subscribe(() => {
 })
 
 ReactHighcharts.Highcharts.setOptions({
+    plotOptions: {
+      series: {
+        animation: false,
+      },
+    },
     exporting: {
       fallbackToExportServer: false,
     },

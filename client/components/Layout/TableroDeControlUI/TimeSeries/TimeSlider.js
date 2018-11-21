@@ -1,11 +1,13 @@
 import React, { Component } from 'react'
 import autobind from 'autobind-decorator'
 import { connect } from 'react-redux'
-import { setGeneralGlobalAnalysis } from '../../../../redux/actions/global'
 import Slider from 'rc-slider'
+import { setTimeSlider, setGeneralFilters } from '../../../../redux/actions/global'
+import { fetchFilterData, buildFiltersOptions } from '../../../../lib/filters'
+import 'rc-slider/assets/index.css';
+
 const createSliderWithTooltip = Slider.createSliderWithTooltip;
 const Range = createSliderWithTooltip(Slider.Range);
-import 'rc-slider/assets/index.css';
 
 @autobind class timeSlider extends Component {
   constructor(props) {
@@ -17,16 +19,34 @@ import 'rc-slider/assets/index.css';
     }
   }
 
-  handleChange(value) {
-    let { setGeneral } = this.props
+  async componentDidUpdate(prevProps) {
+    let { globalAnalysis, setGeneralFilters, token, lowDate, highDate } = this.props
+    const prevLowDate = prevProps.lowDate
+    const prevHighDate = prevProps.highDate
+    if (lowDate !== prevLowDate || highDate !== prevHighDate) {
+      this.setState({
+        lowDateState: this.props.lowDate,
+        highDateState: this.props.highDate
+      })
+      const data = await fetchFilterData(token, globalAnalysis.toJS())
+      const filterOptions = buildFiltersOptions(data)
+      setGeneralFilters(filterOptions)
+    }
+  }
 
-    setGeneral(['lowDate'], value[0])
-    setGeneral(['highDate'], value[1]) 
+  async handleChange(value) {
+    let { setSlider, token, globalAnalysis } = this.props
+    this.setState({ test: true })
+    const lowDate = value[0]
+    const highDate = value[1]
+    setSlider(lowDate, highDate)
+    // const data = await fetchFilterData(token, globalAnalysis.toJS())
+    // const filterOptions = buildFiltersOptions(data)
+    // setGeneralFilters(filterOptions)
   }
 
 
   handleChangeState(value) {
-
     this.setState({
       lowDateState: value[0],
       highDateState: value[1]
@@ -88,16 +108,6 @@ import 'rc-slider/assets/index.css';
     })
   }
 
-  componentDidUpdate(prevProps) {
-
-    if (prevProps.lowDate !== this.props.lowDate || prevProps.highDate !== this.props.highDate) {
-      this.setState({
-        lowDateState: this.props.lowDate,
-        highDateState: this.props.highDate
-      })  
-    }
-  }
-
   render() {
     let { minDate, maxDate, lowDate, highDate } = this.props
     let { lowDateState, highDateState } = this.state
@@ -118,6 +128,8 @@ import 'rc-slider/assets/index.css';
 }
 
 const mapStateToProps = state => ({
+  token: state.getIn(['user', 'token']),
+  globalAnalysis: state.get('globalAnalysis'),
   minDate: state.getIn(['globalAnalysis', 'minDate']),
   maxDate: state.getIn(['globalAnalysis', 'maxDate']),
   lowDate: state.getIn(['globalAnalysis', 'lowDate']),
@@ -125,7 +137,8 @@ const mapStateToProps = state => ({
 })
 
 const mapDispatchToProps = dispatch => ({
-  setGeneral: (location, value) => dispatch(setGeneralGlobalAnalysis(location, value)),
+  setSlider: (lowDate, highDate) => dispatch(setTimeSlider(lowDate, highDate)),
+  setGeneralFilters: (value) => dispatch(setGeneralFilters(value)),
 })
 
 export default connect(mapStateToProps, mapDispatchToProps)(timeSlider)

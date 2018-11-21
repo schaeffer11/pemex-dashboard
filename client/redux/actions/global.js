@@ -34,6 +34,12 @@ export const setGroupByAndGroups = (groupBy, groups) => ({
   groups,
 })
 
+export const setTimeSlider = (lowDate, highDate) => ({
+  type: 'set_timeSlider',
+  lowDate,
+  highDate,
+})
+
 export const setGeneralFilters = (value) => ({
   type: 'set_generalFilters',
   value,
