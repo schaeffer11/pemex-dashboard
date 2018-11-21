@@ -33,7 +33,7 @@ import LoginForm from '../User/LoginForm'
         <div id="page-wrap" className="productspace">
           <PrivateRoute exact path="/carga_datos" component={InputsUI} user={this.props.user} />
           <PrivateRoute exact path="/diagnosticos" component={DiagnosticosUI} user={this.props.user} />
-          {/* <PrivateRoute exact path="/mapeo" component={MapeoUI} user={this.props.user} /> */}
+          <PrivateRoute exact path="/mapeo" component={MapeoUI} user={this.props.user} />
           <PrivateRoute exact path="/compromisos" component={CompromisosUI} user={this.props.user} />
           <PrivateRoute exact path="/compromisos/manage" component={ManageCompromisos} user={this.props.user} />
           <PrivateRoute path="/tablero_control" component={TableroDeControlUI} user={this.props.user} />
