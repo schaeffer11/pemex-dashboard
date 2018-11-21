@@ -27,3 +27,14 @@ export const setGeneralGlobalAnalysis = (location, value) => ({
   location,
   value,
 })
+
+export const setGroupByAndGroups = (groupBy, groups) => ({
+  type: 'set_groupByAndGroup',
+  groupBy,
+  groups,
+})
+
+export const setGeneralFilters = (value) => ({
+  type: 'set_generalFilters',
+  value,
+})

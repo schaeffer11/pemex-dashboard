@@ -103,9 +103,18 @@ export const getDisabledColumnForGeneralCedula = (sistema, id) => {
 
 export const getDisabledColumnForApuntaladoCeluda = (sistema, id) => sistema !== 'shut-in' && id === 'tiempo'
 
-export const dealWithNaN =(calc) => {
+export const dealWithNaN = (calc) => {
   if (isNaN(calc) || calc === Infinity) {
     return 0
   }
   return calc
+}
+
+export const checkForDifferencesInObjects = (arr, obj1, obj2) => {
+  for (let elem of arr) {
+    if (obj1[elem] !== obj2[elem]) {
+      return true
+    }
+  }
+  return false
 }

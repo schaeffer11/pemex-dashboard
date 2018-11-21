@@ -5,7 +5,6 @@ import { connect } from 'react-redux'
 
 import { setGeneralGlobalAnalysis } from '../../../redux/actions/global'
 import routes from '../../../routes/routes'
-import Sidebar from './Common/Sidebar'
 
 @autobind class TableroDeControlUI extends Component {
   constructor(props) {
@@ -39,7 +38,6 @@ import Sidebar from './Common/Sidebar'
    return (
     <div className="analysis-content">
       <div className='menu'>
-        <Sidebar />
         {
           routes().map(route => (
             <div className='menu-item'>

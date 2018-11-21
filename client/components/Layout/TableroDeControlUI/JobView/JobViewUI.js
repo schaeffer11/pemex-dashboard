@@ -475,11 +475,11 @@ import { generatePowerPoint } from '../../../../pptx';
          <div className='selectors'>
             <WellSelect fieldWellOptions={fieldWellOptions}/>
             <JobSelect options={jobOptions}/>
-          <LocalModal>
-            <Export />
-          </LocalModal>
           </div>
           <KPIs estData={estCostData} data={costData} estIncData={estIncData}/>
+          <LocalModal title="Menu de Exportación">
+            <Export />
+          </LocalModal>
           <CardDeck className="content-deck">
             <Card
                 id="cedula"

@@ -42,6 +42,7 @@ import graficaTratamiento from './reducers/graficaTratamiento'
 import resultadosGenerales from './reducers/resultadosGenerales'
 import forms from './reducers/forms'
 import global from './reducers/global'
+import filters from './reducers/filters'
 import { handleImagesFromServer } from '../lib/formatters';
 import globalAnalysis from './reducers/globalAnalysis'
 import chartOptions from './reducers/chartOptions'
@@ -78,6 +79,7 @@ const appReducer = combineReducers({
   historicoDeAforos,
   global,
   globalAnalysis,
+  filters,
   historicoDeAforosResults,
   tratamientoEstimulacion,
   tratamientoAcido,
