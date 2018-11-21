@@ -33,6 +33,20 @@ export const selectSimpleValue = (val, options) => {
   return simpleValue
 }
 
+export const convertLowDate = (date) => {
+  const year = Math.floor((date - 1) / 12)
+  let month = date % 12
+  month === 0 ? month = 12 : null
+  return `${year}-${month}-01`
+}
+
+export const convertHighDate = (date) => {
+  const year = Math.floor((date - 1) / 12)
+  let month = date % 12
+  month === 0 ? month = 12 : null
+  return `${year}-${month}-31`
+}
+
 export function handleImagesFromServer(images, state) {
   const shallowStateCopy = {...state}
   const imagesKeys = Object.keys(images)

@@ -2,7 +2,7 @@ import React, { Component } from 'react'
 import autobind from 'autobind-decorator'
 import { connect } from 'react-redux'
 import Select from 'react-select'
-import { selectSimpleValue } from '../../../../lib/formatters'
+import { selectSimpleValue, convertLowDate, convertHighDate } from '../../../../lib/formatters'
 import { setGeneralGlobalAnalysis } from '../../../../redux/actions/global'
 
 @autobind class Filters extends Component {
@@ -75,7 +75,8 @@ import { setGeneralGlobalAnalysis } from '../../../../redux/actions/global'
     const { globalAnalysis } = this.props
     const prevGlobalAnalysis = prevProps.globalAnalysis
     let somethingChanged = false
-    for (let option of Object.keys(options)) {
+    const optionKeys = [...Object.keys(options), 'lowDate', 'highDate']
+    for (let option of optionKeys) {
       if (globalAnalysis[option] !== prevGlobalAnalysis[option]) {
         somethingChanged = true
         break;
@@ -98,20 +99,36 @@ import { setGeneralGlobalAnalysis } from '../../../../redux/actions/global'
       },
     }
     const url = `/api/filterOptions?${query.join('&')}`
+    console.log('url', url)
     const data = await fetch(url, headers).then(r => r.json())
     return data
   }
 
   buildQuery() {
     const { globalAnalysis } = this.props
-    return Object.keys(this.filters).filter(f => globalAnalysis[f])
-      .map(f => `${f}=${globalAnalysis[f]}`)
+    console.log('globalAnalysis', globalAnalysis.lowDate)
+    const filteredFilters = Object.keys(this.filters).filter(f => {
+      return globalAnalysis[f]
+    })
+    
+    globalAnalysis.lowDate = convertLowDate(globalAnalysis.lowDate)
+    globalAnalysis.highDate = convertHighDate(globalAnalysis.highDate)
+    const queries = [...filteredFilters, 'lowDate', 'highDate'].map(f => `${f}=${globalAnalysis[f]}`)
+    console.log('queries?', queries)
+    return queries
   }
 
   buildOptions(data) {
     const options = {}
-    data.forEach(elem => {
+    data.filter(elem => {
       const key = Object.keys(elem)[0]
+      if (key === 'lowDate' || key === 'highDate') {
+        return false
+      }
+      return true
+    }).forEach(elem => {
+      const key = Object.keys(elem)[0]
+      console.log("key2", key)
       const { id, name } = this.filters[key]
       options[key] = elem[key].map(i => ({
         label: i[name],

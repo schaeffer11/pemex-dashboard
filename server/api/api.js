@@ -491,7 +491,11 @@ router.get('/filterOptions', async (req, res) => {
         // remove query from keys if it's part of the request. this prevents limiting options of selections
         reqQueriesKeys = reqQueriesKeys.filter(q => q !== query)
       }
-      const builtQuery = reqQueriesKeys.map(q => `AND ${selectMap[q].select[0]} = ?`)
+      const builtQuery = reqQueriesKeys.map(q => {
+        let { select, operator } = selectMap[q]
+        operator = operator || '='
+        return `AND ${select[0]} ${operator} ?`
+      })
       const values = reqQueriesKeys.map(q => queries[q])
       whereMap[query] = { query: builtQuery, values }
       return builtQuery
@@ -520,6 +524,8 @@ router.get('/filterOptions', async (req, res) => {
     company: { select: ['tr.COMPANY'] },
     interventionType: { select: ['t.TIPO_DE_INTERVENCIONES'] },
     terminationType: { select: ['t.TIPO_DE_TERMINACION'] },
+    lowDate: { select: ['tr.FECHA_INTERVENCION'], operator: '>=' },
+    highDate: { select: ['tr.FECHA_INTERVENCION'], operator: '<=' },
   }
   const whereMap = whereBuilderForFilters(req.query, selectMap)
   const promises = Object.keys(whereMap).map(q => {
