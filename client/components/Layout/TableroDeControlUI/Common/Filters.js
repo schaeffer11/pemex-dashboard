@@ -166,6 +166,7 @@ import GroupBy from './GroupBy'
         <div className="filters-tablero">
           {this.buildSelects()}
         </div>
+        <GroupBy />
       </div>
     )
   }
