@@ -7,6 +7,7 @@ import DeltaOil from './DeltaOil'
 import DeltaWater from './DeltaWater'
 import DeltaGas from './DeltaGas'
 import Filters from '../Common/Filters'
+import GroupBy from '../Common/GroupBy'
 import LocalModal from '../Common/LocalModal'
 import Card from '../Common/Card'
 import { CardDeck } from 'reactstrap';
@@ -146,9 +147,14 @@ import AvgDeltaIncProdBar from './AvgDeltaIncProdBar'
       <div className="data executive">
         <div className='content'>
           <TimeSlider />
-          <LocalModal title="Filtros">
-            <Filters />
-          </LocalModal>
+          <div>
+            <LocalModal title="Filtros">
+              <Filters />
+            </LocalModal>
+            <div className="groupBy-selection">
+              <GroupBy />
+            </div>
+          </div>
           <CardDeck className="content-deck">
               <Card
                 id="execTable"

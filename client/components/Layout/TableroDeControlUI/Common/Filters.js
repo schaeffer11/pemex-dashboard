@@ -148,6 +148,7 @@ import GroupBy from './GroupBy'
           <label>{title}</label>
           <Select
             isClearable
+            placeholder="Seleccionar"
             isDisabled={k === groupBy}
             className="export-select"
             options={options[k]}
@@ -161,11 +162,10 @@ import GroupBy from './GroupBy'
 
   render() {
     return (
-      <div className='export-modal'>
+      <div className='export-modal filters'>
         <div className="filters-tablero">
           {this.buildSelects()}
         </div>
-        <GroupBy />
       </div>
     )
   }

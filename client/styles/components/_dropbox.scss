@@ -2,7 +2,15 @@
   // display: block;
   position: relative;
   margin: 1em 0;
+  display: inline-block;
 }
+
+.groupBy-selection {
+  display: inline-block;
+  width: 12em;
+  margin-left: 1em;
+}
+
 
 .open-export-btn {
   border-radius: 4px;
@@ -28,6 +36,9 @@
   box-shadow: 0px 0px 15px 1px #a8a8a8;
   .modal-title {
     font-size: 1.3em;
+  }
+  &.filters {
+    width: 50em;
   }
 }
 

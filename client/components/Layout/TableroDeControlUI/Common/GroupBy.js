@@ -74,6 +74,7 @@ function arrayDiff(a, b) {
       <Select
         isClearable
         className="export-select"
+        placeholder="Grupos"
         options={options}
         onChange={this.handleChanges}
         value={selectSimpleValue(groupBy, options)}

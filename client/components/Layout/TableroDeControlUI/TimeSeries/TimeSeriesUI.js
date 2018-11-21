@@ -6,6 +6,9 @@ import Card from '../Common/Card'
 import { CardDeck } from 'reactstrap';
 import CostBar from './CostBar'
 import AforosScatter from './AforosScatter'
+import Filters from '../Common/Filters'
+import GroupBy from '../Common/GroupBy'
+import LocalModal from '../Common/LocalModal'
 import VolumeLine from './VolumeLine'
 import VolumeGasLine from './VolumeGasLine'
 import TimeSlider from './TimeSlider'
@@ -178,6 +181,14 @@ import VolumeGasTreatments from './VolumeGasTreatments'
       <div className="data statistics">
         <div className='content'>
           <TimeSlider />
+          <div>
+            <LocalModal title="Filtros">
+              <Filters />
+            </LocalModal>
+            <div className="groupBy-selection">
+              <GroupBy />
+            </div>
+          </div>
           <CardDeck className="content-deck">
             <Card
                 id="productionCost"

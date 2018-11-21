@@ -9,7 +9,6 @@ import TableroDeControlUI from './TableroDeControlUI/TableroDeControlUI'
 import HomeUI from './HomeUI/HomeUI'
 import { Route, Redirect } from 'react-router-dom'
 import LoginForm from '../User/LoginForm'
-import Sidebar from './TableroDeControlUI/Common/Sidebar'
 
 
 @autobind class Productspace extends Component {
