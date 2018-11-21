@@ -1,6 +1,8 @@
 import React, { PureComponent } from 'react'
 import autobind from 'autobind-decorator'
 import ReactHighcharts from 'react-highcharts'
+import { formatScatter as formatter } from '../../../../lib/tooltipFormatters'
+
 
 let classificationSeries = [{
     name: 'Exitosa',
@@ -87,6 +89,7 @@ let classificationSeries = [{
                 }
             }
         },
+        tooltip: { formatter },
         title: {
             text: ''
         },

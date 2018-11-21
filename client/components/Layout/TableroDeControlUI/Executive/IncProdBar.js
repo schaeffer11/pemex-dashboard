@@ -31,7 +31,7 @@ let colorWheel = [
     let categories = []
     if (data.length > 0) {
       if (!groupBy) {
-        categories.push('Total Incremental Production')
+        categories.push('')
         series = [{
           name: ' ',
           data: [data[0].qoResult]
@@ -64,8 +64,12 @@ let colorWheel = [
       legend: {
         enabled: false
       },
+      yAxis: {
+        title: { text: 'bpd' },
+      },
       xAxis: {
         categories: categories,
+        title: { text: 'Producción Incremental Total' },
       },
 	    credits: {
 	    	enabled: false

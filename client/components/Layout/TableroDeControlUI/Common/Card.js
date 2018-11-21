@@ -106,36 +106,28 @@ const replaceAll = function(str, search, replacement) {
 
   handleCardExportTable(data) {
     let duplicate = []
-
     data.forEach(row => {
       let newRow = []
       for (var i in row) {
         newRow.push(`"` + row[i] + `"`)
       }
-     
       duplicate.push(newRow)
     })
-
     duplicate.forEach(i => i.join(','))
-
-   
     let dataString = duplicate.join("%0A");
-
     dataString = replaceAll(dataString, ' ', '%20')
-
-
     let a = document.createElement('a');
-    a.href = 'data:attachment/csv,' + dataString;
+    a.href = 'data:attachment/csv;charset=utf-8,%EF%BB%BF,' + dataString;
     a.target = '_blank';
     a.download = 'exportData.csv';
-
+    a.id = 'csvExport'
     document.body.appendChild(a);
-    a.click(); 
-
+    a.click();
+    document.getElementById('csvExport').outerHTML = ''
   }
 
   handleCardExport() {
-    const chart = this.getChartRef()   
+    const chart = this.getChartRef()
 
     if (chart) {
       chart.exportChartLocal({

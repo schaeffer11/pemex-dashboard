@@ -12,6 +12,8 @@ export const calculateVolumes = (data, fluid, sistemas = []) => {
 
 export const getJustificacionesOptions = () => {
   const options = [
+    'Otra',
+    'En tiempo',
     'Limitaciones contractuales',
     'Disponibilidad de contratos',
     'Falta de vehículos de transporte',

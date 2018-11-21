@@ -70,7 +70,7 @@ const LinkButton = ({ text, disabled , width, height, src, to}) => {
               <LinkButton to="/carga_datos" text={'inserción de datos'} src={'./images/inputNew-dark.png'}/>
               <LinkButton to="/tablero_control/resumen_general" text={'tablero de control'} height='90px' src={'./images/checklistNew-dark.png'} />
               <LinkButton to="/diagnosticos" text={'diagnóstico de productividad'} width='85px' src={'./images/analysisNew-dark.png'}/>
-              <LinkButton to="/mapeo" text={'diagnóstico de mapeo'} width='85px' src={'./images/analysisNew-dark.png'}/>
+              <LinkButton to="/mapeo" text={'mapeo de procesos'} width='85px' src={'./images/analysisNew-dark.png'}/>
               <LinkButton to="/compromisos" text={'seguimiento de compromisos'} width='105px' src={'./images/diagnosticsNew-dark.png'} />
             </div>
             <div className="text-inner">
