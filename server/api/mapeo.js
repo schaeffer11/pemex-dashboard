@@ -306,8 +306,6 @@ export const create = function(req, res, next){
             progAccionesMejopra,
             progAccionesMejopraObs
         ], (err, results) => {
-            console.log('mapeo err', err)
-            console.log('mapeo', results)
             if (err) {
                 res.json({ success: false})
             }
@@ -473,8 +471,6 @@ export const get = function(req, res) {
         PROG_ACCIONES_MEJOPRA_OBS as progAccionesMejopraObs
     FROM DiagnosticoMapeo 
     WHERE ID = ? `, [id] , (err, results) => {
-        console.log('mapeo err', err)
-        console.log('mapeo', results)
         res.json(results)
     })
 }
@@ -485,8 +481,6 @@ export const getAll = function(req, res) {
         ACTIVO_ID as activo, 
         ASIGNACION as asignacion 
       FROM DiagnosticoMapeo`, (err, results) => {
-        console.log('mapeo err', err)
-        console.log('mapeo', results)
         res.json(results)
     })
 }
