@@ -113,8 +113,6 @@ import ReactHighCharts from 'react-highcharts'
     config.series[2].data = qwData
 
 
-    console.log(qoData)
-    console.log(plotLines)
     return (        
     <ReactHighCharts 
       className="chart" 

@@ -4,13 +4,22 @@ import ReactHighcharts from 'react-highcharts'
 
 import { KPI } from '../Common/KPIs'
 
-@autobind class VolumeCostBubble extends PureComponent {
+@autobind class ProductionGasBubble extends PureComponent {
 
   render() {
     let { data, costData, groupBy } = this.props
 
     let series = []
-    let groups = Object.keys(data)
+    let groups = []
+
+
+    console.log(data)
+
+    data.forEach(i => {
+      if (!groups.includes(i.groupedName)) {
+        groups.push(i.groupedName)
+      }
+    })
 
     costData = costData.map(i => {
       let utc = Date.UTC(i.YEAR, i.MONTH - 1)
@@ -24,7 +33,7 @@ import { KPI } from '../Common/KPIs'
     })
 
     groups.forEach(name => {
-      let filteredData = data[name].map(j => {
+      let filteredData = data.filter(i => i.groupedName === name).map(j => {
         let utc = Date.UTC(j.YEAR, j.MONTH - 1)
 
         let costObj = name 
@@ -38,14 +47,13 @@ import { KPI } from '../Common/KPIs'
 
         return {
           x: utc,
-          y: j.TOTAL_VOLUME,
+          y: j.QG_RESULT,
           z: cost
         }
       })
 
-
       series.push({
-        name: name !== '1' ? name : 'Volumen',
+        name: name !== 1 ? name : 'Producción Incremental',
         data: filteredData,         
       })
     })
@@ -67,7 +75,7 @@ import { KPI } from '../Common/KPIs'
       },
       yAxis: {
         title: {
-          text: 'Volumen Total Utilizado (m3)'
+          text: 'Gas (MMpc/d)'
         }
       },
       credits: {
@@ -94,4 +102,4 @@ import { KPI } from '../Common/KPIs'
 
 
 
-export default VolumeCostBubble
+export default ProductionGasBubble

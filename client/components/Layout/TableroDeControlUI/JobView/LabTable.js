@@ -10,12 +10,12 @@ import ReactTable from 'react-table'
   render() {
     let { data, handleChange } = this.props
 
-    console.log(data)
-
-
     let columns = [{
         Header: 'Tipo de Analisis',
         accessor: 'type',
+        style: {
+          cursor: 'pointer'
+        },
         width: 420,
       }, { 
         Header: 'Fecha de Muestreo',
@@ -33,38 +33,12 @@ import ReactTable from 'react-table'
       },
     ] 
 
-    let newData = []
-
-      data.forEach(i => {
-       let muestreoDate = new Date(i.fechaMuestreo)
-        muestreoDate = `${muestreoDate.getDate()}/${muestreoDate.getMonth() + 1}/${muestreoDate.getFullYear()}`
-       
-       let pruebaDate = new Date(i.fechaPrueba)
-        pruebaDate = `${pruebaDate.getDate()}/${pruebaDate.getMonth() + 1}/${pruebaDate.getFullYear()}`
-
-        newData.push({
-            id: i.id,
-            type: i.type,
-            fechaMuestreo: muestreoDate,
-            fechaPrueba: pruebaDate,
-            compania: i.compania,
-            superviso: i.superviso,
-            observaciones: i.observaciones,
-        })
-  
-      
-    })
-
-
-
     return (
-      <div className="lab-table">
-        Lab Data
         <ReactTable 
           columns={columns}
           showPagination={false}
-          data={newData}
-          pageSize={newData ? newData.length : 5}
+          data={data}
+          pageSize={data ? data.length : 5}
           getTdProps={(state, rowInfo, column, instance) => {
               return {
                 onClick: (e, handleOriginal) => {
@@ -76,7 +50,6 @@ import ReactTable from 'react-table'
               }
             }}
         />
-      </div>
     )
   }
 }

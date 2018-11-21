@@ -33,7 +33,7 @@ import { KPI } from '../Common/KPIs'
       })
 
       series.push({
-        name: 'Volume Used',
+        name: 'Volumen Utilizado',
         data: data,  
         yAxis: 0,
         zIndex: 0       
@@ -41,7 +41,7 @@ import { KPI } from '../Common/KPIs'
 
 
       series.push({
-        name: 'Num Treatments',
+        name: 'Número de Tratamientos',
         data: numTreatmentData,
         type: 'line',
         yAxis: 1,
@@ -66,11 +66,11 @@ import { KPI } from '../Common/KPIs'
       },
       yAxis: [{
         title: {
-          text: 'Total Volume Used (m3)'
+          text: 'Volumen Total Utilizado (m3)'
         }
       }, {
         title: {
-          text: 'Count'
+          text: 'Número de Tratamientos'
         },
         opposite: true
       }],

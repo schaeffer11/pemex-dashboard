@@ -1,9 +1,6 @@
 import { Router } from 'express'
 import db from '../../lib/db'
 import appConfig from '../../../app-config.js'
-// import path from 'path'
-// import fs from 'fs'
-// import objectPath from 'object-path'
 
 
 const connection = db.getConnection(appConfig.users.database)

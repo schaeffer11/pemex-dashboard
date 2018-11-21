@@ -28,8 +28,6 @@ let colorWheel = [
 
   render() {
     let { data, groupBy } = this.props
-
-    console.log(data)
     
     if (data.length > 0) {
       if (!groupBy) {

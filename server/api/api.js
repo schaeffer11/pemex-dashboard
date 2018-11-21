@@ -23,6 +23,9 @@ import { create as createCompromiso, mine as myCompromisos, collection as getCom
 import { createResults } from './results'
 
 import { create as createDiagnostico, get as getDiagnostico, getAll as getDiagnosticos } from './diagnosticos';
+
+import { create as createMapeo, get as getMapeo, getAll as getMapeos } from './mapeo';
+
 import { getAuthorization } from '../middleware';
 
 const connection = db.getConnection(appConfig.users.database)
@@ -56,6 +59,7 @@ export async function handleImageResponse(data) {
     const imgInformation = well.IMG_URL.split('.')
     const parent = imgInformation[1]
     const index = imgInformation[imgInformation.length - 1]
+    // regex checks if the last index is a number or a number-number
     const isNumber = /^([0-9])|([0-9]+(-[0-9]+))+$/.test(index)
     // get img url from s3
     const imgURL = await signedURL(imgName)
@@ -374,6 +378,18 @@ router.get('/diagnostico/:id', (req, res) => {
     getDiagnostico(req, res)
 })
 
+router.post('/mapeo', (req, res) => {
+    createMapeo(req, res)
+})
+
+router.get('/mapeo', (req, res) => {
+    getMapeos(req, res)
+})
+
+router.get('/mapeo/:id', (req, res) => {
+    getMapeo(req, res)
+})
+
 
 router.get('/getSubmittedFieldWellMapping', (req, res) => {
     connection.query(`SELECT * FROM FieldWellMapping WHERE HAS_DATA = 1`, (err, results) => {
@@ -469,6 +485,75 @@ router.get('/getFieldWellMapping', (req, res) => {
     connection.query(`SELECT * FROM FieldWellMapping`, (err, results) => {
       res.json(results)
     })
+})
+
+router.get('/filterOptions', async (req, res) => {
+  const queryPromise = (name, query, id) => new Promise((resolve, reject) => {
+    connection.query(query, id, (err, results) => {
+      if (err) {
+        reject({ err })
+      } else {
+        resolve ({ [name]: results })
+      }
+    })
+  })
+  
+  function whereBuilderForFilters(queries, selectMap) {
+    const whereMap = {}
+    Object.keys(selectMap).forEach(query => {
+      let reqQueriesKeys = Object.keys(queries)
+      if (queries[query]) {
+        // remove query from keys if it's part of the request. this prevents limiting options of selections
+        reqQueriesKeys = reqQueriesKeys.filter(q => q !== query)
+      }
+      const builtQuery = reqQueriesKeys.map(q => {
+        let { select, operator } = selectMap[q]
+        operator = operator || '='
+        return `AND ${select[0]} ${operator} ?`
+      })
+      const values = reqQueriesKeys.map(q => queries[q])
+      whereMap[query] = { query: builtQuery, values }
+      return builtQuery
+    })
+    return whereMap
+  }
+
+  const selectMap = {
+    subdireccion: {
+      joinStatement: 'FieldWellMapping fwm on t.SUBDIRECCION_ID = fwm.SUBDIRECCION_ID',
+      select: ['t.SUBDIRECCION_ID', 'fwm.SUBDIRECCION_NAME']
+    },
+    activo: {
+      joinStatement: 'FieldWellMapping fwm on t.ACTIVO_ID = fwm.ACTIVO_ID',
+      select: ['t.ACTIVO_ID', 'fwm.ACTIVO_NAME']
+    },
+    field: {
+      joinStatement: 'FieldWellMapping fwm on t.FIELD_FORMACION_ID = fwm.FIELD_FORMACION_ID',
+      select: ['t.FIELD_FORMACION_ID', 'fwm.FIELD_NAME']
+    },
+    well: {
+      joinStatement: 'FieldWellMapping fwm on t.WELL_FORMACION_ID = fwm.WELL_FORMACION_ID',
+      select: ['t.WELL_FORMACION_ID', 'fwm.WELL_NAME']
+    },
+    formation: { select: ['t.FORMACION'] },
+    company: { select: ['tr.COMPANY'] },
+    interventionType: { select: ['t.TIPO_DE_INTERVENCIONES'] },
+    terminationType: { select: ['t.TIPO_DE_TERMINACION'] },
+    lowDate: { select: ['tr.FECHA_INTERVENCION'], operator: '>=' },
+    highDate: { select: ['tr.FECHA_INTERVENCION'], operator: '<=' },
+  }
+  const whereMap = whereBuilderForFilters(req.query, selectMap)
+  const promises = Object.keys(whereMap).map(q => {
+    let query = `SELECT DISTINCT ${selectMap[q].select.join(',')} FROM Transactions t
+                 JOIN TransactionsResults tr on t.TRANSACTION_ID = tr.PROPUESTA_ID`
+    if (selectMap[q].joinStatement) {
+      query += `\nJOIN ${selectMap[q].joinStatement}`
+    }
+    query += `\nWHERE 1 = 1 ${whereMap[q].query.join(' ')}`
+    return queryPromise(q, query, whereMap[q].values)
+  })
+  const results = await Promise.all(promises)
+  res.json(results)
 })
 
 router.get('/getSpecificFieldWell', (req, res) => {

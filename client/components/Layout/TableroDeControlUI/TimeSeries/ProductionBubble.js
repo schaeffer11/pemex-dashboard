@@ -13,7 +13,7 @@ import { KPI } from '../Common/KPIs'
     let groups = []
 
 
-    // console.log(data)
+    console.log(data)
 
     data.forEach(i => {
       if (!groups.includes(i.groupedName)) {
@@ -53,7 +53,7 @@ import { KPI } from '../Common/KPIs'
       })
 
       series.push({
-        name: name ? name : 'Inc Production Data',
+        name: name !== 1 ? name : 'Producción Incremental',
         data: filteredData,         
       })
     })
@@ -75,7 +75,7 @@ import { KPI } from '../Common/KPIs'
       },
       yAxis: {
         title: {
-          text: 'Inc Qo'
+          text: 'Aceite (bbl/d)'
         }
       },
       credits: {

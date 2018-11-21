@@ -43,7 +43,6 @@ let colorWheel = [
             }
           })
         }]
-        console.log(series)
       }
       else {
         data.forEach(i => {
