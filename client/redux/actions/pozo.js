@@ -241,19 +241,25 @@ export const setFromSaveHistoricoDeAforos = value => ({ type: 'set_fromSaveHisto
 export const setProduccionData = value => ({ 
 	type: 'set_produccionData',
 	value: value.map((row, i) => {
-        row.qo = dealWithNaN((parseFloat(row.qo_vol) / parseFloat(row.dias)).toFixed(2))
-        row.qw = dealWithNaN((parseFloat(row.qw_vol) / parseFloat(row.dias)).toFixed(2))
-        row.qg = dealWithNaN((parseFloat(row.qg_vol) / parseFloat(row.dias)).toFixed(2))
-        row.qgi = dealWithNaN((parseFloat(row.qgi_vol) / parseFloat(row.dias)).toFixed(2))
+        let dias = row.dias === '-999' ? 0 : row.dias
+        let qo_vol = row.qo_vol === '-999' ? 0 : row.qo_vol
+        let qw_vol = row.qw_vol === '-999' ? 0 : row.qw_vol
+        let qg_vol = row.qg_vol === '-999' ? 0 : row.qg_vol
+        let qgi_vol = row.qgi_vol === '-999' ? 0 : row.qgi_vol
+
+        row.qo = dealWithNaN((parseFloat(qo_vol) / parseFloat(dias)).toFixed(2))
+        row.qw = dealWithNaN((parseFloat(qw_vol) / parseFloat(dias)).toFixed(2))
+        row.qg = dealWithNaN((parseFloat(qg_vol) / parseFloat(dias)).toFixed(2))
+        row.qgi = dealWithNaN((parseFloat(qgi_vol) / parseFloat(dias)).toFixed(2))
         row.rga = dealWithNaN((parseFloat(row.qg) * 1000000 / parseFloat(row.qo) / 5.615).toFixed(2))
         row.fw = dealWithNaN((parseFloat(row.qw) / (parseFloat(row.qw) + parseFloat(row.qo))).toFixed(2))
 
         let prev = value[i - 1]
 
-        row.np = prev ? dealWithNaN((parseFloat(prev.np) + parseFloat(row.qo_vol)).toFixed(2)) : dealWithNaN((parseFloat(row.qo_vol)).toFixed(2))
-        row.wp = prev ? dealWithNaN((parseFloat(prev.wp) + parseFloat(row.qw_vol)).toFixed(2)) : dealWithNaN((parseFloat(row.qw_vol)).toFixed(2))
-        row.gp = prev ? dealWithNaN((parseFloat(prev.gp) + parseFloat(row.qg_vol)).toFixed(2)) : dealWithNaN((parseFloat(row.qg_vol)).toFixed(2))
-        row.gi = prev ? dealWithNaN((parseFloat(prev.gi) + parseFloat(row.qgi_vol)).toFixed(2)) : dealWithNaN((parseFloat(row.qgi_vol)).toFixed(2))
+        row.np = prev ? dealWithNaN((parseFloat(prev.np) + parseFloat(qo_vol)).toFixed(2)) : dealWithNaN((parseFloat(qo_vol)).toFixed(2))
+        row.wp = prev ? dealWithNaN((parseFloat(prev.wp) + parseFloat(qw_vol)).toFixed(2)) : dealWithNaN((parseFloat(qw_vol)).toFixed(2))
+        row.gp = prev ? dealWithNaN((parseFloat(prev.gp) + parseFloat(qg_vol)).toFixed(2)) : dealWithNaN((parseFloat(qg_vol)).toFixed(2))
+        row.gi = prev ? dealWithNaN((parseFloat(prev.gi) + parseFloat(qgi_vol)).toFixed(2)) : dealWithNaN((parseFloat(qgi_vol)).toFixed(2))
         return row
       })
     })

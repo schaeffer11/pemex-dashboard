@@ -173,6 +173,17 @@ export function submitResultsForm(action, token) {
       if(!ignore[k]) {
         const innerObj = convertedFields[k]
         const innerKeys = Object.keys(innerObj)
+
+        //convert -999 to nulls
+        if (action === 'submit') {
+          innerKeys.forEach(key => {
+            if (innerObj[key] === '-999' || innerObj[key] === '-999.00') {
+              innerObj[key] = null
+            }
+          })       
+        }
+
+
         // look for immediate images
         if (innerObj.hasOwnProperty('imgURL')) {
           if (innerObj.imgURL) {
@@ -188,6 +199,18 @@ export function submitResultsForm(action, token) {
           if (Array.isArray(property)) {
             let index = 0
             for (let j of property) {
+
+              //convert -999 in arrays to nulls
+              if (action === 'submit') {
+                Object.keys(j).forEach(key => {
+                  if (j[key] === '-999' || j[key] === '-999.00') {
+                    j[key] = null
+                  }
+                })
+              }
+
+
+
               if (j.hasOwnProperty('imgURL')) {
                 if (j.imgURL) {
                   const img = await getBase64FromURL(j.imgURL)
