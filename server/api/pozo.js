@@ -1429,7 +1429,7 @@ export const create = async (body, action, cb) => {
 
                       values = []
 
-                      presionDataPozo.forEach(i => {
+                      presionDataCampo.forEach(i => {
                         let newRow = [wellFormacionID, i.fecha, i.Pws, pressureDepthCampo, transactionID]
                         if (action === 'save') {
                           newRow.push(i.error)
@@ -1959,36 +1959,36 @@ export const create = async (body, action, cb) => {
                                                                   let tableError = finalObj.historialDeIntervenciones.hasErrors === true ? 1 : 0
                                                                   historicoEstimulacionData.forEach(i => {
                                                                       if (action === 'save') {
-                                                                          values.push([wellFormacionID, 'estimulacion', i.fecha, i.tipoDeTratamiento, i.objetivo, i.compania, i.acidoVol, i.acidoNombre, i.solventeVol, i.solventeNombre, i.divergenteVol, i.divergenteNombre, i.totalN2, i.beneficioProgramado, i.beneficioOficial, -9999, -9999, -9999, -9999, -9999, -9999, -9999, -9999, -9999, -9999, -9999, -9999, -9999, -9999,null,null,-9999,-9999,-9999,-9999,-9999, i.error, tableError, transactionID ])
+                                                                          values.push([wellFormacionID, 'estimulacion', i.fecha, i.tipoDeTratamiento, i.objetivo, i.compania, i.acidoVol, i.acidoNombre, i.solventeVol, i.solventeNombre, i.divergenteVol, i.divergenteNombre, i.totalN2, i.beneficioProgramado, i.beneficioOficial, null, null, null, null, null, null, null, null, null, null, null, null, null, null,null,null,null,null,null,null,null, i.error, tableError, transactionID ])
                                                                       }
                                                                       else {
-                                                                          values.push([wellFormacionID, 'estimulacion', i.fecha, i.tipoDeTratamiento, i.objetivo, i.compania, i.acidoVol, i.acidoNombre, i.solventeVol, i.solventeNombre, i.divergenteVol, i.divergenteNombre, i.totalN2, i.beneficioProgramado, i.beneficioOficial, -9999, -9999, -9999, -9999, -9999, -9999, -9999, -9999, -9999, -9999, -9999, -9999, -9999, -9999, null, null, -9999,-9999,-9999,-9999,-9999, transactionID ])
+                                                                          values.push([wellFormacionID, 'estimulacion', i.fecha, i.tipoDeTratamiento, i.objetivo, i.compania, i.acidoVol, i.acidoNombre, i.solventeVol, i.solventeNombre, i.divergenteVol, i.divergenteNombre, i.totalN2, i.beneficioProgramado, i.beneficioOficial, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null,null,null,null,null, transactionID ])
                                                                       }
                                                       
                                                                   })
                                                                   historicoAcidoData.forEach(i => {
                                                                       if (action === 'save') {
-                                                                          values.push([wellFormacionID, 'acido', i.fecha, i.tipoDeTratamiento, i.objetivo, i.compania, -9999, -9999, -9999, -9999, -9999, -9999, -9999, i.beneficioProgramado, i.beneficioOficial, i.base, i.cima, i.longitudGravada, i.alturaGravada, i.anchoGravado, i.conductividad, i.fcd, i.presionNeta, i.fluidoFractura, -9999, -9999, -9999, -9999, -9999,null,null,-9999,-9999,-9999,-9999,-9999, i.error, tableError, transactionID])
+                                                                          values.push([wellFormacionID, 'acido', i.fecha, i.tipoDeTratamiento, i.objetivo, i.compania, null, null, null, null, null, null, null, i.beneficioProgramado, i.beneficioOficial, i.base, i.cima, i.longitudGravada, i.alturaGravada, i.anchoGravado, i.conductividad, i.fcd, i.presionNeta, i.fluidoFractura, null, null, null, null, null,null,null,null,null,null,null,null, i.error, tableError, transactionID])
                                                                       }
                                                                       else {
-                                                                          values.push([wellFormacionID, 'acido', i.fecha, i.tipoDeTratamiento, i.objetivo, i.compania, -9999, -9999, -9999, -9999, -9999, -9999, -9999, i.beneficioProgramado, i.beneficioOficial, i.base, i.cima, i.longitudGravada, i.alturaGravada, i.anchoGravado, i.conductividad, i.fcd, i.presionNeta, i.fluidoFractura, -9999, -9999, -9999, -9999, -9999, null, null, -9999,-9999,-9999,-9999,-9999, transactionID])
+                                                                          values.push([wellFormacionID, 'acido', i.fecha, i.tipoDeTratamiento, i.objetivo, i.compania, null, null, null, null, null, null, null, i.beneficioProgramado, i.beneficioOficial, i.base, i.cima, i.longitudGravada, i.alturaGravada, i.anchoGravado, i.conductividad, i.fcd, i.presionNeta, i.fluidoFractura, null, null, null, null, null, null, null, null,null,null,null,null, transactionID])
                                                                       }
                                                                   })
                                                                   historicoApuntaladoData.forEach(i => {
                                                                       if (action === 'save') {
-                                                                          values.push([wellFormacionID, 'apuntalado', i.fecha, i.tipoDeTratamiento, i.objetivo, i.compania, -9999, -9999, -9999, -9999, -9999, -9999, -9999, i.beneficioProgramado, i.beneficioOficial, i.base, i.cima, -9999, -9999, -9999, i.conductividad, i.fcd, i.presionNeta, i.fluidoFractura, i.longitudApuntalada, i.alturaTotalDeFractura, i.anchoPromedio, i.concentracionAreal, -9999,null,null,-9999,-9999,-9999,-9999,-9999, i.error, tableError, transactionID])
+                                                                          values.push([wellFormacionID, 'apuntalado', i.fecha, i.tipoDeTratamiento, i.objetivo, i.compania, null, null, null, null, null, null, null, i.beneficioProgramado, i.beneficioOficial, i.base, i.cima, null, null, null, i.conductividad, i.fcd, i.presionNeta, i.fluidoFractura, i.longitudApuntalada, i.alturaTotalDeFractura, i.anchoPromedio, i.concentracionAreal, null,null,null,null,null,null,null,null, i.error, tableError, transactionID])
                                                                       }
                                                                       else {
-                                                                          values.push([wellFormacionID, 'apuntalado', i.fecha, i.tipoDeTratamiento, i.objetivo, i.compania, -9999, -9999, -9999, -9999, -9999, -9999, -9999, i.beneficioProgramado, i.beneficioOficial, i.base, i.cima, -9999, -9999, -9999, i.conductividad, i.fcd, i.presionNeta, i.fluidoFractura, i.longitudApuntalada, i.alturaTotalDeFractura, i.anchoPromedio, i.concentracionAreal, -9999, null, null, -9999,-9999,-9999,-9999,-9999, transactionID])
+                                                                          values.push([wellFormacionID, 'apuntalado', i.fecha, i.tipoDeTratamiento, i.objetivo, i.compania, null, null, null, null, null, null, null, i.beneficioProgramado, i.beneficioOficial, i.base, i.cima, null, null, null, i.conductividad, i.fcd, i.presionNeta, i.fluidoFractura, i.longitudApuntalada, i.alturaTotalDeFractura, i.anchoPromedio, i.concentracionAreal, null, null, null, null,null,null,null,null, transactionID])
                                                                       }
                                                                       
                                                                   })
                                                                   historicoTermicoData.forEach(i => {
                                                                       if (action === 'save') {
-                                                                          values.push([wellFormacionID, 'termico', null, -999, -999, -999, -9999, -9999, -9999, -9999, -9999, -9999, -9999, -9999, i.beneficioProgramado, i.beneficioOficial, -9999, -9999, -9999, -9999, -9999, -9999, -9999, -9999, -9999, -9999, -9999, -9999, i.ciclo,i.fechaInicio,i.fechaFin,i.Piny,i.Tiny, i.calidad, i.Qiny, i.aguaAcum, i.error, tableError, transactionID])
+                                                                          values.push([wellFormacionID, 'termico', null, null, null, null, null, null, null, null, null, null, null, null, i.beneficioProgramado, i.beneficioOficial, null, null, null, null, null, null, null, null, null, null, null, null, i.ciclo,i.fechaInicio,i.fechaFin,i.Piny,i.Tiny, i.calidad, i.Qiny, i.aguaAcum, i.error, tableError, transactionID])
                                                                       }
                                                                       else {
-                                                                          values.push([wellFormacionID, 'termico', null, -999, -999, -999, -9999, -9999, -9999, -9999, -9999, -9999, -9999, -9999, i.beneficioProgramado, i.beneficioOficial, -9999, -9999, -9999, -9999, -9999, -9999, -9999, -9999, -9999, -9999, -9999, -9999, i.ciclo,i.fechaInicio,i.fechaFin,i.Piny,i.Tiny, i.calidad, i.Qiny, i.aguaAcum, transactionID])
+                                                                          values.push([wellFormacionID, 'termico', null, null, null, null, null, null, null, null, null, null, null, null, i.beneficioProgramado, i.beneficioOficial, null, null, null, null, null, null, null, null, null, null, null, null, i.ciclo,i.fechaInicio,i.fechaFin,i.Piny,i.Tiny, i.calidad, i.Qiny, i.aguaAcum, transactionID])
                                                                       }
                                                                       
                                                                   })                                                               

@@ -3,6 +3,7 @@ import autobind from 'autobind-decorator'
 import { connect } from 'react-redux'
 import Select from 'react-select'
 import { selectSimpleValue, convertLowDate, convertHighDate, handleSelectValue } from '../../../../lib/formatters'
+import { getFilters, fetchFilterData, buildFiltersOptions } from '../../../../lib/filters'
 import { checkForDifferencesInObjects } from '../../../../lib/helpers'
 import { setGeneralFilters, setGeneralGlobalAnalysis } from '../../../../redux/actions/global'
 import GroupBy from './GroupBy'
@@ -11,75 +12,38 @@ import GroupBy from './GroupBy'
   constructor(props) {
     super(props);
     this.state = {}
-    this.filters = {
-      subdireccion: {
-        title: 'Subdirección',
-        id: 'SUBDIRECCION_ID',
-        name: 'SUBDIRECCION_NAME',
-      },
-      activo: {
-        title: 'Activo',
-        id: 'ACTIVO_ID',
-        name: 'ACTIVO_NAME',
-      },
-      field: {
-        title: 'Campo',
-        id: 'FIELD_FORMACION_ID',
-        name: 'FIELD_NAME',
-      },
-      well: {
-        title: 'Pozo',
-        id: 'WELL_FORMACION_ID',
-        name: 'WELL_NAME',
-      },
-      formation: {
-        title: 'Formación',
-        id: 'FORMACION',
-        name: 'FORMACION',
-      },
-      company: {
-        title: 'Compañía',
-        id: 'COMPANY',
-        name: 'COMPANY',
-      },
-      interventionType: {
-        title: 'Intervención',
-        id: 'TIPO_DE_INTERVENCIONES',
-        name: 'TIPO_DE_INTERVENCIONES',
-      },
-      terminationType: {
-        title: 'Terminación',
-        id: 'TIPO_DE_TERMINACION',
-        name: 'TIPO_DE_TERMINACION',
-      },
-    }
   }
 
   async componentDidMount() {
-    let { setGeneralFilters, options } = this.props
+    let { setGeneralFilters, options, globalAnalysis, token } = this.props
     options = options.toJS()
+    globalAnalysis = globalAnalysis.toJS()
     // check if we already have options. otherwise fetch data and build options
     for (let key in options) {
       if (options[key].length > 0) {
         return
       }
     }
-    const data = await this.getData()
-    const filterOptions = this.buildOptions(data)
+    const data = await fetchFilterData(token, globalAnalysis)
+    console.log('i got some data', data)
+    const filterOptions = buildFiltersOptions(data)
     setGeneralFilters(filterOptions)
   }
 
   async componentDidUpdate(prevProps) {
-    let { globalAnalysis, setGeneralFilters } = this.props
+    const filters = getFilters()
+    let { globalAnalysis, setGeneralFilters, token } = this.props
     let prevGlobalAnalysis = prevProps.globalAnalysis
     globalAnalysis = globalAnalysis.toJS()
     prevGlobalAnalysis = prevGlobalAnalysis.toJS()
     // let somethingChanged = false
-    const optionKeys = [...Object.keys(this.filters), 'lowDate', 'highDate']
+    const optionKeys = [...Object.keys(filters), 'lowDate', 'highDate']
     const somethingChanged = checkForDifferencesInObjects(optionKeys, globalAnalysis, prevGlobalAnalysis)
     if (somethingChanged) {
-      const data = await this.getData()
-      const newOptions = this.buildOptions(data)
+      const data = await fetchFilterData(token, globalAnalysis)
+      const newOptions = buildFiltersOptions(data)
+      // const data = await this.getData()
+      // const newOptions = this.buildOptions(data)
       setGeneralFilters(newOptions)
     }
   }
@@ -136,12 +100,13 @@ import GroupBy from './GroupBy'
   }
 
   buildSelects() {
+    const filters = getFilters()
     let { globalAnalysis, options } = this.props
     globalAnalysis = globalAnalysis.toJS()
     options = options.toJS()
     const { groupBy } = globalAnalysis
     return Object.keys(options).map(k => {
-      const { title } = this.filters[k]
+      const { title } = filters[k]
       const selectValue = globalAnalysis[k]
       return (
         <div key={`filter_${k}`} className="filter-individual">
@@ -166,7 +131,6 @@ import GroupBy from './GroupBy'
         <div className="filters-tablero">
           {this.buildSelects()}
         </div>
-        <GroupBy />
       </div>
     )
   }

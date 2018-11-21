@@ -261,11 +261,15 @@ import { checkEmpty, checkDate } from '../../../../lib/errorCheckers';
 
     estimacionCostosData.forEach(i => {
       if (i.cost) {
-        mnxSum += parseFloat(i.cost)
+        let cost = i.cost === '-999' ? 0 : parseFloat(i.cost)
+        mnxSum += cost
       }
       if (i.costDLS) {
-        dlsSum += parseFloat(i.costDLS)
-        convertedDLSSum += parseFloat(i.costDLS) * parseFloat(i.MNXtoDLS)
+        let costDLS = i.costDLS === '-999' ? 0 : parseFloat(i.costDLS)
+        let MNXtoDLS = i.MNXtoDLS === '-999' ? 0 : parseFloat(i.MNXtoDLS)
+
+        dlsSum +=costDLS
+        convertedDLSSum +=costDLS * MNXtoDLS
       }
     })
 

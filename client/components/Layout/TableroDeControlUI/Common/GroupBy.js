@@ -4,7 +4,8 @@ import autobind from 'autobind-decorator'
 import Select from 'react-select'
 import { handleSelectValue, selectSimpleValue } from '../../../../lib/formatters'
 import { checkForDifferencesInObjects } from '../../../../lib/helpers'
-import { setGroupByAndGroups } from '../../../../redux/actions/global'
+import { setGroupByAndGroups, setGeneralFilters } from '../../../../redux/actions/global'
+import { fetchFilterData, buildFiltersOptions } from '../../../../lib/filters'
 
 // Need to make groups update!
 function arrayDiff(a, b) {
@@ -20,15 +21,20 @@ function arrayDiff(a, b) {
     this.state = {}
   }
 
-  componentDidUpdate(prevProps) {
-    let { filters, globalAnalysis, setGeneral } = this.props
+  async componentDidUpdate(prevProps) {
+    let { filters, globalAnalysis, setGeneralFilters, token } = this.props
     filters = filters.toJS()
     globalAnalysis = globalAnalysis.toJS()
     const { groupBy } = globalAnalysis
     let prevFilters = prevProps.filters.toJS()
     let prevGlobalAnalysis = prevProps.globalAnalysis.toJS()
     const prevGroupBy = prevGlobalAnalysis.groupBy
-    if (groupBy && groupBy === prevGroupBy) {
+    if (groupBy && groupBy !== prevGroupBy) {
+      console.log('what is this?')
+      const data = await fetchFilterData(token, globalAnalysis)
+      const filterOptions = buildFiltersOptions(data)
+      setGeneralFilters(filterOptions)
+    } else if (groupBy && groupBy === prevGroupBy) {
       const options = filters[groupBy]
       const prevOptions = prevFilters[groupBy]
       if (options.length !== prevOptions.length) {
@@ -43,10 +49,13 @@ function arrayDiff(a, b) {
     }
   }
 
-  setNewGroups(groupBy, options) {
-    const { setGeneral } = this.props
+  async setNewGroups(groupBy, options) {
+    let { setGeneral, setGeneralFilters, token, globalAnalysis } = this.props
     const groups = groupBy ? options[groupBy].map(elem => elem.label) : []
     setGeneral(groupBy, groups)
+    // const data = await fetchFilterData(token, globalAnalysis.toJS())
+    // const filterOptions = buildFiltersOptions(data)
+    // setGeneralFilters(filterOptions)
   }
 
   handleChanges(selection) {
@@ -85,6 +94,7 @@ function arrayDiff(a, b) {
 
 
 const mapStateToProps = state => ({
+  token: state.getIn(['user', 'token']),
   filters: state.get('filters'),
   groupBy: state.getIn(['globalAnalysis', 'groupBy']),
   globalAnalysis: state.get('globalAnalysis'),
@@ -92,6 +102,7 @@ const mapStateToProps = state => ({
 
 const mapDispatchToProps = dispatch => ({
   setGeneral: (groupBy, groups) => dispatch(setGroupByAndGroups(groupBy, groups)),
+  setGeneralFilters: (value) => dispatch(setGeneralFilters(value)),
 })
 
 export default connect(mapStateToProps, mapDispatchToProps)(GroupBy)
