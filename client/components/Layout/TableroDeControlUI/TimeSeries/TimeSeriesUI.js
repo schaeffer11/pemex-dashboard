@@ -14,9 +14,11 @@ import VolumeGasLine from './VolumeGasLine'
 import TimeSlider from './TimeSlider'
 import { setGeneralGlobalAnalysis } from '../../../../redux/actions/global'
 import ProductionBubble from './ProductionBubble'
+import ProductionGasBubble from './ProductionGasBubble'
 import VolumeCostBubble from './VolumeCostBubble'
 import VolumeGasCostBubble from './VolumeGasCostBubble'
 import ProductionTreatmentsBar from './ProductionTreatmentsBar'
+import ProductionGasTreatmentsBar from './ProductionGasTreatmentsBar'
 import VolumeTreatments from './VolumeTreatments'
 import VolumeGasTreatments from './VolumeGasTreatments'
 
@@ -166,7 +168,8 @@ import VolumeGasTreatments from './VolumeGasTreatments'
                 ref={this.cards[0]}
                 width={'50%'}
               >
-              <ProductionBubble data={incProdData} costData={costData} groupBy={groupBy} />
+              <ProductionBubble label='Aceite' data={incProdData} costData={costData} groupBy={groupBy} />
+              <ProductionGasBubble label='Gas' data={incProdData} costData={costData} groupBy={groupBy} />
             </Card>
               <Card
                 id="volumeCost"
@@ -184,7 +187,8 @@ import VolumeGasTreatments from './VolumeGasTreatments'
                 width={'50%'}
                 multiplyChartsOnGrouping
               >
-              <ProductionTreatmentsBar data={incProdCarouselData} numTreatmentData={numTreatmentData} groupBy={groupBy} />
+              <ProductionTreatmentsBar label='Aceite' data={incProdCarouselData} numTreatmentData={numTreatmentData} groupBy={groupBy} />
+              <ProductionGasTreatmentsBar label="Gas" data={incProdCarouselData} numTreatmentData={numTreatmentData} groupBy={groupBy} />
             </Card>
               <Card
                 id="volumeTreatments"
