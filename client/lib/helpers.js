@@ -1,10 +1,12 @@
+import { ignoreNegative999 } from './formatters'
 export const round = (num, exp = 2) => Math.round(num * Math.pow(10, exp)) / Math.pow(10, exp)
 
 export const calculateVolumes = (data, fluid, sistemas = []) => {
   return data.filter(elem => sistemas.includes(elem.sistema) || !sistemas.length)
     .reduce((accumulator, currentValue) => {
       if (currentValue[fluid]) {
-        return round(accumulator + parseFloat(currentValue[fluid]))
+        const val = ignoreNegative999(currentValue[fluid])
+        return round(accumulator + parseFloat(val))
       }
       return accumulator
     }, 0)

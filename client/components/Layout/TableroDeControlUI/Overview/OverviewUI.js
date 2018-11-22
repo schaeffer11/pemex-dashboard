@@ -183,12 +183,6 @@ import TimeSlider from '../TimeSeries/TimeSlider'
         days: dateDiffData.find(i => i.type === 'termico') ? dateDiffData.find(i => i.type === 'termico').avgDateDiff : null
     }]
 
-
-
-
-
-    console.log(data)
-
     return (
       <div className='data'>
         <div style={{padding: '40px', paddingBottom: '0px'}}>

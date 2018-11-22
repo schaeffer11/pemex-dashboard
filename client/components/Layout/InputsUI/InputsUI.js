@@ -53,7 +53,7 @@ import { setHasSubmitted, setIsLoading, setCurrentPage, setSaveName, setTab } fr
     fetch('/api/getFieldWellMapping', headers)
       .then(r => r.json())
       .then(r => {
-
+        console.log('i got something here')
         this.setState({
           fieldWellOptions: r,
           saveName: saveName
