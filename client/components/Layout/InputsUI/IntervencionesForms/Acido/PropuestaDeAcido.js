@@ -326,7 +326,7 @@ import { calculateValuesGeneralCedula } from '../../../../../lib/formatters';
       volumenSistemaNoReativo: calculateVolumes(cedulaData, 'volLiquid', ['no-reactivo']),
       volumenSistemaDivergente: calculateVolumes(cedulaData, 'volLiquid', ['divergente']),
       volumenDesplazamientoLiquido: calculateVolumes(cedulaData, 'volLiquid', ['desplazamiento']),
-      volumenDesplazamientoN2: calculateVolumes(cedulaData, 'volN2', ['desplazamiento']),
+      volumenDesplazamientoN2: calculateVolumes(cedulaData, 'volN2', ['desplazamientoN2']),
       volumenPrecolchonN2: calculateVolumes(cedulaData, 'volN2', ['pre-colchon']),
       volumenTotalDeLiquido: calculateVolumes(cedulaData, 'volLiquid'),
     }

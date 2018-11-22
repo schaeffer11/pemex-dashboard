@@ -1,12 +1,14 @@
 import React, { PureComponent } from 'react'
 import autobind from 'autobind-decorator'
 import ReactHighcharts from 'react-highcharts'
+import { formatPiePercent as formatter } from '../../../../lib/tooltipFormatters'
 
 
 
 @autobind class JobBreakdown extends PureComponent {
 
   render() {
+	  
     let { data } = this.props
     
     let config = {
@@ -18,7 +20,8 @@ import ReactHighcharts from 'react-highcharts'
 	    },
 	    credits: {
 	    	enabled: false
-	    },
+		},
+		tooltip: { formatter },
 	    series: [{
 	        name: 'Count',
 	        data: data

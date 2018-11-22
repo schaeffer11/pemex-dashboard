@@ -31,11 +31,11 @@ import { KPI } from '../Common/KPIs'
         data: desplazamientoN2,
 
       },{
-        name: <div>Precolchón N<sub>2</sub></div>,
+        name: 'Precolchón N2',
         data: totalPrecolchonN2,
 
       },{
-        name: 'Vapor Injected',
+        name: 'Vapor Inyectado',
         data: vaporInjected,
       }]
 

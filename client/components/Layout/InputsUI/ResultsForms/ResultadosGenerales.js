@@ -6,6 +6,7 @@ import { setGeneralResultadosGenerales } from '../../../../redux/actions/results
 import { CalculatedValue, InputRow, InputRowSelectUnitless, InputDate, TextAreaUnitless } from '../../Common/InputRow'
 import { checkDate, checkEmpty } from '../../../../lib/errorCheckers';
 import { getJustificacionesOptions } from '../../../../lib/helpers';
+import { sortLabels } from '../../../../lib/formatters';
 
 
 @autobind class ResultadosGenerales extends Component {
@@ -100,7 +101,7 @@ import { getJustificacionesOptions } from '../../../../lib/helpers';
             value={justificacionIntervencion}
             callback={(e) => setGeneralResultadosGenerales(['justificacionIntervencion'], e.value)}
             name='tipoDePozo'
-            options={justificacionesOptions}
+            options={justificacionesOptions.sort(sortLabels)}
             onBlur={this.updateErrors}
             errors={this.state.errors}
           />

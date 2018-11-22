@@ -85,9 +85,21 @@ export function handleImagesFromServer(images, state) {
   return shallowStateCopy
 }
 
+export const ignoreNegative999 = (val) => {
+  console.log()
+  // let value = typeof val === 'string' ? parseFloat(val): value
+  // console.log('what is my vallue?', value, typeof value, value === -999)
+  return val === -999 || val === '-999' ? 0 : val
+}
+
 export const calculateValuesGeneralCedula = (data) => {
   return data.map((row, i) => {
     let { sistema, relN2Liq, gastoLiqudo, volLiquid } = row
+    relN2Liq = ignoreNegative999(relN2Liq)
+    gastoLiqudo = ignoreNegative999(gastoLiqudo)
+    volLiquid = ignoreNegative999(volLiquid)
+    row.gastoN2 = ignoreNegative999(row.gastoN2)
+    row.volN2 = ignoreNegative999(row.volN2)
     if (sistema === 'desplazamientoN2' || sistema === 'pre-colchon') {
       row.volLiquid = 0
       row.gastoLiqudo = 0
@@ -99,7 +111,7 @@ export const calculateValuesGeneralCedula = (data) => {
       row.tiempo = dealWithNaN(round((volLiquid * 6.291) / gastoLiqudo) || 0)
     }
     const prev = data[i - 1]
-    row.volLiquidoAcum = prev ? dealWithNaN(round(parseFloat(prev.volLiquidoAcum) + parseFloat(row.volLiquid))) : row.volLiquid
+    row.volLiquidoAcum = prev ? dealWithNaN(round(parseFloat(prev.volLiquidoAcum) + parseFloat(volLiquid))) : volLiquid
     row.volN2Acum = prev ? dealWithNaN(round(parseFloat(prev.volN2Acum) + parseFloat(row.volN2))) : row.volN2
     row.etapa = row.index + 1
     if (isNaN(row.etapa)) {
@@ -112,6 +124,10 @@ export const calculateValuesGeneralCedula = (data) => {
 export const calculateValuesApuntaladoCedula = (data) => {
   return data.map((row, i) => {
     let { apuntalanteAcumulado, volLechada, gastoSuperficie, volEspumaFondo, concentracionApuntalanteFondo } = row
+    volLechada = ignoreNegative999(volLechada)
+    gastoSuperficie = ignoreNegative999(gastoSuperficie)
+    volEspumaFondo = ignoreNegative999(volEspumaFondo)
+    concentracionApuntalanteFondo = ignoreNegative999(concentracionApuntalanteFondo)
     const prev = data[i - 1]
     const apuntalante = parseFloat(volEspumaFondo) * parseFloat(concentracionApuntalanteFondo)
     if (i === 0) {
