@@ -1,6 +1,7 @@
 import React, { PureComponent } from 'react'
 import autobind from 'autobind-decorator'
 import ReactHighcharts from 'react-highcharts'
+import { formatAverageDeviation as formatter } from '../../../../lib/tooltipFormatters'
 
 
 let colorWheel = [
@@ -34,7 +35,7 @@ let colorWheel = [
 
     if (data.length > 0) {
       if (!groupBy) {
-        categories.push('Individual Cost Devations')
+        categories.push('')
         series = [{
           name: ' ',
           data: data.map(i => {
@@ -84,14 +85,15 @@ let colorWheel = [
       legend: {
         enabled: false
       },
+      tooltip: { formatter },
       xAxis: {
         categories: categories
       },
       yAxis: {
-        min: -100,
-        max: 100,
+        // min: -100,
+        // max: 100,
         title: {
-          text: 'Desviación (en porcentaje)'
+          text: '%'
         },
         plotLines: [{
           value: 0,
@@ -101,11 +103,11 @@ let colorWheel = [
         plotBands: [{
           color: '#ecb4b4',
           from: 0,
-          to: 1000
+          to: 10000
         }, {
           color: '#b4ecb4',
           from: 0,
-          to: -1000
+          to: -10000
         }]
       },
 	    credits: {

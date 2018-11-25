@@ -31,7 +31,7 @@ let colorWheel = [
     let categories = []
     if (data.length > 0) {
       if (!groupBy) {
-        categories.push('Total Cost')
+        categories.push('')
         series = [{
           name: ' ',
           data: [data[0].totalCost]

@@ -447,7 +447,7 @@ import { setIsLoading, setShowForms } from '../../../redux/actions/global'
             >
                 { ({touched, isSubmitting, errors}) => (
                     <Form className={this.state.update ? 'disable': ''}>
-                        <button className="import submit" onClick={this.props.openImportModal}>Importar</button>
+                        <button type="button" className="import submit" onClick={this.props.openImportModal}>Importar</button>
                         <div className="title">Diagnóstico de Productividad</div>
 
                         <div className="heading">

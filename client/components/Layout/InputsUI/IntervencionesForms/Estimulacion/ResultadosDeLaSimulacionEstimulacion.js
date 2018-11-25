@@ -133,7 +133,7 @@ import { checkEmpty, checkDate } from '../../../../../lib/errorCheckers';
     return (
       <div style={{marginBot: '20px'}}>
         <div className='header'>
-          Cargar evidencia del laboratorio
+          Cargar evidencia de simulacion
         </div>
         <input type='file' accept="image/*"  onChange={(e) => this.handleFileUpload(e, setEvidenceSimulationImgURL)} multiple></input>
         {imgURL ? <img className='img-preview' src={imgURL}></img> : null }

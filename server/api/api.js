@@ -505,7 +505,7 @@ router.get('/isAdmin', (req, res) => {
 })
 
 router.get('/getFieldWellMapping', (req, res) => {
-    console.log('starting query')
+  console.log('getting field well mapping')
     connection.query(`SELECT * FROM FieldWellMapping`, (err, results) => {
       console.log('results', results)
       res.json(results)

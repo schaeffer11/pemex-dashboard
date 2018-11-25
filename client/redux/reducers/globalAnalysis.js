@@ -42,6 +42,8 @@ const globalAnalysis = (state = initialState, action) => {
       return state.set('formation', fromJS(action.value))
     case 'set_jobType':
       return state.set('jobType', fromJS(action.value))
+    case 'set_timeSlider':
+      return state.set('lowDate', action.lowDate).set('highDate', action.highDate)
     default:
    		return state
   }
