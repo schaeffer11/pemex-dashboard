@@ -416,6 +416,29 @@ router.get('/getTerminationTypes', (req, res) => {
   })
 })
 
+//todo: move this to seperate script, or delete entirely
+router.get('/deletePlaceholders', (req, res) => {
+  const query = `SHOW TABLES`
+  connection.query(query, (err, results) => {
+
+    results.forEach(i => {
+      let newQuery = `SELECT COLUMN_NAME FROM information_schema.columns WHERE table_schema='DataInput' AND table_name='${i.Tables_in_DataInput}';`
+      connection.query(newQuery, (err, results) => {
+        results.forEach(column => {
+          // console.log(column)
+          let finalQuery =  `UPDATE ${i.Tables_in_DataInput} SET ${column.COLUMN_NAME} = NULL WHERE ${column.COLUMN_NAME} = -999`
+          // console.log(finalQuery)
+          connection.query(finalQuery, (err, results) => {
+            // console.log('query', query, 'result', err ? err : results)
+            console.log(results)
+          })
+        })
+      })
+    })
+  })
+})
+
+
 router.get('/getTreatmentCompanies', (req, res) => {
   const query = `
     SELECT DISTINCT(COMPANIA) FROM
@@ -482,7 +505,9 @@ router.get('/isAdmin', (req, res) => {
 })
 
 router.get('/getFieldWellMapping', (req, res) => {
+    console.log('starting query')
     connection.query(`SELECT * FROM FieldWellMapping`, (err, results) => {
+      console.log('results', results)
       res.json(results)
     })
 })
