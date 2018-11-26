@@ -420,13 +420,15 @@ router.get('/getTerminationTypes', (req, res) => {
 router.get('/deletePlaceholders', (req, res) => {
   const query = `SHOW TABLES`
   connection.query(query, (err, results) => {
+    
+    results = [{Tables_in_DataInput: 'WellHistorialIntervenciones'}]
 
     results.forEach(i => {
       let newQuery = `SELECT COLUMN_NAME FROM information_schema.columns WHERE table_schema='DataInput' AND table_name='${i.Tables_in_DataInput}';`
       connection.query(newQuery, (err, results) => {
         results.forEach(column => {
           // console.log(column)
-          let finalQuery =  `UPDATE ${i.Tables_in_DataInput} SET ${column.COLUMN_NAME} = NULL WHERE ${column.COLUMN_NAME} = -999`
+          let finalQuery =  `UPDATE ${i.Tables_in_DataInput} SET ${column.COLUMN_NAME} = NULL WHERE ${column.COLUMN_NAME} = '-9999'`
           // console.log(finalQuery)
           connection.query(finalQuery, (err, results) => {
             // console.log('query', query, 'result', err ? err : results)
