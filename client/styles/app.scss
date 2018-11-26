@@ -32,6 +32,29 @@ $baseTextColor: #222;
 $inverseTextColor: #fff;
 $baseFontFamily: "HelveticaNeue", Helvetica, Arial, sans-serif;
 
+
+.rc-slider-track {
+  background-color: #70ad47;
+  height: 10px;
+}
+
+.rc-slider-rail {
+  height: 10px;
+}
+
+.rc-slider-handle {
+  margin-top: -7px;
+  height: 25px;
+  width: 25px;
+  border: solid 2px #266588;
+  background-color: #266588;
+}
+
+
+
+
+
+
 body {
   font-family: $baseFontFamily;
   background: $background-color;

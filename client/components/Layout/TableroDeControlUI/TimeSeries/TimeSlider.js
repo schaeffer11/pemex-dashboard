@@ -59,7 +59,7 @@ const Range = createSliderWithTooltip(Slider.Range);
 
     switch (month) {
       case 1:
-        month = 'Jan'
+        month = 'Ene'
         break
       case 2:
         month = 'Feb'
@@ -68,7 +68,7 @@ const Range = createSliderWithTooltip(Slider.Range);
         month = 'Mar'
         break
       case 4:
-        month = 'Apr'
+        month = 'Abr'
         break
       case 5:
         month = 'May'
@@ -80,7 +80,7 @@ const Range = createSliderWithTooltip(Slider.Range);
         month = 'Jul'
         break
       case 8:
-        month = 'Aug'
+        month = 'Ago'
         break
       case 9:
         month = 'Sep'
@@ -92,7 +92,7 @@ const Range = createSliderWithTooltip(Slider.Range);
         month = 'Nov'
         break
       case 0:
-        month = 'Dec'  
+        month = 'Dic'  
         break
     }
 
@@ -113,7 +113,13 @@ const Range = createSliderWithTooltip(Slider.Range);
     let { lowDateState, highDateState } = this.state
     
     return (
-      <div>
+      <div className='slider-box' style={{padding: '20px', paddingRight: '35px', border: 'solid 2px #b1b1b1', borderRadius: '10px'}}>
+        <div className='test' style={{color: 'black', display: 'inline-block', fontWeight: 'bold', paddingBottom: '15px'}}>
+        Select a range of time
+        </div>
+        <div className='test' style={{color: 'black', display: 'inline-block', float: 'right', fontWeight: 'bold', paddingBottom: '15px', paddingLeft: '40px'}}>
+        {this.formatDate(lowDate)} - {this.formatDate(highDate)}
+        </div>
         <Range
           min={minDate}
           max={maxDate}

@@ -12,7 +12,7 @@ import ReactTable from 'react-table'
 
     let columns = [{
         Header: 'Tipo de Analisis',
-        accessor: 'type',
+        accessor: 'name',
         style: {
           cursor: 'pointer'
         },
@@ -33,6 +33,39 @@ import ReactTable from 'react-table'
       },
     ] 
 
+    data.map(i => {
+      switch (i.type) {
+        case 'pruebasDeCompatibilidad':
+          i.name = 'Pruebas de compatiblidad por emulsión'
+          break;
+        case 'caracterizacionFisico':
+          i.name = 'Caracterización fisico-química de fluidos'
+          break;
+        case 'pruebasGelDeFractura':
+          i.name = 'Pruebas gel de fractura'
+          break;
+        case 'pruebasDeSolubilidad':
+          i.name = 'Pruebas de solubilidad'
+          break;
+        case 'pruebasParaApuntalante':
+          i.name = 'Pruebas para apuntalante'
+          break;
+        case 'pruebasDeGrabado':
+          i.name = 'Pruebas de grabado'
+          break;
+        case 'cromatografiaDelGas':
+          i.name = 'Cromatografía del gas'
+          break;
+        case 'pruebaDeDureza':
+          i.name = 'Prueba de dureza'
+          break;
+        case 'determinacionDeLaCalidad':
+          i.name = 'Determinación de la calidad método de los cloruros'
+          break;
+      }
+      return i
+    })
+
     return (
         <ReactTable 
           columns={columns}
@@ -43,7 +76,7 @@ import ReactTable from 'react-table'
               return {
                 onClick: (e, handleOriginal) => {
                   if (rowInfo) {
-                    handleChange(rowInfo.original.id, rowInfo.original.type)
+                    handleChange(rowInfo.original.id, rowInfo.original.name)
                   }
                 
                 }
