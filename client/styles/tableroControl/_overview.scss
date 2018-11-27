@@ -1,12 +1,12 @@
 .content {
 	padding: 30px;
+	height: 100%;
+	overflow-y: auto;
 
 	.overview {
 		display: grid;
-		overflow-y: auto;
 		padding-top: 30px;
 		grid-template-columns: calc(50% - 15px) calc(50% - 15px);
-		height: 100%;
 		grid-row-gap: 30px;
 		grid-column-gap: 30px;
 		padding-bottom: 90px;
