@@ -135,7 +135,8 @@ const rootReducer = (state, action) => {
         selectedTab: 'Pozo',
         hasSubmitted: false,
         transactionID: null,
-        saveName: null 
+        saveName: null,
+        companyOptions: global.companyOptions
       }
       return state = fromJS({ user, app, global: newGlobal })
     }

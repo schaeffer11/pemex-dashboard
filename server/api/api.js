@@ -416,6 +416,17 @@ router.get('/getTerminationTypes', (req, res) => {
   })
 })
 
+router.get('/getCompanies', (req, res) => {
+  const query = `SELECT Company FROM CompanyMap`
+  connection.query(query, (err, results) => {
+    results = results.map(i => ({label: i.Company, value: i.Company}))
+    console.log(results)
+    res.send(results)
+  })
+})
+
+
+
 //todo: move this to seperate script, or delete entirely
 router.get('/deletePlaceholders', (req, res) => {
   const query = `SHOW TABLES`

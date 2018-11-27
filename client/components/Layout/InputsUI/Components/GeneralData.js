@@ -8,7 +8,7 @@ import AriaModal from 'react-aria-modal'
 
 import { setObjetivo, setAlcances, setTipoDeIntervenciones } from '../../../../redux/actions/intervencionesEstimulacion'
 import { setSubdireccion, setActivo, setCampo, setPozo, setFormacion, setFechaProgramadaIntervencion, setFromSaveFichaTecnicaHighLevel, setHasErrorsFichaTecnicaHighLevel, setIntervencionProgramada } from '../../../../redux/actions/pozo'
-import { setShowForms, setIsLoading, setTransactionID, setSaveName } from '../../../../redux/actions/global'
+import { setShowForms, setIsLoading, setTransactionID, setSaveName, setCompanyOptions } from '../../../../redux/actions/global'
 import { InputDate, InputRow, InputRowUnitless, InputRowSelectUnitless, TextAreaUnitless } from '../../Common/InputRow'
 import Notification from '../../Common/Notification'
 import Loading from '../../Common/Loading'
@@ -61,7 +61,7 @@ import ButtonGroup from './ButtonGroup'
   }
 
   componentDidMount(){
-    let { user, hasSubmitted } = this.props
+    let { user, hasSubmitted, setCompanyOptions } = this.props
     user = user.toJS()
     const { token, id } = user
     const headers = {
@@ -86,6 +86,14 @@ import ButtonGroup from './ButtonGroup'
         this.setState({
           proposalOptions: r
         })
+      })
+
+
+    fetch('/api/getCompanies', headers)
+      .then(r => r.json())
+      .then( r => {
+        console.log('yeee bitch', r)
+        setCompanyOptions(r)
       })
   }
 
@@ -640,6 +648,7 @@ const mapDispatchToProps = dispatch => ({
   setFromSaveFichaTecnicaHighLevel: obj => dispatch(setFromSaveFichaTecnicaHighLevel(obj)),
   setIntervencionProgramada: obj => dispatch(setIntervencionProgramada(obj)),
   setSaveName: obj => dispatch(setSaveName(obj)),
+  setCompanyOptions: val => dispatch(setCompanyOptions(val))
 })
 
 export default connect(mapStateToProps, mapDispatchToProps)(GeneralData)

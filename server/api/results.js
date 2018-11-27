@@ -314,7 +314,10 @@ export const createResults = async (body, action, cb) => {
 
           values.push([wellFormacionID, 'Treatment Graph', treatmentGraphImg, propuestaID, transactionID])
 
-          connection.query(values.length === 0 ? DUMMY_QUERY : INSERT_IMAGES_QUERY.submit, [values], (err, results) => {
+          console.log(values)
+
+
+          connection.query(values.length === 0 ? DUMMY_QUERY : INSERT_IMAGES_QUERY.submit, [values, values, values, values], (err, results) => {
             console.log('images', err)
             console.log('images', results)
             if (err) {
@@ -324,14 +327,6 @@ export const createResults = async (body, action, cb) => {
               })
             }
 
-            // let query = 
-            //   interventionType === 'estimulacion' 
-            //     ? INSERT_CEDULA_ESTIMULACION_QUERY.submit 
-            //     : interventionType === 'acido' 
-            //       ? INSERT_CEDULA_ACIDO_QUERY.submit 
-            //       : interventionType === 'apuntalado'
-            //         ? INSERT_CEDULA_APUNTALADO_QUERY.submit
-            //         : INSERT_CEDULA_TERMICO_QUERY.submit
             let query
             values = []
 
