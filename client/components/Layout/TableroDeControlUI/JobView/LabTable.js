@@ -62,6 +62,9 @@ import ReactTable from 'react-table'
         case 'determinacionDeLaCalidad':
           i.name = 'Determinación de la calidad método de los cloruros'
           break;
+        case 'curvaDeViscosidad':
+          i.name = 'Curva De Viscosidad'
+          break;
       }
       return i
     })
@@ -76,7 +79,7 @@ import ReactTable from 'react-table'
               return {
                 onClick: (e, handleOriginal) => {
                   if (rowInfo) {
-                    handleChange(rowInfo.original.id, rowInfo.original.name)
+                    handleChange(rowInfo.original.id, rowInfo.original.type)
                   }
                 
                 }

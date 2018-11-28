@@ -1,6 +1,7 @@
 import React, { Component } from 'react'
 import autobind from 'autobind-decorator'
 import { connect } from 'react-redux'
+import ReactTable from 'react-table'
 
 import WellSelect from '../Common/WellSelect'
 import JobSelect from '../Common/JobSelect'
@@ -17,6 +18,7 @@ import LabTable from './LabTable'
 import Export from './Export'
 import LocalModal from './../Common/LocalModal'
 import { generatePowerPoint } from '../../../../pptx';
+import { KPI } from '../Common/KPIs'
 
 @autobind class jobViewUI extends Component {
   constructor(props) {
@@ -36,6 +38,7 @@ import { generatePowerPoint } from '../../../../pptx';
       date: null,
       labData: [],
       specificLabData: [],
+      specificLab: null,
       estIncData: []
     }    
     this.cards = []
@@ -181,6 +184,7 @@ import { generatePowerPoint } from '../../../../pptx';
 
   async fetchLabData(id, type) {
     let { token } = this.props
+
     let specificLabQuery = `/job/getLabData?labID=${id}&type=${type}` 
     
     const headers = {
@@ -190,8 +194,10 @@ import { generatePowerPoint } from '../../../../pptx';
       }
     }
 
+
     this.setState({
-      specificLabData: []
+      specificLabData: [],
+      specificLab: id
     })
 
       fetch(specificLabQuery, headers)
@@ -207,7 +213,6 @@ import { generatePowerPoint } from '../../../../pptx';
 
 
   async fetchData() {
-  	console.log('fetching')
     let { globalAnalysis, token } = this.props
     globalAnalysis = globalAnalysis.toJS()
     let { job, jobType } = globalAnalysis
@@ -326,7 +331,6 @@ import { generatePowerPoint } from '../../../../pptx';
   makeImages() {
     let { imageData } = this.state
 
-    console.log('im hereeeeee', imageData)
     if (imageData && Object.keys(imageData).length > 0) {
 
       let out = Object.keys(imageData).map(i => {
@@ -349,6 +353,203 @@ import { generatePowerPoint } from '../../../../pptx';
       return <div>hi</div>
     }
   } 
+
+  makeLabModal() {
+    let { specificLabData, specificLab, labData } = this.state
+
+
+
+    let lab = labData.find(i => i.id === specificLab)
+
+    console.log(lab)
+    console.log(specificLabData)
+
+    lab = lab ? lab : {}
+
+    let columns
+    switch(lab.type) {
+        case 'pruebasDeCompatibilidad':
+          columns = [
+                {
+                  Header: 'Diseño',
+                  accessor: 'DISENO',
+                }, {
+                  Header: 'Sistema',
+                  accessor: 'SISTEMA',
+                }, {
+                  Header: 'Aceite del pozo',
+                  accessor: 'ACEITE_DEL_POZO',
+                }, {
+                  Header: 'Tiempo de Rompimiento',
+                  accessor: 'TIEMPO_DE_POMPIMIENTO',
+                }, {
+                  Header: 'Separación de fases',
+                  accessor: 'SEPARACION_DE_FASES',
+                }, { 
+                  Header: 'Solidos',
+                  accessor: 'SOLIDOS',
+                }, {
+                  Header: 'Condición',
+                  accessor: 'CONDICION',
+                }
+              ]
+          return (
+          <div>
+            <div>
+              {lab.name}
+            </div>
+            <KPI className='kpi' header='Compania' value={lab.compania}/>
+            <KPI className='kpi' header='Superviso' value={lab.superviso}/>
+            <KPI className='kpi' header='Observaciones' type={'wide'} value={lab.observaciones}/>
+            <ReactTable
+              className="-striped"
+              data={specificLabData}
+              columns={columns}
+              showPagination={false}
+              showPageSizeOptions={false}
+              pageSize={specificLabData.length}
+              sortable={false}
+            />
+          </div>
+          )
+        break;
+        case 'caracterizacionFisico':
+          return (
+          <div>
+            <div>
+              {lab.name}
+            </div>
+            <KPI className='kpi' header='Determinación del porcentaje de aceite' value={specificLabData.length > 0 ? specificLabData[0].PORENTAJE_DE_ACEITE : null} unit='%' />
+            <KPI className='kpi' header='Determinación del porcentaje de agua' value={specificLabData.length > 0 ? specificLabData[0].PORENTAJE_DE_AGUA : null} unit='%' />
+            <KPI className='kpi' header='Determinación del porcentaje de emulsión' value={specificLabData.length > 0 ? specificLabData[0].PORENTAJE_DE_EMULSION : null} unit='%' />
+            <KPI className='kpi' header='Determinación del porcentaje de sólidos' value={specificLabData.length > 0 ? specificLabData[0].PORENTAJE_DE_SOLIDOS : null} unit='%' />
+            <KPI className='kpi' header='Determinación del porcentaje de asfaltenos' value={specificLabData.length > 0 ? specificLabData[0].PORENTAJE_DE_ASFALTENOS : null} unit='%' />
+            <KPI className='kpi' header='Determinación del porcentaje de parafinas' value={specificLabData.length > 0 ? specificLabData[0].PORENTAJE_DE_PARAFINAS : null} unit='%' />
+            <KPI className='kpi' header='Determinación del porcentaje de resinas asfalticas' value={specificLabData.length > 0 ? specificLabData[0].PORENTAJE_DE_RESINAS_ASFALTICAS : null} unit='%' />
+            <KPI className='kpi' header='Determinación del porcentaje de contenido de sólidos' value={specificLabData.length > 0 ? specificLabData[0].PORENTAJE_DE_CONTENIDO_DE_SOLIDOS : null} unit='%' />
+            <KPI className='kpi' header='Densidad del aceite' value={specificLabData.length > 0 ? specificLabData[0].DENSIDAD_DEL_ACEITE : null} unit={<div>gr/cm<sup>3</sup></div>} />
+            <KPI className='kpi' header='Densidad del agua' value={specificLabData.length > 0 ? specificLabData[0].DENSIDAD_DEL_AGUA : null} unit={<div>gr/cm<sup>3</sup></div>} />
+            <KPI className='kpi' header='Densidad de la emulsión' value={specificLabData.length > 0 ? specificLabData[0].DENSIDAD_DE_LA_EMULSION : null} unit={<div>gr/cm<sup>3</sup></div>} />
+            <KPI className='kpi' header='Viscosidad del aceite' value={specificLabData.length > 0 ? specificLabData[0].VISCOSIDAD_DEL_ACEITE : null} unit='cp' />
+            <KPI className='kpi' header='Viscosidad de la emulsión' value={specificLabData.length > 0 ? specificLabData[0].VISCOSIDAD_DE_LA_EMULSION : null} unit='cp' />
+            <KPI className='kpi' header='pH del agua' value={specificLabData.length > 0 ? specificLabData[0].PH_DEL_AGUA : null} unit='adim' />
+            <KPI className='kpi' header='Salinidad del agua' value={specificLabData.length > 0 ? specificLabData[0].SALINIDAD_DEL_AGUA : null} unit='ppm' />
+            <KPI className='kpi' header='Salinidad del aceite' value={specificLabData.length > 0 ? specificLabData[0].SALINIDAD_DEL_ACEITE : null} unit='ppm' />
+            <KPI className='kpi' header='Compania' value={lab.compania}/>
+            <KPI className='kpi' header='Superviso' value={lab.superviso}/>
+            <KPI className='kpi' header='Observaciones' type={'wide'} value={lab.observaciones}/>
+          </div>
+          )
+        break;
+        case 'pruebasGelDeFractura':
+          return (
+          <div>
+            <div>
+              {lab.name}
+            </div>
+            <KPI className='kpi' header='Hidratación del fluido' value={specificLabData.length > 0 ? specificLabData[0].HIDRATACION : null} unit='' />
+            <KPI className='kpi' header='Tiempo de activación del gel' value={specificLabData.length > 0 ? specificLabData[0].TIEMPO_DE_ACTIVACION_DEL_GEL : null} unit='adim' />
+            <KPI className='kpi' header='Determinación de pH' value={specificLabData.length > 0 ? specificLabData[0].DETERMINACION_DE_PH : null} unit='psi' />
+            <KPI className='kpi' header='Tiempo de rompimiento' value={specificLabData.length > 0 ? specificLabData[0].TIEMPO_DE_ROMPIMIENTO : null} unit='mins' />
+            <KPI className='kpi' header='Dosificación de quebradores' value={specificLabData.length > 0 ? specificLabData[0].DOSIFICATION_DE_QUEBRADORES : null} unit='adim' />
+            <KPI className='kpi' header='Viscosidad del gel de fractura' value={specificLabData.length > 0 ? specificLabData[0].VISCOSIDAD_DEL_GEL_DE_FRACTURA : null} unit='adim' />
+            <KPI className='kpi' header='Compania' value={lab.compania}/>
+            <KPI className='kpi' header='Superviso' value={lab.superviso}/>
+            <KPI className='kpi' header='Observaciones' type={'wide'} value={lab.observaciones}/>
+          </div>
+          )
+        break;
+        case 'pruebasDeSolubilidad':
+          return (
+          <div>
+            <div>
+              {lab.name}
+            </div>
+            <KPI className='kpi' header='Tipo de muestra' value={specificLabData.length > 0 ? specificLabData[0].TIPO_DE_MUESTRA : null} unit='' />
+            <KPI className='kpi' header='Peso de la muestra' value={specificLabData.length > 0 ? specificLabData[0].PESO_DE_LA_MUESTRA : null} unit='gr' />
+            <KPI className='kpi' header='Tipo de sistema químico empleado' value={specificLabData.length > 0 ? specificLabData[0].TIPO_DE_SISTEMA_QUIMICO : null} unit='' />
+            <KPI className='kpi' header='Peso final de la muestra' value={specificLabData.length > 0 ? specificLabData[0].PESO_FINAL_DE_LA_MUESTRA : null} unit='gr' />
+            <KPI className='kpi' header='Solubilidad' value={specificLabData.length > 0 ? specificLabData[0].SOLUBILIDAD : null} unit='%' />
+            <KPI className='kpi' header='Compania' value={lab.compania}/>
+            <KPI className='kpi' header='Superviso' value={lab.superviso}/>
+            <KPI className='kpi' header='Observaciones' type={'wide'} value={lab.observaciones}/>
+          </div>
+          )
+        break;
+        case 'pruebasParaApuntalante':
+          return (
+          <div>
+            <div>
+              {lab.name}
+            </div>
+            <KPI className='kpi' header='Esfericidad' value={specificLabData.length > 0 ? specificLabData[0].ESFERICIDAD : null} unit='adim' />
+            <KPI className='kpi' header='Redondez' value={specificLabData.length > 0 ? specificLabData[0].REDONDEZ : null} unit='adim' />
+            <KPI className='kpi' header='Resistencia a la compresión' value={specificLabData.length > 0 ? specificLabData[0].RESISTENCIA_A_LA_COMPRESION : null} unit='psi' />
+            <KPI className='kpi' header='Malla' value={specificLabData.length > 0 ? specificLabData[0].MALLA : null} unit='' />
+            <KPI className='kpi' header='Aglutinamiento' value={specificLabData.length > 0 ? specificLabData[0].AGLUTINAMIENTO : null} unit='adim' />
+            <KPI className='kpi' header='Turbidez' value={specificLabData.length > 0 ? specificLabData[0].TURBIDEZ : null} unit='adim' />
+            <KPI className='kpi' header='Solubilidad' value={specificLabData.length > 0 ? specificLabData[0].SOLUBILIDAD : null} unit='%' />
+            <KPI className='kpi' header='Compania' value={lab.compania}/>
+            <KPI className='kpi' header='Superviso' value={lab.superviso}/>
+            <KPI className='kpi' header='Observaciones' type={'wide'} value={lab.observaciones}/>
+          </div>
+          )
+        break;
+        case 'pruebasDeGrabado':
+          columns = [
+            {
+              Header: 'Sistema Ácido',
+              accessor: 'SISTEMA_ACIDO',
+            }, {
+              Header: <div>Tiempo de contacto<br></br>(min)</div>,
+              accessor: 'TIEMPO_DE_CONTACTO',
+            }, {
+              Header: 'Grabado',
+              accessor: 'GRABADO',
+            }
+          ]
+
+          return (
+          <div>
+            <div>
+              {lab.name}
+            </div>
+            <KPI className='kpi' header='Compania' value={lab.compania}/>
+            <KPI className='kpi' header='Superviso' value={lab.superviso}/>
+            <KPI className='kpi' header='Observaciones' type={'wide'} value={lab.observaciones}/>
+            <ReactTable
+              className="-striped"
+              data={specificLabData}
+              columns={columns}
+              showPagination={false}
+              showPageSizeOptions={false}
+              pageSize={specificLabData.length}
+              sortable={false}
+            />
+          </div>
+          )
+        break;
+        case 'cromatografiaDelGas':
+        case 'pruebaDeDureza':
+        case 'determinacionDeLaCalidad':
+        case 'curvaDeViscosidad':
+        return (
+          <div>
+            <div>
+              {lab.name}
+            </div>
+            <KPI className='kpi' header='Compania' value={lab.compania}/>
+            <KPI className='kpi' header='Superviso' value={lab.superviso}/>
+            <KPI className='kpi' header='Observaciones' type={'wide'} value={lab.observaciones}/>
+          </div>
+          )
+        break;
+        default:
+          return (
+            <div></div>
+            )
+    }
+  }
 
   render() {
     let { fieldWellOptions, jobOptions, imageData, costData, estCostData, volumeData, estIncData, estVolumeData, cedulaData, cedulaResultData, date, aforoData, interventionData, interventionResultsData, labData, specificLabData } = this.state
@@ -541,6 +742,9 @@ import { generatePowerPoint } from '../../../../pptx';
               {this.makeImages()}
             </Card> 
           </CardDeck>
+          <div>
+            {this.makeLabModal()}
+          </div>
           <div style={{height: '500px'}}/>
         </div>
       </div>

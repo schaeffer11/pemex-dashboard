@@ -690,7 +690,7 @@ router.get('/getLabData', (req, res) => {
     query = `select * from IntervencionesLabTestsPruebasDeCompatibilidad where LAB_ID = ?`
   }
   else if (type === 'pruebasDeGrabado') {
-    query = `select * from IntervencionesLabTestsPrueasDeGrabado where LAB_ID = ?`
+    query = `select * from IntervencionesLabTestsPruebasDeGrabado where LAB_ID = ?`
   }
   else if (type === 'pruebasDeSolubilidad') {
     query = `select * from IntervencionesLabTestsPruebasDeSolubilidad where LAB_ID = ?`
