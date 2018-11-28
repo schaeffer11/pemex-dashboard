@@ -1431,7 +1431,7 @@ export const create = async (body, action, cb) => {
                       values = []
 
                       presionDataCampo.forEach(i => {
-                        let newRow = [wellFormacionID, i.fecha, i.Pws, pressureDepthCampo, transactionID]
+                        let newRow = [fieldFormacionID, i.fecha, i.Pws, pressureDepthCampo, transactionID]
                         if (action === 'save') {
                           newRow.push(i.error)
                           newRow.push(finalObj.historicoDePresion.hasErrorsCampo === true ? 1 : 0)
