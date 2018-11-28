@@ -15,7 +15,7 @@ import { create as createWell, getFields, getWell, getSurveys,
             getInterventionEsimulacion, getInterventionAcido, getInterventionApuntalado,
             getInterventionTermico, getCedulaTermico, 
             getLabTest, getCedulaEstimulacion, getCedulaAcido, getCedulaApuntalado, 
-            getCosts, getInterventionImages } from './pozo'
+            getCosts, getInterventionImages, deleteSave } from './pozo'
 
 
 import { create as createCompromiso, mine as myCompromisos, collection as getCompromisos, get as getCompromiso, put as updateCompromiso } from './compromisos';
@@ -314,6 +314,18 @@ router.get('/ping', (req, res) => {
   res.json({ response: 'pong' })
 })
 
+
+router.get('/deleteSave', (req, res) => {
+  let { transactionID } = req.query
+
+  console.log('deleting save')
+
+  deleteSave(transactionID, (data) => {
+    console.log('deleted save')
+    console.log(data)
+    res.json({complete2: true})
+  })
+})
 
 router.post('/comment', (req, res) => {
   let { comment, page, user } = req.body

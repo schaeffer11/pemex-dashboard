@@ -27,6 +27,7 @@ import ButtonGroup from './ButtonGroup'
       selectedProposal: null,
       selectedSave: null,
       selectedSaveName: null,
+      deleteVal: null,
       errors: {
         subdireccion: {
           type: 'number',
@@ -70,6 +71,7 @@ import ButtonGroup from './ButtonGroup'
         'content-type': 'application/json',
       },
     }
+
     let hasErrors = this.checkAllInputs(hasSubmitted)
     setHasErrorsFichaTecnicaHighLevel(hasErrors)
     fetch(`/api/getAllSaves?userID=${id}`, headers)
@@ -223,7 +225,7 @@ import ButtonGroup from './ButtonGroup'
   }
 
   buildModal() {
-    let { saveOptions, selectedSave } = this.state
+    let { saveOptions, selectedSave, selectedSaveName, deleteVal } = this.state
 
     return (
       <AriaModal
@@ -233,7 +235,7 @@ import ButtonGroup from './ButtonGroup'
         verticallyCenter={true}
         focusDialog={true}
         dialogClass="queryModalPartialReset"
-        dialogStyle={{verticalAlign: '', textAlign: 'center', maxHeight: '80%', marginTop: '2%'}}
+        dialogStyle={{verticalAlign: '', textAlign: 'center', maxHeight: '80%', marginTop: '130px'}}
 
       >
       <div className="modalTest" >
@@ -254,6 +256,14 @@ import ButtonGroup from './ButtonGroup'
             </div>
         </div> 
         <button disabled={!selectedSave} className="submit submit-load" onClick={this.handleLoad}>Descargar borrador</button>
+        <br/>
+        <div>  - OR - </div>
+        <div> Delete Save </div>
+        <div> To be able to delete you must type the name of the save in</div>
+        <input value={deleteVal} onChange={e => this.setState({deleteVal: e.target.value})}/>
+        <br/>
+        <button style={{background: '#b22222'}} disabled={!selectedSave || selectedSaveName !== deleteVal} className="submit submit-load" onClick={this.deleteSave}>Delete borrador</button>
+        
       </div>
       </AriaModal>
     )
@@ -548,6 +558,7 @@ import ButtonGroup from './ButtonGroup'
       })
     })
 
+
     const allImages = await fetch(`api/getImages?transactionID=${transactionID}&saved=1`, headers).then(r => r.json())
     newState = handleImagesFromServer(allImages, newState)
 
@@ -559,6 +570,49 @@ import ButtonGroup from './ButtonGroup'
     })
     setSaveName(selectedSaveName)
     this.props.loadFromSave(newState)
+  }
+
+
+
+  deleteSave() {
+    let { selectedSave, selectedSaveName } = this.state
+    let { user, setLoading } = this.props
+
+
+    setLoading({ isLoading: true, loadText: 'Deleting' })
+    user = user.toJS()
+
+    const { token, id } = user
+    const headers = {
+      headers: {
+        'Authorization': `Bearer ${token}`,
+        'content-type': 'application/json',
+      },
+    }
+
+    fetch(`/api/deleteSave?transactionID=${selectedSave}`, headers)
+      .then(res => res.json())
+      .then(res => {
+
+        fetch(`/api/getAllSaves?userID=${id}`, headers)
+          .then(r => r.json())
+          .then( r => {
+
+            setLoading({ 
+              isLoading: false,
+              showNotification: true,
+              notificationType: 'success',
+              notificationText: `Successfully deleted`
+            })
+
+            this.setState({
+              saveOptions: r,
+              selectedSave: null,
+              deleteVal: null,
+              selectedSaveName: null
+            })
+          })
+    })
   }
 
   handleSelectFormType(val) {
@@ -576,9 +630,10 @@ import ButtonGroup from './ButtonGroup'
   }
 
   render() {
-    let { isOpen, selectedSave, formType, selectedProposal } = this.state
+    let { isOpen, selectedSave, formType, selectedProposal, deleteVal } = this.state
     let { setShowForms } = this.props
 
+    console.log(deleteVal)
     return (
       <div className='general-data-outer'>
         <div className='banner image' style={{backgroundImage:'url(/images/homepageBannerThin2.jpg)'}}></div>

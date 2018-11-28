@@ -902,6 +902,24 @@ export const getInterventionImages = async (transID, action, cb) => {
     })
 }
 
+export const deleteSave = async (transID, cb) => {
+
+    let values = []
+    for (let i = 0; i < 48; i++) {
+      values.push(transID)
+    }
+
+    console.log(DELETE_QUERY, values)
+    connection.query(DELETE_QUERY, values, (err, results) => {
+        if (err) {
+            cb({err: 'true'})
+        }
+        else {
+            cb({results: results})
+        }
+    })
+}
+
 async function loopAndDelete(images) {
   const filteredData = images.filter(well => well.IMG_URL !== null && well.IMG_URL !== '')
   const deletedArray = []
