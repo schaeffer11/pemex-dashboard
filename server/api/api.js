@@ -488,10 +488,14 @@ router.get('/getFormationTypes', (req, res) => {
 })
 
 router.get('/getJobs', (req, res) => {
-    let { well } = req.query
+    let { well, lowDate, highDate } = req.query
+    const query = `SELECT * FROM Intervenciones inter
+    JOIN TransactionsResults tr on inter.TRANSACTION_ID = tr.PROPUESTA_ID
+    WHERE inter.WELL_FORMACION_ID = ? AND tr.FECHA_INTERVENCION >= ? AND tr.FECHA_INTERVENCION <= ?`
+    
+    // JOIN TransactionsResults tr on t.TRANSACTION_ID = tr.PROPUESTA_ID
 
-    connection.query(`SELECT * FROM Intervenciones WHERE WELL_FORMACION_ID = ?`, well, (err, results) => {
-
+    connection.query(query, [well, lowDate, highDate], (err, results) => {
       res.json(results)
     })
 })
@@ -577,7 +581,9 @@ router.get('/filterOptions', async (req, res) => {
       query += `\nJOIN ${selectMap[q].joinStatement}`
     }
     query += `\nWHERE 1 = 1 ${whereMap[q].query.join(' ')}`
-    return queryPromise(q, query, whereMap[q].values)
+    return queryPromise(q, query, whereMap[q].values).catch(e => {
+      return e
+    })
   })
   const results = await Promise.all(promises)
   res.json(results)

@@ -14,9 +14,11 @@ import { CardDeck } from 'reactstrap';
 import AforoScatter from './AforoScatter'
 import CedulaTable from './CedulaTable'
 import LabTable from './LabTable'
+import TimeSlider from '../TimeSeries/TimeSlider'
 import LocalModal from './../Common/LocalModal'
 import Filters from './../Common/Filters'
 import ExportPptx from './ExportPptx';
+import { convertLowDate, convertHighDate } from '../../../../lib/formatters';
 
 @autobind class jobViewUI extends Component {
   constructor(props) {
@@ -136,11 +138,13 @@ import ExportPptx from './ExportPptx';
   fetchJobs() {
     let { globalAnalysis } = this.props
     globalAnalysis = globalAnalysis.toJS()
-    let { well } = globalAnalysis
-
+    let { well, lowDate, highDate } = globalAnalysis
+    lowDate = convertLowDate(globalAnalysis.lowDate)
+    highDate = convertHighDate(globalAnalysis.highDate)
+    console.log('fetching jobs')
     let { token } = this.props
 
-    fetch(`/api/getJobs?well=${well}`, {
+    fetch(`/api/getJobs?well=${well}&lowDate=${lowDate}&highDate=${highDate}`, {
       headers: {
         'Authorization': `Bearer ${token}`,
         'content-type': 'application/json',
@@ -148,6 +152,7 @@ import ExportPptx from './ExportPptx';
     })
       .then(r => r.json())
       .then(r => {
+        console.log('what are these', r)
         let jobs = []
 
         r = r.sort((a, b) => {
@@ -450,6 +455,7 @@ import ExportPptx from './ExportPptx';
     return (
       <div className="data job-view">
         <div className='content tablero-content'>
+          <TimeSlider />
          <div className='selectors'>
             <WellSelect fieldWellOptions={fieldWellOptions}/>
             <JobSelect options={jobOptions}/>

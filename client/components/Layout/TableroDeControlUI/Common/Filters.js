@@ -41,14 +41,14 @@ import GroupBy from './GroupBy'
       console.log('something changed')
       const data = await fetchFilterData(token, globalAnalysis)
       const newOptions = buildFiltersOptions(data)
-      console.log('new options', newOptions)
-      const singleValuesFromOptions = {}
-      Object.keys(newOptions).forEach(key => {
-        const arr = newOptions[key]
-        if (arr.length === 1) {
-          singleValuesFromOptions[key] = arr[0].value
-        }
-      })
+      // Re-add if you want things to be auto selected
+      // const singleValuesFromOptions = {}
+      // Object.keys(newOptions).forEach(key => {
+      //   const arr = newOptions[key]
+      //   if (arr.length === 1) {
+      //     singleValuesFromOptions[key] = arr[0].value
+      //   }
+      // })
       // if (Object.keys(singleValuesFromOptions).length > 0) {
       //   mergeGeneralAnalysis(singleValuesFromOptions)
       // }
