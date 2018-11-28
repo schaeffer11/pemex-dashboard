@@ -2,6 +2,7 @@ import React, { Component } from 'react'
 import autobind from 'autobind-decorator'
 import { connect } from 'react-redux'
 import ReactTable from 'react-table'
+import AriaModal from 'react-aria-modal'
 
 import WellSelect from '../Common/WellSelect'
 import JobSelect from '../Common/JobSelect'
@@ -39,7 +40,8 @@ import { KPI } from '../Common/KPIs'
       labData: [],
       specificLabData: [],
       specificLab: null,
-      estIncData: []
+      estIncData: [],
+      isOpen: false
     }    
     this.cards = []
     for (let i = 0; i < 7; i += 1) {
@@ -197,7 +199,8 @@ import { KPI } from '../Common/KPIs'
 
     this.setState({
       specificLabData: [],
-      specificLab: id
+      specificLab: id,
+      isOpen: true
     })
 
       fetch(specificLabQuery, headers)
@@ -551,8 +554,46 @@ import { KPI } from '../Common/KPIs'
     }
   }
 
+  deactivateModal() {
+    this.setState({
+      isOpen: false,
+    })
+  }
+
+  activateModal() {
+    this.setState({
+      isOpen: true,
+    })
+  }
+
+
+    buildModal() {
+    return (
+      <AriaModal
+        titleId="save-modal"
+        onExit={this.deactivateModal}
+        underlayClickExits={true}
+        verticallyCenter={true}
+        focusDialog={true}
+        dialogClass="queryModalPartialReset"
+        dialogStyle={{verticalAlign: '', textAlign: 'center', maxHeight: '80%', marginTop: '2%'}}
+
+      >
+      <div className="modalTest" >
+        <div className="modal-title">
+          Lab Test Data
+        </div>
+        <div className="modal-body" >
+          {this.makeLabModal()}
+        </div> 
+
+      </div>
+      </AriaModal>
+    )
+  }
+
   render() {
-    let { fieldWellOptions, jobOptions, imageData, costData, estCostData, volumeData, estIncData, estVolumeData, cedulaData, cedulaResultData, date, aforoData, interventionData, interventionResultsData, labData, specificLabData } = this.state
+    let { fieldWellOptions, jobOptions, imageData, costData, estCostData, volumeData, estIncData, estVolumeData, cedulaData, cedulaResultData, date, aforoData, interventionData, interventionResultsData, labData, specificLabData, isOpen } = this.state
     let { globalAnalysis } = this.props
 
     globalAnalysis = globalAnalysis.toJS()
@@ -658,13 +699,6 @@ import { KPI } from '../Common/KPIs'
       
     })
 
-
-
-
-
-
-
-
     let cedulaExportData = this.makeCedulaExportData(cedulaData)
     let cedulaResultExportData = this.makeCedulaExportData(cedulaResultData)
     let labExportData = this.makeLabExportData(labDataFixed)
@@ -742,9 +776,7 @@ import { KPI } from '../Common/KPIs'
               {this.makeImages()}
             </Card> 
           </CardDeck>
-          <div>
-            {this.makeLabModal()}
-          </div>
+          { isOpen ? this.buildModal() : null }
           <div style={{height: '500px'}}/>
         </div>
       </div>
