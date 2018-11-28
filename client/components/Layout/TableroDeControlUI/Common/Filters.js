@@ -49,9 +49,9 @@ import GroupBy from './GroupBy'
           singleValuesFromOptions[key] = arr[0].value
         }
       })
-      if (Object.keys(singleValuesFromOptions).length > 0) {
-        mergeGeneralAnalysis(singleValuesFromOptions)
-      }
+      // if (Object.keys(singleValuesFromOptions).length > 0) {
+      //   mergeGeneralAnalysis(singleValuesFromOptions)
+      // }
       setGeneralFilters(newOptions)
     }
   }
