@@ -14,8 +14,8 @@ import { CardDeck } from 'reactstrap';
 import AforoScatter from './AforoScatter'
 import CedulaTable from './CedulaTable'
 import LabTable from './LabTable'
-import Export from './ExportPptx'
 import LocalModal from './../Common/LocalModal'
+import Filters from './../Common/Filters'
 import ExportPptx from './ExportPptx';
 
 @autobind class jobViewUI extends Component {
@@ -455,9 +455,14 @@ import ExportPptx from './ExportPptx';
             <JobSelect options={jobOptions}/>
           </div>
           <KPIs estData={estCostData} data={costData} estIncData={estIncData}/>
-          <LocalModal title="Menu de Exportación">
-            <ExportPptx />
-          </LocalModal>
+          <div className="filtersAndExport">
+            <LocalModal title="Filtros">
+              <Filters />
+            </LocalModal>
+            <LocalModal title="Menu de Exportación">
+              <ExportPptx />
+            </LocalModal>
+          </div>
           <CardDeck className="content-deck">
             <Card
                 id="cedula"

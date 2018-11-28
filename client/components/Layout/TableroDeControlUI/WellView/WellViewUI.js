@@ -15,6 +15,9 @@ import LayerTable from './LayerTable'
 import ZoneTable from './ZoneTable'
 import LocalModal from './../Common/LocalModal'
 import ExportExcel from './ExportExcel'
+import Filters from './../Common/Filters'
+import TimeSlider from '../TimeSeries/TimeSlider'
+import { fetchFilterData } from '../../../../lib/filters'
 
 @autobind class wellViewUI extends Component {
   constructor(props) {
@@ -270,8 +273,11 @@ import ExportExcel from './ExportExcel'
     }
   }
 
-  componentDidMount() {
-  	this.fetchData()
+  async componentDidMount() {
+    this.fetchData()
+    const { globalAnalysis, token } = this.props
+    const data = await fetchFilterData(token, globalAnalysis)
+    console.log('hahahahahha', data)
   }
 
   componentDidUpdate(prevProps) {
@@ -318,15 +324,17 @@ import ExportExcel from './ExportExcel'
 
     return (
       <div className="data well-view">
-        <div className='header'>
-          <div className='selectors'>
-            <WellSelect fieldWellOptions={fieldWellOptions}/>
-          </div>
-        </div>
         <div className='content'>
-          <LocalModal title="Menu de Exportación">
-            <ExportExcel />
-          </LocalModal>
+          <TimeSlider />
+          <div className="filtersAndExport">
+            <LocalModal title="Filtros">
+              <Filters />
+            </LocalModal>
+            <LocalModal title="Menu de Exportación">
+              <ExportExcel />
+            </LocalModal>
+          </div>
+          <WellSelect fieldWellOptions={fieldWellOptions}/>
           <CardDeck className="content-deck">
             <Card
                 id="kpis"
