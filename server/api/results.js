@@ -306,13 +306,13 @@ export const createResults = async (body, action, cb) => {
           values = []
           if (interventionType !== 'termico') {
             geometria.forEach(i => {
-                let name = 'geometry ' + i.intervalo
+                let name = 'Geometría ' + i.intervalo
                 let newRow = [wellFormacionID, name, i.imgName, propuestaID, transactionID]
                 values.push(newRow)
             })
           }
 
-          values.push([wellFormacionID, 'Treatment Graph', treatmentGraphImg, propuestaID, transactionID])
+          values.push([wellFormacionID, 'Gráfica de Tratamiento', treatmentGraphImg, propuestaID, transactionID])
 
           console.log(values)
 

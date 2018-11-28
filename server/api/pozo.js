@@ -1048,7 +1048,6 @@ export const create = async (body, action, cb) => {
 
   let wellLogFile = finalObj.evaluacionPetrofisica.imgName
   let wellBoreFile = finalObj.mecanicoYAparejoDeProduccion.imgName
-  let sistemasArtificialesFile = finalObj.sistemasArtificialesDeProduccion.imgName
 
   let labResultsFile
   let simResultsFile
@@ -1526,9 +1525,8 @@ export const create = async (body, action, cb) => {
                               }
 
                               values = [
-                                [wellFormacionID, 'Well Log', wellLogFile, transactionID],
-                                [wellFormacionID, 'Well Bore Diagram', wellBoreFile, transactionID],
-                                [wellFormacionID, 'Sistemas Artificiales', sistemasArtificialesFile, transactionID]
+                                [wellFormacionID, 'Evaluación Petrofísica', wellLogFile, transactionID],
+                                [wellFormacionID, 'Edo. Mecánico', wellBoreFile, transactionID],
                               ]
 
                               connection.query((action === 'save' ? INSERT_WELL_IMAGE_QUERY.save : INSERT_WELL_IMAGE_QUERY.submit), [values], (err, results) => {
@@ -1804,8 +1802,8 @@ export const create = async (body, action, cb) => {
                                               }
 
                                               imageValues = imageValues.concat([
-                                                [interventionID, 'Est Inc Prod', incProdFile, transactionID],
-                                                [interventionID, 'Simulation Results', simResultsFile, transactionID]
+                                                [interventionID, 'Est. Inc. Prod.', incProdFile, transactionID],
+                                                [interventionID, 'Simulaciones', simResultsFile, transactionID]
                                               ])
 
 
