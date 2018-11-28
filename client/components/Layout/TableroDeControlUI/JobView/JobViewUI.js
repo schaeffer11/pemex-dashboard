@@ -15,9 +15,11 @@ import { CardDeck } from 'reactstrap';
 import AforoScatter from './AforoScatter'
 import CedulaTable from './CedulaTable'
 import LabTable from './LabTable'
-import Export from './Export'
+import TimeSlider from '../TimeSeries/TimeSlider'
 import LocalModal from './../Common/LocalModal'
-import { generatePowerPoint } from '../../../../pptx';
+import Filters from './../Common/Filters'
+import ExportPptx from './ExportPptx';
+import { convertLowDate, convertHighDate } from '../../../../lib/formatters';
 import { KPI } from '../Common/KPIs'
 
 @autobind class jobViewUI extends Component {
@@ -141,11 +143,13 @@ import { KPI } from '../Common/KPIs'
   fetchJobs() {
     let { globalAnalysis } = this.props
     globalAnalysis = globalAnalysis.toJS()
-    let { well } = globalAnalysis
-
+    let { well, lowDate, highDate } = globalAnalysis
+    lowDate = convertLowDate(globalAnalysis.lowDate)
+    highDate = convertHighDate(globalAnalysis.highDate)
+    console.log('fetching jobs')
     let { token } = this.props
 
-    fetch(`/api/getJobs?well=${well}`, {
+    fetch(`/api/getJobs?well=${well}&lowDate=${lowDate}&highDate=${highDate}`, {
       headers: {
         'Authorization': `Bearer ${token}`,
         'content-type': 'application/json',
@@ -153,6 +157,7 @@ import { KPI } from '../Common/KPIs'
     })
       .then(r => r.json())
       .then(r => {
+        console.log('what are these', r)
         let jobs = []
 
         r = r.sort((a, b) => {
@@ -640,21 +645,6 @@ import { KPI } from '../Common/KPIs'
 
     globalAnalysis = globalAnalysis.toJS()
     let { job, jobType } = globalAnalysis
-
-    // console.log('images', imageData)
-    // console.log('costs', costData)
-    // console.log('est costs', estCostData)
-    // console.log('cedula', cedulaData)
-    // console.log('cedula results', cedulaResultData)
-    // console.log('intervention', interventionData)
-    // console.log('intervention results', interventionResultsData)
-    // console.log('aforo data', aforoData)
-    // console.log('date', date)
-    // console.log('labData', labData)
-    // console.log('specificLabData', specificLabData)
-    // console.log('estIncData', estIncData)
-
-
     let simulationData = []
     let hide = false
     interventionData ? interventionData = interventionData[0] : null
@@ -749,14 +739,20 @@ import { KPI } from '../Common/KPIs'
     return (
       <div className="data job-view">
         <div className='content tablero-content'>
+          <TimeSlider />
          <div className='selectors'>
             <WellSelect fieldWellOptions={fieldWellOptions}/>
             <JobSelect options={jobOptions}/>
           </div>
           <KPIs estData={estCostData} data={costData} estIncData={estIncData}/>
-          <LocalModal title="Menu de Exportación">
-            <Export />
-          </LocalModal>
+          <div className="filtersAndExport">
+            <LocalModal title="Filtros">
+              <Filters />
+            </LocalModal>
+            <LocalModal title="Menu de Exportación">
+              <ExportPptx />
+            </LocalModal>
+          </div>
           <CardDeck className="content-deck">
             <Card
                 id="cedula"

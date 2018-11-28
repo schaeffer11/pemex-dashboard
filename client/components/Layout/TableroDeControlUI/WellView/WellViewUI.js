@@ -11,9 +11,13 @@ import KPIMecanico from './KPIMecanico'
 import Images from './Images'
 import Card from '../Common/Card'
 import { CardDeck } from 'reactstrap';
-import { generatePowerPoint } from '../../../../pptx';
 import LayerTable from './LayerTable'
 import ZoneTable from './ZoneTable'
+import LocalModal from './../Common/LocalModal'
+import ExportExcel from './ExportExcel'
+import Filters from './../Common/Filters'
+import TimeSlider from '../TimeSeries/TimeSlider'
+import { fetchFilterData } from '../../../../lib/filters'
 
 @autobind class wellViewUI extends Component {
   constructor(props) {
@@ -269,8 +273,11 @@ import ZoneTable from './ZoneTable'
     }
   }
 
-  componentDidMount() {
-  	this.fetchData()
+  async componentDidMount() {
+    this.fetchData()
+    const { globalAnalysis, token } = this.props
+    const data = await fetchFilterData(token, globalAnalysis)
+    console.log('hahahahahha', data)
   }
 
   componentDidUpdate(prevProps) {
@@ -317,12 +324,17 @@ import ZoneTable from './ZoneTable'
 
     return (
       <div className="data well-view">
-        <div className='header'>
-          <div className='selectors'>
-            <WellSelect fieldWellOptions={fieldWellOptions}/>
-          </div>
-        </div>
         <div className='content'>
+          <TimeSlider />
+          <div className="filtersAndExport">
+            <LocalModal title="Filtros">
+              <Filters />
+            </LocalModal>
+            <LocalModal title="Menu de Exportación">
+              <ExportExcel />
+            </LocalModal>
+          </div>
+          <WellSelect fieldWellOptions={fieldWellOptions}/>
           <CardDeck className="content-deck">
             <Card
                 id="kpis"
