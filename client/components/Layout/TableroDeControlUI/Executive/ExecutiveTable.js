@@ -1,21 +1,40 @@
-import React, { PureComponent } from 'react'
+import React, { Component } from 'react'
 import autobind from 'autobind-decorator'
 import ReactTable from 'react-table' 
 import { CategoryDist, TrafficLight, Currency, Integer, numWithCommas } from '../../../../lib/formatters'
 
-@autobind class ExecutiveTable2Well extends PureComponent {
+@autobind class ExecutiveTable2Well extends Component {
+  constructor(props) {
+    super(props)
+    this.state = { 
+      pageSize: 1,
+    }    
+  }
 
   shouldComponentUpdate(nextProps) {
-    if (this.props.groupBy !== nextProps.groupBy) {
+    if ((this.props.groupBy !== nextProps.groupBy)) {
       return false
     }
     
     return true
   }
 
+  componentDidUpdate(prevProps) {
+    let { data } = this.props
+
+    if (data.length !== prevProps.data.length) {
+      let length = data && data.length < 10 ? data.length : 10
+
+      this.setState({
+        pageSize: length
+      })      
+    }
+
+  }
 
   render() {
     let { data, estIncData, volumeData, groupBy } = this.props
+    let { pageSize } = this.state
 
     let header = ''
 
@@ -159,14 +178,15 @@ import { CategoryDist, TrafficLight, Currency, Integer, numWithCommas } from '..
       }
 
 
-
     return (
       <div className='table'>
         <ReactTable 
           columns={columns}
-          showPagination={false}
+          showPagination={true}
           data={data}
-          pageSize={data  ? data.length : 5}
+          pageSize={pageSize}
+          pageSizeOptions={[1, 5, 10, 20, 25, 50, 100]}
+          onPageSizeChange={(e) => this.setState({pageSize: e})}
           defaultSorted={[
             {
               id: 'numTreatments',
