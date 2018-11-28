@@ -11,9 +11,10 @@ import KPIMecanico from './KPIMecanico'
 import Images from './Images'
 import Card from '../Common/Card'
 import { CardDeck } from 'reactstrap';
-import { generatePowerPoint } from '../../../../pptx';
 import LayerTable from './LayerTable'
 import ZoneTable from './ZoneTable'
+import LocalModal from './../Common/LocalModal'
+import ExportExcel from './ExportExcel'
 
 @autobind class wellViewUI extends Component {
   constructor(props) {
@@ -323,6 +324,9 @@ import ZoneTable from './ZoneTable'
           </div>
         </div>
         <div className='content'>
+          <LocalModal title="Menu de Exportación">
+            <ExportExcel />
+          </LocalModal>
           <CardDeck className="content-deck">
             <Card
                 id="kpis"

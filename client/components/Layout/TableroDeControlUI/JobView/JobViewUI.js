@@ -14,9 +14,9 @@ import { CardDeck } from 'reactstrap';
 import AforoScatter from './AforoScatter'
 import CedulaTable from './CedulaTable'
 import LabTable from './LabTable'
-import Export from './Export'
+import Export from './ExportPptx'
 import LocalModal from './../Common/LocalModal'
-import { generatePowerPoint } from '../../../../pptx';
+import ExportPptx from './ExportPptx';
 
 @autobind class jobViewUI extends Component {
   constructor(props) {
@@ -356,21 +356,6 @@ import { generatePowerPoint } from '../../../../pptx';
 
     globalAnalysis = globalAnalysis.toJS()
     let { job, jobType } = globalAnalysis
-
-    // console.log('images', imageData)
-    // console.log('costs', costData)
-    // console.log('est costs', estCostData)
-    // console.log('cedula', cedulaData)
-    // console.log('cedula results', cedulaResultData)
-    // console.log('intervention', interventionData)
-    // console.log('intervention results', interventionResultsData)
-    // console.log('aforo data', aforoData)
-    // console.log('date', date)
-    // console.log('labData', labData)
-    // console.log('specificLabData', specificLabData)
-    // console.log('estIncData', estIncData)
-
-
     let simulationData = []
     let hide = false
     interventionData ? interventionData = interventionData[0] : null
@@ -457,13 +442,6 @@ import { generatePowerPoint } from '../../../../pptx';
       
     })
 
-
-
-
-
-
-
-
     let cedulaExportData = this.makeCedulaExportData(cedulaData)
     let cedulaResultExportData = this.makeCedulaExportData(cedulaResultData)
     let labExportData = this.makeLabExportData(labDataFixed)
@@ -478,7 +456,7 @@ import { generatePowerPoint } from '../../../../pptx';
           </div>
           <KPIs estData={estCostData} data={costData} estIncData={estIncData}/>
           <LocalModal title="Menu de Exportación">
-            <Export />
+            <ExportPptx />
           </LocalModal>
           <CardDeck className="content-deck">
             <Card
