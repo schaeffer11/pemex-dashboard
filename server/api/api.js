@@ -64,6 +64,7 @@ export async function handleImageResponse(data) {
     // get img url from s3
     const imgURL = await signedURL(imgName)
     const innerObj = {
+      displayName: labID,
       imgName,
       imgURL,
       imgSource: 's3',
@@ -1538,8 +1539,7 @@ router.get('/getEmboloViajero', async (req, res) => {
           objectPath.set(finalObj, `${parent}.${child}`, data[0][key])
         }
       })
-      // finalObj.sistemasArtificialesDeProduccion.hasErrors = data[0].HAS_ERRORS === 0 || data[0].HAS_ERRORS === undefined ? false : true
-      finalObj.sistemasArtificialesDeProduccion.hasErrors = true
+      finalObj.sistemasArtificialesDeProduccion.hasErrors = data[0].HAS_ERRORS === 0 || data[0].HAS_ERRORS === undefined ? false : true
       res.json(finalObj)   
     }
     else if (action === 'loadSave') {
@@ -1581,8 +1581,7 @@ router.get('/getBombeoNeumatico', async (req, res) => {
           objectPath.set(finalObj, `${parent}.${child}`, data[0][key])
         }
       })
-      // finalObj.sistemasArtificialesDeProduccion.hasErrors = data[0].HAS_ERRORS === 0 || data[0].HAS_ERRORS === undefined ? false : true
-      finalObj.sistemasArtificialesDeProduccion.hasErrors = true
+      finalObj.sistemasArtificialesDeProduccion.hasErrors = data[0].HAS_ERRORS === 0 || data[0].HAS_ERRORS === undefined ? false : true
       res.json(finalObj)   
     }
     else if (action === 'loadSave') {
@@ -1625,8 +1624,7 @@ router.get('/getBombeoHidraulico', async (req, res) => {
           objectPath.set(finalObj, `${parent}.${child}`, data[0][key])
         }
       })
-      // finalObj.sistemasArtificialesDeProduccion.hasErrors = data[0].HAS_ERRORS === 0 || data[0].HAS_ERRORS === undefined ? false : true
-      finalObj.sistemasArtificialesDeProduccion.hasErrors = true
+      finalObj.sistemasArtificialesDeProduccion.hasErrors = data[0].HAS_ERRORS === 0 || data[0].HAS_ERRORS === undefined ? false : true
       res.json(finalObj)   
     }
     else if (action === 'loadSave') {
@@ -1671,8 +1669,7 @@ router.get('/getBombeoCavidades', async (req, res) => {
           objectPath.set(finalObj, `${parent}.${child}`, data[0][key])
         }
       })
-      // finalObj.sistemasArtificialesDeProduccion.hasErrors = data[0].HAS_ERRORS === 0 || data[0].HAS_ERRORS === undefined ? false : true
-      finalObj.sistemasArtificialesDeProduccion.hasErrors = true
+      finalObj.sistemasArtificialesDeProduccion.hasErrors = data[0].HAS_ERRORS === 0 || data[0].HAS_ERRORS === undefined ? false : true
 
       res.json(finalObj)   
     }
@@ -1717,8 +1714,7 @@ router.get('/getBombeoElectrocentrifugo', async (req, res) => {
           objectPath.set(finalObj, `${parent}.${child}`, data[0][key])
         }
       })
-      // finalObj.sistemasArtificialesDeProduccion.hasErrors = data[0].HAS_ERRORS === 0 || data[0].HAS_ERRORS === undefined ? false : true
-      finalObj.sistemasArtificialesDeProduccion.hasErrors = true
+      finalObj.sistemasArtificialesDeProduccion.hasErrors = data[0].HAS_ERRORS === 0 || data[0].HAS_ERRORS === undefined ? false : true
       res.json(finalObj)   
     }
     else if (action === 'loadSave') {
@@ -1765,8 +1761,7 @@ router.get('/getBombeoMecanico', async (req, res) => {
           objectPath.set(finalObj, `${parent}.${child}`, data[0][key])
         }
       })
-      // finalObj.sistemasArtificialesDeProduccion.hasErrors = data[0].HAS_ERRORS === 0 || data[0].HAS_ERRORS === undefined ? false : true
-      finalObj.sistemasArtificialesDeProduccion.hasErrors = true
+      finalObj.sistemasArtificialesDeProduccion.hasErrors = data[0].HAS_ERRORS === 0 || data[0].HAS_ERRORS === undefined ? false : true
       res.json(finalObj)   
     }
     else if (action === 'loadSave') {

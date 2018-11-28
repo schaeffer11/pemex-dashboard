@@ -6,7 +6,6 @@ import AriaModal from 'react-aria-modal'
 
 import WellSelect from '../Common/WellSelect'
 import JobSelect from '../Common/JobSelect'
-import Images from './Images'
 import CostBar from './CostBar'
 import VolumeBar from './VolumeBar'
 import KPIs from './KPIs'
@@ -36,6 +35,7 @@ import { KPI } from '../Common/KPIs'
       aforoData: [],
       volumeData: [],
       estVolumeData: [],
+      imageData: [],
       date: null,
       labData: [],
       specificLabData: [],
@@ -336,16 +336,53 @@ import { KPI } from '../Common/KPIs'
 
     if (imageData && Object.keys(imageData).length > 0) {
 
-      let out = Object.keys(imageData).map(i => {
+      let out = []
+
+      Object.keys(imageData).forEach(i => {
         let obj = imageData[i]
 
         if (Array.isArray(obj)) {
-          return obj.map(j => {
-            return <img style={{objectFit: 'contain'}} label={`Lab - ${j.imgName.split('.')[2]}`} src={j.imgURL}></img> 
-          })
+          //RIGHT NOW IMAGES ARE ONLY STORED FOR LABS ON EXPAND
+          // obj.forEach(j => {
+          //   let displayName = 'Lab'
+
+          //   switch (j.imgName.split('.')[2]) {
+          //     case 'compatibilidadPorEmulsion':
+          //       displayName += ' - Pruebas de compatiblidad por emulsión'
+          //       break;
+          //     case 'caracterizacionFisicoQuimica':
+          //       displayName += ' - Caracterización fisico-química de fluidos'
+          //       break;
+          //     case 'gelFractura':
+          //       displayName += ' - Pruebas gel de fractura'
+          //       break;
+          //     case 'solubilidad':
+          //       displayName += ' - Pruebas de solubilidad'
+          //       break;
+          //     case 'apuntalante':
+          //       displayName += ' - Pruebas para apuntalante'
+          //       break;
+          //     case 'grabado':
+          //       displayName += ' - Pruebas de grabado'
+          //       break;
+          //     case 'cromatografiaDelGas':
+          //       displayName += ' - Cromatografía del gas'
+          //       break;
+          //     case 'pruebaDeDureza':
+          //       displayName += ' - Prueba de dureza'
+          //       break;
+          //     case 'determinacionDeLaCalidad':
+          //       displayName += ' - Determinación de la calidad método de los cloruros'
+          //       break;
+          //     case 'curvaDeViscosidad':
+          //       displayName += ' - Curva De Viscosidad'
+          //       break;
+          //   }
+          //   out.push(<img style={{objectFit: 'contain'}} label={displayName} src={j.imgURL}></img>)
+          // })
         }
         else {
-          return <img style={{objectFit: 'contain'}} label={obj.imgName.split('.')[1]} src={obj.imgURL}></img>     
+          out.push(<img style={{objectFit: 'contain'}} label={obj.displayName} src={obj.imgURL}></img>)
         }
       })
 
@@ -353,19 +390,17 @@ import { KPI } from '../Common/KPIs'
 
     }
     else {
-      return <div>hi</div>
+      return <div>No Images</div>
     }
   } 
 
   makeLabModal() {
-    let { specificLabData, specificLab, labData } = this.state
-
-
-
+    let { specificLabData, specificLab, labData, imageData } = this.state
     let lab = labData.find(i => i.id === specificLab)
+    let labImage = imageData.pruebasDeLaboratorio
 
-    console.log(lab)
-    console.log(specificLabData)
+
+    labImage ? labImage = labImage.find(i => parseInt(i.labID) === specificLab) : null
 
     lab = lab ? lab : {}
 
@@ -384,7 +419,7 @@ import { KPI } from '../Common/KPIs'
                   accessor: 'ACEITE_DEL_POZO',
                 }, {
                   Header: 'Tiempo de Rompimiento',
-                  accessor: 'TIEMPO_DE_POMPIMIENTO',
+                  accessor: 'TIEMPO_DE_ROMPIMIENTO',
                 }, {
                   Header: 'Separación de fases',
                   accessor: 'SEPARACION_DE_FASES',
@@ -413,6 +448,7 @@ import { KPI } from '../Common/KPIs'
               pageSize={specificLabData.length}
               sortable={false}
             />
+            <img style={{objectFit: 'contain'}} src={labImage.imgURL}></img> 
           </div>
           )
         break;
@@ -441,6 +477,7 @@ import { KPI } from '../Common/KPIs'
             <KPI className='kpi' header='Compania' value={lab.compania}/>
             <KPI className='kpi' header='Superviso' value={lab.superviso}/>
             <KPI className='kpi' header='Observaciones' type={'wide'} value={lab.observaciones}/>
+            <img style={{objectFit: 'contain'}} src={labImage.imgURL}></img> 
           </div>
           )
         break;
@@ -459,6 +496,7 @@ import { KPI } from '../Common/KPIs'
             <KPI className='kpi' header='Compania' value={lab.compania}/>
             <KPI className='kpi' header='Superviso' value={lab.superviso}/>
             <KPI className='kpi' header='Observaciones' type={'wide'} value={lab.observaciones}/>
+            <img style={{objectFit: 'contain'}} src={labImage.imgURL}></img> 
           </div>
           )
         break;
@@ -476,6 +514,7 @@ import { KPI } from '../Common/KPIs'
             <KPI className='kpi' header='Compania' value={lab.compania}/>
             <KPI className='kpi' header='Superviso' value={lab.superviso}/>
             <KPI className='kpi' header='Observaciones' type={'wide'} value={lab.observaciones}/>
+            <img style={{objectFit: 'contain'}} src={labImage.imgURL}></img> 
           </div>
           )
         break;
@@ -495,6 +534,7 @@ import { KPI } from '../Common/KPIs'
             <KPI className='kpi' header='Compania' value={lab.compania}/>
             <KPI className='kpi' header='Superviso' value={lab.superviso}/>
             <KPI className='kpi' header='Observaciones' type={'wide'} value={lab.observaciones}/>
+            <img style={{objectFit: 'contain'}} src={labImage.imgURL}></img> 
           </div>
           )
         break;
@@ -529,6 +569,7 @@ import { KPI } from '../Common/KPIs'
               pageSize={specificLabData.length}
               sortable={false}
             />
+            <img style={{objectFit: 'contain'}} src={labImage.imgURL}></img> 
           </div>
           )
         break;
@@ -544,6 +585,7 @@ import { KPI } from '../Common/KPIs'
             <KPI className='kpi' header='Compania' value={lab.compania}/>
             <KPI className='kpi' header='Superviso' value={lab.superviso}/>
             <KPI className='kpi' header='Observaciones' type={'wide'} value={lab.observaciones}/>
+            <img style={{objectFit: 'contain'}} src={labImage.imgURL}></img> 
           </div>
           )
         break;
@@ -576,7 +618,7 @@ import { KPI } from '../Common/KPIs'
         verticallyCenter={true}
         focusDialog={true}
         dialogClass="queryModalPartialReset"
-        dialogStyle={{verticalAlign: '', textAlign: 'center', maxHeight: '80%', marginTop: '2%'}}
+        dialogStyle={{verticalAlign: '', textAlign: 'center', maxHeight: '80%', marginTop: '100px'}}
 
       >
       <div className="modalTest" >

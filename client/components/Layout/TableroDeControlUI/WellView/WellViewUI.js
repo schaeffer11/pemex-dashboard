@@ -292,7 +292,7 @@ import ZoneTable from './ZoneTable'
       if (imageData && Object.keys(imageData).length > 0) {
         return Object.keys(imageData).map(i => {
           let obj = imageData[i]
-          return <img style={{objectFit: 'contain'}} label={obj.imgName.split('.')[1]} src={obj.imgURL}></img> 
+          return <img style={{objectFit: 'contain'}} label={obj.displayName} src={obj.imgURL}></img> 
         })
       }
       else {

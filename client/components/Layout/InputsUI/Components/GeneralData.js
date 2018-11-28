@@ -503,6 +503,7 @@ import ButtonGroup from './ButtonGroup'
     let { transactionID, tipoDeIntervenciones } = data
 
     const results = await Promise.all([
+      fetch(`api/getWell?transactionID=${transactionID}&saved=1`, headers).then(r => r.json()),
       fetch(`api/getFields?transactionID=${transactionID}&saved=1`, headers).then(r => r.json()),
       fetch(`api/getHistIntervencionesEstimulacionNew?transactionID=${transactionID}&saved=1`, headers).then(r => r.json()),
       fetch(`api/getHistIntervencionesAcidoNew?transactionID=${transactionID}&saved=1`, headers).then(r => r.json()),
@@ -510,17 +511,10 @@ import ButtonGroup from './ButtonGroup'
       fetch(`api/getHistIntervencionesTermicoNew?transactionID=${transactionID}&saved=1`, headers).then(r => r.json()),
       fetch(`api/getMudLoss?transactionID=${transactionID}&saved=1`, headers).then(r => r.json()),
       fetch(`api/getLayer?transactionID=${transactionID}&saved=1`, headers).then(r => r.json()),
-      fetch(`api/getWell?transactionID=${transactionID}&saved=1`, headers).then(r => r.json()),
       fetch(`api/getHistIntervenciones?transactionID=${transactionID}&saved=1`, headers).then(r => r.json()),
       fetch(`api/getMecanico?transactionID=${transactionID}&saved=1`, headers).then(r => r.json()),
       fetch(`api/getSurvey?transactionID=${transactionID}&saved=1`, headers).then(r => r.json()),
       fetch(`api/getAnalisisAgua?transactionID=${transactionID}&saved=1`, headers).then(r => r.json()),
-      fetch(`api/getEmboloViajero?transactionID=${transactionID}&saved=1`, headers).then(r => r.json()),
-      fetch(`api/getBombeoNeumatico?transactionID=${transactionID}&saved=1`, headers).then(r => r.json()),
-      fetch(`api/getBombeoHidraulico?transactionID=${transactionID}&saved=1`, headers).then(r => r.json()),
-      fetch(`api/getBombeoCavidades?transactionID=${transactionID}&saved=1`, headers).then(r => r.json()),
-      fetch(`api/getBombeoElectrocentrifugo?transactionID=${transactionID}&saved=1`, headers).then(r => r.json()),
-      fetch(`api/getBombeoMecanico?transactionID=${transactionID}&saved=1`, headers).then(r => r.json()),
       fetch(`api/getFieldPressure?transactionID=${transactionID}&saved=1`, headers).then(r => r.json()),
       fetch(`api/getWellPressure?transactionID=${transactionID}&saved=1`, headers).then(r => r.json()),
       fetch(`api/getWellAforos?transactionID=${transactionID}&saved=1`, headers).then(r => r.json()),
@@ -546,6 +540,38 @@ import ButtonGroup from './ButtonGroup'
           notificationText: `No se ha descargado informacion del pozo: ${pozo}`
         })
       })
+
+    let sapData
+    switch (results[0].sistemasArtificialesDeProduccion.tipoDeSistemo) {
+      case 'emboloViajero':
+        sapData = await fetch(`api/getEmboloViajero?transactionID=${transactionID}&saved=1`, headers).then(r => r.json())
+        break;
+      case 'bombeoNeumatico':
+        sapData = await fetch(`api/getBombeoNeumatico?transactionID=${transactionID}&saved=1`, headers).then(r => r.json())
+        break;
+      case 'bombeoHidraulico':
+        sapData = await fetch(`api/getBombeoHidraulico?transactionID=${transactionID}&saved=1`, headers).then(r => r.json())
+        break;
+      case 'bombeoCavidadesProgresivas':
+        sapData = await fetch(`api/getBombeoCavidades?transactionID=${transactionID}&saved=1`, headers).then(r => r.json())
+        break;
+      case 'bombeoElectrocentrifugo':
+        sapData = await fetch(`api/getBombeoElectrocentrifugo?transactionID=${transactionID}&saved=1`, headers).then(r => r.json())
+        break;
+      case 'bombeoMecanico':
+        sapData = await fetch(`api/getBombeoMecanico?transactionID=${transactionID}&saved=1`, headers).then(r => r.json())
+        break;
+      default:
+        sapData = {
+          sistemasArtificialesDeProduccion: {
+            hasErrors: false,
+            tipoDeSistemo: 'none'
+          }
+        }
+        break    
+    }
+
+    results.push(sapData)
 
     let newState = {}
     console.log(results)
