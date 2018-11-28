@@ -6,7 +6,7 @@ import Select from 'react-select'
 import { generatePowerPoint } from '../../../../pptx'
 import ProgressBar from '../Common/ProgressBar'
 
-@autobind class Export extends Component {
+@autobind class ExportPptx extends Component {
   constructor(props){
     super(props)
     this.state = {
@@ -145,18 +145,6 @@ import ProgressBar from '../Common/ProgressBar'
               <button className="cta" disabled={isBuildingPowerpoint || !jobID} onClick={() => this.handlePptxClick()}>Exportar PPTX</button>
             </div>
           </div>
-          <div className="excel-export">
-            <label>Generar Excel</label>
-            <div>
-              <Select
-                className="export-select"
-                options={excelExportOptions}
-                onChange={(excelOption) => this.setState({ excelOption })}
-                value={excelOption}
-              />
-              <button disabled className="cta">Exportar XLXS</button>
-            </div>
-          </div>
         </div>
         {this.powerPointExport()}
       </div>
@@ -170,4 +158,4 @@ const mapStateToProps = state => ({
   jobType: state.getIn(['globalAnalysis', 'jobType']),
 })
 
-export default connect(mapStateToProps)(Export) 
+export default connect(mapStateToProps)(ExportPptx) 

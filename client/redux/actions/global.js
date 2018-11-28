@@ -28,6 +28,11 @@ export const setGeneralGlobalAnalysis = (location, value) => ({
   value,
 })
 
+export const setMergeGlobalAnalysis = (obj) => ({
+  type: 'set_mergeGlobalAnalysis',
+  obj,
+})
+
 export const setGroupByAndGroups = (groupBy, groups) => ({
   type: 'set_groupByAndGroup',
   groupBy,
