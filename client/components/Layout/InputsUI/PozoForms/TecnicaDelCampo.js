@@ -21,11 +21,6 @@ let fluidoOptions = [
     { label: 'Gas Seco', value: 'Gas Seco' },
 ]
  
-let litologiaOptions = [
-    { label: 'Arenas', value: 'Arenas' },
-    { label: 'Carbonatos', value: 'Carbonatos'}
-]
-
 @autobind class TecnicaDelCampo extends Component {
   constructor(props) {
     super(props)
@@ -318,7 +313,7 @@ let litologiaOptions = [
   }
 
   makeFormacionForm() {
-    let { setLitologiaField, setEspesorNetoField, setPorosidadField, setSwField, setKPromedioField, setCaaField, setCgaField, formData } = this.props
+    let { setLitologiaField, setEspesorNetoField, setPorosidadField, setSwField, setKPromedioField, setCaaField, setCgaField, formData, litologiaOptions} = this.props
     formData = formData.toJS()
     let { litologiaField, espesorNetoField, porosidadField, swField, kPromedioField, caaField, cgaField } = formData
 
@@ -396,6 +391,7 @@ const mapStateToProps = state => ({
   formData: state.get('fichaTecnicaDelCampo'),
   hasErrors: state.getIn(['fichaTecnicaDelCampo', 'hasErrors']),
   hasSubmitted: state.getIn(['global', 'hasSubmitted']),
+  litologiaOptions: state.getIn(['global', 'litologiaOptions'])
 })
 
 const mapDispatchToProps = dispatch => ({

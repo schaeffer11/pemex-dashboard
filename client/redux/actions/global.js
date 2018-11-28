@@ -51,3 +51,7 @@ export const setGeneralFilters = (value) => ({
 })
 
 export const setCompanyOptions = value => ({ type: 'set_companyOptions', value})
+export const setJustificationOptions = value => ({ type: 'set_justificationOptions', value})
+export const setLitologiaOptions = value => ({ type: 'set_litologiaOptions', value})
+export const setTipoDeTerminationOptions = value => ({ type: 'set_tipoDeTerminationOptions', value})
+export const setTipoDeLinerOptions = value => ({ type: 'set_tipoDeLinerOptions', value})

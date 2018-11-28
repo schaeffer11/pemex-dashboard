@@ -8,7 +8,7 @@ import AriaModal from 'react-aria-modal'
 
 import { setObjetivo, setAlcances, setTipoDeIntervenciones } from '../../../../redux/actions/intervencionesEstimulacion'
 import { setSubdireccion, setActivo, setCampo, setPozo, setFormacion, setFechaProgramadaIntervencion, setFromSaveFichaTecnicaHighLevel, setHasErrorsFichaTecnicaHighLevel, setIntervencionProgramada } from '../../../../redux/actions/pozo'
-import { setShowForms, setIsLoading, setTransactionID, setSaveName, setCompanyOptions } from '../../../../redux/actions/global'
+import { setShowForms, setIsLoading, setTransactionID, setSaveName, setCompanyOptions, setJustificationOptions, setLitologiaOptions, setTipoDeTerminationOptions, setTipoDeLinerOptions } from '../../../../redux/actions/global'
 import { InputDate, InputRow, InputRowUnitless, InputRowSelectUnitless, TextAreaUnitless } from '../../Common/InputRow'
 import Notification from '../../Common/Notification'
 import Loading from '../../Common/Loading'
@@ -62,7 +62,7 @@ import ButtonGroup from './ButtonGroup'
   }
 
   componentDidMount(){
-    let { user, hasSubmitted, setCompanyOptions } = this.props
+    let { user, hasSubmitted, setCompanyOptions, setJustificationOptions, setLitologiaOptions, setTipoDeTerminationOptions, setTipoDeLinerOptions } = this.props
     user = user.toJS()
     const { token, id } = user
     const headers = {
@@ -91,11 +91,34 @@ import ButtonGroup from './ButtonGroup'
       })
 
 
-    fetch('/api/getCompanies', headers)
+    fetch('/api/getCompanyMap', headers)
       .then(r => r.json())
       .then( r => {
-        console.log('yeee bitch', r)
         setCompanyOptions(r)
+      })
+
+    fetch('/api/getJustificationMap', headers)
+      .then(r => r.json())
+      .then( r => {
+        setJustificationOptions(r)
+      })
+
+    fetch('/api/getLitologiaMap', headers)
+      .then(r => r.json())
+      .then( r => {
+        setLitologiaOptions(r)
+      })
+
+    fetch('/api/getTipoDeTerminationMap', headers)
+      .then(r => r.json())
+      .then( r => {
+        setTipoDeTerminationOptions(r)
+      })
+
+    fetch('/api/getTipoDeLinerMap', headers)
+      .then(r => r.json())
+      .then( r => {
+        setTipoDeLinerOptions(r)
       })
   }
 
@@ -729,7 +752,11 @@ const mapDispatchToProps = dispatch => ({
   setFromSaveFichaTecnicaHighLevel: obj => dispatch(setFromSaveFichaTecnicaHighLevel(obj)),
   setIntervencionProgramada: obj => dispatch(setIntervencionProgramada(obj)),
   setSaveName: obj => dispatch(setSaveName(obj)),
-  setCompanyOptions: val => dispatch(setCompanyOptions(val))
+  setCompanyOptions: val => dispatch(setCompanyOptions(val)),
+  setJustificationOptions: val => dispatch(setJustificationOptions(val)),
+  setLitologiaOptions: val => dispatch(setLitologiaOptions(val)),
+  setTipoDeTerminationOptions: val => dispatch(setTipoDeTerminationOptions(val)),
+  setTipoDeLinerOptions: val => dispatch(setTipoDeLinerOptions(val))
 })
 
 export default connect(mapStateToProps, mapDispatchToProps)(GeneralData)

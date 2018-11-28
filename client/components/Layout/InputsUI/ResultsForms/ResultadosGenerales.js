@@ -5,7 +5,6 @@ import moment from 'moment'
 import { setGeneralResultadosGenerales } from '../../../../redux/actions/results'
 import { CalculatedValue, InputRow, InputRowSelectUnitless, InputDate, TextAreaUnitless } from '../../Common/InputRow'
 import { checkDate, checkEmpty } from '../../../../lib/errorCheckers';
-import { getJustificacionesOptions } from '../../../../lib/helpers';
 import { sortLabels } from '../../../../lib/formatters';
 
 
@@ -80,9 +79,9 @@ import { sortLabels } from '../../../../lib/formatters';
   }
 
   render() {
-    const { formData, setGeneralResultadosGenerales } = this.props
+    const { formData, setGeneralResultadosGenerales, justificationOptions } = this.props
     const { fechaIntervencion, comentariosIntervencion, justificacionIntervencion } = formData
-    const justificacionesOptions = getJustificacionesOptions()
+
     return (
       <div className='results-form form' >
         <div className='header'>
@@ -101,7 +100,7 @@ import { sortLabels } from '../../../../lib/formatters';
             value={justificacionIntervencion}
             callback={(e) => setGeneralResultadosGenerales(['justificacionIntervencion'], e.value)}
             name='tipoDePozo'
-            options={justificacionesOptions.sort(sortLabels)}
+            options={justificationOptions.sort(sortLabels)}
             onBlur={this.updateErrors}
             errors={this.state.errors}
           />
@@ -121,6 +120,7 @@ import { sortLabels } from '../../../../lib/formatters';
 const mapStateToProps = state => ({
   formData: state.get('resultadosGenerales').toJS(),
   hasSubmitted: state.getIn(['global', 'hasSubmitted']),
+  justificationOptions: state.getIn(['global', 'justificationOptions']),
 })
 
 const mapDispatchToProps = dispatch => ({

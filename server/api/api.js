@@ -429,10 +429,49 @@ router.get('/getTerminationTypes', (req, res) => {
   })
 })
 
-router.get('/getCompanies', (req, res) => {
-  const query = `SELECT Company FROM CompanyMap`
+
+
+
+router.get('/getCompanyMap', (req, res) => {
+  const query = `SELECT COMPANY FROM CompanyMap`
   connection.query(query, (err, results) => {
-    results = results.map(i => ({label: i.Company, value: i.Company}))
+    results = results.map(i => ({label: i.COMPANY, value: i.COMPANY}))
+    console.log(results)
+    res.send(results)
+  })
+})
+
+router.get('/getJustificationMap', (req, res) => {
+  const query = `SELECT JUSTIFICACION FROM JustificacionesMap`
+  connection.query(query, (err, results) => {
+    results = results.map(i => ({label: i.JUSTIFICACION, value: i.JUSTIFICACION}))
+    console.log(results)
+    res.send(results)
+  })
+})
+
+router.get('/getLitologiaMap', (req, res) => {
+  const query = `SELECT LITOLOGIA FROM LitologiaMap`
+  connection.query(query, (err, results) => {
+    results = results.map(i => ({label: i.LITOLOGIA, value: i.LITOLOGIA}))
+    console.log(results)
+    res.send(results)
+  })
+})
+
+router.get('/getTipoDeTerminationMap', (req, res) => {
+  const query = `SELECT TIPO_DE_TERMINATION FROM TipoDeTerminationMap`
+  connection.query(query, (err, results) => {
+    results = results.map(i => ({label: i.TIPO_DE_TERMINATION, value: i.TIPO_DE_TERMINATION}))
+    console.log(results)
+    res.send(results)
+  })
+})
+
+router.get('/getTipoDeLinerMap', (req, res) => {
+  const query = `SELECT TIPO_DE_LINER FROM TipoDeLinerMap`
+  connection.query(query, (err, results) => {
+    results = results.map(i => ({label: i.TIPO_DE_LINER, value: i.TIPO_DE_LINER}))
     console.log(results)
     res.send(results)
   })
