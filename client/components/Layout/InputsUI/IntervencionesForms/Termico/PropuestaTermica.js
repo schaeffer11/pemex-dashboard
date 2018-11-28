@@ -6,7 +6,6 @@ import { InputRow, InputRowSelectUnitless, CalculatedValue } from '../../../Comm
 import { setMergePropuestaTermica, setCedulaPropuestaTermica } from '../../../../../redux/actions/intervencionesTermica'
 import { checkEmpty, checkDate } from '../../../../../lib/errorCheckers'
 import { calculateValuesTermicaCedula } from '../../../../../lib/formatters';
-import { companyOptions } from '../../../../../lib/helpers'
 
 @autobind class PropuestaTermica extends Component {
   constructor(props) {
@@ -124,7 +123,7 @@ import { companyOptions } from '../../../../../lib/helpers'
   }
 
   makeGeneralForm() {
-    let { formData, setMergePropuestaTermica, intervals } = this.props
+    let { formData, setMergePropuestaTermica, intervals, companyOptions } = this.props
     let { propuestaCompany, volumenVapor, calidad, gastoInyeccion, presionMaximaSalidaGenerador, temperaturaMaximaGenerador } = formData
 
     const intervalsDiv = intervals.map(elem => (
@@ -303,6 +302,7 @@ const mapStateToProps = state => ({
   hasErrors: state.getIn(['propuestaTermica', 'hasErrors']),
   hasSubmitted: state.getIn(['global', 'hasSubmitted']),
   intervals: state.getIn(['evaluacionPetrofisica', 'layerData']).toJS(),
+  companyOptions: state.getIn(['global', 'companyOptions'])
 })
 
 const mapDispatchToProps = dispatch => ({

@@ -8,7 +8,7 @@ import Select from 'react-select'
 import InputTable from '../../Common/InputTable'
 import { InputRow, InputRowUnitless, InputRowSelectUnitless, TextAreaUnitless } from '../../Common/InputRow'
 import { setPruebasDeLaboratorioData } from '../../../../redux/actions/intervencionesEstimulacion'
-import { companyOptions } from '../../../../lib/helpers'
+import { getCompanyOptions } from '../../../../lib/helpers'
 
 export const options = [
   { label: 'Caracterización fisico-química de fluidos', value: 'caracterizacionFisico' },
@@ -115,7 +115,7 @@ export const options = [
 
 
   makeGeneralesForm() {
-    let { setPruebasDeLaboratorioData, formData } = this.props
+    let { setPruebasDeLaboratorioData, formData, companyOptions } = this.props
     formData = formData.toJS()
     let { pruebasDeLaboratorioData } = formData
 
@@ -228,6 +228,7 @@ export const options = [
 
 const mapStateToProps = state => ({
   formData: state.get('pruebasDeLaboratorio'),
+  companyOptions: state.getIn(['global', 'companyOptions'])
 })
 
 const mapDispatchToProps = dispatch => ({

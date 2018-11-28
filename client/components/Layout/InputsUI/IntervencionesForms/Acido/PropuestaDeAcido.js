@@ -11,7 +11,7 @@ import { setHasErrorsPropuestaAcido, setCedulaData, setModuloYoungArena, setModu
    setLongitudDeIntervalo, setVolAparejo, setCapacidadTotalDelPozo, setVolumenPrecolchonN2,
     setVolumenSistemaNoReativo, setVolumenSistemaReactivo, setVolumenSistemaDivergente, 
     setVolumenDesplazamientoLiquido, setVolumenDesplazamientoGelLineal, setPropuestaCompany } from '../../../../../redux/actions/intervencionesAcido'
-import { round, calculateVolumes, getSistemaOptions, getDisabledColumnForGeneralCedula, companyOptions } from '../../../../../lib/helpers'
+import { round, calculateVolumes, getSistemaOptions, getDisabledColumnForGeneralCedula } from '../../../../../lib/helpers'
 import { checkEmpty, checkDate } from '../../../../../lib/errorCheckers'
 import { calculateValuesGeneralCedula } from '../../../../../lib/formatters';
 
@@ -138,9 +138,10 @@ import { calculateValuesGeneralCedula } from '../../../../../lib/formatters';
 
 
   makeGeneralForm() {
-    let { formData, setPropuestaCompany, intervalos } = this.props
+    let { formData, setPropuestaCompany, intervalos, companyOptions } = this.props
     formData = formData.toJS()
     intervalos = intervalos.toJS()
+
     let { propuestaCompany } = formData
 
     const intervals = intervalos.map(elem => <div key={`intervalo_${elem.cimaMD}-${elem.baseMD}`}>{`${elem.cimaMD}-${elem.baseMD}`}</div>)
@@ -515,6 +516,7 @@ const mapStateToProps = state => ({
   intervalos: state.getIn(['evaluacionPetrofisica', 'layerData']),
   hasErrors: state.getIn(['propuestaAcido', 'hasErrors']),
   hasSubmitted: state.getIn(['global', 'hasSubmitted']),
+  companyOptions: state.getIn(['global', 'companyOptions'])
 })
 
 const mapDispatchToProps = dispatch => ({

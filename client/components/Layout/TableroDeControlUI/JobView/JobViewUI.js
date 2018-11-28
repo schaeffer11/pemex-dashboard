@@ -1,10 +1,11 @@
 import React, { Component } from 'react'
 import autobind from 'autobind-decorator'
 import { connect } from 'react-redux'
+import ReactTable from 'react-table'
+import AriaModal from 'react-aria-modal'
 
 import WellSelect from '../Common/WellSelect'
 import JobSelect from '../Common/JobSelect'
-import Images from './Images'
 import CostBar from './CostBar'
 import VolumeBar from './VolumeBar'
 import KPIs from './KPIs'
@@ -19,6 +20,7 @@ import LocalModal from './../Common/LocalModal'
 import Filters from './../Common/Filters'
 import ExportPptx from './ExportPptx';
 import { convertLowDate, convertHighDate } from '../../../../lib/formatters';
+import { KPI } from '../Common/KPIs'
 
 @autobind class jobViewUI extends Component {
   constructor(props) {
@@ -35,10 +37,13 @@ import { convertLowDate, convertHighDate } from '../../../../lib/formatters';
       aforoData: [],
       volumeData: [],
       estVolumeData: [],
+      imageData: [],
       date: null,
       labData: [],
       specificLabData: [],
-      estIncData: []
+      specificLab: null,
+      estIncData: [],
+      isOpen: false
     }    
     this.cards = []
     for (let i = 0; i < 7; i += 1) {
@@ -186,6 +191,7 @@ import { convertLowDate, convertHighDate } from '../../../../lib/formatters';
 
   async fetchLabData(id, type) {
     let { token } = this.props
+
     let specificLabQuery = `/job/getLabData?labID=${id}&type=${type}` 
     
     const headers = {
@@ -195,8 +201,11 @@ import { convertLowDate, convertHighDate } from '../../../../lib/formatters';
       }
     }
 
+
     this.setState({
-      specificLabData: []
+      specificLabData: [],
+      specificLab: id,
+      isOpen: true
     })
 
       fetch(specificLabQuery, headers)
@@ -212,7 +221,6 @@ import { convertLowDate, convertHighDate } from '../../../../lib/formatters';
 
 
   async fetchData() {
-  	console.log('fetching')
     let { globalAnalysis, token } = this.props
     globalAnalysis = globalAnalysis.toJS()
     let { job, jobType } = globalAnalysis
@@ -331,19 +339,55 @@ import { convertLowDate, convertHighDate } from '../../../../lib/formatters';
   makeImages() {
     let { imageData } = this.state
 
-    console.log('im hereeeeee', imageData)
     if (imageData && Object.keys(imageData).length > 0) {
 
-      let out = Object.keys(imageData).map(i => {
+      let out = []
+
+      Object.keys(imageData).forEach(i => {
         let obj = imageData[i]
 
         if (Array.isArray(obj)) {
-          return obj.map(j => {
-            return <img style={{objectFit: 'contain'}} label={`Lab - ${j.imgName.split('.')[2]}`} src={j.imgURL}></img> 
-          })
+          //RIGHT NOW IMAGES ARE ONLY STORED FOR LABS ON EXPAND
+          // obj.forEach(j => {
+          //   let displayName = 'Lab'
+
+          //   switch (j.imgName.split('.')[2]) {
+          //     case 'compatibilidadPorEmulsion':
+          //       displayName += ' - Pruebas de compatiblidad por emulsión'
+          //       break;
+          //     case 'caracterizacionFisicoQuimica':
+          //       displayName += ' - Caracterización fisico-química de fluidos'
+          //       break;
+          //     case 'gelFractura':
+          //       displayName += ' - Pruebas gel de fractura'
+          //       break;
+          //     case 'solubilidad':
+          //       displayName += ' - Pruebas de solubilidad'
+          //       break;
+          //     case 'apuntalante':
+          //       displayName += ' - Pruebas para apuntalante'
+          //       break;
+          //     case 'grabado':
+          //       displayName += ' - Pruebas de grabado'
+          //       break;
+          //     case 'cromatografiaDelGas':
+          //       displayName += ' - Cromatografía del gas'
+          //       break;
+          //     case 'pruebaDeDureza':
+          //       displayName += ' - Prueba de dureza'
+          //       break;
+          //     case 'determinacionDeLaCalidad':
+          //       displayName += ' - Determinación de la calidad método de los cloruros'
+          //       break;
+          //     case 'curvaDeViscosidad':
+          //       displayName += ' - Curva De Viscosidad'
+          //       break;
+          //   }
+          //   out.push(<img style={{objectFit: 'contain'}} label={displayName} src={j.imgURL}></img>)
+          // })
         }
         else {
-          return <img style={{objectFit: 'contain'}} label={obj.imgName.split('.')[1]} src={obj.imgURL}></img>     
+          out.push(<img style={{objectFit: 'contain'}} label={obj.displayName} src={obj.imgURL}></img>)
         }
       })
 
@@ -351,12 +395,252 @@ import { convertLowDate, convertHighDate } from '../../../../lib/formatters';
 
     }
     else {
-      return <div>hi</div>
+      return <div>No Images</div>
     }
   } 
 
+  makeLabModal() {
+    let { specificLabData, specificLab, labData, imageData } = this.state
+    let lab = labData.find(i => i.id === specificLab)
+    let labImage = imageData.pruebasDeLaboratorio
+
+
+    labImage ? labImage = labImage.find(i => parseInt(i.labID) === specificLab) : null
+
+    lab = lab ? lab : {}
+
+    let columns
+    switch(lab.type) {
+        case 'pruebasDeCompatibilidad':
+          columns = [
+                {
+                  Header: 'Diseño',
+                  accessor: 'DISENO',
+                }, {
+                  Header: 'Sistema',
+                  accessor: 'SISTEMA',
+                }, {
+                  Header: 'Aceite del pozo',
+                  accessor: 'ACEITE_DEL_POZO',
+                }, {
+                  Header: 'Tiempo de Rompimiento',
+                  accessor: 'TIEMPO_DE_ROMPIMIENTO',
+                }, {
+                  Header: 'Separación de fases',
+                  accessor: 'SEPARACION_DE_FASES',
+                }, { 
+                  Header: 'Solidos',
+                  accessor: 'SOLIDOS',
+                }, {
+                  Header: 'Condición',
+                  accessor: 'CONDICION',
+                }
+              ]
+          return (
+          <div>
+            <div>
+              {lab.name}
+            </div>
+            <KPI className='kpi' header='Compania' value={lab.compania}/>
+            <KPI className='kpi' header='Superviso' value={lab.superviso}/>
+            <KPI className='kpi' header='Observaciones' type={'wide'} value={lab.observaciones}/>
+            <ReactTable
+              className="-striped"
+              data={specificLabData}
+              columns={columns}
+              showPagination={false}
+              showPageSizeOptions={false}
+              pageSize={specificLabData.length}
+              sortable={false}
+            />
+            <img style={{objectFit: 'contain'}} src={labImage.imgURL}></img> 
+          </div>
+          )
+        break;
+        case 'caracterizacionFisico':
+          return (
+          <div>
+            <div>
+              {lab.name}
+            </div>
+            <KPI className='kpi' header='Determinación del porcentaje de aceite' value={specificLabData.length > 0 ? specificLabData[0].PORENTAJE_DE_ACEITE : null} unit='%' />
+            <KPI className='kpi' header='Determinación del porcentaje de agua' value={specificLabData.length > 0 ? specificLabData[0].PORENTAJE_DE_AGUA : null} unit='%' />
+            <KPI className='kpi' header='Determinación del porcentaje de emulsión' value={specificLabData.length > 0 ? specificLabData[0].PORENTAJE_DE_EMULSION : null} unit='%' />
+            <KPI className='kpi' header='Determinación del porcentaje de sólidos' value={specificLabData.length > 0 ? specificLabData[0].PORENTAJE_DE_SOLIDOS : null} unit='%' />
+            <KPI className='kpi' header='Determinación del porcentaje de asfaltenos' value={specificLabData.length > 0 ? specificLabData[0].PORENTAJE_DE_ASFALTENOS : null} unit='%' />
+            <KPI className='kpi' header='Determinación del porcentaje de parafinas' value={specificLabData.length > 0 ? specificLabData[0].PORENTAJE_DE_PARAFINAS : null} unit='%' />
+            <KPI className='kpi' header='Determinación del porcentaje de resinas asfalticas' value={specificLabData.length > 0 ? specificLabData[0].PORENTAJE_DE_RESINAS_ASFALTICAS : null} unit='%' />
+            <KPI className='kpi' header='Determinación del porcentaje de contenido de sólidos' value={specificLabData.length > 0 ? specificLabData[0].PORENTAJE_DE_CONTENIDO_DE_SOLIDOS : null} unit='%' />
+            <KPI className='kpi' header='Densidad del aceite' value={specificLabData.length > 0 ? specificLabData[0].DENSIDAD_DEL_ACEITE : null} unit={<div>gr/cm<sup>3</sup></div>} />
+            <KPI className='kpi' header='Densidad del agua' value={specificLabData.length > 0 ? specificLabData[0].DENSIDAD_DEL_AGUA : null} unit={<div>gr/cm<sup>3</sup></div>} />
+            <KPI className='kpi' header='Densidad de la emulsión' value={specificLabData.length > 0 ? specificLabData[0].DENSIDAD_DE_LA_EMULSION : null} unit={<div>gr/cm<sup>3</sup></div>} />
+            <KPI className='kpi' header='Viscosidad del aceite' value={specificLabData.length > 0 ? specificLabData[0].VISCOSIDAD_DEL_ACEITE : null} unit='cp' />
+            <KPI className='kpi' header='Viscosidad de la emulsión' value={specificLabData.length > 0 ? specificLabData[0].VISCOSIDAD_DE_LA_EMULSION : null} unit='cp' />
+            <KPI className='kpi' header='pH del agua' value={specificLabData.length > 0 ? specificLabData[0].PH_DEL_AGUA : null} unit='adim' />
+            <KPI className='kpi' header='Salinidad del agua' value={specificLabData.length > 0 ? specificLabData[0].SALINIDAD_DEL_AGUA : null} unit='ppm' />
+            <KPI className='kpi' header='Salinidad del aceite' value={specificLabData.length > 0 ? specificLabData[0].SALINIDAD_DEL_ACEITE : null} unit='ppm' />
+            <KPI className='kpi' header='Compania' value={lab.compania}/>
+            <KPI className='kpi' header='Superviso' value={lab.superviso}/>
+            <KPI className='kpi' header='Observaciones' type={'wide'} value={lab.observaciones}/>
+            <img style={{objectFit: 'contain'}} src={labImage.imgURL}></img> 
+          </div>
+          )
+        break;
+        case 'pruebasGelDeFractura':
+          return (
+          <div>
+            <div>
+              {lab.name}
+            </div>
+            <KPI className='kpi' header='Hidratación del fluido' value={specificLabData.length > 0 ? specificLabData[0].HIDRATACION : null} unit='' />
+            <KPI className='kpi' header='Tiempo de activación del gel' value={specificLabData.length > 0 ? specificLabData[0].TIEMPO_DE_ACTIVACION_DEL_GEL : null} unit='adim' />
+            <KPI className='kpi' header='Determinación de pH' value={specificLabData.length > 0 ? specificLabData[0].DETERMINACION_DE_PH : null} unit='psi' />
+            <KPI className='kpi' header='Tiempo de rompimiento' value={specificLabData.length > 0 ? specificLabData[0].TIEMPO_DE_ROMPIMIENTO : null} unit='mins' />
+            <KPI className='kpi' header='Dosificación de quebradores' value={specificLabData.length > 0 ? specificLabData[0].DOSIFICATION_DE_QUEBRADORES : null} unit='adim' />
+            <KPI className='kpi' header='Viscosidad del gel de fractura' value={specificLabData.length > 0 ? specificLabData[0].VISCOSIDAD_DEL_GEL_DE_FRACTURA : null} unit='adim' />
+            <KPI className='kpi' header='Compania' value={lab.compania}/>
+            <KPI className='kpi' header='Superviso' value={lab.superviso}/>
+            <KPI className='kpi' header='Observaciones' type={'wide'} value={lab.observaciones}/>
+            <img style={{objectFit: 'contain'}} src={labImage.imgURL}></img> 
+          </div>
+          )
+        break;
+        case 'pruebasDeSolubilidad':
+          return (
+          <div>
+            <div>
+              {lab.name}
+            </div>
+            <KPI className='kpi' header='Tipo de muestra' value={specificLabData.length > 0 ? specificLabData[0].TIPO_DE_MUESTRA : null} unit='' />
+            <KPI className='kpi' header='Peso de la muestra' value={specificLabData.length > 0 ? specificLabData[0].PESO_DE_LA_MUESTRA : null} unit='gr' />
+            <KPI className='kpi' header='Tipo de sistema químico empleado' value={specificLabData.length > 0 ? specificLabData[0].TIPO_DE_SISTEMA_QUIMICO : null} unit='' />
+            <KPI className='kpi' header='Peso final de la muestra' value={specificLabData.length > 0 ? specificLabData[0].PESO_FINAL_DE_LA_MUESTRA : null} unit='gr' />
+            <KPI className='kpi' header='Solubilidad' value={specificLabData.length > 0 ? specificLabData[0].SOLUBILIDAD : null} unit='%' />
+            <KPI className='kpi' header='Compania' value={lab.compania}/>
+            <KPI className='kpi' header='Superviso' value={lab.superviso}/>
+            <KPI className='kpi' header='Observaciones' type={'wide'} value={lab.observaciones}/>
+            <img style={{objectFit: 'contain'}} src={labImage.imgURL}></img> 
+          </div>
+          )
+        break;
+        case 'pruebasParaApuntalante':
+          return (
+          <div>
+            <div>
+              {lab.name}
+            </div>
+            <KPI className='kpi' header='Esfericidad' value={specificLabData.length > 0 ? specificLabData[0].ESFERICIDAD : null} unit='adim' />
+            <KPI className='kpi' header='Redondez' value={specificLabData.length > 0 ? specificLabData[0].REDONDEZ : null} unit='adim' />
+            <KPI className='kpi' header='Resistencia a la compresión' value={specificLabData.length > 0 ? specificLabData[0].RESISTENCIA_A_LA_COMPRESION : null} unit='psi' />
+            <KPI className='kpi' header='Malla' value={specificLabData.length > 0 ? specificLabData[0].MALLA : null} unit='' />
+            <KPI className='kpi' header='Aglutinamiento' value={specificLabData.length > 0 ? specificLabData[0].AGLUTINAMIENTO : null} unit='adim' />
+            <KPI className='kpi' header='Turbidez' value={specificLabData.length > 0 ? specificLabData[0].TURBIDEZ : null} unit='adim' />
+            <KPI className='kpi' header='Solubilidad' value={specificLabData.length > 0 ? specificLabData[0].SOLUBILIDAD : null} unit='%' />
+            <KPI className='kpi' header='Compania' value={lab.compania}/>
+            <KPI className='kpi' header='Superviso' value={lab.superviso}/>
+            <KPI className='kpi' header='Observaciones' type={'wide'} value={lab.observaciones}/>
+            <img style={{objectFit: 'contain'}} src={labImage.imgURL}></img> 
+          </div>
+          )
+        break;
+        case 'pruebasDeGrabado':
+          columns = [
+            {
+              Header: 'Sistema Ácido',
+              accessor: 'SISTEMA_ACIDO',
+            }, {
+              Header: <div>Tiempo de contacto<br></br>(min)</div>,
+              accessor: 'TIEMPO_DE_CONTACTO',
+            }, {
+              Header: 'Grabado',
+              accessor: 'GRABADO',
+            }
+          ]
+
+          return (
+          <div>
+            <div>
+              {lab.name}
+            </div>
+            <KPI className='kpi' header='Compania' value={lab.compania}/>
+            <KPI className='kpi' header='Superviso' value={lab.superviso}/>
+            <KPI className='kpi' header='Observaciones' type={'wide'} value={lab.observaciones}/>
+            <ReactTable
+              className="-striped"
+              data={specificLabData}
+              columns={columns}
+              showPagination={false}
+              showPageSizeOptions={false}
+              pageSize={specificLabData.length}
+              sortable={false}
+            />
+            <img style={{objectFit: 'contain'}} src={labImage.imgURL}></img> 
+          </div>
+          )
+        break;
+        case 'cromatografiaDelGas':
+        case 'pruebaDeDureza':
+        case 'determinacionDeLaCalidad':
+        case 'curvaDeViscosidad':
+        return (
+          <div>
+            <div>
+              {lab.name}
+            </div>
+            <KPI className='kpi' header='Compania' value={lab.compania}/>
+            <KPI className='kpi' header='Superviso' value={lab.superviso}/>
+            <KPI className='kpi' header='Observaciones' type={'wide'} value={lab.observaciones}/>
+            <img style={{objectFit: 'contain'}} src={labImage.imgURL}></img> 
+          </div>
+          )
+        break;
+        default:
+          return (
+            <div></div>
+            )
+    }
+  }
+
+  deactivateModal() {
+    this.setState({
+      isOpen: false,
+    })
+  }
+
+  activateModal() {
+    this.setState({
+      isOpen: true,
+    })
+  }
+
+
+    buildModal() {
+    return (
+      <AriaModal
+        titleId="save-modal"
+        onExit={this.deactivateModal}
+        underlayClickExits={true}
+        verticallyCenter={true}
+        focusDialog={true}
+        dialogClass="queryModalPartialReset"
+        dialogStyle={{verticalAlign: '', textAlign: 'center', maxHeight: '80%', marginTop: '100px'}}
+
+      >
+      <div className="modalTest" >
+        <div className="modal-title">
+          Lab Test Data
+        </div>
+        <div className="modal-body" >
+          {this.makeLabModal()}
+        </div> 
+
+      </div>
+      </AriaModal>
+    )
+  }
+
   render() {
-    let { fieldWellOptions, jobOptions, imageData, costData, estCostData, volumeData, estIncData, estVolumeData, cedulaData, cedulaResultData, date, aforoData, interventionData, interventionResultsData, labData, specificLabData } = this.state
+    let { fieldWellOptions, jobOptions, imageData, costData, estCostData, volumeData, estIncData, estVolumeData, cedulaData, cedulaResultData, date, aforoData, interventionData, interventionResultsData, labData, specificLabData, isOpen } = this.state
     let { globalAnalysis } = this.props
 
     globalAnalysis = globalAnalysis.toJS()
@@ -530,6 +814,7 @@ import { convertLowDate, convertHighDate } from '../../../../lib/formatters';
               {this.makeImages()}
             </Card> 
           </CardDeck>
+          { isOpen ? this.buildModal() : null }
           <div style={{height: '500px'}}/>
         </div>
       </div>

@@ -902,6 +902,24 @@ export const getInterventionImages = async (transID, action, cb) => {
     })
 }
 
+export const deleteSave = async (transID, cb) => {
+
+    let values = []
+    for (let i = 0; i < 48; i++) {
+      values.push(transID)
+    }
+
+    console.log(DELETE_QUERY, values)
+    connection.query(DELETE_QUERY, values, (err, results) => {
+        if (err) {
+            cb({err: 'true'})
+        }
+        else {
+            cb({results: results})
+        }
+    })
+}
+
 async function loopAndDelete(images) {
   const filteredData = images.filter(well => well.IMG_URL !== null && well.IMG_URL !== '')
   const deletedArray = []
@@ -1030,7 +1048,6 @@ export const create = async (body, action, cb) => {
 
   let wellLogFile = finalObj.evaluacionPetrofisica.imgName
   let wellBoreFile = finalObj.mecanicoYAparejoDeProduccion.imgName
-  let sistemasArtificialesFile = finalObj.sistemasArtificialesDeProduccion.imgName
 
   let labResultsFile
   let simResultsFile
@@ -1431,7 +1448,7 @@ export const create = async (body, action, cb) => {
                       values = []
 
                       presionDataCampo.forEach(i => {
-                        let newRow = [wellFormacionID, i.fecha, i.Pws, pressureDepthCampo, transactionID]
+                        let newRow = [fieldFormacionID, i.fecha, i.Pws, pressureDepthCampo, transactionID]
                         if (action === 'save') {
                           newRow.push(i.error)
                           newRow.push(finalObj.historicoDePresion.hasErrorsCampo === true ? 1 : 0)
@@ -1508,9 +1525,8 @@ export const create = async (body, action, cb) => {
                               }
 
                               values = [
-                                [wellFormacionID, 'Well Log', wellLogFile, transactionID],
-                                [wellFormacionID, 'Well Bore Diagram', wellBoreFile, transactionID],
-                                [wellFormacionID, 'Sistemas Artificiales', sistemasArtificialesFile, transactionID]
+                                [wellFormacionID, 'Evaluación Petrofísica', wellLogFile, transactionID],
+                                [wellFormacionID, 'Edo. Mecánico', wellBoreFile, transactionID],
                               ]
 
                               connection.query((action === 'save' ? INSERT_WELL_IMAGE_QUERY.save : INSERT_WELL_IMAGE_QUERY.submit), [values], (err, results) => {
@@ -1786,8 +1802,8 @@ export const create = async (body, action, cb) => {
                                               }
 
                                               imageValues = imageValues.concat([
-                                                [interventionID, 'Est Inc Prod', incProdFile, transactionID],
-                                                [interventionID, 'Simulation Results', simResultsFile, transactionID]
+                                                [interventionID, 'Est. Inc. Prod.', incProdFile, transactionID],
+                                                [interventionID, 'Simulaciones', simResultsFile, transactionID]
                                               ])
 
 

@@ -15,7 +15,7 @@ import { create as createWell, getFields, getWell, getSurveys,
             getInterventionEsimulacion, getInterventionAcido, getInterventionApuntalado,
             getInterventionTermico, getCedulaTermico, 
             getLabTest, getCedulaEstimulacion, getCedulaAcido, getCedulaApuntalado, 
-            getCosts, getInterventionImages } from './pozo'
+            getCosts, getInterventionImages, deleteSave } from './pozo'
 
 
 import { create as createCompromiso, mine as myCompromisos, collection as getCompromisos, get as getCompromiso, put as updateCompromiso } from './compromisos';
@@ -64,6 +64,7 @@ export async function handleImageResponse(data) {
     // get img url from s3
     const imgURL = await signedURL(imgName)
     const innerObj = {
+      displayName: labID,
       imgName,
       imgURL,
       imgSource: 's3',
@@ -315,6 +316,18 @@ router.get('/ping', (req, res) => {
 })
 
 
+router.get('/deleteSave', (req, res) => {
+  let { transactionID } = req.query
+
+  console.log('deleting save')
+
+  deleteSave(transactionID, (data) => {
+    console.log('deleted save')
+    console.log(data)
+    res.json({complete2: true})
+  })
+})
+
 router.post('/comment', (req, res) => {
   let { comment, page, user } = req.body
   connection.query(`INSERT INTO Feedback (USER, COMMENT, PAGE) VALUES (?, ?, ?)`, [user, comment, page], (err, results) => {
@@ -415,6 +428,17 @@ router.get('/getTerminationTypes', (req, res) => {
     res.send(results)
   })
 })
+
+router.get('/getCompanies', (req, res) => {
+  const query = `SELECT Company FROM CompanyMap`
+  connection.query(query, (err, results) => {
+    results = results.map(i => ({label: i.Company, value: i.Company}))
+    console.log(results)
+    res.send(results)
+  })
+})
+
+
 
 //todo: move this to seperate script, or delete entirely
 router.get('/deletePlaceholders', (req, res) => {
@@ -1521,8 +1545,7 @@ router.get('/getEmboloViajero', async (req, res) => {
           objectPath.set(finalObj, `${parent}.${child}`, data[0][key])
         }
       })
-      // finalObj.sistemasArtificialesDeProduccion.hasErrors = data[0].HAS_ERRORS === 0 || data[0].HAS_ERRORS === undefined ? false : true
-      finalObj.sistemasArtificialesDeProduccion.hasErrors = true
+      finalObj.sistemasArtificialesDeProduccion.hasErrors = data[0].HAS_ERRORS === 0 || data[0].HAS_ERRORS === undefined ? false : true
       res.json(finalObj)   
     }
     else if (action === 'loadSave') {
@@ -1564,8 +1587,7 @@ router.get('/getBombeoNeumatico', async (req, res) => {
           objectPath.set(finalObj, `${parent}.${child}`, data[0][key])
         }
       })
-      // finalObj.sistemasArtificialesDeProduccion.hasErrors = data[0].HAS_ERRORS === 0 || data[0].HAS_ERRORS === undefined ? false : true
-      finalObj.sistemasArtificialesDeProduccion.hasErrors = true
+      finalObj.sistemasArtificialesDeProduccion.hasErrors = data[0].HAS_ERRORS === 0 || data[0].HAS_ERRORS === undefined ? false : true
       res.json(finalObj)   
     }
     else if (action === 'loadSave') {
@@ -1608,8 +1630,7 @@ router.get('/getBombeoHidraulico', async (req, res) => {
           objectPath.set(finalObj, `${parent}.${child}`, data[0][key])
         }
       })
-      // finalObj.sistemasArtificialesDeProduccion.hasErrors = data[0].HAS_ERRORS === 0 || data[0].HAS_ERRORS === undefined ? false : true
-      finalObj.sistemasArtificialesDeProduccion.hasErrors = true
+      finalObj.sistemasArtificialesDeProduccion.hasErrors = data[0].HAS_ERRORS === 0 || data[0].HAS_ERRORS === undefined ? false : true
       res.json(finalObj)   
     }
     else if (action === 'loadSave') {
@@ -1654,8 +1675,7 @@ router.get('/getBombeoCavidades', async (req, res) => {
           objectPath.set(finalObj, `${parent}.${child}`, data[0][key])
         }
       })
-      // finalObj.sistemasArtificialesDeProduccion.hasErrors = data[0].HAS_ERRORS === 0 || data[0].HAS_ERRORS === undefined ? false : true
-      finalObj.sistemasArtificialesDeProduccion.hasErrors = true
+      finalObj.sistemasArtificialesDeProduccion.hasErrors = data[0].HAS_ERRORS === 0 || data[0].HAS_ERRORS === undefined ? false : true
 
       res.json(finalObj)   
     }
@@ -1700,8 +1720,7 @@ router.get('/getBombeoElectrocentrifugo', async (req, res) => {
           objectPath.set(finalObj, `${parent}.${child}`, data[0][key])
         }
       })
-      // finalObj.sistemasArtificialesDeProduccion.hasErrors = data[0].HAS_ERRORS === 0 || data[0].HAS_ERRORS === undefined ? false : true
-      finalObj.sistemasArtificialesDeProduccion.hasErrors = true
+      finalObj.sistemasArtificialesDeProduccion.hasErrors = data[0].HAS_ERRORS === 0 || data[0].HAS_ERRORS === undefined ? false : true
       res.json(finalObj)   
     }
     else if (action === 'loadSave') {
@@ -1748,8 +1767,7 @@ router.get('/getBombeoMecanico', async (req, res) => {
           objectPath.set(finalObj, `${parent}.${child}`, data[0][key])
         }
       })
-      // finalObj.sistemasArtificialesDeProduccion.hasErrors = data[0].HAS_ERRORS === 0 || data[0].HAS_ERRORS === undefined ? false : true
-      finalObj.sistemasArtificialesDeProduccion.hasErrors = true
+      finalObj.sistemasArtificialesDeProduccion.hasErrors = data[0].HAS_ERRORS === 0 || data[0].HAS_ERRORS === undefined ? false : true
       res.json(finalObj)   
     }
     else if (action === 'loadSave') {

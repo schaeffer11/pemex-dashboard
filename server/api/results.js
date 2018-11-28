@@ -306,15 +306,18 @@ export const createResults = async (body, action, cb) => {
           values = []
           if (interventionType !== 'termico') {
             geometria.forEach(i => {
-                let name = 'geometry ' + i.intervalo
+                let name = 'Geometría ' + i.intervalo
                 let newRow = [wellFormacionID, name, i.imgName, propuestaID, transactionID]
                 values.push(newRow)
             })
           }
 
-          values.push([wellFormacionID, 'Treatment Graph', treatmentGraphImg, propuestaID, transactionID])
+          values.push([wellFormacionID, 'Gráfica de Tratamiento', treatmentGraphImg, propuestaID, transactionID])
 
-          connection.query(values.length === 0 ? DUMMY_QUERY : INSERT_IMAGES_QUERY.submit, [values], (err, results) => {
+          console.log(values)
+
+
+          connection.query(values.length === 0 ? DUMMY_QUERY : INSERT_IMAGES_QUERY.submit, [values, values, values, values], (err, results) => {
             console.log('images', err)
             console.log('images', results)
             if (err) {
@@ -324,14 +327,6 @@ export const createResults = async (body, action, cb) => {
               })
             }
 
-            // let query = 
-            //   interventionType === 'estimulacion' 
-            //     ? INSERT_CEDULA_ESTIMULACION_QUERY.submit 
-            //     : interventionType === 'acido' 
-            //       ? INSERT_CEDULA_ACIDO_QUERY.submit 
-            //       : interventionType === 'apuntalado'
-            //         ? INSERT_CEDULA_APUNTALADO_QUERY.submit
-            //         : INSERT_CEDULA_TERMICO_QUERY.submit
             let query
             values = []
 

@@ -49,3 +49,5 @@ export const setGeneralFilters = (value) => ({
   type: 'set_generalFilters',
   value,
 })
+
+export const setCompanyOptions = value => ({ type: 'set_companyOptions', value})

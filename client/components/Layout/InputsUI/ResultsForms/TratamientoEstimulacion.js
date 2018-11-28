@@ -5,7 +5,7 @@ import { connect } from 'react-redux'
 import InputTable from '../../Common/InputTable'
 import { InputRow, InputRowSelectUnitless, CalculatedValue } from '../../Common/InputRow'
 import { setMergeTratamientoEstimulacion, setCedulaTratamientoEstimulacion } from '../../../../redux/actions/results'
-import { round, calculateVolumes, getSistemaOptions, getDisabledColumnForGeneralCedula, companyOptions } from '../../../../lib/helpers'
+import { round, calculateVolumes, getSistemaOptions, getDisabledColumnForGeneralCedula } from '../../../../lib/helpers'
 import { checkEmpty, checkDate } from '../../../../lib/errorCheckers'
 import { calculateValuesGeneralCedula } from '../../../../lib/formatters';
 
@@ -115,7 +115,7 @@ import { calculateValuesGeneralCedula } from '../../../../lib/formatters';
   }
 
   makeGeneralForm() {
-    let { formData, setMergeTratamientoEstimulacion, intervals, stimulationType } = this.props
+    let { formData, setMergeTratamientoEstimulacion, intervals, stimulationType, companyOptions } = this.props
     let { tratamientoCompany } = formData
 
     const intervalsDiv = intervals.map(elem => <div key={`intervalo_${elem}`}>{elem}</div>)
@@ -414,6 +414,7 @@ const mapStateToProps = state => ({
   hasSubmitted: state.getIn(['global', 'hasSubmitted']),
   intervals: state.getIn(['resultsMeta', 'intervals']).toJS(),
   stimulationType: state.getIn(['resultsMeta', 'stimulationType']),
+  companyOptions: state.getIn(['global', 'companyOptions'])
 })
 
 const mapDispatchToProps = dispatch => ({

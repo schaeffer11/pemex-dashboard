@@ -15,6 +15,7 @@ const initialState = Map({
     hasSubmitted: false,
     transactionID: null,
     saveName: null,
+    companyOptions: []
 })
 
 
@@ -41,6 +42,8 @@ const global = (state = initialState, action) => {
       return state.set('transactionID', action.value)
     case 'set_saveName':
       return state.set('saveName', action.value)
+    case 'set_companyOptions':
+      return state.set('companyOptions', action.value)
     default:
    		return state
   }
