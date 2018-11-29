@@ -623,6 +623,7 @@ UNION
 select FECHA, QO, QW, QG from ResultsAforos WHERE PROPUESTA_ID = ? AND Qo != -999
 `
 
+  console.log('monkmonkmonk', query, transactionID)
   connection.query(query, [transactionID, transactionID], (err, results) => {
       console.log('comment err', err)
 

@@ -141,13 +141,12 @@ import { KPI } from '../Common/KPIs'
   }
 
   fetchJobs() {
-    let { globalAnalysis } = this.props
+    let { globalAnalysis, token } = this.props
     globalAnalysis = globalAnalysis.toJS()
     let { well, lowDate, highDate } = globalAnalysis
     lowDate = convertLowDate(globalAnalysis.lowDate)
     highDate = convertHighDate(globalAnalysis.highDate)
 
-    let { token } = this.props
 
     fetch(`/api/getJobs?well=${well}&lowDate=${lowDate}&highDate=${highDate}`, {
       headers: {
@@ -164,6 +163,8 @@ import { KPI } from '../Common/KPIs'
           return a.FECHA_PROGRAMADA_INTERVENCION - b.FECHA_PROGRAMADA_INTERVENCION
         })
 
+        console.log('this is important', r)
+
         r.forEach(i => {
           let date = new Date(i.FECHA_PROGRAMADA_INTERVENCION)
           date = `${date.getDate()}/${date.getMonth() + 1}/${date.getFullYear()}`
@@ -172,7 +173,7 @@ import { KPI } from '../Common/KPIs'
           jobs.push({
             type: type,
             date: date,
-            transID: i.TRANSACTION_ID,
+            transID: i.PROPUESTA_ID,
           })
         })
         
@@ -650,6 +651,8 @@ import { KPI } from '../Common/KPIs'
     interventionData ? interventionData = interventionData[0] : null
     interventionResultsData ? interventionResultsData = interventionResultsData[0] : null
 
+
+    console.log(fieldWellOptions, jobOptions, imageData, costData, estCostData, volumeData, estIncData, estVolumeData, cedulaData, cedulaResultData, date, aforoData, interventionData, interventionResultsData, labData, specificLabData, isOpen)
     if (interventionData && interventionResultsData)  {
       if (jobType === 'Estimulacion') {
         if (!interventionData.LONGITUD_DE_AGUJERO_DE_GUSANO || !interventionData.PENETRACION_RADIAL) {
