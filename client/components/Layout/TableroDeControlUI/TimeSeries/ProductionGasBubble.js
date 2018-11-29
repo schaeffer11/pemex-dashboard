@@ -13,9 +13,6 @@ import { KPI } from '../Common/KPIs'
     let series = []
     let groups = []
 
-
-    console.log(data)
-
     data.forEach(i => {
       if (!groups.includes(i.groupedName)) {
         groups.push(i.groupedName)

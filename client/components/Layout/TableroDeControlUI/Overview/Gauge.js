@@ -72,7 +72,6 @@ export const Gauge = ({ topLabel, botLabel, value, topSubLabel, botSubLabel, cla
     }],
   }
 
-  console.log(value)
 
   botLabel ? botLabel = parseFloat(botLabel).toFixed(2) : null
 

@@ -5,7 +5,7 @@ import Select from 'react-select'
 import { selectSimpleValue, convertLowDate, convertHighDate, handleSelectValue } from '../../../../lib/formatters'
 import { getFilters, fetchFilterData, buildFiltersOptions } from '../../../../lib/filters'
 import { checkForDifferencesInObjects } from '../../../../lib/helpers'
-import { setGeneralFilters, setGeneralGlobalAnalysis } from '../../../../redux/actions/global'
+import { setGeneralFilters, setGeneralGlobalAnalysis, setMergeGlobalAnalysis } from '../../../../redux/actions/global'
 import GroupBy from './GroupBy'
 
 @autobind class Filters extends Component {
@@ -25,25 +25,33 @@ import GroupBy from './GroupBy'
       }
     }
     const data = await fetchFilterData(token, globalAnalysis)
-    console.log('i got some data', data)
     const filterOptions = buildFiltersOptions(data)
     setGeneralFilters(filterOptions)
   }
 
   async componentDidUpdate(prevProps) {
     const filters = getFilters()
-    let { globalAnalysis, setGeneralFilters, token } = this.props
+    let { globalAnalysis, setGeneralFilters, mergeGeneralAnalysis, token } = this.props
     let prevGlobalAnalysis = prevProps.globalAnalysis
     globalAnalysis = globalAnalysis.toJS()
     prevGlobalAnalysis = prevGlobalAnalysis.toJS()
-    // let somethingChanged = false
     const optionKeys = [...Object.keys(filters), 'lowDate', 'highDate']
     const somethingChanged = checkForDifferencesInObjects(optionKeys, globalAnalysis, prevGlobalAnalysis)
     if (somethingChanged) {
+
       const data = await fetchFilterData(token, globalAnalysis)
       const newOptions = buildFiltersOptions(data)
-      // const data = await this.getData()
-      // const newOptions = this.buildOptions(data)
+      // Re-add if you want things to be auto selected
+      // const singleValuesFromOptions = {}
+      // Object.keys(newOptions).forEach(key => {
+      //   const arr = newOptions[key]
+      //   if (arr.length === 1) {
+      //     singleValuesFromOptions[key] = arr[0].value
+      //   }
+      // })
+      // if (Object.keys(singleValuesFromOptions).length > 0) {
+      //   mergeGeneralAnalysis(singleValuesFromOptions)
+      // }
       setGeneralFilters(newOptions)
     }
   }
@@ -96,7 +104,24 @@ import GroupBy from './GroupBy'
   handleSelect(selection, type) {
     const { setGeneralAnalysis } = this.props
     const value = handleSelectValue(selection)
+    if (value === null) {
+
+    }
     setGeneralAnalysis([type], value)
+  }
+
+  clearFilters() {
+    const { mergeGeneralAnalysis } = this.props
+    mergeGeneralAnalysis({
+      subdireccion: null,
+      activo: null,
+      field: null,
+      well: null,
+      formation: null,
+      company: null,
+      interventionType: null,
+      terminationType: null,
+    })
   }
 
   buildSelects() {
@@ -131,6 +156,7 @@ import GroupBy from './GroupBy'
         <div className="filters-tablero">
           {this.buildSelects()}
         </div>
+        <button onClick={this.clearFilters}><i className="fas fa-times" /> borrar filtros</button>
       </div>
     )
   }
@@ -145,6 +171,7 @@ const mapStateToProps = state => ({
 const mapDispatchToProps = dispatch => ({
   setGeneralFilters: (value) => dispatch(setGeneralFilters(value)),
   setGeneralAnalysis: (location, value) => dispatch(setGeneralGlobalAnalysis(location, value)),
+  mergeGeneralAnalysis: (obj) => dispatch(setMergeGlobalAnalysis(obj)),
 })
 
 export default connect(mapStateToProps, mapDispatchToProps)(Filters)

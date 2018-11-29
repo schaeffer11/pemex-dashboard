@@ -3,6 +3,7 @@ import db from '../../lib/db'
 import appConfig from '../../../app-config.js'
 import moment from 'moment'
 import { handleImageResponse } from '../api';
+import { getAuthorization } from '../../middleware';
 // import path from 'path'
 // import fs from 'fs'
 // import objectPath from 'object-path'
@@ -10,6 +11,7 @@ import { handleImageResponse } from '../api';
 
 const connection = db.getConnection(appConfig.users.database)
 const router = Router()
+router.use(getAuthorization)
 
 
 router.get('/getEstCostData', (req, res) => {
@@ -20,7 +22,6 @@ SELECT * FROM IntervencionesEstimatedCosts c
 JOIN CostMap cm on c.ITEM = cm.COST_ID
 WHERE TRANSACTION_ID = ?`
 
-  console.log('testing', transactionID)
   connection.query(query, transactionID, (err, results) => {
       console.log('comment err', err)
 
@@ -61,7 +62,7 @@ JOIN ?? ia ON r.PROPUESTA_ID = ia.TRANSACTION_ID
  JOIN TransactionsResults tr on tr.PROPUESTA_ID = ia.TRANSACTION_ID
 WHERE r.PROPUESTA_ID = ?`
  
-console.log(query, type, transactionID)
+
   connection.query(query, [type, transactionID], (err, results) => {
       console.log('comment err', err)
 
@@ -77,7 +78,6 @@ console.log(query, type, transactionID)
 
 router.get('/getResultsImages', (req, res) => {
   const { transactionID } = req.query
-  console.log('getting results images')
   const query = `
     SELECT * FROM ResultsImages WHERE PROPUESTA_ID = ?
   `
@@ -328,9 +328,6 @@ router.get('/getCedulaResults', (req, res) => {
           })
         }
 
-        console.log('da results', results)
-
-
         res.json(results)
       }
     })
@@ -482,10 +479,7 @@ router.get('/getInterventionResultsData', (req, res) => {
       else {
         if (shouldMapData) {
           const final = {}
-          console.log('results', results[0], results[0].VOLUMEN_TOTAL_DE_LIQUIDO)
-          console.log('map', map.VOLUMEN_TOTAL_DE_LIQUIDO)
           Object.keys(results[0]).forEach((key) => {
-            console.log('key', key, map[key])
             final[map[key]] = results[0][key]
           })
           res.json(final)
@@ -606,8 +600,6 @@ router.get('/getEstimatedVolumeData', (req, res) => {
       WHERE TRANSACTION_ID = ?`
   }
 
-  console.log(query)
-
   connection.query(query, transactionID, (err, results) => {
       console.log('comment err', err)
 
@@ -631,6 +623,7 @@ UNION
 select FECHA, QO, QW, QG from ResultsAforos WHERE PROPUESTA_ID = ? AND Qo != -999
 `
 
+  console.log('monkmonkmonk', query, transactionID)
   connection.query(query, [transactionID, transactionID], (err, results) => {
       console.log('comment err', err)
 
@@ -670,8 +663,6 @@ router.get('/getLabs', (req, res) => {
           }
         })
 
-        console.log(query, transactionID)
-        console.log(results)
         res.json(results)
       }
     })
@@ -690,7 +681,7 @@ router.get('/getLabData', (req, res) => {
     query = `select * from IntervencionesLabTestsPruebasDeCompatibilidad where LAB_ID = ?`
   }
   else if (type === 'pruebasDeGrabado') {
-    query = `select * from IntervencionesLabTestsPrueasDeGrabado where LAB_ID = ?`
+    query = `select * from IntervencionesLabTestsPruebasDeGrabado where LAB_ID = ?`
   }
   else if (type === 'pruebasDeSolubilidad') {
     query = `select * from IntervencionesLabTestsPruebasDeSolubilidad where LAB_ID = ?`
@@ -732,7 +723,6 @@ router.get('/generalResults', (req, res) => {
       let final = {}
       if (results.length > 0) {
         const result = results[0]
-        console.log("results", results)
         final = {
           company: result.COMPANY,
           fecha: moment(result.FECHA_INTERVENCION).format('YYYY-MM-DD'),

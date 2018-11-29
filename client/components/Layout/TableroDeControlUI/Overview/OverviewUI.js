@@ -185,16 +185,16 @@ import TimeSlider from '../TimeSeries/TimeSlider'
 
     return (
       <div className='data'>
-        <div style={{padding: '40px', paddingBottom: '0px'}}>
+        <div className='content'>
           <TimeSlider />
-        </div>
-        <div className="overview">
-          <TypeKPI data={data[0]} />
-          <TypeKPI data={data[1]} />
-          <TypeKPI data={data[2]} />
-          <TypeKPI data={data[3]} />
-          <TypeKPI data={data[4]} />
-          <TypeKPI data={data[5]} />
+          <div className="overview">
+            <TypeKPI data={data[0]} />
+            <TypeKPI data={data[1]} />
+            <TypeKPI data={data[2]} />
+            <TypeKPI data={data[3]} />
+            <TypeKPI data={data[4]} />
+            <TypeKPI data={data[5]} />
+          </div>
         </div>
       </div>
     )

@@ -118,7 +118,6 @@ export const InputRowSelectMulti = ({ header, name, value, options, callback, on
 }
 
 export const InputRowSelectUnitless = ({ header, name, value, options, callback, onBlur, index, errors=[], disabled }) => {
-
   if (!options) {
     options = []
   }
@@ -222,7 +221,7 @@ export const InputRowCosts = ({ header, name, unit, value, onChange, index, onBl
 export const InputDate = ({ name, onChange, value, header, onBlur, errors }) => {
   // const errorElements = generateErrorElements(name, errors)
   let handleSelect = (date) => {
-    console.log('date?', date)
+    // console.log('date?', date)
     if (date === null) {
       checkDate(date, name, errors, onBlur)
       onChange(null)

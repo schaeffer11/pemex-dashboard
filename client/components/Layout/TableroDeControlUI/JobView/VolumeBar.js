@@ -8,8 +8,6 @@ import { KPI } from '../Common/KPIs'
 
   render() {
     let { data, estData } = this.props
-
-    console.log(data, estData)
     
     let categories = []
     let series = []
@@ -48,8 +46,6 @@ import { KPI } from '../Common/KPIs'
       name: 'Actual',
       data: actualData
     }]
-
-    console.log(series, categories)
 
 
     let config = {

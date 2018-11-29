@@ -1,8 +1,8 @@
 .well-view {
-	display: grid;
-	grid-template-rows: 130px calc(100vh - 130px);
-	grid-template-areas: 	'header' 
-							'content';
+	// display: grid;
+	// grid-template-rows: 130px calc(100vh - 130px);
+	// grid-template-areas: 'content';
+
 
 	.header {
 		grid-area: header;
@@ -19,9 +19,6 @@
     		height: 95px;
     		margin-bottom: 30px;
 		}
-
-
-
 	}
 
 	.content {

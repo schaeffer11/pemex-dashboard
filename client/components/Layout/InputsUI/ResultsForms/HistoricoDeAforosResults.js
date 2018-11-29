@@ -231,7 +231,7 @@ let columns = [
     aforosData.forEach(i => {
       if (i.fecha) {
         let date = new Date(i.fecha)
-        console.log('da date', typeof i.qo, i.qo, parseFloat(i.qo))
+
         date = Date.UTC(date.getFullYear(), date.getMonth(), date.getDate())
         i.qo.length > 0 || typeof i.qo === 'number' ? qoData.push([date, parseFloat(i.qo)]) : null
         i.qw.length > 0 || typeof i.qw === 'number' ? qwData.push([date, parseFloat(i.qw)]) : null

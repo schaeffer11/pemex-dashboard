@@ -264,7 +264,6 @@ const forms = [
         let newObj = data.evaluacionPetrofisica
         newObj.layerData = layerData.evaluacionPetrofisica.layerData
         newObj.fromSave = true
-        console.log('what is this?', newObj)
         setEvaluacionPetrofisica(newObj)
         setLoading({ 
           isLoading: false,

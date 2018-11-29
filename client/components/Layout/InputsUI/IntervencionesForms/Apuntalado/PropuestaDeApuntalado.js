@@ -9,7 +9,7 @@ import { setHasErrorsPropuestaApuntalado, setCedulaData, setModuloYoungArena, se
   setIntervalo, setLongitudDeIntervalo, setVolAparejo, setCapacidadTotalDelPozo, setVolumenPrecolchonN2, 
   setVolumenDeApuntalante, setVolumenDeGelDeFractura, setVolumenDesplazamiento, setVolumenTotalDeLiquido, 
   setPropuestaCompany } from '../../../../../redux/actions/intervencionesApuntalado'
-import { round, calculateVolumes, getSistemaApuntaladoOptions, getDisabledColumnForApuntaladoCeluda, companyOptions } from '../../../../../lib/helpers'
+import { round, calculateVolumes, getSistemaApuntaladoOptions, getDisabledColumnForApuntaladoCeluda } from '../../../../../lib/helpers'
 import { checkEmpty, checkDate } from '../../../../../lib/errorCheckers'
 import { calculateValuesApuntaladoCedula } from '../../../../../lib/formatters';
 
@@ -133,7 +133,7 @@ import { calculateValuesApuntaladoCedula } from '../../../../../lib/formatters';
   }
 
   makeGeneralForm() {
-    let { formData, setPropuestaCompany, intervalos } = this.props
+    let { formData, setPropuestaCompany, intervalos, companyOptions } = this.props
     formData = formData.toJS()
     intervalos = intervalos.toJS()
     let { propuestaCompany } = formData
@@ -496,6 +496,7 @@ const mapStateToProps = state => ({
   intervalos: state.getIn(['evaluacionPetrofisica', 'layerData']),
   hasErrors: state.getIn(['propuestaApuntalado', 'hasErrors']),
   hasSubmitted: state.getIn(['global', 'hasSubmitted']),
+  companyOptions: state.getIn(['global', 'companyOptions'])
 })
 
 const mapDispatchToProps = dispatch => ({

@@ -39,7 +39,16 @@
   }
   &.filters {
     width: 50em;
+    button {
+      background: transparent;
+      border: none;
+      color: #d84040;
+    }
   }
+}
+
+.filtersAndExport > * {
+  margin: 1em .5em;
 }
 
 .filters-tablero {

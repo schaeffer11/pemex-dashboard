@@ -38,7 +38,6 @@ import { setIsLoading, setShowForms } from '../../../redux/actions/global'
             })
                 .then(r => r.json())
                 .then((res) => {
-                    console.log(res)
                     this.setState({
                         compromiso: res,
                         editMode: true

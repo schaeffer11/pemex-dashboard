@@ -74,7 +74,7 @@ const getErrors = (data, headers) => {
     headers.forEach(elem => {
       initialValues[elem.name] = elem.type === 'date' ? null : ''
     })
-    console.log('what is this initial values', initialValues)
+    // console.log('what is this initial values', initialValues)
     setData([initialValues])
     if (!file) {
       return this.setState({ isAccepted: true, errors: [] })
@@ -89,9 +89,9 @@ const getErrors = (data, headers) => {
       const workbook = XLSX.read(data, { type: 'binary' })
       const sheetName = workbook.SheetNames[0]
       const sheet = workbook.Sheets[sheetName]
-      console.log('sheet', sheet)
+      // console.log('sheet', sheet)
       let jsonData = XLSX.utils.sheet_to_json(sheet, { header: headers.map(elem => elem.name) })
-      console.log('json', jsonData)
+      // console.log('json', jsonData)
       /**
        * Remove header from file
        * Parse data to fix dates and add missing data
@@ -101,7 +101,7 @@ const getErrors = (data, headers) => {
       const parsedData = parseJson(jsonData, headers)
       const errors = getErrors(parsedData, headers)
       // Handle resulting data
-      console.log('parsedData',parsedData)
+      // console.log('parsedData',parsedData)
       if (errors.length > 0) {
         return this.setState({ errors, isAccepted: false, modalIsOpen: true })
       } else {

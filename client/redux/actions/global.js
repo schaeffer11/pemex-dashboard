@@ -28,6 +28,11 @@ export const setGeneralGlobalAnalysis = (location, value) => ({
   value,
 })
 
+export const setMergeGlobalAnalysis = (obj) => ({
+  type: 'set_mergeGlobalAnalysis',
+  obj,
+})
+
 export const setGroupByAndGroups = (groupBy, groups) => ({
   type: 'set_groupByAndGroup',
   groupBy,
@@ -44,3 +49,9 @@ export const setGeneralFilters = (value) => ({
   type: 'set_generalFilters',
   value,
 })
+
+export const setCompanyOptions = value => ({ type: 'set_companyOptions', value})
+export const setJustificationOptions = value => ({ type: 'set_justificationOptions', value})
+export const setLitologiaOptions = value => ({ type: 'set_litologiaOptions', value})
+export const setTipoDeTerminationOptions = value => ({ type: 'set_tipoDeTerminationOptions', value})
+export const setTipoDeLinerOptions = value => ({ type: 'set_tipoDeLinerOptions', value})

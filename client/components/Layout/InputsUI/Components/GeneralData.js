@@ -8,7 +8,7 @@ import AriaModal from 'react-aria-modal'
 
 import { setObjetivo, setAlcances, setTipoDeIntervenciones } from '../../../../redux/actions/intervencionesEstimulacion'
 import { setSubdireccion, setActivo, setCampo, setPozo, setFormacion, setFechaProgramadaIntervencion, setFromSaveFichaTecnicaHighLevel, setHasErrorsFichaTecnicaHighLevel, setIntervencionProgramada } from '../../../../redux/actions/pozo'
-import { setShowForms, setIsLoading, setTransactionID, setSaveName } from '../../../../redux/actions/global'
+import { setShowForms, setIsLoading, setTransactionID, setSaveName, setCompanyOptions, setJustificationOptions, setLitologiaOptions, setTipoDeTerminationOptions, setTipoDeLinerOptions } from '../../../../redux/actions/global'
 import { InputDate, InputRow, InputRowUnitless, InputRowSelectUnitless, TextAreaUnitless } from '../../Common/InputRow'
 import Notification from '../../Common/Notification'
 import Loading from '../../Common/Loading'
@@ -27,6 +27,7 @@ import ButtonGroup from './ButtonGroup'
       selectedProposal: null,
       selectedSave: null,
       selectedSaveName: null,
+      deleteVal: null,
       errors: {
         subdireccion: {
           type: 'number',
@@ -61,7 +62,7 @@ import ButtonGroup from './ButtonGroup'
   }
 
   componentDidMount(){
-    let { user, hasSubmitted } = this.props
+    let { user, hasSubmitted, setCompanyOptions, setJustificationOptions, setLitologiaOptions, setTipoDeTerminationOptions, setTipoDeLinerOptions } = this.props
     user = user.toJS()
     const { token, id } = user
     const headers = {
@@ -70,6 +71,7 @@ import ButtonGroup from './ButtonGroup'
         'content-type': 'application/json',
       },
     }
+
     let hasErrors = this.checkAllInputs(hasSubmitted)
     setHasErrorsFichaTecnicaHighLevel(hasErrors)
     fetch(`/api/getAllSaves?userID=${id}`, headers)
@@ -86,6 +88,37 @@ import ButtonGroup from './ButtonGroup'
         this.setState({
           proposalOptions: r
         })
+      })
+
+
+    fetch('/api/getCompanyMap', headers)
+      .then(r => r.json())
+      .then( r => {
+        setCompanyOptions(r)
+      })
+
+    fetch('/api/getJustificationMap', headers)
+      .then(r => r.json())
+      .then( r => {
+        setJustificationOptions(r)
+      })
+
+    fetch('/api/getLitologiaMap', headers)
+      .then(r => r.json())
+      .then( r => {
+        setLitologiaOptions(r)
+      })
+
+    fetch('/api/getTipoDeTerminationMap', headers)
+      .then(r => r.json())
+      .then( r => {
+        setTipoDeTerminationOptions(r)
+      })
+
+    fetch('/api/getTipoDeLinerMap', headers)
+      .then(r => r.json())
+      .then( r => {
+        setTipoDeLinerOptions(r)
       })
   }
 
@@ -215,7 +248,7 @@ import ButtonGroup from './ButtonGroup'
   }
 
   buildModal() {
-    let { saveOptions, selectedSave } = this.state
+    let { saveOptions, selectedSave, selectedSaveName, deleteVal } = this.state
 
     return (
       <AriaModal
@@ -225,7 +258,7 @@ import ButtonGroup from './ButtonGroup'
         verticallyCenter={true}
         focusDialog={true}
         dialogClass="queryModalPartialReset"
-        dialogStyle={{verticalAlign: '', textAlign: 'center', maxHeight: '80%', marginTop: '2%'}}
+        dialogStyle={{verticalAlign: '', textAlign: 'center', maxHeight: '80%', marginTop: '130px'}}
 
       >
       <div className="modalTest" >
@@ -246,6 +279,14 @@ import ButtonGroup from './ButtonGroup'
             </div>
         </div> 
         <button disabled={!selectedSave} className="submit submit-load" onClick={this.handleLoad}>Descargar borrador</button>
+        <br/>
+        <div>  - OR - </div>
+        <div> Delete Save </div>
+        <div> To be able to delete you must type the name of the save in</div>
+        <input value={deleteVal} onChange={e => this.setState({deleteVal: e.target.value})}/>
+        <br/>
+        <button style={{background: '#b22222'}} disabled={!selectedSave || selectedSaveName !== deleteVal} className="submit submit-load" onClick={this.deleteSave}>Delete borrador</button>
+        
       </div>
       </AriaModal>
     )
@@ -380,7 +421,6 @@ import ButtonGroup from './ButtonGroup'
         })
 
         activoOptions = activos.map(i => ({label: i.ACTIVO_NAME, value: i.ACTIVO_ID})).sort(sortLabels)
-        console.log(activoOptions, activos, fieldWellOptions)
       }
 
       if (activo) {
@@ -485,6 +525,7 @@ import ButtonGroup from './ButtonGroup'
     let { transactionID, tipoDeIntervenciones } = data
 
     const results = await Promise.all([
+      fetch(`api/getWell?transactionID=${transactionID}&saved=1`, headers).then(r => r.json()),
       fetch(`api/getFields?transactionID=${transactionID}&saved=1`, headers).then(r => r.json()),
       fetch(`api/getHistIntervencionesEstimulacionNew?transactionID=${transactionID}&saved=1`, headers).then(r => r.json()),
       fetch(`api/getHistIntervencionesAcidoNew?transactionID=${transactionID}&saved=1`, headers).then(r => r.json()),
@@ -492,17 +533,10 @@ import ButtonGroup from './ButtonGroup'
       fetch(`api/getHistIntervencionesTermicoNew?transactionID=${transactionID}&saved=1`, headers).then(r => r.json()),
       fetch(`api/getMudLoss?transactionID=${transactionID}&saved=1`, headers).then(r => r.json()),
       fetch(`api/getLayer?transactionID=${transactionID}&saved=1`, headers).then(r => r.json()),
-      fetch(`api/getWell?transactionID=${transactionID}&saved=1`, headers).then(r => r.json()),
       fetch(`api/getHistIntervenciones?transactionID=${transactionID}&saved=1`, headers).then(r => r.json()),
       fetch(`api/getMecanico?transactionID=${transactionID}&saved=1`, headers).then(r => r.json()),
       fetch(`api/getSurvey?transactionID=${transactionID}&saved=1`, headers).then(r => r.json()),
       fetch(`api/getAnalisisAgua?transactionID=${transactionID}&saved=1`, headers).then(r => r.json()),
-      fetch(`api/getEmboloViajero?transactionID=${transactionID}&saved=1`, headers).then(r => r.json()),
-      fetch(`api/getBombeoNeumatico?transactionID=${transactionID}&saved=1`, headers).then(r => r.json()),
-      fetch(`api/getBombeoHidraulico?transactionID=${transactionID}&saved=1`, headers).then(r => r.json()),
-      fetch(`api/getBombeoCavidades?transactionID=${transactionID}&saved=1`, headers).then(r => r.json()),
-      fetch(`api/getBombeoElectrocentrifugo?transactionID=${transactionID}&saved=1`, headers).then(r => r.json()),
-      fetch(`api/getBombeoMecanico?transactionID=${transactionID}&saved=1`, headers).then(r => r.json()),
       fetch(`api/getFieldPressure?transactionID=${transactionID}&saved=1`, headers).then(r => r.json()),
       fetch(`api/getWellPressure?transactionID=${transactionID}&saved=1`, headers).then(r => r.json()),
       fetch(`api/getWellAforos?transactionID=${transactionID}&saved=1`, headers).then(r => r.json()),
@@ -529,8 +563,39 @@ import ButtonGroup from './ButtonGroup'
         })
       })
 
+    let sapData
+    switch (results[0].sistemasArtificialesDeProduccion.tipoDeSistemo) {
+      case 'emboloViajero':
+        sapData = await fetch(`api/getEmboloViajero?transactionID=${transactionID}&saved=1`, headers).then(r => r.json())
+        break;
+      case 'bombeoNeumatico':
+        sapData = await fetch(`api/getBombeoNeumatico?transactionID=${transactionID}&saved=1`, headers).then(r => r.json())
+        break;
+      case 'bombeoHidraulico':
+        sapData = await fetch(`api/getBombeoHidraulico?transactionID=${transactionID}&saved=1`, headers).then(r => r.json())
+        break;
+      case 'bombeoCavidadesProgresivas':
+        sapData = await fetch(`api/getBombeoCavidades?transactionID=${transactionID}&saved=1`, headers).then(r => r.json())
+        break;
+      case 'bombeoElectrocentrifugo':
+        sapData = await fetch(`api/getBombeoElectrocentrifugo?transactionID=${transactionID}&saved=1`, headers).then(r => r.json())
+        break;
+      case 'bombeoMecanico':
+        sapData = await fetch(`api/getBombeoMecanico?transactionID=${transactionID}&saved=1`, headers).then(r => r.json())
+        break;
+      default:
+        sapData = {
+          sistemasArtificialesDeProduccion: {
+            hasErrors: false,
+            tipoDeSistemo: 'none'
+          }
+        }
+        break    
+    }
+
+    results.push(sapData)
+
     let newState = {}
-    console.log(results)
     results.forEach(r => {
       const rKeys = Object.keys(r)
       rKeys.forEach(registerName => {
@@ -539,6 +604,7 @@ import ButtonGroup from './ButtonGroup'
         })
       })
     })
+
 
     const allImages = await fetch(`api/getImages?transactionID=${transactionID}&saved=1`, headers).then(r => r.json())
     newState = handleImagesFromServer(allImages, newState)
@@ -551,6 +617,49 @@ import ButtonGroup from './ButtonGroup'
     })
     setSaveName(selectedSaveName)
     this.props.loadFromSave(newState)
+  }
+
+
+
+  deleteSave() {
+    let { selectedSave, selectedSaveName } = this.state
+    let { user, setLoading } = this.props
+
+
+    setLoading({ isLoading: true, loadText: 'Deleting' })
+    user = user.toJS()
+
+    const { token, id } = user
+    const headers = {
+      headers: {
+        'Authorization': `Bearer ${token}`,
+        'content-type': 'application/json',
+      },
+    }
+
+    fetch(`/api/deleteSave?transactionID=${selectedSave}`, headers)
+      .then(res => res.json())
+      .then(res => {
+
+        fetch(`/api/getAllSaves?userID=${id}`, headers)
+          .then(r => r.json())
+          .then( r => {
+
+            setLoading({ 
+              isLoading: false,
+              showNotification: true,
+              notificationType: 'success',
+              notificationText: `Successfully deleted`
+            })
+
+            this.setState({
+              saveOptions: r,
+              selectedSave: null,
+              deleteVal: null,
+              selectedSaveName: null
+            })
+          })
+    })
   }
 
   handleSelectFormType(val) {
@@ -568,7 +677,7 @@ import ButtonGroup from './ButtonGroup'
   }
 
   render() {
-    let { isOpen, selectedSave, formType, selectedProposal } = this.state
+    let { isOpen, selectedSave, formType, selectedProposal, deleteVal } = this.state
     let { setShowForms } = this.props
 
     return (
@@ -640,6 +749,11 @@ const mapDispatchToProps = dispatch => ({
   setFromSaveFichaTecnicaHighLevel: obj => dispatch(setFromSaveFichaTecnicaHighLevel(obj)),
   setIntervencionProgramada: obj => dispatch(setIntervencionProgramada(obj)),
   setSaveName: obj => dispatch(setSaveName(obj)),
+  setCompanyOptions: val => dispatch(setCompanyOptions(val)),
+  setJustificationOptions: val => dispatch(setJustificationOptions(val)),
+  setLitologiaOptions: val => dispatch(setLitologiaOptions(val)),
+  setTipoDeTerminationOptions: val => dispatch(setTipoDeTerminationOptions(val)),
+  setTipoDeLinerOptions: val => dispatch(setTipoDeLinerOptions(val))
 })
 
 export default connect(mapStateToProps, mapDispatchToProps)(GeneralData)

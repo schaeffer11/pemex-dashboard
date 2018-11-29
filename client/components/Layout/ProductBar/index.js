@@ -18,18 +18,28 @@ class Productbar extends Component {
      super(props)
 
      this.state = {
-         location: ""
+         location: "",
+        //  isAdmin: false,
      }
   }
 
-  componentDidMount(){
-    const { history } = this.props;
-    this.unsubscribeFromHistory = history.listen(this.handleLocationChange);
-    this.handleLocationChange(history.location);
-  }
+  // async componentDidMount(){
+  //   const { history } = this.props;
+  //   this.unsubscribeFromHistory = history.listen(this.handleLocationChange);
+  //   this.handleLocationChange(history.location);
+  //   const isAdmin = await this.showAdminRoute()
+  //   this.setState({ isAdmin })
+  // }
 
-  componentDidUpdate(){
-  }
+  // async componentDidUpdate(prevProps){
+  //   const { user } = this.props
+  //   if (user !== prevProps.user) {
+  //     console.log("i got a different user")
+  //     const isAdmin = await this.showAdminRoute()
+  //     console.log('setting this fucker', isAdmin)
+  //     this.setState({ isAdmin })
+  //   }
+  // }
 
   componentWillUnmount() {
       if (this.unsubscribeFromHistory) this.unsubscribeFromHistory();
@@ -44,36 +54,52 @@ class Productbar extends Component {
   }
 
   showTabs(){
-      let { showForms} = this.props
-      return showForms && location && this.state.location.pathname == '/carga_datos'
+    let { showForms, } = this.props
+    return showForms && location && this.state.location.pathname == '/carga_datos' && showForms !== 'results'
   }
 
+  // async showAdminRoute() {
+  //   const { token } = this.props
+  //   const headers = {
+  //     'Authorization': `Bearer ${token}`,
+  //     'content-type': 'application/json',
+  //   }
+  //   console.log('iciiii')
+  //   const isAdmin = await fetch('/api/isAdmin', { headers }).then(r => r.json())
+  //   console.log('am i an admin and allowed', isAdmin)
+  //   const { success } = isAdmin
+  //   return success
+  // }
+
+
   render(){
-      let { app, user, logoutAction, setTab, pozoName, selectedTab } = this.props
-
-      const title = app.get('title')
-      return (
-        <div className="productbar">
-          <div className="title">
-              <NavLink to="/"><span/></NavLink>
-              {/*<div style={{fontFamily: 'Roboto', display: 'inline-block', color: '#CE1A22', fontWeight: 'normal', fontSize: '16px', position: 'relative', top: '-10px', left: '-35px'}}>Versión beta para prueba </div>-->*/}
-          </div>
-
-          {this.showTabs() && (
-              <div>
-                  <span className="selectedPozo">Pozo: {pozoName}</span>
-                  <div className="links">
-                      <a className={selectedTab == 'Pozo' ? 'active': ''} tabIndex="Pozo" onClick={e => setTab('Pozo')}>Pozo</a>
-                      <a className={selectedTab == 'Intervenciones' ? 'active': ''} tabIndex="Intervenciones" onClick={e => setTab('Intervenciones')}>Intervenciones</a>
-                  </div>
-              </div>
-          )}
-
-          { user !== null && (
-            <ProductbarActions user={user} logoutAction={logoutAction} />
-          )}
+    let { app, user, logoutAction, setTab, pozoName, selectedTab, isAdmin } = this.props
+    // const { isAdmin } = this.state
+    console.log('is admin for a fasdf', isAdmin)
+    const title = app.get('title')
+    return (
+      <div className="productbar">
+        <div className="title">
+            <NavLink to="/"><span/></NavLink>
+            {/*<div style={{fontFamily: 'Roboto', display: 'inline-block', color: '#CE1A22', fontWeight: 'normal', fontSize: '16px', position: 'relative', top: '-10px', left: '-35px'}}>Versión beta para prueba </div>-->*/}
         </div>
-      )
+        {isAdmin && <NavLink to="/tablero_control/resumen_general" style={{color: 'black'}}>admin</NavLink>}
+
+        {this.showTabs() && (
+            <div>
+                <span className="selectedPozo">Pozo: {pozoName}</span>
+                <div className="links">
+                    <a className={selectedTab == 'Pozo' ? 'active': ''} tabIndex="Pozo" onClick={e => setTab('Pozo')}>Pozo</a>
+                    <a className={selectedTab == 'Intervenciones' ? 'active': ''} tabIndex="Intervenciones" onClick={e => setTab('Intervenciones')}>Intervenciones</a>
+                </div>
+            </div>
+        )}
+
+        { user !== null && (
+          <ProductbarActions user={user} logoutAction={logoutAction} />
+        )}
+      </div>
+    )
   }
 }
 

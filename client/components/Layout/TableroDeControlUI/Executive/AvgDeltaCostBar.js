@@ -30,7 +30,7 @@ let colorWheel = [
 
   render () {
     let { data, groupBy } = this.props
-    console.log('what is groupby', groupBy)
+
     let dataPoints = []
     let series
     let categories = []
@@ -44,7 +44,6 @@ let colorWheel = [
       }
       else {
         data.forEach((i, index) => {
-          console.log('wtf', i)
           const colorIndex = index % colorWheel.length
           dataPoints.push({ y: i.avgDeviation, color: colorWheel[colorIndex] })
           categories.push(i[groupBy])

@@ -1,6 +1,7 @@
 import { Router } from 'express'
 import db from '../../lib/db'
 import appConfig from '../../../app-config.js'
+import { getAuthorization } from '../../middleware'
 // import path from 'path'
 // import fs from 'fs'
 // import objectPath from 'object-path'
@@ -8,7 +9,7 @@ import appConfig from '../../../app-config.js'
 
 const connection = db.getConnection(appConfig.users.database)
 const router = Router()
-
+router.use(getAuthorization)
 router.post('/costData', (req, res) => {
   let { activo, field, well, formation } = req.body
 

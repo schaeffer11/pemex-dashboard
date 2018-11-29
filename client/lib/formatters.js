@@ -66,7 +66,6 @@ export function handleImagesFromServer(images, state) {
         images[parent].forEach((elem, index) => {
           const { imgURL, imgName, imgSource, labID } = elem
           for (let lab of shallowStateCopy.pruebasDeLaboratorio.pruebasDeLaboratorioData) {
-            console.log('da lab', lab, labID)
             if (lab.labID.toString() === labID) {
               lab.imgURL = imgURL
               lab.imgName = imgName
@@ -85,12 +84,7 @@ export function handleImagesFromServer(images, state) {
   return shallowStateCopy
 }
 
-export const ignoreNegative999 = (val) => {
-  console.log()
-  // let value = typeof val === 'string' ? parseFloat(val): value
-  // console.log('what is my vallue?', value, typeof value, value === -999)
-  return val === -999 || val === '-999' ? 0 : val
-}
+export const ignoreNegative999 = (val) => val === -999 || val === '-999' ? 0 : val
 
 export const calculateValuesGeneralCedula = (data) => {
   return data.map((row, i) => {
@@ -123,7 +117,7 @@ export const calculateValuesGeneralCedula = (data) => {
 
 export const calculateValuesApuntaladoCedula = (data) => {
   return data.map((row, i) => {
-    let { apuntalanteAcumulado, volLechada, gastoSuperficie, volEspumaFondo, concentracionApuntalanteFondo } = row
+    let { volLechada, gastoSuperficie, volEspumaFondo, concentracionApuntalanteFondo } = row
     volLechada = ignoreNegative999(volLechada)
     gastoSuperficie = ignoreNegative999(gastoSuperficie)
     volEspumaFondo = ignoreNegative999(volEspumaFondo)

@@ -11,7 +11,7 @@ import { setHasErrorsResultadosSimulacionEstimulacion, setHasErrorsPropuestaEsti
   setVolumenSistemaDivergente, setVolumenDesplazamientoLiquido, setVolumenDesplazamientoN2, setVolumenTotalDeLiquido, 
   setPropuestaCompany, setTipoDeEstimulacion, setTipoDeColocacion, setTiempoDeContacto } from '../../../../../redux/actions/intervencionesEstimulacion'
 import { setEspesorBruto } from '../../../../../redux/actions/pozo'
-import { round, calculateVolumes, getSistemaOptions, getDisabledColumnForGeneralCedula, companyOptions } from '../../../../../lib/helpers'
+import { round, calculateVolumes, getSistemaOptions, getDisabledColumnForGeneralCedula } from '../../../../../lib/helpers'
 import { setPenetracionRadial, setLongitudDeAgujeroDeGusano } from '../../../../../redux/actions/intervencionesEstimulacion'
 import { checkEmpty, checkDate } from '../../../../../lib/errorCheckers'
 import { calculateValuesGeneralCedula } from '../../../../../lib/formatters';
@@ -166,7 +166,7 @@ import { calculateValuesGeneralCedula } from '../../../../../lib/formatters';
 
 
   makeGeneralForm() {
-    let { formData, setPropuestaCompany, setTipoDeEstimulacion, intervalos } = this.props
+    let { formData, setPropuestaCompany, setTipoDeEstimulacion, intervalos, companyOptions } = this.props
     formData = formData.toJS()
     intervalos = intervalos.toJS()
     let { propuestaCompany, tipoDeEstimulacion } = formData
@@ -490,7 +490,7 @@ import { calculateValuesGeneralCedula } from '../../../../../lib/formatters';
     let { tipoDeEstimulacion } = formData
 
     return (
-      <div className="form propuesta-de-estimulacion">
+      <div className="form">
       <div className='top'>
           { this.makeCedulaTable() }
         </div>
@@ -516,6 +516,7 @@ const mapStateToProps = state => ({
   intervalos: state.getIn(['evaluacionPetrofisica', 'layerData']),
   hasErrors: state.getIn(['propuestaEstimulacion', 'hasErrors']),
   hasSubmitted: state.getIn(['global', 'hasSubmitted']),
+  companyOptions: state.getIn(['global', 'companyOptions'])
 })
 
 const mapDispatchToProps = dispatch => ({

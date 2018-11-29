@@ -50,7 +50,7 @@ export async function fetchFilterData(token, globalAnalysis) {
         'content-type': 'application/json',
     }
   const url = `/api/filterOptions?${query.join('&')}`
-  console.log('da url', url)
+
   const data = await fetch(url, { headers }).then(r => r.json())
   return data
 }
@@ -81,7 +81,7 @@ function buildQuery(globalAnalysis) {
   const filteredFilters = Object.keys(filters).filter(f => {
     return globalAnalysis[f]
   })
-  console.log('wtf is this', globalAnalysis)
+
   globalAnalysis.lowDate = convertLowDate(globalAnalysis.lowDate)
   globalAnalysis.highDate = convertHighDate(globalAnalysis.highDate)
   const queries = [...filteredFilters, 'lowDate', 'highDate'].map(f => `${f}=${globalAnalysis[f]}`)

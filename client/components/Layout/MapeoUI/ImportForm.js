@@ -28,7 +28,6 @@ import { setIsLoading, setShowForms } from '../../../redux/actions/global'
     onSubmit(values, actions ){
         let { setLoading, select } = this.props
         setTimeout(() => {
-            console.log(values.mapeo)
 
             select(values.mapeo)
 

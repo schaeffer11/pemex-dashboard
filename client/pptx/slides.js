@@ -257,7 +257,6 @@ export async function buildGraficaDeTratamiento(pptx, image) {
 
 export async function buildGeneralResults(pptx, token, id, interventionType) {
   const data = await getData(`/job/getInterventionResultsData`, token, { transactionID: id, type: interventionType, shouldMapData: true })
-  console.log('da data is here', data)
   const slide = pptx.addNewSlide('MASTER_SLIDE')
   slide.addText('Resultados de tratamiento', { placeholder: 'slide_title' })
 
@@ -272,7 +271,6 @@ export async function buildGeneralResults(pptx, token, id, interventionType) {
     const geoMechanic = buildSimpleTable('Información de Geomecánica', map.geoMechanicInformation, data)
     slide.addTable(geoMechanic.table, { x: left, y: 3.0, ...geoMechanic.options })
   }
-  console.log('da interventionType', interventionType)
   if (interventionType === 'Estimulacion' && data.tipoDeEstimulacion === 'limpieza') {
     const limpieza = buildSimpleTable('Limpieza de Aparejo', map.general, data)
     slide.addTable(limpieza.table, { x: left, y: 3.0, ...limpieza.options })
@@ -285,7 +283,6 @@ export async function buildGeneralResults(pptx, token, id, interventionType) {
 
   if (interventionType === 'Termico') {
     const general = buildSimpleTable('General', map.general, data)
-    console.log('i think i am here', general)
     slide.addTable(general.table, { x: left, y: 1.0, ...general.options })
   }
 
@@ -332,7 +329,6 @@ export async function buildGeneralProposal(pptx, token, id) {
 
 
   const data = await getData(`/api/${interventionURL}`, token, queryObj)
-  console.log('general proposal data', data, estimacionProduccionData)
   const map = maps.propuesta[interventionType]
   
   const slide = pptx.addNewSlide('MASTER_SLIDE')
@@ -359,9 +355,7 @@ export async function buildGeneralProposal(pptx, token, id) {
   }
 
   if (interventionType === 'termico') {
-    console.log('building general proposal', data[propuestaData], map.general)
     const general = buildSimpleTable('General', map.general, data[propuestaData])
-    console.log('what is general', general)
     slide.addTable(general.table, { x: left, y: 1.0, ...general.options })
   }
 
@@ -414,7 +408,6 @@ function buildLabDataSlide(pptx, map, lab, labTitle) {
 export async function buildLabReports(pptx, token, id, images) {
   const data = await getData('/api/getLabTest', token, { transactionID: id })
   const { pruebasDeLaboratorioData } = data.pruebasDeLaboratorio
-  console.log('pruebasd de laboratorio data', pruebasDeLaboratorioData)
   if (Object.keys(pruebasDeLaboratorioData[0]).length > 0) {
     for (let lab of pruebasDeLaboratorioData) {
       const labImage = images ? images.find(elem => elem.labID.toString() === lab.labID.toString()) : null

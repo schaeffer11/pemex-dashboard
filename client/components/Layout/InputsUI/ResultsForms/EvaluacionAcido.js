@@ -256,10 +256,10 @@ import { setGeneralEvaluacionAcido, setMergeEvaluacionAcido } from '../../../../
   }
 
   handleFileUpload(e, index, intervalo) {
-    console.log('da index', index)
+
     const { setGeneralEvaluacionAcido } = this.props
     let { files } = e.target
-    console.log(files)
+
     let localImgUrl = window.URL.createObjectURL(files[0])
     setGeneralEvaluacionAcido(['geometria', index, 'imgURL'], localImgUrl)
     setGeneralEvaluacionAcido(['geometria', index, 'imgName'], ['evaluacionAcido', intervalo].join('.'))
@@ -268,7 +268,7 @@ import { setGeneralEvaluacionAcido, setMergeEvaluacionAcido } from '../../../../
   makeGeometryInput() {
     const { formData } = this.props
     const { geometria } = formData
-    console.log('da form data', formData)
+
     return geometria.map((geo, index) => {
       const { imgURL, intervalo } = geo
       return (

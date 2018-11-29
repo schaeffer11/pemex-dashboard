@@ -1,18 +1,21 @@
 import express from 'express'
-import serverConfig from '../../app-config'
-import { createSession, resumeSession, listSessions } from './session-store'
 import Blowfish from 'xs-blowfish'
+var SqlString = require('sqlstring')
+
+import db from '../lib/db'
+import appConfig from '../../app-config'
 import pkg from '../../package.json'
 import users from './users'
+import { createSession, resumeSession, listSessions } from './session-store'
 
 const app = express()
 
 // OKTA & BLOWFISH TOKEN ENCRYPTION
-const HASH_SECRET = 'lazard-demo v' + pkg.version
+const HASH_SECRET = '80% accuracy at the speed of light'
 const bf = new Blowfish(HASH_SECRET)
 
 // API CALLS WILL BE ROUTED THROUGH THIS HOST DOMAIN
-const API_HOST = serverConfig.api_host
+const API_HOST = appConfig.api_host
 
 // MESSAGING CONSTANTS
 const messages = {
@@ -43,6 +46,50 @@ app.isAuthenticated = function(req, res, next) {
 function authenticationFailure(res, detail) {
   return res.status(401).json({ status: 401, success: false, message: messages.AUTH_FAILURE, detail })
 }
+
+app.post('/auth/createUser', (req, res) => {
+  let { username, password, subdireccionID, activoID, isAdmin } = req.body
+  let db_con = db.get(appConfig.users.database)
+  let table = appConfig.users.table
+
+  // FILTERS & SUCH
+  const hash = (obj) => {
+   let bf = new Blowfish(HASH_SECRET + obj.username)
+   return bf.encrypt(JSON.stringify(obj))
+  }
+  const sqlize = (value) => typeof value === 'string' ? SqlString.escape(value) : value
+
+  let inputs = process.argv.slice(2)
+  let user = {
+   username: username,
+   password: password,
+   IS_ADMIN: isAdmin
+  }
+
+   // subdireccionID ? user.SUBDIRECCION_ID = subdireccionID
+   // activoID ? user.ACTIVO_ID = activoID
+
+  // FILL OUT HASHED COLUMNS
+  user.password = hash({ username: user.username, password: user.password })
+
+  let keys = Object.keys(user)
+
+  let values = keys.map(key => sqlize(user[key])).join(', ')
+  let sql = `INSERT INTO ?? (${keys.join(', ')}) VALUES (${values})`
+
+  console.log(sql, table)
+
+  return db_con.query(sql, table, (err, results) => {
+        if (err) {
+          console.log('Error creating user', err)
+          res.json({success: false})
+        }
+        else {
+          console.log('success', results)
+          res.json({success: true})
+        }
+  })
+})
 
 app.get('/auth/sessions', (req, res) => {
   res.json(listSessions())
@@ -113,12 +160,16 @@ app.use('/auth', (req, res) => {
       console.log(err)
       return authenticationFailure(res, err)
     }
+    else if (userData.IS_ACTIVE === 0) {
+      return authenticationFailure(res, 'Inactive user')
+    }
 
     let user = {
       id: userData.id,
       name: userData.username,
       activoID: userData.ACTIVO_ID,
-      subdireccionID: userData.SUBDIRECCION_ID
+      subdireccionID: userData.SUBDIRECCION_ID,
+      isAdmin: userData.IS_ADMIN,
     }
 
     // embed user in request.session

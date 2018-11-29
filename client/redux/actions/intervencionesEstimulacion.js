@@ -57,7 +57,6 @@ export const setEstIncProdEstimulationImgURL = (url, name) => ({ type: 'set_estI
 
 export const setPruebasDeLaboratorioData = value => ({ type: 'set_pruebasDeLaboratorioData', value})
 export const setPruebasDeLaboratorioImg = (index, url, name) => {
-  console.log('ici')
  return { index,
   url,
   name,

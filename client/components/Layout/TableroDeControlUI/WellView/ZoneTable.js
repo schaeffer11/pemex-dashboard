@@ -32,7 +32,7 @@ import ReactTable from 'react-table'
           columns={mudLossColumns}
           showPagination={true}
           data={data}
-          pageSize={10}
+          defaultPageSize={10}
         />
       </div>
     )

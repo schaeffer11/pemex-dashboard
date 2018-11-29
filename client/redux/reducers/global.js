@@ -15,6 +15,11 @@ const initialState = Map({
     hasSubmitted: false,
     transactionID: null,
     saveName: null,
+    companyOptions: [],
+    justificationOptions: [],
+    litologiaOptions: [],
+    tipoDeTerminationOptions: [],
+    tipoDeLinerOptions: [],
 })
 
 
@@ -29,7 +34,6 @@ const global = (state = initialState, action) => {
     case 'set_tab':
       return state.set('selectedTab', action.value)
     case 'set_isLoading':
-      console.log('setting some loading stuff', action.obj)
       return state.mergeDeep(fromJS(action.obj))
     case 'reset_notification':
       return state.set('showNotification', false)
@@ -41,6 +45,16 @@ const global = (state = initialState, action) => {
       return state.set('transactionID', action.value)
     case 'set_saveName':
       return state.set('saveName', action.value)
+    case 'set_companyOptions':
+      return state.set('companyOptions', action.value)
+    case 'set_justificationOptions':
+      return state.set('justificationOptions', action.value)
+    case 'set_litologiaOptions':
+      return state.set('litologiaOptions', action.value)
+    case 'set_tipoDeTerminationOptions':
+      return state.set('tipoDeTerminationOptions', action.value)
+    case 'set_tipoDeLinerOptions':
+      return state.set('tipoDeLinerOptions', action.value)
     default:
    		return state
   }

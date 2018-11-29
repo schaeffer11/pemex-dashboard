@@ -1,12 +1,14 @@
 import { Router } from 'express'
 import db from '../../lib/db'
 import appConfig from '../../../app-config.js'
+import { getAuthorization } from './../../middleware'
 
 
 const connection = db.getConnection(appConfig.users.database)
 const router = Router()
 
 
+router.use(getAuthorization)
 router.get('/jobBreakdown', (req, res) => {
   let { subdir, activo, field, well, formation, company, tipoDeIntervencion, tipoDeTerminacion, groupBy, noGroup, lowDate, highDate } = req.query
   
