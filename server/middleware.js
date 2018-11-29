@@ -24,7 +24,7 @@ export const getAuthorization = (req, res, next) => {
   if (req.isAuthorized) {
     return next()
   }
-  return res.status(401).send('Usuario no reconocido')
+  return res.status(401).json({ success: false, message: 'Usuario no autorizado' })
 }
 
 export const allowAdmin = (req, res, next) => {
@@ -32,5 +32,5 @@ export const allowAdmin = (req, res, next) => {
     console.log('admin and authorized')
     return next()
   }
-  return res.status(401).send('Usuario no es administrador')
+  return res.status(401).json({ success: false, message: 'Usuario no es administrador' })
 }
