@@ -77,7 +77,7 @@ import { Link, Redirect } from 'react-router-dom'
     }
 
     viewDetails(id){
-        console.log(id)
+
        this.setState({
            openModal: true,
            compromisoId: id

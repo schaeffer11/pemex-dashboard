@@ -107,7 +107,6 @@ import { fetchFilterData } from '../../../../lib/filters'
 
 
   fetchData() {
-  	console.log('fetching')
     let { globalAnalysis } = this.props
     let { well } = globalAnalysis
 
@@ -141,12 +140,8 @@ import { fetchFilterData } from '../../../../lib/filters'
         })
       .then(res => res.json())
       .then(res => {
-        console.log(res, res.success)
         if (!res.success !== false) {
-          console.log('madeit')
           let transactionID = res[0].TRANSACTION_ID
-
-          console.log(transactionID)
 
           fetch(`/well/wellData`, {
             method: 'POST',
@@ -277,7 +272,6 @@ import { fetchFilterData } from '../../../../lib/filters'
     this.fetchData()
     const { globalAnalysis, token } = this.props
     const data = await fetchFilterData(token, globalAnalysis)
-    console.log('hahahahahha', data)
   }
 
   componentDidUpdate(prevProps) {

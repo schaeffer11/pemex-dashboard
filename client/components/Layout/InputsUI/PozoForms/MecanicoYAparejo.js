@@ -190,7 +190,7 @@ let tratamientoPorOptions = [
     this.setState({ errors: errorsCopy }, () => {
       const { setHasErrorsMecanicoYAparejoDeProduccion, hasSubmitted } = this.props
       const hasErrors = this.checkAllInputs(hasSubmitted)
-      console.log('checking for errors', hasErrors, this.state.errors)
+
       setHasErrorsMecanicoYAparejoDeProduccion(hasErrors)
     })
   }

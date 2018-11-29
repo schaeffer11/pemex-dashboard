@@ -308,14 +308,12 @@ router.get('/exportData/', (req, res) => {
     if (err) {
       return res.send('Error')
     }
-    console.log('results', results)
+
     // return res.send('')
     
     const map = maps[option]
     const mapKeys = Object.keys(map)
-    console.log('keys',mapKeys)
     const headers = mapKeys.map(key => map[key]).join(',')
-    console.log(`what are my headers?${headers}`)
     const data = results.map(r => {
       const innerStr = mapKeys.map(key => key === 'Fecha' || key === 'FECHA' ? formatDate(r[key]) : r[key]).join(',')
       return innerStr

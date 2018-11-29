@@ -85,9 +85,6 @@ import ReactHighCharts from 'react-highcharts'
     }
 
 
-
-    console.log(data)
-
     let qoData = []
     let qwData = []
     let qgData = []

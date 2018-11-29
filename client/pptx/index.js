@@ -227,7 +227,6 @@ const secondHalf = (pptx, token, jobID, jobType, images) => [
 
 async function buildAndSkipError(index, everything, hasResults, updateProgress) {
   for (let e of everything) {
-    console.log('buidling and skippihg', e.name, typeof updateProgress)
     try {
       await e.func()
       if (e.name) {
@@ -235,7 +234,7 @@ async function buildAndSkipError(index, everything, hasResults, updateProgress) 
         index++
       }
     } catch (error) {
-      console.log('just kidding!!!')
+      console.log('error', error)
       if (e.name) {
         updateProgress(index, e.name, hasResults, true)
         index++
@@ -253,15 +252,12 @@ export async function generatePowerPoint(token, jobID, jobType, updateProgress) 
   pptx.setBrowser(true)
   pptx.setLayout({ name: 'LAYOUT_WIDE', width: slideWidth, height: slideHeight })
   const names = await getData('/api/getSpecificFieldWell', token, { transactionID: jobID })
-  console.log('names', names)
   const masterSlide = buildMasterSlide(slideWidth, slideHeight, names)
   pptx.defineSlideMaster(masterSlide)
   const images = await getData('/api/getImages', token, { transactionID: jobID })
   const hasResults = await getHasresults(token, jobID)
   // const hasResults = false
-  console.log('images', images)
   const firstHalfTasks = firstHalf(pptx, token, jobID, images)
-  console.log('what is this', typeof updateProgress)
   let index = 1
   index = await buildAndSkipError(index, firstHalfTasks, hasResults, updateProgress)
   if (hasResults) {
@@ -276,6 +272,6 @@ export async function generatePowerPoint(token, jobID, jobType, updateProgress) 
     // await buildAforoChart(pptx, token, jobID)
     // await buildGraficaDeTratamiento(pptx, imageResults.graficaTratamiento)
   }
-  console.log('done')
+  console.log('finished building ppt')
   pptx.save()
 }

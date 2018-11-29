@@ -133,7 +133,6 @@ if (state.user) {
   API.auth(state.user)
     .then((user) => {
       if (!user) {
-        console.log('what happened here?')
         store.dispatch({ type: 'LOGOUT' })
       } else {
         console.info(`user "${user.id}" authenticated from previous session`)
@@ -142,7 +141,6 @@ if (state.user) {
       }
       bootstrap()
     })
-  console.log('something here')
 } else {
   console.log('no user found in state...')
   bootstrap()

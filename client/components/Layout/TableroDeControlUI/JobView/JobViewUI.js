@@ -146,7 +146,7 @@ import { KPI } from '../Common/KPIs'
     let { well, lowDate, highDate } = globalAnalysis
     lowDate = convertLowDate(globalAnalysis.lowDate)
     highDate = convertHighDate(globalAnalysis.highDate)
-    console.log('fetching jobs')
+
     let { token } = this.props
 
     fetch(`/api/getJobs?well=${well}&lowDate=${lowDate}&highDate=${highDate}`, {
@@ -157,7 +157,7 @@ import { KPI } from '../Common/KPIs'
     })
       .then(r => r.json())
       .then(r => {
-        console.log('what are these', r)
+
         let jobs = []
 
         r = r.sort((a, b) => {

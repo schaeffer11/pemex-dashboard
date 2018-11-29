@@ -235,7 +235,6 @@ export function submitResultsForm(action, token) {
 
     }
     else if (action === 'submit') {
-    	console.log('submittttting')
       fetch('/api/results', {
         headers,
         method: 'POST',

@@ -832,7 +832,6 @@ export const getWellProduccion = async (transID, action, cb) => {
 
 export const getWellImages = async (transID, action, cb) => {
   connection.query(INSERT_WELL_IMAGE_QUERY[action], [transID], (err, results) => {
-    console.log('got images?', err, results)
     cb(results)
    })
 }
@@ -909,7 +908,6 @@ export const deleteSave = async (transID, cb) => {
       values.push(transID)
     }
 
-    console.log(DELETE_QUERY, values)
     connection.query(DELETE_QUERY, values, (err, results) => {
         if (err) {
             cb({err: 'true'})
@@ -924,7 +922,6 @@ async function loopAndDelete(images) {
   const filteredData = images.filter(well => well.IMG_URL !== null && well.IMG_URL !== '')
   const deletedArray = []
   for (let elem of filteredData) {
-    console.log('elem', elem)
     const deletedObject = await deleteObject(elem.IMG_URL)
     deletedArray.push(deletedObject)
   }
@@ -932,7 +929,6 @@ async function loopAndDelete(images) {
 }
 
 const deleteImages = (transactionID, action) => new Promise((resolve, reject) => {
-  console.log('getting images', transactionID, action)
   getWellImages(transactionID, 'loadSave', async wellImages => {
     const deletedWellImages = await loopAndDelete(wellImages)
     getInterventionImages(transactionID, 'loadSave', async interventionImages => {
@@ -947,7 +943,7 @@ async function handleImageUploads(obj, transactionID) {
   if (objShallowCopy.imgSource === 'local') {
     objShallowCopy.imgName = [transactionID, objShallowCopy.imgName].join('.')
     const buf = Buffer.from(objShallowCopy.img, 'base64')
-    console.log('adding image to s3', objShallowCopy.imgName, transactionID)
+    // console.log('adding image to s3', objShallowCopy.imgName, transactionID)
     const t = await addObject(buf, objShallowCopy.imgName).catch(reason => console.log(reason))
     objShallowCopy.img = t
   } else if (objShallowCopy.imgSource === 's3') {
@@ -955,9 +951,9 @@ async function handleImageUploads(obj, transactionID) {
     const oldTransactionID = objShallowCopy.imgName.split('.')[0]
     const oldKey = [oldTransactionID, nameWithoutTransaction].join('.')
     const newKey = [transactionID, nameWithoutTransaction].join('.')
-    console.log('copying the old object', nameWithoutTransaction, oldKey, newKey)
+    // console.log('copying the old object', nameWithoutTransaction, oldKey, newKey)
     const objectCopy = await copyObject(oldKey, newKey).catch(r => console.log('something went wrong with the copy', r))
-    console.log('done copying', objectCopy)
+    // console.log('done copying', objectCopy)
     objShallowCopy.imgName = newKey
   }
   return objShallowCopy
@@ -973,7 +969,7 @@ export const create = async (body, action, cb) => {
     const innerKeys = Object.keys(innerObj)
     // look for immediate images
     if (innerObj.img) {
-      console.log('found image', k, innerObj.imgName)
+      // console.log('found image', k, innerObj.imgName)
       innerObj = await handleImageUploads(innerObj, transactionID)
     }
     for (let iKey of innerKeys) {
@@ -982,9 +978,9 @@ export const create = async (body, action, cb) => {
         let index = 0
         for (let j of property) {
           if (j.img) {
-            console.log('property has an image')
+            // console.log('property has an image')
             j = await handleImageUploads(j, transactionID)
-            console.log('uploaded image', j.imgName)
+            // console.log('uploaded image', j.imgName)
             // mutate object with correct imgName
             innerObj[iKey][index].imgName = j.imgName
             index += 1
@@ -2080,8 +2076,7 @@ export const create = async (body, action, cb) => {
                                                                               });
                                                                             }
                                                                             console.log('success!');
-                                                                            var log = 'Post ' + results + ' added';
-                                                                            console.log(log)
+
                                                                             cb(null, transactionID)
                                                                           })
                                                                         })

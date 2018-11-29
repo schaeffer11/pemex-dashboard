@@ -38,12 +38,11 @@ export const getBuckets = () => {
     if (err) {
       console.log('something is wrong', err)
     }
-    console.log('should be buckets', data)
   })
 }
 
 export const addObject = (buf, Key) => new Promise((resolve, reject) => {
-  console.log('what is the key', Key)
+  // console.log('what is the key', Key)
   const params = {
     Bucket: 'pemex-prod-01',
     Key,
@@ -51,7 +50,7 @@ export const addObject = (buf, Key) => new Promise((resolve, reject) => {
     // ContentEncoding: 'base64',
     ContentType: 'image/png'
   }
-  console.log('da params', params)
+
   s3.putObject(params, (err, data) => {
     if (err) {
       reject(err)

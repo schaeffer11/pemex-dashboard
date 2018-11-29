@@ -38,7 +38,7 @@ import GroupBy from './GroupBy'
     const optionKeys = [...Object.keys(filters), 'lowDate', 'highDate']
     const somethingChanged = checkForDifferencesInObjects(optionKeys, globalAnalysis, prevGlobalAnalysis)
     if (somethingChanged) {
-      console.log('something changed')
+
       const data = await fetchFilterData(token, globalAnalysis)
       const newOptions = buildFiltersOptions(data)
       // Re-add if you want things to be auto selected
@@ -105,7 +105,7 @@ import GroupBy from './GroupBy'
     const { setGeneralAnalysis } = this.props
     const value = handleSelectValue(selection)
     if (value === null) {
-      console.log('selection,, type', selection, type)
+
     }
     setGeneralAnalysis([type], value)
   }

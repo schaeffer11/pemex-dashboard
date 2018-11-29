@@ -458,10 +458,10 @@ import { setGeneralEvaluacionApuntalado, setMergeEvaluacionApuntalado } from '..
   }
 
   handleFileUpload(e, index, intervalo) {
-    console.log('da index', index)
+
     const { setGeneralEvaluacionApuntalado } = this.props
     let { files } = e.target
-    console.log(files)
+
     let localImgUrl = window.URL.createObjectURL(files[0])
     setGeneralEvaluacionApuntalado(['geometria', index, 'imgURL'], localImgUrl)
     setGeneralEvaluacionApuntalado(['geometria', index, 'imgName'], ['evaluacionApuntalado', intervalo].join('.'))
@@ -470,7 +470,7 @@ import { setGeneralEvaluacionApuntalado, setMergeEvaluacionApuntalado } from '..
   makeGeometryInput() {
     const { formData } = this.props
     const { geometria } = formData
-    console.log('da form data', formData)
+
     return geometria.map((geo, index) => {
       const { imgURL, intervalo } = geo
       return (

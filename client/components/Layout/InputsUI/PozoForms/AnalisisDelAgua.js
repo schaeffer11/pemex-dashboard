@@ -243,7 +243,6 @@ const yesOrNoOptions = [{
     formData = formData.toJS()
     let { waterAnalysisBool } = formData
 
-    console.log('render agua')
     return (
       <div className="form analisis-del-agua">
         <div className='left'>
@@ -251,7 +250,6 @@ const yesOrNoOptions = [{
         { waterAnalysisBool === true ? this.makeValoresForm() : null }
         </div>
         <div className='right'>
-          {/* <div className="image"/> */}
           <AnalisisDelAguaGraph />
         </div>
       </div>

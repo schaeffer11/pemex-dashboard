@@ -109,7 +109,6 @@ let classificationSeries = [{
 	    },
 	    series: series
   }
-  console.log('my config', config)
 
     return (
     	<ReactHighcharts

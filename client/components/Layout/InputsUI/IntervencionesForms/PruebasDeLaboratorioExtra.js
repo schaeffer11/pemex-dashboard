@@ -610,7 +610,7 @@ const grabadoOptions = [
     const { setPruebasDeLaboratorioImg } = this.props
     let { files } = e.target
     let localImgUrl = window.URL.createObjectURL(files[0])
-    console.log('setting image', index)
+
     setPruebasDeLaboratorioImg(index, localImgUrl, `pruebasDeLaboratorio.${imgName}`)
     {/* setURL(`pruebasDeLaboratorio.${imgName}`, e, true) */}
   }

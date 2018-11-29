@@ -421,7 +421,6 @@ import ButtonGroup from './ButtonGroup'
         })
 
         activoOptions = activos.map(i => ({label: i.ACTIVO_NAME, value: i.ACTIVO_ID})).sort(sortLabels)
-        console.log(activoOptions, activos, fieldWellOptions)
       }
 
       if (activo) {
@@ -597,7 +596,6 @@ import ButtonGroup from './ButtonGroup'
     results.push(sapData)
 
     let newState = {}
-    console.log(results)
     results.forEach(r => {
       const rKeys = Object.keys(r)
       rKeys.forEach(registerName => {
@@ -682,7 +680,6 @@ import ButtonGroup from './ButtonGroup'
     let { isOpen, selectedSave, formType, selectedProposal, deleteVal } = this.state
     let { setShowForms } = this.props
 
-    console.log(deleteVal)
     return (
       <div className='general-data-outer'>
         <div className='banner image' style={{backgroundImage:'url(/images/homepageBannerThin2.jpg)'}}></div>

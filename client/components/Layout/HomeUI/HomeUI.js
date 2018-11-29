@@ -3,10 +3,7 @@ import autobind from 'autobind-decorator'
 import { Link, Redirect } from 'react-router-dom'
 
 const LinkButton = ({ text, disabled , width, height, src, to}) => {
-  console.log(text)
-
     let className='link'
-
     let style = {}
 
     height ? style.height= height : style.height = '80px'

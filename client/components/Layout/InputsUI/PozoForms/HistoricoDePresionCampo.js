@@ -114,8 +114,6 @@ let columns = [
   updateErrors(errors) {
     let { hasErrors, setHasErrorsHistoricoDePressionCampo } = this.props
     let hasErrorNew = false
-
-    console.log(errors)
     
     Object.keys(errors).forEach(key => {
       if (errors[key].value !== null){
@@ -172,9 +170,7 @@ let columns = [
     let { presionDataCampo, pressureDepthCampo } = formData
 
     const objectTemplate = {fecha: null, Pws: ''}
-
-    console.log('render presion campo')
-
+    
     return (
       <div className='historico-presion' >
         <div className="inputs">

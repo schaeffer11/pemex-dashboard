@@ -36,10 +36,8 @@ const router = Router()
 const getImagesForClient = async (transactionID, action) => new Promise((resolve, reject) => {
   getWellImages(transactionID, action, async (wellImages) => {
     const formattedWellImages = await handleImageResponse(wellImages)
-    console.log('format well img', formattedWellImages)
     getInterventionImages(transactionID, action, async (interventionImages) => {
       const formattedInterventionImages = await handleImageResponse(interventionImages)
-      console.log('format intervention img', formattedInterventionImages)
       resolve({ ...formattedWellImages, ...formattedInterventionImages })
     })
   })
@@ -83,9 +81,7 @@ export async function handleImageResponse(data) {
 
 async function labTests(transactionID, action) {
   return new Promise((resolve, reject) => {
-    console.log('loading lab tests!', transactionID, action)
     getLabTest(transactionID, action, (data) => {
-      console.log('in here', data)
       let labIDs = []
       let outData = []
   
@@ -102,7 +98,6 @@ async function labTests(transactionID, action) {
           type = subset[0].TIPO_DE_ANALISIS
           let i = subset[0]
           if (type === 'caracterizacionFisico') {
-            console.log('what is my type', type)
             outData.push({
               edited: true,
               labID: i.LAB_ID,
@@ -311,7 +306,6 @@ const upload = multer({
 router.use(upload.array())
 
 router.get('/ping', (req, res) => {
-	console.log('pong')
   res.json({ response: 'pong' })
 })
 
@@ -319,11 +313,7 @@ router.get('/ping', (req, res) => {
 router.get('/deleteSave', (req, res) => {
   let { transactionID } = req.query
 
-  console.log('deleting save')
-
   deleteSave(transactionID, (data) => {
-    console.log('deleted save')
-    console.log(data)
     res.json({complete2: true})
   })
 })
@@ -436,7 +426,6 @@ router.get('/getCompanyMap', (req, res) => {
   const query = `SELECT COMPANY FROM CompanyMap`
   connection.query(query, (err, results) => {
     results = results.map(i => ({label: i.COMPANY, value: i.COMPANY}))
-    console.log(results)
     res.send(results)
   })
 })
@@ -445,7 +434,6 @@ router.get('/getJustificationMap', (req, res) => {
   const query = `SELECT JUSTIFICACION FROM JustificacionesMap`
   connection.query(query, (err, results) => {
     results = results.map(i => ({label: i.JUSTIFICACION, value: i.JUSTIFICACION}))
-    console.log(results)
     res.send(results)
   })
 })
@@ -454,7 +442,6 @@ router.get('/getLitologiaMap', (req, res) => {
   const query = `SELECT LITOLOGIA FROM LitologiaMap`
   connection.query(query, (err, results) => {
     results = results.map(i => ({label: i.LITOLOGIA, value: i.LITOLOGIA}))
-    console.log(results)
     res.send(results)
   })
 })
@@ -463,7 +450,6 @@ router.get('/getTipoDeTerminationMap', (req, res) => {
   const query = `SELECT TIPO_DE_TERMINATION FROM TipoDeTerminationMap`
   connection.query(query, (err, results) => {
     results = results.map(i => ({label: i.TIPO_DE_TERMINATION, value: i.TIPO_DE_TERMINATION}))
-    console.log(results)
     res.send(results)
   })
 })
@@ -472,7 +458,6 @@ router.get('/getTipoDeLinerMap', (req, res) => {
   const query = `SELECT TIPO_DE_LINER FROM TipoDeLinerMap`
   connection.query(query, (err, results) => {
     results = results.map(i => ({label: i.TIPO_DE_LINER, value: i.TIPO_DE_LINER}))
-    console.log(results)
     res.send(results)
   })
 })
@@ -494,7 +479,7 @@ router.get('/deletePlaceholders', (req, res) => {
           let finalQuery =  `UPDATE ${i.Tables_in_DataInput} SET ${column.COLUMN_NAME} = NULL WHERE ${column.COLUMN_NAME} = '-9999'`
           // console.log(finalQuery)
           connection.query(finalQuery, (err, results) => {
-            // console.log('query', query, 'result', err ? err : results)
+            console.log(err)
             console.log(results)
           })
         })
@@ -574,9 +559,7 @@ router.get('/isAdmin', (req, res) => {
 })
 
 router.get('/getFieldWellMapping', (req, res) => {
-  console.log('getting field well mapping')
     connection.query(`SELECT * FROM FieldWellMapping`, (err, results) => {
-      console.log('results', results)
       res.json(results)
     })
 })
@@ -800,7 +783,6 @@ router.post('/well', async (req, res) => {
       console.log('we got an error saving', err)
       res.json({ isSubmitted: false })
     } else {
-      console.log('all good in the submitting neighborhood')
       res.json({ isSubmitted: true })
     }
   })
@@ -815,7 +797,6 @@ router.post('/wellSave', async (req, res) => {
       console.log('we got an error saving', err)
       res.json({ isSaved: false })
     } else {
-      console.log('all good in the saving neighborhood')
       const images = await getImagesForClient(transactionID, 'loadSave')
       // Need pruebas de laboratorio so lab images can be correctly saved in redux 
       const pruebasDeLaboratorioData = await labTests(transactionID, 'loadSave').catch(e => e)
@@ -839,7 +820,6 @@ router.post('/results', async (req, res) => {
       console.log('we got an error saving', err)
       res.json({ isSubmitted: false })
     } else {
-      console.log('all good in the submitting results neighborhood,')
       res.json({ isSubmitted: true })
     }
   })
@@ -1261,7 +1241,6 @@ router.get('/getHistIntervenciones', async (req, res) => {
   getHistIntervenciones(transactionID, action, (data) => {
     const finalObj = {}
     if (data && data.length > 0) {
-      console.log('my data', data)
       data.forEach((d, index) => {
         d.DATE ? d.DATE = d.DATE.toJSON().slice(0, 10) : null
         d.HAS_ERRORS = d.HAS_ERRORS === 0 || d.HAS_ERRORS === undefined || d.HAS_ERRORS === undefined ? false : true
@@ -1453,7 +1432,6 @@ router.get('/getMudLoss', async (req, res) => {
         objectPath.push(finalObj, `${mainParent}.${innerParent}`, innerObj)
       })
       finalObj.evaluacionPetrofisica.hasErrors = data[0].TABLE_HAS_ERRORS === 0 ? false : true
-      console.log('what is this?', finalObj)
       res.json(finalObj)
     }
     else if (action === 'loadTransaction'){
@@ -2052,7 +2030,6 @@ router.get('/getImages', async (req, res) => {
   const { transactionID, saved } = req.query
   const action = saved ? 'loadSave' : 'loadTransaction'
   const imagesForClient = await getImagesForClient(transactionID, action).catch(r => console.log('something went wrong getting images'))
-  console.log('da images from client', imagesForClient)
   res.json(imagesForClient)
 })
 router.get('/getWellImages', async (req, res) => {
@@ -2432,7 +2409,6 @@ router.get('/getCedulaEstimulacion', async (req, res) => {
   const innerParent = 'cedulaData'
 
   getCedulaEstimulacion(transactionID, action, (data) => {
-    console.log(data)
     let finalObj = {}
     let error = false
     if (data && data.length > 0) {
@@ -2648,7 +2624,6 @@ router.get('/getCedulaTermico', async (req, res) => {
       }
     }
 
-    console.log(finalObj)
     res.json(finalObj)
   })
 })

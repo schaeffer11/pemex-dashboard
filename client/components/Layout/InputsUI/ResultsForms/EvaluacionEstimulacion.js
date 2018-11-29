@@ -91,7 +91,7 @@ import { setGeneralEvaluacionEstimulacion, setMergeEvaluacionEstimulacion } from
   makeResultForm() {
     let { formData, setGeneralEvaluacionEstimulacion } = this.props
     let { penetracionRadial, longitudDeAgujeroDeGusano } = formData
-    console.log('que es esto', penetracionRadial, longitudDeAgujeroDeGusano)
+
     return (
       <div className='result-form' >
         <div className='header'>

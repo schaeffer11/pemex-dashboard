@@ -21,7 +21,6 @@ import { InputRow, InputRowUnitless, InputRowSelectUnitless, TextAreaUnitless } 
     formData = formData.toJS()
 
     let { tipoDeIntervenciones } = formData
-    console.log('tipo de intervenciones?', tipoDeIntervenciones)
     let form;
     switch(tipoDeIntervenciones){
       case 'estimulacion': 

@@ -22,14 +22,14 @@ import ProgressBar from '../Common/ProgressBar'
   async handleExcelExport() {
     const { excelOption } = this.state
     const { token, wellID, fieldID } = this.props
-    console.log('da wellID', wellID)
+
     const headers = {
       'Authorization': `Bearer ${token}`,
       'content-type': 'application/json',
     }
     const option = excelOption.value
     const id = option === 'historicoPresionCampo' ? fieldID : wellID
-    console.log('what are we', option, id, fieldID)
+
     const data = await fetch(`/well/exportData/?option=${option}&id=${id}`, { headers }).then(r => r.text())
     let a = document.createElement('a');
     a.href = 'data:attachment/csv;charset=utf-8,' + data

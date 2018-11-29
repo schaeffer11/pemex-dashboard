@@ -11,8 +11,6 @@ import { KPI } from '../Common/KPIs'
 
     let series = []
     let groups = []
-
-    console.log(data)
     
     if (data) {
       data.forEach(i => {

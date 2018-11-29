@@ -242,10 +242,7 @@ let columns = [
     config.series[0].data = qoData.filter(i => i[1] !== -999)
     config.series[1].data = qgData.filter(i => i[1] !== -999)
     config.series[2].data = qwData.filter(i => i[1] !== -999)
-    
-    console.log(config)
-
-
+  
 
     return (        
       <div className="graph">
