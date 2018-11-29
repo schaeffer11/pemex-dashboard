@@ -62,6 +62,7 @@ button {
   &[disabled]{
     cursor: not-allowed;
     background: #C0C0C0;
+    box-shadow: none;
   }
 }
 

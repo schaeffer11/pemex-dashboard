@@ -4,10 +4,19 @@ div[contenteditable=true],
 input[contenteditable=true],
 input[type=text],
 input[type=password],
-textarea,
-.input > div div{
+textarea{
   background: $input-background ;
   color: $black;
+
+  &[disabled] {
+    cursor: not-allowed;
+    background: $disabled-input-background;
+    border-color: $disabled-input-color;
+  }
+
+  &.error {
+    border: 2px solid $red;
+  }
 }
 
 input[type=text], input[type=password] {
@@ -18,12 +27,20 @@ input[type=text], input[type=password] {
   font-weight: 200;
   outline: none;
 
-  &.error {
-    border: 2px solid $red;
-  }
-
   &:focus {
     box-shadow: 0 0 0.05em 0.15em #def
+  }
+}
+
+/* Global select box styles */
+.input {
+  & > div div {
+    background: $input-background;
+    color: $black;
+
+    [role="option"]:hover {
+      background: #d0cdcd;
+    }
   }
 }
 
@@ -78,7 +95,7 @@ input[type=text], input[type=password] {
     max-width: 100%;
   }
 
-  input[type="number"] {
+  input {
    width: 100%;
   }
 }
@@ -93,7 +110,7 @@ input[type=text], input[type=password] {
 .select-input {
   & > div {
     min-height: unset !important;
-    
+
     div[aria-hidden] {
       padding: 5px !important;
     }

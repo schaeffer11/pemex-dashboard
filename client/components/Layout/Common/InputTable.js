@@ -368,9 +368,10 @@ import { checkDate, checkEmpty, checkEmptySingular, checkDateSingular } from '..
     let {columns, data} = this.props;
     columns.forEach(column => {
       column.minWidth = 150
-      if(column.cell === 'renderEditable')
-        column.Cell = this.renderEditable
-      else if(column.cell === 'renderDate')
+      if(column.cell === 'renderEditable') {
+          column.minWidth = 250
+          column.Cell = this.renderEditable
+      } else if(column.cell === 'renderDate')
         column.Cell = this.renderDate
       else if(column.cell === 'renderNumber')
         column.Cell = this.renderNumber
@@ -378,16 +379,18 @@ import { checkDate, checkEmpty, checkEmptySingular, checkDateSingular } from '..
         column.Cell = this.renderNumberDisable
       else if(column.cell === 'renderSelect')
         column.Cell = this.renderSelect
-      else if(column.cell === 'renderTextarea')
-        column.Cell = this.renderTextarea
-      else if(column.cell)
+      else if(column.cell === 'renderTextarea') {
+          column.minWidth = 250
+          column.Cell = this.renderTextarea
+      }else if(column.cell)
         column.Cell = null
 
       if (column.columns) {
         column.columns.forEach(subColumn => {
-          if(subColumn.cell === 'renderEditable')
-            subColumn.Cell = this.renderEditable
-          else if(subColumn.cell === 'renderDate')
+          if(subColumn.cell === 'renderEditable') {
+              column.minWidth = 250
+              subColumn.Cell = this.renderEditable
+          } else if(subColumn.cell === 'renderDate')
             subColumn.Cell = this.renderDate
           else if(subColumn.cell === 'renderNumber')
             subColumn.Cell = this.renderNumber
@@ -395,9 +398,10 @@ import { checkDate, checkEmpty, checkEmptySingular, checkDateSingular } from '..
             subColumn.Cell = this.renderNumberDisable
           else if(subColumn.cell === 'renderSelect')
             subColumn.Cell = this.renderSelect
-          else if(subColumn.cell === 'renderTextarea')
-            subColumn.Cell = this.renderTextarea
-          else if(subColumn.cell)
+          else if(subColumn.cell === 'renderTextarea') {
+              subColumn.Cell = this.renderTextarea
+              subColumn.minWidth = 250
+          }else if(subColumn.cell)
             subColumn.Cell = null
         })
       }

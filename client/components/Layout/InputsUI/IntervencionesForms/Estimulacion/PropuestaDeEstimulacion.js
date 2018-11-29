@@ -490,7 +490,7 @@ import { calculateValuesGeneralCedula } from '../../../../../lib/formatters';
     let { tipoDeEstimulacion } = formData
 
     return (
-      <div className="form propuesta-de-estimulacion">
+      <div className="form">
       <div className='top'>
           { this.makeCedulaTable() }
         </div>
