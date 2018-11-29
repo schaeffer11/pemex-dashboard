@@ -3,10 +3,10 @@ const env = process.env.NODE_ENV || 'dev'
 const isProduction = env === 'production'
 
 export const sslRedirect = (req, res, next) => {
-  console.log('isProduction', isProduction)
-  console.log('request header', req.secure, req.protocol, req.headers.host)
+  // console.log('isProduction', isProduction)
+  // console.log('request header', req.secure, req.protocol, req.headers.host)
   if (isProduction && !req.secure) {
-    console.log('redirecting', req.protocol)
+    // console.log('redirecting', req.protocol)
     res.redirect(`https://${req.headers.host}`)
   } else {
     next()

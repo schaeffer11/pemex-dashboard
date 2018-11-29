@@ -4,7 +4,7 @@ import { connect } from 'react-redux'
 
 import InputTable from '../../Common/InputTable'
 import { InputRow, CalculatedValue, InputRowSelectUnitless } from '../../Common/InputRow'
-import { round, calculateVolumes, getSistemaOptions, getSistemaApuntaladoOptions, getDisabledColumnForApuntaladoCeluda, companyOptions } from '../../../../lib/helpers'
+import { round, calculateVolumes, getSistemaOptions, getSistemaApuntaladoOptions, getDisabledColumnForApuntaladoCeluda } from '../../../../lib/helpers'
 import { checkEmpty, checkDate } from '../../../../lib/errorCheckers'
 import { setMergeTratamientoApuntalado, setCedulaTratamientoApuntalado } from '../../../../redux/actions/results'
 import { calculateValuesApuntaladoCedula } from '../../../../lib/formatters'
@@ -124,7 +124,7 @@ import { calculateValuesApuntaladoCedula } from '../../../../lib/formatters'
   }
 
   makeGeneralForm() {
-    let { formData, setMergeTratamientoApuntalado, intervals } = this.props
+    let { formData, setMergeTratamientoApuntalado, intervals, companyOptions } = this.props
     let { tratamientoCompany } = formData
 
     const intervalsDiv = intervals.map(elem => <div key={`intervalo_${elem}`}>{elem}</div>)
@@ -420,6 +420,7 @@ const mapStateToProps = state => ({
   intervals: state.getIn(['resultsMeta', 'intervals']),
   hasErrors: state.getIn(['propuestaApuntalado', 'hasErrors']),
   hasSubmitted: state.getIn(['global', 'hasSubmitted']),
+  companyOptions: state.getIn(['global', 'companyOptions'])
 })
 
 const mapDispatchToProps = dispatch => ({

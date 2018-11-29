@@ -1,6 +1,9 @@
 import React, { PureComponent } from 'react'
 import autobind from 'autobind-decorator'
 import ReactHighcharts from 'react-highcharts'
+import { formatAverageDeviation as formatter } from '../../../../lib/tooltipFormatters'
+
+
 
 
 let colorWheel = [
@@ -25,60 +28,71 @@ let colorWheel = [
     return true
   }
 
-
-  render() {
+  render () {
     let { data, groupBy } = this.props
-    
+    let dataPoints = []
+    let series
+    let categories = []
     if (data.length > 0) {
       if (!groupBy) {
-        data = [{
-          name: 'Average Inc Prod Deviation',
+        categories.push('')
+        series = [{
+          name: ' ',
           data: [data[0].avgQoDeviation]
         }]
       }
       else {
-        data = data.map(i => {
-          return {
-            name: i.groupedName,
-            borderColor: 'black',
-            data: [i.avgQoDeviation]
-          }
+        data.forEach((i, index) => {
+          const colorIndex = index % colorWheel.length
+          dataPoints.push({ y: i.avgQoDeviation, color: colorWheel[colorIndex] })
+          categories.push(i.groupedName)
         })
+
+        series = [{
+          name: ' ',
+          data: dataPoints
+        }]
       }   
     }
-
-    // console.log(data)
-
-    let config = {
+    const config = {
 	    chart: {
-	        type: 'column',
           zoomType: 'y',
+	        type: 'column'
 	    },
 	    title: {
 	        text: ''
-	    },
+      },
+      tooltip: { formatter },
+      legend: {
+        enabled: false
+      },
       yAxis: {
         title: {
-          text: 'Percentage'
+          text: '%'
         },
-        min: -100,
-        max: 100,
+        // min: -1000,
+        // max: 1000,
         plotBands: [{
           color: '#b4ecb4',
           from: 0,
-          to: 1000
+          to: 10000
         }, {
           color: '#ecb4b4',
           from: 0,
-          to: -1000
+          to: -10000
         }]
+      },
+      xAxis: {
+        categories: categories,
+        title: { text: '' },
       },
 	    credits: {
 	    	enabled: false
 	    },
-	    series: data
-		}
-
+      plotOptions: {
+      },
+	    series: series
+    }
     return (
     	<ReactHighcharts
     		className='chart'

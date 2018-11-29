@@ -119,8 +119,6 @@ import { checkEmpty, checkDate } from '../../../../../lib/errorCheckers';
   handleFileUpload(e, setURL) {
     let { files } = e.target
 
-    console.log(files)
-
     let localImgUrl = window.URL.createObjectURL(files[0])
 
     setURL(localImgUrl, 'resultadosSimulacionEstimulacion')
@@ -133,7 +131,7 @@ import { checkEmpty, checkDate } from '../../../../../lib/errorCheckers';
     return (
       <div style={{marginBot: '20px'}}>
         <div className='header'>
-          Cargar evidencia del laboratorio
+          Cargar evidencia de simulacion
         </div>
         <input type='file' accept="image/*"  onChange={(e) => this.handleFileUpload(e, setEvidenceSimulationImgURL)} multiple></input>
         {imgURL ? <img className='img-preview' src={imgURL}></img> : null }

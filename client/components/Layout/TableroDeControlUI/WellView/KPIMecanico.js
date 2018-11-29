@@ -21,7 +21,6 @@ const numWithCommas = (x) => {
 
     data.length > 0 ? data = data[0] : data = {}
 
-    console.log(data)
 
     return (        
       <div className="KPIs" style={{padding: '0px 20px 20px 20px'}}>

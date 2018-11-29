@@ -21,7 +21,7 @@ const config = {
             'Sodio',
             'Calcio',
             'Magnesio',
-            'Fierro'
+            'Hierro'
           ]
         },
         tooltip: {

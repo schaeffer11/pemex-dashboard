@@ -28,6 +28,8 @@ const globalAnalysis = (state = initialState, action) => {
   switch (action.type) {
     case 'set_generalGlobalAnalysis':
       return state.setIn(action.location, fromJS(action.value))
+    case 'set_mergeGlobalAnalysis':
+      return state.merge(action.obj)
     case 'set_groupByAndGroup':
       return state.set('groupBy', action.groupBy).set('groups', fromJS(action.groups))
     case 'set_activo':

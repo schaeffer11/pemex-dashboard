@@ -44,9 +44,10 @@ class Productbar extends Component {
   }
 
   showTabs(){
-      let { showForms} = this.props
-      return showForms && location && this.state.location.pathname == '/carga_datos'
+      let { showForms, } = this.props
+      return showForms && location && this.state.location.pathname == '/carga_datos' && showForms !== 'results'
   }
+
 
   render(){
       let { app, user, logoutAction, setTab, pozoName, selectedTab } = this.props

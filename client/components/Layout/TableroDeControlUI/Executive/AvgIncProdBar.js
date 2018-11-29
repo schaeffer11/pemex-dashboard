@@ -1,6 +1,7 @@
 import React, { PureComponent } from 'react'
 import autobind from 'autobind-decorator'
 import ReactHighcharts from 'react-highcharts'
+import { formatGeneralBarChart as formatter } from '../../../../lib/tooltipFormatters'
 
 let colorWheel = [
       '#56B3D8',
@@ -31,7 +32,7 @@ let colorWheel = [
     let categories = []
     if (data.length > 0) {
       if (!groupBy) {
-        categories.push('Average Incremental Production')
+        categories.push('')
         series = [{
           name: ' ',
           data: [data[0].avgQoResult]
@@ -60,12 +61,16 @@ let colorWheel = [
 	    title: {
 	        text: ''
 	    },
-
+      tooltip: { formatter },
       legend: {
         enabled: false
       },
+      yAxis: {
+        title: { text: 'bpd' },
+      },
       xAxis: {
         categories: categories,
+        title: { text: 'Producción Incremental Promedio' },
       },
 	    credits: {
 	    	enabled: false

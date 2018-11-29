@@ -30,7 +30,7 @@ const history = createBrowserHistory()
 const composeEnhancer = window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__ || compose
 const store = createStore(
   connectRouter(history)(rootReducer),
-  // persistedState,
+  persistedState,
   composeEnhancer(
     applyMiddleware( 
       thunk,
@@ -91,26 +91,26 @@ ReactHighcharts.Highcharts.setOptions({
       '#90D2CE',
       '#F4F296',
     ],
-    // lang: {
-    //     loading: 'Cargando...',
-    //     months: ['Enero', 'Febrero', 'Marzo', 'Abril', 'Mayo', 'Junio', 'Julio', 'Agosto', 'Septiembre', 'Octubre', 'Noviembre', 'Diciembre'],
-    //     weekdays: ['Domingo', 'Lunes', 'Martes', 'Miércoles', 'Jueves', 'Viernes', 'Sábado'],
-    //     shortMonths: ['Ene', 'Feb', 'Mar', 'Abr', 'May', 'Jun', 'Jul', 'Ago', 'Sep', 'Oct', 'Nov', 'Dic'],
-    //     exportButtonTitle: "Exportar",
-    //     printButtonTitle: "Importar",
-    //     rangeSelectorFrom: "Desde",
-    //     rangeSelectorTo: "Hasta",
-    //     rangeSelectorZoom: "Período",
-    //     downloadPNG: 'Descargar imagen PNG',
-    //     downloadJPEG: 'Descargar imagen JPEG',
-    //     downloadPDF: 'Descargar imagen PDF',
-    //     downloadSVG: 'Descargar imagen SVG',
-    //     printChart: 'Imprimir',
-    //     resetZoom: 'Reiniciar zoom',
-    //     resetZoomTitle: 'Reiniciar zoom',
-    //     thousandsSep: ",",
-    //     decimalPoint: '.'
-    // }
+    lang: {
+        loading: 'Cargando...',
+        months: ['Enero', 'Febrero', 'Marzo', 'Abril', 'Mayo', 'Junio', 'Julio', 'Agosto', 'Septiembre', 'Octubre', 'Noviembre', 'Diciembre'],
+        weekdays: ['Domingo', 'Lunes', 'Martes', 'Miércoles', 'Jueves', 'Viernes', 'Sábado'],
+        shortMonths: ['Ene', 'Feb', 'Mar', 'Abr', 'May', 'Jun', 'Jul', 'Ago', 'Sep', 'Oct', 'Nov', 'Dic'],
+        exportButtonTitle: "Exportar",
+        printButtonTitle: "Importar",
+        rangeSelectorFrom: "Desde",
+        rangeSelectorTo: "Hasta",
+        rangeSelectorZoom: "Período",
+        downloadPNG: 'Descargar imagen PNG',
+        downloadJPEG: 'Descargar imagen JPEG',
+        downloadPDF: 'Descargar imagen PDF',
+        downloadSVG: 'Descargar imagen SVG',
+        printChart: 'Imprimir',
+        resetZoom: 'Reiniciar zoom',
+        resetZoomTitle: 'Reiniciar zoom',
+        thousandsSep: ",",
+        decimalPoint: '.'
+    }
 });
 
 
@@ -133,7 +133,6 @@ if (state.user) {
   API.auth(state.user)
     .then((user) => {
       if (!user) {
-        console.log('what happened here?')
         store.dispatch({ type: 'LOGOUT' })
       } else {
         console.info(`user "${user.id}" authenticated from previous session`)
@@ -142,7 +141,6 @@ if (state.user) {
       }
       bootstrap()
     })
-  console.log('something here')
 } else {
   console.log('no user found in state...')
   bootstrap()

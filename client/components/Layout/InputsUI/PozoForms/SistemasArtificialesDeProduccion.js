@@ -530,7 +530,6 @@ import { setFromSaveSistemas, setHasErrorsSistemas, setSistemasArtificialesImgUR
         break
     }
 
-        console.log('render sistemas')
     return (
       <div className="form sistemas-artificiales-de-produccion">
         <div className='left'>

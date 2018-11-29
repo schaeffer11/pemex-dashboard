@@ -43,7 +43,6 @@ import { setHasSubmitted, setIsLoading, setCurrentPage, setSaveName, setTab } fr
 
   componentDidMount() {
     const { token, saveName } = this.props
-    console.log('mounted,', saveName)
     const headers = {
       headers: {
         'Authorization': `Bearer ${token}`,
@@ -53,7 +52,6 @@ import { setHasSubmitted, setIsLoading, setCurrentPage, setSaveName, setTab } fr
     fetch('/api/getFieldWellMapping', headers)
       .then(r => r.json())
       .then(r => {
-
         this.setState({
           fieldWellOptions: r,
           saveName: saveName
@@ -65,7 +63,6 @@ import { setHasSubmitted, setIsLoading, setCurrentPage, setSaveName, setTab } fr
   componentDidUpdate(prevProps) {
     let { saveName } = this.props
     if (saveName !== prevProps.saveName) {
-      console.log('updatigngggggggg')
       this.setState({
         saveName: saveName
       })
@@ -75,7 +72,6 @@ import { setHasSubmitted, setIsLoading, setCurrentPage, setSaveName, setTab } fr
   handleSelectTab(val) {
     let { setCurrentPage, tipoDeIntervenciones, setTab } = this.props
 
-    console.log(val)
     if (val === 'Intervenciones') {
       let name = tipoDeIntervenciones === 'estimulacion' 
                 ? 'propuestaEstimulacion' 

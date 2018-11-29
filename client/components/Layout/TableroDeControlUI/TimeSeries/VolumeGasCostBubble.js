@@ -1,6 +1,7 @@
 import React, { PureComponent } from 'react'
 import autobind from 'autobind-decorator'
 import ReactHighcharts from 'react-highcharts'
+import { formatBubbleVolume as formatter } from '../../../../lib/tooltipFormatters'
 
 import { KPI } from '../Common/KPIs'
 
@@ -57,6 +58,7 @@ import { KPI } from '../Common/KPIs'
       title: {
           text: ''
       },
+      tooltip: { formatter },
       xAxis: {
         title: {
           text: 'Fecha'

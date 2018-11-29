@@ -409,7 +409,7 @@ const INSERT_INTERVENTION_APUNTALADO_QUERY = {
     save: `INSERT INTO _IntervencionesApuntaladoSave (
         INTERVENTION_ID, WELL_FORMACION_ID, 
         VOLUMEN_DESPLAZAMIENTO_LIQUIDO,
-        VOLUMEN_TOTAL_DE_LIQUIDO, MODULO_YOUNG_ARENA,
+        VOLUMEN_TOTAL_DE_LIQUIDO, VOLUMEN_APUNTALANTE, VOLUMEN_GEL_DE_FRACTURA, VOLUMEN_PRECOLCHON_APUNTALANTE, MODULO_YOUNG_ARENA,
         MODULO_YOUNG_LUTITAS, RELAC_POISSON_ARENA, RELAC_POISSON_LUTITAS, GRADIENTE_DE_FRACTURA, DENSIDAD_DE_DISPAROS,
         DIAMETRO_DE_DISPAROS, LONGITUD_APUNTALADA, ALTURA_TOTAL_DE_FRACTURA, ANCHO_PROMEDIO,
         CONCENTRACION_AREAL, CONDUCTIVIDAD, FCD, PRESION_NETA, EFICIENCIA_DE_FLUIDO_DE_FRACTURA,
@@ -420,11 +420,11 @@ const INSERT_INTERVENTION_APUNTALADO_QUERY = {
         (?, ?, ?, ?, ?, ?, ?, ?, ?, ?,
          ?, ?, ?, ?, ?, ?, ?, ?, ?, ?,
          ?, ?, ?, ?, ?, ?, ?, ?, ?, ?,
-         ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`,
+         ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`,
     submit: `INSERT INTO IntervencionesApuntalado (
         INTERVENTION_ID, WELL_FORMACION_ID, 
-        VOLUMEN_DESPLAZAMIENTO_LIQUIDO,
-        VOLUMEN_TOTAL_DE_LIQUIDO, MODULO_YOUNG_ARENA,
+        VOLUMEN_DESPLAZAMIENTO_LIQUIDO, 
+        VOLUMEN_TOTAL_DE_LIQUIDO,  VOLUMEN_APUNTALANTE, VOLUMEN_GEL_DE_FRACTURA, VOLUMEN_PRECOLCHON_APUNTALANTE, MODULO_YOUNG_ARENA,
         MODULO_YOUNG_LUTITAS, RELAC_POISSON_ARENA, RELAC_POISSON_LUTITAS, GRADIENTE_DE_FRACTURA, DENSIDAD_DE_DISPAROS,
         DIAMETRO_DE_DISPAROS, LONGITUD_APUNTALADA, ALTURA_TOTAL_DE_FRACTURA, ANCHO_PROMEDIO,
         CONCENTRACION_AREAL, CONDUCTIVIDAD, FCD, PRESION_NETA, EFICIENCIA_DE_FLUIDO_DE_FRACTURA,
@@ -435,7 +435,7 @@ const INSERT_INTERVENTION_APUNTALADO_QUERY = {
         (?, ?, ?, ?, ?, ?, ?, ?, ?, ?,
          ?, ?, ?, ?, ?, ?, ?, ?, ?, ?,
          ?, ?, ?, ?, ?, ?, ?, ?, ?, ?,
-         ?, ?, ?, ?, ?, ?, ?)`,     
+         ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`,     
     loadSave: `SELECT * FROM _IntervencionesApuntaladoSave WHERE TRANSACTION_ID = ?`,
     loadTransaction: `SELECT * FROM IntervencionesApuntalado WHERE TRANSACTION_ID = ?`    
 }
@@ -832,7 +832,6 @@ export const getWellProduccion = async (transID, action, cb) => {
 
 export const getWellImages = async (transID, action, cb) => {
   connection.query(INSERT_WELL_IMAGE_QUERY[action], [transID], (err, results) => {
-    console.log('got images?', err, results)
     cb(results)
    })
 }
@@ -902,11 +901,27 @@ export const getInterventionImages = async (transID, action, cb) => {
     })
 }
 
+export const deleteSave = async (transID, cb) => {
+
+    let values = []
+    for (let i = 0; i < 48; i++) {
+      values.push(transID)
+    }
+
+    connection.query(DELETE_QUERY, values, (err, results) => {
+        if (err) {
+            cb({err: 'true'})
+        }
+        else {
+            cb({results: results})
+        }
+    })
+}
+
 async function loopAndDelete(images) {
   const filteredData = images.filter(well => well.IMG_URL !== null && well.IMG_URL !== '')
   const deletedArray = []
   for (let elem of filteredData) {
-    console.log('elem', elem)
     const deletedObject = await deleteObject(elem.IMG_URL)
     deletedArray.push(deletedObject)
   }
@@ -914,7 +929,6 @@ async function loopAndDelete(images) {
 }
 
 const deleteImages = (transactionID, action) => new Promise((resolve, reject) => {
-  console.log('getting images', transactionID, action)
   getWellImages(transactionID, 'loadSave', async wellImages => {
     const deletedWellImages = await loopAndDelete(wellImages)
     getInterventionImages(transactionID, 'loadSave', async interventionImages => {
@@ -929,7 +943,7 @@ async function handleImageUploads(obj, transactionID) {
   if (objShallowCopy.imgSource === 'local') {
     objShallowCopy.imgName = [transactionID, objShallowCopy.imgName].join('.')
     const buf = Buffer.from(objShallowCopy.img, 'base64')
-    console.log('adding image to s3', objShallowCopy.imgName, transactionID)
+    // console.log('adding image to s3', objShallowCopy.imgName, transactionID)
     const t = await addObject(buf, objShallowCopy.imgName).catch(reason => console.log(reason))
     objShallowCopy.img = t
   } else if (objShallowCopy.imgSource === 's3') {
@@ -937,9 +951,9 @@ async function handleImageUploads(obj, transactionID) {
     const oldTransactionID = objShallowCopy.imgName.split('.')[0]
     const oldKey = [oldTransactionID, nameWithoutTransaction].join('.')
     const newKey = [transactionID, nameWithoutTransaction].join('.')
-    console.log('copying the old object', nameWithoutTransaction, oldKey, newKey)
+    // console.log('copying the old object', nameWithoutTransaction, oldKey, newKey)
     const objectCopy = await copyObject(oldKey, newKey).catch(r => console.log('something went wrong with the copy', r))
-    console.log('done copying', objectCopy)
+    // console.log('done copying', objectCopy)
     objShallowCopy.imgName = newKey
   }
   return objShallowCopy
@@ -955,7 +969,7 @@ export const create = async (body, action, cb) => {
     const innerKeys = Object.keys(innerObj)
     // look for immediate images
     if (innerObj.img) {
-      console.log('found image', k, innerObj.imgName)
+      // console.log('found image', k, innerObj.imgName)
       innerObj = await handleImageUploads(innerObj, transactionID)
     }
     for (let iKey of innerKeys) {
@@ -964,9 +978,9 @@ export const create = async (body, action, cb) => {
         let index = 0
         for (let j of property) {
           if (j.img) {
-            console.log('property has an image')
+            // console.log('property has an image')
             j = await handleImageUploads(j, transactionID)
-            console.log('uploaded image', j.imgName)
+            // console.log('uploaded image', j.imgName)
             // mutate object with correct imgName
             innerObj[iKey][index].imgName = j.imgName
             index += 1
@@ -1030,7 +1044,6 @@ export const create = async (body, action, cb) => {
 
   let wellLogFile = finalObj.evaluacionPetrofisica.imgName
   let wellBoreFile = finalObj.mecanicoYAparejoDeProduccion.imgName
-  let sistemasArtificialesFile = finalObj.sistemasArtificialesDeProduccion.imgName
 
   let labResultsFile
   let simResultsFile
@@ -1090,7 +1103,8 @@ export const create = async (body, action, cb) => {
   else if (tipoDeIntervenciones === 'apuntalado') {
       //Propuesta De Fracturamiento Apuntalado
       var { volumenPrecolchonN2, volumenSistemaNoReativo, volumenSistemaReactivo, volumenSistemaDivergente,
-        volumenDesplazamientoLiquido, volumenDesplazamientoN2, volumenTotalDeLiquido, moduloYoungArena, moduloYoungLutitas, relacPoissonArena,
+        volumenDesplazamientoLiquido, volumenDesplazamientoN2, volumenTotalDeLiquido, volumenApuntalante, volumenGelFractura, volumenPrecolchonN2, 
+    moduloYoungArena, moduloYoungLutitas, relacPoissonArena,
     relacPoissonLutatas, gradienteDeFractura, densidadDeDisparos, diametroDeDisparos } = finalObj.propuestaApuntalado
 
       //Resultados de simulacion Apuntalado
@@ -1430,7 +1444,7 @@ export const create = async (body, action, cb) => {
                       values = []
 
                       presionDataCampo.forEach(i => {
-                        let newRow = [wellFormacionID, i.fecha, i.Pws, pressureDepthCampo, transactionID]
+                        let newRow = [fieldFormacionID, i.fecha, i.Pws, pressureDepthCampo, transactionID]
                         if (action === 'save') {
                           newRow.push(i.error)
                           newRow.push(finalObj.historicoDePresion.hasErrorsCampo === true ? 1 : 0)
@@ -1507,9 +1521,8 @@ export const create = async (body, action, cb) => {
                               }
 
                               values = [
-                                [wellFormacionID, 'Well Log', wellLogFile, transactionID],
-                                [wellFormacionID, 'Well Bore Diagram', wellBoreFile, transactionID],
-                                [wellFormacionID, 'Sistemas Artificiales', sistemasArtificialesFile, transactionID]
+                                [wellFormacionID, 'Evaluación Petrofísica', wellLogFile, transactionID],
+                                [wellFormacionID, 'Edo. Mecánico', wellBoreFile, transactionID],
                               ]
 
                               connection.query((action === 'save' ? INSERT_WELL_IMAGE_QUERY.save : INSERT_WELL_IMAGE_QUERY.submit), [values], (err, results) => {
@@ -1584,7 +1597,7 @@ export const create = async (body, action, cb) => {
                                   else if (tipoDeIntervenciones === 'apuntalado') {
                                     values = [
                                         interventionID, wellFormacionID, 
-                                        volumenDesplazamientoLiquido, volumenTotalDeLiquido, 
+                                        volumenDesplazamientoLiquido, volumenTotalDeLiquido, volumenApuntalante, volumenGelFractura, volumenPrecolchonN2,
                                         moduloYoungArena, moduloYoungLutitas, relacPoissonArena,
                                         relacPoissonLutatas, gradienteDeFractura, densidadDeDisparos, diametroDeDisparos,
                                         longitudApuntalada, alturaTotalDeFractura, anchoPromedio, concentractionAreal, conductividad,
@@ -1785,8 +1798,8 @@ export const create = async (body, action, cb) => {
                                               }
 
                                               imageValues = imageValues.concat([
-                                                [interventionID, 'Est Inc Prod', incProdFile, transactionID],
-                                                [interventionID, 'Simulation Results', simResultsFile, transactionID]
+                                                [interventionID, 'Est. Inc. Prod.', incProdFile, transactionID],
+                                                [interventionID, 'Simulaciones', simResultsFile, transactionID]
                                               ])
 
 
@@ -2063,8 +2076,7 @@ export const create = async (body, action, cb) => {
                                                                               });
                                                                             }
                                                                             console.log('success!');
-                                                                            var log = 'Post ' + results + ' added';
-                                                                            console.log(log)
+
                                                                             cb(null, transactionID)
                                                                           })
                                                                         })

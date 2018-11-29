@@ -11,9 +11,13 @@ import KPIMecanico from './KPIMecanico'
 import Images from './Images'
 import Card from '../Common/Card'
 import { CardDeck } from 'reactstrap';
-import { generatePowerPoint } from '../../../../pptx';
 import LayerTable from './LayerTable'
 import ZoneTable from './ZoneTable'
+import LocalModal from './../Common/LocalModal'
+import ExportExcel from './ExportExcel'
+import Filters from './../Common/Filters'
+import TimeSlider from '../TimeSeries/TimeSlider'
+import { fetchFilterData } from '../../../../lib/filters'
 
 @autobind class wellViewUI extends Component {
   constructor(props) {
@@ -103,7 +107,6 @@ import ZoneTable from './ZoneTable'
 
 
   fetchData() {
-  	console.log('fetching')
     let { globalAnalysis } = this.props
     let { well } = globalAnalysis
 
@@ -137,12 +140,8 @@ import ZoneTable from './ZoneTable'
         })
       .then(res => res.json())
       .then(res => {
-        console.log(res, res.success)
         if (!res.success !== false) {
-          console.log('madeit')
           let transactionID = res[0].TRANSACTION_ID
-
-          console.log(transactionID)
 
           fetch(`/well/wellData`, {
             method: 'POST',
@@ -269,8 +268,10 @@ import ZoneTable from './ZoneTable'
     }
   }
 
-  componentDidMount() {
-  	this.fetchData()
+  async componentDidMount() {
+    this.fetchData()
+    const { globalAnalysis, token } = this.props
+    const data = await fetchFilterData(token, globalAnalysis)
   }
 
   componentDidUpdate(prevProps) {
@@ -292,7 +293,7 @@ import ZoneTable from './ZoneTable'
       if (imageData && Object.keys(imageData).length > 0) {
         return Object.keys(imageData).map(i => {
           let obj = imageData[i]
-          return <img style={{objectFit: 'contain'}} label={obj.imgName.split('.')[1]} src={obj.imgURL}></img> 
+          return <img style={{objectFit: 'contain'}} label={obj.displayName} src={obj.imgURL}></img> 
         })
       }
       else {
@@ -317,12 +318,17 @@ import ZoneTable from './ZoneTable'
 
     return (
       <div className="data well-view">
-        <div className='header'>
-          <div className='selectors'>
-            <WellSelect fieldWellOptions={fieldWellOptions}/>
-          </div>
-        </div>
         <div className='content'>
+          <TimeSlider />
+          <div className="filtersAndExport">
+            <LocalModal title="Filtros">
+              <Filters />
+            </LocalModal>
+            <LocalModal title="Menu de Exportación">
+              <ExportExcel />
+            </LocalModal>
+          </div>
+          <WellSelect fieldWellOptions={fieldWellOptions}/>
           <CardDeck className="content-deck">
             <Card
                 id="kpis"

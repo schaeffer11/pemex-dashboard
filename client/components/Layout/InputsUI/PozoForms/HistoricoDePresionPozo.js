@@ -161,7 +161,7 @@ let columns = [
     let { formData, setPresionDataPozo, hasSubmitted } = this.props
     formData = formData.toJS()
     let { presionDataPozo, fromSavePozo } = formData
-    console.log('hola', presionDataPozo)
+
     const rowObj = {
       fecha: null,
       Pws: '',

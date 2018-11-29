@@ -298,7 +298,7 @@ const DateInput = (props) => {
           dateFormat="L"
           name={props.name}
           onChange={(date, event) => {
-            console.log('da date', date)
+
             if (date) {
               form.setFieldValue(props.name, date.format('YYYY-MM-DD'))
             } else {

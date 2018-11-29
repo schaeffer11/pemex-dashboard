@@ -331,9 +331,7 @@ import { checkDate, checkEmpty, checkEmptySingular, checkDateSingular } from '..
     rowObj.length = data.length + 1
 
 
-    console.log(JSON.parse(JSON.stringify(this.state.errors)))
     this.setState({ errors: [...errors, newErrorRow] }, () => {
-      console.log(this.state.errors)
       this.setOuterStateError()
     })
 

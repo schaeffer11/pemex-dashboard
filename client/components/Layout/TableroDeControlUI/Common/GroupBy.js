@@ -30,7 +30,7 @@ function arrayDiff(a, b) {
     let prevGlobalAnalysis = prevProps.globalAnalysis.toJS()
     const prevGroupBy = prevGlobalAnalysis.groupBy
     if (groupBy && groupBy !== prevGroupBy) {
-      console.log('what is this?')
+
       const data = await fetchFilterData(token, globalAnalysis)
       const filterOptions = buildFiltersOptions(data)
       setGeneralFilters(filterOptions)

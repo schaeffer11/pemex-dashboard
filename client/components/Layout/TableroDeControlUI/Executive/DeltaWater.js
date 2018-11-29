@@ -1,6 +1,7 @@
 import React, { PureComponent } from 'react'
 import autobind from 'autobind-decorator'
 import ReactHighcharts from 'react-highcharts'
+import { formatScatter as formatter } from '../../../../lib/tooltipFormatters'
 
 let classificationSeries = [{
     name: 'Exitosa',
@@ -90,6 +91,7 @@ let classificationSeries = [{
         title: {
             text: ''
         },
+        tooltip: { formatter },
         xAxis: {
             title: {
                 text: 'Producción Incremental Estimada (bbl/d)'

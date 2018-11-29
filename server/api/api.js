@@ -15,7 +15,7 @@ import { create as createWell, getFields, getWell, getSurveys,
             getInterventionEsimulacion, getInterventionAcido, getInterventionApuntalado,
             getInterventionTermico, getCedulaTermico, 
             getLabTest, getCedulaEstimulacion, getCedulaAcido, getCedulaApuntalado, 
-            getCosts, getInterventionImages } from './pozo'
+            getCosts, getInterventionImages, deleteSave } from './pozo'
 
 
 import { create as createCompromiso, mine as myCompromisos, collection as getCompromisos, get as getCompromiso, put as updateCompromiso } from './compromisos';
@@ -36,10 +36,8 @@ const router = Router()
 const getImagesForClient = async (transactionID, action) => new Promise((resolve, reject) => {
   getWellImages(transactionID, action, async (wellImages) => {
     const formattedWellImages = await handleImageResponse(wellImages)
-    console.log('format well img', formattedWellImages)
     getInterventionImages(transactionID, action, async (interventionImages) => {
       const formattedInterventionImages = await handleImageResponse(interventionImages)
-      console.log('format intervention img', formattedInterventionImages)
       resolve({ ...formattedWellImages, ...formattedInterventionImages })
     })
   })
@@ -64,6 +62,7 @@ export async function handleImageResponse(data) {
     // get img url from s3
     const imgURL = await signedURL(imgName)
     const innerObj = {
+      displayName: labID,
       imgName,
       imgURL,
       imgSource: 's3',
@@ -82,9 +81,7 @@ export async function handleImageResponse(data) {
 
 async function labTests(transactionID, action) {
   return new Promise((resolve, reject) => {
-    console.log('loading lab tests!', transactionID, action)
     getLabTest(transactionID, action, (data) => {
-      console.log('in here', data)
       let labIDs = []
       let outData = []
   
@@ -101,7 +98,6 @@ async function labTests(transactionID, action) {
           type = subset[0].TIPO_DE_ANALISIS
           let i = subset[0]
           if (type === 'caracterizacionFisico') {
-            console.log('what is my type', type)
             outData.push({
               edited: true,
               labID: i.LAB_ID,
@@ -310,10 +306,17 @@ const upload = multer({
 router.use(upload.array())
 
 router.get('/ping', (req, res) => {
-	console.log('pong')
   res.json({ response: 'pong' })
 })
 
+
+router.get('/deleteSave', (req, res) => {
+  let { transactionID } = req.query
+
+  deleteSave(transactionID, (data) => {
+    res.json({complete2: true})
+  })
+})
 
 router.post('/comment', (req, res) => {
   let { comment, page, user } = req.body
@@ -416,6 +419,76 @@ router.get('/getTerminationTypes', (req, res) => {
   })
 })
 
+
+
+
+router.get('/getCompanyMap', (req, res) => {
+  const query = `SELECT COMPANY FROM CompanyMap`
+  connection.query(query, (err, results) => {
+    results = results.map(i => ({label: i.COMPANY, value: i.COMPANY}))
+    res.send(results)
+  })
+})
+
+router.get('/getJustificationMap', (req, res) => {
+  const query = `SELECT JUSTIFICACION FROM JustificacionesMap`
+  connection.query(query, (err, results) => {
+    results = results.map(i => ({label: i.JUSTIFICACION, value: i.JUSTIFICACION}))
+    res.send(results)
+  })
+})
+
+router.get('/getLitologiaMap', (req, res) => {
+  const query = `SELECT LITOLOGIA FROM LitologiaMap`
+  connection.query(query, (err, results) => {
+    results = results.map(i => ({label: i.LITOLOGIA, value: i.LITOLOGIA}))
+    res.send(results)
+  })
+})
+
+router.get('/getTipoDeTerminationMap', (req, res) => {
+  const query = `SELECT TIPO_DE_TERMINATION FROM TipoDeTerminationMap`
+  connection.query(query, (err, results) => {
+    results = results.map(i => ({label: i.TIPO_DE_TERMINATION, value: i.TIPO_DE_TERMINATION}))
+    res.send(results)
+  })
+})
+
+router.get('/getTipoDeLinerMap', (req, res) => {
+  const query = `SELECT TIPO_DE_LINER FROM TipoDeLinerMap`
+  connection.query(query, (err, results) => {
+    results = results.map(i => ({label: i.TIPO_DE_LINER, value: i.TIPO_DE_LINER}))
+    res.send(results)
+  })
+})
+
+
+
+//todo: move this to seperate script, or delete entirely
+router.get('/deletePlaceholders', (req, res) => {
+  const query = `SHOW TABLES`
+  connection.query(query, (err, results) => {
+    
+    results = [{Tables_in_DataInput: 'WellHistorialIntervenciones'}]
+
+    results.forEach(i => {
+      let newQuery = `SELECT COLUMN_NAME FROM information_schema.columns WHERE table_schema='DataInput' AND table_name='${i.Tables_in_DataInput}';`
+      connection.query(newQuery, (err, results) => {
+        results.forEach(column => {
+          // console.log(column)
+          let finalQuery =  `UPDATE ${i.Tables_in_DataInput} SET ${column.COLUMN_NAME} = NULL WHERE ${column.COLUMN_NAME} = '-9999'`
+          // console.log(finalQuery)
+          connection.query(finalQuery, (err, results) => {
+            console.log(err)
+            console.log(results)
+          })
+        })
+      })
+    })
+  })
+})
+
+
 router.get('/getTreatmentCompanies', (req, res) => {
   const query = `
     SELECT DISTINCT(COMPANIA) FROM
@@ -463,10 +536,14 @@ router.get('/getFormationTypes', (req, res) => {
 })
 
 router.get('/getJobs', (req, res) => {
-    let { well } = req.query
+    let { well, lowDate, highDate } = req.query
+    const query = `SELECT * FROM Intervenciones inter
+    JOIN TransactionsResults tr on inter.TRANSACTION_ID = tr.PROPUESTA_ID
+    WHERE inter.WELL_FORMACION_ID = ? AND tr.FECHA_INTERVENCION >= ? AND tr.FECHA_INTERVENCION <= ?`
+    
+    // JOIN TransactionsResults tr on t.TRANSACTION_ID = tr.PROPUESTA_ID
 
-    connection.query(`SELECT * FROM Intervenciones WHERE WELL_FORMACION_ID = ?`, well, (err, results) => {
-
+    connection.query(query, [well, lowDate, highDate], (err, results) => {
       res.json(results)
     })
 })
@@ -550,7 +627,9 @@ router.get('/filterOptions', async (req, res) => {
       query += `\nJOIN ${selectMap[q].joinStatement}`
     }
     query += `\nWHERE 1 = 1 ${whereMap[q].query.join(' ')}`
-    return queryPromise(q, query, whereMap[q].values)
+    return queryPromise(q, query, whereMap[q].values).catch(e => {
+      return e
+    })
   })
   const results = await Promise.all(promises)
   res.json(results)
@@ -704,7 +783,6 @@ router.post('/well', async (req, res) => {
       console.log('we got an error saving', err)
       res.json({ isSubmitted: false })
     } else {
-      console.log('all good in the submitting neighborhood')
       res.json({ isSubmitted: true })
     }
   })
@@ -719,7 +797,6 @@ router.post('/wellSave', async (req, res) => {
       console.log('we got an error saving', err)
       res.json({ isSaved: false })
     } else {
-      console.log('all good in the saving neighborhood')
       const images = await getImagesForClient(transactionID, 'loadSave')
       // Need pruebas de laboratorio so lab images can be correctly saved in redux 
       const pruebasDeLaboratorioData = await labTests(transactionID, 'loadSave').catch(e => e)
@@ -743,7 +820,6 @@ router.post('/results', async (req, res) => {
       console.log('we got an error saving', err)
       res.json({ isSubmitted: false })
     } else {
-      console.log('all good in the submitting results neighborhood,')
       res.json({ isSubmitted: true })
     }
   })
@@ -1165,7 +1241,6 @@ router.get('/getHistIntervenciones', async (req, res) => {
   getHistIntervenciones(transactionID, action, (data) => {
     const finalObj = {}
     if (data && data.length > 0) {
-      console.log('my data', data)
       data.forEach((d, index) => {
         d.DATE ? d.DATE = d.DATE.toJSON().slice(0, 10) : null
         d.HAS_ERRORS = d.HAS_ERRORS === 0 || d.HAS_ERRORS === undefined || d.HAS_ERRORS === undefined ? false : true
@@ -1357,7 +1432,6 @@ router.get('/getMudLoss', async (req, res) => {
         objectPath.push(finalObj, `${mainParent}.${innerParent}`, innerObj)
       })
       finalObj.evaluacionPetrofisica.hasErrors = data[0].TABLE_HAS_ERRORS === 0 ? false : true
-      console.log('what is this?', finalObj)
       res.json(finalObj)
     }
     else if (action === 'loadTransaction'){
@@ -1488,8 +1562,7 @@ router.get('/getEmboloViajero', async (req, res) => {
           objectPath.set(finalObj, `${parent}.${child}`, data[0][key])
         }
       })
-      // finalObj.sistemasArtificialesDeProduccion.hasErrors = data[0].HAS_ERRORS === 0 || data[0].HAS_ERRORS === undefined ? false : true
-      finalObj.sistemasArtificialesDeProduccion.hasErrors = true
+      finalObj.sistemasArtificialesDeProduccion.hasErrors = data[0].HAS_ERRORS === 0 || data[0].HAS_ERRORS === undefined ? false : true
       res.json(finalObj)   
     }
     else if (action === 'loadSave') {
@@ -1531,8 +1604,7 @@ router.get('/getBombeoNeumatico', async (req, res) => {
           objectPath.set(finalObj, `${parent}.${child}`, data[0][key])
         }
       })
-      // finalObj.sistemasArtificialesDeProduccion.hasErrors = data[0].HAS_ERRORS === 0 || data[0].HAS_ERRORS === undefined ? false : true
-      finalObj.sistemasArtificialesDeProduccion.hasErrors = true
+      finalObj.sistemasArtificialesDeProduccion.hasErrors = data[0].HAS_ERRORS === 0 || data[0].HAS_ERRORS === undefined ? false : true
       res.json(finalObj)   
     }
     else if (action === 'loadSave') {
@@ -1575,8 +1647,7 @@ router.get('/getBombeoHidraulico', async (req, res) => {
           objectPath.set(finalObj, `${parent}.${child}`, data[0][key])
         }
       })
-      // finalObj.sistemasArtificialesDeProduccion.hasErrors = data[0].HAS_ERRORS === 0 || data[0].HAS_ERRORS === undefined ? false : true
-      finalObj.sistemasArtificialesDeProduccion.hasErrors = true
+      finalObj.sistemasArtificialesDeProduccion.hasErrors = data[0].HAS_ERRORS === 0 || data[0].HAS_ERRORS === undefined ? false : true
       res.json(finalObj)   
     }
     else if (action === 'loadSave') {
@@ -1621,8 +1692,7 @@ router.get('/getBombeoCavidades', async (req, res) => {
           objectPath.set(finalObj, `${parent}.${child}`, data[0][key])
         }
       })
-      // finalObj.sistemasArtificialesDeProduccion.hasErrors = data[0].HAS_ERRORS === 0 || data[0].HAS_ERRORS === undefined ? false : true
-      finalObj.sistemasArtificialesDeProduccion.hasErrors = true
+      finalObj.sistemasArtificialesDeProduccion.hasErrors = data[0].HAS_ERRORS === 0 || data[0].HAS_ERRORS === undefined ? false : true
 
       res.json(finalObj)   
     }
@@ -1667,8 +1737,7 @@ router.get('/getBombeoElectrocentrifugo', async (req, res) => {
           objectPath.set(finalObj, `${parent}.${child}`, data[0][key])
         }
       })
-      // finalObj.sistemasArtificialesDeProduccion.hasErrors = data[0].HAS_ERRORS === 0 || data[0].HAS_ERRORS === undefined ? false : true
-      finalObj.sistemasArtificialesDeProduccion.hasErrors = true
+      finalObj.sistemasArtificialesDeProduccion.hasErrors = data[0].HAS_ERRORS === 0 || data[0].HAS_ERRORS === undefined ? false : true
       res.json(finalObj)   
     }
     else if (action === 'loadSave') {
@@ -1715,8 +1784,7 @@ router.get('/getBombeoMecanico', async (req, res) => {
           objectPath.set(finalObj, `${parent}.${child}`, data[0][key])
         }
       })
-      // finalObj.sistemasArtificialesDeProduccion.hasErrors = data[0].HAS_ERRORS === 0 || data[0].HAS_ERRORS === undefined ? false : true
-      finalObj.sistemasArtificialesDeProduccion.hasErrors = true
+      finalObj.sistemasArtificialesDeProduccion.hasErrors = data[0].HAS_ERRORS === 0 || data[0].HAS_ERRORS === undefined ? false : true
       res.json(finalObj)   
     }
     else if (action === 'loadSave') {
@@ -1962,7 +2030,6 @@ router.get('/getImages', async (req, res) => {
   const { transactionID, saved } = req.query
   const action = saved ? 'loadSave' : 'loadTransaction'
   const imagesForClient = await getImagesForClient(transactionID, action).catch(r => console.log('something went wrong getting images'))
-  console.log('da images from client', imagesForClient)
   res.json(imagesForClient)
 })
 router.get('/getWellImages', async (req, res) => {
@@ -2342,7 +2409,6 @@ router.get('/getCedulaEstimulacion', async (req, res) => {
   const innerParent = 'cedulaData'
 
   getCedulaEstimulacion(transactionID, action, (data) => {
-    console.log(data)
     let finalObj = {}
     let error = false
     if (data && data.length > 0) {
@@ -2558,7 +2624,6 @@ router.get('/getCedulaTermico', async (req, res) => {
       }
     }
 
-    console.log(finalObj)
     res.json(finalObj)
   })
 })

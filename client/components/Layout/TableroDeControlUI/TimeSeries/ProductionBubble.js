@@ -1,6 +1,7 @@
 import React, { PureComponent } from 'react'
 import autobind from 'autobind-decorator'
 import ReactHighcharts from 'react-highcharts'
+import { formatBubbleProduction as formatter } from '../../../../lib/tooltipFormatters'
 
 import { KPI } from '../Common/KPIs'
 
@@ -11,9 +12,6 @@ import { KPI } from '../Common/KPIs'
 
     let series = []
     let groups = []
-
-
-    console.log(data)
 
     data.forEach(i => {
       if (!groups.includes(i.groupedName)) {
@@ -66,6 +64,7 @@ import { KPI } from '../Common/KPIs'
       title: {
           text: ''
       },
+      tooltip: { formatter },
       xAxis: {
         title: {
           text: 'Fecha'
@@ -83,9 +82,6 @@ import { KPI } from '../Common/KPIs'
       },
       series: series
   }
-
-  // console.log(series)
-
     return (
       <div className="production-bubble test">
         <div className='chart'>

@@ -138,8 +138,6 @@ import { checkEmpty, checkDate } from '../../../../../lib/errorCheckers'
   handleFileUpload(e, setURL) {
     let { files } = e.target
 
-    console.log(files)
-
     let localImgUrl = window.URL.createObjectURL(files[0])
 
     setURL(localImgUrl, 'resultadosSimulacionApuntalado')

@@ -238,9 +238,12 @@ let columns = [
         i.qg.length > 0 || typeof i.qg === 'number' ? qgData.push([date, parseFloat(i.qg)]) : null
       }
     })
-    config.series[0].data = qoData
-    config.series[1].data = qgData
-    config.series[2].data = qwData
+
+    config.series[0].data = qoData.filter(i => i[1] !== -999)
+    config.series[1].data = qgData.filter(i => i[1] !== -999)
+    config.series[2].data = qwData.filter(i => i[1] !== -999)
+  
+
     return (        
       <div className="graph">
             <ReactHighCharts className="chart" ref={(ref) => this.chart = ref} config= {config} />

@@ -28,7 +28,7 @@ import LoginForm from '../User/LoginForm'
   render() {
     const onPage = this.props.onPage || 'sample_page'
     const { isLoading } = this.state
-    console.log('something happened?')
+
     return (
         <div id="page-wrap" className="productspace">
           <PrivateRoute exact path="/carga_datos" component={InputsUI} user={this.props.user} />

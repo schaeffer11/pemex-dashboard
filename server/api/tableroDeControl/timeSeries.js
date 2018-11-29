@@ -98,7 +98,6 @@ GROUP BY ${groupByClause} YEAR(FECHA_INTERVENCION), MONTH(FECHA_INTERVENCION)
 ORDER BY groupedName;
   `
 
-  console.log(query, values)
   connection.query(query, values, (err, results) => {
       console.log('comment err', err)
 
@@ -456,8 +455,6 @@ ${whereClause}
 GROUP BY ${groupByClause} YEAR(FECHA_INTERVENCION), MONTH(FECHA_INTERVENCION)
 ORDER BY groupedName
 `
-
-  console.log('rererere', query, values)
 
   connection.query(query, values, (err, results) => {
       console.log('comment err', err)

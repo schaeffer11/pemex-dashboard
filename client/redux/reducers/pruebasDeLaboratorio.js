@@ -18,7 +18,6 @@ const pruebasDeLaboratorio = (state = initialState, action) => {
     case 'set_pruebasDeLaboratorioData':
         return state.set('pruebasDeLaboratorioData', fromJS(action.value))
     case 'set_pruebasDeLaboratorioImg':
-    console.log('in here', action.index, action.name)
         return state.setIn(['pruebasDeLaboratorioData', action.index, 'imgURL'], action.url)
             .setIn(['pruebasDeLaboratorioData', action.index, 'imgName'], action.name).setIn(['pruebasDeLaboratorioData', action.index, 'imgSource'], 'local')
     default:

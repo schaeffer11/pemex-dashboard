@@ -1,6 +1,8 @@
-import React, { PureComponent } from 'react'
+import React, { Component } from 'react'
 import autobind from 'autobind-decorator'
 import ReactHighcharts from 'react-highcharts'
+import { formatScatter as formatter } from '../../../../lib/tooltipFormatters'
+
 
 let classificationSeries = [{
     name: 'Exitosa',
@@ -10,7 +12,7 @@ let classificationSeries = [{
     color: 'red'
 }]
 
-@autobind class DeltaOil extends PureComponent {
+@autobind class DeltaOil extends Component {
 
   shouldComponentUpdate(nextProps) {
     if (this.props.groupBy !== nextProps.groupBy) {
@@ -90,7 +92,8 @@ let classificationSeries = [{
 	    },
 	    title: {
 	        text: ''
-	    },
+      },
+      tooltip: { formatter },
 	    xAxis: {
 	    	title: {
 	    		text: 'Producción Incremental Estimada (bbl/d)'
@@ -105,7 +108,7 @@ let classificationSeries = [{
 	    	enabled: false
 	    },
 	    series: series
-	}
+  }
 
     return (
     	<ReactHighcharts

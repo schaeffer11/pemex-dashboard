@@ -160,7 +160,6 @@ const DUMMY_QUERY = 'SELECT(1) FROM Users LIMIT 1'
 
 
 export const createResults = async (body, action, cb) => {
-  console.log('im in results')
   const transactionID = Math.floor(Math.random() * 1000000000)
   const allKeys = Object.keys(body)
   const finalObj = {}
@@ -172,11 +171,11 @@ export const createResults = async (body, action, cb) => {
     // look for immediate images
     if (innerObj.img) {
       innerObj.imgName = [transactionID, innerObj.imgName].join('.')
-      console.log('found image', k, innerObj.imgName)
+      // console.log('found image', k, innerObj.imgName)
       const buf = Buffer.from(innerObj.img, 'base64')
       const t = await addObject(buf, innerObj.imgName).catch(reason => console.log('something went wrong', reason))
       innerObj.img = t
-      console.log('uploaded img', t, k)
+      // console.log('uploaded img', t, k)
     }
 
     for (let iKey of innerKeys) {
@@ -186,11 +185,11 @@ export const createResults = async (body, action, cb) => {
         for (let j of property) {
           if (j.img) {
             j.imgName = [transactionID, j.imgName].join('.')
-            console.log('ok here are some imaages', j.imgName)
+            // console.log('ok here are some imaages', j.imgName)
             const buf = Buffer.from(j.img, 'base64')
             const t = await addObject(buf, j.imgName).catch(reason => console.log('something went wrong', reason))
             j.img = t
-            console.log('uploaded img', k, t)
+            // console.log('uploaded img', k, t)
           }
           i++
         }
@@ -198,8 +197,6 @@ export const createResults = async (body, action, cb) => {
     }
     finalObj[k] = innerObj
   }
-
-  console.log(finalObj)
 
 
   let userID = finalObj.user.id
@@ -306,15 +303,18 @@ export const createResults = async (body, action, cb) => {
           values = []
           if (interventionType !== 'termico') {
             geometria.forEach(i => {
-                let name = 'geometry ' + i.intervalo
+                let name = 'Geometría ' + i.intervalo
                 let newRow = [wellFormacionID, name, i.imgName, propuestaID, transactionID]
                 values.push(newRow)
             })
           }
 
-          values.push([wellFormacionID, 'Treatment Graph', treatmentGraphImg, propuestaID, transactionID])
+          values.push([wellFormacionID, 'Gráfica de Tratamiento', treatmentGraphImg, propuestaID, transactionID])
 
-          connection.query(values.length === 0 ? DUMMY_QUERY : INSERT_IMAGES_QUERY.submit, [values], (err, results) => {
+          console.log(values)
+
+
+          connection.query(values.length === 0 ? DUMMY_QUERY : INSERT_IMAGES_QUERY.submit, [values, values, values, values], (err, results) => {
             console.log('images', err)
             console.log('images', results)
             if (err) {
@@ -324,14 +324,6 @@ export const createResults = async (body, action, cb) => {
               })
             }
 
-            // let query = 
-            //   interventionType === 'estimulacion' 
-            //     ? INSERT_CEDULA_ESTIMULACION_QUERY.submit 
-            //     : interventionType === 'acido' 
-            //       ? INSERT_CEDULA_ACIDO_QUERY.submit 
-            //       : interventionType === 'apuntalado'
-            //         ? INSERT_CEDULA_APUNTALADO_QUERY.submit
-            //         : INSERT_CEDULA_TERMICO_QUERY.submit
             let query
             values = []
 
@@ -389,15 +381,6 @@ export const createResults = async (body, action, cb) => {
                   cb(err)
                 })
               }
-              // let INSERT_CEDULA_APUNTALADO_QUERY
-              // query = 
-              //   interventionType === 'estimulacion' 
-              //     ? INSERT_RESULTS_ESIMULACION_QUERY.submit 
-              //     : interventionType === 'acido' 
-              //       ? INSERT_RESULTS_ACIDO_QUERY.submit 
-              //       : interventionType === 'apuntalado'
-              //         ? INSERT_RESULTS_APUNTALADO_QUERY.submit
-              //         : INSERT_RESULTS_TERMICO_QUERY.submit
 
               if (interventionType === 'estimulacion') {
                 query = INSERT_RESULTS_ESIMULACION_QUERY.submit

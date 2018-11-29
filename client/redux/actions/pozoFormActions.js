@@ -15,7 +15,6 @@ export function getBase64FromURL(imgURL) {
     xhr.responseType = 'arraybuffer'
   
     xhr.onload = function(e) {
-      console.log('image status', this.status)
       if (this.status == 200) {
         var uInt8Array = new Uint8Array(this.response);
         const base64 = bufferToBase64(uInt8Array)
@@ -144,7 +143,6 @@ export function submitForm(action, token, saveName) {
       })
         .then(r => r.json())
         .then((r) => {
-          console.log('i got back images?', isSaved, images)
           let notificationType = ''
           let notificationText = ''
           const { isSaved, images, pruebasDeLaboratorio } = r

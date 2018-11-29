@@ -12,29 +12,6 @@ import { setFromSaveMecanicoYAparejoDeProduccion, setHasErrorsMecanicoYAparejoDe
   setImgAparejoDeProduccionURL, setDesviacion } from '../../../../redux/actions/pozo'
 import { checkEmpty, checkDate } from '../../../../lib/errorCheckers'
 
-
-let tipoDeTerminacionOptions = [
-  { label: 'Agujero Descubierto (AD)', value: 'Agujero Descubierto (AD)' },
-  { label: 'Liner Cementado y Disparado (LCD)', value: 'Liner Cementado y Disparado (LCD)' },
-  { label: 'Liner Ranurado (LR)', value: 'Liner Ranurado (LR)' },
-  { label: 'Liner Ranurado y Disparado (LRD)', value: 'Liner Ranurado y Disparado (LRD)' },
-  { label: 'Cola extendida', value: 'Cola extendida' },
-  { label: 'Simple', value: 'Simple' },
-  { label: 'Tuberia Cementada y Disparada (TCD)', value: 'Tuberia Cementada y Disparada (TCD)'}
-]
-
-let tipoDeLinerOptions = [
-  { label: 'Liner Ranurado (LR)', value: 'Liner Ranurado (LR)' },
-  { label: 'Liner Ranurado y Disparado (LRD)', value: 'Liner Ranurado y Disparado (LRD)' },
-  { label: 'Liner Disparado (LD)', value: 'Liner Disparado (LD)' },
-  { label: 'Liner Cementado y Disparado (LCD)', value: 'Liner Cementado y Disparado (LCD)' },
-  { label: 'Cola extendida', value: 'Cola extendida' },
-  { label: 'Liner mas complemento', value: 'Liner mas complemento' },
-  { label: 'Tie back', value: 'Tie back' },
-  { label: 'Sencillo', value: 'Sencillo' },
-  { label: 'No aplica', value: 'No aplica' },
-]
-
 let tratamientoPorOptions = [
   { label: 'Tubería de Producción (TP)', value: 'Tubería de Producción (TP)' },
   { label: 'Tubería de Revestimiento-Tubería de Producción (TR-TP)', value: 'Tubería de Revestimiento-Tubería de Producción (TR-TP)' },
@@ -213,7 +190,7 @@ let tratamientoPorOptions = [
     this.setState({ errors: errorsCopy }, () => {
       const { setHasErrorsMecanicoYAparejoDeProduccion, hasSubmitted } = this.props
       const hasErrors = this.checkAllInputs(hasSubmitted)
-      console.log('checking for errors', hasErrors, this.state.errors)
+
       setHasErrorsMecanicoYAparejoDeProduccion(hasErrors)
     })
   }
@@ -243,7 +220,7 @@ let tratamientoPorOptions = [
   }
 
   makeTerminacionForm() {
-    let { setTipoDeTerminacion, setHIntervaloProductor, setEmpacador, setPresionDifEmpacador, setSensorPyt, setTipoDeLiner, setDiametroDeLiner, setTipoDePistolas, setDensidadDeDisparosMecanico, setFase, setDiametroDeOrificio, setPenetracion, setTipoDeSAP, formData } = this.props
+    let { setTipoDeTerminacion, setHIntervaloProductor, setEmpacador, setPresionDifEmpacador, setSensorPyt, setTipoDeLiner, setDiametroDeLiner, setTipoDePistolas, setDensidadDeDisparosMecanico, setFase, setDiametroDeOrificio, setPenetracion, setTipoDeSAP, formData, tipoDeTerminationOptions, tipoDeLinerOptions} = this.props
     formData = formData.toJS()
     let { tipoDeTerminacion, hIntervaloProductor, empacador, presionDifEmpacador, sensorPyt, tipoDeLiner, diametroDeLiner, tipoDePistolas, densidadDeDisparosMecanico, fase, diametroDeOrificio, penetracion, tipoDeSAP } = formData
     
@@ -254,7 +231,7 @@ let tratamientoPorOptions = [
         </div>
         TIPO
         <div className="input-table">
-          <InputRowSelectUnitless header="Tipo de terminación" value={tipoDeTerminacion} callback={this.handleSelectTipoDeTerminacion} options={tipoDeTerminacionOptions} name='tipoDeTerminacion' onBlur={this.updateErrors} errors={this.state.errors} />
+          <InputRowSelectUnitless header="Tipo de terminación" value={tipoDeTerminacion} callback={this.handleSelectTipoDeTerminacion} options={tipoDeTerminationOptions} name='tipoDeTerminacion' onBlur={this.updateErrors} errors={this.state.errors} />
           <InputRow header="h (intervalo productor)" value={hIntervaloProductor} onChange={setHIntervaloProductor} name='hIntervaloProductor' unit='md' onBlur={this.updateErrors} errors={this.state.errors} />
           <InputRow header="Profunidad del Empacador" name='empacador' value={empacador} onChange={setEmpacador} unit='md' onBlur={this.updateErrors} errors={this.state.errors} />
           <InputRow header="Presión dif. empacador" name='presionDifEmpacador' value={presionDifEmpacador} onChange={setPresionDifEmpacador} unit='psi' onBlur={this.updateErrors} errors={this.state.errors} />
@@ -505,6 +482,8 @@ const mapStateToProps = state => ({
   formData: state.get('mecanicoYAparejoDeProduccion'),
   hasErrors: state.getIn(['mecanicoYAparejoDeProduccion', 'hasErrors']),
   hasSubmitted: state.getIn(['global', 'hasSubmitted']),
+  tipoDeTerminationOptions: state.getIn(['global', 'tipoDeTerminationOptions']),
+  tipoDeLinerOptions: state.getIn(['global', 'tipoDeLinerOptions']),
 })
 
 const mapDispatchToProps = dispatch => ({
