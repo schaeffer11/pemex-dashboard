@@ -59,15 +59,14 @@ app.post('/auth/createUser', (req, res) => {
   }
   const sqlize = (value) => typeof value === 'string' ? SqlString.escape(value) : value
 
-  let inputs = process.argv.slice(2)
   let user = {
    username: username,
    password: password,
    IS_ADMIN: isAdmin
   }
 
-   // subdireccionID ? user.SUBDIRECCION_ID = subdireccionID
-   // activoID ? user.ACTIVO_ID = activoID
+   subdireccionID ? user.SUBDIRECCION_ID = subdireccionID : null
+   activoID ? user.ACTIVO_ID = activoID : null
 
   // FILL OUT HASHED COLUMNS
   user.password = hash({ username: user.username, password: user.password })
@@ -90,6 +89,36 @@ app.post('/auth/createUser', (req, res) => {
         }
   })
 })
+
+app.post('/auth/changePassword', (req, res) => {
+  let { username, password  } = req.body
+  let db_con = db.get(appConfig.users.database)
+  let table = appConfig.users.table
+
+  // FILTERS & SUCH
+  const hash = (obj) => {
+   let bf = new Blowfish(HASH_SECRET + obj.username)
+   return bf.encrypt(JSON.stringify(obj))
+  }
+
+  // FILL OUT HASHED COLUMNS
+  let newPassword = hash({ username: username, password: password })
+
+
+  let sql = `UPDATE Users SET password = ? WHERE username = ?`
+
+  return db_con.query(sql, [newPassword, username], (err, results) => {
+        if (err) {
+          console.log('Error changing password', err)
+          res.json({success: false})
+        }
+        else {
+          console.log('success', results)
+          res.json({success: true})
+        }
+  })
+})
+
 
 app.get('/auth/sessions', (req, res) => {
   res.json(listSessions())

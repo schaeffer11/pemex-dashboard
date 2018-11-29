@@ -19,7 +19,7 @@ export function formatScatter() {
 }
 
 export function formatPiePercent() {
-  return `<b>${numberFormat(this.percentage)} %</b>`
+  return `${this.point.name}<br/><b>${numberFormat(this.percentage)} %</b>`
 }
 
 export function formatBubbleProduction() {

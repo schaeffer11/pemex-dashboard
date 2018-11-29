@@ -10,7 +10,10 @@ import { formatPiePercent as formatter } from '../../../../lib/tooltipFormatters
   render() {
 	  
     let { data } = this.props
+
+    console.log(data)
     
+
     let config = {
 	    chart: {
 	        type: 'pie'
@@ -28,11 +31,15 @@ import { formatPiePercent as formatter } from '../../../../lib/tooltipFormatters
 	    }],
 	    plotOptions: {
 	    	pie: {
+	    		size: '50%',
 	    		dataLabels: {
 	    			enabled: true,
 	    			formatter: function() {
-              return '<b>'+ this.point.name +'</b>: '+ this.y;
-            }
+              			return '<b>'+ this.point.name +'</b>: '+ this.y;
+            		},
+            		style: {
+            			fontSize: '14px'
+            		}
 	    		}
 	    	}
 	    }

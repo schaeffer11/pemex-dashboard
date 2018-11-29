@@ -18,8 +18,12 @@ const generateErrorElements = ( name = '', errors = [] ) => {
 }
 
 export const InputRow = ({ header, type='number', name, unit, value, onChange, onBlur, index, errors = {}, style = {} }) => {
-  let handleChange = (e) => {
+  let handleChangeCleave = (e) => {
     onChange(e.target.rawValue, e)
+  }
+
+  let handleChange = (e) => {
+    onChange(e.target.value, e)
   }
 
   value = value === null ? '' : value
@@ -28,19 +32,30 @@ export const InputRow = ({ header, type='number', name, unit, value, onChange, o
       <div className='label'>
         {header}
       </div>
-      <Cleave
-        className="input"
-        options={{
-          numeral: true,
-          numeralThousandsGroupStyle: 'thousand',
-          numeralDecimalScale: 10,
-        }}
-        value={value}
-        onChange={handleChange}
-        onBlur={(e) => checkEmpty(e.target.rawValue, name, errors, onBlur)}
-        index={index}
-        name={name}
-      />
+      {type === 'number' ?
+        <Cleave
+          className="input"
+          options={{
+            numeral: true,
+            numeralThousandsGroupStyle: 'thousand',
+            numeralDecimalScale: 10,
+          }}
+          value={value}
+          onChange={handleChangeCleave}
+          onBlur={(e) => checkEmpty(e.target.rawValue, name, errors, onBlur)}
+          index={index}
+          name={name}
+        /> : 
+        <input 
+          className='input' 
+          type={type} 
+          value={value} 
+          onChange={handleChange} 
+          onBlur={(e) => checkEmpty(e.target.value, name, errors, onBlur)} 
+          name={name} 
+          index={index}
+        />
+      }
       <div className='unit'>
         {unit}
       </div>

@@ -164,7 +164,7 @@ import VolumeGasTreatments from './VolumeGasTreatments'
           <CardDeck className="content-deck">
             <Card
                 id="productionCost"
-                title="Producción Incremental vs Costo"
+                title="Producción Incremental vs Costos Reales"
                 ref={this.cards[0]}
                 width={'50%'}
               >
@@ -173,7 +173,7 @@ import VolumeGasTreatments from './VolumeGasTreatments'
             </Card>
               <Card
                 id="volumeCost"
-                title="Volúmenes vs Costo"
+                title="Volúmenes Inyectados vs Costos Reales"
                 ref={this.cards[0]}
                 width={'50%'}
               >
@@ -192,7 +192,7 @@ import VolumeGasTreatments from './VolumeGasTreatments'
             </Card>
               <Card
                 id="volumeTreatments"
-                title="Volumen y Número de Tratamientos"
+                title="Volúmenes Inyectados y Número de Tratamientos"
                 ref={this.cards[0]}
                 width={'50%'}
                 multiplyChartsOnGrouping
@@ -202,7 +202,7 @@ import VolumeGasTreatments from './VolumeGasTreatments'
             </Card>
             <Card
                 id="costs"
-                title="Costos"
+                title="Costos Reales"
                 ref={this.cards[1]}
                 width={'50%'}
               >
@@ -210,7 +210,7 @@ import VolumeGasTreatments from './VolumeGasTreatments'
             </Card>
               <Card
                 id="volume"
-                title="Volumen Utilizado"
+                title="Volúmenes Inyectados"
                 ref={this.cards[2]}
                 width={'50%'}
                 multiplyChartsOnGrouping

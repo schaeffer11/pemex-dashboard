@@ -44,6 +44,7 @@ import { KPI } from '../Common/KPIs'
         name: 'Número de Tratamientos',
         data: numTreatmentData,
         type: 'line',
+        color: '#0D547B',
         yAxis: 1,
         zIndex: 1
       })

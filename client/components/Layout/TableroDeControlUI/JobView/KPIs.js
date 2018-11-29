@@ -43,7 +43,6 @@ const numWithCommas = (x) => {
       company = estIncData[0].COMPANY
     }
 
-
     return (
       <div className="kpis">
         <KPI className='company' header='Company' value={company} />

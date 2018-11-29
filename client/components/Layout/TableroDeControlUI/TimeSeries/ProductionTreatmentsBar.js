@@ -50,6 +50,7 @@ import { KPI } from '../Common/KPIs'
           name: 'Número de Tratamientos',
           data: numTreatmentData.filter(i => i.groupedName === name),
           type: 'line',
+          color: '#0D547B',
           yAxis: 1,
           zIndex: 1
         })

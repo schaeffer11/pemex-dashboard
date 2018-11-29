@@ -21,6 +21,7 @@ import Filters from './../Common/Filters'
 import ExportPptx from './ExportPptx';
 import { convertLowDate, convertHighDate } from '../../../../lib/formatters';
 import { KPI } from '../Common/KPIs'
+import MoreKPIs from './MoreKPIs'
 
 @autobind class jobViewUI extends Component {
   constructor(props) {
@@ -43,7 +44,8 @@ import { KPI } from '../Common/KPIs'
       specificLabData: [],
       specificLab: null,
       estIncData: [],
-      isOpen: false
+      isOpen: false,
+      jobData: []
     }    
     this.cards = []
     for (let i = 0; i < 7; i += 1) {
@@ -174,6 +176,7 @@ import { KPI } from '../Common/KPIs'
             type: type,
             date: date,
             transID: i.PROPUESTA_ID,
+
           })
         })
         
@@ -255,6 +258,7 @@ import { KPI } from '../Common/KPIs'
     let estVolumeQuery = `/job/getEstimatedVolumeData?transactionID=${job}&type=${jobType}`
     let labsQuery = `/job/getLabs?transactionID=${job}`
     let estIncQuery = `/job/getEstIncData?transactionID=${job}&type=${jobType}`
+    let jobDataQuery = `/job/getJobData?transactionID=${job}`
 
     const headers = {
       headers: {
@@ -286,7 +290,8 @@ import { KPI } from '../Common/KPIs'
         fetch(volumeQuery, headers).then(r => r.json()),
         fetch(estVolumeQuery, headers).then(r => r.json()),
         fetch(labsQuery, headers).then(r => r.json()),
-        fetch(estIncQuery, headers).then(r => r.json())
+        fetch(estIncQuery, headers).then(r => r.json()),
+        fetch(jobDataQuery, headers).then(r => r.json()),
       ])
         .catch(error => {
           console.log('err', error)
@@ -305,7 +310,8 @@ import { KPI } from '../Common/KPIs'
         volumeData: data[8],
         estVolumeData: data[9],
         labData: data[10],
-        estIncData: data[11]
+        estIncData: data[11],
+        jobData: data[12]
       }
 
       this.setState(newState) 
@@ -347,47 +353,7 @@ import { KPI } from '../Common/KPIs'
       Object.keys(imageData).forEach(i => {
         let obj = imageData[i]
 
-        if (Array.isArray(obj)) {
-          //RIGHT NOW IMAGES ARE ONLY STORED FOR LABS ON EXPAND
-          // obj.forEach(j => {
-          //   let displayName = 'Lab'
-
-          //   switch (j.imgName.split('.')[2]) {
-          //     case 'compatibilidadPorEmulsion':
-          //       displayName += ' - Pruebas de compatiblidad por emulsión'
-          //       break;
-          //     case 'caracterizacionFisicoQuimica':
-          //       displayName += ' - Caracterización fisico-química de fluidos'
-          //       break;
-          //     case 'gelFractura':
-          //       displayName += ' - Pruebas gel de fractura'
-          //       break;
-          //     case 'solubilidad':
-          //       displayName += ' - Pruebas de solubilidad'
-          //       break;
-          //     case 'apuntalante':
-          //       displayName += ' - Pruebas para apuntalante'
-          //       break;
-          //     case 'grabado':
-          //       displayName += ' - Pruebas de grabado'
-          //       break;
-          //     case 'cromatografiaDelGas':
-          //       displayName += ' - Cromatografía del gas'
-          //       break;
-          //     case 'pruebaDeDureza':
-          //       displayName += ' - Prueba de dureza'
-          //       break;
-          //     case 'determinacionDeLaCalidad':
-          //       displayName += ' - Determinación de la calidad método de los cloruros'
-          //       break;
-          //     case 'curvaDeViscosidad':
-          //       displayName += ' - Curva De Viscosidad'
-          //       break;
-          //   }
-          //   out.push(<img style={{objectFit: 'contain'}} label={displayName} src={j.imgURL}></img>)
-          // })
-        }
-        else {
+        if (!Array.isArray(obj)) {
           out.push(<img style={{objectFit: 'contain'}} label={obj.displayName} src={obj.imgURL}></img>)
         }
       })
@@ -641,7 +607,7 @@ import { KPI } from '../Common/KPIs'
   }
 
   render() {
-    let { fieldWellOptions, jobOptions, imageData, costData, estCostData, volumeData, estIncData, estVolumeData, cedulaData, cedulaResultData, date, aforoData, interventionData, interventionResultsData, labData, specificLabData, isOpen } = this.state
+    let { fieldWellOptions, jobOptions, imageData, costData, estCostData, jobData, volumeData, estIncData, estVolumeData, cedulaData, cedulaResultData, date, aforoData, interventionData, interventionResultsData, labData, specificLabData, isOpen } = this.state
     let { globalAnalysis } = this.props
 
     globalAnalysis = globalAnalysis.toJS()
@@ -743,11 +709,6 @@ import { KPI } from '../Common/KPIs'
       <div className="data job-view">
         <div className='content tablero-content'>
           <TimeSlider />
-         <div className='selectors'>
-            <WellSelect fieldWellOptions={fieldWellOptions}/>
-            <JobSelect options={jobOptions}/>
-          </div>
-          <KPIs estData={estCostData} data={costData} estIncData={estIncData}/>
           <div className="filtersAndExport">
             <LocalModal title="Filtros">
               <Filters />
@@ -756,6 +717,14 @@ import { KPI } from '../Common/KPIs'
               <ExportPptx />
             </LocalModal>
           </div>
+          <div style={{display: 'flex'}}>
+           <div className='selectors'>
+              <WellSelect fieldWellOptions={fieldWellOptions}/>
+              <JobSelect options={jobOptions}/>
+            </div>
+            <KPIs estData={estCostData} data={costData} estIncData={estIncData} />
+          </div>
+          <MoreKPIs jobData={jobData} />
           <CardDeck className="content-deck">
             <Card
                 id="cedula"

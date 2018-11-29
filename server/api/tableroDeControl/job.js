@@ -14,6 +14,25 @@ const router = Router()
 router.use(getAuthorization)
 
 
+router.get('/getJobData', (req, res) => {
+  let { transactionID } = req.query
+
+  let query = `
+SELECT * FROM Intervenciones
+WHERE TRANSACTION_ID = ?`
+
+  connection.query(query, transactionID, (err, results) => {
+      console.log('comment err', err)
+
+     if (err) {
+        res.json({ success: false})
+      }
+      else {
+        res.json(results)
+      }
+    })
+})
+
 router.get('/getEstCostData', (req, res) => {
   let { transactionID } = req.query
 

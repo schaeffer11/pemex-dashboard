@@ -38,7 +38,7 @@ const yesOrNoOptions = [{
           value: '',
         },
         salinidadConConductimetro: {
-          type: 'number',
+          type: 'text',
           value: '',
         },
         solidosDisueltosTotales: {
@@ -208,7 +208,7 @@ const yesOrNoOptions = [{
           <InputRow header="pH" name='pH' value={pH} onChange={setPH} unit='' errors={this.state.errors} onBlur={this.updateErrors}/>
           <InputRow header="Temperatura" name='temperaturaDeConductividad' value={temperaturaDeConductividad} onChange={setTemperaturaDeConductividad} unit='°C' errors={this.state.errors} onBlur={this.updateErrors}/>
           <InputRow header="Resistividad" name='resistividad' value={resistividad} onChange={setResistividad} unit='Ohm*m' errors={this.state.errors} onBlur={this.updateErrors}/>
-          <InputRow header="Salinidad" name='salinidadConConductimetro' value={salinidadConConductimetro} onChange={setSalinidadConConductimetro} unit='mEq/L' errors={this.state.errors} onBlur={this.updateErrors}/>
+          <InputRow header="Salinidad" type='text' name='salinidadConConductimetro' value={salinidadConConductimetro} onChange={setSalinidadConConductimetro} unit='mEq/L' errors={this.state.errors} onBlur={this.updateErrors}/>
           <InputRow header="Solidos disueltos totales" name='solidosDisueltosTotales' value={solidosDisueltosTotales} onChange={setSolidosDisueltosTotales} unit='mEq/L' errors={this.state.errors} onBlur={this.updateErrors}/>
           <InputRow header={<div>Dureza total como CaCO<sub>3</sub></div>} name='durezaTotalComoCaCO3' value={durezaTotalComoCaCO3} onChange={setDurezaTotalComoCaCO3} unit='mEq/L' errors={this.state.errors} onBlur={this.updateErrors}/>
           <InputRow header={<div>Dureza de calcio como CaCO<sub>3</sub></div>} name='durezaDeCalcioComoCaCO3' value={durezaDeCalcioComoCaCO3} onChange={setDurezaDeCalcioComoCaCO3} unit='mEq/L' errors={this.state.errors} onBlur={this.updateErrors}/>

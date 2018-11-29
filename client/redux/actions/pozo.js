@@ -114,7 +114,20 @@ export const setLayerData = value => ({
     return elem
   })
 })
-export const setMudLossData = value => ({ type: 'set_mudLossData', value})
+
+export const setMudLossData = value => ({ 
+  type: 'set_mudLossData', 
+  value: value.map((row, i) => {
+    let lodoPerdido = row.lodoPerdido === '-999' ? 0 : row.lodoPerdido
+
+    let prev = value[i - 1]
+
+
+    row.totalLodoPerdido = prev ? dealWithNaN((parseFloat(prev.totalLodoPerdido) + parseFloat(lodoPerdido)).toFixed(2)) : dealWithNaN(parseFloat(lodoPerdido).toFixed(2))
+    return row
+  })
+})
+
 export const setImgURL = (url, name) => ({ type: 'set_imgURL', url, name})
 export const setEvaluacionPetrofisica = value => ({ type: 'set_evaluacionPetrofisica', value})
 export const setHasErrorsEvaluacionPetrofisica = value => ({ type: 'set_hasErrorsEvaluacionPetrofisica', value})
