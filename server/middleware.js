@@ -28,7 +28,7 @@ export const getAuthorization = (req, res, next) => {
 }
 
 export const allowAdmin = (req, res, next) => {
-  console.log('allowing admin?', req.user.isAdmin)
+  console.log('allowing admin?', req.url, req.user.isAdmin)
   console.log('allowing admin? user', req.user)
   if (req.user.isAdmin) {
     console.log('admin and authorized')

@@ -353,11 +353,13 @@ router.get('/activo', (req, res) => {
     })
 })
 
-router.post('/compromiso', (req, res) => {
+router.post('/compromiso', allowAdmin, (req, res) => {
+  console.log('IN COMPROMISO')
   createCompromiso(req, res)
 })
 
-router.put('/compromiso/:id', (req, res) => {
+router.put('/compromiso/:id', allowAdmin, (req, res) => {
+  console.log('IN COMPROMISO put')
     updateCompromiso(req, res)
 })
 
@@ -365,7 +367,7 @@ router.get('/compromiso/mine', (req, res) => {
     myCompromisos(req, res)
 })
 
-router.get('/compromiso', (req, res) => {
+router.get('/compromiso', allowAdmin, (req, res) => {
     getCompromisos(req, res)
 })
 
@@ -373,27 +375,27 @@ router.get('/compromiso/:id', (req, res) => {
     getCompromiso(req, res)
 })
 
-router.post('/diagnostico', (req, res) => {
+router.post('/diagnostico', allowAdmin, (req, res) => {
     createDiagnostico(req, res)
 })
 
-router.get('/diagnostico', (req, res) => {
+router.get('/diagnostico', allowAdmin, (req, res) => {
     getDiagnosticos(req, res)
 })
 
-router.get('/diagnostico/:id', (req, res) => {
+router.get('/diagnostico/:id', allowAdmin, (req, res) => {
     getDiagnostico(req, res)
 })
 
-router.post('/mapeo', (req, res) => {
+router.post('/mapeo', allowAdmin, (req, res) => {
     createMapeo(req, res)
 })
 
-router.get('/mapeo', (req, res) => {
+router.get('/mapeo', allowAdmin, (req, res) => {
     getMapeos(req, res)
 })
 
-router.get('/mapeo/:id', (req, res) => {
+router.get('/mapeo/:id', allowAdmin, (req, res) => {
     getMapeo(req, res)
 })
 

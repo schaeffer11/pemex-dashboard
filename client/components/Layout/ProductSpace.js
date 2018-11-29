@@ -62,8 +62,8 @@ import LoginForm from '../User/LoginForm'
           <PrivateRoute exact path="/carga_datos" component={InputsUI} user={this.props.user} />
           <AdminPrivateRoute exact path="/diagnosticos" component={DiagnosticosUI} isAdmin={isAdmin} user={this.props.user} />
           <AdminPrivateRoute exact path="/mapeo" component={MapeoUI} isAdmin={isAdmin} user={this.props.user} />
-          <PrivateRoute exact path="/compromisos" component={CompromisosUI} user={this.props.user} />
-          <PrivateRoute exact path="/compromisos/manage" component={ManageCompromisos} user={this.props.user} />
+          <PrivateRoute exact path="/compromisos" component={CompromisosUI} user={this.props.user} isAdmin={isAdmin} />
+          <AdminPrivateRoute exact path="/compromisos/manage" component={ManageCompromisos} user={this.props.user} isAdmin={isAdmin} />
           <PrivateRoute path="/tablero_control" component={TableroDeControlUI} user={this.props.user} />
           <Route
             exact
@@ -84,10 +84,10 @@ import LoginForm from '../User/LoginForm'
 
 export default Productspace
 
-const PrivateRoute = ({ component: Component, user: user, ...properties}) => (
+const PrivateRoute = ({ component: Component, user: user, ...properties, isAdmin }) => (
   <Route {...properties} render={(props) => (
     user !== null
-      ? <Component {...props} />
+      ? <Component {...props} isAdmin={isAdmin} />
       : <Redirect to={{pathname:'/', state: {referrer: props.location} }}/>
   )} />
 )

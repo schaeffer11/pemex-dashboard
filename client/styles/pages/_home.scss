@@ -84,7 +84,10 @@
                     width: 220px;
 					text-align: center;
 
-
+					& .disabled {
+						// color: '#a7aaaf'
+						cursor: not-allowed;
+					}
 					.link {
 						grid-area: button;
 						max-width: 160px;
@@ -107,9 +110,7 @@
 
 				.img {
                    margin: auto;
-                   width: 80px;
-
-
+									width: 80px;
 				}
 			}
 
