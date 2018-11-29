@@ -32,12 +32,22 @@ import routes from '../../../routes/routes'
       })
 
   }
-
-
+  async testAdmin() {
+    const { token } = this.props
+    const headers = {
+      'Authorization': `Bearer ${token}`,
+      'content-type': 'application/json',
+  }
+  console.log(headers)
+    const data = await fetch('/api/testingAdmin', { headers }).then(r => r.text())
+    console.log('am i an admin and allowed', data)
+  }
   render() {
    return (
     <div className="analysis-content">
       <div className='menu'>
+        <h1>prueba</h1>
+        <button onClick={this.testAdmin}>PRUEBAAAA</button>
         {
           routes().map(route => (
             <div className='menu-item'>

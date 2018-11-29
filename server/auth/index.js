@@ -128,7 +128,8 @@ app.use('/auth', (req, res) => {
       id: userData.id,
       name: userData.username,
       activoID: userData.ACTIVO_ID,
-      subdireccionID: userData.SUBDIRECCION_ID
+      subdireccionID: userData.SUBDIRECCION_ID,
+      isAdmin: userData.IS_ADMIN,
     }
 
     // embed user in request.session

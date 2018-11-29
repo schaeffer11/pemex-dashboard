@@ -1,14 +1,12 @@
 import { Router } from 'express'
 import db from '../../lib/db'
 import appConfig from '../../../app-config.js'
-// import path from 'path'
-// import fs from 'fs'
-// import objectPath from 'object-path'
+import { getAuthorization } from '../../middleware';
 
 
 const connection = db.getConnection(appConfig.users.database)
 const router = Router()
-
+router.use(getAuthorization)
 
 router.get('/costData', (req, res) => {
   let { subdir, activo, field, well, formation, company, tipoDeIntervencion, tipoDeTerminacion, groupBy, avg, noGroup, lowDate, highDate } = req.query

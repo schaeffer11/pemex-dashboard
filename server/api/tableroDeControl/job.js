@@ -3,6 +3,7 @@ import db from '../../lib/db'
 import appConfig from '../../../app-config.js'
 import moment from 'moment'
 import { handleImageResponse } from '../api';
+import { getAuthorization } from '../../middleware';
 // import path from 'path'
 // import fs from 'fs'
 // import objectPath from 'object-path'
@@ -10,6 +11,7 @@ import { handleImageResponse } from '../api';
 
 const connection = db.getConnection(appConfig.users.database)
 const router = Router()
+router.use(getAuthorization)
 
 
 router.get('/getEstCostData', (req, res) => {

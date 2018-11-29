@@ -3,6 +3,7 @@ import db from '../../lib/db'
 import appConfig from '../../../app-config.js'
 import moment from 'moment'
 import { getWellProduccion } from '../pozo';
+import { getAuthorization } from '../../middleware'
 // import path from 'path'
 // import fs from 'fs'
 // import objectPath from 'object-path'
@@ -11,7 +12,7 @@ import { getWellProduccion } from '../pozo';
 const connection = db.getConnection(appConfig.users.database)
 const router = Router()
 
-
+router.use(getAuthorization)
 
 router.post('/previousTransaction', (req, res) => {
   let { well } = req.body

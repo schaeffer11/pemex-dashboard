@@ -26,7 +26,7 @@ import { create as createDiagnostico, get as getDiagnostico, getAll as getDiagno
 
 import { create as createMapeo, get as getMapeo, getAll as getMapeos } from './mapeo';
 
-import { getAuthorization } from '../middleware';
+import { getAuthorization, allowAdmin } from '../middleware';
 
 const connection = db.getConnection(appConfig.users.database)
 const env = process.env.NODE_ENV || 'dev'
@@ -298,9 +298,13 @@ router.get('/get_template/:template', (req, res) => {
   res.sendFile(filePath)
 })
 
+
 router.use(getAuthorization)
 const upload = multer({
   limits: { fieldSize: 25 * 1024 * 1024 },
+})
+router.get('/testingAdmin', allowAdmin, (req, res) => {
+  res.send('good stuff')
 })
 
 router.use(upload.array())
