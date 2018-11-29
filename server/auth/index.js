@@ -44,6 +44,13 @@ function authenticationFailure(res, detail) {
   return res.status(401).json({ status: 401, success: false, message: messages.AUTH_FAILURE, detail })
 }
 
+app.post('/auth/createUser', (req, res) => {
+  let { username, password } = req.body
+
+  res.json({username, password})
+
+})
+
 app.get('/auth/sessions', (req, res) => {
   res.json(listSessions())
 })
@@ -112,6 +119,9 @@ app.use('/auth', (req, res) => {
     if (err) {
       console.log(err)
       return authenticationFailure(res, err)
+    }
+    else if (userData.IS_ACTIVE === 0) {
+      return authenticationFailure(res, 'Inactive user')
     }
 
     let user = {
