@@ -133,6 +133,7 @@ import { fetchFilterData } from '../../../../lib/filters'
           method: 'POST',
           headers: {
             'content-type': 'application/json',
+            'Authorization': `Bearer ${token}`,
           },
           body: JSON.stringify({
             well
@@ -147,6 +148,7 @@ import { fetchFilterData } from '../../../../lib/filters'
             method: 'POST',
             headers: {
               'content-type': 'application/json',
+              'Authorization': `Bearer ${token}`,
             },
             body: JSON.stringify({
               transactionID
@@ -163,6 +165,7 @@ import { fetchFilterData } from '../../../../lib/filters'
             method: 'POST',
             headers: {
               'content-type': 'application/json',
+              'Authorization': `Bearer ${token}`,
             },
             body: JSON.stringify({
               transactionID
@@ -179,6 +182,7 @@ import { fetchFilterData } from '../../../../lib/filters'
             method: 'POST',
             headers: {
               'content-type': 'application/json',
+              'Authorization': `Bearer ${token}`,
             },
             body: JSON.stringify({
               transactionID
@@ -195,6 +199,7 @@ import { fetchFilterData } from '../../../../lib/filters'
             method: 'POST',
             headers: {
               'content-type': 'application/json',
+              'Authorization': `Bearer ${token}`,
             },
             body: JSON.stringify({
               transactionID
@@ -211,6 +216,7 @@ import { fetchFilterData } from '../../../../lib/filters'
             method: 'POST',
             headers: {
               'content-type': 'application/json',
+              'Authorization': `Bearer ${token}`,
             },
             body: JSON.stringify({
               transactionID
@@ -227,6 +233,7 @@ import { fetchFilterData } from '../../../../lib/filters'
             method: 'POST',
             headers: {
               'content-type': 'application/json',
+              'Authorization': `Bearer ${token}`,
             },
             body: JSON.stringify({
               transactionID
@@ -242,6 +249,7 @@ import { fetchFilterData } from '../../../../lib/filters'
           fetch(`/api/getWellImages?transactionID=${transactionID}`, {
             headers: {
               'content-type': 'application/json',
+              'Authorization': `Bearer ${token}`,
             },
           })
           .then(res => res.json())
@@ -254,6 +262,7 @@ import { fetchFilterData } from '../../../../lib/filters'
           fetch(`/well/getInterventionDates?wellID=${well}`, {
             headers: {
               'content-type': 'application/json',
+              'Authorization': `Bearer ${token}`,
             },
           })
           .then(res => res.json())
