@@ -48,7 +48,7 @@ import routes from '../../../routes/routes'
       <div className='menu'>
         {
           routes().map(route => (
-            <div className='menu-item'>
+            <div key={`tableroUI_${route.path}`} className='menu-item'>
               <NavLink
                 to={route.path}
                 activeClassName="active"

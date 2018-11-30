@@ -183,7 +183,6 @@ import { setHasSubmitted, setIsLoading, setCurrentPage, setSaveName, setTab } fr
         hasErrors = true
       }
 
-      console.log('has errors', hasErrors)
       if (!hasErrors) {
         this.props.submitResultsForm(action, this.props.token)
         this.setState({'error': ''})

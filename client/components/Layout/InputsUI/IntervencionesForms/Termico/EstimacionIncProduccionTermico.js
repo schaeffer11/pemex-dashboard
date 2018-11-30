@@ -133,7 +133,6 @@ import { checkEmpty, checkDate } from '../../../../../lib/errorCheckers'
     if (hasErrorNew != hasErrors) {
       setGeneral('hasErrors', hasErrorNew)
     }
-    console.log('what are these arreros', errors)
     this.setState({ errors })
   }
 

@@ -29,7 +29,6 @@ const Toasty = ({ type, notification }) => {
 }
 
 const Notification = ({ notificationText, showNotification, notificationType, resetNotifications }) => {
-  // console.log('Notifying?', saved, loaded)
     const toastProps = {
       position: 'top-right',
       autoClose: 5000,
