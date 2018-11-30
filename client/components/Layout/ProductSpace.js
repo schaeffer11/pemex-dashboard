@@ -48,9 +48,7 @@ import LoginForm from '../User/LoginForm'
         'Authorization': `Bearer ${token}`,
         'content-type': 'application/json',
       }
-      console.log('iciiii')
       const isAdmin = await fetch('/api/isAdmin', { headers }).then(r => r.json())
-      console.log('am i an admin and allowed', isAdmin)
       const { success } = isAdmin
       return success
     }
@@ -98,7 +96,6 @@ const PrivateRoute = ({ component: Component, user: user, ...properties, isAdmin
 
 
 const AdminPrivateRoute = ({ component: Component, isAdmin, ...properties}) => {
-  console.log('da route', isAdmin)
     return <Route {...properties} render={(props) => (
       isAdmin
       ? <Component {...props} />

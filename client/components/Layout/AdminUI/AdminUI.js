@@ -38,7 +38,6 @@ import Select from 'react-select'
     }
     const subdireccionData = await fetch('/api/activo', { headers }).then(r => r.json())
     const users = await fetch('/api/users', { headers }).then(r => r.json())
-    console.log('users are', users)
     const subdirecciones = {}
     subdireccionData.forEach(elem => {
       const { SUBDIRECCION_NAME, SUBDIRECCION_ID, ACTIVO_NAME, ACTIVO_ID } = elem

@@ -236,7 +236,6 @@ export const InputRowCosts = ({ header, name, unit, value, onChange, index, onBl
 export const InputDate = ({ name, onChange, value, header, onBlur, errors }) => {
   // const errorElements = generateErrorElements(name, errors)
   let handleSelect = (date) => {
-    // console.log('date?', date)
     if (date === null) {
       checkDate(date, name, errors, onBlur)
       onChange(null)

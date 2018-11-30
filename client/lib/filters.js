@@ -58,6 +58,13 @@ export async function fetchFilterData(token, globalAnalysis) {
 export function buildFiltersOptions(data) {
   const options = {}
   const filters = getFilters()
+  const interventionMap = {
+    acido: 'Frac. Ácido',
+    apuntalado: 'Frac. Apuntalado',
+    estimulacionLimpieza: 'Estimulación Limpieza',
+    estimulacionMatricial: 'Estimulación Matricial',
+    termico: 'Estimulación Termica',
+  }
   data.filter(elem => {
     const key = Object.keys(elem)[0]
     if (key === 'lowDate' || key === 'highDate') {
@@ -67,10 +74,18 @@ export function buildFiltersOptions(data) {
   }).forEach(elem => {
     const key = Object.keys(elem)[0]
     const { id, name } = filters[key]
-    options[key] = elem[key].map(i => ({
-      label: i[name],
-      value: i[id],
-    }))
+    options[key] = elem[key].map(i => {
+      if(key === 'interventionType') {
+        return {
+          label: interventionMap[i[name]],
+          value: i[id],
+        }
+      }
+      return {
+        label: i[name],
+        value: i[id],
+      }
+    })
   })
   return options
 }

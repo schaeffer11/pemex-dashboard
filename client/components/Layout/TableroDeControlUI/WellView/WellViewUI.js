@@ -302,7 +302,7 @@ import { fetchFilterData } from '../../../../lib/filters'
       if (imageData && Object.keys(imageData).length > 0) {
         return Object.keys(imageData).map(i => {
           let obj = imageData[i]
-          return <img style={{objectFit: 'contain'}} label={obj.displayName} src={obj.imgURL}></img> 
+          return <img key={`wellview_img_${i}`} style={{objectFit: 'contain'}} label={obj.displayName} src={obj.imgURL}></img> 
         })
       }
       else {

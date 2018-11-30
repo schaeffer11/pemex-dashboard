@@ -88,7 +88,6 @@ import { calculateValuesTermicaCedula } from '../../../../../lib/formatters';
       }
       error === true ? hasErrors = true : null
     })
-    console.log('errors', errors)
     return hasErrors
   }
 

@@ -153,7 +153,7 @@ export async function buildEvaluacionPetrofisica(pptx, token, id, image) {
     const base64 = await getBase64FromURL(image.imgURL).catch(e => e)
     if (!base64.error) {
       imageSlide.addImage({
-        data: `image/png;base64,${base64}`, x: getPositions(10.5).middle, y: 2.0,
+        data: `image/png;base64,${base64}`, x: getPositions(10.5).middle, y: 1.0,
         sizing: { type: 'contain', h: 5.5, w: 10.5 }
       })
     }
