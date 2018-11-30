@@ -263,7 +263,7 @@ import ButtonGroup from './ButtonGroup'
       >
       <div className="modalTest" >
         <div className="modal-title">
-          Menu de descarga
+          Menú de descarga
         </div>
         <div className="modal-info"> 
           Seleccione borrador para descargar
@@ -281,11 +281,11 @@ import ButtonGroup from './ButtonGroup'
         <button disabled={!selectedSave} className="submit submit-load" onClick={this.handleLoad}>Descargar borrador</button>
         <br/>
         <div>  - O - </div>
-        <div> Eliminar un Barrador </div>
+        <div> Eliminar un Borrador </div>
         <div> Para eliminar por favor ingrese el nombre en la siguiente casilla</div>
         <input value={deleteVal} onChange={e => this.setState({deleteVal: e.target.value})}/>
         <br/>
-        <button style={{background: '#b22222', marginTop: '10px'}} disabled={!selectedSave || selectedSaveName !== deleteVal} className="submit submit-load" onClick={this.deleteSave}>Eliminar Barrador</button>
+        <button style={{background: '#b22222', marginTop: '10px'}} disabled={!selectedSave || selectedSaveName !== deleteVal} className="submit submit-load" onClick={this.deleteSave}>Eliminar Borrador</button>
         
       </div>
       </AriaModal>
