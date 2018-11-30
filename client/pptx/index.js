@@ -246,7 +246,7 @@ async function buildAndSkipError(index, everything, hasResults, updateProgress) 
 }
 
 export async function generatePowerPoint(token, jobID, jobType, updateProgress) {
-  console.log('generating powerpoint')
+  // console.log('generating powerpoint')
   const slideWidth = 13.3
   const slideHeight = 7.5
   const pptx = new PptxGenJS()
@@ -273,6 +273,6 @@ export async function generatePowerPoint(token, jobID, jobType, updateProgress) 
     // await buildAforoChart(pptx, token, jobID)
     // await buildGraficaDeTratamiento(pptx, imageResults.graficaTratamiento)
   }
-  console.log('finished building ppt')
+  // console.log('finished building ppt')
   pptx.save()
 }

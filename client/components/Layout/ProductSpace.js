@@ -35,7 +35,7 @@ import LoginForm from '../User/LoginForm'
     const { user } = this.props
     if (user !== prevProps.user) {
       const isAdmin = await this.showAdminRoute()
-      console.log('setting this fucker', isAdmin)
+
       this.setState({ isAdmin })
     }
   }

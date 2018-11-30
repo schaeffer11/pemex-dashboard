@@ -55,8 +55,6 @@ const forms = [
   constructor(props) {
     super(props)
 
-    console.log(props, props.global.toJS().currentPage === 'TecnicaDelCampo' ? 0 : 10)
-
     this.state = {
       currentStep:  props.global.toJS().currentPage === 'TecnicaDelCampo' ? 0 : 10,
       isOpen: false,
