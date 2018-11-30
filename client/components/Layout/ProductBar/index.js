@@ -83,7 +83,7 @@ class Productbar extends Component {
             <NavLink to="/"><span/></NavLink>
             {/*<div style={{fontFamily: 'Roboto', display: 'inline-block', color: '#CE1A22', fontWeight: 'normal', fontSize: '16px', position: 'relative', top: '-10px', left: '-35px'}}>Versión beta para prueba </div>-->*/}
         </div>
-        {isAdmin && <NavLink to="/tablero_control/resumen_general" style={{color: 'black'}}>admin</NavLink>}
+        {isAdmin && <NavLink to="/administrar" style={{color: 'black'}}>admin</NavLink>}
 
         {this.showTabs() && (
             <div>

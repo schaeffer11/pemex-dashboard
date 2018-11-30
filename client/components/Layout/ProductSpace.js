@@ -8,6 +8,7 @@ import CompromisosUI from './CompromisosUI/CompromisosUI'
 import ManageCompromisos from './CompromisosUI/ManageCompromisos'
 import TableroDeControlUI from './TableroDeControlUI/TableroDeControlUI'
 import HomeUI from './HomeUI/HomeUI'
+import AdminUI from './AdminUI/AdminUI'
 import { Route, Redirect } from 'react-router-dom'
 import LoginForm from '../User/LoginForm'
 
@@ -33,7 +34,6 @@ import LoginForm from '../User/LoginForm'
   async componentDidUpdate(prevProps){
     const { user } = this.props
     if (user !== prevProps.user) {
-      console.log("i got a different user")
       const isAdmin = await this.showAdminRoute()
       console.log('setting this fucker', isAdmin)
       this.setState({ isAdmin })
@@ -62,6 +62,7 @@ import LoginForm from '../User/LoginForm'
           <PrivateRoute exact path="/carga_datos" component={InputsUI} user={this.props.user} />
           <AdminPrivateRoute exact path="/diagnosticos" component={DiagnosticosUI} isAdmin={isAdmin} user={this.props.user} />
           <AdminPrivateRoute exact path="/mapeo" component={MapeoUI} isAdmin={isAdmin} user={this.props.user} />
+          <AdminPrivateRoute exact path="/administrar" component={AdminUI} isAdmin={isAdmin} user={this.props.user} />
           <PrivateRoute exact path="/compromisos" component={CompromisosUI} user={this.props.user} isAdmin={isAdmin} />
           <AdminPrivateRoute exact path="/compromisos/manage" component={ManageCompromisos} user={this.props.user} isAdmin={isAdmin} />
           <PrivateRoute path="/tablero_control" component={TableroDeControlUI} user={this.props.user} />
