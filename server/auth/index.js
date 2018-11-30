@@ -7,6 +7,7 @@ import appConfig from '../../app-config'
 import pkg from '../../package.json'
 import users from './users'
 import { createSession, resumeSession, listSessions } from './session-store'
+import { getAuthorization, allowAdmin } from '../middleware';
 
 const app = express()
 
@@ -47,7 +48,7 @@ function authenticationFailure(res, detail) {
   return res.status(401).json({ status: 401, success: false, message: messages.AUTH_FAILURE, detail })
 }
 
-app.post('/auth/createUser', (req, res) => {
+app.post('/auth/createUser', getAuthorization, allowAdmin, (req, res) => {
   let { username, password, subdireccionID, activoID, isAdmin } = req.body
   let db_con = db.get(appConfig.users.database)
   let table = appConfig.users.table
