@@ -43,16 +43,15 @@ const numWithCommas = (x) => {
       company = estIncData[0].COMPANY
     }
 
-
     return (
       <div className="kpis">
-        <KPI className='company' header='Company' value={company} />
-        <KPI className='est-cost' header='Estimated Cost' value={'$' + numWithCommas(estCost)} unit=' MNX'/>
-        <KPI className='cost' header='Cost' value={'$' + numWithCommas(cost)} unit=' MNX'/>
-        <KPI className='delta-cost' header='Delta' value={delta.toFixed(2) + '%'} />
-        <KPI className='est-prod' header='Estimated Inc Prod' value={estProd} unit=' bbl/d'/>
-        <KPI className='prod' header='Inc Prod' value={prod} unit=' bbl/d'/>
-        <KPI className='delta-prod' header='Delta' value={deltaProd.toFixed(2) + '%'} />
+        <KPI className='company' header='Compañía' value={company} />
+        <KPI className='est-cost' header='Costos Estimados' value={'$' + numWithCommas(estCost.toFixed(0))} unit=' MNX'/>
+        <KPI className='cost' header='Costos Reales' value={'$' + numWithCommas(cost.toFixed(0))} unit=' MNX'/>
+        <KPI className='delta-cost' header='Desviación' value={delta.toFixed(2) + '%'} />
+        <KPI className='est-prod' header='Prod. Inc. Estimada' value={estProd} unit=' bbl/d'/>
+        <KPI className='prod' header='Prod. Inc. Real' value={prod} unit=' bbl/d'/>
+        <KPI className='delta-prod' header='Desviación' value={deltaProd.toFixed(2) + '%'} />
       </div>
     )
   }

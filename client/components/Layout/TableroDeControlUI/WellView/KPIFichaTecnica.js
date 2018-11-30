@@ -30,8 +30,8 @@ const numWithCommas = (x) => {
 
     return (        
       <div className="KPIs" style={{padding: '0px 20px 20px 20px'}}>
-        <KPI header='Field' value={data.FIELD_NAME} />
-        <KPI header='Formation' value={data.FORMACION} />
+        <KPI header='Campo' value={data.FIELD_NAME} />
+        <KPI header='Formación' value={data.FORMACION} />
         <KPI header='Tipo De Pozo' value={data.TIPO_DE_POZO} />
         <KPI header='Caliza' value={data.CALIZA} unit='%'/>
         <KPI header='Dolomia' value={data.DOLOMIA} unit='%'/>
@@ -46,11 +46,11 @@ const numWithCommas = (x) => {
         <KPI header='PWF' value={numWithCommas(data.PWF)} unit={<span> Kg/cm<sup>2</sup></span>}/>
         <KPI header='PWF Fecha' value={pwfFecha} />
         <KPI header='Δp/mes' value={data.DELTA_P_PER_MES} unit={<span> Kg/cm<sup>2</sup>/mes</span>}/>
-        <KPI header='TYAC' value={numWithCommas(data.TYAC)} unit=' °C'/>
+        <KPI header={<div>T<sub>YAC</sub></div>} value={numWithCommas(data.TYAC)} unit=' °C'/>
         <KPI header='PVT' value={data.PVT} />
-        <KPI header='Aparejo De Produccion' value={data.APAREJO_DE_PRODUCCION} />
+        <KPI header='Aparejo de Producción' value={data.APAREJO_DE_PRODUCCION} />
         <KPI header='Prof Empacador' value={numWithCommas(data.PROF_EMPACADOR)} unit=' md' />
-        <KPI header='Prof Sesor PYT' value={numWithCommas(data.PROF_SENSOR_PYT)} unit=' md' />
+        <KPI header='Prof. sensor P y T' value={numWithCommas(data.PROF_SENSOR_PYT)} unit=' md' />
         <KPI header='Tipo De Sistema' value={data.TIPO_DE_SISTEMA} />
       </div>
     )

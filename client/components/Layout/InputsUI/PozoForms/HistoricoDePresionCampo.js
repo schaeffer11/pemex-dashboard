@@ -172,7 +172,7 @@ let columns = [
     const objectTemplate = {fecha: null, Pws: ''}
     
     return (
-      <div className='historico-presion' >
+      <div className='form historico-presion' >
         <div className="inputs">
           <ExcelUpload
           template="HistoricoPresionCampo"
@@ -182,7 +182,7 @@ let columns = [
               ]}
               setData={this.props.setPresionDataCampo}
             />
-          <div className='depth'>
+          <div className='depth input-table' style={{width: '50%'}}>
             <InputRow header="Plano de Referencia" name='pressureDepthCampo' value={pressureDepthCampo} onChange={setPressureDepthCampo} unit={'md'} onBlur={this.updateErrors} errors={this.state.errors} />
           </div>
           {this.makeHistoricoDePresionTable()}

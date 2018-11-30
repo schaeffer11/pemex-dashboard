@@ -16,7 +16,7 @@
     		margin-right: 30px;
     		display: inline-block;
     		vertical-align: top;
-    		height: 175px;
+    		flex: 1;
     		// margin-bottom: 30px;
 		}
 
@@ -27,7 +27,7 @@
 			border-radius: 10px;
 			width: calc(50% - 15px);
 			display: inline-block;
-			height: 175px;
+			flex: 1;
 
 			.KPI {
 				width: 33%;
@@ -37,6 +37,21 @@
 			.company {
 				margin-right: 66%;
 			}
+		}
+
+		.more-kpis {
+			padding: 15px;
+			border: solid 2px #b1b1b1;
+			border-radius: 10px;
+			width: 100%;
+			margin-top: 30px;
+			margin-bottom: 30px;
+			
+			.KPI {
+				width: 33%;
+				display: inline-block;
+			}
+
 		}
 	}
 }

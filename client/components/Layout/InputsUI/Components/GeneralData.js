@@ -280,12 +280,12 @@ import ButtonGroup from './ButtonGroup'
         </div> 
         <button disabled={!selectedSave} className="submit submit-load" onClick={this.handleLoad}>Descargar borrador</button>
         <br/>
-        <div>  - OR - </div>
-        <div> Delete Save </div>
-        <div> To be able to delete you must type the name of the save in</div>
+        <div>  - O - </div>
+        <div> Eliminar un Barrador </div>
+        <div> Para eliminar por favor ingrese el nombre en la siguiente casilla</div>
         <input value={deleteVal} onChange={e => this.setState({deleteVal: e.target.value})}/>
         <br/>
-        <button style={{background: '#b22222'}} disabled={!selectedSave || selectedSaveName !== deleteVal} className="submit submit-load" onClick={this.deleteSave}>Delete borrador</button>
+        <button style={{background: '#b22222', marginTop: '10px'}} disabled={!selectedSave || selectedSaveName !== deleteVal} className="submit submit-load" onClick={this.deleteSave}>Eliminar Barrador</button>
         
       </div>
       </AriaModal>

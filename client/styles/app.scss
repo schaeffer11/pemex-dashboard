@@ -26,6 +26,7 @@
 @import './components/_sidebar.scss';
 @import './components/_query_modal.scss';
 @import './components/_dropbox.scss';
+@import './components/_admin.scss';
 
 // Local variables
 $baseTextColor: #222;
@@ -135,7 +136,7 @@ li {
 
 .disabled {
   cursor: default;
-  color: #333 !important;
+  // color: #333 !important;
   opacity: 0.5 !important;
 
   &:hover {

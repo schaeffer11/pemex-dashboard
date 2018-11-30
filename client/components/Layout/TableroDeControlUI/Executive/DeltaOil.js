@@ -2,7 +2,7 @@ import React, { Component } from 'react'
 import autobind from 'autobind-decorator'
 import ReactHighcharts from 'react-highcharts'
 import { formatScatter as formatter } from '../../../../lib/tooltipFormatters'
-
+import { RenameInterventionTypes } from '../../../../lib/formatters'
 
 let classificationSeries = [{
     name: 'Exitosa',
@@ -76,8 +76,10 @@ let classificationSeries = [{
     	data: [[0,0], [max, max]]
     })
 
-
-
+  if (groupBy && groupBy === 'interventionType') {
+    series = RenameInterventionTypes(series)
+  }
+  
     let config = {
 	    chart: {
 	        type: 'scatter',

@@ -2,9 +2,10 @@ import { fromJS } from 'immutable'
 
 const initialState = fromJS({
   fechaIntervencion: null,
-  justificacionIntervencion: '',
-  comentariosIntervencion: '',
+  justificacionIntervencion: null,
+  comentariosIntervencion: null,
   hasErrors: true,
+  wasCancelled: false
 })
 
 const resultadosGenerales = (state = initialState, action) => {

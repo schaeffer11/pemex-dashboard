@@ -21,7 +21,7 @@ import StickySubtabs from '../Components/StickySubtabs'
 import { setFichaTecnicaDelCampo, setHistorialDeIntervenciones, setFichaTecnicaDelPozo, setEvaluacionPetrofisica, setMecanicoYAparejoDeProduccion, 
   setAnalisisDelAgua, setSistemasArtificialesDeProduccion, setPresionDataCampo, setPressureDepthCampo, setPresionDataPozo, setPressureDepthPozo, setHistoricoProduccion, setHistoricoDeAforos,
   setFromSaveFichaTecnicaDelCampo, setFromSaveHistorialDeIntervenciones, setFromSaveFichaTecnicaDelPozo, setFromSaveEvaluacionPetrofisica, setFromSaveMecanicoYAparejoDeProduccion, setFromSaveAnalisisDelAgua, setFromSaveSistemas, setFromSaveHistoricoDePressionCampo, setFromSaveHistoricoDePressionPozo, setFromSaveHistoricoDeAforos, setFromSaveHistoricoDeProduccion, setAllPressure } from '../../../../redux/actions/pozo'
-import { setCurrentPage } from '../../../../redux/actions/global'
+import { setCurrentPage, setTab } from '../../../../redux/actions/global'
 
 const forms = [
   {'title' : 'Ficha Técnica del Campo', menuTitle: 'Ficha Técnica del Campo', content: <TecnicaDelCampo />, className: 'TecnicaDelCampo' },
@@ -55,8 +55,10 @@ const forms = [
   constructor(props) {
     super(props)
 
+    console.log(props, props.global.toJS().currentPage === 'TecnicaDelCampo' ? 0 : 10)
+
     this.state = {
-      currentStep: 0,
+      currentStep:  props.global.toJS().currentPage === 'TecnicaDelCampo' ? 0 : 10,
       isOpen: false,
       selectedTransaction: null,
       transactionOptions: [],
@@ -684,13 +686,16 @@ const forms = [
   }
 
   handleNextSubtab(){    
-    let { setCurrentPage } = this.props
+    let { setCurrentPage, setTab } = this.props
 
     if(forms.length > this.state.currentStep + 1){
       setCurrentPage(forms[this.state.currentStep + 1].title)
       this.setState({
         currentStep: this.state.currentStep + 1
       })
+    }
+    else {
+      setTab('Intervenciones')
     }
   }
 
@@ -898,6 +903,7 @@ const mapDispatchToProps = dispatch => ({
   setAllPressure: (val, depth) => dispatch(setAllPressure(val)),
   setCurrentPage: val => dispatch(setCurrentPage(val)),
   setFromSaveHistoricoDeProduccion: values => {dispatch(setFromSaveHistoricoDeProduccion(values))},
+  setTab: val => dispatch(setTab(val))
 })
 
 const mapStateToProps = state => ({
@@ -925,6 +931,7 @@ const mapStateToProps = state => ({
   sistemasArtificialesDeProduccionHasErrors: state.getIn(['sistemasArtificialesDeProduccion', 'hasErrors']),
   historicoDePresion: state.get('historicoDePresion'),
   user: state.get('user'),
+  global: state.get('global')
 })
 
 

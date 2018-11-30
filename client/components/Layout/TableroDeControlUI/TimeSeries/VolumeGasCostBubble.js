@@ -1,8 +1,9 @@
 import React, { PureComponent } from 'react'
 import autobind from 'autobind-decorator'
 import ReactHighcharts from 'react-highcharts'
-import { formatBubbleVolume as formatter } from '../../../../lib/tooltipFormatters'
 
+import { formatBubbleVolume as formatter } from '../../../../lib/tooltipFormatters'
+import { RenameInterventionTypes } from '../../../../lib/formatters'
 import { KPI } from '../Common/KPIs'
 
 @autobind class VolumeGasCostBubble extends PureComponent {
@@ -50,6 +51,10 @@ import { KPI } from '../Common/KPIs'
       })
     })
 
+    if (groupBy && groupBy === 'interventionType') {
+      series = RenameInterventionTypes(series)
+    }
+
     let config = {
       chart: {
           type: 'bubble',
@@ -68,7 +73,8 @@ import { KPI } from '../Common/KPIs'
       },
       yAxis: {
         title: {
-          text: 'Volumen Total Utilizado (m3)'
+          useHTML: true,
+          text: 'Volumen Total Utilizado (m<sup>3</sup>)'
         }
       },
       credits: {

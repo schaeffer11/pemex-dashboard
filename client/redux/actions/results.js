@@ -147,7 +147,9 @@ function getBase64FromURL(imgURL) {
 
 
 export function submitResultsForm(action, token) {
+  console.log('submittttting')
   return async (dispatch, getState) => {
+
 
     dispatch(setIsLoading({ isLoading: true, loadText: 'Guardando' }))
     const ignore = {
@@ -160,7 +162,9 @@ export function submitResultsForm(action, token) {
 
     
  
-    let filteredKeys = ['user', 'global', 'graficaTratamiento', 'historicoDeAforosResults', 'estCostResults', 
+    let filteredKeys = action === 'submitEmpty' 
+    ? ['user', 'global', 'resultsMeta', 'resultadosGenerales'] 
+    : ['user', 'global', 'graficaTratamiento', 'historicoDeAforosResults', 'estCostResults', 
     'tratamientoEstimulacion', 'tratamientoAcido', 'tratamientoApuntalado', 'tratamientoTermico',
     'evaluacionApuntalado', 'evaluacionAcido', 'evaluacionEstimulacion', 'evaluacionTermica', 'resultsMeta', 'resultadosGenerales']
 
@@ -234,7 +238,7 @@ export function submitResultsForm(action, token) {
     if (action === 'save') {
 
     }
-    else if (action === 'submit') {
+    else if (action === 'submit' || action === 'submitEmpty') {
       fetch('/api/results', {
         headers,
         method: 'POST',

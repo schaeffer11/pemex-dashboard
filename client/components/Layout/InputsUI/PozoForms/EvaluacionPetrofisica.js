@@ -93,13 +93,16 @@ let mudLossColumns = [
     accessor: 'baseMD',
     cell: 'renderNumber',
   }, { 
-    Header: <div>Lodo perdido<br></br>(m<sup>3</sup>)</div>,
+    Header: <div>Lodo Perdido<br></br>(m<sup>3</sup>)</div>,
     accessor: 'lodoPerdido',
     cell: 'renderNumber',
   }, { 
     Header: <div>Dens.<br></br>(gr/cm<sup>3</sup>)</div>,
     accessor: 'densidad',
     cell: 'renderNumber',
+  }, { 
+    Header: <div>Total Lodo Perdido<br></br>(m<sup>3</sup>)</div>,
+    accessor: 'totalLodoPerdido'
   }
 ]
 

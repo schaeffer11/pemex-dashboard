@@ -14,6 +14,25 @@ const router = Router()
 router.use(getAuthorization)
 
 
+router.get('/getJobData', (req, res) => {
+  let { transactionID } = req.query
+
+  let query = `
+SELECT * FROM Intervenciones
+WHERE TRANSACTION_ID = ?`
+
+  connection.query(query, transactionID, (err, results) => {
+      console.log('comment err', err)
+
+     if (err) {
+        res.json({ success: false})
+      }
+      else {
+        res.json(results)
+      }
+    })
+})
+
 router.get('/getEstCostData', (req, res) => {
   let { transactionID } = req.query
 
@@ -497,44 +516,44 @@ router.get('/getVolumeData', (req, res) => {
   if (type === 'Estimulacion') {
     query = `
       SELECT 
-        VOLUMEN_SISTEMA_NO_REACTIVO,
-        VOLUMEN_SISTEMA_REACTIVO,
-        VOLUMEN_SISTEMA_DIVERGENTE,
-        VOLUMEN_DESPLAZAMIENTO_LIQUIDO,
-        VOLUMEN_DESPLAZAMIENTO_N2,
-        VOLUMEN_PRECOLCHON_N2,
-        VOLUMEN_TOTAL_DE_LIQUIDO
+        VOLUMEN_SISTEMA_NO_REACTIVO as 'Sistema no reactivo',
+        VOLUMEN_SISTEMA_REACTIVO as 'Sistema reactivo,
+        VOLUMEN_SISTEMA_DIVERGENTE as 'Sistema divergente,
+        VOLUMEN_DESPLAZAMIENTO_LIQUIDO as 'Desplazamiento liqudio',
+        VOLUMEN_DESPLAZAMIENTO_N2 as 'Desplazamiento N2',
+        VOLUMEN_PRECOLCHON_N2 as 'Precolchon N2',
+        VOLUMEN_TOTAL_DE_LIQUIDO as 'Total de liquido'
       FROM ResultsEstimulacions ie
       WHERE PROPUESTA_ID = ?`
   }
   else if (type === 'Acido') {
     query = `
       SELECT 
-        VOLUMEN_SISTEMA_NO_REACTIVO,
-        VOLUMEN_SISTEMA_REACTIVO,
-        VOLUMEN_SISTEMA_DIVERGENTE,
-        VOLUMEN_DESPLAZAMIENTO_LIQUIDO,
-        VOLUMEN_DESPLAZAMIENTO_N2,
-        VOLUMEN_PRECOLCHON_N2,
-        VOLUMEN_TOTAL_DE_LIQUIDO
+        VOLUMEN_SISTEMA_NO_REACTIVO as 'Sistema no reactivo',
+        VOLUMEN_SISTEMA_REACTIVO as 'Sistema reactivo,
+        VOLUMEN_SISTEMA_DIVERGENTE as 'Sistema divergente,
+        VOLUMEN_DESPLAZAMIENTO_LIQUIDO as 'Desplazamiento liqudio',
+        VOLUMEN_DESPLAZAMIENTO_N2 as 'Desplazamiento N2',
+        VOLUMEN_PRECOLCHON_N2 as 'Precolchon N2',
+        VOLUMEN_TOTAL_DE_LIQUIDO as 'Total de liquido'
       FROM ResultsAcido ie
       WHERE PROPUESTA_ID = ?`
   }
   else if (type === 'Apuntalado') {
     query = `
       SELECT 
-        VOLUMEN_DESPLAZAMIENTO_LIQUIDO,
-        VOLUMEN_TOTAL_DE_LIQUIDO,
-        VOLUMEN_APUNTALANTE,
-        VOLUMEN_GEL_DE_FRACTURA,
-        VOLUMEN_PRECOLCHON_APUNTALANTE
+        VOLUMEN_DESPLAZAMIENTO_LIQUIDO as 'Desplazamiento liqudio',
+        VOLUMEN_TOTAL_DE_LIQUIDO as 'Total de liquido',
+        VOLUMEN_APUNTALANTE as 'Apuntalante',
+        VOLUMEN_GEL_DE_FRACTURA as 'Gel de fractura',
+        VOLUMEN_PRECOLCHON_APUNTALANTE as 'Precolchon apuntalante'
       FROM ResultsApuntalado ie
       WHERE PROPUESTA_ID = ?`
   }
   else {
     query = `
       SELECT 
-        VOLUMEN_VAPOR_INYECTAR
+        VOLUMEN_VAPOR_INYECTAR as 'Vapor inyectar'
       FROM ResultsTermico ie
       WHERE PROPUESTA_ID = ?`
   }
@@ -558,44 +577,44 @@ router.get('/getEstimatedVolumeData', (req, res) => {
   if (type === 'Estimulacion') {
     query = `
       SELECT 
-        VOLUMEN_SISTEMA_NO_REACTIVO,
-        VOLUMEN_SISTEMA_REACTIVO,
-        VOLUMEN_SISTEMA_DIVERGENTE,
-        VOLUMEN_DESPLAZAMIENTO_LIQUIDO,
-        VOLUMEN_DESPLAZAMIENTO_N2,
-        VOLUMEN_PRECOLCHON_N2,
-        VOLUMEN_TOTAL_DE_LIQUIDO
+        VOLUMEN_SISTEMA_NO_REACTIVO as 'Sistema no reactivo',
+        VOLUMEN_SISTEMA_REACTIVO as 'Sistema reactivo,
+        VOLUMEN_SISTEMA_DIVERGENTE as 'Sistema divergente,
+        VOLUMEN_DESPLAZAMIENTO_LIQUIDO as 'Desplazamiento liqudio',
+        VOLUMEN_DESPLAZAMIENTO_N2 as 'Desplazamiento N2',
+        VOLUMEN_PRECOLCHON_N2 as 'Precolchon N2',
+        VOLUMEN_TOTAL_DE_LIQUIDO as 'Total de liquido'
       FROM IntervencionesEstimulacions ie
       WHERE TRANSACTION_ID = ?`
   }
   else if (type === 'Acido') {
     query = `
       SELECT 
-        VOLUMEN_SISTEMA_NO_REACTIVO,
-        VOLUMEN_SISTEMA_REACTIVO,
+        VOLUMEN_SISTEMA_NO_REACTIVO as 'Sistema no reactivo',
+        VOLUMEN_SISTEMA_REACTIVO as 'Sistema reactivo,
         VOLUMEN_SISTEMA_DIVERGENTE,
-        VOLUMEN_DESPLAZAMIENTO_LIQUIDO,
-        VOLUMEN_DESPLAZAMIENTO_N2,
-        VOLUMEN_PRECOLCHON_N2,
-        VOLUMEN_TOTAL_DE_LIQUIDO
+        VOLUMEN_DESPLAZAMIENTO_LIQUIDO as 'Desplazamiento liqudio',
+        VOLUMEN_DESPLAZAMIENTO_N2 as 'Desplazamiento N2',
+        VOLUMEN_PRECOLCHON_N2 as 'Precolchon N2',
+        VOLUMEN_TOTAL_DE_LIQUIDO as 'Total de liquido'
       FROM IntervencionesAcido ie
       WHERE TRANSACTION_ID = ?`
   }
   else if (type === 'Apuntalado') {
     query = `
       SELECT 
-        VOLUMEN_DESPLAZAMIENTO_LIQUIDO,
-        VOLUMEN_TOTAL_DE_LIQUIDO,
-        VOLUMEN_APUNTALANTE,
-        VOLUMEN_GEL_DE_FRACTURA,
-        VOLUMEN_PRECOLCHON_APUNTALANTE
+        VOLUMEN_DESPLAZAMIENTO_LIQUIDO as 'Desplazamiento liqudio',
+        VOLUMEN_TOTAL_DE_LIQUIDO as 'Total de liquido',
+        VOLUMEN_APUNTALANTE as 'Apuntalante',
+        VOLUMEN_GEL_DE_FRACTURA as 'Gel de fractura',
+        VOLUMEN_PRECOLCHON_APUNTALANTE as 'Precolchon apuntalante'
       FROM IntervencionesApuntalado ie
       WHERE TRANSACTION_ID = ?`
   }
   else {
     query = `
       SELECT 
-        VOLUMEN_VAPOR_INYECTAR
+        VOLUMEN_VAPOR_INYECTAR as 'Vapor inyectar'
       FROM IntervencionesTermico ie
       WHERE TRANSACTION_ID = ?`
   }

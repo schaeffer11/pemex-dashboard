@@ -182,6 +182,7 @@ export const options = [
       }, { 
         Header: 'Personal de Pemex que supervisó',
         accessor: 'superviso',
+        width: 420,
         cell: 'renderEditable'
       },
     ]

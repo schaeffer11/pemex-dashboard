@@ -1,9 +1,9 @@
 import React, { Component } from 'react'
 import autobind from 'autobind-decorator'
 import ReactHighcharts from 'react-highcharts'
+
 import { formatAverageDeviation as formatter } from '../../../../lib/tooltipFormatters'
-
-
+import { RenameInterventionTypes } from '../../../../lib/formatters'
 
 let colorWheel = [
       '#56B3D8',
@@ -55,6 +55,11 @@ let colorWheel = [
         }]
       }   
     }
+
+    if (groupBy && groupBy === 'interventionType') {
+      categories = RenameInterventionTypes(categories)
+    }
+
     const config = {
 	    chart: {
           zoomType: 'y',

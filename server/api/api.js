@@ -336,7 +336,7 @@ router.post('/comment', (req, res) => {
     })
 })
 
-router.get('/users', (req, res) => {
+router.get('/users', allowAdmin, (req, res) => {
     let table = appConfig.users.table
     connection.query(`SELECT username, id FROM ??`, [table], (err, results) => {
         if (err) {
@@ -348,16 +348,18 @@ router.get('/users', (req, res) => {
 })
 
 router.get('/activo', (req, res) => {
-    connection.query(`SELECT DISTINCT ACTIVO_NAME, ACTIVO_ID FROM FieldWellMapping`, (err, results) => {
+    connection.query(`SELECT DISTINCT SUBDIRECCION_ID, SUBDIRECCION_NAME, ACTIVO_NAME, ACTIVO_ID FROM FieldWellMapping`, (err, results) => {
         res.json(results)
     })
 })
 
-router.post('/compromiso', (req, res) => {
+router.post('/compromiso', allowAdmin, (req, res) => {
+  console.log('IN COMPROMISO')
   createCompromiso(req, res)
 })
 
-router.put('/compromiso/:id', (req, res) => {
+router.put('/compromiso/:id', allowAdmin, (req, res) => {
+  console.log('IN COMPROMISO put')
     updateCompromiso(req, res)
 })
 
@@ -365,7 +367,7 @@ router.get('/compromiso/mine', (req, res) => {
     myCompromisos(req, res)
 })
 
-router.get('/compromiso', (req, res) => {
+router.get('/compromiso', allowAdmin, (req, res) => {
     getCompromisos(req, res)
 })
 
@@ -373,27 +375,27 @@ router.get('/compromiso/:id', (req, res) => {
     getCompromiso(req, res)
 })
 
-router.post('/diagnostico', (req, res) => {
+router.post('/diagnostico', allowAdmin, (req, res) => {
     createDiagnostico(req, res)
 })
 
-router.get('/diagnostico', (req, res) => {
+router.get('/diagnostico', allowAdmin, (req, res) => {
     getDiagnosticos(req, res)
 })
 
-router.get('/diagnostico/:id', (req, res) => {
+router.get('/diagnostico/:id', allowAdmin, (req, res) => {
     getDiagnostico(req, res)
 })
 
-router.post('/mapeo', (req, res) => {
+router.post('/mapeo', allowAdmin, (req, res) => {
     createMapeo(req, res)
 })
 
-router.get('/mapeo', (req, res) => {
+router.get('/mapeo', allowAdmin, (req, res) => {
     getMapeos(req, res)
 })
 
-router.get('/mapeo/:id', (req, res) => {
+router.get('/mapeo/:id', allowAdmin, (req, res) => {
     getMapeo(req, res)
 })
 
@@ -936,18 +938,14 @@ router.get('/getHistIntervencionesEstimulacionNew', async (req, res) => {
         objectPath.push(finalObj, `${mainParent}.${innerParent}`, innerObj)
       })
       finalObj.historialDeIntervenciones.hasErrors = data[0].TABLE_HAS_ERRORS === 0 ? false : true
+      finalObj.historialDeIntervenciones.showEstim = true
       res.json(finalObj)
-    }
-    else if (action === 'loadTransaction'){
-      res.json({ err: 'No value found in database'  })
     }
     else {
       res.json({
         [mainParent]: {
-          [innerParent]: [
-          {error: true}
-          ],
-          hasErrors: true
+          [innerParent]: [],
+          showEstim: false
         }
       })
     }
@@ -998,19 +996,15 @@ router.get('/getHistIntervencionesAcidoNew', async (req, res) => {
         objectPath.set(innerObj, 'index', index)
         objectPath.push(finalObj, `${mainParent}.${innerParent}`, innerObj)
       })
-
+      finalObj.historialDeIntervenciones.hasErrors = data[0].TABLE_HAS_ERRORS === 0 ? false : true
+      finalObj.historialDeIntervenciones.showAcido = true
       res.json(finalObj)
-    }
-    else if (action === 'loadTransaction'){
-      res.json({ err: 'No value found in database'  })
     }
     else {
       res.json({
         [mainParent]: {
-          [innerParent]: [
-          {error: true}
-          ],
-          hasErrors: true
+          [innerParent]: [],
+          showAcido: false
         }
       })
     }
@@ -1062,19 +1056,15 @@ router.get('/getHistIntervencionesApuntaladoNew', async (req, res) => {
         objectPath.set(innerObj, 'index', index)
         objectPath.push(finalObj, `${mainParent}.${innerParent}`, innerObj)
       })
-
+      finalObj.historialDeIntervenciones.hasErrors = data[0].TABLE_HAS_ERRORS === 0 ? false : true
+      finalObj.historialDeIntervenciones.showApuntalado = true
       res.json(finalObj)
-    }
-    else if (action === 'loadTransaction'){
-      res.json({ err: 'No value found in database'  })
     }
     else {
       res.json({
         [mainParent]: {
-          [innerParent]: [
-          {error: true}
-          ],
-          hasErrors: true
+          [innerParent]: [],
+          showApuntalado: false
         }
       })
     }
@@ -1122,19 +1112,15 @@ router.get('/getHistIntervencionesTermicoNew', async (req, res) => {
         objectPath.set(innerObj, 'index', index)
         objectPath.push(finalObj, `${mainParent}.${innerParent}`, innerObj)
       })
-
+      finalObj.historialDeIntervenciones.hasErrors = data[0].TABLE_HAS_ERRORS === 0 ? false : true
+      finalObj.historialDeIntervenciones.showTermico = true
       res.json(finalObj)
-    }
-    else if (action === 'loadTransaction'){
-      res.json({ err: 'No value found in database'  })
     }
     else {
       res.json({
         [mainParent]: {
-          [innerParent]: [
-          {error: true}
-          ],
-          hasErrors: true
+          [innerParent]: [],
+          showTermico: false
         }
       })
     }

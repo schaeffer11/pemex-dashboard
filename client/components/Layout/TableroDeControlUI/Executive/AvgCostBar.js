@@ -1,7 +1,9 @@
 import React, { PureComponent } from 'react'
 import autobind from 'autobind-decorator'
 import ReactHighcharts from 'react-highcharts'
+
 import { formatGeneralBarChart as formatter } from '../../../../lib/tooltipFormatters'
+import { RenameInterventionTypes } from '../../../../lib/formatters'
 
 let colorWheel = [
       '#56B3D8',
@@ -53,6 +55,10 @@ let colorWheel = [
       }   
     }
 
+    if (groupBy && groupBy === 'interventionType') {
+      categories = RenameInterventionTypes(categories)
+    }
+    
     let config = {
 	    chart: {
           zoomType: 'y',
@@ -61,7 +67,10 @@ let colorWheel = [
 	    title: {
 	        text: ''
 	    },
-      tooltip: { formatter },
+      tooltip: { 
+        valuePrefix: '$',
+        valueDecimals: 0
+       },
       legend: {
         enabled: false
       },

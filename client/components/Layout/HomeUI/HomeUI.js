@@ -4,7 +4,7 @@ import { Link, Redirect } from 'react-router-dom'
 
 const LinkButton = ({ text, disabled , width, height, src, to}) => {
     let className='link'
-    let style = {}
+    let style = { color: '#a7aaaf' }
 
     height ? style.height= height : style.height = '80px'
     width ? style.width = width : style.width = '80px'
@@ -41,8 +41,8 @@ const LinkButton = ({ text, disabled , width, height, src, to}) => {
 
 
   render() {
-    const { referer } = this.props.location.state || {}
-/*
+    const { isAdmin } = this.props
+/* 
     if(referrer){
       return <Redirect to={referrer} />
     }
@@ -66,8 +66,8 @@ const LinkButton = ({ text, disabled , width, height, src, to}) => {
             <div className="buttons">
               <LinkButton to="/carga_datos" text={'inserción de datos'} src={'./images/inputNew-dark.png'}/>
               <LinkButton to="/tablero_control/resumen_general" text={'tablero de control'} height='90px' src={'./images/checklistNew-dark.png'} />
-              <LinkButton to="/diagnosticos" text={'diagnóstico de productividad'} width='85px' src={'./images/analysisNew-dark.png'}/>
-              <LinkButton to="/mapeo" text={'mapeo de procesos'} width='85px' src={'./images/analysisNew-dark.png'}/>
+              <LinkButton disabled={!isAdmin} to="/diagnosticos" text={'diagnóstico de productividad'} width='85px' src={'./images/analysisNew-dark.png'}/>
+              <LinkButton disabled={!isAdmin} to="/mapeo" text={'mapeo de procesos'} width='85px' src={'./images/analysisNew-dark.png'}/>
               <LinkButton to="/compromisos" text={'seguimiento de compromisos'} width='105px' src={'./images/diagnosticsNew-dark.png'} />
             </div>
             <div className="text-inner">
@@ -78,7 +78,12 @@ const LinkButton = ({ text, disabled , width, height, src, to}) => {
           </div>
           <div className="footer">
             <span className="left">Optimizar. Estandarizar. Sustentar. Excelencia.</span>
-
+            {isAdmin && <Link to="/administrar" style={{
+              float: 'right',
+              color: 'white',
+              paddingRight: '10px',
+              lineHeight: '50px',
+              }}>Administrar</Link>}
           </div>
         </div>
       </div>

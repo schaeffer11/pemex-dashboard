@@ -683,11 +683,17 @@ import { setHasErrorsFichaTecnicaDelPozo, setTipoDeSistemo, setHistorialInterven
   render() {
     return (
       <div className="form tecnica-del-pozo">
+        <div className='left' >
           { this.makePozoForm() }
+        </div>
+        <div className='middle'>
           { this.makeFormacionForm() }
-          { this.makeHistoricalInterventionsInput() }
-          {this.makeFluidosForm()}
           {this.makePresionForm()}
+        </div>
+        <div className='right' >
+          {this.makeFluidosForm()}
+        </div>
+          { this.makeHistoricalInterventionsInput() }
       </div>
     )
   }

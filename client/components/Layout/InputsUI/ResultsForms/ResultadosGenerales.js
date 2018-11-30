@@ -2,6 +2,8 @@ import React, { Component } from 'react'
 import { connect } from 'react-redux'
 import autobind from 'autobind-decorator'
 import moment from 'moment'
+import Select from 'react-select'
+
 import { setGeneralResultadosGenerales } from '../../../../redux/actions/results'
 import { CalculatedValue, InputRow, InputRowSelectUnitless, InputDate, TextAreaUnitless } from '../../Common/InputRow'
 import { checkDate, checkEmpty } from '../../../../lib/errorCheckers';
@@ -12,6 +14,7 @@ import { sortLabels } from '../../../../lib/formatters';
   constructor(props) {
     super(props)
     this.state = {
+      canceled: false,
       errors: {
         fechaIntervencion: {
           type: 'date',
@@ -80,22 +83,30 @@ import { sortLabels } from '../../../../lib/formatters';
 
   render() {
     const { formData, setGeneralResultadosGenerales, justificationOptions } = this.props
-    const { fechaIntervencion, comentariosIntervencion, justificacionIntervencion } = formData
+    let { canceled } = this.state
+    const { fechaIntervencion, comentariosIntervencion, justificacionIntervencion, wasCancelled } = formData
+
+    let options = [{ label: 'No', value: false},{ label: 'Yes', value: true}]
+
 
     return (
-      <div className='results-form form' >
-        <div className='header'>
-        </div>
+      <div className='results-form form' style={{color: 'black'}} >
         <div className="input-table">
-          <InputDate
+         <InputRowSelectUnitless
+            header="Se canceló la intervención?"
+            value={wasCancelled}
+            callback={e => setGeneralResultadosGenerales(['wasCancelled'], e.value)}
+            options={options}
+          />
+        {wasCancelled === true ? null : <InputDate
             header="Fecha de Intervención"
             name='fechaIntervencion'
             value={fechaIntervencion}
             onChange={(e) => setGeneralResultadosGenerales(['fechaIntervencion'], e)}
             onBlur={this.updateErrors}
             errors={this.state.errors}
-          />
-          <InputRowSelectUnitless
+          />}
+          {wasCancelled === true ? null : <InputRowSelectUnitless
             header="Justificación"
             value={justificacionIntervencion}
             callback={(e) => setGeneralResultadosGenerales(['justificacionIntervencion'], e.value)}
@@ -103,7 +114,7 @@ import { sortLabels } from '../../../../lib/formatters';
             options={justificationOptions.sort(sortLabels)}
             onBlur={this.updateErrors}
             errors={this.state.errors}
-          />
+          />}
           <TextAreaUnitless
             header='Comentarios'
             name='comentariosIntervencion'

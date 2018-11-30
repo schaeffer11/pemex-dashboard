@@ -36,10 +36,10 @@ import { KPI } from '../Common/KPIs'
     })
 
     let series = [{
-      name: 'Estimated',
+      name: 'Estimados',
       data: estimatedData
     }, {
-      name: 'Actual',
+      name: 'Reales',
       data: actualData
     }]
 
@@ -59,7 +59,7 @@ import { KPI } from '../Common/KPIs'
       },
       yAxis: {
         title: {
-          text: 'Costs ($MNX)'
+          text: 'Costos ($MNX)'
         }
       },
       credits: {

@@ -136,7 +136,11 @@ const rootReducer = (state, action) => {
         hasSubmitted: false,
         transactionID: null,
         saveName: null,
-        companyOptions: global.toJS().companyOptions
+        companyOptions: global.toJS().companyOptions,
+        justificationOptions: global.toJS().justificationOptions,
+        litologiaOptions: global.toJS().litologiaOptions,
+        tipoDeTerminationOptions: global.toJS().tipoDeTerminationOptions,
+        tipoDeLinerOptions: global.toJS().tipoDeLinerOptions,
       }
       return state = fromJS({ user, app, global: newGlobal })
     }

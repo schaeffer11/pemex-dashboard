@@ -103,9 +103,29 @@ const config = {
     }
   }
 
-  componentDidMount(){
+  buildChart(sodio, calcio, magnesio, fierro, cloruros, bicarbonatos, sulfatos, carbonatos) {
+    let newConfig = config
+    let newConfig2 = config2
 
+    sodio = parseInt(sodio) || 1
+    calcio = parseInt(calcio) || 1
+    magnesio = parseInt(magnesio) || 1
+    fierro = parseInt(fierro) || 1
+    cloruros = parseInt(cloruros) || 1
+    bicarbonatos = parseInt(bicarbonatos) || 1
+    sulfatos = parseInt(sulfatos) || 1
+    carbonatos = parseInt(carbonatos) || 1
+
+    newConfig.series[0].data = [sodio, calcio, magnesio, fierro]
+    newConfig2.series[0].data = [cloruros, bicarbonatos, sulfatos, carbonatos]
+
+
+    this.setState({
+      chartConfig: newConfig,
+      chartConfig2: newConfig2
+    })
   }
+
 
   shouldComponentUpdate(nextProps, nextState) {
     let { formData } = nextProps
@@ -129,31 +149,18 @@ const config = {
     
 
     if (oldFormData.sodio !== sodio || oldFormData.calcio !== calcio || oldFormData.magnesio !== magnesio || oldFormData.fierro !== fierro || oldFormData.cloruros !== cloruros || oldFormData.bicarbonatos !== bicarbonatos || oldFormData.sulfatos !== sulfatos || oldFormData.carbonatos !== carbonatos) {
-
-      let newConfig = config
-      let newConfig2 = config2
-
-      sodio = parseInt(sodio) || 1
-      calcio = parseInt(calcio) || 1
-      magnesio = parseInt(magnesio) || 1
-      fierro = parseInt(fierro) || 1
-      cloruros = parseInt(cloruros) || 1
-      bicarbonatos = parseInt(bicarbonatos) || 1
-      sulfatos = parseInt(sulfatos) || 1
-      carbonatos = parseInt(carbonatos) || 1
-
-      newConfig.series[0].data = [sodio, calcio, magnesio, fierro]
-      newConfig2.series[0].data = [cloruros, bicarbonatos, sulfatos, carbonatos]
-
-
-      this.setState({
-        chartConfig: newConfig,
-        chartConfig2: newConfig2
-      })
+      this.buildChart(sodio, calcio, magnesio, fierro, cloruros, bicarbonatos, sulfatos, carbonatos)
     }
 
   }
 
+  componentDidMount(){
+    let { formData } = this.props
+    formData = formData.toJS()
+    let { sodio, calcio, magnesio, fierro, cloruros, bicarbonatos, sulfatos, carbonatos } = formData
+
+    this.buildChart(sodio, calcio, magnesio, fierro, cloruros, bicarbonatos, sulfatos, carbonatos)
+  }
 
 
   render() {

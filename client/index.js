@@ -72,6 +72,12 @@ ReactHighcharts.Highcharts.setOptions({
         animation: false,
       },
     },
+    chart: {
+      style: {
+        fontFamily: "Lucida Grande, Lucida Sans Unicode, Verdana, Arial, Helvetica, sans-serif",
+        fontSize: "14px"
+      }
+    },
     exporting: {
       fallbackToExportServer: false,
     },

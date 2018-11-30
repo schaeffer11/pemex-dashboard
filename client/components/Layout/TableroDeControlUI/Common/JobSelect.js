@@ -35,7 +35,7 @@ import { sortLabels } from '../../../../lib/formatters'
 
     return (
 	      <div className='well-selector' >
-	        Jobs
+	        Tratamiento
           <Select
 	          value={realJob}
             options={options}

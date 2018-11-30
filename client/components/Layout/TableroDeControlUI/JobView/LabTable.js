@@ -11,7 +11,7 @@ import ReactTable from 'react-table'
     let { data, handleChange } = this.props
 
     let columns = [{
-        Header: 'Tipo de Analisis',
+        Header: 'Tipo de Análisis',
         accessor: 'name',
         style: {
           cursor: 'pointer'

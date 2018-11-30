@@ -2,18 +2,18 @@ import { fromJS } from 'immutable'
 
 const initialState = fromJS({ 
     hasErrors: true,
-    longitudTotal: '',
-    longitudEfectivaGrabada: '',
-    alturaGrabada: '',
-    anchoPromedio: '',
-    concentracionDelAcido: '',
-    conductividad: '',
-    fcd: '',
-    presionNeta: '',
-    eficienciaDeFluidoDeFractura: '',
+    longitudTotal: null,
+    longitudEfectivaGrabada: null,
+    alturaGrabada: null,
+    anchoPromedio: null,
+    concentracionDelAcido: null,
+    conductividad: null,
+    fcd: null,
+    presionNeta: null,
+    eficienciaDeFluidoDeFractura: null,
     imgURL: null,
     imgSource: null,
-    imgName: '',
+    imgName: null,
 })
 
 
