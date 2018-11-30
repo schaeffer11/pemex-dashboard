@@ -2,10 +2,10 @@ import { Map, fromJS } from 'immutable'
 
 const initialState = Map({ 
     hasErrors: true,
-    penetracionRadial: '',
-    longitudDeAgujeroDeGusano: '',
+    penetracionRadial: null,
+    longitudDeAgujeroDeGusano: null,
     imgURL: null,
-    imgName: '',
+    imgName: null,
     imgSource: null,
 })
 

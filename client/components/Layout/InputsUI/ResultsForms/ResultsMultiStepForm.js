@@ -109,7 +109,7 @@ const mergeKeys = elem => {
   render() {
     let { setShowForms, hasSubmitted, hasErrorsHistoricoDeAforosResults, hasErrorsEstCostResults, hasErrorsTratamientoEstimulacion, 
       hasErrorsTratamientoAcido, hasErrorsTratamientoApuntalado, tipoDeIntervencionesResults, hasErrorsEvaluacionApuntalado, 
-      hasErrorsEvaluacionAcido, hasErrorsEvaluacionEstimulacion, hasErrorsTratamientoTermico, hasErrorsEvaluacionTermica, hasErrorsResultadosGenerales, stimulationType } = this.props
+      hasErrorsEvaluacionAcido, hasErrorsEvaluacionEstimulacion, hasErrorsTratamientoTermico, hasErrorsEvaluacionTermica, hasErrorsResultadosGenerales, stimulationType, wasCancelled } = this.props
     let className = 'subtab'
 
     let evaluacionErrors = 
@@ -134,10 +134,13 @@ const mergeKeys = elem => {
 
     let title = forms[this.state.currentStep].title
 
+    let formsDupl = forms
+    wasCancelled ? formsDupl = [formsDupl[0]] : null
+
     return (
        <div className={`multistep-form`}>
         <StickySubtabs>
-            {forms.map( (tab, index) => {
+            {formsDupl.map( (tab, index) => {
               let active = this.state.currentStep === index ? 'active' : '';
               let error = errors[index]
               const errorClass = (error && hasSubmitted) ? 'error' : ''; 
@@ -152,11 +155,11 @@ const mergeKeys = elem => {
             </div>
             <div className="tab-actions">
                 <button className="cta clear" onClick={(e) => setShowForms(false)}><i className="fa fa-undo">&nbsp;</i></button>
-                <button className="cta next" onClick={this.handleNextSubtab}>Siguiente</button>
-                <button className="cta prev" onClick={this.handlePrevSubtab}>Anterior</button>
+                {wasCancelled ? null : <button className="cta next" onClick={this.handleNextSubtab}>Siguiente</button>}
+                {wasCancelled ? null : <button className="cta prev" onClick={this.handlePrevSubtab}>Anterior</button>}
             </div>
 
-          {forms[this.state.currentStep].content}
+          {formsDupl[this.state.currentStep].content}
 
         </div>
       </div>
@@ -171,6 +174,7 @@ const mapDispatchToProps = dispatch => ({
 
 const mapStateToProps = state => ({
   hasSubmitted: state.getIn(['global', 'hasSubmitted']),
+  wasCancelled: state.getIn(['resultadosGenerales', 'wasCancelled']),
   token: state.getIn(['user', 'token']),
   propuestaID: state.getIn(['global', 'transactionID']),
   stimulationType: state.getIn(['resultsMeta', 'stimulationType']),
