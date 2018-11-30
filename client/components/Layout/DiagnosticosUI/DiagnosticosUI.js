@@ -25,7 +25,7 @@ import ImportForm from './ImportForm'
       'Authorization': `Bearer ${token}`,
       'content-type': 'application/json',
     }
-    console.log('headers?', token)
+
     fetch('/api/diagnostico', { headers })
       .then(r => r.json())
       .then((res) => {
@@ -60,7 +60,7 @@ import ImportForm from './ImportForm'
 
   select(id) {
     const { token } = this.props
-    console.log('MY TOKEN', token)
+
     const headers = {
         'Authorization': `Bearer ${token}`,
         'content-type': 'application/json',

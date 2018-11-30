@@ -271,7 +271,6 @@ import { setIsLoading, setShowForms } from '../../../redux/actions/global'
   }
 
   confirmSubmit() {
-    console.log('confirming submit')
     this.setState({ update: true })
     e.preventDefault()
     return false;

@@ -165,7 +165,6 @@ import MoreKPIs from './MoreKPIs'
           return a.FECHA_PROGRAMADA_INTERVENCION - b.FECHA_PROGRAMADA_INTERVENCION
         })
 
-        console.log('this is important', r)
 
         r.forEach(i => {
           let date = new Date(i.FECHA_PROGRAMADA_INTERVENCION)
@@ -609,8 +608,6 @@ import MoreKPIs from './MoreKPIs'
   render() {
     let { fieldWellOptions, jobOptions, imageData, costData, estCostData, jobData, volumeData, estIncData, estVolumeData, cedulaData, cedulaResultData, date, aforoData, interventionData, interventionResultsData, labData, specificLabData, isOpen } = this.state
     let { globalAnalysis } = this.props
-
-    console.log(imageData)
 
     globalAnalysis = globalAnalysis.toJS()
     let { job, jobType } = globalAnalysis

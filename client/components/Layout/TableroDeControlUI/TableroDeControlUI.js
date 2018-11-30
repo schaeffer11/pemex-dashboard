@@ -38,9 +38,9 @@ import routes from '../../../routes/routes'
       'Authorization': `Bearer ${token}`,
       'content-type': 'application/json',
   }
-  console.log(headers)
+
     const data = await fetch('/api/testingAdmin', { headers }).then(r => r.text())
-    console.log('am i an admin and allowed', data)
+
   }
   render() {
    return (

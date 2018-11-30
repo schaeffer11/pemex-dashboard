@@ -11,8 +11,6 @@ import { formatPiePercent as formatter } from '../../../../lib/tooltipFormatters
 	  
     let { data } = this.props
 
-    console.log(data)
-
     let graphData = []
     let newItem
 

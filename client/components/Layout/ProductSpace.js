@@ -35,7 +35,7 @@ import LoginForm from '../User/LoginForm'
     const { user } = this.props
     if (user !== prevProps.user) {
       const isAdmin = await this.showAdminRoute()
-      console.log('setting this fucker', isAdmin)
+
       this.setState({ isAdmin })
     }
   }
@@ -47,9 +47,9 @@ import LoginForm from '../User/LoginForm'
       'Authorization': `Bearer ${token}`,
       'content-type': 'application/json',
     }
-    console.log('iciiii')
+
     const isAdmin = await fetch('/api/isAdmin', { headers }).then(r => r.json())
-    console.log('am i an admin and allowed', isAdmin)
+
     const { success } = isAdmin
     return success
   }

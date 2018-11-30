@@ -147,7 +147,6 @@ function getBase64FromURL(imgURL) {
 
 
 export function submitResultsForm(action, token) {
-  console.log('submittttting')
   return async (dispatch, getState) => {
 
 

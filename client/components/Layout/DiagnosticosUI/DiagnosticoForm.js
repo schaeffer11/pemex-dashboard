@@ -89,7 +89,7 @@ import { setIsLoading, setShowForms } from '../../../redux/actions/global'
 
   componentDidMount() {
     const { token } = this.props
-    console.log('the form token', token)
+
     const headers = {
       'Authorization': `Bearer ${token}`,
       'content-type': 'application/json',
@@ -435,7 +435,7 @@ import { setIsLoading, setShowForms } from '../../../redux/actions/global'
   }
 
   confirmSubmit(e) {
-    console.log('confirming submit')
+
     this.setState({ update: true })
     e.preventDefault()
     return false;
