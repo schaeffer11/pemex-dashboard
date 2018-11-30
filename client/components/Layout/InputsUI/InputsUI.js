@@ -155,11 +155,14 @@ import { setHasSubmitted, setIsLoading, setCurrentPage, setSaveName, setTab } fr
     let { setHasSubmitted, hasErrorsHistoricoDeAforosResults, hasErrorsEstCostResults, 
       hasErrorsTratamientoEstimulacion, hasErrorsTratamientoAcido, hasErrorsTratamientoApuntalado,
       tipoDeIntervencionesResults, hasErrorsEvaluacionApuntalado, hasErrorsEvaluacionAcido, hasErrorsEvaluacionEstimulacion,
-      hasErrorsEvaluacionTermica, hasErrorsTratamientoTermico, stimulationType } = this.props
+      hasErrorsEvaluacionTermica, hasErrorsTratamientoTermico, stimulationType, wasCancelled} = this.props
 
     hasErrorsEvaluacionEstimulacion = stimulationType === 'matricial' ? hasErrorsEvaluacionEstimulacion : false
-
-    if (action === 'submit') {
+    if (wasCancelled) {
+      this.props.submitResultsForm('submitEmpty', this.props.token)
+      this.setState({'error': ''})
+    }
+    else if (action === 'submit') {
       let hasErrors = false
       setHasSubmitted(true)
       
@@ -449,6 +452,7 @@ const mapStateToProps = state => ({
   tipoDeIntervenciones: state.getIn(['objetivoYAlcancesIntervencion', 'tipoDeIntervenciones']),
   tipoDeIntervencionesResults: state.getIn(['resultsMeta', 'interventionType']),
   saveName: state.getIn(['global', 'saveName']),
+  wasCancelled: state.getIn(['resultadosGenerales', 'wasCancelled']),
 })
 
 const mapDispatchToProps = dispatch => ({

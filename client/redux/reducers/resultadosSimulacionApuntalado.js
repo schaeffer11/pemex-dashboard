@@ -2,16 +2,16 @@ import { Map, fromJS } from 'immutable'
 
 const initialState = Map({ 
     hasErrors: true,
-    longitudApuntalada: '',
-    alturaTotalDeFractura: '',
-    anchoPromedio: '',
-    concentractionAreal: '',
-    conductividad: '',
-    fcd: '',
-    presionNeta: '',
-    eficienciaDeFluidoDeFractura: '',
+    longitudApuntalada: null,
+    alturaTotalDeFractura: null,
+    anchoPromedio: null,
+    concentractionAreal: null,
+    conductividad: null,
+    fcd: null,
+    presionNeta: null,
+    eficienciaDeFluidoDeFractura: null,
     imgURL: null,
-    imgName: '',
+    imgName: null,
     imgSource: null,
 })
 
