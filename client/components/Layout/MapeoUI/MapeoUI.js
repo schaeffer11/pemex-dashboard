@@ -1,5 +1,6 @@
 import React, { Component } from 'react'
 import autobind from 'autobind-decorator'
+import { connect } from 'react-redux'
 import { Link, Redirect } from 'react-router-dom'
 import AriaModal from 'react-aria-modal'
 import MapeoForm from './MapeoForm'
@@ -7,113 +8,106 @@ import ImportForm from './ImportForm'
 
 
 @autobind class MapeoUI extends Component {
-    constructor(props) {
-        super(props)
-        this.state = {
-            openModal: false,
-            selectedMapeo: false,
-            mapeo: null,
-            mapeos: [{}]
-        }
+  constructor(props) {
+    super(props)
+    this.state = {
+      openModal: false,
+      selectedMapeo: false,
+      mapeo: null,
+      mapeos: [{}]
+    }
+  }
+
+  componentDidMount() {
+    const { token } = this.props
+    const headers = {
+      'Authorization': `Bearer ${token}`,
+      'content-type': 'application/json',
     }
 
-    componentDidMount() {
-        const { token } = this.props
-        const headers = {
-            headers: {
-                'Authorization': `Bearer ${token}`,
-                'content-type': 'application/json',
-            },
-        }
-
-        fetch('/api/mapeo', {
-            headers,
-            method: 'GET'
-        })
-            .then(r => r.json())
-            .then((res) => {
-                this.setState({
-                    mapeos: res,
-                })
-            })
-    }
-
-    componentDidUpdate(prevProps) {
-
-    }
-
-    openImportModal() {
+    fetch('/api/mapeo', { headers })
+      .then(r => r.json())
+      .then((res) => {
         this.setState({
-            openModal: true
+          mapeos: res,
         })
+      })
+  }
+
+  componentDidUpdate(prevProps) {
+
+  }
+
+  openImportModal() {
+    this.setState({
+      openModal: true
+    })
+  }
+
+  closeImportModal() {
+    this.setState({
+      openModal: false
+    })
+  }
+
+  select(id) {
+    const { token } = this.props
+    const headers = {
+      'Authorization': `Bearer ${token}`,
+      'content-type': 'application/json',
     }
 
-    closeImportModal() {
-        this.setState({
+    if (id) {
+      fetch('/api/mapeo/' + id, { headers })
+        .then(r => r.json())
+        .then((res) => {
+          this.setState({
+            mapeo: res[0],
+            selectedMapeo: id,
             openModal: false
+          })
         })
     }
+  }
 
-    select(id) {
-        const { token } = this.props
-        const headers = {
-            headers: {
-                'Authorization': `Bearer ${token}`,
-                'content-type': 'application/json',
-            },
+  render() {
+    return (
+      <div>
+        {this.state.openModal &&
+          <ImportModal
+            mapeos={this.state.mapeos}
+            select={this.select}
+            closeImportModal={this.closeImportModal} />
         }
-
-        if (id) {
-            fetch('/api/mapeo/' +  id, {
-                headers,
-                method: 'GET'
-            })
-                .then(r => r.json())
-                .then((res) => {
-                    this.setState({
-                        mapeo: res[0],
-                        selectedMapeo: id,
-                        openModal: false
-                    })
-                })
-        }
-    }
-
-    render() {
-        return (
-            <div>
-                { this.state.openModal &&
-                    <ImportModal
-                        mapeos={this.state.mapeos}
-                        select={this.select}
-                        closeImportModal={this.closeImportModal} />
-                }
-                <div className="diagnostico">
-                    <MapeoForm id={this.state.selectedMapeo} values={this.state.mapeo} openImportModal={this.openImportModal}/>
-                </div>
-            </div>
-        )
-    }
+        <div className="diagnostico">
+          <MapeoForm id={this.state.selectedMapeo} values={this.state.mapeo} openImportModal={this.openImportModal} />
+        </div>
+      </div>
+    )
+  }
 }
 
 const ImportModal = (props) => {
 
-    return (
-        <AriaModal
-            titleId="save-modal"
-            underlayClickExits={true}
-            verticallyCenter={true}
-            focusDialog={true}
-            dialogClass="queryModalPartialReset"
-            dialogStyle={{verticalAlign: '', textAlign: 'center', maxHeight: '80%', marginTop: '10%'}}
-        >
-            <div className="compromisosModal" >
-                <ImportForm mapeos={props.mapeos} select={props.select} closeImportModal={props.closeImportModal} />
-            </div>
-        </AriaModal>
-    )
+  return (
+    <AriaModal
+      titleId="save-modal"
+      underlayClickExits={true}
+      verticallyCenter={true}
+      focusDialog={true}
+      dialogClass="queryModalPartialReset"
+      dialogStyle={{ verticalAlign: '', textAlign: 'center', maxHeight: '80%', marginTop: '10%' }}
+    >
+      <div className="compromisosModal" >
+        <ImportForm mapeos={props.mapeos} select={props.select} closeImportModal={props.closeImportModal} />
+      </div>
+    </AriaModal>
+  )
 }
 
 
+const mapStateToProps = (state) => ({
+  token: state.getIn(['user', 'token']),
+})
 
-export default MapeoUI
+export default connect(mapStateToProps)(MapeoUI)

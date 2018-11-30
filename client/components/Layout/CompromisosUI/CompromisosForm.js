@@ -35,22 +35,16 @@ import { setIsLoading, setShowForms } from '../../../redux/actions/global'
   componentDidMount() {
     const { token, id } = this.props
     const headers = {
-      headers: {
-        'Authorization': `Bearer ${token}`,
-        'content-type': 'application/json',
-      },
+      'Authorization': `Bearer ${token}`,
+      'content-type': 'application/json',
     }
 
 
     if (id) {
-      fetch('/api/compromiso/' + id, {
-        headers,
-        method: 'GET'
-      })
+      fetch('/api/compromiso/' + id, { headers })
         .then(r => r.json())
         .then((res) => {
           this.initialValues = res;
-
           this.setState({
             editMode: true
           })
@@ -107,7 +101,7 @@ import { setIsLoading, setShowForms } from '../../../redux/actions/global'
 
       if (id) {
         fetch('/api/compromiso/' + id, {
-          headers,
+          headers: headers,
           method: 'PUT',
           body: formData,
         })
@@ -131,7 +125,7 @@ import { setIsLoading, setShowForms } from '../../../redux/actions/global'
           })
       } else {
         fetch('/api/compromiso', {
-          headers,
+          headers: headers,
           method: 'POST',
           body: formData,
         })

@@ -10,9 +10,9 @@ import { login, logout } from '../../redux/actions/user'
 import { BrowserRouter, Route, Redirect } from 'react-router-dom'
 
 
-const App = ({ children, user, username, loginAction, logoutAction, userActions, app, match }) => {
+const App = ({ user, loginAction, logoutAction, app }) => {
   const body = user !== null
-    ? <Productspace /> // <Productspace onPage={match.params.page} />
+    ? <Productspace />
     : <LoginForm loginAction={loginAction} user={user} />
 
   return (
@@ -38,16 +38,3 @@ const mapDispatchToProps = dispatch => ({
 })
 
 export default connect(mapStateToProps, mapDispatchToProps)(App)
-
-// export default connect({
-//   props: {
-//     username: 'user.name', // returns single name value from user register as 'username' prop
-//     user: 'user', // returns entire user register as 'user' prop
-//     app: 'app', // returns entire app register as 'app' prop
-//   },
-//   dispatchers: {
-//     userActions: 'user', // returns all user actions as 'userActions' prop
-//     loginAction: 'user.login', // returns single login action from user register as 'loginAction' prop
-//     logoutAction: 'user.logout', // returns single logout action from user register as 'logoutAction' prop
-//   },
-// })(App)
