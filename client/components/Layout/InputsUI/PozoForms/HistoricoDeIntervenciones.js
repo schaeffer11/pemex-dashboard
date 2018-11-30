@@ -1,7 +1,7 @@
 import React, { Component } from 'react'
 import { connect } from 'react-redux'
 import autobind from 'autobind-decorator'
-import { setFromSaveHistorialDeIntervenciones, setHistoricoTermicoData, setHistoricoEstimulacionData, setHistoricoAcidoData, setHistoricoApuntaladoData, setHasErrorsHistorialDeIntervenciones } from '../../../../redux/actions/pozo'
+import { setFromSaveHistorialDeIntervenciones, setHistoricoTermicoData, setHistoricoEstimulacionData, setHistoricoAcidoData, setHistoricoApuntaladoData, setHasErrorsHistorialDeIntervenciones, setShowEstim, setShowApuntalado, setShowAcido, setShowTermico } from '../../../../redux/actions/pozo'
 import InputTable from '../../Common/InputTable'
 import ExcelUpload from '../../Common/ExcelUpload'
 import { checkDate, checkEmpty } from '../../../../lib/errorCheckers'
@@ -326,19 +326,19 @@ let columnsApuntalado = [
     this.state = { 
       errors: {
         apuntaladoTable: {
-          value: '',
+          value: false,
           type: 'table',
         },
         acidoTable: {
-          value: '',
+          value: false,
           type: 'table',
         },
         estimulacionTable: {
-          value: '',
+          value: false,
           type: 'table',
         },
         termicoTable: {
-          value: '',
+          value: false,
           type: 'table',
         },
       },
@@ -406,10 +406,47 @@ let columnsApuntalado = [
     })
   }
 
+  handleApuntaladoCheck(e) {
+    let { setShowApuntalado, setHistoricoApuntaladoData } = this.props
+
+    let checked = e.target.checked
+    if (checked === true) {
+      setHistoricoApuntaladoData([{
+        fecha: null,
+        tipoDeTratamiento: '',
+        objetivo: '',
+        compania: '',
+        cima: '',
+        base: '',
+        longitudApuntalada: '',
+        alturaTotalDeFractura: '',
+        anchoPromedio: '',
+        concentracionAreal: '',
+        conductividad: '',
+        fcd: '',
+        presionNeta: '',
+        fluidoFractura: '',
+        beneficioProgramado: '',
+        beneficioOficial: '',
+        error: true,
+      }])
+      this.checkForErrors('', 'apuntaladoTable')
+    }
+    else {
+      setHistoricoApuntaladoData([])
+      this.checkForErrors(false, 'apuntaladoTable')
+    }
+
+
+
+    setShowApuntalado(checked)
+  }
+
+
   makeApuntaladoTable() {
     let { formData, setHistoricoApuntaladoData, hasSubmitted } = this.props
     formData = formData.toJS()
-    let { historicoApuntaladoData, fromSave } = formData
+    let { historicoApuntaladoData, fromSave, showApuntalado } = formData
 
     const rowObj = {
         fecha: null,
@@ -453,8 +490,11 @@ let columnsApuntalado = [
     return (
       <div className='presion-table'>
         <div className='header'>
-          Histórico de fracturamientos apuntalados realizados al pozo
+          <input type='checkbox' value={showApuntalado} checked={showApuntalado} onChange={e => this.handleApuntaladoCheck(e)}/>
+          <span> Histórico de fracturamientos apuntalados realizados al pozo </span>
         </div>
+        {showApuntalado ?
+        <div>
         <ExcelUpload
           template='HistorialIntervencionesFracApunt'
           headers={errors}
@@ -476,14 +516,51 @@ let columnsApuntalado = [
             fromSave={fromSave}
           />
         </div>
+        </div> : null }
       </div>
       )
   }
 
+  handleAcidoCheck(e) {
+    let { setShowAcido, setHistoricoAcidoData } = this.props
+
+    let checked = e.target.checked
+    if (checked === true) {
+      setHistoricoAcidoData([{
+      fecha: null,
+      tipoDeTratamiento: '',
+      objetivo: '',
+      compania: '',
+      base: '',
+      cima: '',
+      longitudGravada: '',
+      alturaGravada: '',
+      anchoGravado: '',
+      conductividad: '',
+      fcd: '',
+      presionNeta: '',
+      fluidoFractura: '',
+      beneficioProgramado: '',
+      beneficioOficial: '',
+      error: true,
+    }])
+      this.checkForErrors('', 'acidoTable')
+    }
+    else {
+      setHistoricoAcidoData([])
+      this.checkForErrors(false, 'acidoTable')
+    }
+
+
+
+    setShowAcido(checked)
+  }
+
+
   makeAcidoTable() {
     let { formData, setHistoricoAcidoData, hasSubmitted } = this.props
     formData = formData.toJS()
-    let { historicoAcidoData, fromSave } = formData
+    let { historicoAcidoData, fromSave, showAcido } = formData
     const rowObj = {
       fecha: null,
       tipoDeTratamiento: '',
@@ -523,8 +600,11 @@ let columnsApuntalado = [
     return (
       <div className='presion-table'>
         <div className='header'>
-          Histórico de fracturamientos ácidos realizados al pozo
+          <input type='checkbox' value={showAcido} checked={showAcido} onChange={e => this.handleAcidoCheck(e)}/>
+          <span> Histórico de fracturamientos ácidos realizados al pozo </span>
         </div>
+        {showAcido ?
+        <div>
         <ExcelUpload
           template='HistorialIntervencionesFracAcido'
           headers={errors}
@@ -546,14 +626,47 @@ let columnsApuntalado = [
             fromSave={fromSave}
           />
         </div>
+        </div> : null }
       </div>
       )
   }
 
+  handleEstimCheck(e) {
+    let { setShowEstim, setHistoricoEstimulacionData } = this.props
+
+    let checked = e.target.checked
+    if (checked === true) {
+      setHistoricoEstimulacionData([{
+      fecha: null,
+      tipoDeTratamiento: '',
+      objetivo: '',
+      compania: '',
+      acidoVol: '',
+      acidoNombre: '',
+      solventeVol: '',
+      solventeNombre: '',
+      divergenteVol: '',
+      divergenteNombre: '',
+      totalN2: '',
+      beneficioProgramado: '',
+      beneficioOficial: '',
+      error: true,
+    }])
+      this.checkForErrors('', 'estimulacionTable')
+    }
+    else {
+      setHistoricoEstimulacionData([])
+      this.checkForErrors(false, 'estimulacionTable')
+    }
+
+    setShowEstim(checked)
+  }
+
+
   makeEstimulacionTable() {
     let { formData, setHistoricoEstimulacionData, hasSubmitted } = this.props
     formData = formData.toJS()
-    let { historicoEstimulacionData, fromSave } = formData
+    let { historicoEstimulacionData, fromSave, showEstim } = formData
     const rowObj = {
       fecha: null,
       tipoDeTratamiento: '',
@@ -587,9 +700,13 @@ let columnsApuntalado = [
     ]
     return (
       <div className='presion-table'>
+
         <div className='header'>
-          Histórico de tratamientos de estimulación
+          <input type='checkbox' value={showEstim} checked={showEstim} onChange={e => this.handleEstimCheck(e)}/>
+           <span> Histórico de tratamientos de estimulación </span>
         </div>
+        { showEstim ?
+        <div>
         <ExcelUpload
           template='HistorialIntervencionesEstimulacion'
           headers={errors}
@@ -611,14 +728,46 @@ let columnsApuntalado = [
             fromSave={fromSave}
           />
         </div>
+        </div> : null }
       </div>
       )
   }
 
+  handleTermicoCheck(e) {
+    let { setShowTermico, setHistoricoTermicoData } = this.props
+
+    let checked = e.target.checked
+    if (checked === true) {
+      setHistoricoTermicoData([{
+      ciclo: '',
+      fechaInicio: null,
+      fechaFin: null,
+      objetivo: '',
+      Piny: '',
+      Tiny: '',
+      calidad: '',
+      Qiny: '',
+      aguaAcum: '',
+      beneficioProgramado: '',
+      beneficioOficial: '',
+      error: true,
+    }
+])
+      this.checkForErrors('', 'termicoTable')
+    }
+    else {
+      setHistoricoTermicoData([])
+      this.checkForErrors(false, 'termicoTable')
+    }
+
+    setShowTermico(checked)
+  }
+
+
   makeTermicoData() {
     let { formData, setHistoricoTermicoData, hasSubmitted } = this.props
     formData = formData.toJS()
-    let { historicoTermicoData, fromSave } = formData
+    let { historicoTermicoData, fromSave, showTermico } = formData
     const rowObj = {
       ciclo: '',
       fechaInicio: null,
@@ -651,8 +800,11 @@ let columnsApuntalado = [
     return (
       <div className='presion-table'>
         <div className='header'>
-          Histórico de tratamientos térmicos
+          <input type='checkbox' value={showTermico} checked={showTermico} onChange={e => this.handleTermicoCheck(e)}/>
+          <span> Histórico de tratamientos térmicos </span>
         </div>
+        { showTermico ?
+        <div>
         <ExcelUpload
           template='HistorialIntervencionesTermicas'
           headers={errors}
@@ -674,6 +826,7 @@ let columnsApuntalado = [
             fromSave={fromSave}
           />
         </div>
+        </div> : null}
       </div>
       )
   }
@@ -703,6 +856,10 @@ const mapDispatchToProps = dispatch => ({
     setHasErrorsHistorialDeIntervenciones: val => dispatch(setHasErrorsHistorialDeIntervenciones(val)),
     setHistoricoApuntaladoData: val => dispatch(setHistoricoApuntaladoData(val)),
     setFromSaveHistorialDeIntervenciones: val => dispatch(setFromSaveHistorialDeIntervenciones(val)),
+    setShowEstim: val => dispatch(setShowEstim(val)),
+    setShowApuntalado: val => dispatch(setShowApuntalado(val)),
+    setShowAcido: val => dispatch(setShowAcido(val)),
+    setShowTermico: val => dispatch(setShowTermico(val)),
 })
 
 export default connect(mapStateToProps, mapDispatchToProps)(HistorialDeIntervenciones)

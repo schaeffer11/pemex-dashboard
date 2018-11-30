@@ -938,18 +938,14 @@ router.get('/getHistIntervencionesEstimulacionNew', async (req, res) => {
         objectPath.push(finalObj, `${mainParent}.${innerParent}`, innerObj)
       })
       finalObj.historialDeIntervenciones.hasErrors = data[0].TABLE_HAS_ERRORS === 0 ? false : true
+      finalObj.historialDeIntervenciones.showEstim = true
       res.json(finalObj)
-    }
-    else if (action === 'loadTransaction'){
-      res.json({ err: 'No value found in database'  })
     }
     else {
       res.json({
         [mainParent]: {
-          [innerParent]: [
-          {error: true}
-          ],
-          hasErrors: true
+          [innerParent]: [],
+          showEstim: false
         }
       })
     }
@@ -1000,19 +996,15 @@ router.get('/getHistIntervencionesAcidoNew', async (req, res) => {
         objectPath.set(innerObj, 'index', index)
         objectPath.push(finalObj, `${mainParent}.${innerParent}`, innerObj)
       })
-
+      finalObj.historialDeIntervenciones.hasErrors = data[0].TABLE_HAS_ERRORS === 0 ? false : true
+      finalObj.historialDeIntervenciones.showAcido = true
       res.json(finalObj)
-    }
-    else if (action === 'loadTransaction'){
-      res.json({ err: 'No value found in database'  })
     }
     else {
       res.json({
         [mainParent]: {
-          [innerParent]: [
-          {error: true}
-          ],
-          hasErrors: true
+          [innerParent]: [],
+          showAcido: false
         }
       })
     }
@@ -1064,19 +1056,15 @@ router.get('/getHistIntervencionesApuntaladoNew', async (req, res) => {
         objectPath.set(innerObj, 'index', index)
         objectPath.push(finalObj, `${mainParent}.${innerParent}`, innerObj)
       })
-
+      finalObj.historialDeIntervenciones.hasErrors = data[0].TABLE_HAS_ERRORS === 0 ? false : true
+      finalObj.historialDeIntervenciones.showApuntalado = true
       res.json(finalObj)
-    }
-    else if (action === 'loadTransaction'){
-      res.json({ err: 'No value found in database'  })
     }
     else {
       res.json({
         [mainParent]: {
-          [innerParent]: [
-          {error: true}
-          ],
-          hasErrors: true
+          [innerParent]: [],
+          showApuntalado: false
         }
       })
     }
@@ -1124,19 +1112,15 @@ router.get('/getHistIntervencionesTermicoNew', async (req, res) => {
         objectPath.set(innerObj, 'index', index)
         objectPath.push(finalObj, `${mainParent}.${innerParent}`, innerObj)
       })
-
+      finalObj.historialDeIntervenciones.hasErrors = data[0].TABLE_HAS_ERRORS === 0 ? false : true
+      finalObj.historialDeIntervenciones.showTermico = true
       res.json(finalObj)
-    }
-    else if (action === 'loadTransaction'){
-      res.json({ err: 'No value found in database'  })
     }
     else {
       res.json({
         [mainParent]: {
-          [innerParent]: [
-          {error: true}
-          ],
-          hasErrors: true
+          [innerParent]: [],
+          showTermico: false
         }
       })
     }

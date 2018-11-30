@@ -61,7 +61,10 @@ export const setHistoricoTermicoData = value => ({ type: 'set_historicoTermicoDa
 export const setHistorialDeIntervenciones = value => ({ type: 'set_historialDeIntervenciones', value})
 export const setHasErrorsHistorialDeIntervenciones = value => ({ type: 'set_hasErrorsHistorialDeIntervenciones', value})
 export const setFromSaveHistorialDeIntervenciones = value => ({ type: 'set_fromSaveHistorialDeIntervenciones', value})
-
+export const setShowEstim = value => ({ type: 'set_showEstim', value})
+export const setShowApuntalado = value => ({ type: 'set_showApuntalado', value})
+export const setShowAcido = value => ({ type: 'set_showAcido', value})
+export const setShowTermico = value => ({ type: 'set_showTermico', value})
 //FichaTecnicaDelPozo
 export const setGeneralFichaTecnicaPozo = (location, value) => ({
   type: 'set_generalFichaTecnicaDelPozo',
