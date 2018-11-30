@@ -379,11 +379,11 @@ router.post('/diagnostico', allowAdmin, (req, res) => {
     createDiagnostico(req, res)
 })
 
-router.get('/diagnostico', allowAdmin, (req, res) => {
+router.get('/diagnostico', (req, res) => {
     getDiagnosticos(req, res)
 })
 
-router.get('/diagnostico/:id', allowAdmin, (req, res) => {
+router.get('/diagnostico/:id', (req, res) => {
     getDiagnostico(req, res)
 })
 
@@ -391,11 +391,11 @@ router.post('/mapeo', allowAdmin, (req, res) => {
     createMapeo(req, res)
 })
 
-router.get('/mapeo', allowAdmin, (req, res) => {
+router.get('/mapeo', (req, res) => {
     getMapeos(req, res)
 })
 
-router.get('/mapeo/:id', allowAdmin, (req, res) => {
+router.get('/mapeo/:id', (req, res) => {
     getMapeo(req, res)
 })
 
@@ -623,7 +623,7 @@ router.get('/filterOptions', async (req, res) => {
   const whereMap = whereBuilderForFilters(req.query, selectMap)
   const promises = Object.keys(whereMap).map(q => {
     let query = `SELECT DISTINCT ${selectMap[q].select.join(',')} FROM Transactions t
-                 JOIN TransactionsResults tr on t.TRANSACTION_ID = tr.PROPUESTA_ID`
+                 LEFT JOIN TransactionsResults tr on t.TRANSACTION_ID = tr.PROPUESTA_ID`
     if (selectMap[q].joinStatement) {
       query += `\nJOIN ${selectMap[q].joinStatement}`
     }

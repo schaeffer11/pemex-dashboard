@@ -217,7 +217,6 @@ import ButtonGroup from './ButtonGroup'
   }
 
   checkIncomplete() {
-    return false
     let { interventionFormData, formData } = this.props
 
     interventionFormData = interventionFormData.toJS()

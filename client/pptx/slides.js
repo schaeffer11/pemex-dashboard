@@ -78,7 +78,7 @@ export async function buildEstadoMecanicoYAparejo(pptx, token, id, image) {
     const base64 = await getBase64FromURL(image.imgURL).catch(e => e)
     if (!base64.error) {
       slide.addImage({
-        data: `image/png;base64,${base64}`, x: middle, y: 0.5,
+        data: `image/png;base64,${base64}`, x: middle, y: 1.5,
         sizing: { type: 'contain', h: 4.0, w: 4.0 }
       })
     }
