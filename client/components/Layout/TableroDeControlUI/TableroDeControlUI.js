@@ -46,8 +46,6 @@ import routes from '../../../routes/routes'
    return (
     <div className="analysis-content">
       <div className='menu'>
-        <h1>prueba</h1>
-        <button onClick={this.testAdmin}>PRUEBAAAA</button>
         {
           routes().map(route => (
             <div className='menu-item'>

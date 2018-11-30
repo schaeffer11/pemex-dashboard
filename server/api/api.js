@@ -336,7 +336,7 @@ router.post('/comment', (req, res) => {
     })
 })
 
-router.get('/users', (req, res) => {
+router.get('/users', allowAdmin, (req, res) => {
     let table = appConfig.users.table
     connection.query(`SELECT username, id FROM ??`, [table], (err, results) => {
         if (err) {
