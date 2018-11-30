@@ -30,7 +30,7 @@ export function formatBubbleProduction() {
   <strong>${numberFormat(this.point.y, 2)}</strong> </div> <br>`
   retVal += '<div style=height:14px;font-size:12px;line-height:14px;>'
   retVal += `<div class="tooltip-line">Costo:
-  <strong>${numberFormat(this.point.z, 0)}</strong> </div> <br>`
+  <strong>$${numberFormat(this.point.z, 0)}</strong> </div> <br>`
   return retVal
 }
 
@@ -42,7 +42,7 @@ export function formatBubbleVolume() {
   <strong>${numberFormat(this.point.y, 0)}</strong> </div> <br>`
   retVal += '<div style=height:14px;font-size:12px;line-height:14px;>'
   retVal += `<div class="tooltip-line">Costo:
-  <strong>${numberFormat(this.point.z, 0)}</strong> </div> <br>`
+  <strong>$${numberFormat(this.point.z, 0)}</strong> </div> <br>`
   return retVal
 }
 

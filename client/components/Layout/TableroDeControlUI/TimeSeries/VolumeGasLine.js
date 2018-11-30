@@ -56,11 +56,12 @@ import { KPI } from '../Common/KPIs'
         tickInterval   : 24 * 3600 * 1000 *30,
         type: 'datetime'
       },
-      yAxis: [{
+      yAxis: {
         title: {
-          text: 'Volumen (m3)'
+          useHTML: true,
+          text: 'Volumen (m<sup>3</sup>)'
         }
-      }],
+      },
       tooltip: {
         shared: true
       },

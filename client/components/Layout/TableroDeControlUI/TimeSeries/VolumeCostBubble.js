@@ -74,7 +74,8 @@ import { RenameInterventionTypes } from '../../../../lib/formatters'
       },
       yAxis: {
         title: {
-          text: 'Volumen Total Utilizado (m3)'
+          useHTML: true,
+          text: 'Volumen Total Utilizado (m<sup>3</sup>)'
         }
       },
       credits: {

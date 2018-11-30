@@ -2,7 +2,7 @@ import React, { Component } from 'react'
 import { connect } from 'react-redux'
 import autobind from 'autobind-decorator'
 
-import { setIsLoading, setShowForms, setCurrentPage } from '../../../../../redux/actions/global'
+import { setIsLoading, setShowForms, setCurrentPage, setTab } from '../../../../../redux/actions/global'
 import PropuestaDeEstimulacion from './PropuestaDeEstimulacion'
 import PruebasDeLaboratorio from '../PruebasDeLaboratorio'
 import PruebasDeLaboratorioExtra from '../PruebasDeLaboratorioExtra'
@@ -51,13 +51,16 @@ import StickySubtabs from '../../Components/StickySubtabs'
   }
 
   handlePrevSubtab(){
-    let { setCurrentPage } = this.props
+    let { setCurrentPage, setTab } = this.props
 
     if( this.state.currentStep - 1 >= 0){
       setCurrentPage(forms[this.state.currentStep - 1].title)
       this.setState({
         currentStep: this.state.currentStep - 1
       })
+    }
+    else {
+      setTab('Pozo')
     }
   }
 
@@ -107,7 +110,8 @@ import StickySubtabs from '../../Components/StickySubtabs'
 
 const mapDispatchToProps = dispatch => ({
     setShowForms : values => { dispatch(setShowForms(values))},
-      setCurrentPage: values => {dispatch(setCurrentPage(values))},
+    setCurrentPage: values => {dispatch(setCurrentPage(values))},
+    setTab: values => {dispatch(setTab(values))},
 })
 
 const mapStateToProps = state => ({
