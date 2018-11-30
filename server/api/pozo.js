@@ -1656,8 +1656,12 @@ export const create = async (body, action, cb) => {
                                       pruebasDeLaboratorioData.forEach(i => {
                                       const labID = Math.floor(Math.random() * 1000000000)
                                       i.labID = labID
-                                      values.push([labID, interventionID, wellFormacionID, i.type, i.fechaMuestreo, i.fechaPrueba, i.compania, i.superviso, i.obervaciones, transactionID])
-                                      imageValues.push([interventionID, labID, i.imgName, transactionID])
+
+                                      if (!(i.type === '' && i.fechaMuestreo === null && i.fechaPrueba === null && i.compania === '' && i.superviso === '')) {
+                                        values.push([labID, interventionID, wellFormacionID, i.type, i.fechaMuestreo, i.fechaPrueba, i.compania, i.superviso, i.obervaciones, transactionID])
+                                        imageValues.push([interventionID, labID, i.imgName, transactionID])
+                                      }
+                                      
                                     })
                                     
                                     }
