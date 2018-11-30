@@ -348,7 +348,7 @@ router.get('/users', (req, res) => {
 })
 
 router.get('/activo', (req, res) => {
-    connection.query(`SELECT DISTINCT ACTIVO_NAME, ACTIVO_ID FROM FieldWellMapping`, (err, results) => {
+    connection.query(`SELECT DISTINCT SUBDIRECCION_ID, SUBDIRECCION_NAME, ACTIVO_NAME, ACTIVO_ID FROM FieldWellMapping`, (err, results) => {
         res.json(results)
     })
 })
