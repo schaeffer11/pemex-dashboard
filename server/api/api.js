@@ -597,9 +597,11 @@ router.get('/filterOptions', async (req, res) => {
         reqQueriesKeys = reqQueriesKeys.filter(q => q !== query)
       }
       const builtQuery = reqQueriesKeys.map(q => {
-        let { select, operator } = selectMap[q]
+        let { select, operator, whereStatement } = selectMap[q]
         operator = operator || '='
-        return `AND ${select[0]} ${operator} ?`
+        whereStatement = whereStatement || `AND ${select[0]} ${operator} ?`
+        return whereStatement
+        // return `AND ${select[0]} ${operator} ?`
       })
       const values = reqQueriesKeys.map(q => queries[q])
       whereMap[query] = { query: builtQuery, values }
@@ -629,20 +631,18 @@ router.get('/filterOptions', async (req, res) => {
     company: { select: ['tr.COMPANY'] },
     interventionType: { select: ['t.TIPO_DE_INTERVENCIONES'] },
     terminationType: { select: ['t.TIPO_DE_TERMINACION'] },
-    lowDate: { select: ['tr.FECHA_INTERVENCION'], operator: '>=' },
-    highDate: { select: ['tr.FECHA_INTERVENCION'], operator: '<=' },
+    lowDate: { select: ['tr.FECHA_INTERVENCION'], operator: '>=', whereStatement: `AND (tr.FECHA_INTERVENCION >= ? OR tr.FECHA_INTERVENCION IS NULL)` },
+    highDate: { select: ['tr.FECHA_INTERVENCION'], operator: '<=', whereStatement: `AND (tr.FECHA_INTERVENCION <= ? OR tr.FECHA_INTERVENCION IS NULL)` },
   }
   const whereMap = whereBuilderForFilters(req.query, selectMap)
   const promises = Object.keys(whereMap).map(q => {
     let query = `SELECT DISTINCT ${selectMap[q].select.join(',')} FROM Transactions t
                  LEFT JOIN TransactionsResults tr on t.TRANSACTION_ID = tr.PROPUESTA_ID`
-                 
+
     if (selectMap[q].joinStatement) {
       query += `\nJOIN ${selectMap[q].joinStatement}`
     }
     query += `\nWHERE 1 = 1 ${whereMap[q].query.join(' ')}`
-
-    console.log(query, whereMap[q].values)
     return queryPromise(q, query, whereMap[q].values).catch(e => {
       return e
     })

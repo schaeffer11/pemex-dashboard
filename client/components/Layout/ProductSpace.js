@@ -24,9 +24,9 @@ import LoginForm from '../User/LoginForm'
   }
 
   async componentDidMount(){
-    const { history } = this.props;
-    this.unsubscribeFromHistory = history.listen(this.handleLocationChange);
-    this.handleLocationChange(history.location);
+    // const { history } = this.props;
+    // this.unsubscribeFromHistory = history.listen(this.handleLocationChange);
+    // this.handleLocationChange(history.location);
     const isAdmin = await this.showAdminRoute()
     this.setState({ isAdmin })
   }
@@ -42,16 +42,19 @@ import LoginForm from '../User/LoginForm'
 
   async showAdminRoute() {
     const { user } = this.props
-    const token = user.get('token')
-    const headers = {
-      'Authorization': `Bearer ${token}`,
-      'content-type': 'application/json',
+    if (user) {
+      const token = user.get('token')
+      const headers = {
+        'Authorization': `Bearer ${token}`,
+        'content-type': 'application/json',
+      }
+      console.log('iciiii')
+      const isAdmin = await fetch('/api/isAdmin', { headers }).then(r => r.json())
+      console.log('am i an admin and allowed', isAdmin)
+      const { success } = isAdmin
+      return success
     }
-    console.log('iciiii')
-    const isAdmin = await fetch('/api/isAdmin', { headers }).then(r => r.json())
-    console.log('am i an admin and allowed', isAdmin)
-    const { success } = isAdmin
-    return success
+    return false
   }
 
   render() {
