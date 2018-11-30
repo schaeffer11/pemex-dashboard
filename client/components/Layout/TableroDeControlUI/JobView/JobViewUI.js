@@ -420,7 +420,7 @@ import MoreKPIs from './MoreKPIs'
               pageSize={specificLabData.length}
               sortable={false}
             />
-            <img style={{objectFit: 'contain'}} src={labImage.imgURL}></img> 
+            <img style={{objectFit: 'contain'}} src={labImage ? labImage.imgURL: null}></img> 
           </div>
           )
         break;
@@ -609,6 +609,8 @@ import MoreKPIs from './MoreKPIs'
   render() {
     let { fieldWellOptions, jobOptions, imageData, costData, estCostData, jobData, volumeData, estIncData, estVolumeData, cedulaData, cedulaResultData, date, aforoData, interventionData, interventionResultsData, labData, specificLabData, isOpen } = this.state
     let { globalAnalysis } = this.props
+
+    console.log(imageData)
 
     globalAnalysis = globalAnalysis.toJS()
     let { job, jobType } = globalAnalysis

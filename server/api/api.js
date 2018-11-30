@@ -408,11 +408,21 @@ router.get('/getSubmittedFieldWellMapping', (req, res) => {
 
 router.get('/getDates', (req, res) => {
   connection.query(`select 
-      YEAR(MIN(FECHA_INTERVENCION)) * 12 + MONTH(MIN(FECHA_INTERVENCION)) AS MIN, 
+    MIN(MIN) as MIN, MAX(MAX) as MAX, MIN(MIN_DATE) as MIN_DATE, MAX(MAX_DATE) AS MAX_DATE
+from 
+
+(SELECT YEAR(MIN(FECHA_INTERVENCION)) * 12 + MONTH(MIN(FECHA_INTERVENCION)) AS MIN, 
       YEAR(MAX(FECHA_INTERVENCION)) * 12 + MONTH(MAX(FECHA_INTERVENCION)) + 1 AS MAX, 
       MIN(FECHA_INTERVENCION) AS MIN_DATE, 
       MAX(FECHA_INTERVENCION) AS MAX_DATE 
-      FROM TransactionsResults`, (err, results) => {
+      FROM TransactionsResults
+   UNION  
+      
+ SELECT YEAR(MIN(FECHA_PROGRAMADA_INTERVENCION)) * 12 + MONTH(MIN(FECHA_PROGRAMADA_INTERVENCION)) AS MIN, 
+      YEAR(MAX(FECHA_PROGRAMADA_INTERVENCION)) * 12 + MONTH(MAX(FECHA_PROGRAMADA_INTERVENCION)) + 1 AS MAX, 
+      MIN(FECHA_PROGRAMADA_INTERVENCION) AS MIN_DATE, 
+      MAX(FECHA_PROGRAMADA_INTERVENCION) AS MAX_DATE 
+      FROM Intervenciones) a`, (err, results) => {
         res.json(results)
       })
 })
@@ -566,6 +576,8 @@ router.get('/getFieldWellMapping', (req, res) => {
 })
 
 router.get('/filterOptions', async (req, res) => {
+  let { type } = req.query
+
   const queryPromise = (name, query, id) => new Promise((resolve, reject) => {
     connection.query(query, id, (err, results) => {
       if (err) {
@@ -624,10 +636,13 @@ router.get('/filterOptions', async (req, res) => {
   const promises = Object.keys(whereMap).map(q => {
     let query = `SELECT DISTINCT ${selectMap[q].select.join(',')} FROM Transactions t
                  LEFT JOIN TransactionsResults tr on t.TRANSACTION_ID = tr.PROPUESTA_ID`
+                 
     if (selectMap[q].joinStatement) {
       query += `\nJOIN ${selectMap[q].joinStatement}`
     }
     query += `\nWHERE 1 = 1 ${whereMap[q].query.join(' ')}`
+
+    console.log(query, whereMap[q].values)
     return queryPromise(q, query, whereMap[q].values).catch(e => {
       return e
     })
