@@ -29,7 +29,7 @@ import ProgressBar from '../Common/ProgressBar'
     }
     const option = excelOption.value
     const id = option === 'historicoPresionCampo' ? fieldID : wellID
-
+    console.log('field id', fieldID, wellID)
     const data = await fetch(`/well/exportData/?option=${option}&id=${id}`, { headers }).then(r => r.text())
     let a = document.createElement('a');
     a.href = 'data:attachment/csv;charset=utf-8,' + data
