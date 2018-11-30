@@ -379,11 +379,11 @@ router.post('/diagnostico', allowAdmin, (req, res) => {
     createDiagnostico(req, res)
 })
 
-router.get('/diagnostico', allowAdmin, (req, res) => {
+router.get('/diagnostico', (req, res) => {
     getDiagnosticos(req, res)
 })
 
-router.get('/diagnostico/:id', allowAdmin, (req, res) => {
+router.get('/diagnostico/:id', (req, res) => {
     getDiagnostico(req, res)
 })
 
@@ -391,11 +391,11 @@ router.post('/mapeo', allowAdmin, (req, res) => {
     createMapeo(req, res)
 })
 
-router.get('/mapeo', allowAdmin, (req, res) => {
+router.get('/mapeo', (req, res) => {
     getMapeos(req, res)
 })
 
-router.get('/mapeo/:id', allowAdmin, (req, res) => {
+router.get('/mapeo/:id', (req, res) => {
     getMapeo(req, res)
 })
 
@@ -408,11 +408,21 @@ router.get('/getSubmittedFieldWellMapping', (req, res) => {
 
 router.get('/getDates', (req, res) => {
   connection.query(`select 
-      YEAR(MIN(FECHA_INTERVENCION)) * 12 + MONTH(MIN(FECHA_INTERVENCION)) AS MIN, 
+    MIN(MIN) as MIN, MAX(MAX) as MAX, MIN(MIN_DATE) as MIN_DATE, MAX(MAX_DATE) AS MAX_DATE
+from 
+
+(SELECT YEAR(MIN(FECHA_INTERVENCION)) * 12 + MONTH(MIN(FECHA_INTERVENCION)) AS MIN, 
       YEAR(MAX(FECHA_INTERVENCION)) * 12 + MONTH(MAX(FECHA_INTERVENCION)) + 1 AS MAX, 
       MIN(FECHA_INTERVENCION) AS MIN_DATE, 
       MAX(FECHA_INTERVENCION) AS MAX_DATE 
-      FROM TransactionsResults`, (err, results) => {
+      FROM TransactionsResults
+   UNION  
+      
+ SELECT YEAR(MIN(FECHA_PROGRAMADA_INTERVENCION)) * 12 + MONTH(MIN(FECHA_PROGRAMADA_INTERVENCION)) AS MIN, 
+      YEAR(MAX(FECHA_PROGRAMADA_INTERVENCION)) * 12 + MONTH(MAX(FECHA_PROGRAMADA_INTERVENCION)) + 1 AS MAX, 
+      MIN(FECHA_PROGRAMADA_INTERVENCION) AS MIN_DATE, 
+      MAX(FECHA_PROGRAMADA_INTERVENCION) AS MAX_DATE 
+      FROM Intervenciones) a`, (err, results) => {
         res.json(results)
       })
 })
@@ -566,6 +576,8 @@ router.get('/getFieldWellMapping', (req, res) => {
 })
 
 router.get('/filterOptions', async (req, res) => {
+  let { type } = req.query
+
   const queryPromise = (name, query, id) => new Promise((resolve, reject) => {
     connection.query(query, id, (err, results) => {
       if (err) {
@@ -585,9 +597,11 @@ router.get('/filterOptions', async (req, res) => {
         reqQueriesKeys = reqQueriesKeys.filter(q => q !== query)
       }
       const builtQuery = reqQueriesKeys.map(q => {
-        let { select, operator } = selectMap[q]
+        let { select, operator, whereStatement } = selectMap[q]
         operator = operator || '='
-        return `AND ${select[0]} ${operator} ?`
+        whereStatement = whereStatement || `AND ${select[0]} ${operator} ?`
+        return whereStatement
+        // return `AND ${select[0]} ${operator} ?`
       })
       const values = reqQueriesKeys.map(q => queries[q])
       whereMap[query] = { query: builtQuery, values }
@@ -617,13 +631,14 @@ router.get('/filterOptions', async (req, res) => {
     company: { select: ['tr.COMPANY'] },
     interventionType: { select: ['t.TIPO_DE_INTERVENCIONES'] },
     terminationType: { select: ['t.TIPO_DE_TERMINACION'] },
-    lowDate: { select: ['tr.FECHA_INTERVENCION'], operator: '>=' },
-    highDate: { select: ['tr.FECHA_INTERVENCION'], operator: '<=' },
+    lowDate: { select: ['tr.FECHA_INTERVENCION'], operator: '>=', whereStatement: `AND (tr.FECHA_INTERVENCION >= ? OR tr.FECHA_INTERVENCION IS NULL)` },
+    highDate: { select: ['tr.FECHA_INTERVENCION'], operator: '<=', whereStatement: `AND (tr.FECHA_INTERVENCION <= ? OR tr.FECHA_INTERVENCION IS NULL)` },
   }
   const whereMap = whereBuilderForFilters(req.query, selectMap)
   const promises = Object.keys(whereMap).map(q => {
     let query = `SELECT DISTINCT ${selectMap[q].select.join(',')} FROM Transactions t
-                 JOIN TransactionsResults tr on t.TRANSACTION_ID = tr.PROPUESTA_ID`
+                 LEFT JOIN TransactionsResults tr on t.TRANSACTION_ID = tr.PROPUESTA_ID`
+
     if (selectMap[q].joinStatement) {
       query += `\nJOIN ${selectMap[q].joinStatement}`
     }

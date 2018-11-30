@@ -26,7 +26,7 @@ import { Link, Redirect } from 'react-router-dom'
       'Authorization': `Bearer ${token}`,
       'content-type': 'application/json',
     }
-    console.log('what is this?', )
+
 
     fetch('/api/activo', { headers })
       .then(r => r.json())
@@ -81,7 +81,7 @@ import { Link, Redirect } from 'react-router-dom'
 
   render() {
     const { isAdmin } = this.props
-    console.log('isadmin', isAdmin)
+
     return (
       <div className="compromisos">
         {this.state.openModal && <Modal handleClose={this.handleClose} compromisoId={this.state.compromisoId} onUpdateData={this.onUpdateData} activos={this.state.activos} />}

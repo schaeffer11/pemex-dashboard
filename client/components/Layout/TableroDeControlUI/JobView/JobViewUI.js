@@ -165,7 +165,6 @@ import MoreKPIs from './MoreKPIs'
           return a.FECHA_PROGRAMADA_INTERVENCION - b.FECHA_PROGRAMADA_INTERVENCION
         })
 
-        console.log('this is important', r)
 
         r.forEach(i => {
           let date = new Date(i.FECHA_PROGRAMADA_INTERVENCION)
@@ -420,7 +419,7 @@ import MoreKPIs from './MoreKPIs'
               pageSize={specificLabData.length}
               sortable={false}
             />
-            <img style={{objectFit: 'contain'}} src={labImage.imgURL}></img> 
+            <img style={{objectFit: 'contain'}} src={labImage ? labImage.imgURL: null}></img> 
           </div>
           )
         break;

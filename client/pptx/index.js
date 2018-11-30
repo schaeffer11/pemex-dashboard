@@ -57,6 +57,7 @@ export async function getPostData(url, token, transactionID) {
   return fetch(url, {
     method: 'POST',
     headers: {
+      Authorization: `Bearer ${token}`,
       'content-type': 'application/json',
     },
     body: JSON.stringify({
@@ -205,7 +206,7 @@ const firstHalf = (pptx, token, jobID, images) => [
   { func: async () => buildHistorialIntervenciones(pptx, token, jobID), name: 'historialDeIntervenciones' },
   { func: async () => buildEstadoMecanicoYAparejo(pptx, token, jobID, images.mecanicoYAparejoDeProduccion), name: 'estadoMecanicoYAparejo' },
   { func: async () => buildSistemasArtificialesDeProduccion(pptx, token, jobID), name: 'sistemasArtificialesDeProduccion' },
-  { func: async () => buildEvaluacionPetrofisica(pptx, token, jobID, images.buildEvaluacionPetrofisica), name: 'evaluacionPetrofisica' },
+  { func: async () => buildEvaluacionPetrofisica(pptx, token, jobID, images.evaluacionPetrofisica), name: 'evaluacionPetrofisica' },
   { func: async () => buildWaterAnalysis(pptx, token, jobID), name: 'analisisDeAgua' },
   { func: async () => buildProductionChart(pptx, token, jobID), name: 'historicoDeProduccion' },
   { func: async () => buildAforoChart(pptx, token, jobID), name: 'historicoDeAforosPropuesta' },
@@ -245,7 +246,7 @@ async function buildAndSkipError(index, everything, hasResults, updateProgress) 
 }
 
 export async function generatePowerPoint(token, jobID, jobType, updateProgress) {
-  console.log('generating powerpoint')
+  // console.log('generating powerpoint')
   const slideWidth = 13.3
   const slideHeight = 7.5
   const pptx = new PptxGenJS()
@@ -272,6 +273,6 @@ export async function generatePowerPoint(token, jobID, jobType, updateProgress) 
     // await buildAforoChart(pptx, token, jobID)
     // await buildGraficaDeTratamiento(pptx, imageResults.graficaTratamiento)
   }
-  console.log('finished building ppt')
+  // console.log('finished building ppt')
   pptx.save()
 }

@@ -189,7 +189,7 @@ router.get('/exportData/', (req, res) => {
   const queries = {
     historicoProduccion: 'SELECT * FROM WellHistoricalProduccion WHERE WELL_FORMACION_ID = ?',
     historicoPresionPozo: 'SELECT * FROM WellHistoricalPressure WHERE WELL_FORMACION_ID = ?',
-    historicoPresionCampo: 'SELECT * FROM WellHistoricalPressure WHERE FIELD_FORMACION_ID = ?',
+    historicoPresionCampo: 'SELECT * FROM FieldHistoricalPressure WHERE FIELD_FORMACION_ID = ?',
     historicoAforos: 'SELECT * FROM WellAforos WHERE WELL_FORMACION_ID = ?',
     desviacion: 'SELECT * FROM WellSurveys WHERE WELL_FORMACION_ID = ?',
   }
@@ -307,6 +307,7 @@ router.get('/exportData/', (req, res) => {
   const query = queries[option]
   connection.query(query, id, (err, results) => {
     if (err) {
+      console.log('error with export', err)
       return res.send('Error')
     }
 

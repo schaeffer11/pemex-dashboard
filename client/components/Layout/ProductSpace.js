@@ -24,9 +24,9 @@ import LoginForm from '../User/LoginForm'
   }
 
   async componentDidMount(){
-    const { history } = this.props;
-    this.unsubscribeFromHistory = history.listen(this.handleLocationChange);
-    this.handleLocationChange(history.location);
+    // const { history } = this.props;
+    // this.unsubscribeFromHistory = history.listen(this.handleLocationChange);
+    // this.handleLocationChange(history.location);
     const isAdmin = await this.showAdminRoute()
     this.setState({ isAdmin })
   }
@@ -35,23 +35,26 @@ import LoginForm from '../User/LoginForm'
     const { user } = this.props
     if (user !== prevProps.user) {
       const isAdmin = await this.showAdminRoute()
-      console.log('setting this fucker', isAdmin)
+
       this.setState({ isAdmin })
     }
   }
 
   async showAdminRoute() {
     const { user } = this.props
-    const token = user.get('token')
-    const headers = {
-      'Authorization': `Bearer ${token}`,
-      'content-type': 'application/json',
+    if (user) {
+      const token = user.get('token')
+      const headers = {
+        'Authorization': `Bearer ${token}`,
+        'content-type': 'application/json',
+      }
+      console.log('iciiii')
+      const isAdmin = await fetch('/api/isAdmin', { headers }).then(r => r.json())
+      console.log('am i an admin and allowed', isAdmin)
+      const { success } = isAdmin
+      return success
     }
-    console.log('iciiii')
-    const isAdmin = await fetch('/api/isAdmin', { headers }).then(r => r.json())
-    console.log('am i an admin and allowed', isAdmin)
-    const { success } = isAdmin
-    return success
+    return false
   }
 
   render() {
@@ -60,8 +63,8 @@ import LoginForm from '../User/LoginForm'
     return (
         <div id="page-wrap" className="productspace">
           <PrivateRoute exact path="/carga_datos" component={InputsUI} user={this.props.user} />
-          <AdminPrivateRoute exact path="/diagnosticos" component={DiagnosticosUI} isAdmin={isAdmin} user={this.props.user} />
-          <AdminPrivateRoute exact path="/mapeo" component={MapeoUI} isAdmin={isAdmin} user={this.props.user} />
+          <PrivateRoute exact path="/diagnosticos" component={DiagnosticosUI} isAdmin={isAdmin} user={this.props.user} />
+          <PrivateRoute exact path="/mapeo" component={MapeoUI} isAdmin={isAdmin} user={this.props.user} />
           <AdminPrivateRoute exact path="/administrar" component={AdminUI} isAdmin={isAdmin} user={this.props.user} />
           <PrivateRoute exact path="/compromisos" component={CompromisosUI} user={this.props.user} isAdmin={isAdmin} />
           <AdminPrivateRoute exact path="/compromisos/manage" component={ManageCompromisos} user={this.props.user} isAdmin={isAdmin} />

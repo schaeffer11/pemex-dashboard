@@ -271,7 +271,6 @@ import { setIsLoading, setShowForms } from '../../../redux/actions/global'
   }
 
   confirmSubmit() {
-    console.log('confirming submit')
     this.setState({ update: true })
     e.preventDefault()
     return false;
@@ -939,25 +938,14 @@ import { setIsLoading, setShowForms } from '../../../redux/actions/global'
                 </div>
               </div>
 
-              <div className="button-group">
+              {this.props.isAdmin && <div className="button-group">
               <button disabled={!this.state.update} className="submit button" onClick={this.confirmEdit}>
                   Editar
                 </button>
                 <button disabled={this.state.update} className="submit button" type="submit">
                   Enviar
                 </button>
-                {/* {this.state.update &&
-                  <button className="submit button" type="submit" onClick={this.confirmEdit}>
-                    Editar
-                                </button>
-                }
-
-                {!this.state.update &&
-                  <button className="submit button" type="submit">
-                    Enviar
-                                </button>
-                } */}
-              </div>
+              </div>}
 
               {Object.entries(errors).length > 0 && <div class="error">Esta planilla contiene errores.</div>}
             </Form>
@@ -1059,7 +1047,8 @@ const mapDispatchToProps = dispatch => ({
 
 const mapStateToProps = state => ({
   user: state.getIn(['user', 'id']),
-  token: state.getIn(['user', 'token'])
+  token: state.getIn(['user', 'token']),
+  isAdmin: state.getIn(['user', 'isAdmin']),
 })
 
 

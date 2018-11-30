@@ -112,7 +112,7 @@ export function submitForm(action, token, saveName) {
 
               if (j.hasOwnProperty('imgURL')) {
                 if (j.imgURL) {
-                  console.log('converting some array img', property)
+                  // console.log('converting some array img', property)
                   const img = j.imgSource === 'local' ? await getBase64FromURL(j.imgURL) : 'exists in s3'
                   j.img = img
                   index += 1

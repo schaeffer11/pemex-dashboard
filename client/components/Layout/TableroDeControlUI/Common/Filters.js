@@ -133,6 +133,7 @@ import GroupBy from './GroupBy'
     return Object.keys(options).map(k => {
       const { title } = filters[k]
       const selectValue = globalAnalysis[k]
+
       return (
         <div key={`filter_${k}`} className="filter-individual">
           <label>{title}</label>

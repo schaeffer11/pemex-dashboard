@@ -20,19 +20,25 @@ import ImportForm from './ImportForm'
   }
 
   componentDidMount() {
-    const { token } = this.props
-    // console.log('user', user)
-    // const token = user.get('token')
+    const { token, activoID, isAdmin } = this.props
     const headers = {
       'Authorization': `Bearer ${token}`,
       'content-type': 'application/json',
     }
-    console.log('headers?', token)
+
     fetch('/api/diagnostico', { headers })
       .then(r => r.json())
       .then((res) => {
+        let diagnosticos
+        if (!isAdmin && activoID !== null) {
+          diagnosticos = res.filter(elem => elem.activo === activoID)
+        } else if(isAdmin) {
+          diagnosticos = res
+        } else {
+          diagnosticos = []
+        }
         this.setState({
-          diagnosticos: res,
+          diagnosticos
         })
       })
   }
@@ -54,7 +60,7 @@ import ImportForm from './ImportForm'
 
   select(id) {
     const { token } = this.props
-    console.log('MY TOKEN', token)
+
     const headers = {
         'Authorization': `Bearer ${token}`,
         'content-type': 'application/json',
@@ -83,7 +89,7 @@ import ImportForm from './ImportForm'
             closeImportModal={this.closeImportModal} />
         }
         <div className="diagnostico">
-          <DiagnosticoForm  id={this.state.selectedDiagnostico} token={this.props.token} values={this.state.diagnostico} openImportModal={this.openImportModal} />
+          <DiagnosticoForm id={this.state.selectedDiagnostico} token={this.props.token} values={this.state.diagnostico} openImportModal={this.openImportModal} />
         </div>
       </div>
     )
@@ -110,6 +116,7 @@ const ImportModal = (props) => {
 
 const mapStateToProps = (state) => ({
   token: state.getIn(['user', 'token']),
+  activoID: state.getIn(['user', 'activoID']),
 })
 
 

@@ -387,7 +387,7 @@ const replaceAll = function(str, search, replacement) {
                   id={`user_options_${id}`}
                   onClick={this.handleToggleUserPopover}
                 >
-                  <i class="fas fa-ellipsis-v"></i>
+                  <i className="fas fa-ellipsis-v"></i>
                 </Button>
                 <Tooltip
                   placement="top"
@@ -404,7 +404,7 @@ const replaceAll = function(str, search, replacement) {
                 </Tooltip>
               </div>
               <Button id={`expand_${id}`} onClick={this.handleModalToggle}>
-                <i class="fas fa-expand"></i>
+                <i className="fas fa-expand"></i>
               </Button>
               {cardHasOptions && this.renderPopover()}
               {this.renderUserOptions()}

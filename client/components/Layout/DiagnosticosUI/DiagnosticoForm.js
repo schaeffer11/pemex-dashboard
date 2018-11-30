@@ -89,7 +89,7 @@ import { setIsLoading, setShowForms } from '../../../redux/actions/global'
 
   componentDidMount() {
     const { token } = this.props
-    console.log('the form token', token)
+
     const headers = {
       'Authorization': `Bearer ${token}`,
       'content-type': 'application/json',
@@ -435,7 +435,7 @@ import { setIsLoading, setShowForms } from '../../../redux/actions/global'
   }
 
   confirmSubmit(e) {
-    console.log('confirming submit')
+
     this.setState({ update: true })
     e.preventDefault()
     return false;
@@ -895,25 +895,14 @@ import { setIsLoading, setShowForms } from '../../../redux/actions/global'
                 </div>
               </div>
 
-              <div className="button-group">
+              {this.props.isAdmin && <div className="button-group">
                 <button disabled={!this.state.update} className="submit button" onClick={this.confirmEdit}>
                   Editar
                 </button>
                 <button disabled={this.state.update} className="submit button" type="submit">
                   Enviar
                 </button>
-                {/* {this.state.update &&
-                  <button className="submit button" type="submit" onClick={this.confirmEdit}>
-                    Editar
-                                </button>
-                }
-
-                {!this.state.update &&
-                  <button className="submit button" type="submit">
-                    Enviar
-                                </button>
-                } */}
-              </div>
+              </div>}
 
               {Object.entries(errors).length > 0 && <div class="error">Esta forma contiene errores.</div>}
             </Form>
@@ -1015,6 +1004,7 @@ const mapDispatchToProps = dispatch => ({
 
 const mapStateToProps = state => ({
   user: state.getIn(['user', 'id']),
+  isAdmin: state.getIn(['user', 'isAdmin'])
 })
 
 

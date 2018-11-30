@@ -19,7 +19,7 @@ import ImportForm from './ImportForm'
   }
 
   componentDidMount() {
-    const { token } = this.props
+    const { token, activoID, isAdmin } = this.props
     const headers = {
       'Authorization': `Bearer ${token}`,
       'content-type': 'application/json',
@@ -28,8 +28,16 @@ import ImportForm from './ImportForm'
     fetch('/api/mapeo', { headers })
       .then(r => r.json())
       .then((res) => {
+        let mapeos
+        if (!isAdmin && activoID !== null) {
+          mapeos = res.filter(elem => elem.activo === activoID)
+        } else if(isAdmin) {
+          mapeos = res
+        } else {
+          mapeos = []
+        }
         this.setState({
-          mapeos: res,
+          mapeos,
         })
       })
   }
@@ -108,6 +116,7 @@ const ImportModal = (props) => {
 
 const mapStateToProps = (state) => ({
   token: state.getIn(['user', 'token']),
+  activoID: state.getIn(['user', 'activoID']),
 })
 
 export default connect(mapStateToProps)(MapeoUI)

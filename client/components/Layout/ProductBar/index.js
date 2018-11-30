@@ -50,7 +50,6 @@ class Productbar extends Component {
   render(){
     let { app, user, logoutAction, setTab, pozoName, selectedTab } = this.props
     const { isAdmin } = this.state
-    console.log('is admin for a fasdf', isAdmin)
     const title = app.get('title')
     return (
       <div className="productbar">

@@ -26,7 +26,7 @@ app.use(helmet())
 
 // Redirect to secure
 app.enable('trust proxy')
-// app.use(sslRedirect)
+app.use(sslRedirect)
 
 // ENABLE CORS
 app.use(cors())

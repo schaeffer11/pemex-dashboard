@@ -16,7 +16,7 @@ const Evaluaciones = ({ interventionType }) => {
     case 'termico':
       return <EvaluacionTermica />
     default:
-      return <div>Nothing</div>
+      return <div>No hay evaluacion</div>
   }
 }
 
