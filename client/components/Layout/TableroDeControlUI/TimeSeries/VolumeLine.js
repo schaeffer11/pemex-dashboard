@@ -83,7 +83,8 @@ import { KPI } from '../Common/KPIs'
       },
       yAxis: {
         title: {
-          text: 'Volumen (m3)'
+          useHTML: true,
+          text: 'Volumen (m<sup>3</sup>)'
         }
       },
       tooltip: {

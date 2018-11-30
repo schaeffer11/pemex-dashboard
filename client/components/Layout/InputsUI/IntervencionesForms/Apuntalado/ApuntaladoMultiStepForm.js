@@ -54,7 +54,7 @@ import StickySubtabs from '../../Components/StickySubtabs'
   }
 
   handlePrevSubtab(){
-    let { setCurrentPage } = this.props
+    let { setCurrentPage, setTab } = this.props
 
     if( this.state.currentStep - 1 >= 0){
       setCurrentPage(forms[this.state.currentStep - 1].title)

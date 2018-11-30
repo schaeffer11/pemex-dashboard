@@ -55,6 +55,10 @@ import { RenameInterventionTypes } from '../../../../lib/formatters'
         tickInterval   : 24 * 3600 * 1000*30,
         type: 'datetime',
       },
+      tooltip: { 
+        valuePrefix: '$',
+        valueDecimals: 0
+       },
       yAxis: {
         title: {
           text: 'Costos ($MNX)'

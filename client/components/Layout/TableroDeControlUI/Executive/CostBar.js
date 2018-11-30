@@ -66,7 +66,10 @@ let colorWheel = [
 	    title: {
 	        text: ''
 	    },
-
+      tooltip: {
+        valuePrefix: '$',
+        valueDecimals: 0
+      },
       legend: {
         enabled: false
       },

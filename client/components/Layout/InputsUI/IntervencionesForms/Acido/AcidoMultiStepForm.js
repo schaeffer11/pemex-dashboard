@@ -52,7 +52,7 @@ import StickySubtabs from '../../Components/StickySubtabs'
   }
 
   handlePrevSubtab(){
-    let { setCurrentPage } = this.props
+    let { setCurrentPage, seetTab } = this.props
 
     if( this.state.currentStep - 1 >= 0){
 
