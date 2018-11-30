@@ -375,7 +375,7 @@ import { fetchFilterData } from '../../../../lib/filters'
             </Card>
               <Card
                 id="evalPetrofisica"
-                title="Evaluacion Petrofisica"
+                title="Evaluación Petrofisica"
                 width={'50%'}
                 ref={this.cards[3]}
                 isTable={true}
