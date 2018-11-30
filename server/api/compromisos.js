@@ -3,9 +3,11 @@ import appConfig from '../../app-config.js'
 const connection = db.getConnection(appConfig.users.database)
 
 export const create = function(req, res){
+    console.log('CREATING A COMPROMISO')
     let { fechaCompromiso, fechaCumplimiento, descripcion, activo, responsable, minuta, avance, notas } = req.body
-    connection.query(`INSERT INTO Compromisos (ID, FECHA_COMPROMISO, FECHA_CUMPLIMIENTO, DESCRIPCION, ACTIVO, RESPONSABLE, MINUTA, AVANCE, NOTAS) VALUES (null, ?, ?, ?, ?, ?, ?, ?)`, [fechaCompromiso, fechaCumplimiento, descripcion, activo, responsable, minuta, avance, notas], (err, results) => {
+    connection.query(`INSERT INTO Compromisos (ID, FECHA_COMPROMISO, FECHA_CUMPLIMIENTO, DESCRIPCION, ACTIVO, RESPONSABLE, MINUTA, AVANCE, NOTAS) VALUES (null, ?, ?, ?, ?, ?, ?, ?, ?)`, [fechaCompromiso, fechaCumplimiento, descripcion, activo, responsable, minuta, avance, notas], (err, results) => {
         if (err) {
+            console.log('COMPROMISO ERROR', err)
             res.status(400)
             res.send({})
         }

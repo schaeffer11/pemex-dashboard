@@ -8,6 +8,7 @@ import CompromisosUI from './CompromisosUI/CompromisosUI'
 import ManageCompromisos from './CompromisosUI/ManageCompromisos'
 import TableroDeControlUI from './TableroDeControlUI/TableroDeControlUI'
 import HomeUI from './HomeUI/HomeUI'
+import AdminUI from './AdminUI/AdminUI'
 import { Route, Redirect } from 'react-router-dom'
 import LoginForm from '../User/LoginForm'
 
@@ -33,7 +34,6 @@ import LoginForm from '../User/LoginForm'
   async componentDidUpdate(prevProps){
     const { user } = this.props
     if (user !== prevProps.user) {
-      console.log("i got a different user")
       const isAdmin = await this.showAdminRoute()
       console.log('setting this fucker', isAdmin)
       this.setState({ isAdmin })
@@ -41,7 +41,8 @@ import LoginForm from '../User/LoginForm'
   }
 
   async showAdminRoute() {
-    const { token } = this.props
+    const { user } = this.props
+    const token = user.get('token')
     const headers = {
       'Authorization': `Bearer ${token}`,
       'content-type': 'application/json',
@@ -54,18 +55,22 @@ import LoginForm from '../User/LoginForm'
   }
 
   render() {
-    const onPage = this.props.onPage || 'sample_page'
-    const { isLoading } = this.state
+    const { isAdmin } = this.state
 
     return (
         <div id="page-wrap" className="productspace">
           <PrivateRoute exact path="/carga_datos" component={InputsUI} user={this.props.user} />
-          <PrivateRoute exact path="/diagnosticos" component={DiagnosticosUI} user={this.props.user} />
-          <PrivateRoute exact path="/mapeo" component={MapeoUI} user={this.props.user} />
-          <PrivateRoute exact path="/compromisos" component={CompromisosUI} user={this.props.user} />
-          <PrivateRoute exact path="/compromisos/manage" component={ManageCompromisos} user={this.props.user} />
+          <AdminPrivateRoute exact path="/diagnosticos" component={DiagnosticosUI} isAdmin={isAdmin} user={this.props.user} />
+          <AdminPrivateRoute exact path="/mapeo" component={MapeoUI} isAdmin={isAdmin} user={this.props.user} />
+          <AdminPrivateRoute exact path="/administrar" component={AdminUI} isAdmin={isAdmin} user={this.props.user} />
+          <PrivateRoute exact path="/compromisos" component={CompromisosUI} user={this.props.user} isAdmin={isAdmin} />
+          <AdminPrivateRoute exact path="/compromisos/manage" component={ManageCompromisos} user={this.props.user} isAdmin={isAdmin} />
           <PrivateRoute path="/tablero_control" component={TableroDeControlUI} user={this.props.user} />
-          <Route exact path="/" component={HomeUI} />
+          <Route
+            exact
+            path="/"
+            render={(props) => <HomeUI {...props} isAdmin={isAdmin} />}
+          />
           { this.props.user === null && (
             <div className="login">
               <div className="loginModal">
@@ -80,30 +85,23 @@ import LoginForm from '../User/LoginForm'
 
 export default Productspace
 
-const PrivateRoute = ({ component: Component, user: user, ...properties}) => (
+const PrivateRoute = ({ component: Component, user: user, ...properties, isAdmin }) => (
   <Route {...properties} render={(props) => (
     user !== null
-      ? <Component {...props} />
+      ? <Component {...props} isAdmin={isAdmin} />
       : <Redirect to={{pathname:'/', state: {referrer: props.location} }}/>
   )} />
 )
 
 
-const AdminPrivateRoute = ({ component: Component, user: user, ...properties}) => {
-  if (user) {
-    fetch(`api/isAdmin?id=${user.token}`, { headers })
-    .then(res => res.json)
-    .then(res => {
-
-    })
-  } 
-  else {
+const AdminPrivateRoute = ({ component: Component, isAdmin, ...properties}) => {
+  console.log('da route', isAdmin)
     return <Route {...properties} render={(props) => (
-     <Redirect to={{pathname:'/', state: {referrer: props.location} }}/>
+      isAdmin
+      ? <Component {...props} />
+      : <Redirect to={{pathname:'/', state: {referrer: props.location} }}/>
     )} />
   }
-
-}
 
 
 

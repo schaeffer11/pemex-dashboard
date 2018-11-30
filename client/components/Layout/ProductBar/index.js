@@ -19,27 +19,27 @@ class Productbar extends Component {
 
      this.state = {
          location: "",
-        //  isAdmin: false,
+         isAdmin: false,
      }
   }
 
-  // async componentDidMount(){
-  //   const { history } = this.props;
-  //   this.unsubscribeFromHistory = history.listen(this.handleLocationChange);
-  //   this.handleLocationChange(history.location);
-  //   const isAdmin = await this.showAdminRoute()
-  //   this.setState({ isAdmin })
-  // }
+  async componentDidMount(){
+    const { history } = this.props;
+    this.unsubscribeFromHistory = history.listen(this.handleLocationChange);
+    this.handleLocationChange(history.location);
+    const isAdmin = await this.showAdminRoute()
+    this.setState({ isAdmin })
+  }
 
-  // async componentDidUpdate(prevProps){
-  //   const { user } = this.props
-  //   if (user !== prevProps.user) {
-  //     console.log("i got a different user")
-  //     const isAdmin = await this.showAdminRoute()
-  //     console.log('setting this fucker', isAdmin)
-  //     this.setState({ isAdmin })
-  //   }
-  // }
+  async componentDidUpdate(prevProps){
+    const { user } = this.props
+    if (user !== prevProps.user) {
+      console.log("i got a different user")
+      const isAdmin = await this.showAdminRoute()
+      console.log('setting this fucker', isAdmin)
+      this.setState({ isAdmin })
+    }
+  }
 
   componentWillUnmount() {
       if (this.unsubscribeFromHistory) this.unsubscribeFromHistory();
@@ -58,23 +58,23 @@ class Productbar extends Component {
     return showForms && location && this.state.location.pathname == '/carga_datos' && showForms !== 'results'
   }
 
-  // async showAdminRoute() {
-  //   const { token } = this.props
-  //   const headers = {
-  //     'Authorization': `Bearer ${token}`,
-  //     'content-type': 'application/json',
-  //   }
-  //   console.log('iciiii')
-  //   const isAdmin = await fetch('/api/isAdmin', { headers }).then(r => r.json())
-  //   console.log('am i an admin and allowed', isAdmin)
-  //   const { success } = isAdmin
-  //   return success
-  // }
+  async showAdminRoute() {
+    const { token } = this.props
+    const headers = {
+      'Authorization': `Bearer ${token}`,
+      'content-type': 'application/json',
+    }
+    console.log('iciiii')
+    const isAdmin = await fetch('/api/isAdmin', { headers }).then(r => r.json())
+    console.log('am i an admin and allowed', isAdmin)
+    const { success } = isAdmin
+    return success
+  }
 
 
   render(){
-    let { app, user, logoutAction, setTab, pozoName, selectedTab, isAdmin } = this.props
-    // const { isAdmin } = this.state
+    let { app, user, logoutAction, setTab, pozoName, selectedTab } = this.props
+    const { isAdmin } = this.state
     console.log('is admin for a fasdf', isAdmin)
     const title = app.get('title')
     return (
@@ -83,7 +83,7 @@ class Productbar extends Component {
             <NavLink to="/"><span/></NavLink>
             {/*<div style={{fontFamily: 'Roboto', display: 'inline-block', color: '#CE1A22', fontWeight: 'normal', fontSize: '16px', position: 'relative', top: '-10px', left: '-35px'}}>Versión beta para prueba </div>-->*/}
         </div>
-        {isAdmin && <NavLink to="/tablero_control/resumen_general" style={{color: 'black'}}>admin</NavLink>}
+        {isAdmin && <NavLink to="/administrar" style={{color: 'black'}}>admin</NavLink>}
 
         {this.showTabs() && (
             <div>
