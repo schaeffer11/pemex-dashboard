@@ -206,7 +206,7 @@ import VolumeGasTreatments from './VolumeGasTreatments'
                 ref={this.cards[1]}
                 width={'50%'}
               >
-              <CostBar data={costData} />
+              <CostBar data={costData} groupBy={groupBy}/>
             </Card>
               <Card
                 id="volume"

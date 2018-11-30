@@ -1,8 +1,9 @@
 import React, { PureComponent } from 'react'
 import autobind from 'autobind-decorator'
 import ReactHighcharts from 'react-highcharts'
-import { formatGeneralBarChart as formatter } from '../../../../lib/tooltipFormatters'
 
+import { formatGeneralBarChart as formatter } from '../../../../lib/tooltipFormatters'
+import { RenameInterventionTypes } from '../../../../lib/formatters'
 let colorWheel = [
       '#56B3D8',
       '#C3E4CC',
@@ -51,6 +52,10 @@ let colorWheel = [
           data: dataPoints
         }]
       }   
+    }
+
+    if (groupBy && groupBy === 'interventionType') {
+      categories = RenameInterventionTypes(categories)
     }
 
     let config = {

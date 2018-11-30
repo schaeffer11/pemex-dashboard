@@ -41,12 +41,14 @@ import ReactHighCharts from 'react-highcharts'
       },
       yAxis: [{
           title: {
-              text: 'PWS (someUnit)'
+              useHTML: true,
+              text: 'PWS (kg/cm<sup>2</sup>)'
           }
       }, {
           opposite: true,
           title: {
-              text: 'PWF (someUnit)'
+            useHTML: true,
+            text: 'PWF (kg/cm<sup>2</sup>)'
           }
       }],
       plotOptions: {

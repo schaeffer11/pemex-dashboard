@@ -178,6 +178,26 @@ import { CategoryDist, TrafficLight, Currency, Integer, numWithCommas } from '..
       }
 
 
+    data = data.map(i => {
+      if (i.name === 'apuntalado') { 
+        i.name = 'Frac. Apuntalado'
+       }
+      if (i.name === 'acido') {
+        i.name = 'Frac. Ácido'
+       }
+      if (i.name === 'estimulacionLimpieza') { 
+        i.name = 'Estimulación Limpiezas'
+       }
+      if (i.name === 'estimulacionMatricial') { 
+        i.name = 'Estimulación Matricial'
+       }
+      if (i.name === 'termico') { 
+        i.name = 'Estimulación Térmica'
+       } 
+       return i
+    })
+
+
     return (
       <div className='table'>
         <ReactTable 

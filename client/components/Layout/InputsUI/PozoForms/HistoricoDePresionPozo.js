@@ -200,7 +200,7 @@ let columns = [
     formData = formData.toJS()
     let { pressureDepthPozo } = formData
     return (
-      <div className='historico-presion' >
+      <div className='form historico-presion' >
         <div className="inputs">
           <ExcelUpload
             template="HistoricoPresionPozo"
@@ -211,7 +211,7 @@ let columns = [
             ]}
             setData={this.props.setPresionDataPozo}
           />
-          <div className='depth'>
+          <div className='depth input-table' style={{width: '50%'}}>
             <InputRow header="Plano de Referencia" name='pressureDepthPozo' value={pressureDepthPozo} onChange={setPressureDepthPozo} unit={'md'} onBlur={this.updateErrors} errors={this.state.errors}  />
           </div>
           {this.makeHistoricoDePresionTable()}

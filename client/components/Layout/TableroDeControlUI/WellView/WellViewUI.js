@@ -341,17 +341,17 @@ import { fetchFilterData } from '../../../../lib/filters'
           <CardDeck className="content-deck">
             <Card
                 id="kpis"
-                title="KPIs"
+                title="Datos Generales"
                 ref={this.cards[0]}
                 isNotGraph={true}
                 width={'100%'}
               >
-                <KPIFichaTecnica label='Ficha Tecnica' data={wellData} />
-                <KPIMecanico label='Mecanico Data' data={wellData} />
+                <KPIFichaTecnica label='Ficha Técnica' data={wellData} />
+                <KPIMecanico label='Estado Mecánico' data={wellData} />
             </Card>
             <Card
                 id="production"
-                title="Productions"
+                title="Producción"
                 ref={this.cards[1]}
                 width={'50%'}
               >
@@ -359,7 +359,7 @@ import { fetchFilterData } from '../../../../lib/filters'
             </Card>
             <Card
                 id="pressure"
-                title="Pressure"
+                title="Presión"
                 ref={this.cards[2]}
                 width={'50%'}
               >
@@ -385,7 +385,7 @@ import { fetchFilterData } from '../../../../lib/filters'
             </Card>
             <Card
                 id="images"
-                title="Images"
+                title="Imágenes"
                 ref={this.cards[4]}
                 isImage={true}
               >

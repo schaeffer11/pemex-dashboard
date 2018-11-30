@@ -617,8 +617,6 @@ import MoreKPIs from './MoreKPIs'
     interventionData ? interventionData = interventionData[0] : null
     interventionResultsData ? interventionResultsData = interventionResultsData[0] : null
 
-
-    console.log(fieldWellOptions, jobOptions, imageData, costData, estCostData, volumeData, estIncData, estVolumeData, cedulaData, cedulaResultData, date, aforoData, interventionData, interventionResultsData, labData, specificLabData, isOpen)
     if (interventionData && interventionResultsData)  {
       if (jobType === 'Estimulacion') {
         if (!interventionData.LONGITUD_DE_AGUJERO_DE_GUSANO || !interventionData.PENETRACION_RADIAL) {
@@ -728,16 +726,16 @@ import MoreKPIs from './MoreKPIs'
           <CardDeck className="content-deck">
             <Card
                 id="cedula"
-                title="Cedulas"
+                title="Cédula de Tratamiento"
                 ref={this.cards[4]}
                 isTable={true}
               >          
-              <CedulaTable label='Proposed' data={cedulaData} exportData={cedulaExportData} type={jobType} />
-              <CedulaTable label='Actual' data={cedulaResultData} exportData={cedulaResultExportData} type={jobType} />
+              <CedulaTable label='Propuesta' data={cedulaData} exportData={cedulaExportData} type={jobType} />
+              <CedulaTable label='Real' data={cedulaResultData} exportData={cedulaResultExportData} type={jobType} />
             </Card>  
             <Card
                 id="costs"
-                title="Estimated Vs Actual Costs"
+                title="Costos Estimados vs Reales"
                 ref={this.cards[0]}
                 width={'50%'}
               >          
@@ -745,7 +743,7 @@ import MoreKPIs from './MoreKPIs'
             </Card>
              <Card
                 id="volumes"
-                title="Estimated Vs Actual Volumes"
+                title="Volúmenes Inyectados Estimados vs Reales"
                 ref={this.cards[1]}
                 width={'50%'}
               >          
@@ -770,7 +768,7 @@ import MoreKPIs from './MoreKPIs'
             </Card> 
             <Card
                 id="labs"
-                title="Lab Tests"
+                title="Pruebas de Laboratorio"
                 ref={this.cards[5]}
                 isTable={true}
               >
@@ -779,7 +777,7 @@ import MoreKPIs from './MoreKPIs'
              <Card
 
                 id="images"
-                title="Images"
+                title="Imágenes"
                 ref={this.cards[6]}
                 isImage={true}
               >

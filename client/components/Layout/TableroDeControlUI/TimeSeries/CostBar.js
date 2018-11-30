@@ -3,11 +3,12 @@ import autobind from 'autobind-decorator'
 import ReactHighcharts from 'react-highcharts'
 
 import { KPI } from '../Common/KPIs'
+import { RenameInterventionTypes } from '../../../../lib/formatters'
 
 @autobind class CostBar extends PureComponent {
 
   render() {
-    let { data } = this.props
+    let { data, groupBy } = this.props
 
     let groups = []
     let series = []
@@ -35,6 +36,9 @@ import { KPI } from '../Common/KPIs'
       })
     })
 
+    if (groupBy && groupBy === 'interventionType') {
+      series = RenameInterventionTypes(series)
+    }
 
     let config = {
       chart: {

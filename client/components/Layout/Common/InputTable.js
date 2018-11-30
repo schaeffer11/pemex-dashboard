@@ -141,6 +141,7 @@ import { checkDate, checkEmpty, checkEmptySingular, checkDateSingular } from '..
         <textarea
           className={errorClasses}
           contentEditable
+          style={{width: '100%'}}
           suppressContentEditableWarning
           value={value}
           onChange={e => {

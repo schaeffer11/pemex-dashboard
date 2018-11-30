@@ -343,10 +343,11 @@
 
 	.tecnica-del-pozo {
 		display: grid;
-		grid-template-columns: 25% 25% 50%;
+		grid-template-columns: 33% 33% 33%;
 		grid-column-gap: 10px;
 		grid-template-areas:
-		"pozo formacion intervenciones";
+		"left middle right"
+		"intervenciones intervenciones intervenciones";
 		
 		.image {
 			grid-area: image;
@@ -361,18 +362,21 @@
 
 		}
 
-		.formacion-form {
-			grid-area: formacion;
+		.left {
+			grid-area: left;
 		}
 
-		.pozo-form {
-			grid-area: pozo;
+		.middle {
+			grid-area: middle;
+		}
+
+		.right {
+			grid-area: right;
 		}
 
 		.intervenciones-form {
 			grid-area: intervenciones;
 		}
-
 
 	}
 

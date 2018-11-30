@@ -40,10 +40,10 @@ import { KPI } from '../Common/KPIs'
     })
 
     series = [{
-      name: 'Estimated',
+      name: 'Estimados',
       data: estimatedData
     }, {
-      name: 'Actual',
+      name: 'Reales',
       data: actualData
     }]
 
@@ -64,7 +64,8 @@ import { KPI } from '../Common/KPIs'
       },
       yAxis: {
         title: {
-          text: 'Volumes (m3)'
+          useHTML: true,
+          text: 'Volúmenes Inyectados (m<sup>3</sup>)'
         }
       },
       credits: {

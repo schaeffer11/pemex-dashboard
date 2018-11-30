@@ -2,6 +2,8 @@ import React, { PureComponent } from 'react'
 import autobind from 'autobind-decorator'
 import ReactHighcharts from 'react-highcharts'
 
+import { RenameInterventionTypes } from '../../../../lib/formatters'
+
 let colorWheel = [
       '#56B3D8',
       '#C3E4CC',
@@ -52,6 +54,10 @@ let colorWheel = [
       }   
     }
 
+    if (groupBy && groupBy === 'interventionType') {
+      categories = RenameInterventionTypes(categories)
+    }
+    
     let config = {
 	    chart: {
           zoomType: 'y',

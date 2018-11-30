@@ -179,11 +179,11 @@ export const Integer = (row) => {
 
 export const CategoryDist = (row) => (
   <div style={{width: '100%', height: '100%', borderRadius: '2px'}}>
-    <div style={{width: `${row.original.percAcido}%`, height: '90%', display: 'inline-block', position: 'relative', backgroundColor: '#56B3D8', top: '5%', transition: 'all .5s ease-out'}}></div>
-    <div style={{width: `${row.original.percApuntalado}%`, height: '90%', display: 'inline-block', position: 'relative', backgroundColor: '#C3E4CC', top: '5%', transition: 'all .5s ease-out'}}></div>
-    <div style={{width: `${row.original.percEstimulacionLimpieza}%`, height: '90%', display: 'inline-block', position: 'relative', backgroundColor: '#E4CE5E', top: '5%', transition: 'all .5s ease-out'}}></div>
-    <div style={{width: `${row.original.percEstimulacionMatricial}%`, height: '90%', display: 'inline-block', position: 'relative', backgroundColor: '#C26A1B', top: '5%', transition: 'all .5s ease-out'}}></div>
-    <div style={{width: `${row.original.percTermico}%`, height: '90%', display: 'inline-block', position: 'relative', backgroundColor: '#5D2311', top: '5%', transition: 'all .5s ease-out'}}></div>
+    <div style={{width: `${row.original.percAcido}%`, height: '25px', verticalAlign: 'top', display: 'inline-block', position: 'relative', backgroundColor: '#56B3D8', top: '5%', transition: 'all .5s ease-out'}}></div>
+    <div style={{width: `${row.original.percApuntalado}%`, height: '25px', verticalAlign: 'top', display: 'inline-block', position: 'relative', backgroundColor: '#C3E4CC', top: '5%', transition: 'all .5s ease-out'}}></div>
+    <div style={{width: `${row.original.percEstimulacionLimpieza}%`, height: '25px', verticalAlign: 'top', display: 'inline-block', position: 'relative', backgroundColor: '#E4CE5E', top: '5%', transition: 'all .5s ease-out'}}></div>
+    <div style={{width: `${row.original.percEstimulacionMatricial}%`, height: '25px', verticalAlign: 'top', display: 'inline-block', position: 'relative', backgroundColor: '#C26A1B', top: '5%', transition: 'all .5s ease-out'}}></div>
+    <div style={{width: `${row.original.percTermico}%`, height: '25px', verticalAlign: 'top', display: 'inline-block', position: 'relative', backgroundColor: '#5D2311', top: '5%', transition: 'all .5s ease-out'}}></div>
   </div>
   )
 
@@ -195,4 +195,46 @@ export const TrafficLight = (row) => {
   
   </div>
   )
+}
+
+export const RenameInterventionTypes = (series) => {
+  series = series.map(i => {
+    if (i.name) {
+      if (i.name === 'apuntalado') { 
+        i.name = 'Frac. Apuntalado'
+       }
+      if (i.name === 'acido') {
+        i.name = 'Frac. Ácido'
+       }
+      if (i.name === 'estimulacionLimpieza') { 
+        i.name = 'Estimulación Limpiezas'
+       }
+      if (i.name === 'estimulacionMatricial') { 
+        i.name = 'Estimulación Matricial'
+       }
+      if (i.name === 'termico') { 
+        i.name = 'Estimulación Térmica'
+       }  
+    }
+    else {
+      if (i === 'apuntalado') { 
+        i = 'Frac. Apuntalado'
+       }
+      if (i === 'acido') {
+        i = 'Frac. Ácido'
+       }
+      if (i === 'estimulacionLimpieza') { 
+        i = 'Estimulación Limpiezas'
+       }
+      if (i === 'estimulacionMatricial') { 
+        i = 'Estimulación Matricial'
+       }
+      if (i === 'termico') { 
+        i = 'Estimulación Térmica'
+       }  
+    }
+
+     return i
+  })
+  return series
 }
