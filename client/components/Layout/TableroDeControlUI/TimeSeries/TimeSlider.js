@@ -115,7 +115,7 @@ const Range = createSliderWithTooltip(Slider.Range);
     return (
       <div className='slider-box' style={{padding: '20px', paddingRight: '35px', border: 'solid 2px #b1b1b1', borderRadius: '10px'}}>
         <div className='test' style={{color: 'black', display: 'inline-block', fontWeight: 'bold', paddingBottom: '15px'}}>
-        Select a range of time
+        Seleccione un rango de fechas
         </div>
         <div className='test' style={{color: 'black', display: 'inline-block', float: 'right', fontWeight: 'bold', paddingBottom: '15px', paddingLeft: '40px'}}>
         {this.formatDate(lowDate)} - {this.formatDate(highDate)}
