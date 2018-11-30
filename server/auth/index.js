@@ -52,7 +52,7 @@ app.post('/auth/createUser', getAuthorization, allowAdmin, (req, res) => {
   let { username, password, subdireccionID, activoID, isAdmin } = req.body
   let db_con = db.get(appConfig.users.database)
   let table = appConfig.users.table
-
+  console.log('do i have everything?', username, password, subdireccionID, activoID, isAdmin)
   // FILTERS & SUCH
   const hash = (obj) => {
    let bf = new Blowfish(HASH_SECRET + obj.username)
@@ -91,7 +91,7 @@ app.post('/auth/createUser', getAuthorization, allowAdmin, (req, res) => {
   })
 })
 
-app.post('/auth/changePassword', (req, res) => {
+app.post('/auth/changePassword', getAuthorization, allowAdmin, (req, res) => {
   let { username, password  } = req.body
   let db_con = db.get(appConfig.users.database)
   let table = appConfig.users.table

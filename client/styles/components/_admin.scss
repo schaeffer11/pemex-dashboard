@@ -1,0 +1,35 @@
+.admin {
+  color: white;
+  h3 {
+    margin: 1em;
+  }
+  button {
+    margin: 1em;
+  }
+  .adminContainer {
+    display: flex;
+    ul {
+      flex: 1;
+      list-style: none;
+    }
+    label {
+      display: block;
+    }
+    input {
+      display: block;
+    }
+  }
+  // .createUserValidation {
+    .validationContainer {
+      display: flex;
+      .validationCheck {
+        margin: 0 1em;
+      }
+      .validationExplanation {
+        p {
+          margin: 0;
+        }
+      }
+    }
+  // }
+}
