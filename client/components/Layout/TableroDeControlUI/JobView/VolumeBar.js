@@ -58,7 +58,7 @@ import { KPI } from '../Common/KPIs'
       },
       xAxis: {
         title: {
-          text: 'Item'
+          text: ' '
         },
         categories: categories
       },
