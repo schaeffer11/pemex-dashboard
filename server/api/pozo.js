@@ -1641,12 +1641,6 @@ export const create = async (body, action, cb) => {
                                       })
                                     }
 
-
-
-                                                pruebasDeLaboratorioData.forEach(i => {
-                                                  
-                                                })
-
                                     let imageValues = []
                                     values = []
                                     const labResultValues = []
