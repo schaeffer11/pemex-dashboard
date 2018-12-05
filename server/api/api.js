@@ -613,26 +613,52 @@ router.get('/filterOptions', async (req, res) => {
   const selectMap = {
     subdireccion: {
       joinStatement: 'FieldWellMapping fwm on t.SUBDIRECCION_ID = fwm.SUBDIRECCION_ID',
-      select: ['t.SUBDIRECCION_ID', 'fwm.SUBDIRECCION_NAME']
+      select: ['t.SUBDIRECCION_ID', 'fwm.SUBDIRECCION_NAME'],
+      notNull: 'SUBDIRECCION_ID',
     },
     activo: {
       joinStatement: 'FieldWellMapping fwm on t.ACTIVO_ID = fwm.ACTIVO_ID',
-      select: ['t.ACTIVO_ID', 'fwm.ACTIVO_NAME']
+      select: ['t.ACTIVO_ID', 'fwm.ACTIVO_NAME'],
+      notNull: 'ACTIVO_ID',
     },
     field: {
       joinStatement: 'FieldWellMapping fwm on t.FIELD_FORMACION_ID = fwm.FIELD_FORMACION_ID',
-      select: ['t.FIELD_FORMACION_ID', 'fwm.FIELD_NAME']
+      select: ['t.FIELD_FORMACION_ID', 'fwm.FIELD_NAME'],
+      notNull: 'FIELD_FORMACION_ID',
     },
     well: {
       joinStatement: 'FieldWellMapping fwm on t.WELL_FORMACION_ID = fwm.WELL_FORMACION_ID',
-      select: ['t.WELL_FORMACION_ID', 'fwm.WELL_NAME']
+      select: ['t.WELL_FORMACION_ID', 'fwm.WELL_NAME'],
+      notNull: 'WELL_FORMACION_ID',
     },
-    formation: { select: ['t.FORMACION'] },
-    company: { select: ['tr.COMPANY'] },
-    interventionType: { select: ['t.TIPO_DE_INTERVENCIONES'] },
-    terminationType: { select: ['t.TIPO_DE_TERMINACION'] },
-    lowDate: { select: ['tr.FECHA_INTERVENCION'], operator: '>=', whereStatement: `AND (tr.FECHA_INTERVENCION >= ? OR tr.FECHA_INTERVENCION IS NULL)` },
-    highDate: { select: ['tr.FECHA_INTERVENCION'], operator: '<=', whereStatement: `AND (tr.FECHA_INTERVENCION <= ? OR tr.FECHA_INTERVENCION IS NULL)` },
+    formation: { 
+      select: ['t.FORMACION'] ,
+      notNull: 'FORMACION',
+    },
+    company: { 
+      select: ['tr.COMPANY'],
+      notNull: 'COMPANY',
+    },
+    interventionType: { 
+      select: ['t.TIPO_DE_INTERVENCIONES'] ,
+      notNull: 'TIPO_DE_INTERVENCIONES',
+    },
+    terminationType: { 
+      select: ['t.TIPO_DE_TERMINACION'] ,
+      notNull: 'TIPO_DE_TERMINACION',
+    },
+    lowDate: { 
+      select: ['tr.FECHA_INTERVENCION'],
+      notNull: 'FECHA_INTERVENCION',
+      operator: '>=', 
+      whereStatement: `AND (tr.FECHA_INTERVENCION >= ? OR tr.FECHA_INTERVENCION IS NULL)` 
+    },
+    highDate: { 
+      select: ['tr.FECHA_INTERVENCION'],
+      notNull: 'FECHA_INTERVENCION',
+      operator: '<=', 
+      whereStatement: `AND (tr.FECHA_INTERVENCION <= ? OR tr.FECHA_INTERVENCION IS NULL)` 
+    },
   }
   const whereMap = whereBuilderForFilters(req.query, selectMap)
   const promises = Object.keys(whereMap).map(q => {
@@ -643,11 +669,17 @@ router.get('/filterOptions', async (req, res) => {
       query += `\nJOIN ${selectMap[q].joinStatement}`
     }
     query += `\nWHERE 1 = 1 ${whereMap[q].query.join(' ')}`
-    return queryPromise(q, query, whereMap[q].values).catch(e => {
+
+    console.log('herehere', q, query, whereMap[q].values)
+
+    const queryContainer = `SELECT * FROM (${query}) a WHERE ${selectMap[q].notNull} IS NOT NULL`
+    return queryPromise(q, queryContainer, whereMap[q].values).catch(e => {
+
       return e
     })
   })
   const results = await Promise.all(promises)
+  
   res.json(results)
 })
 
