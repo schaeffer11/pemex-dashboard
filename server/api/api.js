@@ -670,8 +670,6 @@ router.get('/filterOptions', async (req, res) => {
     }
     query += `\nWHERE 1 = 1 ${whereMap[q].query.join(' ')}`
 
-    console.log('herehere', q, query, whereMap[q].values)
-
     const queryContainer = `SELECT * FROM (${query}) a WHERE ${selectMap[q].notNull} IS NOT NULL`
     return queryPromise(q, queryContainer, whereMap[q].values).catch(e => {
 
