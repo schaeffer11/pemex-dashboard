@@ -59,7 +59,7 @@ import { KPI } from '../Common/KPIs'
       },
       yAxis: {
         title: {
-          text: 'Costos ($MNX)'
+          text: 'Costos ($MXN)'
         }
       },
       credits: {

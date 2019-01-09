@@ -37,7 +37,7 @@ const numWithCommas = (x) => {
                     {estCost ? `$${numWithCommas(estCost.toFixed(0))}` : '-' }
                 </div>
                 <div className='header'>
-                    Est. Costo Total (MNX)
+                    Est. Costo Total (MXN)
                 </div>
             </div>
             <div className='kpi'>
@@ -45,7 +45,7 @@ const numWithCommas = (x) => {
                     {cost ? `$${numWithCommas(cost.toFixed(0))}` : '-' }
                 </div>
                 <div className='header'>
-                    Costo Total (MNX)
+                    Costo Total (MXN)
                 </div>
             </div>
             <div className='kpi'>
