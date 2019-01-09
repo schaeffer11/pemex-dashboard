@@ -2005,7 +2005,7 @@ export const create = async (body, action, cb) => {
                                                                   })                                                               
 
 
-                                                                  connection.query(action === 'save' ? INSERT_HIST_INTERVENCIONES_NEW_QUERY.save : INSERT_HIST_INTERVENCIONES_NEW_QUERY.submit, [values], (err, results) => {
+                                                                  connection.query(values.length > 1 ? (action === 'save' ? INSERT_HIST_INTERVENCIONES_NEW_QUERY.save : INSERT_HIST_INTERVENCIONES_NEW_QUERY.submit) : DUMMY_QUERY, [values], (err, results) => {
                                                                       console.log('historial interventions', err)
                                                                       console.log('historial interventions', results)
 

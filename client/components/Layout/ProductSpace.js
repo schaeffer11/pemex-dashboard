@@ -84,9 +84,12 @@ import LoginForm from '../User/LoginForm'
   }
 }
 
+
+
 export default Productspace
 
-const PrivateRoute = ({ component: Component, user: user, ...properties, isAdmin }) => (
+
+const PrivateRoute = ({ component: Component, user: user, isAdmin, ...properties }) => (
   <Route {...properties} render={(props) => (
     user !== null
       ? <Component {...props} isAdmin={isAdmin} />
@@ -102,6 +105,3 @@ const AdminPrivateRoute = ({ component: Component, isAdmin, ...properties}) => {
       : <Redirect to={{pathname:'/', state: {referrer: props.location} }}/>
     )} />
   }
-
-
-

@@ -2,18 +2,14 @@
 import React from 'react'
 import { connect } from 'react-redux'
 import classnames from 'classnames'
+import { BrowserRouter } from 'react-router-dom'
 
 import Productbar from './ProductBar'
 import Productspace from './ProductSpace'
 import LoginForm from '../User/LoginForm'
 import { login, logout } from '../../redux/actions/user'
-import { BrowserRouter, Route, Redirect } from 'react-router-dom'
-
 
 const App = ({ user, loginAction, logoutAction, app }) => {
-  const body = user !== null
-    ? <Productspace />
-    : <LoginForm loginAction={loginAction} user={user} />
 
   return (
     <BrowserRouter>
