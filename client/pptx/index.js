@@ -1,6 +1,7 @@
 import PptxGenJS from 'pptxgenjs'
 import ReactHighcharts from 'react-highcharts'
 import { buildEstadoMecanicoYAparejo, buildFichaTecnicaDelCampo, buildFichaTecnicaDelPozo, buildSistemasArtificialesDeProduccion, buildEvaluacionPetrofisica, buildEvaluacionPetrofisicaImage, buildProposalCedula, buildGeneralProposal, buildLabReports, buildHistorialIntervenciones, buildChart, buildProductionChart, buildAforoChart, buildPressureChart, buildWaterAnalysis, buildResultsCedula, buildGeneralResults, buildGeometry, buildGraficaDeTratamiento, buildObjectivoYAlcances } from './slides'
+import { formatText } from './formatters'
 
 function buildMasterSlide(slideWidth, slideHeight, names) {
   const logo = { x: 0.7, y: 0.15, w: 1.5, h: 0.5, path: '/images/pemex-logo-fpo.png' }
@@ -85,7 +86,7 @@ export function buildTable(title, map, data) {
     const d = mapKeys.map((header) => {
       const options = { fontFace: 'Arial Narrow' }
       options.fill = index % 2 === 1 ? 'cdd4dc' : 'e8ebef'
-      const obj = { text: elem[header], options }
+      const obj = { text: formatText(elem[header]), options }
       return obj
     })
     return d
@@ -137,7 +138,7 @@ export function buildSimpleTable(title, map, data, hasUnits=true) {
     const { text, unit } = map[elem]
     const dataArray = [
       { text, options },
-      { text: data[elem], options },
+      { text: formatText(data[elem]), options },
     ]
     if (hasUnits) {
       dataArray.push({ text: unit, options })

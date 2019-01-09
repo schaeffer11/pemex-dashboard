@@ -623,9 +623,9 @@ import MoreKPIs from './MoreKPIs'
         }
         else {
           simulationData = [{
-            item: 'Longitud de agujero de gusano', unit: 'pg', sim: interventionData.LONGITUD_DE_AGUJERO_DE_GUSANO, actual: interventionResultsData.LONGITUD_DE_AGUJERO_DE_GUSANO
+            item: 'Longitud de agujero de gusano', unit: 'ft', sim: interventionData.LONGITUD_DE_AGUJERO_DE_GUSANO, actual: interventionResultsData.LONGITUD_DE_AGUJERO_DE_GUSANO
           },{
-            item: 'Penetración radial', unit: 'pg', sim: interventionData.PENETRACION_RADIAL, actual: interventionResultsData.PENETRACION_RADIAL
+            item: 'Penetración radial', unit: 'ft', sim: interventionData.PENETRACION_RADIAL, actual: interventionResultsData.PENETRACION_RADIAL
           }]
         }
       }

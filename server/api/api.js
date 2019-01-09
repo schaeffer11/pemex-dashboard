@@ -921,6 +921,7 @@ router.get('/getFields', async (req, res) => {
     if (data && data.length > 0) {
       data[0].P_ACTUAL_FECHA ? data[0].P_ACTUAL_FECHA = data[0].P_ACTUAL_FECHA.toJSON().slice(0, 10) : null
       data[0].FECHA_DE_EXPLOTACION ? data[0].FECHA_DE_EXPLOTACION = data[0].FECHA_DE_EXPLOTACION.toJSON().slice(0, 10) : null
+      data[0].DESCUBRIMIENTO ? data[0].DESCUBRIMIENTO = data[0].DESCUBRIMIENTO.toJSON().slice(0, 10) : null
 
       Object.keys(data[0]).forEach(key => {
         if (map[key]) {

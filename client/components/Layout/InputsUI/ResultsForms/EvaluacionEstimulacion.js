@@ -100,7 +100,7 @@ import { setGeneralEvaluacionEstimulacion, setMergeEvaluacionEstimulacion } from
           <InputRow
             header="Penetración radial"
             name='penetracionRadial'
-            unit="m"
+            unit="ft"
             value={penetracionRadial}
             onChange={e => setGeneralEvaluacionEstimulacion(['penetracionRadial'], e)}
             errors={this.state.errors}
@@ -109,7 +109,7 @@ import { setGeneralEvaluacionEstimulacion, setMergeEvaluacionEstimulacion } from
           <InputRow
             header="Longitud de agujero de gusano"
             name='longitudDeAgujeroDeGusano'
-            unit="m"
+            unit="ft"
             value={longitudDeAgujeroDeGusano}
             onChange={e => setGeneralEvaluacionEstimulacion(['longitudDeAgujeroDeGusano'], e)}
             errors={this.state.errors}
