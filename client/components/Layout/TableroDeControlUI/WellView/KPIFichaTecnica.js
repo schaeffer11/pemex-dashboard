@@ -27,8 +27,14 @@ const numWithCommas = (x) => {
     let pwfFecha = data.PWF_FECHA ? new Date(data.PWF_FECHA) : null
     pwfFecha = pwfFecha ? `${pwfFecha.getDate()}/${pwfFecha.getMonth() + 1}/${pwfFecha.getFullYear()}` : ''
 
-
-    return (        
+    Object.keys(data).forEach((key) => {
+      const value = data[key]
+      if (value === 'none' || value === 'None') {
+        data[key] = 'Ninguno'
+      }
+    })
+    
+    return (
       <div className="KPIs" style={{padding: '0px 20px 20px 20px'}}>
         <KPI header='Campo' value={data.FIELD_NAME} />
         <KPI header='Formación' value={data.FORMACION} />
@@ -46,12 +52,12 @@ const numWithCommas = (x) => {
         <KPI header='PWF' value={numWithCommas(data.PWF)} unit={<span> Kg/cm<sup>2</sup></span>}/>
         <KPI header='PWF Fecha' value={pwfFecha} />
         <KPI header='Δp/mes' value={data.DELTA_P_PER_MES} unit={<span> Kg/cm<sup>2</sup>/mes</span>}/>
-        <KPI header={<div>T<sub>YAC</sub></div>} value={numWithCommas(data.TYAC)} unit=' °C'/>
+        <KPI header={<div style={{ display: 'inline-block'}}>T<sub>YAC</sub></div>} value={numWithCommas(data.TYAC)} unit=' °C'/>
         <KPI header='PVT' value={data.PVT} />
         <KPI header='Aparejo de Producción' value={data.APAREJO_DE_PRODUCCION} />
         <KPI header='Prof Empacador' value={numWithCommas(data.PROF_EMPACADOR)} unit=' md' />
         <KPI header='Prof. sensor P y T' value={numWithCommas(data.PROF_SENSOR_PYT)} unit=' md' />
-        <KPI header='Tipo De Sistema' value={data.TIPO_DE_SISTEMA} />
+        <KPI header='Tipo de Sistema Artificial de Producción' value={data.TIPO_DE_SISTEMA} />
       </div>
     )
   }
