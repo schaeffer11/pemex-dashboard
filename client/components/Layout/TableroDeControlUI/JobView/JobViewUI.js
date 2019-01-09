@@ -437,9 +437,9 @@ import MoreKPIs from './MoreKPIs'
             <KPI className='kpi' header='Determinación del porcentaje de parafinas' value={specificLabData.length > 0 ? specificLabData[0].PORENTAJE_DE_PARAFINAS : null} unit='%' />
             <KPI className='kpi' header='Determinación del porcentaje de resinas asfalticas' value={specificLabData.length > 0 ? specificLabData[0].PORENTAJE_DE_RESINAS_ASFALTICAS : null} unit='%' />
             <KPI className='kpi' header='Determinación del porcentaje de contenido de sólidos' value={specificLabData.length > 0 ? specificLabData[0].PORENTAJE_DE_CONTENIDO_DE_SOLIDOS : null} unit='%' />
-            <KPI className='kpi' header='Densidad del aceite' value={specificLabData.length > 0 ? specificLabData[0].DENSIDAD_DEL_ACEITE : null} unit={<div>gr/cm<sup>3</sup></div>} />
-            <KPI className='kpi' header='Densidad del agua' value={specificLabData.length > 0 ? specificLabData[0].DENSIDAD_DEL_AGUA : null} unit={<div>gr/cm<sup>3</sup></div>} />
-            <KPI className='kpi' header='Densidad de la emulsión' value={specificLabData.length > 0 ? specificLabData[0].DENSIDAD_DE_LA_EMULSION : null} unit={<div>gr/cm<sup>3</sup></div>} />
+            <KPI className='kpi' header='Densidad del aceite' value={specificLabData.length > 0 ? specificLabData[0].DENSIDAD_DEL_ACEITE : null} unit={<div>g/cm<sup>3</sup></div>} />
+            <KPI className='kpi' header='Densidad del agua' value={specificLabData.length > 0 ? specificLabData[0].DENSIDAD_DEL_AGUA : null} unit={<div>g/cm<sup>3</sup></div>} />
+            <KPI className='kpi' header='Densidad de la emulsión' value={specificLabData.length > 0 ? specificLabData[0].DENSIDAD_DE_LA_EMULSION : null} unit={<div>g/cm<sup>3</sup></div>} />
             <KPI className='kpi' header='Viscosidad del aceite' value={specificLabData.length > 0 ? specificLabData[0].VISCOSIDAD_DEL_ACEITE : null} unit='cp' />
             <KPI className='kpi' header='Viscosidad de la emulsión' value={specificLabData.length > 0 ? specificLabData[0].VISCOSIDAD_DE_LA_EMULSION : null} unit='cp' />
             <KPI className='kpi' header='pH del agua' value={specificLabData.length > 0 ? specificLabData[0].PH_DEL_AGUA : null} unit='adim' />

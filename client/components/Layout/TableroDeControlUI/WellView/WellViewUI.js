@@ -46,7 +46,7 @@ import { fetchFilterData } from '../../../../lib/filters'
       `Cima (md)`,
       `Base (md)`,
       `Lodo perdido (m3)`,
-      `Dens. (gr/cm3)`
+      `Dens. (g/cm3)`
     ])
 
 
@@ -77,7 +77,7 @@ import { fetchFilterData } from '../../../../lib/filters'
       `V Dol. (%)`,
       `Porosidad (%)`,
       `Sw. (%)`,
-      `Dens. (gr/cm3)`,
+      `Dens. (g/cm3)`,
       `Resis. (ohm)`,
       `Perm (md)`
     ])

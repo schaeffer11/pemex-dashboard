@@ -21,7 +21,7 @@ import ReactTable from 'react-table'
         Header: <div>Lodo perdido<br></br>(m<sup>3</sup>)</div>,
         accessor: 'LODO_PERDIDO'
       }, { 
-        Header: <div>Dens.<br></br>(gr/cm<sup>3</sup>)</div>,
+        Header: <div>Dens.<br></br>(g/cm<sup>3</sup>)</div>,
         accessor: 'DENSIDAD'
       }
     ]
