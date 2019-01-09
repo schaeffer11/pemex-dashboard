@@ -1183,6 +1183,7 @@ router.get('/getWell', async (req, res) => {
 
   const map = {
     WELL_FORMACION_ID: { parent: 'fichaTecnicaDelPozoHighLevel', child: 'pozo'},
+    WELL_NAME: { parent: 'fichaTecnicaDelPozoHighLevel', child: 'pozoName'},
     SUBDIRECCION: { parent: 'fichaTecnicaDelPozoHighLevel', child: 'subdireccion'},
     ACTIVO: { parent: 'fichaTecnicaDelPozoHighLevel', child: 'activo'},
     FORMACION: { parent: 'fichaTecnicaDelPozoHighLevel', child: 'formacion'},
