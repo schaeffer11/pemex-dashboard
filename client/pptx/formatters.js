@@ -66,19 +66,16 @@ export function formatText(str) {
     return ''
   }
   if(!isNaN(str)) {
-    console.log("formatting number", str)
     return dealWithNaN(str)
   }
   // This awful regex unfortunately works better than moment's isValid date method
   const isValidDate = /\d{4}\-(0?[1-9]|1[012])\-(0?[1-9]|[12][0-9]|3[01])*/.test(str)
   if (isValidDate) {
-    console.log("formatting date", str)
     return dateReformat(str)
   }
   // if word is in special dictionary return that
   const wordMap = specialTermDictionary()
   if (wordMap[str]) {
-    console.log("formatting special word", str)
     return wordMap[str]
   }
   // if first letter is capitalized return string

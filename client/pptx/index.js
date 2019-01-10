@@ -247,7 +247,6 @@ async function buildAndSkipError(index, everything, hasResults, updateProgress) 
 }
 
 export async function generatePowerPoint(token, jobID, jobType, updateProgress) {
-  // console.log('generating powerpoint')
   const slideWidth = 13.3
   const slideHeight = 7.5
   const pptx = new PptxGenJS()
