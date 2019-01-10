@@ -1,6 +1,7 @@
 import PptxGenJS from 'pptxgenjs'
 import ReactHighcharts from 'react-highcharts'
-import { buildEstadoMecanicoYAparejo, buildFichaTecnicaDelCampo, buildFichaTecnicaDelPozo, buildSistemasArtificialesDeProduccion, buildEvaluacionPetrofisica, buildEvaluacionPetrofisicaImage, buildProposalCedula, buildGeneralProposal, buildLabReports, buildHistorialIntervenciones, buildChart, buildProductionChart, buildAforoChart, buildPressureChart, buildWaterAnalysis, buildResultsCedula, buildGeneralResults, buildGeometry, buildGraficaDeTratamiento, buildObjectivoYAlcances } from './slides'
+import { buildEstadoMecanicoYAparejo, buildFichaTecnicaDelCampo, buildFichaTecnicaDelPozo, buildSistemasArtificialesDeProduccion, buildEvaluacionPetrofisica, buildEvaluacionPetrofisicaImage, buildProposalCedula, buildGeneralProposal, buildLabReports, buildHistorialIntervenciones, buildChart, buildProductionChart, buildAforoChart, buildPressureChart, buildWaterAnalysis, buildResultsCedula, buildGeneralResults, buildGeometry, buildGraficaDeTratamiento, buildObjectivoYAlcances, buildTitleSlide } from './slides'
+import { formatText } from './formatters'
 
 function buildMasterSlide(slideWidth, slideHeight, names) {
   const logo = { x: 0.7, y: 0.15, w: 1.5, h: 0.5, path: '/images/pemex-logo-fpo.png' }
@@ -85,7 +86,7 @@ export function buildTable(title, map, data) {
     const d = mapKeys.map((header) => {
       const options = { fontFace: 'Arial Narrow' }
       options.fill = index % 2 === 1 ? 'cdd4dc' : 'e8ebef'
-      const obj = { text: elem[header], options }
+      const obj = { text: formatText(elem[header]), options }
       return obj
     })
     return d
@@ -137,7 +138,7 @@ export function buildSimpleTable(title, map, data, hasUnits=true) {
     const { text, unit } = map[elem]
     const dataArray = [
       { text, options },
-      { text: data[elem], options },
+      { text: formatText(data[elem]), options },
     ]
     if (hasUnits) {
       dataArray.push({ text: unit, options })
@@ -185,7 +186,7 @@ function buildSectionSlide(pptx, title) {
   slide.addText(title, { w: '100%', h: '100%', fontSize: 48, fontFace: 'Arial Narrow', align: 'center', valign: 'middle' })
 }
 
-async function getHasresults(token, id) {
+async function getHasResults(token, id) {
   const headers = {
     headers: {
       'Authorization': `Bearer ${token}`,
@@ -246,7 +247,6 @@ async function buildAndSkipError(index, everything, hasResults, updateProgress) 
 }
 
 export async function generatePowerPoint(token, jobID, jobType, updateProgress) {
-  // console.log('generating powerpoint')
   const slideWidth = 13.3
   const slideHeight = 7.5
   const pptx = new PptxGenJS()
@@ -256,10 +256,11 @@ export async function generatePowerPoint(token, jobID, jobType, updateProgress) 
   const masterSlide = buildMasterSlide(slideWidth, slideHeight, names)
   pptx.defineSlideMaster(masterSlide)
   const images = await getData('/api/getImages', token, { transactionID: jobID })
-  const hasResults = await getHasresults(token, jobID)
+  const hasResults = await getHasResults(token, jobID)
   // const hasResults = false
   const firstHalfTasks = firstHalf(pptx, token, jobID, images)
   let index = 1
+  buildTitleSlide(pptx, names)
   index = await buildAndSkipError(index, firstHalfTasks, hasResults, updateProgress)
   if (hasResults) {
     const imageResults = await getData(`/job/getResultsImages`, token, { transactionID: jobID })

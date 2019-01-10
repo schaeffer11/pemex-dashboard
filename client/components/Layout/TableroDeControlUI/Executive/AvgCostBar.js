@@ -79,7 +79,7 @@ let colorWheel = [
       },
       yAxis: {
         title: {
-          text: 'MNX'
+          text: 'MXN'
         }
       },
 	    credits: {

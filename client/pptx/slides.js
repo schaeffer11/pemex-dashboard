@@ -10,6 +10,47 @@ function getPositions(len) {
   }
 }
 
+export async function buildTitleSlide(pptx, names) {
+  const slideWidth = 13.3
+  const slideHeight = 7.5
+  const titleSlide = pptx.addNewSlide()
+  titleSlide.back = 'e2e2e2'
+
+  // Shapes
+  const bottomBarLight = { x: 0, get y() { return slideHeight - this.h }, w:'100%', h: 0.15, fill:'00a02d' }
+  const bottomBarDarkLeft = { x: 0.6, y: bottomBarLight.y, w:'18%', h: 0.15, fill:'005618' }
+  const bottomBarDarkRight = { x: slideWidth - 1.3, y: bottomBarLight.y, w:'5%', h: 0.15, fill:'005618' }
+  const topBar = { x: 0, y: 0, w:'100%', h: 0.10, fill:'ce0a00' }
+  titleSlide.addShape(pptx.shapes.RECTANGLE, bottomBarLight)
+  titleSlide.addShape(pptx.shapes.RECTANGLE, bottomBarDarkLeft)
+  titleSlide.addShape(pptx.shapes.RECTANGLE, bottomBarDarkRight)
+  titleSlide.addShape(pptx.shapes.RECTANGLE, topBar)
+
+  // Static text
+  const mainTextOptions = { fontFace: 'Arial Narrow', align: 'center', w: '100%' }
+  const titleTextOptions = { ...mainTextOptions, bold: true, }
+  const anotherSubTitleTextOptions = { ...mainTextOptions, fontSize: 20, color: '717171' }
+  titleSlide.addText('Pemex Exploración y Producción\nSubdirección de Especialidad Técnica de Explotación', { x: 0.0, y: 1.0, ...titleTextOptions, fontSize: 24 })
+  titleSlide.addText('Homologación de Procesos de Estimulación y Fracturamiento', { x: 0.0, y: 2.0, ...titleTextOptions, fontSize: 20 })
+  titleSlide.addText('Gerencia de Producción.- Coordinación de Productividad de Pozos', { x: 0.0, y: 2.5, ...anotherSubTitleTextOptions })
+
+  // Dynamic text
+  const date = new Date()
+  const dateStr = `${date.getDate()}/${date.getMonth() + 1}/${date.getFullYear()}`
+  const namesTitleStr = 'Subdirección:\nActivo:\nCampo:\nPozo:\nFormación:'
+  const namesStr = `${names.subdireccion.split('Sub. ')[1]}\n${names.activo}\n${names.field}\n${names.well}\n${names.formation}`
+  titleSlide.addText(namesTitleStr, { x: 4.5, y: 3.75, w: 2, align: 'right', fontSize: 18, bold: true })
+  titleSlide.addText(namesStr, { x: 6.5, y: 3.75, w: 2, align: 'left', fontSize: 18 })
+  titleSlide.addText(dateStr, { x: 11.75, y: 7, fontSize: 16, fontFace: 'Arial Narrow' })
+
+  // Images
+  titleSlide.addImage({ x: 0.2, y: 0.2, w: 1.89, h: 0.63, path: '/images/pemex-logo-fpo.png' })
+  titleSlide.addImage({ path: '/images/pptx/portada_abajo.png', x: getPositions(7.79).middle, y: 5.5, h: 1.5, w: 7.79 })
+  titleSlide.addImage({ x: 11, y: 2.0, h: 4.32, w: 1.74, path: '/images/pptx/portada_derecha.png' })
+  titleSlide.addImage({ x: 0.65, y: 2.0,  h: 3.38, w: 1.68, path: '/images/pptx/portada_izquierda.jp1g' })
+  return slide
+}
+
 export async function buildObjectivoYAlcances(pptx, token, id) {
   const data = await getData('/api/getInterventionBase', token, { transactionID: id })
   const { intervencionProgramada } = data.objetivoYAlcancesIntervencion
@@ -19,6 +60,7 @@ export async function buildObjectivoYAlcances(pptx, token, id) {
   slide.addText('Propuesta', { placeholder: 'slide_title' })
   const { middle } = getPositions(10)
   slide.addTable(table, { x: middle, y: 1.0, colW: [2.0, 8], fontSize: 18 })
+  return slide
 }
 
 export async function buildFichaTecnicaDelCampo(pptx, token, id) {
@@ -647,12 +689,8 @@ export async function buildAforoChart(pptx, token, id) {
 
 export async function buildPressureChart(pptx, token, id, isField = false) {
   let data
-  if (isField) {
-    data = await getPostData('/well/fieldHistoricalPressure', token, id)
-  } else {
-    data = await getPostData('/well/pressureData', token, id)
-  }
-
+  let pwsData = []
+  let pwfData = []
   let config = {
     chart: {
       type: 'line',
@@ -673,16 +711,6 @@ export async function buildPressureChart(pptx, token, id, isField = false) {
       },
       type: 'datetime'
     },
-    yAxis: [{
-      title: {
-        text: 'PWS (someUnit)'
-      }
-    }, {
-      opposite: true,
-      title: {
-        text: 'PWF (someUnit)'
-      }
-    }],
     plotOptions: {
       series: {
         animation: false,
@@ -694,22 +722,13 @@ export async function buildPressureChart(pptx, token, id, isField = false) {
 
       }
     },
-    series: [{
-      name: 'PWS',
-      color: '#0000A0',
-      label: 'bbl/d',
-      data: []
-    }, {
-      name: 'PWF',
-      color: '#3a88c0',
-      yAxis: 1,
-      label: 'MMpc/d',
-      data: []
-    }]
   }
 
-  let pwsData = []
-  let pwfData = []
+  if (isField) {
+    data = await getPostData('/well/fieldHistoricalPressure', token, id)
+  } else {
+    data = await getPostData('/well/pressureData', token, id)
+  }
 
   data.forEach(i => {
     if (i.FECHA) {
@@ -721,8 +740,29 @@ export async function buildPressureChart(pptx, token, id, isField = false) {
     }
   })
 
-  config.series[0].data = pwsData.sort((a, b) => { return a[0] - b[0] })
-  config.series[1].data = pwfData.sort((a, b) => { return a[0] - b[0] })
+  config.series = [{
+    name: 'PWS',
+    color: '#0000A0',
+    label: 'bbl/d',
+    data: pwsData.sort((a, b) => { return a[0] - b[0] })
+  }]
+  config.yAxis = [{ title: { text: 'PWS (Kg/cm2)' } }]
+
+  if (!isField) {
+    config.series.push({
+      name: 'PWF',
+      color: '#3a88c0',
+      yAxis: 1,
+      label: 'MMpc/d',
+      data: pwfData.sort((a, b) => { return a[0] - b[0] })
+    })
+    config.yAxis.push({
+      opposite: true,
+      title: {
+        text: 'PWF (Kg/cm2)'
+      }
+    })
+  }
 
   const base64 = await buildChartBase64(config)
   const slide = pptx.addNewSlide('MASTER_SLIDE')

@@ -2,6 +2,7 @@ import React, { PureComponent } from 'react'
 import autobind from 'autobind-decorator'
 
 import { KPI } from '../Common/KPIs'
+import { dealWithNaN } from '../../../../lib/helpers';
 
 const numWithCommas = (x) => {
   if (x === 0) {
@@ -43,15 +44,16 @@ const numWithCommas = (x) => {
       company = estIncData[0].COMPANY
     }
 
+    
     return (
       <div className="kpis">
         <KPI className='company' header='Compañía' value={company} />
-        <KPI className='est-cost' header='Costos Estimados' value={'$' + numWithCommas(estCost.toFixed(0))} unit=' MNX'/>
-        <KPI className='cost' header='Costos Reales' value={'$' + numWithCommas(cost.toFixed(0))} unit=' MNX'/>
-        <KPI className='delta-cost' header='Desviación' value={delta.toFixed(2) + '%'} />
-        <KPI className='est-prod' header='Prod. Inc. Estimada' value={estProd} unit=' bbl/d'/>
-        <KPI className='prod' header='Prod. Inc. Real' value={prod} unit=' bbl/d'/>
-        <KPI className='delta-prod' header='Desviación' value={deltaProd.toFixed(2) + '%'} />
+        <KPI className='est-cost' header='Costos Estimados' value={'$' + numWithCommas(dealWithNaN(estCost).toFixed(0))} unit=' MXN'/>
+        <KPI className='cost' header='Costos Reales' value={'$' + numWithCommas(dealWithNaN(cost).toFixed(0))} unit=' MXN'/>
+        <KPI className='delta-cost' header='Desviación' value={dealWithNaN(delta).toFixed(2) + ' %'} />
+        <KPI className='est-prod' header='Prod. Inc. Estimada' value={dealWithNaN(estProd)} unit=' bbl/d'/>
+        <KPI className='prod' header='Prod. Inc. Real' value={dealWithNaN(prod)} unit=' bbl/d'/>
+        <KPI className='delta-prod' header='Desviación' value={dealWithNaN(deltaProd).toFixed(2) + ' %'} />
       </div>
     )
   }

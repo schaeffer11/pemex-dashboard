@@ -61,7 +61,7 @@ import { RenameInterventionTypes } from '../../../../lib/formatters'
        },
       yAxis: {
         title: {
-          text: 'Costos ($MNX)'
+          text: 'Costos ($MXN)'
         }
       },
       plotOptions: {

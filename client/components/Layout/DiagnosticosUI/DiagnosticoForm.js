@@ -573,7 +573,7 @@ import { setIsLoading, setShowForms } from '../../../redux/actions/global'
                     {errors.indiceColoidal && touched.indiceColoidal && <div class="error">{errors.indiceColoidal}</div>}
                   </div>
                   <div className="trow">
-                    <div className="description">Densidad de la emulsión (gr/cm3)</div>
+                    <div className="description">Densidad de la emulsión (g/cm3)</div>
                     <div className="bool"><BoolInput name="densidadEmulsion" /></div>
                     <div className="observations"><Field component="textarea" name="densidadEmulsionObs" /></div>
                     {errors.densidadEmulsion && touched.densidadEmulsion && <div class="error">{errors.densidadEmulsion}</div>}

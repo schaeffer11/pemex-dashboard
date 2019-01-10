@@ -684,7 +684,7 @@ router.get('/filterOptions', async (req, res) => {
 router.get('/getSpecificFieldWell', (req, res) => {
   const { transactionID } = req.query
   const query = `
-    SELECT t.FORMACION, fwm.WELL_NAME, fwm.FIELD_NAME
+    SELECT t.FORMACION, fwm.WELL_NAME, fwm.FIELD_NAME, fwm.SUBDIRECCION_NAME, fwm.ACTIVO_NAME
     FROM Transactions t JOIN FieldWellMapping fwm ON t.WELL_FORMACION_ID = fwm.WELL_FORMACION_ID
     WHERE t.TRANSACTION_ID = ?`
   connection.query(query, transactionID, (err, results) => {
@@ -696,6 +696,8 @@ router.get('/getSpecificFieldWell', (req, res) => {
       well: results[0].WELL_NAME,
       field: results[0].FIELD_NAME,
       formation: results[0].FORMACION,
+      subdireccion: results[0].SUBDIRECCION_NAME,
+      activo: results[0].ACTIVO_NAME,
     })
   })
 })
@@ -921,6 +923,7 @@ router.get('/getFields', async (req, res) => {
     if (data && data.length > 0) {
       data[0].P_ACTUAL_FECHA ? data[0].P_ACTUAL_FECHA = data[0].P_ACTUAL_FECHA.toJSON().slice(0, 10) : null
       data[0].FECHA_DE_EXPLOTACION ? data[0].FECHA_DE_EXPLOTACION = data[0].FECHA_DE_EXPLOTACION.toJSON().slice(0, 10) : null
+      data[0].DESCUBRIMIENTO ? data[0].DESCUBRIMIENTO = data[0].DESCUBRIMIENTO.toJSON().slice(0, 10) : null
 
       Object.keys(data[0]).forEach(key => {
         if (map[key]) {
@@ -1183,6 +1186,7 @@ router.get('/getWell', async (req, res) => {
 
   const map = {
     WELL_FORMACION_ID: { parent: 'fichaTecnicaDelPozoHighLevel', child: 'pozo'},
+    WELL_NAME: { parent: 'fichaTecnicaDelPozoHighLevel', child: 'pozoName'},
     SUBDIRECCION: { parent: 'fichaTecnicaDelPozoHighLevel', child: 'subdireccion'},
     ACTIVO: { parent: 'fichaTecnicaDelPozoHighLevel', child: 'activo'},
     FORMACION: { parent: 'fichaTecnicaDelPozoHighLevel', child: 'formacion'},
