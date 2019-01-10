@@ -47,7 +47,7 @@ export async function buildTitleSlide(pptx, names) {
   titleSlide.addImage({ x: 0.2, y: 0.2, w: 1.89, h: 0.63, path: '/images/pemex-logo-fpo.png' })
   titleSlide.addImage({ path: '/images/pptx/portada_abajo.png', x: getPositions(7.79).middle, y: 5.5, h: 1.5, w: 7.79 })
   titleSlide.addImage({ x: 11, y: 2.0, h: 4.32, w: 1.74, path: '/images/pptx/portada_derecha.png' })
-  titleSlide.addImage({ x: 0.65, y: 2.0,  h: 3.38, w: 1.68, path: '/images/pptx/portada_izquierda.jp1g' })
+  titleSlide.addImage({ x: 0.65, y: 2.0,  h: 3.38, w: 1.68, path: '/images/pptx/portada_izquierda.jpg' })
   return slide
 }
 
