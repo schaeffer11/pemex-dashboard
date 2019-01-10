@@ -160,6 +160,9 @@ import MoreKPIs from './MoreKPIs'
       .then(r => {
 
         let jobs = []
+        const proposals = []
+        const realJobs = []
+        console.log('da jerbs', r)
 
         r = r.sort((a, b) => {
           return a.FECHA_PROGRAMADA_INTERVENCION - b.FECHA_PROGRAMADA_INTERVENCION
@@ -174,7 +177,7 @@ import MoreKPIs from './MoreKPIs'
           jobs.push({
             type: type,
             date: date,
-            transID: i.PROPUESTA_ID,
+            transID: i.TRANSACTION_ID,
 
           })
         })

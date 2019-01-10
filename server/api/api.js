@@ -553,13 +553,17 @@ router.get('/getFormationTypes', (req, res) => {
 
 router.get('/getJobs', (req, res) => {
     let { well, lowDate, highDate } = req.query
-    const query = `SELECT * FROM Intervenciones inter
-    JOIN TransactionsResults tr on inter.TRANSACTION_ID = tr.PROPUESTA_ID
-    WHERE inter.WELL_FORMACION_ID = ? AND tr.FECHA_INTERVENCION >= ? AND tr.FECHA_INTERVENCION <= ?`
-    
-    // JOIN TransactionsResults tr on t.TRANSACTION_ID = tr.PROPUESTA_ID
-
+    // const query = `SELECT * FROM Intervenciones inter
+    // JOIN TransactionsResults tr on inter.TRANSACTION_ID = tr.PROPUESTA_ID
+    // WHERE inter.WELL_FORMACION_ID = ? AND (tr.FECHA_INTERVENCION >= ? OR tr.FECHA_INTERVENCION IS NULL) AND (tr.FECHA_INTERVENCION <= ? OR tr.FECHA_INTERVENCION IS NULL)`
+    const query = `SELECT * FROM (SELECT inter.*, ISNULL(tr.TRANSACTION_ID) AS HAS_NO_RESULTS, tr.FECHA_INTERVENCION FROM Intervenciones inter
+      LEFT JOIN TransactionsResults tr on inter.TRANSACTION_ID = tr.PROPUESTA_ID
+      WHERE 1 = 1
+      AND inter.WELL_FORMACION_ID = ?
+      AND (tr.FECHA_INTERVENCION >= ? OR tr.FECHA_INTERVENCION IS NULL)
+      AND (tr.FECHA_INTERVENCION <= ? OR tr.FECHA_INTERVENCION IS NULL)) a`
     connection.query(query, [well, lowDate, highDate], (err, results) => {
+      console.log('da results', results)
       res.json(results)
     })
 })
