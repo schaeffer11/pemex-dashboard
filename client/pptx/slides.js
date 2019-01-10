@@ -690,12 +690,8 @@ export async function buildAforoChart(pptx, token, id) {
 
 export async function buildPressureChart(pptx, token, id, isField = false) {
   let data
-  if (isField) {
-    data = await getPostData('/well/fieldHistoricalPressure', token, id)
-  } else {
-    data = await getPostData('/well/pressureData', token, id)
-  }
-
+  let pwsData = []
+  let pwfData = []
   let config = {
     chart: {
       type: 'line',
@@ -716,16 +712,6 @@ export async function buildPressureChart(pptx, token, id, isField = false) {
       },
       type: 'datetime'
     },
-    yAxis: [{
-      title: {
-        text: 'PWS (someUnit)'
-      }
-    }, {
-      opposite: true,
-      title: {
-        text: 'PWF (someUnit)'
-      }
-    }],
     plotOptions: {
       series: {
         animation: false,
@@ -737,22 +723,13 @@ export async function buildPressureChart(pptx, token, id, isField = false) {
 
       }
     },
-    series: [{
-      name: 'PWS',
-      color: '#0000A0',
-      label: 'bbl/d',
-      data: []
-    }, {
-      name: 'PWF',
-      color: '#3a88c0',
-      yAxis: 1,
-      label: 'MMpc/d',
-      data: []
-    }]
   }
 
-  let pwsData = []
-  let pwfData = []
+  if (isField) {
+    data = await getPostData('/well/fieldHistoricalPressure', token, id)
+  } else {
+    data = await getPostData('/well/pressureData', token, id)
+  }
 
   data.forEach(i => {
     if (i.FECHA) {
@@ -764,8 +741,29 @@ export async function buildPressureChart(pptx, token, id, isField = false) {
     }
   })
 
-  config.series[0].data = pwsData.sort((a, b) => { return a[0] - b[0] })
-  config.series[1].data = pwfData.sort((a, b) => { return a[0] - b[0] })
+  config.series = [{
+    name: 'PWS',
+    color: '#0000A0',
+    label: 'bbl/d',
+    data: pwsData.sort((a, b) => { return a[0] - b[0] })
+  }]
+  config.yAxis = [{ title: { text: 'PWS (Kg/cm2)' } }]
+
+  if (!isField) {
+    config.series.push({
+      name: 'PWF',
+      color: '#3a88c0',
+      yAxis: 1,
+      label: 'MMpc/d',
+      data: pwfData.sort((a, b) => { return a[0] - b[0] })
+    })
+    config.yAxis.push({
+      opposite: true,
+      title: {
+        text: 'PWF (Kg/cm2)'
+      }
+    })
+  }
 
   const base64 = await buildChartBase64(config)
   const slide = pptx.addNewSlide('MASTER_SLIDE')
