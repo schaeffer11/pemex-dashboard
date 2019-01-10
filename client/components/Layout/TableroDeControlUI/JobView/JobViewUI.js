@@ -361,7 +361,7 @@ import MoreKPIs from './MoreKPIs'
 
     }
     else {
-      return <div>No Images</div>
+      return <div>No Imágenes</div>
     }
   } 
 
@@ -395,7 +395,7 @@ import MoreKPIs from './MoreKPIs'
                   Header: 'Separación de fases',
                   accessor: 'SEPARACION_DE_FASES',
                 }, { 
-                  Header: 'Solidos',
+                  Header: 'Solidós',
                   accessor: 'SOLIDOS',
                 }, {
                   Header: 'Condición',
@@ -407,8 +407,8 @@ import MoreKPIs from './MoreKPIs'
             <div>
               {lab.name}
             </div>
-            <KPI className='kpi' header='Compania' value={lab.compania}/>
-            <KPI className='kpi' header='Superviso' value={lab.superviso}/>
+            <KPI className='kpi' header='Compañia' value={lab.compania}/>
+            <KPI className='kpi' header='Supervisó' value={lab.superviso}/>
             <KPI className='kpi' header='Observaciones' type={'wide'} value={lab.observaciones}/>
             <ReactTable
               className="-striped"
@@ -448,7 +448,7 @@ import MoreKPIs from './MoreKPIs'
             <KPI className='kpi' header='Compania' value={lab.compania}/>
             <KPI className='kpi' header='Superviso' value={lab.superviso}/>
             <KPI className='kpi' header='Observaciones' type={'wide'} value={lab.observaciones}/>
-            <img style={{objectFit: 'contain'}} src={labImage.imgURL}></img> 
+            <img style={{objectFit: 'contain'}} src={labImage ? labImage.imgURL : null }></img> 
           </div>
           )
         break;
@@ -467,7 +467,7 @@ import MoreKPIs from './MoreKPIs'
             <KPI className='kpi' header='Compania' value={lab.compania}/>
             <KPI className='kpi' header='Superviso' value={lab.superviso}/>
             <KPI className='kpi' header='Observaciones' type={'wide'} value={lab.observaciones}/>
-            <img style={{objectFit: 'contain'}} src={labImage.imgURL}></img> 
+            <img style={{objectFit: 'contain'}} src={labImage ? labImage.imgURL : null }></img> 
           </div>
           )
         break;
@@ -485,7 +485,7 @@ import MoreKPIs from './MoreKPIs'
             <KPI className='kpi' header='Compania' value={lab.compania}/>
             <KPI className='kpi' header='Superviso' value={lab.superviso}/>
             <KPI className='kpi' header='Observaciones' type={'wide'} value={lab.observaciones}/>
-            <img style={{objectFit: 'contain'}} src={labImage.imgURL}></img> 
+            <img style={{objectFit: 'contain'}} src={labImage ? labImage.imgURL : null }></img> 
           </div>
           )
         break;
@@ -505,7 +505,7 @@ import MoreKPIs from './MoreKPIs'
             <KPI className='kpi' header='Compania' value={lab.compania}/>
             <KPI className='kpi' header='Superviso' value={lab.superviso}/>
             <KPI className='kpi' header='Observaciones' type={'wide'} value={lab.observaciones}/>
-            <img style={{objectFit: 'contain'}} src={labImage.imgURL}></img> 
+            <img style={{objectFit: 'contain'}} src={labImage ? labImage.imgURL : null }></img> 
           </div>
           )
         break;
@@ -540,7 +540,7 @@ import MoreKPIs from './MoreKPIs'
               pageSize={specificLabData.length}
               sortable={false}
             />
-            <img style={{objectFit: 'contain'}} src={labImage.imgURL}></img> 
+            <img style={{objectFit: 'contain'}} src={labImage ? labImage.imgURL : null }></img> 
           </div>
           )
         break;
@@ -556,7 +556,7 @@ import MoreKPIs from './MoreKPIs'
             <KPI className='kpi' header='Compania' value={lab.compania}/>
             <KPI className='kpi' header='Superviso' value={lab.superviso}/>
             <KPI className='kpi' header='Observaciones' type={'wide'} value={lab.observaciones}/>
-            <img style={{objectFit: 'contain'}} src={labImage.imgURL}></img> 
+            <img style={{objectFit: 'contain'}} src={labImage ? labImage.imgURL : null }></img> 
           </div>
           )
         break;
@@ -581,6 +581,43 @@ import MoreKPIs from './MoreKPIs'
 
 
     buildModal() {
+    let { specificLabData, specificLab, labData, imageData } = this.state
+    let lab = labData.find(i => i.id === specificLab)
+    let name = lab.type
+
+    switch (lab.type) {
+      case 'pruebasDeCompatibilidad':
+        name = 'Pruebas de compatiblidad por emulsión'
+        break;
+      case 'caracterizacionFisico':
+        name = 'Caracterización fisico-química de fluidos'
+        break;
+      case 'pruebasGelDeFractura':
+        name = 'Pruebas gel de fractura'
+        break;
+      case 'pruebasDeSolubilidad':
+        name = 'Pruebas de solubilidad'
+        break;
+      case 'pruebasParaApuntalante':
+        name = 'Pruebas para apuntalante'
+        break;
+      case 'pruebasDeGrabado':
+        name = 'Pruebas de grabado'
+        break;
+      case 'cromatografiaDelGas':
+        name = 'Cromatografía del gas'
+        break;
+      case 'pruebaDeDureza':
+        name = 'Prueba de dureza'
+        break;
+      case 'determinacionDeLaCalidad':
+        name = 'Determinación de la calidad método de los cloruros'
+        break;
+      case 'curvaDeViscosidad':
+        name = 'Curva De Viscosidad'
+        break;
+    }
+
     return (
       <AriaModal
         titleId="save-modal"
@@ -594,7 +631,7 @@ import MoreKPIs from './MoreKPIs'
       >
       <div className="modalTest" >
         <div className="modal-title">
-          Lab Test Data
+          {name}
         </div>
         <div className="modal-body" >
           {this.makeLabModal()}
