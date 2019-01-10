@@ -684,7 +684,7 @@ router.get('/filterOptions', async (req, res) => {
 router.get('/getSpecificFieldWell', (req, res) => {
   const { transactionID } = req.query
   const query = `
-    SELECT t.FORMACION, fwm.WELL_NAME, fwm.FIELD_NAME
+    SELECT t.FORMACION, fwm.WELL_NAME, fwm.FIELD_NAME, fwm.SUBDIRECCION_NAME, fwm.ACTIVO_NAME
     FROM Transactions t JOIN FieldWellMapping fwm ON t.WELL_FORMACION_ID = fwm.WELL_FORMACION_ID
     WHERE t.TRANSACTION_ID = ?`
   connection.query(query, transactionID, (err, results) => {
@@ -696,6 +696,8 @@ router.get('/getSpecificFieldWell', (req, res) => {
       well: results[0].WELL_NAME,
       field: results[0].FIELD_NAME,
       formation: results[0].FORMACION,
+      subdireccion: results[0].SUBDIRECCION_NAME,
+      activo: results[0].ACTIVO_NAME,
     })
   })
 })
