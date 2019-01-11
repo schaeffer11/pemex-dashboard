@@ -22,6 +22,7 @@ import ExportPptx from './ExportPptx';
 import { convertLowDate, convertHighDate } from '../../../../lib/formatters';
 import { KPI } from '../Common/KPIs'
 import MoreKPIs from './MoreKPIs'
+import { formatText } from '../../../../pptx/formatters';
 
 @autobind class jobViewUI extends Component {
   constructor(props) {
@@ -380,6 +381,12 @@ import MoreKPIs from './MoreKPIs'
     lab = lab ? lab : {}
 
     let columns
+    specificLabData.forEach((row) => {
+      Object.keys(row).forEach((key) => {
+        console.log('what am i', key, row[key])
+        row[key] = formatText(row[key])
+      })
+    })
     switch(lab.type) {
         case 'pruebasDeCompatibilidad':
           columns = [
@@ -415,7 +422,7 @@ import MoreKPIs from './MoreKPIs'
             <KPI className='kpi' header='Supervisó' value={lab.superviso}/>
             <KPI className='kpi' header='Observaciones' type={'wide'} value={lab.observaciones}/>
             <ReactTable
-              className="-striped"
+              className="table"
               data={specificLabData}
               columns={columns}
               showPagination={false}
@@ -536,7 +543,7 @@ import MoreKPIs from './MoreKPIs'
             <KPI className='kpi' header='Superviso' value={lab.superviso}/>
             <KPI className='kpi' header='Observaciones' type={'wide'} value={lab.observaciones}/>
             <ReactTable
-              className="-striped"
+              className="table"
               data={specificLabData}
               columns={columns}
               showPagination={false}

@@ -2,6 +2,7 @@ import React, { PureComponent } from 'react'
 import autobind from 'autobind-decorator'
 import ReactHighCharts from 'react-highcharts'
 import { KPI } from '../Common/KPIs'
+import { formatText } from '../../../../pptx/formatters';
 
 const numWithCommas = (x) => {
   if (x === 0) {
@@ -18,9 +19,10 @@ const numWithCommas = (x) => {
 
   render() {
     let { data } = this.props
-
     data.length > 0 ? data = data[0] : data = {}
-
+    Object.keys(data).forEach((key) => {
+      data[key] = formatText(data[key])
+    })
 
     return (        
       <div className="KPIs" style={{padding: '0px 20px 20px 20px'}}>
