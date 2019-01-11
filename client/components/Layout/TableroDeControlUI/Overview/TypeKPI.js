@@ -3,6 +3,7 @@ import autobind from 'autobind-decorator'
 import ReactHighcharts from 'react-highcharts'
 import Gauge from './Gauge'
 import Bar from './Bar'
+import { dealWithNaN } from '../../../../lib/helpers';
 
 const numWithCommas = (x) => {
   if (x === 0) {
@@ -21,14 +22,14 @@ const numWithCommas = (x) => {
     let { name, classname, cost, estCost, numProposals, numResults, days, percEstimated, percResults, prodEstimated, prodReal } = data
 
     percResults = percResults ? percResults : 0
-
+    
     return (
       <div className={`kpi-outer ${classname}`}>
         <div className='name'>
             {name}
         </div>
         <div className = 'gauge' style={{height: '210px', width: '50%', display: 'inline-block', borderBottom: 'solid 2px #b1b1b1', verticalAlign: 'top'}}>
-            <Gauge topLabel={`${numResults}/${numProposals}`} topSubLabel={'# de Tratamientos'} botLabel={`${percResults}`} botSubLabel={'% de Avance'} value={percResults} />
+            <Gauge topLabel={`${dealWithNaN(numResults)}/${dealWithNaN(numProposals)}`} topSubLabel={'# de Tratamientos'} botLabel={`${percResults}`} botSubLabel={'% de Avance'} value={percResults} />
          </div>
          <div className = 'kpis' style={{height: '210px', width: '50%', display: 'inline-block', borderBottom: 'solid 2px #b1b1b1', borderLeft: 'solid 2px #b1b1b1'}}>
             <div className='kpi'>
@@ -36,7 +37,7 @@ const numWithCommas = (x) => {
                     {estCost ? `$${numWithCommas(estCost.toFixed(0))}` : '-' }
                 </div>
                 <div className='header'>
-                    Est. Costo Total (MNX)
+                    Est. Costo Total (MXN)
                 </div>
             </div>
             <div className='kpi'>
@@ -44,7 +45,7 @@ const numWithCommas = (x) => {
                     {cost ? `$${numWithCommas(cost.toFixed(0))}` : '-' }
                 </div>
                 <div className='header'>
-                    Costo Total (MNX)
+                    Costo Total (MXN)
                 </div>
             </div>
             <div className='kpi'>

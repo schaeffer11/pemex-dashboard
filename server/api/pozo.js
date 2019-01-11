@@ -77,8 +77,10 @@ const INSERT_WELL_QUERY = {
          ?, ?, ?, ?, ?, ?, ?, ?, ?, ?,
          ?, ?, ?, ?, ?, ?, ?, ?, ?, ?,
          ?, ?, ?, ?, ?, ?, ?)`,
-    loadSave: `SELECT * FROM _WellsDataSave WHERE TRANSACTION_ID = ?`,
-    loadTransaction: `SELECT * FROM WellsData WHERE TRANSACTION_ID = ?`    
+    loadSave: `SELECT wds.*, fwm.WELL_NAME FROM _WellsDataSave wds
+              LEFT JOIN FieldWellMapping fwm ON fwm.WELL_FORMACION_ID = wds.WELL_FORMACION_ID
+              WHERE wds.TRANSACTION_ID = ?`,
+    loadTransaction: `SELECT * FROM WellsData WHERE TRANSACTION_ID = ?`
 }
 
 const INSERT_SURVERY_QUERY = {

@@ -46,7 +46,7 @@ import { fetchFilterData } from '../../../../lib/filters'
       `Cima (md)`,
       `Base (md)`,
       `Lodo perdido (m3)`,
-      `Dens. (gr/cm3)`
+      `Dens. (g/cm3)`
     ])
 
 
@@ -77,7 +77,7 @@ import { fetchFilterData } from '../../../../lib/filters'
       `V Dol. (%)`,
       `Porosidad (%)`,
       `Sw. (%)`,
-      `Dens. (gr/cm3)`,
+      `Dens. (g/cm3)`,
       `Resis. (ohm)`,
       `Perm (md)`
     ])
@@ -333,7 +333,7 @@ import { fetchFilterData } from '../../../../lib/filters'
             <LocalModal title="Filtros">
               <Filters />
             </LocalModal>
-            <LocalModal title="Menu de Exportación">
+            <LocalModal title="Menú de Exportación">
               <ExportExcel />
             </LocalModal>
           </div>
@@ -375,7 +375,7 @@ import { fetchFilterData } from '../../../../lib/filters'
             </Card>
               <Card
                 id="evalPetrofisica"
-                title="Evaluación Petrofisica"
+                title="Evaluación Petrofísica"
                 width={'50%'}
                 ref={this.cards[3]}
                 isTable={true}

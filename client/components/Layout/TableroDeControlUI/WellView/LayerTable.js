@@ -42,13 +42,13 @@ import ReactTable from 'react-table'
     Header: <div>Sw.<br></br>(%)</div>,
     accessor: 'SW'
   }, { 
-    Header: <div>Dens.<br></br>(gr/cm<sup>3</sup>)</div>,
+    Header: <div>Dens.<br></br>(g/cm<sup>3</sup>)</div>,
     accessor: 'DENS'
   }, { 
     Header: <div>Resis.<br></br>(ohm)</div>,
     accessor: 'RESIS'
   }, { 
-    Header: <div>Perm<br></br>(md)</div>,
+    Header: <div>Perm<br></br>(mD)</div>,
     accessor: 'PERMEABILIDAD'
   }
 ]

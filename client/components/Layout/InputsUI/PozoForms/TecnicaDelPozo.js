@@ -429,7 +429,7 @@ import { setHasErrorsFichaTecnicaDelPozo, setTipoDeSistemo, setHistorialInterven
             header="Densidad del agua"
             name='densidadAgua'
             value={densidadAgua}
-            unit={<div>gr/cm<sup>3</sup></div>}
+            unit={<div>g/cm<sup>3</sup></div>}
             onChange={e => setGeneralFichaTecnicaPozo(['densidadAgua'], e)}
             onBlur={this.updateErrors}
             errors={this.state.errors}

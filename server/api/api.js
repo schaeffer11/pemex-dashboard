@@ -553,13 +553,17 @@ router.get('/getFormationTypes', (req, res) => {
 
 router.get('/getJobs', (req, res) => {
     let { well, lowDate, highDate } = req.query
-    const query = `SELECT * FROM Intervenciones inter
-    JOIN TransactionsResults tr on inter.TRANSACTION_ID = tr.PROPUESTA_ID
-    WHERE inter.WELL_FORMACION_ID = ? AND tr.FECHA_INTERVENCION >= ? AND tr.FECHA_INTERVENCION <= ?`
-    
-    // JOIN TransactionsResults tr on t.TRANSACTION_ID = tr.PROPUESTA_ID
-
+    // const query = `SELECT * FROM Intervenciones inter
+    // JOIN TransactionsResults tr on inter.TRANSACTION_ID = tr.PROPUESTA_ID
+    // WHERE inter.WELL_FORMACION_ID = ? AND (tr.FECHA_INTERVENCION >= ? OR tr.FECHA_INTERVENCION IS NULL) AND (tr.FECHA_INTERVENCION <= ? OR tr.FECHA_INTERVENCION IS NULL)`
+    const query = `SELECT * FROM (SELECT inter.*, ISNULL(tr.TRANSACTION_ID) AS HAS_NO_RESULTS, tr.FECHA_INTERVENCION FROM Intervenciones inter
+      LEFT JOIN TransactionsResults tr on inter.TRANSACTION_ID = tr.PROPUESTA_ID
+      WHERE 1 = 1
+      AND inter.WELL_FORMACION_ID = ?
+      AND (tr.FECHA_INTERVENCION >= ? OR tr.FECHA_INTERVENCION IS NULL)
+      AND (tr.FECHA_INTERVENCION <= ? OR tr.FECHA_INTERVENCION IS NULL)) a`
     connection.query(query, [well, lowDate, highDate], (err, results) => {
+      console.log('da results', results)
       res.json(results)
     })
 })
@@ -662,7 +666,7 @@ router.get('/filterOptions', async (req, res) => {
   }
   const whereMap = whereBuilderForFilters(req.query, selectMap)
   const promises = Object.keys(whereMap).map(q => {
-    let query = `SELECT DISTINCT ${selectMap[q].select.join(',')} FROM Transactions t
+    let query = `SELECT DISTINCT ${selectMap[q].select.join(',')}, ISNULL(tr.TRANSACTION_ID) AS HAS_NO_RESULTS FROM Transactions t
                  LEFT JOIN TransactionsResults tr on t.TRANSACTION_ID = tr.PROPUESTA_ID`
 
     if (selectMap[q].joinStatement) {
@@ -684,7 +688,7 @@ router.get('/filterOptions', async (req, res) => {
 router.get('/getSpecificFieldWell', (req, res) => {
   const { transactionID } = req.query
   const query = `
-    SELECT t.FORMACION, fwm.WELL_NAME, fwm.FIELD_NAME
+    SELECT t.FORMACION, fwm.WELL_NAME, fwm.FIELD_NAME, fwm.SUBDIRECCION_NAME, fwm.ACTIVO_NAME
     FROM Transactions t JOIN FieldWellMapping fwm ON t.WELL_FORMACION_ID = fwm.WELL_FORMACION_ID
     WHERE t.TRANSACTION_ID = ?`
   connection.query(query, transactionID, (err, results) => {
@@ -696,6 +700,8 @@ router.get('/getSpecificFieldWell', (req, res) => {
       well: results[0].WELL_NAME,
       field: results[0].FIELD_NAME,
       formation: results[0].FORMACION,
+      subdireccion: results[0].SUBDIRECCION_NAME,
+      activo: results[0].ACTIVO_NAME,
     })
   })
 })
@@ -921,6 +927,7 @@ router.get('/getFields', async (req, res) => {
     if (data && data.length > 0) {
       data[0].P_ACTUAL_FECHA ? data[0].P_ACTUAL_FECHA = data[0].P_ACTUAL_FECHA.toJSON().slice(0, 10) : null
       data[0].FECHA_DE_EXPLOTACION ? data[0].FECHA_DE_EXPLOTACION = data[0].FECHA_DE_EXPLOTACION.toJSON().slice(0, 10) : null
+      data[0].DESCUBRIMIENTO ? data[0].DESCUBRIMIENTO = data[0].DESCUBRIMIENTO.toJSON().slice(0, 10) : null
 
       Object.keys(data[0]).forEach(key => {
         if (map[key]) {
@@ -1183,6 +1190,7 @@ router.get('/getWell', async (req, res) => {
 
   const map = {
     WELL_FORMACION_ID: { parent: 'fichaTecnicaDelPozoHighLevel', child: 'pozo'},
+    WELL_NAME: { parent: 'fichaTecnicaDelPozoHighLevel', child: 'pozoName'},
     SUBDIRECCION: { parent: 'fichaTecnicaDelPozoHighLevel', child: 'subdireccion'},
     ACTIVO: { parent: 'fichaTecnicaDelPozoHighLevel', child: 'activo'},
     FORMACION: { parent: 'fichaTecnicaDelPozoHighLevel', child: 'formacion'},

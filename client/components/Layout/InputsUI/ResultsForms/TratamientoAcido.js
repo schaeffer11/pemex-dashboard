@@ -257,13 +257,22 @@ import { calculateValuesGeneralCedula } from '../../../../lib/formatters';
   setAllData(data) {
     const { setCedulaTratamientoAcido } = this.props
     const cedulaData = calculateValuesGeneralCedula(data)
+    // const volumes = {
+    //   volumenSistemaReactivo: calculateVolumes(cedulaData, 'volLiquid', 'reactivo'),
+    //   volumenSistemaNoReativo: calculateVolumes(cedulaData, 'volLiquid', 'no-reactivo'),
+    //   volumenSistemaDivergente: calculateVolumes(cedulaData, 'volLiquid', 'divergente'),
+    //   volumenDesplazamientoLiquido: calculateVolumes(cedulaData, 'volLiquid', 'desplazamiento'),
+    //   volumenDesplazamientoN2: calculateVolumes(cedulaData, 'volN2', 'desplazamiento'),
+    //   volumenPrecolchonN2: calculateVolumes(cedulaData, 'volN2', 'pre-colchon'),
+    //   volumenTotalDeLiquido: calculateVolumes(cedulaData, 'volLiquid'),
+    // }
     const volumes = {
       volumenSistemaReactivo: calculateVolumes(cedulaData, 'volLiquid', 'reactivo'),
-      volumenSistemaNoReativo: calculateVolumes(cedulaData, 'volLiquid', 'no-reactivo'),
-      volumenSistemaDivergente: calculateVolumes(cedulaData, 'volLiquid', 'divergente'),
-      volumenDesplazamientoLiquido: calculateVolumes(cedulaData, 'volLiquid', 'desplazamiento'),
-      volumenDesplazamientoN2: calculateVolumes(cedulaData, 'volN2', 'desplazamiento'),
-      volumenPrecolchonN2: calculateVolumes(cedulaData, 'volN2', 'pre-colchon'),
+      volumenSistemaNoReativo: calculateVolumes(cedulaData, 'volLiquid', ['no-reactivo']),
+      volumenSistemaDivergente: calculateVolumes(cedulaData, 'volLiquid', ['divergente']),
+      volumenDesplazamientoLiquido: calculateVolumes(cedulaData, 'volLiquid', ['desplazamiento']),
+      volumenDesplazamientoN2: calculateVolumes(cedulaData, 'volN2', ['desplazamientoN2']),
+      volumenPrecolchonN2: calculateVolumes(cedulaData, 'volN2', ['pre-colchon']),
       volumenTotalDeLiquido: calculateVolumes(cedulaData, 'volLiquid'),
     }
     setCedulaTratamientoAcido(cedulaData, volumes)

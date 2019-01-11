@@ -110,8 +110,8 @@ import { checkEmpty, checkDate } from '../../../../../lib/errorCheckers';
         <div className='header'>
           Matricial
         </div>
-        <InputRow header="Penetración radial" name='penetracionRadial' unit="pg" value={penetracionRadial} onChange={setPenetracionRadial} errors={this.state.errors} onBlur={this.updateErrors} />
-        <InputRow header="Longitud de agujero de gusano" name='longitudDeAgujeroDeGusano' unit="pg" value={longitudDeAgujeroDeGusano} onChange={setLongitudDeAgujeroDeGusano} errors={this.state.errors} onBlur={this.updateErrors} />
+        <InputRow header="Penetración radial" name='penetracionRadial' unit="ft" value={penetracionRadial} onChange={setPenetracionRadial} errors={this.state.errors} onBlur={this.updateErrors} />
+        <InputRow header="Longitud de agujero de gusano" name='longitudDeAgujeroDeGusano' unit="ft" value={longitudDeAgujeroDeGusano} onChange={setLongitudDeAgujeroDeGusano} errors={this.state.errors} onBlur={this.updateErrors} />
       </div>
     )
   }

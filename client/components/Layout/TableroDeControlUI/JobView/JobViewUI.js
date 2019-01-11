@@ -158,33 +158,37 @@ import MoreKPIs from './MoreKPIs'
     })
       .then(r => r.json())
       .then(r => {
-
-        let jobs = []
-
-        r = r.sort((a, b) => {
-          return a.FECHA_PROGRAMADA_INTERVENCION - b.FECHA_PROGRAMADA_INTERVENCION
+        const proposals = []
+        const realJobs = []
+        r.forEach((intervention) => {
+          const { TIPO_DE_INTERVENCIONES, TRANSACTION_ID, FECHA_PROGRAMADA_INTERVENCION, FECHA_INTERVENCION, HAS_NO_RESULTS } = intervention
+          const type = TIPO_DE_INTERVENCIONES
+          const transactionID = TRANSACTION_ID
+          const dateStr = FECHA_INTERVENCION || FECHA_PROGRAMADA_INTERVENCION
+          const date = new Date(dateStr)
+          const obj = {
+            type,
+            transactionID,
+            date,
+          }
+          return HAS_NO_RESULTS ? proposals.push(obj) : realJobs.push(obj)
         })
-
-
-        r.forEach(i => {
-          let date = new Date(i.FECHA_PROGRAMADA_INTERVENCION)
-          date = `${date.getDate()}/${date.getMonth() + 1}/${date.getFullYear()}`
-          let type = i.TIPO_DE_INTERVENCIONES
-          type = type.charAt(0).toUpperCase() + type.substr(1)
-          jobs.push({
-            type: type,
-            date: date,
-            transID: i.PROPUESTA_ID,
-
-          })
-        })
-        
-        jobs = jobs.map(i => ({
-          label: `${i.type} ${i.date}`, value: i.transID, type: i.type
-        }))
-
+        const sortByDate = (a, b) => a.date - b.date
+        const buildOptions = (option) => {
+          const { date, type, transactionID } = option
+          const dateStr = `${date.getDate()}/${date.getMonth() + 1}/${date.getFullYear()}`
+          const typeLabel = type.replace(/^\w/, c => c.toUpperCase())
+          return {
+            label: `${typeLabel} ${dateStr}`,
+            value: transactionID,
+            type: typeLabel,
+          }
+        }
         this.setState({
-          jobOptions: jobs
+          jobOptions: [
+            { label: 'Real', options: realJobs.sort(sortByDate).map(buildOptions) },
+            { label: 'Propuesta', options: proposals.sort(sortByDate).map(buildOptions) }
+          ],
         })
     })
   }
@@ -361,7 +365,7 @@ import MoreKPIs from './MoreKPIs'
 
     }
     else {
-      return <div>No Images</div>
+      return <div>No Imágenes</div>
     }
   } 
 
@@ -395,7 +399,7 @@ import MoreKPIs from './MoreKPIs'
                   Header: 'Separación de fases',
                   accessor: 'SEPARACION_DE_FASES',
                 }, { 
-                  Header: 'Solidos',
+                  Header: 'Solidós',
                   accessor: 'SOLIDOS',
                 }, {
                   Header: 'Condición',
@@ -407,8 +411,8 @@ import MoreKPIs from './MoreKPIs'
             <div>
               {lab.name}
             </div>
-            <KPI className='kpi' header='Compania' value={lab.compania}/>
-            <KPI className='kpi' header='Superviso' value={lab.superviso}/>
+            <KPI className='kpi' header='Compañia' value={lab.compania}/>
+            <KPI className='kpi' header='Supervisó' value={lab.superviso}/>
             <KPI className='kpi' header='Observaciones' type={'wide'} value={lab.observaciones}/>
             <ReactTable
               className="-striped"
@@ -437,9 +441,9 @@ import MoreKPIs from './MoreKPIs'
             <KPI className='kpi' header='Determinación del porcentaje de parafinas' value={specificLabData.length > 0 ? specificLabData[0].PORENTAJE_DE_PARAFINAS : null} unit='%' />
             <KPI className='kpi' header='Determinación del porcentaje de resinas asfalticas' value={specificLabData.length > 0 ? specificLabData[0].PORENTAJE_DE_RESINAS_ASFALTICAS : null} unit='%' />
             <KPI className='kpi' header='Determinación del porcentaje de contenido de sólidos' value={specificLabData.length > 0 ? specificLabData[0].PORENTAJE_DE_CONTENIDO_DE_SOLIDOS : null} unit='%' />
-            <KPI className='kpi' header='Densidad del aceite' value={specificLabData.length > 0 ? specificLabData[0].DENSIDAD_DEL_ACEITE : null} unit={<div>gr/cm<sup>3</sup></div>} />
-            <KPI className='kpi' header='Densidad del agua' value={specificLabData.length > 0 ? specificLabData[0].DENSIDAD_DEL_AGUA : null} unit={<div>gr/cm<sup>3</sup></div>} />
-            <KPI className='kpi' header='Densidad de la emulsión' value={specificLabData.length > 0 ? specificLabData[0].DENSIDAD_DE_LA_EMULSION : null} unit={<div>gr/cm<sup>3</sup></div>} />
+            <KPI className='kpi' header='Densidad del aceite' value={specificLabData.length > 0 ? specificLabData[0].DENSIDAD_DEL_ACEITE : null} unit={<div>g/cm<sup>3</sup></div>} />
+            <KPI className='kpi' header='Densidad del agua' value={specificLabData.length > 0 ? specificLabData[0].DENSIDAD_DEL_AGUA : null} unit={<div>g/cm<sup>3</sup></div>} />
+            <KPI className='kpi' header='Densidad de la emulsión' value={specificLabData.length > 0 ? specificLabData[0].DENSIDAD_DE_LA_EMULSION : null} unit={<div>g/cm<sup>3</sup></div>} />
             <KPI className='kpi' header='Viscosidad del aceite' value={specificLabData.length > 0 ? specificLabData[0].VISCOSIDAD_DEL_ACEITE : null} unit='cp' />
             <KPI className='kpi' header='Viscosidad de la emulsión' value={specificLabData.length > 0 ? specificLabData[0].VISCOSIDAD_DE_LA_EMULSION : null} unit='cp' />
             <KPI className='kpi' header='pH del agua' value={specificLabData.length > 0 ? specificLabData[0].PH_DEL_AGUA : null} unit='adim' />
@@ -448,7 +452,7 @@ import MoreKPIs from './MoreKPIs'
             <KPI className='kpi' header='Compania' value={lab.compania}/>
             <KPI className='kpi' header='Superviso' value={lab.superviso}/>
             <KPI className='kpi' header='Observaciones' type={'wide'} value={lab.observaciones}/>
-            <img style={{objectFit: 'contain'}} src={labImage.imgURL}></img> 
+            <img style={{objectFit: 'contain'}} src={labImage ? labImage.imgURL : null }></img> 
           </div>
           )
         break;
@@ -467,7 +471,7 @@ import MoreKPIs from './MoreKPIs'
             <KPI className='kpi' header='Compania' value={lab.compania}/>
             <KPI className='kpi' header='Superviso' value={lab.superviso}/>
             <KPI className='kpi' header='Observaciones' type={'wide'} value={lab.observaciones}/>
-            <img style={{objectFit: 'contain'}} src={labImage.imgURL}></img> 
+            <img style={{objectFit: 'contain'}} src={labImage ? labImage.imgURL : null }></img> 
           </div>
           )
         break;
@@ -485,7 +489,7 @@ import MoreKPIs from './MoreKPIs'
             <KPI className='kpi' header='Compania' value={lab.compania}/>
             <KPI className='kpi' header='Superviso' value={lab.superviso}/>
             <KPI className='kpi' header='Observaciones' type={'wide'} value={lab.observaciones}/>
-            <img style={{objectFit: 'contain'}} src={labImage.imgURL}></img> 
+            <img style={{objectFit: 'contain'}} src={labImage ? labImage.imgURL : null }></img> 
           </div>
           )
         break;
@@ -505,7 +509,7 @@ import MoreKPIs from './MoreKPIs'
             <KPI className='kpi' header='Compania' value={lab.compania}/>
             <KPI className='kpi' header='Superviso' value={lab.superviso}/>
             <KPI className='kpi' header='Observaciones' type={'wide'} value={lab.observaciones}/>
-            <img style={{objectFit: 'contain'}} src={labImage.imgURL}></img> 
+            <img style={{objectFit: 'contain'}} src={labImage ? labImage.imgURL : null }></img> 
           </div>
           )
         break;
@@ -540,7 +544,7 @@ import MoreKPIs from './MoreKPIs'
               pageSize={specificLabData.length}
               sortable={false}
             />
-            <img style={{objectFit: 'contain'}} src={labImage.imgURL}></img> 
+            <img style={{objectFit: 'contain'}} src={labImage ? labImage.imgURL : null }></img> 
           </div>
           )
         break;
@@ -556,7 +560,7 @@ import MoreKPIs from './MoreKPIs'
             <KPI className='kpi' header='Compania' value={lab.compania}/>
             <KPI className='kpi' header='Superviso' value={lab.superviso}/>
             <KPI className='kpi' header='Observaciones' type={'wide'} value={lab.observaciones}/>
-            <img style={{objectFit: 'contain'}} src={labImage.imgURL}></img> 
+            <img style={{objectFit: 'contain'}} src={labImage ? labImage.imgURL : null }></img> 
           </div>
           )
         break;
@@ -581,6 +585,43 @@ import MoreKPIs from './MoreKPIs'
 
 
     buildModal() {
+    let { specificLabData, specificLab, labData, imageData } = this.state
+    let lab = labData.find(i => i.id === specificLab)
+    let name = lab.type
+
+    switch (lab.type) {
+      case 'pruebasDeCompatibilidad':
+        name = 'Pruebas de compatiblidad por emulsión'
+        break;
+      case 'caracterizacionFisico':
+        name = 'Caracterización fisico-química de fluidos'
+        break;
+      case 'pruebasGelDeFractura':
+        name = 'Pruebas gel de fractura'
+        break;
+      case 'pruebasDeSolubilidad':
+        name = 'Pruebas de solubilidad'
+        break;
+      case 'pruebasParaApuntalante':
+        name = 'Pruebas para apuntalante'
+        break;
+      case 'pruebasDeGrabado':
+        name = 'Pruebas de grabado'
+        break;
+      case 'cromatografiaDelGas':
+        name = 'Cromatografía del gas'
+        break;
+      case 'pruebaDeDureza':
+        name = 'Prueba de dureza'
+        break;
+      case 'determinacionDeLaCalidad':
+        name = 'Determinación de la calidad método de los cloruros'
+        break;
+      case 'curvaDeViscosidad':
+        name = 'Curva De Viscosidad'
+        break;
+    }
+
     return (
       <AriaModal
         titleId="save-modal"
@@ -594,7 +635,7 @@ import MoreKPIs from './MoreKPIs'
       >
       <div className="modalTest" >
         <div className="modal-title">
-          Lab Test Data
+          {name}
         </div>
         <div className="modal-body" >
           {this.makeLabModal()}
@@ -623,9 +664,9 @@ import MoreKPIs from './MoreKPIs'
         }
         else {
           simulationData = [{
-            item: 'Longitud de agujero de gusano', unit: 'pg', sim: interventionData.LONGITUD_DE_AGUJERO_DE_GUSANO, actual: interventionResultsData.LONGITUD_DE_AGUJERO_DE_GUSANO
+            item: 'Longitud de agujero de gusano', unit: 'ft', sim: interventionData.LONGITUD_DE_AGUJERO_DE_GUSANO, actual: interventionResultsData.LONGITUD_DE_AGUJERO_DE_GUSANO
           },{
-            item: 'Penetración radial', unit: 'pg', sim: interventionData.PENETRACION_RADIAL, actual: interventionResultsData.PENETRACION_RADIAL
+            item: 'Penetración radial', unit: 'ft', sim: interventionData.PENETRACION_RADIAL, actual: interventionResultsData.PENETRACION_RADIAL
           }]
         }
       }
@@ -710,7 +751,7 @@ import MoreKPIs from './MoreKPIs'
             <LocalModal title="Filtros">
               <Filters />
             </LocalModal>
-            <LocalModal title="Menu de Exportación">
+            <LocalModal title="Menú de Exportación">
               <ExportPptx />
             </LocalModal>
           </div>

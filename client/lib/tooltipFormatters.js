@@ -14,7 +14,7 @@ export function formatGeneralBarChart() {
 
 export function formatScatter() {
   return `${this.series.userOptions.name}
-  <br>Real.: <b>${this.y}</b>
+  <br>Real.: <b>${numberFormat(this.y, 2)}</b>
   <br>Est.: <b>${this.x}</b>`
 }
 
@@ -23,7 +23,7 @@ export function formatPiePercent() {
 }
 
 export function formatBubbleProduction() {
-  const date = moment(this.point.x).format('MMM YYYY')
+  const date = moment(this.point.x).add(1, 'months').format('MMM YYYY')
   let retVal = `<small>${date}</small><br><br>`
   retVal += '<div style=height:14px;font-size:12px;line-height:14px;>'
   retVal += `<div class="tooltip-line">Prod. Inc.:
@@ -35,7 +35,7 @@ export function formatBubbleProduction() {
 }
 
 export function formatBubbleVolume() {
-  const date = moment(this.point.x).format('MMM YYYY')
+  const date = moment(this.point.x).add(1, 'months').format('MMM YYYY')
   let retVal = `<small>${date}</small><br><br>`
   retVal += '<div style=height:14px;font-size:12px;line-height:14px;>'
   retVal += `<div class="tooltip-line">Volumen:
