@@ -568,6 +568,21 @@ router.get('/getJobs', (req, res) => {
     })
 })
 
+router.get('/well_info', (req, res) => {
+  const { well } = req.query
+  const query = `SELECT WELL_NAME AS well, SUBDIRECCION_NAME AS subdireccion, ACTIVO_NAME AS activo, FIELD_NAME AS field
+    FROM FieldWellMapping 
+    WHERE WELL_FORMACION_ID = ?`
+  connection.query(query, [well], (err, results) => {
+    if (err) {
+      console.log('err', err)
+      res.json(false)
+    } else {
+      res.json(results[0])
+    }
+  })
+})
+
 
 router.get('/isAdmin', allowAdmin, (req, res) => {
   res.json({ success: true })
@@ -666,7 +681,7 @@ router.get('/filterOptions', async (req, res) => {
   }
   const whereMap = whereBuilderForFilters(req.query, selectMap)
   const promises = Object.keys(whereMap).map(q => {
-    let query = `SELECT DISTINCT ${selectMap[q].select.join(',')} FROM Transactions t
+    let query = `SELECT DISTINCT ${selectMap[q].select.join(',')}, ISNULL(tr.TRANSACTION_ID) AS HAS_NO_RESULTS FROM Transactions t
                  LEFT JOIN TransactionsResults tr on t.TRANSACTION_ID = tr.PROPUESTA_ID`
 
     if (selectMap[q].joinStatement) {
@@ -1252,6 +1267,7 @@ router.get('/getWell', async (req, res) => {
         }
       })
       finalObj.fichaTecnicaDelPozo.hasErrors = data[0].HAS_ERRORS === 0 || data[0].HAS_ERRORS === undefined ? false : true
+      console.log('THE FINAL OBJECT', finalObj)
       res.json(finalObj)
     }
     else {

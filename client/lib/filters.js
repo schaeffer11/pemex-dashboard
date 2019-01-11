@@ -79,11 +79,13 @@ export function buildFiltersOptions(data) {
         return {
           label: interventionMap[i[name]],
           value: i[id],
+          hasResults: !i.HAS_NO_RESULTS
         }
       }
       return {
         label: i[name],
         value: i[id],
+        hasResults: !i.HAS_NO_RESULTS
       }
     })
   })

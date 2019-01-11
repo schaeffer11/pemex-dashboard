@@ -50,12 +50,9 @@ function arrayDiff(a, b) {
   }
 
   async setNewGroups(groupBy, options) {
-    let { setGeneral, setGeneralFilters, token, globalAnalysis } = this.props
-    const groups = groupBy ? options[groupBy].map(elem => elem.label) : []
+    let { setGeneral } = this.props
+    const groups = groupBy ? options[groupBy].filter(elem => elem.hasResults).map(elem => elem.label) : []
     setGeneral(groupBy, groups)
-    // const data = await fetchFilterData(token, globalAnalysis.toJS())
-    // const filterOptions = buildFiltersOptions(data)
-    // setGeneralFilters(filterOptions)
   }
 
   handleChanges(selection) {

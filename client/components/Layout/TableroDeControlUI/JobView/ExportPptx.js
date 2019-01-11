@@ -56,10 +56,10 @@ import ProgressBar from '../Common/ProgressBar'
   buildIndividualTask(tasks, type) {
     return Object.keys(tasks).map(task => {
       if (type === 'error') {
-        return<li>{this.determineError(tasks[task][type])}</li>
+        return<li key={task}>{this.determineError(tasks[task][type])}</li>
       }
       return (
-        <li>{tasks[task][type]}</li>
+        <li key={task}>{tasks[task][type]}</li>
       )
     })
   }

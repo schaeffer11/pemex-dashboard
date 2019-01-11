@@ -93,10 +93,12 @@ export async function buildFichaTecnicaDelPozo(pptx, token, id) {
   const slide = pptx.addNewSlide('MASTER_SLIDE')
   slide.addText('Ficha Técnica del Pozo', { placeholder: 'slide_title' })
   const data = await getData('/api/getWell', token, { transactionID: id })
+  const pvtData = await getData('/api/well_info', token, { well: data.fichaTecnicaDelPozo.pvt })
   const { well } = maps
+  data.fichaTecnicaDelPozo.pvt = pvtData.well
   const datos = buildSimpleTable('Generales', well.datos, data.fichaTecnicaDelPozo)
   const fluido = buildSimpleTable('Fluido', well.fluido, data.fichaTecnicaDelPozo)
-  const presion = buildSimpleTable('Presión', well.presion, data.fichaTecnicaDelPozo)
+  const presion = buildSimpleTable('Pruebas de Presión', well.presion, data.fichaTecnicaDelPozo)
   const formacion = buildSimpleTable('Formación', well.formacion, data.fichaTecnicaDelPozo)
 
   const { left, right, middle } = getPositions(4)
