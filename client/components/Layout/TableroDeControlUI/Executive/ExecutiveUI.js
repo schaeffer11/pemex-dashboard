@@ -21,6 +21,8 @@ import IncProdBar from './IncProdBar'
 import AvgIncProdBar from './AvgIncProdBar'
 import DeltaIncProdScatter from './DeltaIncProdScatter'
 import AvgDeltaIncProdBar from './AvgDeltaIncProdBar'
+import ProductionBarOil from './ProductionBarOil'
+import ProductionBarGas from './ProductionBarGas'
 
 @autobind class executiveUI extends Component {
   constructor(props) {
@@ -251,7 +253,15 @@ import AvgDeltaIncProdBar from './AvgDeltaIncProdBar'
 
     let exportData = this.buildExecTableExport(execTableData, groupBy)
 
+    console.log(jobBreakdownData)
+    console.log(estIncData)
+    let productionBarData = {}
+    estIncData.forEach(i => {
+        let key = i.groupedName === 1 ? undefined : i.groupedName
+        productionBarData[key] = i
+    })
 
+    console.log(productionBarData)
     return (
       <div className="data executive">
         <div className='content'>
@@ -285,12 +295,14 @@ import AvgDeltaIncProdBar from './AvgDeltaIncProdBar'
             </Card>
             <Card
                 id="classifications"
-                title="Clasificación"
+                title="Clasificación y Producción"
                 ref={this.cards[1]}
                 width={'50%'}
                 multiplyChartsOnGrouping
               >
               <JobBreakdown label='Tipo' data={jobBreakdownData} />
+              <ProductionBarOil label='Aceite' data={estIncData} />
+              <ProductionBarGas label='Gas' data={estIncData} />
 {/*              <JobBreakdown label='Éxito' data={aforosCarouselData} />*/}
             </Card>
             <Card
