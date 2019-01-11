@@ -666,7 +666,7 @@ router.get('/filterOptions', async (req, res) => {
   }
   const whereMap = whereBuilderForFilters(req.query, selectMap)
   const promises = Object.keys(whereMap).map(q => {
-    let query = `SELECT DISTINCT ${selectMap[q].select.join(',')} FROM Transactions t
+    let query = `SELECT DISTINCT ${selectMap[q].select.join(',')}, ISNULL(tr.TRANSACTION_ID) AS HAS_NO_RESULTS FROM Transactions t
                  LEFT JOIN TransactionsResults tr on t.TRANSACTION_ID = tr.PROPUESTA_ID`
 
     if (selectMap[q].joinStatement) {

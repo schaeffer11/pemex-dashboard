@@ -8,11 +8,6 @@ import { connect } from 'react-redux'
 import { setJob, setJobType } from '../../../../redux/actions/global'
 import { sortLabels } from '../../../../lib/formatters'
 
-const groupStyles = {
-  border: '2px dotted',
-  borderRadius: "5px",
-  background: "#f2fcff",
-}
 const Group = props => (
   <div>
     <components.Group {...props} />
@@ -22,29 +17,18 @@ const Group = props => (
 @autobind class JobSelect extends Component {
   constructor(props) {
     super(props)
-
   }
 
-
-
   handleSelectJob(val) {
-    console.log('handling change', val)
   	let { setJob, setJobType } = this.props
   	let value = val ? val.value : null
     let type = val ? val.type : null
-
   	setJob(value)
     setJobType(type)
   }
 
   render() {
-    let { globalAnalysis, options } = this.props
-    globalAnalysis = globalAnalysis.toJS()
-    let { job } = globalAnalysis
-
-  
-  	const realJob = options.find(i=>i.value === job) || null
-
+    const { options } = this.props
     return (
 	      <div className='well-selector' >
 	        Tratamiento
@@ -54,25 +38,15 @@ const Group = props => (
             onChange={this.handleSelectJob}
             components={{Group}}
           />
-          {/* <Select
-	          value={realJob}
-            options={options}
-	          onChange={this.handleSelectJob}
-	          isClearable = {true}
-	        /> */}
 	      </div>
     )
   }
 }
-
-const mapStateToProps = state => ({
-	globalAnalysis: state.get('globalAnalysis'),
-})
 
 const mapDispatchToProps = dispatch => ({
 	setJob: val => dispatch(setJob(val)),
   setJobType: val => dispatch(setJobType(val)),
 })
 
-export default connect(mapStateToProps, mapDispatchToProps)(JobSelect)
+export default connect(null, mapDispatchToProps)(JobSelect)
 
