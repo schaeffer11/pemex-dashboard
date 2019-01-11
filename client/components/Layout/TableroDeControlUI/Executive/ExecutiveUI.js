@@ -275,7 +275,7 @@ import AvgDeltaIncProdBar from './AvgDeltaIncProdBar'
             </Card>
             <Card
                 id="productionGraphs"
-                title="Desviación Real vs Estimada"
+                title="Desviación Real vs Programada"
                 ref={this.cards[0]}
                 width={'50%'}
               >
