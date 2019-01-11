@@ -107,6 +107,17 @@ export function submitForm(action, token, saveName) {
                   if (j[key] === '-999' || j[key] === '-999.00') {
                     j[key] = null
                   }
+
+                  let innerProperty = j[key]
+                  if (Array.isArray(innerProperty)) {
+                    for (let item of innerProperty) {
+                      Object.keys(item).forEach(innerKey => {
+                        if (item[innerKey] === '-999' || item[innerKey] === '-999.00') {
+                          item[innerKey] = null
+                        }
+                      })
+                    }
+                  }
                 })
               }
 
