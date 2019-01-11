@@ -83,5 +83,5 @@ export function formatText(str) {
     return str
   }
   // Otherwise return string with first letter capitalized
-  return str.replace(/^\w/, c => c.toUpperCase());
+  return str.replace(/^\w/, c => c.toUpperCase())
 }

@@ -38,7 +38,13 @@ export async function buildTitleSlide(pptx, names) {
   const date = new Date()
   const dateStr = `${date.getDate()}/${date.getMonth() + 1}/${date.getFullYear()}`
   const namesTitleStr = 'Subdirección:\nActivo:\nCampo:\nPozo:\nFormación:'
-  const namesStr = `${names.subdireccion.split('Sub. ')[1]}\n${names.activo}\n${names.field}\n${names.well}\n${names.formation}`
+  const lineBreakRegex = /\r?\n|\r/g
+  const subdireccion = names.subdireccion.split('Sub. ')[1].replace(lineBreakRegex, '')
+  const activo = names.activo.replace(lineBreakRegex, '')
+  const field = names.field.replace(lineBreakRegex, '')
+  const well = names.well.replace(lineBreakRegex, '')
+  const formation = names.formation.replace(lineBreakRegex, '')
+  const namesStr = `${subdireccion}\n${activo}\n${field}\n${well}\n${formation}`
   titleSlide.addText(namesTitleStr, { x: 4.5, y: 3.75, w: 2, align: 'right', fontSize: 18, bold: true })
   titleSlide.addText(namesStr, { x: 6.5, y: 3.75, w: 2, align: 'left', fontSize: 18 })
   titleSlide.addText(dateStr, { x: 11.75, y: 7, fontSize: 16, fontFace: 'Arial Narrow' })
@@ -48,7 +54,7 @@ export async function buildTitleSlide(pptx, names) {
   titleSlide.addImage({ path: '/images/pptx/portada_abajo.png', x: getPositions(7.79).middle, y: 5.5, h: 1.5, w: 7.79 })
   titleSlide.addImage({ x: 11, y: 2.0, h: 4.32, w: 1.74, path: '/images/pptx/portada_derecha.png' })
   titleSlide.addImage({ x: 0.65, y: 2.0,  h: 3.38, w: 1.68, path: '/images/pptx/portada_izquierda.jpg' })
-  return slide
+  return titleSlide
 }
 
 export async function buildObjectivoYAlcances(pptx, token, id) {
