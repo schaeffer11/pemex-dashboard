@@ -158,36 +158,37 @@ import MoreKPIs from './MoreKPIs'
     })
       .then(r => r.json())
       .then(r => {
-
-        let jobs = []
         const proposals = []
         const realJobs = []
-        console.log('da jerbs', r)
-
-        r = r.sort((a, b) => {
-          return a.FECHA_PROGRAMADA_INTERVENCION - b.FECHA_PROGRAMADA_INTERVENCION
+        r.forEach((intervention) => {
+          const { TIPO_DE_INTERVENCIONES, TRANSACTION_ID, FECHA_PROGRAMADA_INTERVENCION, FECHA_INTERVENCION, HAS_NO_RESULTS } = intervention
+          const type = TIPO_DE_INTERVENCIONES
+          const transactionID = TRANSACTION_ID
+          const dateStr = FECHA_INTERVENCION || FECHA_PROGRAMADA_INTERVENCION
+          const date = new Date(dateStr)
+          const obj = {
+            type,
+            transactionID,
+            date,
+          }
+          return HAS_NO_RESULTS ? proposals.push(obj) : realJobs.push(obj)
         })
-
-
-        r.forEach(i => {
-          let date = new Date(i.FECHA_PROGRAMADA_INTERVENCION)
-          date = `${date.getDate()}/${date.getMonth() + 1}/${date.getFullYear()}`
-          let type = i.TIPO_DE_INTERVENCIONES
-          type = type.charAt(0).toUpperCase() + type.substr(1)
-          jobs.push({
-            type: type,
-            date: date,
-            transID: i.TRANSACTION_ID,
-
-          })
-        })
-        
-        jobs = jobs.map(i => ({
-          label: `${i.type} ${i.date}`, value: i.transID, type: i.type
-        }))
-
+        const sortByDate = (a, b) => a.date - b.date
+        const buildOptions = (option) => {
+          const { date, type, transactionID } = option
+          const dateStr = `${date.getDate()}/${date.getMonth() + 1}/${date.getFullYear()}`
+          const typeLabel = type.replace(/^\w/, c => c.toUpperCase())
+          return {
+            label: `${typeLabel} ${dateStr}`,
+            value: transactionID,
+            type: typeLabel,
+          }
+        }
         this.setState({
-          jobOptions: jobs
+          jobOptions: [
+            { label: 'Real', options: realJobs.sort(sortByDate).map(buildOptions) },
+            { label: 'Propuesta', options: proposals.sort(sortByDate).map(buildOptions) }
+          ],
         })
     })
   }

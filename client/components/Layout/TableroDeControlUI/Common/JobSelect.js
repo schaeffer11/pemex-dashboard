@@ -2,11 +2,22 @@
 import React, { Component } from 'react'
 import autobind from 'autobind-decorator'
 import AsyncSelect from 'react-select/lib/Async'
-import Select from 'react-select'
+import Select, { components } from 'react-select'
 import { connect } from 'react-redux'
 
 import { setJob, setJobType } from '../../../../redux/actions/global'
 import { sortLabels } from '../../../../lib/formatters'
+
+const groupStyles = {
+  border: '2px dotted',
+  borderRadius: "5px",
+  background: "#f2fcff",
+}
+const Group = props => (
+  <div>
+    <components.Group {...props} />
+  </div>
+)
 
 @autobind class JobSelect extends Component {
   constructor(props) {
@@ -17,6 +28,7 @@ import { sortLabels } from '../../../../lib/formatters'
 
 
   handleSelectJob(val) {
+    console.log('handling change', val)
   	let { setJob, setJobType } = this.props
   	let value = val ? val.value : null
     let type = val ? val.type : null
@@ -37,11 +49,17 @@ import { sortLabels } from '../../../../lib/formatters'
 	      <div className='well-selector' >
 	        Tratamiento
           <Select
+            isClearable
+            options={options}
+            onChange={this.handleSelectJob}
+            components={{Group}}
+          />
+          {/* <Select
 	          value={realJob}
             options={options}
 	          onChange={this.handleSelectJob}
 	          isClearable = {true}
-	        />
+	        /> */}
 	      </div>
     )
   }
