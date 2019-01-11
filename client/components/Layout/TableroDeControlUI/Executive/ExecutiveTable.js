@@ -82,7 +82,7 @@ import { CategoryDist, TrafficLight, Currency, Integer, numWithCommas } from '..
         minWidth: 150,
         Cell: Currency,
       },{
-        Header: 'Producción Incremental Estimada',
+        Header: 'Producción Incremental Programada',
         accessor: 'estProd', 
         minWidth: 150,
         Cell: Integer

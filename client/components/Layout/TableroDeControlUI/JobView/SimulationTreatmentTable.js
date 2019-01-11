@@ -31,7 +31,7 @@ import ReactTable from 'react-table'
     return hide === true ? 
       (
         <div>
-          No simulation/results needed
+          No aplica
         </div>
       ) :
       (  

@@ -51,7 +51,7 @@ const numWithCommas = (x) => {
         <KPI className='est-cost' header='Costos Estimados' value={'$' + numWithCommas(dealWithNaN(estCost).toFixed(0))} unit=' MXN'/>
         <KPI className='cost' header='Costos Reales' value={'$' + numWithCommas(dealWithNaN(cost).toFixed(0))} unit=' MXN'/>
         <KPI className='delta-cost' header='Desviación' value={dealWithNaN(delta).toFixed(2) + ' %'} />
-        <KPI className='est-prod' header='Prod. Inc. Estimada' value={dealWithNaN(estProd)} unit=' bbl/d'/>
+        <KPI className='est-prod' header='Prod. Inc. Programada' value={dealWithNaN(estProd)} unit=' bbl/d'/>
         <KPI className='prod' header='Prod. Inc. Real' value={dealWithNaN(prod)} unit=' bbl/d'/>
         <KPI className='delta-prod' header='Desviación' value={dealWithNaN(deltaProd).toFixed(2) + ' %'} />
       </div>
