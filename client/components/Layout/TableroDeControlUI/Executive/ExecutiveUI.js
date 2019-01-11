@@ -285,7 +285,7 @@ import ProductionBarGas from './ProductionBarGas'
             </Card>
             <Card
                 id="productionGraphs"
-                title="Desviación Real vs Programada"
+                title="Cumplimiento de Produccion Programada vs Real"
                 ref={this.cards[0]}
                 width={'50%'}
               >

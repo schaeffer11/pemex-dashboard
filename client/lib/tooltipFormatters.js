@@ -14,7 +14,7 @@ export function formatGeneralBarChart() {
 
 export function formatScatter() {
   return `${this.series.userOptions.name}
-  <br>Real.: <b>${this.y}</b>
+  <br>Real.: <b>${numberFormat(this.y, 2)}</b>
   <br>Est.: <b>${this.x}</b>`
 }
 

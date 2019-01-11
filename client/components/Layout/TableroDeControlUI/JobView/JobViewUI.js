@@ -751,7 +751,7 @@ import MoreKPIs from './MoreKPIs'
             <LocalModal title="Filtros">
               <Filters />
             </LocalModal>
-            <LocalModal title="Menu de Exportación">
+            <LocalModal title="Menú de Exportación">
               <ExportPptx />
             </LocalModal>
           </div>
