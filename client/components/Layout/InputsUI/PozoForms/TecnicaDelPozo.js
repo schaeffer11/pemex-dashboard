@@ -7,7 +7,7 @@ import DatePicker from 'react-datepicker'
 
 import { checkEmpty, checkDate } from '../../../../lib/errorCheckers'
 import InputTable from '../../Common/InputTable'
-import { InputRow, InputRowUnitless, InputRowSelectUnitless, InputDate } from '../../Common/InputRow'
+import { InputRow, InputRowUnitless, InputRowSelectUnitless, InputDate, TextAreaUnitless } from '../../Common/InputRow'
 import { setHasErrorsFichaTecnicaDelPozo, setTipoDeSistemo, setHistorialIntervencionesData, setEspesorBruto, 
   setCaliza, setDolomia, setArcilla, setPorosidad, setPermeabilidad, setSw, setCaa, setCga, setTipoDePozo, 
   setPws, setPwf, setPwsFecha, setPwfFecha, setDeltaPPerMes, setTyac, setPvt, setAparejoDeProduccion,
@@ -456,7 +456,7 @@ import { setHasErrorsFichaTecnicaDelPozo, setTipoDeSistemo, setHistorialInterven
             header="pH"
             name='ph'
             value={ph}
-            unit=""
+            unit="Adim."
             onChange={e => setGeneralFichaTecnicaPozo(['ph'], e)}
             onBlur={this.updateErrors}
             errors={this.state.errors}
@@ -510,7 +510,7 @@ import { setHasErrorsFichaTecnicaDelPozo, setTipoDeSistemo, setHistorialInterven
             onBlur={this.updateErrors}
             errors={this.state.errors}
           />
-          <InputRowUnitless
+          <TextAreaUnitless
             header="Modelo"
             name='modelo'
             value={modelo}
@@ -540,7 +540,7 @@ import { setHasErrorsFichaTecnicaDelPozo, setTipoDeSistemo, setHistorialInterven
             header="S"
             name='s'
             value={s}
-            unit="unidades"
+            unit="Adim."
             onChange={e => setGeneralFichaTecnicaPozo(['s'], e)}
             onBlur={this.updateErrors}
             errors={this.state.errors}

@@ -583,6 +583,21 @@ router.get('/well_info', (req, res) => {
   })
 })
 
+router.get('/wells_from_field', (req, res) => {
+  const { field } = req.query
+  const query = `SELECT WELL_FORMACION_ID, WELL_NAME
+  FROM FieldWellMapping
+  WHERE FIELD_FORMACION_ID = ?`
+  connection.query(query, [field], (err, results) => {
+    if (err) {
+      console.log('err', err)
+      res.json(false)
+    } else {
+      res.json(results)
+    }
+  })
+})
+
 
 router.get('/isAdmin', allowAdmin, (req, res) => {
   res.json({ success: true })
