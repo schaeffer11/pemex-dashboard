@@ -26,7 +26,6 @@ let fluidoOptions = [
     super(props)
 
     this.state = {
-      fieldWellOptions: [],
       pvtWells: [],
       errors: {
         descubrimientoField: {
@@ -303,12 +302,9 @@ let fluidoOptions = [
   }
 
   makeFluidoForm() {
-    let { fieldWellOptions, pvtWells } = this.state
+    const { pvtWells } = this.state
     let { setTipoDeFluidoField, setDensidadDelAceiteField, setPSatField, setRgaFluidoField, setSalinidadField, setPvtRepresentativoField, formData, campo } = this.props
-    // const { pvtWells } = this.state
-
     formData = formData.toJS()
-
     let { tipoDeFluidoField, densidadDelAceiteField, pSatField, rgaFluidoField, salinidadField, pvtRepresentativoField } = formData
     console.log('my pvt wells', pvtWells)
     const pvtOptions = pvtWells.map(well => ({
@@ -316,18 +312,6 @@ let fluidoOptions = [
       value: well.WELL_FORMACION_ID,
     }))
 
-    // let pvtOptions = []
-    // console.log('field well options?', campo, fieldWellOptions)
-    // if (campo && fieldWellOptions.length > 0) {
-    //   let wellSubset = fieldWellOptions.filter(i => i.FIELD_FORMACION_ID === parseInt(campo))
-    //   let usedWells = []
-    //   wellSubset.forEach(i => {
-    //     if (!usedWells.includes(i.WELL_FORMACION_ID)) {
-    //       usedWells.push(i.WELL_FORMACION_ID)
-    //       pvtOptions.push({ label: i.WELL_NAME, value: i.WELL_FORMACION_ID})
-    //     }
-    //   })
-    // }
     return (
       <div className='fluido-form' >
         <div className='header'>

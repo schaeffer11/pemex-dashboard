@@ -20,7 +20,6 @@ export const getAuthorization = (req, res, next) => {
   req.isAuthorized = userSession !== undefined
   console.log('user is authorized', req.isAuthorized)
   req.user = userSession
-  req.isAuthorized = true
   if (req.isAuthorized) {
     return next()
   }
