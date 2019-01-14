@@ -219,6 +219,16 @@ let tratamientoPorOptions = [
     setTipoDeTerminacion(val.value)
   }
 
+  handleSelectTipoDeLiner(val) {
+    let { setTipoDeLiner, setDiametroDeLiner } = this.props
+
+    if (val.value === 'No aplica') {
+      setDiametroDeLiner(null)
+    }
+
+    setTipoDeLiner(val.value)
+  }
+
   makeTerminacionForm() {
     let { setTipoDeTerminacion, setHIntervaloProductor, setEmpacador, setPresionDifEmpacador, setSensorPyt, setTipoDeLiner, setDiametroDeLiner, setTipoDePistolas, setDensidadDeDisparosMecanico, setFase, setDiametroDeOrificio, setPenetracion, setTipoDeSAP, formData, tipoDeTerminationOptions, tipoDeLinerOptions} = this.props
     formData = formData.toJS()
@@ -239,8 +249,10 @@ let tratamientoPorOptions = [
         </div>
         LINER
         <div className="input-table">
-          <InputRowSelectUnitless header="Tipo de liner" name='tipoDeLiner' value={tipoDeLiner} options={tipoDeLinerOptions} callback={(e) => setTipoDeLiner(e.value)} onBlur={this.updateErrors} errors={this.state.errors} />
-          <InputRow header="Diámetro de liner" name='diametroDeLiner' value={diametroDeLiner} onChange={setDiametroDeLiner} unit='pg' onBlur={this.updateErrors} errors={this.state.errors} />
+          <InputRowSelectUnitless header="Tipo de liner" name='tipoDeLiner' value={tipoDeLiner} options={tipoDeLinerOptions} callback={this.handleSelectTipoDeLiner} onBlur={this.updateErrors} errors={this.state.errors} />
+          {
+            tipoDeLiner === 'No aplica' ? null : <InputRow header="Diámetro de liner" name='diametroDeLiner' value={diametroDeLiner} onChange={setDiametroDeLiner} unit='pg' onBlur={this.updateErrors} errors={this.state.errors} />
+          }
           {
             tipoDeTerminacion === 'Agujero Descubierto (AD)' ? null :
             <div>
