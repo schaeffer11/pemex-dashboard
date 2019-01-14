@@ -253,15 +253,12 @@ import ProductionBarGas from './ProductionBarGas'
 
     let exportData = this.buildExecTableExport(execTableData, groupBy)
 
-    console.log(jobBreakdownData)
-    console.log(estIncData)
     let productionBarData = {}
     estIncData.forEach(i => {
         let key = i.groupedName === 1 ? undefined : i.groupedName
         productionBarData[key] = i
     })
 
-    console.log(productionBarData)
     return (
       <div className="data executive">
         <div className='content'>

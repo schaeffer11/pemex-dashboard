@@ -40,7 +40,6 @@ let colorWheel = [
         series = [{
           name: ' ',
           data: data.map(i => {
-            console.log('da i', i)
             return {
               x: 0,
               y: round(i.qoDeviation)
