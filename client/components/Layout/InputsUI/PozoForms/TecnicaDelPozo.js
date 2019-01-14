@@ -7,7 +7,7 @@ import DatePicker from 'react-datepicker'
 
 import { checkEmpty, checkDate } from '../../../../lib/errorCheckers'
 import InputTable from '../../Common/InputTable'
-import { InputRow, InputRowUnitless, InputRowSelectUnitless, InputDate } from '../../Common/InputRow'
+import { InputRow, InputRowUnitless, InputRowSelectUnitless, InputDate, TextAreaUnitless } from '../../Common/InputRow'
 import { setHasErrorsFichaTecnicaDelPozo, setTipoDeSistemo, setHistorialIntervencionesData, setEspesorBruto, 
   setCaliza, setDolomia, setArcilla, setPorosidad, setPermeabilidad, setSw, setCaa, setCga, setTipoDePozo, 
   setPws, setPwf, setPwsFecha, setPwfFecha, setDeltaPPerMes, setTyac, setPvt, setAparejoDeProduccion,
@@ -18,6 +18,7 @@ import { setHasErrorsFichaTecnicaDelPozo, setTipoDeSistemo, setHistorialInterven
     super(props)
     this.state = {
       fieldWellOptions: [],
+      pvtWells: [],
       errors: {
         caliza: {
           type: 'number',
@@ -192,24 +193,22 @@ import { setHasErrorsFichaTecnicaDelPozo, setTipoDeSistemo, setHistorialInterven
   }
 
   componentDidMount(){
-    let { setHasErrorsFichaTecnicaDelPozo, hasSubmitted } = this.props
-
-    const { token } = this.props
-    const headers = {
-      headers: {
-        'Authorization': `Bearer ${token}`,
-        'content-type': 'application/json',
-      },
-    }
+    let { setHasErrorsFichaTecnicaDelPozo, hasSubmitted, generalData } = this.props
+    generalData = generalData.toJS()
+    const { campo } = generalData
     let hasErrors = this.checkAllInputs(hasSubmitted)
     setHasErrorsFichaTecnicaDelPozo(hasErrors)
-     fetch('/api/getFieldWellMapping', headers)
+    const { token } = this.props
+    const headers =  {
+      'Authorization': `Bearer ${token}`,
+      'content-type': 'application/json',
+    }
+
+    fetch(`/api/wells_from_field?field=${campo}`, { headers })
       .then(r => r.json())
       .then(r => {
-        this.setState({
-          fieldWellOptions: r
-        })
-    })
+        this.setState({ pvtWells: r })
+      })
   }
 
   componentDidUpdate(prevProps) {
@@ -456,7 +455,7 @@ import { setHasErrorsFichaTecnicaDelPozo, setTipoDeSistemo, setHistorialInterven
             header="pH"
             name='ph'
             value={ph}
-            unit=""
+            unit="Adim."
             onChange={e => setGeneralFichaTecnicaPozo(['ph'], e)}
             onBlur={this.updateErrors}
             errors={this.state.errors}
@@ -510,7 +509,7 @@ import { setHasErrorsFichaTecnicaDelPozo, setTipoDeSistemo, setHistorialInterven
             onBlur={this.updateErrors}
             errors={this.state.errors}
           />
-          <InputRowUnitless
+          <TextAreaUnitless
             header="Modelo"
             name='modelo'
             value={modelo}
@@ -540,7 +539,7 @@ import { setHasErrorsFichaTecnicaDelPozo, setTipoDeSistemo, setHistorialInterven
             header="S"
             name='s'
             value={s}
-            unit="unidades"
+            unit="Adim."
             onChange={e => setGeneralFichaTecnicaPozo(['s'], e)}
             onBlur={this.updateErrors}
             errors={this.state.errors}
@@ -560,7 +559,7 @@ import { setHasErrorsFichaTecnicaDelPozo, setTipoDeSistemo, setHistorialInterven
   }
 
   makePozoForm() {
-    let { fieldWellOptions } = this.state
+    let { fieldWellOptions, pvtWells } = this.state
     let { tipoDeSistemo, setTipoDePozo, setPws, setPwf, setPwsFecha, setPwfFecha, setDeltaPPerMes, setTyac, setPvt, setAparejoDeProduccion, setProfEmpacador, setProfSensorPYT, setTipoDeSistemo, formData, generalData } = this.props
     formData = formData.toJS()
     generalData = generalData.toJS()
@@ -582,20 +581,10 @@ import { setHasErrorsFichaTecnicaDelPozo, setTipoDeSistemo, setHistorialInterven
       { label: 'Bombeo electrocentrífugo', value: 'bombeoElectrocentrifugo' },
       { label: 'Bombeo mecánico', value: 'bombeoMecanico' },
     ]
-
-    let pvtOptions = []
-
-    if (campo && fieldWellOptions.length > 0) {
-      let wellSubset = fieldWellOptions.filter(i => i.FIELD_FORMACION_ID === parseInt(campo))
-      let usedWells = []
-      wellSubset.forEach(i => {
-        if (!usedWells.includes(i.WELL_FORMACION_ID)) {
-          usedWells.push(i.WELL_FORMACION_ID)
-          pvtOptions.push({ label: i.WELL_NAME, value: i.WELL_FORMACION_ID})
-        }
-      })
-    }
-
+    const pvtOptions = pvtWells.map(well => ({
+      label: well.WELL_NAME,
+      value: well.WELL_FORMACION_ID,
+    }))
     return (
       <div className='pozo-form' >
         <div className='header'>
@@ -609,7 +598,15 @@ import { setHasErrorsFichaTecnicaDelPozo, setTipoDeSistemo, setHistorialInterven
           <InputDate header="Pwf (fecha)" name='pwfFecha' value={pwfFecha} onChange={setPwfFecha} onBlur={this.updateErrors} errors={this.state.errors} />
           <InputRow header="Δp/mes" name='deltaPPerMes' value={deltaPPerMes} onChange={setDeltaPPerMes} unit={<div>Kg/cm<sup>2</sup>/mes</div>} onBlur={this.updateErrors} errors={this.state.errors} />
           <InputRow header={<span>T<sub>yac</sub></span>} name='tyac' value={tyac} onChange={setTyac} unit='°C' onBlur={this.updateErrors} errors={this.state.errors} />
-          <InputRowSelectUnitless header="PVT" name='pvt' value={pvt} callback={(e) => setPvt(e.value)} options={pvtOptions} onBlur={this.updateErrors} errors={this.state.errors} />
+          <InputRowSelectUnitless
+            header="PVT"
+            name='pvt'
+            value={parseInt(pvt)}
+            callback={(e) => setPvt(e.value)}
+            options={pvtOptions}
+            onBlur={this.updateErrors}
+            errors={this.state.errors}
+          />
           <InputRowUnitless header="Aparejo de producción" value={aparejoDeProduccion} onChange={setAparejoDeProduccion} name='aparejoDeProduccion' onBlur={this.updateErrors} errors={this.state.errors} />
           <InputRow header="Profundidad empacador" name='profEmpacador' value={profEmpacador} onChange={setProfEmpacador} unit='md' onBlur={this.updateErrors} errors={this.state.errors} />
           <InputRow header="Profundidad sensor P y T" name='profSensorPYT' value={profSensorPYT} onChange={setProfSensorPYT} unit='md' onBlur={this.updateErrors} errors={this.state.errors} />

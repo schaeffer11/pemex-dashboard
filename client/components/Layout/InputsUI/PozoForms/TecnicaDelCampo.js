@@ -26,6 +26,7 @@ let fluidoOptions = [
     super(props)
 
     this.state = {
+      pvtWells: [],
       errors: {
         descubrimientoField: {
           type: 'date',
@@ -176,11 +177,22 @@ let fluidoOptions = [
   }
 
   componentDidMount(){
-    let { setHasErrorsFichaTecnicaDelCampo, hasSubmitted } = this.props
+    let { setHasErrorsFichaTecnicaDelCampo, hasSubmitted, campo } = this.props
 
     let hasErrors = this.checkAllInputs(hasSubmitted)
     setHasErrorsFichaTecnicaDelCampo(hasErrors)
 
+    const { token } = this.props
+    const headers =  {
+      'Authorization': `Bearer ${token}`,
+      'content-type': 'application/json',
+    }
+
+    fetch(`/api/wells_from_field?field=${campo}`, { headers })
+      .then(r => r.json())
+      .then(r => {
+        this.setState({ pvtWells: r })
+      })
   }
 
   componentDidUpdate(prevProps) {
@@ -281,7 +293,7 @@ let fluidoOptions = [
           <InputDate header="Fecha de presión inicial" name='pInicialAnoField' value={pInicialAnoField} onChange={setPInicialAnoField} onBlur={this.updateErrors} errors={this.state.errors} />
           <InputRow header="Presión actual" name='pActualField' value={pActualField} onChange={setPActualField} unit={<div>Kg/cm<sup>2</sup></div>} onBlur={this.updateErrors} errors={this.state.errors} />
           <InputDate header="Fecha de presión actual" name='pActualFechaField' value={pActualFechaField} onChange={setPActualFechaField} unit='' onBlur={this.updateErrors} errors={this.state.errors} />
-          <InputRow header="DP/año" name='dpPerAnoField' value={dpPerAnoField} onChange={setDpPerAnoField} unit={<div>Kg/cm<sup>2</sup>/año</div>} onBlur={this.updateErrors} errors={this.state.errors} />
+          <InputRow header="∆P/año" name='dpPerAnoField' value={dpPerAnoField} onChange={setDpPerAnoField} unit={<div>Kg/cm<sup>2</sup>/año</div>} onBlur={this.updateErrors} errors={this.state.errors} />
           <InputRow header="T yac" name='tyacField' value={tyacField} onChange={setTyacField} unit='°C' onBlur={this.updateErrors} errors={this.state.errors} />
           <InputRow header="Profundidad al Plano de Referencia" name='prField' value={prField} onChange={setPrField} unit='mvbnm' onBlur={this.updateErrors} errors={this.state.errors} />
         </div>
@@ -290,11 +302,16 @@ let fluidoOptions = [
   }
 
   makeFluidoForm() {
-    let { setTipoDeFluidoField, setDensidadDelAceiteField, setPSatField, setRgaFluidoField, setSalinidadField, setPvtRepresentativoField, formData } = this.props
-
+    const { pvtWells } = this.state
+    let { setTipoDeFluidoField, setDensidadDelAceiteField, setPSatField, setRgaFluidoField, setSalinidadField, setPvtRepresentativoField, formData, campo } = this.props
     formData = formData.toJS()
-
     let { tipoDeFluidoField, densidadDelAceiteField, pSatField, rgaFluidoField, salinidadField, pvtRepresentativoField } = formData
+    console.log('my pvt wells', pvtWells)
+    const pvtOptions = pvtWells.map(well => ({
+      label: well.WELL_NAME,
+      value: well.WELL_FORMACION_ID,
+    }))
+
     return (
       <div className='fluido-form' >
         <div className='header'>
@@ -306,7 +323,15 @@ let fluidoOptions = [
           <InputRow header="Presión de saturación" name='pSatField' value={pSatField} onChange={setPSatField} unit={<div>Kg/cm<sup>2</sup></div>} onBlur={this.updateErrors} errors={this.state.errors} />
           <InputRow header="RGA" name='rgaFluidoField' value={rgaFluidoField} onChange={setRgaFluidoField} unit={<div>m<sup>3</sup>/m<sup>3</sup></div>} onBlur={this.updateErrors} errors={this.state.errors} />
           <InputRow header="Salinidad" name='salinidadField' value={salinidadField} onChange={setSalinidadField} unit='ppm' onBlur={this.updateErrors} errors={this.state.errors} />
-          <InputRowUnitless header="PVT representativo" name='pvtRepresentativoField' value={pvtRepresentativoField} onChange={setPvtRepresentativoField} onBlur={this.updateErrors} errors={this.state.errors} />
+          <InputRowSelectUnitless
+            header="PVT representativo"
+            name="pvtRepresentativoField"
+            options={pvtOptions}
+            value={parseInt(pvtRepresentativoField)}
+            callback={(e) => setPvtRepresentativoField(e.value)}
+            onBlur={this.updateErrors}
+            errors={this.state.errors}
+          />
         </div>
       </div>
     )
@@ -388,10 +413,12 @@ let fluidoOptions = [
 }
 
 const mapStateToProps = state => ({
+  token: state.getIn(['user', 'token']),
   formData: state.get('fichaTecnicaDelCampo'),
   hasErrors: state.getIn(['fichaTecnicaDelCampo', 'hasErrors']),
   hasSubmitted: state.getIn(['global', 'hasSubmitted']),
-  litologiaOptions: state.getIn(['global', 'litologiaOptions'])
+  litologiaOptions: state.getIn(['global', 'litologiaOptions']),
+  campo: state.getIn(['fichaTecnicaDelPozoHighLevel', 'campo']),
 })
 
 const mapDispatchToProps = dispatch => ({

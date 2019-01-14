@@ -4,6 +4,7 @@ import ReactHighcharts from 'react-highcharts'
 
 import { formatAverageDeviation as formatter } from '../../../../lib/tooltipFormatters'
 import { RenameInterventionTypes } from '../../../../lib/formatters'
+import { round } from '../../../../lib/helpers';
 
 let colorWheel = [
       '#56B3D8',
@@ -42,7 +43,7 @@ let colorWheel = [
           data: data.map(i => {
             return {
               x: 0,
-              y: i.deviation
+              y: round(i.deviation)
             }
           })
         }]
@@ -63,7 +64,7 @@ let colorWheel = [
           subData.forEach(j => {
             dataPoints.push({
               x: index, 
-              y: j.deviation, 
+              y: round(j.deviation), 
               color: colorWheel[colorIndex]})
           })
         })

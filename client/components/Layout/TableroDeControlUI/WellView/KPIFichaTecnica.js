@@ -2,6 +2,9 @@ import React, { PureComponent } from 'react'
 import autobind from 'autobind-decorator'
 import ReactHighCharts from 'react-highcharts'
 import { KPI } from '../Common/KPIs'
+import { formatText } from '../../../../pptx/formatters'
+
+
 
 const numWithCommas = (x) => {
   if (x === 0) {
@@ -28,10 +31,7 @@ const numWithCommas = (x) => {
     pwfFecha = pwfFecha ? `${pwfFecha.getDate()}/${pwfFecha.getMonth() + 1}/${pwfFecha.getFullYear()}` : ''
 
     Object.keys(data).forEach((key) => {
-      const value = data[key]
-      if (value === 'none' || value === 'None') {
-        data[key] = 'Ninguno'
-      }
+      data[key] = formatText(data[key])
     })
     
     return (

@@ -73,7 +73,8 @@ let classificationSeries = [{
     	dashStyle: 'Dash',
     	lineWidth: 1,
     	showInLegend: false,
-    	data: [[0,0], [max, max]]
+      data: [[0,0], [max, max]],
+      enableMouseTracking: false,
     })
 
   if (groupBy && groupBy === 'interventionType') {
