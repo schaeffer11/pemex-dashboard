@@ -67,7 +67,7 @@ export function buildFiltersOptions(data) {
   }
   data.filter(elem => {
     const key = Object.keys(elem)[0]
-    if (key === 'lowDate' || key === 'highDate') {
+    if ((key === 'lowDate' || key === 'highDate')) {
       return false
     }
     return true

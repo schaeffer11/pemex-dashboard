@@ -264,7 +264,7 @@ import ProductionBarGas from './ProductionBarGas'
         <div className='content'>
           <TimeSlider />
           <div>
-            <LocalModal title="Filtros">
+            <LocalModal title="Filtros" id="executiveFilters">
               <Filters />
             </LocalModal>
             <div className="groupBy-selection">

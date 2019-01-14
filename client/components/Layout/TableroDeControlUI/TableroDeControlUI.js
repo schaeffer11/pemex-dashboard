@@ -32,16 +32,6 @@ import routes from '../../../routes/routes'
       })
 
   }
-  async testAdmin() {
-    const { token } = this.props
-    const headers = {
-      'Authorization': `Bearer ${token}`,
-      'content-type': 'application/json',
-  }
-
-    const data = await fetch('/api/testingAdmin', { headers }).then(r => r.text())
-
-  }
   render() {
    return (
     <div className="analysis-content">

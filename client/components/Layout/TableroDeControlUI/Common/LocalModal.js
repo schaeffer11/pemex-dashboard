@@ -16,7 +16,11 @@ import ProgressBar from '../Common/ProgressBar'
 
   toggleModal() {
     const { isModalOpen } = this.state
-    this.setState({ isModalOpen: !isModalOpen })
+    return this.setState({ isModalOpen: !isModalOpen })
+  }
+
+  closeModal() {
+    this.setState({ isModalOpen: false })
   }
 
   displayArrow() {
@@ -29,13 +33,16 @@ import ProgressBar from '../Common/ProgressBar'
 
   render() {
     const { isModalOpen } = this.state
-    const { children, title } = this.props
+    const { children, title, id } = this.props
+    const childrenWithProps = React.Children.map(children, child =>
+      React.cloneElement(child, { closeModal: this.closeModal, id })
+    )
     return (
       <div className="localModal">
-        <button className={'open-export-btn'} onClick={() => this.toggleModal()}>
+        <button id={id} className={'open-export-btn'} onClick={() => this.toggleModal()}>
           {title} {this.displayArrow()}
         </button>
-        {isModalOpen && children}
+        {isModalOpen && childrenWithProps}
       </div>
     )
   }

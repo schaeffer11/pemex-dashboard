@@ -5,10 +5,12 @@ import AriaModal from 'react-aria-modal'
 import Select from 'react-select'
 import { generatePowerPoint } from '../../../../pptx'
 import ProgressBar from '../Common/ProgressBar'
+import { focusInCurrentTarget } from '../Common/Filters';
 
 @autobind class ExportExcel extends Component {
   constructor(props){
     super(props)
+    this.modalRef = React.createRef()
     this.state = {
       excelOption: '',
       isBuildingPowerpoint: false,
@@ -17,6 +19,10 @@ import ProgressBar from '../Common/ProgressBar'
       progress: 0,
       hasResults: false,
     }
+  }
+
+  componentDidMount() {
+    this.modalRef.current.focus()
   }
 
   async handleExcelExport() {
@@ -41,6 +47,17 @@ import ProgressBar from '../Common/ProgressBar'
     document.getElementById('csvExport').outerHTML = ''
   }
 
+  handleBlur(e) {
+    const { relatedTarget } = e
+    let targetId = null
+    if (relatedTarget) {
+      targetId = relatedTarget.id
+    }
+    if (!focusInCurrentTarget(e) && targetId !== this.props.id) {
+      this.props.closeModal()
+    }
+  }
+
   render() {
     const { excelOption } = this.state
     const { jobID } = this.props
@@ -52,7 +69,7 @@ import ProgressBar from '../Common/ProgressBar'
       { label: 'Desviación', value: 'desviacion' },
     ]
     return (
-      <div className='export-modal'>
+      <div className='export-modal' ref={this.modalRef} tabIndex="1" onBlur={this.handleBlur}>
         <div className='export-buttons'>
           <div className="excel-export">
             <label>Generar Excel</label>
