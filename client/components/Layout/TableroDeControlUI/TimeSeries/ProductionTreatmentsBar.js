@@ -29,7 +29,6 @@ import { KPI } from '../Common/KPIs'
       })
 
       numTreatmentData = numTreatmentData.sort((a, b) => {return a.x - b.x})
-
       groups.forEach(name => {
         let filteredData = data.filter(i => i.groupedName === name).map(j => {
           let utc = Date.UTC(j.YEAR, j.MONTH - 1)
@@ -41,7 +40,7 @@ import { KPI } from '../Common/KPIs'
 
         series.push({
           name: 'Producción Incremental',
-          data: filteredData,         
+          data: filteredData,
           yAxis: 0,
           zIndex: 0
         })

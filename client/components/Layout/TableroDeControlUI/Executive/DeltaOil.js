@@ -53,7 +53,7 @@ let classificationSeries = [{
 
     if (!groupBy) {
       series = classificationSeries.map(i => {
-        i.data = i.name === 'Exitosa' ? data.filter(j => j.qoResult > j.qo) : data.filter(j => j.qoResult <= j.qo)
+        i.data = i.name === 'Exitosa' ? data.filter(j => j.qoResult >= j.qo) : data.filter(j => j.qoResult < j.qo)
         return i
       })
     }
@@ -99,7 +99,7 @@ let classificationSeries = [{
       tooltip: { formatter },
 	    xAxis: {
 	    	title: {
-	    		text: 'Producción Incremental Estimada (bbl/d)'
+	    		text: 'Producción Incremental Programada (bbl/d)'
 	    	}
 	    },
 	    yAxis: {

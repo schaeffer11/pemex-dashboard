@@ -252,13 +252,11 @@ import ProductionBarGas from './ProductionBarGas'
     })
 
     let exportData = this.buildExecTableExport(execTableData, groupBy)
-
     let productionBarData = {}
     estIncData.forEach(i => {
         let key = i.groupedName === 1 ? undefined : i.groupedName
         productionBarData[key] = i
     })
-
     return (
       <div className="data executive">
         <div className='content'>
@@ -297,9 +295,9 @@ import ProductionBarGas from './ProductionBarGas'
                 width={'50%'}
                 multiplyChartsOnGrouping
               >
-              <JobBreakdown label='Tipo' data={jobBreakdownData} />
-              <ProductionBarOil label='Aceite' data={estIncData} />
-              <ProductionBarGas label='Gas' data={estIncData} />
+              <JobBreakdown label='Tipo' data={jobBreakdownData} groupBy={groupBy} />
+              <ProductionBarOil label='Aceite' data={productionBarData} groupBy={groupBy} />
+              <ProductionBarGas label='Gas' data={productionBarData} groupBy={groupBy} />
 {/*              <JobBreakdown label='Éxito' data={aforosCarouselData} />*/}
             </Card>
             <Card
@@ -308,8 +306,8 @@ import ProductionBarGas from './ProductionBarGas'
                 ref={this.cards[2]}
                 width={'50%'}
               >
-              <IncProdBar label={'Total'} data={estIncData} groupBy={groupBy} />  
-              <AvgIncProdBar label={'Promedio'} data={estIncData} groupBy={groupBy} />  
+              <IncProdBar label={'Total'} data={estIncData} groupBy={groupBy} />
+              <AvgIncProdBar label={'Promedio'} data={estIncData} groupBy={groupBy} />
             </Card>
             <Card
                 id="incProdDeviations"
