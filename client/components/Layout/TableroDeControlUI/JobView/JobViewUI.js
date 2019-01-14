@@ -755,10 +755,10 @@ import { formatText } from '../../../../pptx/formatters';
         <div className='content tablero-content'>
           <TimeSlider />
           <div className="filtersAndExport">
-            <LocalModal title="Filtros">
+            <LocalModal title="Filtros" id="jobViewFilters" isFilter>
               <Filters />
             </LocalModal>
-            <LocalModal title="Menú de Exportación">
+            <LocalModal title="Menú de Exportación" id="jobViewPptxExport">
               <ExportPptx />
             </LocalModal>
           </div>

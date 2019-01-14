@@ -705,6 +705,7 @@ router.get('/filterOptions', async (req, res) => {
     query += `\nWHERE 1 = 1 ${whereMap[q].query.join(' ')}`
 
     const queryContainer = `SELECT * FROM (${query}) a WHERE ${selectMap[q].notNull} IS NOT NULL`
+    console.log('!!!!!!!!!!!!!!query container!!!!!!!!!!!!!!!!1\n\n', queryContainer, selectMap[q].values)
     return queryPromise(q, queryContainer, whereMap[q].values).catch(e => {
 
       return e

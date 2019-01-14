@@ -330,10 +330,10 @@ import { fetchFilterData } from '../../../../lib/filters'
         <div className='content'>
           <TimeSlider />
           <div className="filtersAndExport">
-            <LocalModal title="Filtros">
+            <LocalModal title="Filtros" id="wellViewFilters" isFilter>
               <Filters />
             </LocalModal>
-            <LocalModal title="Menú de Exportación">
+            <LocalModal title="Menú de Exportación" id="wellViewExcelExports">
               <ExportExcel />
             </LocalModal>
           </div>

@@ -5,10 +5,12 @@ import AriaModal from 'react-aria-modal'
 import Select from 'react-select'
 import { generatePowerPoint } from '../../../../pptx'
 import ProgressBar from '../Common/ProgressBar'
+import { focusInCurrentTarget } from '../Common/Filters';
 
 @autobind class ExportPptx extends Component {
   constructor(props){
     super(props)
+    this.modalRef = React.createRef()
     this.state = {
       excelOption: '',
       isBuildingPowerpoint: false,
@@ -41,6 +43,10 @@ import ProgressBar from '../Common/ProgressBar'
         graficaDeTratamiento: { text: 'Gráfica de tratamiento', error: null },
       },
     }
+  }
+
+  componentDidMount() {
+    this.modalRef.current.focus()
   }
 
   determineError(error) {
@@ -126,6 +132,17 @@ import ProgressBar from '../Common/ProgressBar'
     return null
   }
 
+  handleBlur(e) {
+    const { relatedTarget } = e
+    let targetId = null
+    if (relatedTarget) {
+      targetId = relatedTarget.id
+    }
+    if (!focusInCurrentTarget(e) && targetId !== this.props.id) {
+      this.props.closeModal()
+    }
+  }
+
   render() {
     const { excelOption, isBuildingPowerpoint } = this.state
     const { jobID } = this.props
@@ -137,7 +154,7 @@ import ProgressBar from '../Common/ProgressBar'
       { label: 'Desviación', value: 'desviacion' },
     ]
     return (
-      <div className='export-modal'>
+      <div ref={this.modalRef} tabIndex="1" onBlur={this.handleBlur} className='export-modal'>
         <div className='export-buttons'>
           <div className="pptx-export">
             <label>Generar Presentación</label>

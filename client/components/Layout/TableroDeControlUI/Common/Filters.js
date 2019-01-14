@@ -1,4 +1,5 @@
 import React, { Component } from 'react'
+import ReactDOM from 'react-dom'
 import autobind from 'autobind-decorator'
 import { connect } from 'react-redux'
 import Select from 'react-select'
@@ -8,13 +9,31 @@ import { checkForDifferencesInObjects } from '../../../../lib/helpers'
 import { setGeneralFilters, setGeneralGlobalAnalysis, setMergeGlobalAnalysis } from '../../../../redux/actions/global'
 import GroupBy from './GroupBy'
 
+export const focusInCurrentTarget = ({ relatedTarget, currentTarget }) => {
+  if (relatedTarget === null) {
+    return false
+  }
+  let node = relatedTarget.parentNode;
+  while (node !== null) {
+    if (node === currentTarget) {
+      return true
+    }
+    node = node.parentNode;
+  }
+  return false;
+}
+
 @autobind class Filters extends Component {
   constructor(props) {
     super(props);
+    this.modalRef = React.createRef()
     this.state = {}
   }
 
   async componentDidMount() {
+    // On mount we focus on the modal so we can blur if the user clicks elsewhere.
+    this.modalRef.current.focus()
+
     let { setGeneralFilters, options, globalAnalysis, token } = this.props
     options = options.toJS()
     globalAnalysis = globalAnalysis.toJS()
@@ -104,9 +123,6 @@ import GroupBy from './GroupBy'
   handleSelect(selection, type) {
     const { setGeneralAnalysis } = this.props
     const value = handleSelectValue(selection)
-    if (value === null) {
-
-    }
     setGeneralAnalysis([type], value)
   }
 
@@ -133,6 +149,14 @@ import GroupBy from './GroupBy'
     return Object.keys(options).map(k => {
       const { title } = filters[k]
       const selectValue = globalAnalysis[k]
+      // We can encounter duplicate options (results vs no results), so we remove them here, because we don't need the distinction
+      const unique = {}
+      const filteredOptions = options[k].filter((elem) => {
+        if (unique[elem.value]) {
+          return false
+        }
+        return unique[elem.value] = true
+      })
 
       return (
         <div key={`filter_${k}`} className="filter-individual">
@@ -142,7 +166,7 @@ import GroupBy from './GroupBy'
             placeholder="Seleccionar"
             isDisabled={k === groupBy}
             className="export-select"
-            options={options[k]}
+            options={filteredOptions}
             onChange={(selection) => this.handleSelect(selection, k)}
             value={selectSimpleValue(selectValue, options[k])}
           />
@@ -151,9 +175,20 @@ import GroupBy from './GroupBy'
     })
   }
 
+  handleBlur(e) {
+    const { relatedTarget } = e
+    let targetId = null
+    if (relatedTarget) {
+      targetId = relatedTarget.id
+    }
+    if (!focusInCurrentTarget(e) && targetId !== this.props.id) {
+      this.props.closeModal()
+    }
+  }
+
   render() {
     return (
-      <div className='export-modal filters'>
+      <div ref={this.modalRef} className='export-modal filters' tabIndex="1" onClick={this.handleClick} onBlur={this.handleBlur}>
         <div className="filters-tablero">
           {this.buildSelects()}
         </div>
