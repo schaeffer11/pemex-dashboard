@@ -123,9 +123,6 @@ export const focusInCurrentTarget = ({ relatedTarget, currentTarget }) => {
   handleSelect(selection, type) {
     const { setGeneralAnalysis } = this.props
     const value = handleSelectValue(selection)
-    if (value === null) {
-
-    }
     setGeneralAnalysis([type], value)
   }
 

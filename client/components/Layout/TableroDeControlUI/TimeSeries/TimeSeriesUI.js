@@ -154,7 +154,7 @@ import VolumeGasTreatments from './VolumeGasTreatments'
         <div className='content'>
           <TimeSlider />
           <div>
-            <LocalModal title="Filtros" id="timeSeriesFilters">
+            <LocalModal title="Filtros" id="timeSeriesFilters" isFilter>
               <Filters />
             </LocalModal>
             <div className="groupBy-selection">
