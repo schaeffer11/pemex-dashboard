@@ -99,8 +99,8 @@ const errorsVolumes = [
   { name: 'solventeNombre', type: 'text' },
   { name: 'divergenteVol', type: 'text' },
   { name: 'divergenteNombre', type: 'text' },
-  { name: desplazamientoLiquidoVol, type: 'text' },
-  { name: desplazamientoLiquidoNombre, type: 'text' },
+  { name: 'desplazamientoLiquidoVol', type: 'text' },
+  { name: 'desplazamientoLiquidoNombre', type: 'text' },
   { name: 'totalN2', type: 'text' },
 ]
 
@@ -448,6 +448,7 @@ let columnsApuntalado = [
         beneficioProgramado: '',
         beneficioOficial: '',
         error: true,
+        ...rowVolumes,
       }])
       this.checkForErrors('', 'apuntaladoTable')
     }
@@ -485,6 +486,7 @@ let columnsApuntalado = [
         beneficioProgramado: '',
         beneficioOficial: '',
         error: true,
+        ...rowVolumes,
       }
 
       const errors = [
@@ -504,6 +506,7 @@ let columnsApuntalado = [
         { name: 'fluidoFractura', type: 'number' },
         { name: 'beneficioProgramado', type: 'number' },
         { name: 'beneficioOficial', type: 'number' },
+        ...errorsVolumes,
       ]
 
     return (
@@ -561,6 +564,7 @@ let columnsApuntalado = [
       fluidoFractura: '',
       beneficioProgramado: '',
       beneficioOficial: '',
+      ...rowVolumes,
       error: true,
     }])
       this.checkForErrors('', 'acidoTable')
@@ -596,6 +600,7 @@ let columnsApuntalado = [
       fluidoFractura: '',
       beneficioProgramado: '',
       beneficioOficial: '',
+      ...rowVolumes,
       error: true,
     }
     const errors = [
@@ -614,6 +619,7 @@ let columnsApuntalado = [
       { name: 'fluidoFractura', type: 'number' },
       { name: 'beneficioProgramado', type: 'number' },
       { name: 'beneficioOficial', type: 'number' },
+      ...errorsVolumes,
     ]
 
     return (
@@ -660,13 +666,7 @@ let columnsApuntalado = [
       tipoDeTratamiento: '',
       objetivo: '',
       compania: '',
-      acidoVol: '',
-      acidoNombre: '',
-      solventeVol: '',
-      solventeNombre: '',
-      divergenteVol: '',
-      divergenteNombre: '',
-      totalN2: '',
+      ...rowVolumes,
       beneficioProgramado: '',
       beneficioOficial: '',
       error: true,

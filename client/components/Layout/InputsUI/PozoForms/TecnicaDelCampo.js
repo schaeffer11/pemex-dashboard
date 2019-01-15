@@ -306,7 +306,6 @@ let fluidoOptions = [
     let { setTipoDeFluidoField, setDensidadDelAceiteField, setPSatField, setRgaFluidoField, setSalinidadField, setPvtRepresentativoField, formData, campo } = this.props
     formData = formData.toJS()
     let { tipoDeFluidoField, densidadDelAceiteField, pSatField, rgaFluidoField, salinidadField, pvtRepresentativoField } = formData
-    console.log('my pvt wells', pvtWells)
     const pvtOptions = pvtWells.map(well => ({
       label: well.WELL_NAME,
       value: well.WELL_FORMACION_ID,
