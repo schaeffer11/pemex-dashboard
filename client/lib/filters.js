@@ -44,6 +44,7 @@ export const getFilters = () => ({
 })
 
 export async function fetchFilterData(token, globalAnalysis) {
+  console.log('whats going on?')
   const query = buildQuery(globalAnalysis)
     const headers = {
         'Authorization': `Bearer ${token}`,
@@ -102,5 +103,6 @@ function buildQuery(globalAnalysis) {
   globalAnalysis.lowDate = convertLowDate(globalAnalysis.lowDate)
   globalAnalysis.highDate = convertHighDate(globalAnalysis.highDate)
   const queries = [...filteredFilters, 'lowDate', 'highDate'].map(f => `${f}=${globalAnalysis[f]}`)
+  console.log('query>????', queries)
   return queries
 }

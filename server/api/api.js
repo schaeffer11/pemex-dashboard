@@ -353,6 +353,36 @@ router.get('/activo', (req, res) => {
     })
 })
 
+router.get('/ttt', (req, res) => {
+  const { query } = req
+
+  const map = {
+    subdireccion: 'SUBDIRECCION_ID',
+    activo: 'ACTIVO_ID',
+    field: 'FIELD_FORMACION_ID',
+    well: 'WELL_FORMACION_ID',
+  }
+
+  let sqlQuery = `SELECT SUBDIRECCION_NAME, SUBDIRECCION_ID, ACTIVO_NAME, ACTIVO_ID, FIELD_NAME, FIELD_FORMACION_ID, WELL_NAME, WELL_FORMACION_ID
+  FROM FieldWellMapping
+  WHERE 1 = 1`
+
+  const a = Object.keys(query).filter((elem) => map[elem]).map((elem) => {
+    return `${map[elem]} = ${query[elem]}`
+  })
+  if (a.length > 0) {
+    sqlQuery += ` AND ${a.join(' AND ')}`
+  }
+  console.log('da que', sqlQuery)
+  connection.query(sqlQuery, (err, results) => {
+    if (err) {
+      console.log(err)
+      return res.json({ error: true })
+    }
+    res.json(results)
+  })
+})
+
 router.post('/compromiso', allowAdmin, (req, res) => {
   console.log('IN COMPROMISO')
   createCompromiso(req, res)

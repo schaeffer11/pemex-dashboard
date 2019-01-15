@@ -98,6 +98,7 @@ export const focusInCurrentTarget = ({ relatedTarget, currentTarget }) => {
     globalAnalysis.lowDate = convertLowDate(globalAnalysis.lowDate)
     globalAnalysis.highDate = convertHighDate(globalAnalysis.highDate)
     const queries = [...filteredFilters, 'lowDate', 'highDate'].map(f => `${f}=${globalAnalysis[f]}`)
+    console.log('queries', queries)
     return queries
   }
 
