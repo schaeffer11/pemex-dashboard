@@ -104,6 +104,70 @@ const errorsVolumes = [
   { name: 'totalN2', type: 'text' },
 ]
 
+const apuntaladoVolumeColumns = [{ 
+  Header: 'Gel Fractura',
+  columns: [{
+    Header: <div>m<sup>3</sup></div>,
+    accessor: 'gelFracturaVol',
+    cell: 'renderTextarea',
+  }, { 
+    Header: 'Nombre Comercial',
+    accessor: 'gelFracturaNombre',
+    cell: 'renderTextarea',
+  }]
+}, { 
+  Header: 'Apuntalante',
+    columns: [{
+    Header: <div>m<sup>3</sup></div>,
+    accessor: 'apuntalanteVol',
+    cell: 'renderTextarea',
+  }, { 
+    Header: 'Nombre Comercial',
+    accessor: 'apuntalanteNombre',
+    cell: 'renderTextarea',
+  }]
+},
+{
+  Header: 'Desplazamiento Líquido',
+  columns: [{
+    Header: <div>m<sup>3</sup></div>,
+    accessor: 'desplazamientoLiquidoVol',
+    cell: 'renderTextarea',
+  }, { 
+    Header: 'Nombre Comercial',
+    accessor: 'desplazamientoLiquidoNombre',
+    cell: 'renderTextarea',
+  }]
+},
+{
+  Header: <div>Total N<sub>2</sub><br/>ST</div>,
+  columns: [{ 
+    Header: <div>m<sup>3</sup></div>,
+    accessor: 'totalN2',
+    cell: 'renderTextarea',
+  }]
+}]
+
+const rowApuntaladoVolumes = {
+  gelFracturaVol: '',
+  gelFracturaNombre: '',
+  apuntalanteVol: '',
+  apuntalanteNombre: '',
+  desplazamientoLiquidoVol: '',
+  desplazamientoLiquidoNombre: '',
+  totalN2: '',
+}
+
+const errorsApuntaladoVolumes = [
+  { name: 'gelFracturaVol', type: 'text' },
+  { name: 'gelFracturaNombre', type: 'text' },
+  { name: 'apuntalanteVol', type: 'text' },
+  { name: 'apuntalanteNombre', type: 'text' },
+  { name: 'desplazamientoLiquidoVol', type: 'text' },
+  { name: 'desplazamientoLiquidoNombre', type: 'text' },
+  { name: 'totalN2', type: 'text' },
+]
+
 let columnsEstimulacion = [
   {
     Header: '',
@@ -264,6 +328,18 @@ let columnsAcido = [
     cell: 'renderNumber'
   },
   ...volumeColumns,
+  { 
+    Header: 'Gel Lineal',
+      columns: [{
+      Header: <div>m<sup>3</sup></div>,
+      accessor: 'gelLinealVol',
+      cell: 'renderTextarea',
+    }, { 
+      Header: 'Nombre Comercial',
+      accessor: 'gelLinealNombre',
+      cell: 'renderTextarea',
+    }]
+  },
   ...benefitColumns,
 ]
 
@@ -335,7 +411,7 @@ let columnsApuntalado = [
     accessor: 'fluidoFractura',
     cell: 'renderNumber'
   },
-  ...volumeColumns,
+  ...apuntaladoVolumeColumns,
   ...benefitColumns,
 ]
 
@@ -448,7 +524,7 @@ let columnsApuntalado = [
         beneficioProgramado: '',
         beneficioOficial: '',
         error: true,
-        ...rowVolumes,
+        ...rowApuntaladoVolumes,
       }])
       this.checkForErrors('', 'apuntaladoTable')
     }
@@ -486,7 +562,7 @@ let columnsApuntalado = [
         beneficioProgramado: '',
         beneficioOficial: '',
         error: true,
-        ...rowVolumes,
+        ...rowApuntaladoVolumes,
       }
 
       const errors = [
@@ -506,7 +582,7 @@ let columnsApuntalado = [
         { name: 'fluidoFractura', type: 'number' },
         { name: 'beneficioProgramado', type: 'number' },
         { name: 'beneficioOficial', type: 'number' },
-        ...errorsVolumes,
+        ...errorsApuntaladoVolumes,
       ]
 
     return (
@@ -565,6 +641,8 @@ let columnsApuntalado = [
       beneficioProgramado: '',
       beneficioOficial: '',
       ...rowVolumes,
+      gelLinealNombre: '',
+      gelLinealVol: '',
       error: true,
     }])
       this.checkForErrors('', 'acidoTable')
@@ -601,6 +679,8 @@ let columnsApuntalado = [
       beneficioProgramado: '',
       beneficioOficial: '',
       ...rowVolumes,
+      gelLinealNombre: '',
+      gelLinealVol: '',
       error: true,
     }
     const errors = [
@@ -620,6 +700,8 @@ let columnsApuntalado = [
       { name: 'beneficioProgramado', type: 'number' },
       { name: 'beneficioOficial', type: 'number' },
       ...errorsVolumes,
+      { name: 'gelLinealVol', type: 'text' },
+      { name: 'gelLinealNombre', type: 'text' },
     ]
 
     return (
