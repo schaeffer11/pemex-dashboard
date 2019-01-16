@@ -276,7 +276,7 @@ maps.evaluacionPetrofisica = {
     sw: { text: 'Sw.', unit: units.percent },
     dens: { text: 'Dens.', unit: units.densityLayer },
     resis: { text: 'Resis.', unit: units.resistivity },
-    perm: { text: 'Perm.', unit: units.measuredDepth },
+    perm: { text: 'Perm.', unit: units.milliDarcy },
   },
   mudLossData: {
     cimaMD: { text: 'Cima', unit: units.measuredDepth },
