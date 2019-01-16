@@ -206,7 +206,7 @@ import { calculateValuesApuntaladoCedula } from '../../../../../lib/formatters';
           <CalculatedValue
             header={<div>Gel Lineal</div>}
             value={volumenGelLineal}
-            unit={<div>m<sup>3</sup></div>}
+            unit={<div>U.S. Gal</div>}
           />
           <CalculatedValue
             header={<div>Total de líquido</div>}
