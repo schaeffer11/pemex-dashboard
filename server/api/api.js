@@ -1027,6 +1027,8 @@ router.get('/getHistIntervencionesEstimulacionNew', async (req, res) => {
     TOTAL_N2: { child: 'totalN2' },
     BENEFICIO_PROGRAMADO: { child: 'beneficioProgramado' },
     BENEFICIO_OFICIAL: { child: 'beneficioOficial' },    
+    DESPLAZAMIENTO_LIQUIDO_VOL: { child: 'desplazamientoLiquidoVol' },
+    DESPLAZAMIENTO_LIQUIDO_NOMBRE: { child: 'desplazamientoLiquidoNombre' },
     HAS_ERRORS: { child: 'error'}
   }
 
@@ -1086,6 +1088,17 @@ router.get('/getHistIntervencionesAcidoNew', async (req, res) => {
     FLUIDO_FRACTURA: { child: 'fluidoFractura' },    
     BENEFICIO_PROGRAMADO: { child: 'beneficioProgramado' },
     BENEFICIO_OFICIAL: { child: 'beneficioOficial' },  
+    GEL_LINEAL_VOL: { child: 'gelLinealVol' },
+    GEL_LINEAL_NOMBRE: { child: 'gelLinealNombre' }, 
+    DESPLAZAMIENTO_LIQUIDO_VOL: { child: 'desplazamientoLiquidoVol' },
+    DESPLAZAMIENTO_LIQUIDO_NOMBRE: { child: 'desplazamientoLiquidoNombre' },
+    ACIDO_VOL: { child: 'acidoVol' },
+    ACIDO_NOMBRE: { child: 'acidoNombre' },
+    SOLVENTE_VOL: { child: 'solventeVol' },
+    SOLVENTE_NOMBRE: { child: 'solventeNombre' },
+    DIVERGENTE_VOL: { child: 'divergenteVol' },
+    DIVERGENTE_NOMBRE: { child: 'divergenteNombre' },
+    TOTAL_N2: { child: 'totalN2' },
     HAS_ERRORS: { child: 'error'}  
   }
 
@@ -1145,7 +1158,14 @@ router.get('/getHistIntervencionesApuntaladoNew', async (req, res) => {
     PRESION_NETA: { child: 'presionNeta' },
     FLUIDO_FRACTURA: { child: 'fluidoFractura' },    
     BENEFICIO_PROGRAMADO: { child: 'beneficioProgramado' },
-    BENEFICIO_OFICIAL: { child: 'beneficioOficial' },    
+    BENEFICIO_OFICIAL: { child: 'beneficioOficial' },   
+    DESPLAZAMIENTO_LIQUIDO_VOL: { child: 'desplazamientoLiquidoVol' },
+    DESPLAZAMIENTO_LIQUIDO_NOMBRE: { child: 'desplazamientoLiquidoNombre' },
+    APUNTALANTE_VOL: { child: 'apuntalanteVol' },
+    APUNTALANTE_NOMBRE: { child: 'apuntalanteNombre' },
+    GEL_FRACTURA_VOL: { child: 'gelFracturaVol' },
+    GEL_FRACTURA_NOMBRE: { child: 'gelFracturaNombre' },
+    TOTAL_N2: { child: 'totalN2' },
     HAS_ERRORS: { child: 'error'}
   }
 
