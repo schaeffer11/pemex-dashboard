@@ -231,7 +231,7 @@ let columnsTermico = [
     cell: 'renderDate',
   },
   { 
-    Header: 'Objectivo',
+    Header: 'Objetivo',
     accessor: 'objetivo',
     cell: 'renderTextarea',
   },

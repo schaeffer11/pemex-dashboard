@@ -67,7 +67,7 @@ let layerColumns = [
     accessor: 'resis',
     cell: 'renderNumber',
   }, { 
-    Header: <div>Perm<br></br>(md)</div>,
+    Header: <div>Perm<br></br>(mD)</div>,
     accessor: 'perm',
     cell: 'renderNumber',
   }

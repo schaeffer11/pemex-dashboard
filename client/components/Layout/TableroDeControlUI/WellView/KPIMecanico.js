@@ -23,8 +23,7 @@ const numWithCommas = (x) => {
     Object.keys(data).forEach((key) => {
       data[key] = formatText(data[key])
     })
-
-    return (        
+    return (
       <div className="KPIs" style={{padding: '0px 20px 20px 20px'}}>
         <KPI header='Tipo de Terminación' value={data.TIPO_DE_TERMINACION} />
         <KPI header='h(intervalo productor)' value={numWithCommas(data.H_INTERVALO_PRODUCTOR)} unit=' md'/> 
