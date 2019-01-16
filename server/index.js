@@ -7,10 +7,10 @@ import bodyParser from 'body-parser'
 import helmet from 'helmet'
 import { autoRefreshSession } from './auth/session-store'
 import { sslRedirect } from './middleware'
-import logger from './logger'
+// import logger from './logger'
 import pkg from '../package.json'
 import compression from 'compression'
-import proxy from 'http-proxy-middleware'
+// import proxy from 'http-proxy-middleware'
 import cors from 'cors'
 
 // CONFIG & ENVIRONMENT
@@ -22,7 +22,7 @@ const PORT = process.env.PORT || config.ports.http
 console.log(`initializing ${pkg.description} server in ${env} mode...`)
 var app = express()
 app.use(helmet())
-
+app.use(helmet.noCache())
 
 // Redirect to secure
 app.enable('trust proxy')
@@ -81,7 +81,7 @@ import timeSeries from './api/tableroDeControl/timeSeries'
 app.use('/timeSeries', timeSeries)
 
 // ENABLE LOGGING AND CACHE CONTROL
-app.use(logger)
+// app.use(logger)
 
 // VERSION & PACKAGE CHECKING
 app.get('/version', (req, res) => {

@@ -6,7 +6,7 @@ import Select, { components } from 'react-select'
 import { connect } from 'react-redux'
 
 import { setJob, setJobType } from '../../../../redux/actions/global'
-import { sortLabels } from '../../../../lib/formatters'
+import { sortLabels, selectSimpleValue } from '../../../../lib/formatters'
 
 const Group = props => (
   <div>
@@ -28,25 +28,31 @@ const Group = props => (
   }
 
   render() {
-    const { options } = this.props
+    const { options, job } = this.props
+    const selectJob = selectSimpleValue(job, options)
     return (
 	      <div className='well-selector' >
-	        Tratamiento
+	        Tratamiento 
           <Select
             isClearable
             options={options}
             onChange={this.handleSelectJob}
             components={{Group}}
+            value={selectJob}
           />
 	      </div>
     )
   }
 }
 
+const mapStateToProps = state => ({
+  job: state.getIn(['globalAnalysis', 'job']),
+})
+
 const mapDispatchToProps = dispatch => ({
 	setJob: val => dispatch(setJob(val)),
   setJobType: val => dispatch(setJobType(val)),
 })
 
-export default connect(null, mapDispatchToProps)(JobSelect)
+export default connect(mapStateToProps, mapDispatchToProps)(JobSelect)
 

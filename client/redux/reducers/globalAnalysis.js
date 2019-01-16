@@ -32,6 +32,8 @@ const globalAnalysis = (state = initialState, action) => {
       return state.merge(action.obj)
     case 'set_groupByAndGroup':
       return state.set('groupBy', action.groupBy).set('groups', fromJS(action.groups))
+    case 'set_wellAndJob':
+      return state.set('well', action.value).set('job', null).set('jobType', null)
     // case 'set_activo':
     //   return state.set('activo', fromJS(action.value))
     // case 'set_field':

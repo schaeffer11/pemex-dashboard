@@ -1,5 +1,6 @@
 import React, { PureComponent } from 'react'
 import autobind from 'autobind-decorator'
+import { connect } from 'react-redux'
 
 import { KPI } from '../Common/KPIs'
 
@@ -16,14 +17,10 @@ const numWithCommas = (x) => {
 @autobind class MoreKPIs extends PureComponent {
 
   render() {
-    let { jobData } = this.props
-
+    let { jobData, job } = this.props
     let alcances = ''
     let objetivo = ''
-
-
-
-    if (jobData.length > 0) {
+    if (job && jobData.length > 0) {
       alcances = jobData[0].ALCANCES
       objetivo = jobData[0].OBJETIVO
     }
@@ -37,6 +34,8 @@ const numWithCommas = (x) => {
   }
 }
 
+const mapStateToProps = state => ({
+  job: state.getIn(['globalAnalysis', 'job']),
+})
 
-
-export default MoreKPIs
+export default connect(mapStateToProps)(MoreKPIs)
