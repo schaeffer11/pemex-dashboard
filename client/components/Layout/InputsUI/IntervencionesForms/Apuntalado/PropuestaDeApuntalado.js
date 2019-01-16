@@ -173,7 +173,8 @@ import { calculateValuesApuntaladoCedula } from '../../../../../lib/formatters';
       volumenGelFractura,
       volumenDesplazamientoLiquido,
       volumenTotalDeLiquido,
-      volumenApuntalante
+      volumenApuntalante,
+      volumenGelLineal
     } = formData
 
     return (
@@ -200,6 +201,11 @@ import { calculateValuesApuntaladoCedula } from '../../../../../lib/formatters';
           <CalculatedValue
             header={<div>Desplazamiento líquido</div>}
             value={volumenDesplazamientoLiquido}
+            unit={<div>U.S. Gal</div>}
+          />
+          <CalculatedValue
+            header={<div>Gel Lineal</div>}
+            value={volumenGelLineal}
             unit={<div>U.S. Gal</div>}
           />
           <CalculatedValue
@@ -303,6 +309,7 @@ import { calculateValuesApuntaladoCedula } from '../../../../../lib/formatters';
       volumenGelFractura: calculateVolumes(cedulaData, 'volLiquido', ['pad', 'pad-proppant']),
       volumenDesplazamientoLiquido: calculateVolumes(cedulaData, 'volLiquido', ['flush']),
       volumenTotalDeLiquido: calculateVolumes(cedulaData, 'volLiquido'),
+      volumenGelLineal: calculateVolumes(cedulaData, 'volLiquido', ['gelLineal']),
       volumenApuntalante: cedulaData[cedulaData.length - 1].apuntalanteAcumulado / 100
     }
     setCedulaData(cedulaData, volumes)

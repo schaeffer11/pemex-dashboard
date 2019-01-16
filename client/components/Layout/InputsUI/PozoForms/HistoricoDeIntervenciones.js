@@ -6,6 +6,168 @@ import InputTable from '../../Common/InputTable'
 import ExcelUpload from '../../Common/ExcelUpload'
 import { checkDate, checkEmpty } from '../../../../lib/errorCheckers'
 
+
+const volumeColumns = [
+  { 
+    Header: 'Ácido',
+    columns: [{
+      Header: <div>m<sup>3</sup></div>,
+      accessor: 'acidoVol',
+      cell: 'renderTextarea',
+    }, { 
+      Header: 'Nombre Comercial',
+      accessor: 'acidoNombre',
+      cell: 'renderTextarea',
+    }]
+  }, { 
+    Header: 'Solvente',
+      columns: [{
+      Header: <div>m<sup>3</sup></div>,
+      accessor: 'solventeVol',
+      cell: 'renderTextarea',
+    }, { 
+      Header: 'Nombre Comercial',
+      accessor: 'solventeNombre',
+      cell: 'renderTextarea',
+    }]
+  }, { 
+    Header: 'Divergente',
+    columns: [{
+      Header: <div>m<sup>3</sup></div>,
+      accessor: 'divergenteVol',
+      cell: 'renderTextarea',
+    }, { 
+      Header: 'Nombre Comercial',
+      accessor: 'divergenteNombre',
+      cell: 'renderTextarea',
+    }]
+  },
+  {
+    Header: 'Desplazamiento Líquido',
+    columns: [{
+      Header: <div>m<sup>3</sup></div>,
+      accessor: 'desplazamientoLiquidoVol',
+      cell: 'renderTextarea',
+    }, { 
+      Header: 'Nombre Comercial',
+      accessor: 'desplazamientoLiquidoNombre',
+      cell: 'renderTextarea',
+    }]
+  },
+  {
+    Header: <div>Total N<sub>2</sub><br/>ST</div>,
+    columns: [{ 
+      Header: <div>m<sup>3</sup></div>,
+      accessor: 'totalN2',
+      cell: 'renderTextarea',
+    }]
+  },
+]
+
+const benefitColumns = [{
+  Header: <div>Beneficio<br/>(bpd)</div>,
+  columns: [
+    {
+      Header: 'Programado',
+      accessor: 'beneficioProgramado',
+      cell: 'renderNumber',
+    },
+    { 
+      Header: 'Oficial',
+      accessor: 'beneficioOficial',
+      cell: 'renderNumber',
+    }
+  ]
+}]
+
+const rowVolumes = {
+  acidoVol: '',
+  acidoNombre: '',
+  solventeVol: '',
+  solventeNombre: '',
+  divergenteVol: '',
+  divergenteNombre: '',
+  desplazamientoLiquidoVol: '',
+  desplazamientoLiquidoNombre: '',
+  totalN2: '',
+}
+
+const errorsVolumes = [
+  { name: 'acidoVol', type: 'text' },
+  { name: 'acidoNombre', type: 'text' },
+  { name: 'solventeVol', type: 'text' },
+  { name: 'solventeNombre', type: 'text' },
+  { name: 'divergenteVol', type: 'text' },
+  { name: 'divergenteNombre', type: 'text' },
+  { name: 'desplazamientoLiquidoVol', type: 'text' },
+  { name: 'desplazamientoLiquidoNombre', type: 'text' },
+  { name: 'totalN2', type: 'text' },
+]
+
+const apuntaladoVolumeColumns = [{ 
+  Header: 'Gel Fractura',
+  columns: [{
+    Header: <div>m<sup>3</sup></div>,
+    accessor: 'gelFracturaVol',
+    cell: 'renderTextarea',
+  }, { 
+    Header: 'Nombre Comercial',
+    accessor: 'gelFracturaNombre',
+    cell: 'renderTextarea',
+  }]
+}, { 
+  Header: 'Apuntalante',
+    columns: [{
+    Header: <div>m<sup>3</sup></div>,
+    accessor: 'apuntalanteVol',
+    cell: 'renderTextarea',
+  }, { 
+    Header: 'Nombre Comercial',
+    accessor: 'apuntalanteNombre',
+    cell: 'renderTextarea',
+  }]
+},
+{
+  Header: 'Desplazamiento Líquido',
+  columns: [{
+    Header: <div>m<sup>3</sup></div>,
+    accessor: 'desplazamientoLiquidoVol',
+    cell: 'renderTextarea',
+  }, { 
+    Header: 'Nombre Comercial',
+    accessor: 'desplazamientoLiquidoNombre',
+    cell: 'renderTextarea',
+  }]
+},
+{
+  Header: <div>Total N<sub>2</sub><br/>ST</div>,
+  columns: [{ 
+    Header: <div>m<sup>3</sup></div>,
+    accessor: 'totalN2',
+    cell: 'renderTextarea',
+  }]
+}]
+
+const rowApuntaladoVolumes = {
+  gelFracturaVol: '',
+  gelFracturaNombre: '',
+  apuntalanteVol: '',
+  apuntalanteNombre: '',
+  desplazamientoLiquidoVol: '',
+  desplazamientoLiquidoNombre: '',
+  totalN2: '',
+}
+
+const errorsApuntaladoVolumes = [
+  { name: 'gelFracturaVol', type: 'text' },
+  { name: 'gelFracturaNombre', type: 'text' },
+  { name: 'apuntalanteVol', type: 'text' },
+  { name: 'apuntalanteNombre', type: 'text' },
+  { name: 'desplazamientoLiquidoVol', type: 'text' },
+  { name: 'desplazamientoLiquidoNombre', type: 'text' },
+  { name: 'totalN2', type: 'text' },
+]
+
 let columnsEstimulacion = [
   {
     Header: '',
@@ -36,58 +198,9 @@ let columnsEstimulacion = [
       accessor: 'compania',
       cell: 'renderEditable',
     }]
-  }, { 
-    Header: 'Ácido',
-    columns: [{
-      Header: <div>m<sup>3</sup></div>,
-      accessor: 'acidoVol',
-      cell: 'renderNumber',
-    }, { 
-      Header: 'Nombre Comercial',
-      accessor: 'acidoNombre',
-      cell: 'renderEditable',
-    }]
-  }, { 
-    Header: 'Solvente',
-      columns: [{
-      Header: <div>m<sup>3</sup></div>,
-      accessor: 'solventeVol',
-      cell: 'renderNumber',
-    }, { 
-      Header: 'Nombre Comercial',
-      accessor: 'solventeNombre',
-      cell: 'renderEditable',
-    }]
-  }, { 
-    Header: 'Divergente',
-    columns: [{
-      Header: <div>m<sup>3</sup></div>,
-      accessor: 'divergenteVol',
-      cell: 'renderNumber',
-    }, { 
-      Header: 'Nombre Comercial',
-      accessor: 'divergenteNombre',
-      cell: 'renderEditable',
-    }]
-  }, {
-    Header: <div>Total N<sub>2</sub><br/>ST</div>,
-    columns: [{ 
-      Header: <div>m<sup>3</sup></div>,
-      accessor: 'totalN2',
-      cell: 'renderNumber',
-    }]
-  }, {
-    Header: <div>Beneficio<br/>(bpd)</div>,
-    columns: [{ 
-      Header: 'Programado',
-      accessor: 'beneficioProgramado',
-      cell: 'renderNumber',
-    }, { 
-      Header: 'Oficial',
-      accessor: 'beneficioOficial',
-      cell: 'renderNumber',
-  }]
-}
+  },
+  ...volumeColumns,
+  ...benefitColumns,
 ]
 
 let columnsTermico = [
@@ -118,7 +231,7 @@ let columnsTermico = [
     cell: 'renderDate',
   },
   { 
-    Header: 'Objectivo',
+    Header: 'Objetivo',
     accessor: 'objetivo',
     cell: 'renderTextarea',
   },
@@ -147,19 +260,7 @@ let columnsTermico = [
     accessor: 'aguaAcum',
     cell: 'renderNumber',
   },
-  {
-    Header: <div>Beneficio<br/>(bpd)</div>,
-    columns: [{
-      Header: 'Programado',
-      accessor: 'beneficioProgramado',
-      cell: 'renderNumber'
-    }, 
-    {
-      Header: 'Oficial',
-      accessor: 'beneficioOficial',
-      cell: 'renderNumber'
-    }]
-  }
+  ...benefitColumns,
 ]
 
 let columnsAcido = [
@@ -225,18 +326,21 @@ let columnsAcido = [
     Header: <div>Eficiencia de Fluido de Fractura<br/>(%)</div>,
     accessor: 'fluidoFractura',
     cell: 'renderNumber'
-  }, {
-    Header: <div>Beneficio<br/>(bpd)</div>,
-    columns: [{
-      Header: 'Programado',
-      accessor: 'beneficioProgramado',
-      cell: 'renderNumber'
-    }, {
-      Header: 'Oficial',
-      accessor: 'beneficioOficial',
-      cell: 'renderNumber'
+  },
+  ...volumeColumns,
+  { 
+    Header: 'Gel Lineal',
+      columns: [{
+      Header: <div>m<sup>3</sup></div>,
+      accessor: 'gelLinealVol',
+      cell: 'renderTextarea',
+    }, { 
+      Header: 'Nombre Comercial',
+      accessor: 'gelLinealNombre',
+      cell: 'renderTextarea',
     }]
-  }
+  },
+  ...benefitColumns,
 ]
 
 let columnsApuntalado = [
@@ -306,18 +410,9 @@ let columnsApuntalado = [
     Header: <div>Eficiencia de Fluido de Fractura<br/>(%)</div>,
     accessor: 'fluidoFractura',
     cell: 'renderNumber'
-  }, {
-    Header: <div>Beneficio<br/>(bpd)</div>,
-    columns: [{
-      Header: 'Programado',
-      accessor: 'beneficioProgramado',
-      cell: 'renderNumber'
-    }, {
-      Header: 'Oficial',
-      accessor: 'beneficioOficial',
-      cell: 'renderNumber'
-    }]
-  }
+  },
+  ...apuntaladoVolumeColumns,
+  ...benefitColumns,
 ]
 
 @autobind class HistorialDeIntervenciones extends Component {
@@ -429,6 +524,7 @@ let columnsApuntalado = [
         beneficioProgramado: '',
         beneficioOficial: '',
         error: true,
+        ...rowApuntaladoVolumes,
       }])
       this.checkForErrors('', 'apuntaladoTable')
     }
@@ -466,6 +562,7 @@ let columnsApuntalado = [
         beneficioProgramado: '',
         beneficioOficial: '',
         error: true,
+        ...rowApuntaladoVolumes,
       }
 
       const errors = [
@@ -485,6 +582,7 @@ let columnsApuntalado = [
         { name: 'fluidoFractura', type: 'number' },
         { name: 'beneficioProgramado', type: 'number' },
         { name: 'beneficioOficial', type: 'number' },
+        ...errorsApuntaladoVolumes,
       ]
 
     return (
@@ -542,6 +640,9 @@ let columnsApuntalado = [
       fluidoFractura: '',
       beneficioProgramado: '',
       beneficioOficial: '',
+      ...rowVolumes,
+      gelLinealNombre: '',
+      gelLinealVol: '',
       error: true,
     }])
       this.checkForErrors('', 'acidoTable')
@@ -577,6 +678,9 @@ let columnsApuntalado = [
       fluidoFractura: '',
       beneficioProgramado: '',
       beneficioOficial: '',
+      ...rowVolumes,
+      gelLinealNombre: '',
+      gelLinealVol: '',
       error: true,
     }
     const errors = [
@@ -595,6 +699,9 @@ let columnsApuntalado = [
       { name: 'fluidoFractura', type: 'number' },
       { name: 'beneficioProgramado', type: 'number' },
       { name: 'beneficioOficial', type: 'number' },
+      ...errorsVolumes,
+      { name: 'gelLinealVol', type: 'text' },
+      { name: 'gelLinealNombre', type: 'text' },
     ]
 
     return (
@@ -641,13 +748,7 @@ let columnsApuntalado = [
       tipoDeTratamiento: '',
       objetivo: '',
       compania: '',
-      acidoVol: '',
-      acidoNombre: '',
-      solventeVol: '',
-      solventeNombre: '',
-      divergenteVol: '',
-      divergenteNombre: '',
-      totalN2: '',
+      ...rowVolumes,
       beneficioProgramado: '',
       beneficioOficial: '',
       error: true,
@@ -672,31 +773,19 @@ let columnsApuntalado = [
       tipoDeTratamiento: '',
       objetivo: '',
       compania: '',
-      acidoVol: '',
-      acidoNombre: '',
-      solventeVol: '',
-      solventeNombre: '',
-      divergenteVol: '',
-      divergenteNombre: '',
-      totalN2: '',
       beneficioProgramado: '',
       beneficioOficial: '',
       error: true,
+      ...rowVolumes,
     }
     const errors = [
       { name: 'fecha', type: 'date' },
       { name: 'tipoDeTratamiento', type: 'text' },
       { name: 'objetivo', type: 'text' },
       { name: 'compania', type: 'text' },
-      { name: 'acidoVol', type: 'number' },
-      { name: 'acidoNombre', type: 'text' },
-      { name: 'solventeVol', type: 'number' },
-      { name: 'solventeNombre', type: 'text' },
-      { name: 'divergenteVol', type: 'number' },
-      { name: 'divergenteNombre', type: 'text' },
-      { name: 'totalN2', type: 'number' },
       { name: 'beneficioProgramado', type: 'number' },
       { name: 'beneficioOficial', type: 'number' },
+      ...errorsVolumes,
     ]
     return (
       <div className='presion-table'>

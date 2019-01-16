@@ -19,6 +19,10 @@ export const getSistemaOptions = () => [
   { value: 'divergente', label: 'Divergente' },
   { value: 'desplazamiento', label: 'Desplazamiento Liquido' },
   { value: 'desplazamientoN2', label: 'Desplazamiento N2' },
+  { value: 'gelFractura', label: 'Gel Fractura' },
+  { value: 'gelLineal', label: 'Gel Lineal' },
+  { value: 'modificadorPermeabilidad', label: 'Modificador de Permeabilidad' },
+  { value: 'espaciador', label: 'Espaciador' },
 ]
 
 export const getSistemaApuntaladoOptions = () => [
@@ -27,6 +31,7 @@ export const getSistemaApuntaladoOptions = () => [
   { value: 'pad', label: 'Pad' },
   { value: 'pad-proppant', label: 'Pad + Proppant' },
   { value: 'flush', label: 'Flush' },
+  { value: 'gelLineal', label: 'Gel Lineal' },
 ]
 
 export const getDisabledColumnForGeneralCedula = (sistema, id) => {

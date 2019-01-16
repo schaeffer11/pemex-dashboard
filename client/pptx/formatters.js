@@ -57,7 +57,7 @@ function dateReformat(str) {
   const dateArr = str.split('-')
   const year = dateArr[0]
   const month = dateArr[1]
-  const day = dateArr[2]
+  const day = dateArr[2].slice(0, 2)
   return `${day}/${month}/${year}`
 }
 

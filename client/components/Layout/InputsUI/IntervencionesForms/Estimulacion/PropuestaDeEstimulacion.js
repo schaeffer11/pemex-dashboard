@@ -252,7 +252,11 @@ import { calculateValuesGeneralCedula } from '../../../../../lib/formatters';
       volumenDesplazamientoLiquido,
       volumenDesplazamientoN2,
       volumenPrecolchonN2,
-      volumenTotalDeLiquido } = formData
+      volumenTotalDeLiquido,
+      volumenGelFractura,
+      volumenGelLineal,
+      volumenModificadorPermeabilidad,
+      volumenEspaciador } = formData
 
     return (
       <div className='detalles-form' >
@@ -283,6 +287,26 @@ import { calculateValuesGeneralCedula } from '../../../../../lib/formatters';
           <CalculatedValue
             header={<div>Desplazamiento líquido</div>}
             value={volumenDesplazamientoLiquido}
+            unit={<div>m<sup>3</sup></div>}
+          />
+          <CalculatedValue
+            header={<div>Gel Fractura</div>}
+            value={volumenGelFractura}
+            unit={<div>m<sup>3</sup></div>}
+          />
+          <CalculatedValue
+            header={<div>Gel Lineal</div>}
+            value={volumenGelLineal}
+            unit={<div>m<sup>3</sup></div>}
+          />
+          <CalculatedValue
+            header={<div>Modificador de Permeabilidad</div>}
+            value={volumenModificadorPermeabilidad}
+            unit={<div>m<sup>3</sup></div>}
+          />
+          <CalculatedValue
+            header={<div>Espaciador</div>}
+            value={volumenEspaciador}
             unit={<div>m<sup>3</sup></div>}
           />
           <CalculatedValue
@@ -338,6 +362,10 @@ import { calculateValuesGeneralCedula } from '../../../../../lib/formatters';
       volumenDesplazamientoLiquido: calculateVolumes(cedulaData, 'volLiquid', ['desplazamiento']),
       volumenDesplazamientoN2: calculateVolumes(cedulaData, 'volN2', ['desplazamientoN2']),
       volumenPrecolchonN2: calculateVolumes(cedulaData, 'volN2', ['pre-colchon']),
+      volumenGelFractura: calculateVolumes(cedulaData, 'volLiquid', ['gelFractura']),
+      volumenGelLineal: calculateVolumes(cedulaData, 'volLiquid', ['gelLineal']),
+      volumenModificadorPermeabilidad: calculateVolumes(cedulaData, 'volLiquid', ['modificadorPermeabilidad']),
+      volumenEspaciador: calculateVolumes(cedulaData, 'volLiquid', ['espaciador']),
       volumenTotalDeLiquido: calculateVolumes(cedulaData, 'volLiquid'),
     }
 

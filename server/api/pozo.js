@@ -339,8 +339,9 @@ const INSERT_INTERVENTION_ESIMULACION_QUERY = {
     save: `INSERT INTO _IntervencionesEstimulacionsSave (
         INTERVENTION_ID, WELL_FORMACION_ID, TIPO_DE_ESTIMULACION,
         VOLUMEN_PRECOLCHON_N2,
-        VOLUMEN_SISTEMA_NO_REACTIVO, VOLUMEN_SISTEMA_REACTIVO, VOLUMEN_SISTEMA_DIVERGENTE, VOLUMEN_DESPLAZAMIENTO_LIQUIDO, VOLUMEN_DESPLAZAMIENTO_N2,
-        VOLUMEN_TOTAL_DE_LIQUIDO, TIPO_DE_COLOCACION,
+        VOLUMEN_SISTEMA_NO_REACTIVO, VOLUMEN_SISTEMA_REACTIVO, VOLUMEN_SISTEMA_DIVERGENTE, VOLUMEN_DESPLAZAMIENTO_LIQUIDO, 
+        VOLUMEN_GEL_DE_FRACTURA, VOLUMEN_GEL_LINEAL, VOLUMEN_MODIFICADOR_PERMEABILIDAD, 
+        VOLUMEN_ESPACIADOR, VOLUMEN_DESPLAZAMIENTO_N2, VOLUMEN_TOTAL_DE_LIQUIDO, TIPO_DE_COLOCACION,
         TIEMPO_DE_CONTACTO, PENETRACION_RADIAL, LONGITUD_DE_AGUJERO_DE_GUSANO,
         EST_INC_ESTRANGULADOR, EST_INC_Ptp, EST_INC_Ttp, EST_INC_Pbaj, EST_INC_Tbaj,
         EST_INC_Ptr, EST_INC_Qi, EST_INC_Qo, EST_INC_Qq, EST_INC_Qw,
@@ -349,12 +350,13 @@ const INSERT_INTERVENTION_ESIMULACION_QUERY = {
         (?, ?, ?, ?, ?, ?, ?, ?, ?, ?,
          ?, ?, ?, ?, ?, ?, ?, ?, ?, ?,
          ?, ?, ?, ?, ?, ?, ?, ?, ?, ?,
-         ?, ?, ?, ?, ?)`,
+         ?, ?, ?, ?, ?, ?, ?, ?, ?)`,
     submit: `INSERT INTO IntervencionesEstimulacions (
         INTERVENTION_ID, WELL_FORMACION_ID, TIPO_DE_ESTIMULACION,
         VOLUMEN_PRECOLCHON_N2,
-        VOLUMEN_SISTEMA_NO_REACTIVO, VOLUMEN_SISTEMA_REACTIVO, VOLUMEN_SISTEMA_DIVERGENTE, VOLUMEN_DESPLAZAMIENTO_LIQUIDO, VOLUMEN_DESPLAZAMIENTO_N2,
-        VOLUMEN_TOTAL_DE_LIQUIDO, TIPO_DE_COLOCACION,
+        VOLUMEN_SISTEMA_NO_REACTIVO, VOLUMEN_SISTEMA_REACTIVO, VOLUMEN_SISTEMA_DIVERGENTE, VOLUMEN_DESPLAZAMIENTO_LIQUIDO, 
+        VOLUMEN_GEL_DE_FRACTURA, VOLUMEN_GEL_LINEAL, VOLUMEN_MODIFICADOR_PERMEABILIDAD, 
+        VOLUMEN_ESPACIADOR, VOLUMEN_DESPLAZAMIENTO_N2, VOLUMEN_TOTAL_DE_LIQUIDO, TIPO_DE_COLOCACION,
         TIEMPO_DE_CONTACTO, PENETRACION_RADIAL, LONGITUD_DE_AGUJERO_DE_GUSANO,
         EST_INC_ESTRANGULADOR, EST_INC_Ptp, EST_INC_Ttp, EST_INC_Pbaj, EST_INC_Tbaj,
         EST_INC_Ptr, EST_INC_Qi, EST_INC_Qo, EST_INC_Qq, EST_INC_Qw,
@@ -363,7 +365,7 @@ const INSERT_INTERVENTION_ESIMULACION_QUERY = {
         (?, ?, ?, ?, ?, ?, ?, ?, ?, ?,
          ?, ?, ?, ?, ?, ?, ?, ?, ?, ?,
          ?, ?, ?, ?, ?, ?, ?, ?, ?, ?,
-         ?, ?)`,     
+         ?, ?, ?, ?, ?, ?)`,     
     loadSave: `SELECT * FROM _IntervencionesEstimulacionsSave WHERE TRANSACTION_ID = ?`,
     loadTransaction: `SELECT * FROM IntervencionesEstimulacions WHERE TRANSACTION_ID = ?`    
 }
@@ -372,8 +374,9 @@ const INSERT_INTERVENTION_ACIDO_QUERY = {
     save: `INSERT INTO _IntervencionesAcidoSave (
         INTERVENTION_ID, WELL_FORMACION_ID,
         VOLUMEN_PRECOLCHON_N2,
-        VOLUMEN_SISTEMA_NO_REACTIVO, VOLUMEN_SISTEMA_REACTIVO, VOLUMEN_SISTEMA_DIVERGENTE, VOLUMEN_DESPLAZAMIENTO_LIQUIDO, VOLUMEN_DESPLAZAMIENTO_N2,
-        VOLUMEN_TOTAL_DE_LIQUIDO, MODULO_YOUNG_ARENA,
+        VOLUMEN_SISTEMA_NO_REACTIVO, VOLUMEN_SISTEMA_REACTIVO, VOLUMEN_SISTEMA_DIVERGENTE, VOLUMEN_DESPLAZAMIENTO_LIQUIDO, 
+        VOLUMEN_GEL_DE_FRACTURA, VOLUMEN_GEL_LINEAL, VOLUMEN_MODIFICADOR_PERMEABILIDAD, 
+        VOLUMEN_ESPACIADOR, VOLUMEN_DESPLAZAMIENTO_N2, VOLUMEN_TOTAL_DE_LIQUIDO, MODULO_YOUNG_ARENA,
         MODULO_YOUNG_LUTITAS, RELAC_POISSON_ARENA, RELAC_POISSON_LUTITAS, GRADIENTE_DE_FRACTURA, DENSIDAD_DE_DISPAROS,
         DIAMETRO_DE_DISPAROS, LONGITUD_TOTAL, LONGITUD_EFECTIVA_GRABADA,
         ALTURA_GRABADA, ANCHO_PROMEDIO, CONCENTRACION_DEL_ACIDO, CONDUCTIVIDAD, FCD, PRESION_NETA,
@@ -385,12 +388,13 @@ const INSERT_INTERVENTION_ACIDO_QUERY = {
          ?, ?, ?, ?, ?, ?, ?, ?, ?, ?,
          ?, ?, ?, ?, ?, ?, ?, ?, ?, ?,
          ?, ?, ?, ?, ?, ?, ?, ?, ?, ?,
-         ?, ?, ?, ?, ?, ?)`,
+         ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`,
     submit: `INSERT INTO IntervencionesAcido (
         INTERVENTION_ID, WELL_FORMACION_ID,
         VOLUMEN_PRECOLCHON_N2,
-        VOLUMEN_SISTEMA_NO_REACTIVO, VOLUMEN_SISTEMA_REACTIVO, VOLUMEN_SISTEMA_DIVERGENTE, VOLUMEN_DESPLAZAMIENTO_LIQUIDO, VOLUMEN_DESPLAZAMIENTO_N2,
-        VOLUMEN_TOTAL_DE_LIQUIDO, MODULO_YOUNG_ARENA,
+        VOLUMEN_SISTEMA_NO_REACTIVO, VOLUMEN_SISTEMA_REACTIVO, VOLUMEN_SISTEMA_DIVERGENTE, VOLUMEN_DESPLAZAMIENTO_LIQUIDO, 
+        VOLUMEN_GEL_DE_FRACTURA, VOLUMEN_GEL_LINEAL, VOLUMEN_MODIFICADOR_PERMEABILIDAD, 
+        VOLUMEN_ESPACIADOR, VOLUMEN_DESPLAZAMIENTO_N2, VOLUMEN_TOTAL_DE_LIQUIDO, MODULO_YOUNG_ARENA,
         MODULO_YOUNG_LUTITAS, RELAC_POISSON_ARENA, RELAC_POISSON_LUTITAS, GRADIENTE_DE_FRACTURA, DENSIDAD_DE_DISPAROS,
         DIAMETRO_DE_DISPAROS, LONGITUD_TOTAL, LONGITUD_EFECTIVA_GRABADA,
         ALTURA_GRABADA, ANCHO_PROMEDIO, CONCENTRACION_DEL_ACIDO, CONDUCTIVIDAD, FCD, PRESION_NETA,
@@ -402,7 +406,7 @@ const INSERT_INTERVENTION_ACIDO_QUERY = {
          ?, ?, ?, ?, ?, ?, ?, ?, ?, ?,
          ?, ?, ?, ?, ?, ?, ?, ?, ?, ?,
          ?, ?, ?, ?, ?, ?, ?, ?, ?, ?,
-         ?, ?, ?)`,     
+         ?, ?, ?, ?, ?, ?, ?)`,     
     loadSave: `SELECT * FROM _IntervencionesAcidoSave WHERE TRANSACTION_ID = ?`,
     loadTransaction: `SELECT * FROM IntervencionesAcido WHERE TRANSACTION_ID = ?`    
 }
@@ -411,7 +415,7 @@ const INSERT_INTERVENTION_APUNTALADO_QUERY = {
     save: `INSERT INTO _IntervencionesApuntaladoSave (
         INTERVENTION_ID, WELL_FORMACION_ID, 
         VOLUMEN_DESPLAZAMIENTO_LIQUIDO,
-        VOLUMEN_TOTAL_DE_LIQUIDO, VOLUMEN_APUNTALANTE, VOLUMEN_GEL_DE_FRACTURA, VOLUMEN_PRECOLCHON_APUNTALANTE, MODULO_YOUNG_ARENA,
+        VOLUMEN_TOTAL_DE_LIQUIDO, VOLUMEN_APUNTALANTE, VOLUMEN_GEL_DE_FRACTURA, VOLUMEN_PRECOLCHON_APUNTALANTE, VOLUMEN_GEL_LINEAL, MODULO_YOUNG_ARENA,
         MODULO_YOUNG_LUTITAS, RELAC_POISSON_ARENA, RELAC_POISSON_LUTITAS, GRADIENTE_DE_FRACTURA, DENSIDAD_DE_DISPAROS,
         DIAMETRO_DE_DISPAROS, LONGITUD_APUNTALADA, ALTURA_TOTAL_DE_FRACTURA, ANCHO_PROMEDIO,
         CONCENTRACION_AREAL, CONDUCTIVIDAD, FCD, PRESION_NETA, EFICIENCIA_DE_FLUIDO_DE_FRACTURA,
@@ -422,11 +426,12 @@ const INSERT_INTERVENTION_APUNTALADO_QUERY = {
         (?, ?, ?, ?, ?, ?, ?, ?, ?, ?,
          ?, ?, ?, ?, ?, ?, ?, ?, ?, ?,
          ?, ?, ?, ?, ?, ?, ?, ?, ?, ?,
-         ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`,
+         ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, 
+         ?, ?, ?, ?)`,
     submit: `INSERT INTO IntervencionesApuntalado (
         INTERVENTION_ID, WELL_FORMACION_ID, 
         VOLUMEN_DESPLAZAMIENTO_LIQUIDO, 
-        VOLUMEN_TOTAL_DE_LIQUIDO,  VOLUMEN_APUNTALANTE, VOLUMEN_GEL_DE_FRACTURA, VOLUMEN_PRECOLCHON_APUNTALANTE, MODULO_YOUNG_ARENA,
+        VOLUMEN_TOTAL_DE_LIQUIDO,  VOLUMEN_APUNTALANTE, VOLUMEN_GEL_DE_FRACTURA, VOLUMEN_PRECOLCHON_APUNTALANTE, VOLUMEN_GEL_LINEAL, MODULO_YOUNG_ARENA,
         MODULO_YOUNG_LUTITAS, RELAC_POISSON_ARENA, RELAC_POISSON_LUTITAS, GRADIENTE_DE_FRACTURA, DENSIDAD_DE_DISPAROS,
         DIAMETRO_DE_DISPAROS, LONGITUD_APUNTALADA, ALTURA_TOTAL_DE_FRACTURA, ANCHO_PROMEDIO,
         CONCENTRACION_AREAL, CONDUCTIVIDAD, FCD, PRESION_NETA, EFICIENCIA_DE_FLUIDO_DE_FRACTURA,
@@ -437,7 +442,8 @@ const INSERT_INTERVENTION_APUNTALADO_QUERY = {
         (?, ?, ?, ?, ?, ?, ?, ?, ?, ?,
          ?, ?, ?, ?, ?, ?, ?, ?, ?, ?,
          ?, ?, ?, ?, ?, ?, ?, ?, ?, ?,
-         ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`,     
+         ?, ?, ?, ?, ?, ?, ?, ?, ?, ?,
+         ?)`,     
     loadSave: `SELECT * FROM _IntervencionesApuntaladoSave WHERE TRANSACTION_ID = ?`,
     loadTransaction: `SELECT * FROM IntervencionesApuntalado WHERE TRANSACTION_ID = ?`    
 }
@@ -1061,8 +1067,9 @@ export const create = async (body, action, cb) => {
 
   if (tipoDeIntervenciones === 'estimulacion') {
       //Propuesta Estimulaction
-      var { tipoDeColocacion, tiempoDeContacto, tipoDeEstimulacion, volumenPrecolchonN2, volumenSistemaNoReativo, volumenSistemaReactivo, volumenSistemaDivergente,
-        volumenDesplazamientoLiquido, volumenDesplazamientoN2, volumenTotalDeLiquido } = finalObj.propuestaEstimulacion
+      var { tipoDeColocacion, tiempoDeContacto, tipoDeEstimulacion, volumenPrecolchonN2, volumenSistemaNoReativo, 
+        volumenSistemaReactivo, volumenSistemaDivergente, volumenDesplazamientoLiquido, volumenDesplazamientoN2, 
+        volumenTotalDeLiquido } = finalObj.propuestaEstimulacion
 
       //Simulacion Resultados Estimulacion
       var { penetracionRadial, longitudDeAgujeroDeGusano } = finalObj.resultadosSimulacionEstimulacion
@@ -1082,8 +1089,10 @@ export const create = async (body, action, cb) => {
   else if (tipoDeIntervenciones === 'acido') {
       //Propuesta De Fracturamiento Acido
       var { volumenPrecolchonN2, volumenSistemaNoReativo, volumenSistemaReactivo, volumenSistemaDivergente,
-        volumenDesplazamientoLiquido, volumenDesplazamientoN2, volumenTotalDeLiquido, moduloYoungArena, moduloYoungLutitas, relacPoissonArena,
-    relacPoissonLutatas, gradienteDeFractura, densidadDeDisparos, diametroDeDisparos } = finalObj.propuestaAcido
+        volumenDesplazamientoLiquido, volumenGelFractura, volumenGelLineal, volumenModificadorPermeabilidad, 
+        volumenEspaciador, volumenDesplazamientoN2, volumenTotalDeLiquido, moduloYoungArena, moduloYoungLutitas, 
+        relacPoissonArena, relacPoissonLutatas, gradienteDeFractura, densidadDeDisparos, 
+        diametroDeDisparos } = finalObj.propuestaAcido
 
       //Resultados De La Simulacion
       var { longitudTotal, longitudEfectivaGrabada, alturaGrabada, anchoPromedio, concentracionDelAcido,
@@ -1105,9 +1114,10 @@ export const create = async (body, action, cb) => {
   else if (tipoDeIntervenciones === 'apuntalado') {
       //Propuesta De Fracturamiento Apuntalado
       var { volumenPrecolchonN2, volumenSistemaNoReativo, volumenSistemaReactivo, volumenSistemaDivergente,
-        volumenDesplazamientoLiquido, volumenDesplazamientoN2, volumenTotalDeLiquido, volumenApuntalante, volumenGelFractura, volumenPrecolchonN2, 
-    moduloYoungArena, moduloYoungLutitas, relacPoissonArena,
-    relacPoissonLutatas, gradienteDeFractura, densidadDeDisparos, diametroDeDisparos } = finalObj.propuestaApuntalado
+        volumenDesplazamientoLiquido, volumenGelFractura, volumenGelLineal, volumenModificadorPermeabilidad, 
+        volumenEspaciador, volumenDesplazamientoN2, volumenTotalDeLiquido, volumenGelLineal, volumenApuntalante, 
+        volumenGelFractura, volumenPrecolchonN2, moduloYoungArena, moduloYoungLutitas, relacPoissonArena,
+        relacPoissonLutatas, gradienteDeFractura, densidadDeDisparos, diametroDeDisparos } = finalObj.propuestaApuntalado
 
       //Resultados de simulacion Apuntalado
       var { longitudApuntalada, alturaTotalDeFractura, anchoPromedio, concentractionAreal, conductividad,
@@ -1561,7 +1571,9 @@ export const create = async (body, action, cb) => {
                                   if (tipoDeIntervenciones === 'estimulacion') {
                                     values = [
                                       interventionID, wellFormacionID, tipoDeEstimulacion, volumenPrecolchonN2, volumenSistemaNoReativo, volumenSistemaReactivo, volumenSistemaDivergente,
-                                      volumenDesplazamientoLiquido, volumenDesplazamientoN2, volumenTotalDeLiquido,
+                                      volumenDesplazamientoLiquido, volumenGelFractura, volumenGelLineal, 
+                                      volumenModificadorPermeabilidad, volumenEspaciador,
+                                      volumenDesplazamientoN2, volumenTotalDeLiquido,
                                       tipoDeColocacion, tiempoDeContacto, penetracionRadial, longitudDeAgujeroDeGusano,
                                       estIncEstrangulador, estIncPtp, estIncTtp, estIncPbaj, estIncTbaj,
                                       estIncPtr, estIncQl, estIncQo, estIncQg, estIncQw,
@@ -1580,8 +1592,9 @@ export const create = async (body, action, cb) => {
                                     values = [
                                       interventionID, wellFormacionID, 
                                       volumenPrecolchonN2, volumenSistemaNoReativo, volumenSistemaReactivo, volumenSistemaDivergente,
-                                    volumenDesplazamientoLiquido, volumenDesplazamientoN2, volumenTotalDeLiquido, 
-                                    moduloYoungArena, moduloYoungLutitas, relacPoissonArena,
+                                      volumenDesplazamientoLiquido, volumenGelFractura, volumenGelLineal, 
+                                      volumenModificadorPermeabilidad, volumenEspaciador, volumenDesplazamientoN2, volumenTotalDeLiquido, 
+                                      moduloYoungArena, moduloYoungLutitas, relacPoissonArena,
                                       relacPoissonLutatas, gradienteDeFractura, densidadDeDisparos, diametroDeDisparos, 
                                       longitudTotal, longitudEfectivaGrabada, alturaGrabada, anchoPromedio, concentracionDelAcido,
                                       conductividad, fcd, presionNeta, eficienciaDeFluidoDeFractura, estIncEstrangulador, estIncPtp, estIncTtp, estIncPbaj, estIncTbaj,
@@ -1600,7 +1613,7 @@ export const create = async (body, action, cb) => {
                                     values = [
                                         interventionID, wellFormacionID, 
                                         volumenDesplazamientoLiquido, volumenTotalDeLiquido, volumenApuntalante, volumenGelFractura, volumenPrecolchonN2,
-                                        moduloYoungArena, moduloYoungLutitas, relacPoissonArena,
+                                        volumenGelLineal, moduloYoungArena, moduloYoungLutitas, relacPoissonArena,
                                         relacPoissonLutatas, gradienteDeFractura, densidadDeDisparos, diametroDeDisparos,
                                         longitudApuntalada, alturaTotalDeFractura, anchoPromedio, concentractionAreal, conductividad,
                                         fcd, presionNeta, eficienciaDeFluidoDeFractura,
@@ -1972,42 +1985,42 @@ export const create = async (body, action, cb) => {
                                                                   let tableError = finalObj.historialDeIntervenciones.hasErrors === true ? 1 : 0
                                                                   historicoEstimulacionData.forEach(i => {
                                                                       if (action === 'save') {
-                                                                          values.push([wellFormacionID, 'estimulacion', i.fecha, i.tipoDeTratamiento, i.objetivo, i.compania, i.acidoVol, i.acidoNombre, i.solventeVol, i.solventeNombre, i.divergenteVol, i.divergenteNombre, i.totalN2, i.beneficioProgramado, i.beneficioOficial, null, null, null, null, null, null, null, null, null, null, null, null, null, null,null,null,null,null,null,null,null, i.error, tableError, transactionID ])
+                                                                          values.push([wellFormacionID, 'estimulacion', i.fecha, i.tipoDeTratamiento, i.objetivo, i.compania, i.acidoVol, i.acidoNombre, i.solventeVol, i.solventeNombre, i.divergenteVol, i.divergenteNombre, i.totalN2, i.beneficioProgramado, i.beneficioOficial, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null,null,null,null,null, i.desplazamientoLiquidoNombre, i.desplazamientoLiquidoVol, null, null, null, null, null, null, i.error, tableError, transactionID ])
                                                                       }
                                                                       else {
-                                                                          values.push([wellFormacionID, 'estimulacion', i.fecha, i.tipoDeTratamiento, i.objetivo, i.compania, i.acidoVol, i.acidoNombre, i.solventeVol, i.solventeNombre, i.divergenteVol, i.divergenteNombre, i.totalN2, i.beneficioProgramado, i.beneficioOficial, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null,null,null,null,null, transactionID ])
+                                                                          values.push([wellFormacionID, 'estimulacion', i.fecha, i.tipoDeTratamiento, i.objetivo, i.compania, i.acidoVol, i.acidoNombre, i.solventeVol, i.solventeNombre, i.divergenteVol, i.divergenteNombre, i.totalN2, i.beneficioProgramado, i.beneficioOficial, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null,null,null,null,null, i.desplazamientoLiquidoNombre, i.desplazamientoLiquidoVol, null, null, null, null, null, null, transactionID ])
                                                                       }
                                                       
                                                                   })
                                                                   historicoAcidoData.forEach(i => {
                                                                       if (action === 'save') {
-                                                                          values.push([wellFormacionID, 'acido', i.fecha, i.tipoDeTratamiento, i.objetivo, i.compania, null, null, null, null, null, null, null, i.beneficioProgramado, i.beneficioOficial, i.base, i.cima, i.longitudGravada, i.alturaGravada, i.anchoGravado, i.conductividad, i.fcd, i.presionNeta, i.fluidoFractura, null, null, null, null, null,null,null,null,null,null,null,null, i.error, tableError, transactionID])
+                                                                          values.push([wellFormacionID, 'acido', i.fecha, i.tipoDeTratamiento, i.objetivo, i.compania, i.acidoVol, i.acidoNombre, i.solventeVol, i.solventeNombre, i.divergenteVol, i.divergenteNombre, i.totalN2, i.beneficioProgramado, i.beneficioOficial, i.base, i.cima, i.longitudGravada, i.alturaGravada, i.anchoGravado, i.conductividad, i.fcd, i.presionNeta, i.fluidoFractura, null, null, null, null, null, null, null, null,null,null,null,null, i.desplazamientoLiquidoNombre, i.desplazamientoLiquidoVol, i.gelLinealVol, i.gelLinealNombre, null, null, null, null, i.error, tableError, transactionID])
                                                                       }
                                                                       else {
-                                                                          values.push([wellFormacionID, 'acido', i.fecha, i.tipoDeTratamiento, i.objetivo, i.compania, null, null, null, null, null, null, null, i.beneficioProgramado, i.beneficioOficial, i.base, i.cima, i.longitudGravada, i.alturaGravada, i.anchoGravado, i.conductividad, i.fcd, i.presionNeta, i.fluidoFractura, null, null, null, null, null, null, null, null,null,null,null,null, transactionID])
+                                                                          values.push([wellFormacionID, 'acido', i.fecha, i.tipoDeTratamiento, i.objetivo, i.compania, i.acidoVol, i.acidoNombre, i.solventeVol, i.solventeNombre, i.divergenteVol, i.divergenteNombre, i.totalN2, i.beneficioProgramado, i.beneficioOficial, i.base, i.cima, i.longitudGravada, i.alturaGravada, i.anchoGravado, i.conductividad, i.fcd, i.presionNeta, i.fluidoFractura, null, null, null, null, null, null, null, null,null,null,null,null, i.desplazamientoLiquidoNombre, i.desplazamientoLiquidoVol, i.gelLinealVol, i.gelLinealNombre, null, null, null, null, transactionID])
                                                                       }
                                                                   })
                                                                   historicoApuntaladoData.forEach(i => {
                                                                       if (action === 'save') {
-                                                                          values.push([wellFormacionID, 'apuntalado', i.fecha, i.tipoDeTratamiento, i.objetivo, i.compania, null, null, null, null, null, null, null, i.beneficioProgramado, i.beneficioOficial, i.base, i.cima, null, null, null, i.conductividad, i.fcd, i.presionNeta, i.fluidoFractura, i.longitudApuntalada, i.alturaTotalDeFractura, i.anchoPromedio, i.concentracionAreal, null,null,null,null,null,null,null,null, i.error, tableError, transactionID])
+                                                                          values.push([wellFormacionID, 'apuntalado', i.fecha, i.tipoDeTratamiento, i.objetivo, i.compania, null, null, null, null, null, null, i.totalN2, i.beneficioProgramado, i.beneficioOficial, i.base, i.cima, null, null, null, i.conductividad, i.fcd, i.presionNeta, i.fluidoFractura, i.longitudApuntalada, i.alturaTotalDeFractura, i.anchoPromedio, i.concentracionAreal, null, null, null, null,null,null,null,null, i.desplazamientoLiquidoVol, i.desplazamientoLiquidoNombre, null, null, i.gelFracturaVol, i.gelFracturaNombre, i.apuntalanteVol, i.apuntalanteNombre, i.error, tableError, transactionID])
                                                                       }
                                                                       else {
-                                                                          values.push([wellFormacionID, 'apuntalado', i.fecha, i.tipoDeTratamiento, i.objetivo, i.compania, null, null, null, null, null, null, null, i.beneficioProgramado, i.beneficioOficial, i.base, i.cima, null, null, null, i.conductividad, i.fcd, i.presionNeta, i.fluidoFractura, i.longitudApuntalada, i.alturaTotalDeFractura, i.anchoPromedio, i.concentracionAreal, null, null, null, null,null,null,null,null, transactionID])
+                                                                          values.push([wellFormacionID, 'apuntalado', i.fecha, i.tipoDeTratamiento, i.objetivo, i.compania, null, null, null, null, null, null, i.totalN2, i.beneficioProgramado, i.beneficioOficial, i.base, i.cima, null, null, null, i.conductividad, i.fcd, i.presionNeta, i.fluidoFractura, i.longitudApuntalada, i.alturaTotalDeFractura, i.anchoPromedio, i.concentracionAreal, null, null, null, null,null,null,null,null, i.desplazamientoLiquidoVol, i.desplazamientoLiquidoNombre, null, null, i.gelFracturaVol, i.gelFracturaNombre, i.apuntalanteVol, i.apuntalanteNombre, transactionID])
                                                                       }
                                                                       
                                                                   })
                                                                   historicoTermicoData.forEach(i => {
                                                                       if (action === 'save') {
-                                                                          values.push([wellFormacionID, 'termico', null, null, null, null, null, null, null, null, null, null, null, null, i.beneficioProgramado, i.beneficioOficial, null, null, null, null, null, null, null, null, null, null, null, null, i.ciclo,i.fechaInicio,i.fechaFin,i.Piny,i.Tiny, i.calidad, i.Qiny, i.aguaAcum, i.error, tableError, transactionID])
+                                                                          values.push([wellFormacionID, 'termico', null, null, null, null, null, null, null, null, null, null, null, null, i.beneficioProgramado, i.beneficioOficial, null, null, null, null, null, null, null, null, null, null, null, null, i.ciclo,i.fechaInicio,i.fechaFin,i.Piny,i.Tiny, i.calidad, i.Qiny, i.aguaAcum, null, null, null, null, null, null, i.error, tableError, transactionID])
                                                                       }
                                                                       else {
-                                                                          values.push([wellFormacionID, 'termico', null, null, null, null, null, null, null, null, null, null, null, null, i.beneficioProgramado, i.beneficioOficial, null, null, null, null, null, null, null, null, null, null, null, null, i.ciclo,i.fechaInicio,i.fechaFin,i.Piny,i.Tiny, i.calidad, i.Qiny, i.aguaAcum, transactionID])
+                                                                          values.push([wellFormacionID, 'termico', null, null, null, null, null, null, null, null, null, null, null, null, i.beneficioProgramado, i.beneficioOficial, null, null, null, null, null, null, null, null, null, null, null, null, i.ciclo,i.fechaInicio,i.fechaFin,i.Piny,i.Tiny, i.calidad, i.Qiny, i.aguaAcum, null, null, null, null, null, null, transactionID])
                                                                       }
                                                                       
                                                                   })                                                               
 
 
-                                                                  connection.query(values.length > 1 ? (action === 'save' ? INSERT_HIST_INTERVENCIONES_NEW_QUERY.save : INSERT_HIST_INTERVENCIONES_NEW_QUERY.submit) : DUMMY_QUERY, [values], (err, results) => {
+                                                                  connection.query(values.length > 0 ? (action === 'save' ? INSERT_HIST_INTERVENCIONES_NEW_QUERY.save : INSERT_HIST_INTERVENCIONES_NEW_QUERY.submit) : DUMMY_QUERY, [values], (err, results) => {
                                                                       console.log('historial interventions', err)
                                                                       console.log('historial interventions', results)
 

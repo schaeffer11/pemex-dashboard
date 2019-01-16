@@ -276,7 +276,7 @@ maps.evaluacionPetrofisica = {
     sw: { text: 'Sw.', unit: units.percent },
     dens: { text: 'Dens.', unit: units.densityLayer },
     resis: { text: 'Resis.', unit: units.resistivity },
-    perm: { text: 'Perm.', unit: units.measuredDepth },
+    perm: { text: 'Perm.', unit: units.milliDarcy },
   },
   mudLossData: {
     cimaMD: { text: 'Cima', unit: units.measuredDepth },
@@ -339,6 +339,10 @@ maps.propuesta = {
       volumenSistemaDivergente: { text: 'Sistema divergente', unit: units.volume },
       volumenDesplazamientoLiquido: { text: 'Desplazamiento líquido', unit: units.volume },
       volumenDesplazamientoN2: { text: 'Desplazamiento N2', unit: units.volume },
+      volumenGelFractura: { text: 'Gel Fractura', unit: units.volume },
+      volumenGelLineal: { text: 'Gel Lineal', unit: units.volume },
+      volumenModificadorPermeabilidad: { text: 'Modificador de Permeabilidad', unit: units.volume },
+      volumenEspaciador: { text: 'Espaciador', unit: units.volume },
       volumenTotalDeLiquido: { text: 'Total de líquido', unit: units.volume },
     },
     resultadosSimulacion: {
@@ -371,6 +375,10 @@ maps.propuesta = {
       volumenSistemaDivergente: { text: 'Sistema divergente', unit: units.volume },
       volumenDesplazamientoLiquido: { text: 'Desplazamiento líquido', unit: units.volume },
       volumenDesplazamientoN2: { text: 'Desplazamiento N2', unit: units.volume },
+      volumenGelFractura: { text: 'Gel Fractura', unit: units.volume },
+      volumenGelLineal: { text: 'Gel Lineal', unit: units.volume },
+      volumenModificadorPermeabilidad: { text: 'Modificador de Permeabilidad', unit: units.volume },
+      volumenEspaciador: { text: 'Espaciador', unit: units.volume },
       volumenTotalDeLiquido: { text: 'Total de líquido', unit: units.volume },
     },
     resultadosSimulacion: {
@@ -418,6 +426,7 @@ maps.propuesta = {
       volumenApuntalante: { text: 'Apuntalante', unit: units.volumeSacks },
       volumenGelFractura: { text: 'Gel de fractura', unit: units.volumeUS },
       volumenDesplazamientoLiquido: { text: 'Desplazamiento líquido', unit: units.volumeUS },
+      volumenGelLineal: { text: 'Gel Lineal', unit: units.volumeUS },
       volumenTotalDeLiquido: { text: 'Total de líquido', unit: units.volumeUS },
     },
     resultadosSimulacion: {
