@@ -6,7 +6,7 @@ import Select from 'react-select'
 import { selectSimpleValue, convertLowDate, convertHighDate, handleSelectValue } from '../../../../lib/formatters'
 import { getFilters, fetchFilterData, buildFiltersOptions } from '../../../../lib/filters'
 import { checkForDifferencesInObjects } from '../../../../lib/helpers'
-import { setGeneralFilters, setGeneralGlobalAnalysis, setMergeGlobalAnalysis } from '../../../../redux/actions/global'
+import { setGeneralFilters, setGeneralGlobalAnalysis, setMergeGlobalAnalysis, setWellAndJob } from '../../../../redux/actions/global'
 import GroupBy from './GroupBy'
 
 export const focusInCurrentTarget = ({ relatedTarget, currentTarget }) => {
@@ -122,9 +122,13 @@ export const focusInCurrentTarget = ({ relatedTarget, currentTarget }) => {
   }
 
   handleSelect(selection, type) {
-    const { setGeneralAnalysis } = this.props
+    const { setGeneralAnalysis, setWellAndJob } = this.props
     const value = handleSelectValue(selection)
-    setGeneralAnalysis([type], value)
+    if (type === 'well') {
+      setWellAndJob(value)
+    } else {
+      setGeneralAnalysis([type], value)
+    }
   }
 
   clearFilters() {
@@ -207,6 +211,7 @@ const mapStateToProps = state => ({
 
 const mapDispatchToProps = dispatch => ({
   setGeneralFilters: (value) => dispatch(setGeneralFilters(value)),
+  setWellAndJob: (value) => dispatch(setWellAndJob(value)),
   setGeneralAnalysis: (location, value) => dispatch(setGeneralGlobalAnalysis(location, value)),
   mergeGeneralAnalysis: (obj) => dispatch(setMergeGlobalAnalysis(obj)),
 })
