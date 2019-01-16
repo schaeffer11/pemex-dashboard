@@ -3,6 +3,7 @@ import { connect } from 'react-redux'
 import autobind from 'autobind-decorator'
 import objectPath from 'object-path'
 import Select from 'react-select'
+import CreateWell from './CreateWell'
 
 @autobind class AdminUI extends Component {
   constructor(props) {
@@ -194,6 +195,16 @@ import Select from 'react-select'
     return <i style={{ color: '#d84040' }} className="fas fa-times" />
   }
 
+  handleSubdireccionSelect(e) {
+    const newState = {
+      subdireccion: e
+    }
+    if (e === null) {
+      newState.activo = null
+    }
+    this.setState(newState)
+  }
+
   renderCreateNewUser() {
     const { isEqualPassword, usernameIsUnique, isCorrectUsername, newUsername, newFirstPassword, newSecondPassword, isCorrectPassword, subdirecciones, subdireccion, activo, isAdmin } = this.state
     const subdireccionesOptions = Object.keys(subdirecciones).map(key => ({
@@ -201,7 +212,7 @@ import Select from 'react-select'
       value: subdirecciones[key].id,
     }))
     let activoOptions = []
-    if (subdireccion !== '') {
+    if (subdireccion) {
       activoOptions = subdirecciones[`sub_${subdireccion.value}`].activos.map(elem => {
         return {
         label: elem.name,
@@ -240,7 +251,8 @@ import Select from 'react-select'
                 className='input'
                 options={subdireccionesOptions}
                 value={subdireccion}
-                onChange={(e) => this.setState({ subdireccion: e })}
+                onChange={this.handleSubdireccionSelect}
+                isClearable
               />
             </li>
             <li>
@@ -251,6 +263,7 @@ import Select from 'react-select'
                 options={activoOptions}
                 value={activo}
                 onChange={(e) => this.setState({ activo: e })}
+                isClearable
               />
             </li>
             <li>
@@ -394,6 +407,7 @@ import Select from 'react-select'
         <h1>Administrar Usuarios</h1>
         {this.renderCreateNewUser()}
         {this.renderChangePassword()}
+        <CreateWell subdirecciones={this.state.subdirecciones} />
       </div>
     )
   }

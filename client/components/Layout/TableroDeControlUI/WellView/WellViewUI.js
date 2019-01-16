@@ -155,7 +155,11 @@ import { fetchFilterData } from '../../../../lib/filters'
             })
           })
           .then(res => res.json())
-          .then(res => {
+          .then(async res => {
+            const pvtData = await fetch(`/api/well_info?well=${res[0].PVT}`, headers).then(r => r.json())
+            if (pvtData.hasOwnProperty('well')) {
+              res[0].PVT = pvtData.well
+            }
             this.setState({
               wellData: res
             })
@@ -313,14 +317,6 @@ import { fetchFilterData } from '../../../../lib/filters'
   render() {
     let { fieldWellOptions, wellData, zoneData, layerData, productionData, pressureData , aforosData, imageData, interventionDates } = this.state
     const { token, globalAnalysis } = this.props
-    // console.log('well', wellData)
-    // console.log('zone', zoneData)
-    // console.log('layer', layerData)
-    // console.log('production', productionData)
-    // console.log('pressure', pressureData)
-    // console.log('aforos', aforosData)
-    // console.log('images', imageData, imageData)
-    // console.log('interventionDates', interventionDates)
 
     let zoneExportData = this.makeZoneExportData(zoneData)
     let layerExportData = this.makeLayerExportData(layerData)

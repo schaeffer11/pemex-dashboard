@@ -13,8 +13,7 @@ import ReactHighcharts from 'react-highcharts'
   }
 
   render() {
-    let { data, groupBy } = this.props
-
+		let { data, groupBy, groups } = this.props
     let config = {
 	    chart: {
 	        type: 'column',

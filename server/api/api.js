@@ -353,6 +353,36 @@ router.get('/activo', (req, res) => {
     })
 })
 
+router.get('/ttt', (req, res) => {
+  const { query } = req
+
+  const map = {
+    subdireccion: 'SUBDIRECCION_ID',
+    activo: 'ACTIVO_ID',
+    field: 'FIELD_FORMACION_ID',
+    well: 'WELL_FORMACION_ID',
+  }
+
+  let sqlQuery = `SELECT SUBDIRECCION_NAME, SUBDIRECCION_ID, ACTIVO_NAME, ACTIVO_ID, FIELD_NAME, FIELD_FORMACION_ID, WELL_NAME, WELL_FORMACION_ID
+  FROM FieldWellMapping
+  WHERE 1 = 1`
+
+  const a = Object.keys(query).filter((elem) => map[elem]).map((elem) => {
+    return `${map[elem]} = ${query[elem]}`
+  })
+  if (a.length > 0) {
+    sqlQuery += ` AND ${a.join(' AND ')}`
+  }
+  console.log('da que', sqlQuery)
+  connection.query(sqlQuery, (err, results) => {
+    if (err) {
+      console.log(err)
+      return res.json({ error: true })
+    }
+    res.json(results)
+  })
+})
+
 router.post('/compromiso', allowAdmin, (req, res) => {
   console.log('IN COMPROMISO')
   createCompromiso(req, res)
@@ -997,6 +1027,8 @@ router.get('/getHistIntervencionesEstimulacionNew', async (req, res) => {
     TOTAL_N2: { child: 'totalN2' },
     BENEFICIO_PROGRAMADO: { child: 'beneficioProgramado' },
     BENEFICIO_OFICIAL: { child: 'beneficioOficial' },    
+    DESPLAZAMIENTO_LIQUIDO_VOL: { child: 'desplazamientoLiquidoVol' },
+    DESPLAZAMIENTO_LIQUIDO_NOMBRE: { child: 'desplazamientoLiquidoNombre' },
     HAS_ERRORS: { child: 'error'}
   }
 
@@ -1056,6 +1088,17 @@ router.get('/getHistIntervencionesAcidoNew', async (req, res) => {
     FLUIDO_FRACTURA: { child: 'fluidoFractura' },    
     BENEFICIO_PROGRAMADO: { child: 'beneficioProgramado' },
     BENEFICIO_OFICIAL: { child: 'beneficioOficial' },  
+    GEL_LINEAL_VOL: { child: 'gelLinealVol' },
+    GEL_LINEAL_NOMBRE: { child: 'gelLinealNombre' }, 
+    DESPLAZAMIENTO_LIQUIDO_VOL: { child: 'desplazamientoLiquidoVol' },
+    DESPLAZAMIENTO_LIQUIDO_NOMBRE: { child: 'desplazamientoLiquidoNombre' },
+    ACIDO_VOL: { child: 'acidoVol' },
+    ACIDO_NOMBRE: { child: 'acidoNombre' },
+    SOLVENTE_VOL: { child: 'solventeVol' },
+    SOLVENTE_NOMBRE: { child: 'solventeNombre' },
+    DIVERGENTE_VOL: { child: 'divergenteVol' },
+    DIVERGENTE_NOMBRE: { child: 'divergenteNombre' },
+    TOTAL_N2: { child: 'totalN2' },
     HAS_ERRORS: { child: 'error'}  
   }
 
@@ -1115,7 +1158,14 @@ router.get('/getHistIntervencionesApuntaladoNew', async (req, res) => {
     PRESION_NETA: { child: 'presionNeta' },
     FLUIDO_FRACTURA: { child: 'fluidoFractura' },    
     BENEFICIO_PROGRAMADO: { child: 'beneficioProgramado' },
-    BENEFICIO_OFICIAL: { child: 'beneficioOficial' },    
+    BENEFICIO_OFICIAL: { child: 'beneficioOficial' },   
+    DESPLAZAMIENTO_LIQUIDO_VOL: { child: 'desplazamientoLiquidoVol' },
+    DESPLAZAMIENTO_LIQUIDO_NOMBRE: { child: 'desplazamientoLiquidoNombre' },
+    APUNTALANTE_VOL: { child: 'apuntalanteVol' },
+    APUNTALANTE_NOMBRE: { child: 'apuntalanteNombre' },
+    GEL_FRACTURA_VOL: { child: 'gelFracturaVol' },
+    GEL_FRACTURA_NOMBRE: { child: 'gelFracturaNombre' },
+    TOTAL_N2: { child: 'totalN2' },
     HAS_ERRORS: { child: 'error'}
   }
 
@@ -2170,6 +2220,10 @@ router.get('/getInterventionEstimulacion', async (req, res) => {
     VOLUMEN_SISTEMA_REACTIVO: { parent: 'propuestaEstimulacion', child: 'volumenSistemaReactivo' }, 
     VOLUMEN_SISTEMA_DIVERGENTE: { parent: 'propuestaEstimulacion', child: 'volumenSistemaDivergente' }, 
     VOLUMEN_DESPLAZAMIENTO_LIQUIDO: { parent: 'propuestaEstimulacion', child: 'volumenDesplazamientoLiquido' }, 
+    VOLUMEN_GEL_DE_FRACTURA: { parent: 'propuestaEstimulacion', child: 'volumenGelFractura' },
+    VOLUMEN_GEL_LINEAL: { parent: 'propuestaEstimulacion', child: 'volumenGelLineal' },
+    VOLUMEN_MODIFICADOR_PERMEABILIDAD: { parent: 'propuestaEstimulacion', child: 'volumenModificadorPermeabilidad' },
+    VOLUMEN_ESPACIADOR: { parent: 'propuestaEstimulacion', child: 'volumenEspaciador' },
     VOLUMEN_DESPLAZAMIENTO_N2: { parent: 'propuestaEstimulacion', child: 'volumenDesplazamientoN2' },
     VOLUMEN_TOTAL_DE_LIQUIDO: { parent: 'propuestaEstimulacion', child: 'volumenTotalDeLiquido' }, 
     TIPO_DE_COLOCACION: { parent: 'propuestaEstimulacion', child: 'tipoDeColocacion' },
@@ -2234,6 +2288,10 @@ router.get('/getInterventionAcido', async (req, res) => {
     VOLUMEN_SISTEMA_REACTIVO: { parent: 'propuestaAcido', child: 'volumenSistemaReactivo' }, 
     VOLUMEN_SISTEMA_DIVERGENTE: { parent: 'propuestaAcido', child: 'volumenSistemaDivergente' }, 
     VOLUMEN_DESPLAZAMIENTO_LIQUIDO: { parent: 'propuestaAcido', child: 'volumenDesplazamientoLiquido' }, 
+    VOLUMEN_GEL_DE_FRACTURA: { parent: 'propuestaAcido', child: 'volumenGelFractura' },
+    VOLUMEN_GEL_LINEAL: { parent: 'propuestaAcido', child: 'volumenGelLineal' },
+    VOLUMEN_MODIFICADOR_PERMEABILIDAD: { parent: 'propuestaAcido', child: 'volumenModificadorPermeabilidad' },
+    VOLUMEN_ESPACIADOR: { parent: 'propuestaAcido', child: 'volumenEspaciador' },
     VOLUMEN_DESPLAZAMIENTO_N2: { parent: 'propuestaAcido', child: 'volumenDesplazamientoN2' },
     VOLUMEN_TOTAL_DE_LIQUIDO: { parent: 'propuestaAcido', child: 'volumenTotalDeLiquido' }, 
     MODULO_YOUNG_ARENA: { parent: 'propuestaAcido', child: 'moduloYoungArena' },
@@ -2313,6 +2371,7 @@ router.get('/getInterventionApuntalado', async (req, res) => {
     VOLUMEN_DESPLAZAMIENTO_LIQUIDO: { parent: 'propuestaApuntalado', child: 'volumenDesplazamientoLiquido' },
     VOLUMEN_TOTAL_DE_LIQUIDO: { parent: 'propuestaApuntalado', child: 'volumenTotalDeLiquido' },
     VOLUMEN_GEL_DE_FRACTURA: { parent: 'propuestaApuntalado', child: 'volumenGelFractura' },
+    VOLUMEN_GEL_LINEAL: { parent: 'propuestaApuntalado', child: 'volumenGelLineal' },
     // VOLUMEN_PRECOLCHON_N2: { parent: 'propuestaApuntalado', child: 'volumenPrecolchonN2' },
     // VOLUMEN_SISTEMA_NO_REACTIVO: { parent: 'propuestaApuntalado', child: 'volumenSistemaNoReativo' }, 
     // VOLUMEN_SISTEMA_REACTIVO: { parent: 'propuestaApuntalado', child: 'volumenSistemaReactivo' }, 

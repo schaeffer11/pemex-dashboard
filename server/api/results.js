@@ -79,12 +79,13 @@ const INSERT_RESULTS_ESIMULACION_QUERY = {
     submit: `INSERT INTO ResultsEstimulacions (
         INTERVENTION_ID, WELL_FORMACION_ID, TIPO_DE_ESTIMULACION,
         VOLUMEN_PRECOLCHON_N2, VOLUMEN_SISTEMA_NO_REACTIVO, VOLUMEN_SISTEMA_REACTIVO, 
-        VOLUMEN_SISTEMA_DIVERGENTE, VOLUMEN_DESPLAZAMIENTO_LIQUIDO, VOLUMEN_DESPLAZAMIENTO_N2,
+        VOLUMEN_SISTEMA_DIVERGENTE, VOLUMEN_DESPLAZAMIENTO_LIQUIDO, VOLUMEN_GEL_DE_FRACTURA, 
+        VOLUMEN_GEL_LINEAL, VOLUMEN_MODIFICADOR_PERMEABILIDAD, VOLUMEN_ESPACIADOR, VOLUMEN_DESPLAZAMIENTO_N2,
         VOLUMEN_TOTAL_DE_LIQUIDO, TIPO_DE_COLOCACION,
         TIEMPO_DE_CONTACTO, PENETRACION_RADIAL, LONGITUD_DE_AGUJERO_DE_GUSANO,
         PROPUESTA_ID, TRANSACTION_ID) VALUES
         (?, ?, ?, ?, ?, ?, ?, ?, ?, ?,
-         ?, ?, ?, ?, ?, ?)`,     
+         ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`,     
     loadSave: ``,
     loadTransaction: ``    
 }
@@ -93,7 +94,8 @@ const INSERT_RESULTS_ACIDO_QUERY = {
     save: ``,
     submit: `INSERT INTO ResultsAcido (
         INTERVENTION_ID, WELL_FORMACION_ID, VOLUMEN_PRECOLCHON_N2, VOLUMEN_SISTEMA_NO_REACTIVO, VOLUMEN_SISTEMA_REACTIVO, 
-        VOLUMEN_SISTEMA_DIVERGENTE, VOLUMEN_DESPLAZAMIENTO_LIQUIDO, VOLUMEN_DESPLAZAMIENTO_N2,
+        VOLUMEN_SISTEMA_DIVERGENTE, VOLUMEN_DESPLAZAMIENTO_LIQUIDO, VOLUMEN_GEL_DE_FRACTURA, 
+        VOLUMEN_GEL_LINEAL, VOLUMEN_MODIFICADOR_PERMEABILIDAD, VOLUMEN_ESPACIADOR, VOLUMEN_DESPLAZAMIENTO_N2,
         VOLUMEN_TOTAL_DE_LIQUIDO, MODULO_YOUNG_ARENA, MODULO_YOUNG_LUTITAS, RELAC_POISSON_ARENA,
         RELAC_POISSON_LUTITAS, GRADIENTE_DE_FRACTURA, DENSIDAD_DE_DISPAROS,
         DIAMETRO_DE_DISPAROS, LONGITUD_TOTAL, LONGITUD_EFECTIVA_GRABADA,
@@ -101,7 +103,8 @@ const INSERT_RESULTS_ACIDO_QUERY = {
         EFICIENCIA_DE_FLUIDO_DE_FRACTURA, PROPUESTA_ID, TRANSACTION_ID) VALUES
         (?, ?, ?, ?, ?, ?, ?, ?, ?, ?,
          ?, ?, ?, ?, ?, ?, ?, ?, ?, ?,
-         ?, ?, ?, ?, ?, ?, ?)`,     
+         ?, ?, ?, ?, ?, ?, ?, ?, ?, ?,
+         ?)`,     
     loadSave: ``,
     loadTransaction: ``    
 }
@@ -111,7 +114,7 @@ const INSERT_RESULTS_APUNTALADO_QUERY = {
     submit: `INSERT INTO ResultsApuntalado (
         INTERVENTION_ID, WELL_FORMACION_ID, 
         VOLUMEN_DESPLAZAMIENTO_LIQUIDO, VOLUMEN_TOTAL_DE_LIQUIDO, 
-        VOLUMEN_APUNTALANTE, VOLUMEN_GEL_DE_FRACTURA, VOLUMEN_PRECOLCHON_APUNTALANTE, MODULO_YOUNG_ARENA,
+        VOLUMEN_APUNTALANTE, VOLUMEN_GEL_DE_FRACTURA, VOLUMEN_PRECOLCHON_APUNTALANTE, VOLUMEN_GEL_LINEAL, MODULO_YOUNG_ARENA,
         MODULO_YOUNG_LUTITAS, RELAC_POISSON_ARENA, RELAC_POISSON_LUTITAS, GRADIENTE_DE_FRACTURA, DENSIDAD_DE_DISPAROS,
         DIAMETRO_DE_DISPAROS, LONGITUD_APUNTALADA, ALTURA_TOTAL_DE_FRACTURA, ANCHO_PROMEDIO,
         CONCENTRACION_AREAL, CONDUCTIVIDAD, FCD, PRESION_NETA, EFICIENCIA_DE_FLUIDO_DE_FRACTURA,
@@ -121,7 +124,7 @@ const INSERT_RESULTS_APUNTALADO_QUERY = {
         (?, ?, ?, ?, ?, ?, ?, ?, ?, ?,
          ?, ?, ?, ?, ?, ?, ?, ?, ?, ?,
          ?, ?, ?, ?, ?, ?, ?, ?, ?, ?,
-         ?, ?, ?, ?, ?, ?, ?)`,     
+         ?, ?, ?, ?, ?, ?, ?, ?)`,     
     loadSave: ``,
     loadTransaction: ``    
 }
@@ -271,7 +274,8 @@ export const createResults = async (body, action, cb) => {
 
     if (interventionType === 'estimulacion') {
         var { tipoDeColocacion, tiempoDeContacto, volumenPrecolchonN2, volumenSistemaNoReativo, volumenSistemaReactivo, volumenSistemaDivergente,
-          volumenDesplazamientoLiquido, volumenDesplazamientoN2, volumenTotalDeLiquido, cedulaData, tratamientoCompany } = finalObj.tratamientoEstimulacion
+          volumenDesplazamientoLiquido, volumenDesplazamientoN2, volumenGelFractura, volumenGelLineal, volumenModificadorPermeabilidad, 
+          volumenEspaciador, volumenTotalDeLiquido, cedulaData, tratamientoCompany } = finalObj.tratamientoEstimulacion
 
         var { penetracionRadial, longitudDeAgujeroDeGusano, qo, qw, qg } = finalObj.evaluacionEstimulacion
 
@@ -285,7 +289,8 @@ export const createResults = async (body, action, cb) => {
     }
     else if (interventionType === 'acido') {
         var { volumenPrecolchonN2, volumenSistemaNoReativo, volumenSistemaReactivo, volumenSistemaDivergente,
-          volumenDesplazamientoLiquido, volumenDesplazamientoN2, volumenTotalDeLiquido, moduloYoungArena, moduloYoungLutitas, relacPoissonArena,
+          volumenDesplazamientoLiquido, volumenDesplazamientoN2, volumenGelFractura, volumenGelLineal, volumenModificadorPermeabilidad, 
+          volumenEspaciador, volumenTotalDeLiquido, moduloYoungArena, moduloYoungLutitas, relacPoissonArena,
           relacPoissonLutatas, gradienteDeFractura, densidadDeDisparos, diametroDeDisparos, cedulaData, tratamientoCompany } = finalObj.tratamientoAcido
 
         var { longitudTotal, longitudEfectivaGrabada, alturaGrabada, anchoPromedio, concentracionDelAcido,
@@ -293,8 +298,8 @@ export const createResults = async (body, action, cb) => {
     }
 
     else if (interventionType === 'apuntalado') {
-        var { volumenPrecolchonN2, volumenApuntalante, volumenGelFractura,
-          volumenDesplazamientoLiquido, volumenTotalDeLiquido, moduloYoungArena, moduloYoungLutitas, relacPoissonArena,
+        var { volumenPrecolchonN2, volumenApuntalante, volumenGelFractura, volumenDesplazamientoLiquido, 
+          volumenTotalDeLiquido, volumenGelLineal, moduloYoungArena, moduloYoungLutitas, relacPoissonArena,
           relacPoissonLutatas, gradienteDeFractura, densidadDeDisparos, diametroDeDisparos, cedulaData, tratamientoCompany } = finalObj.tratamientoApuntalado
 
         var { longitudApuntalada, alturaTotalDeFractura, anchoPromedio, concentracionAreal, conductividad,
@@ -441,8 +446,9 @@ export const createResults = async (body, action, cb) => {
                 if (interventionType === 'estimulacion') {
                   query = INSERT_RESULTS_ESIMULACION_QUERY.submit
                   values = [
-                    interventionID, wellFormacionID, stimulationType, volumenPrecolchonN2, volumenSistemaNoReativo, volumenSistemaReactivo, volumenSistemaDivergente,
-                    volumenDesplazamientoLiquido, volumenDesplazamientoN2, volumenTotalDeLiquido,
+                    interventionID, wellFormacionID, stimulationType, volumenPrecolchonN2, volumenSistemaNoReativo, volumenSistemaReactivo, 
+                    volumenSistemaDivergente, volumenDesplazamientoLiquido, volumenGelFractura, volumenGelLineal, 
+                    volumenModificadorPermeabilidad, volumenEspaciador, volumenDesplazamientoN2, volumenTotalDeLiquido,
                     tipoDeColocacion, tiempoDeContacto, penetracionRadial, longitudDeAgujeroDeGusano,
                     propuestaID, transactionID
                   ]
@@ -452,8 +458,9 @@ export const createResults = async (body, action, cb) => {
                   values = [
                     interventionID, wellFormacionID, 
                     volumenPrecolchonN2, volumenSistemaNoReativo, volumenSistemaReactivo, volumenSistemaDivergente,
-                  volumenDesplazamientoLiquido, volumenDesplazamientoN2, volumenTotalDeLiquido, 
-                  moduloYoungArena, moduloYoungLutitas, relacPoissonArena,
+                    volumenDesplazamientoLiquido, volumenGelFractura, volumenGelLineal, volumenModificadorPermeabilidad, 
+                    volumenEspaciador, volumenDesplazamientoN2, volumenTotalDeLiquido, 
+                    moduloYoungArena, moduloYoungLutitas, relacPoissonArena,
                     relacPoissonLutatas, gradienteDeFractura, densidadDeDisparos, diametroDeDisparos, 
                     longitudTotal, longitudEfectivaGrabada, alturaGrabada, anchoPromedio, concentracionDelAcido,
                     conductividad, fcd, presionNeta, eficienciaDeFluidoDeFractura, 
@@ -464,7 +471,7 @@ export const createResults = async (body, action, cb) => {
                   query = INSERT_RESULTS_APUNTALADO_QUERY.submit
                   values = [
                       interventionID, wellFormacionID, volumenDesplazamientoLiquido, volumenTotalDeLiquido, 
-                      volumenApuntalante, volumenGelFractura, volumenPrecolchonN2,
+                      volumenApuntalante, volumenGelFractura, volumenPrecolchonN2, volumenGelLineal,
                       moduloYoungArena, moduloYoungLutitas, relacPoissonArena,
                       relacPoissonLutatas, gradienteDeFractura, densidadDeDisparos, diametroDeDisparos,
                       longitudApuntalada, alturaTotalDeFractura, anchoPromedio, concentracionAreal, conductividad,

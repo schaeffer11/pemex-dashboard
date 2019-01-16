@@ -403,6 +403,10 @@ router.get('/getInterventionResultsData', (req, res) => {
       VOLUMEN_SISTEMA_REACTIVO: 'volumenSistemaReactivo',
       VOLUMEN_SISTEMA_DIVERGENTE: 'volumenSistemaDivergente',
       VOLUMEN_DESPLAZAMIENTO_LIQUIDO: 'volumenDesplazamientoLiquido',
+      VOLUMEN_GEL_DE_FRACTURA: 'volumenGelFractura',
+      VOLUMEN_GEL_LINEAL: 'volumenGelLineal',
+      VOLUMEN_MODIFICADOR_PERMEABILIDAD: 'volumenModificadorPermeabilidad',
+      VOLUMEN_ESPACIADOR: 'volumenEspaciador',
       VOLUMEN_DESPLAZAMIENTO_N2: 'volumenDesplazamientoN2',
       VOLUMEN_TOTAL_DE_LIQUIDO: 'volumenTotalDeLiquido',
       TIPO_DE_COLOCACION: 'tipoDeColocacion',
@@ -423,6 +427,10 @@ router.get('/getInterventionResultsData', (req, res) => {
         VOLUMEN_SISTEMA_REACTIVO: 'volumenSistemaReactivo',
         VOLUMEN_SISTEMA_DIVERGENTE: 'volumenSistemaDivergente',
         VOLUMEN_DESPLAZAMIENTO_LIQUIDO: 'volumenDesplazamientoLiquido',
+        VOLUMEN_GEL_DE_FRACTURA: 'volumenGelFractura',
+        VOLUMEN_GEL_LINEAL: 'volumenGelLineal',
+        VOLUMEN_MODIFICADOR_PERMEABILIDAD: 'volumenModificadorPermeabilidad',
+        VOLUMEN_ESPACIADOR: 'volumenEspaciador',
         VOLUMEN_DESPLAZAMIENTO_N2: 'volumenDesplazamientoN2',
         VOLUMEN_TOTAL_DE_LIQUIDO: 'volumenTotalDeLiquido',
         MODULO_YOUNG_ARENA: 'moduloYoungArena',
@@ -454,6 +462,7 @@ router.get('/getInterventionResultsData', (req, res) => {
       VOLUMEN_DESPLAZAMIENTO_LIQUIDO: 'volumenDesplazamientoLiquido',
       VOLUMEN_TOTAL_DE_LIQUIDO: 'volumenTotalDeLiquido',
       VOLUMEN_GEL_DE_FRACTURA: 'volumenGelFractura',
+      VOLUMEN_GEL_LINEAL: 'volumenGelLineal',
       MODULO_YOUNG_ARENA: 'moduloYoungArena',
       MODULO_YOUNG_LUTITAS: 'moduloYoungLutitas',
       RELAC_POISSON_ARENA: 'relacPoissonArena',
@@ -520,6 +529,10 @@ router.get('/getVolumeData', (req, res) => {
         VOLUMEN_SISTEMA_REACTIVO as 'Sistema reactivo,
         VOLUMEN_SISTEMA_DIVERGENTE as 'Sistema divergente,
         VOLUMEN_DESPLAZAMIENTO_LIQUIDO as 'Desplazamiento liqudio',
+        VOLUMEN_GEL_DE_FRACTURA as 'Gel de fractura',
+        VOLUMEN_GEL_LINEAL as 'Gel Lineal',
+        VOLUMEN_MODIFICADOR_PERMEABILIDAD as 'Modificador de Permeabilidad',
+        VOLUMEN_ESPACIADOR as 'Espaciador',
         VOLUMEN_DESPLAZAMIENTO_N2 as 'Desplazamiento N2',
         VOLUMEN_PRECOLCHON_N2 as 'Precolchon N2',
         VOLUMEN_TOTAL_DE_LIQUIDO as 'Total de liquido'
@@ -533,6 +546,10 @@ router.get('/getVolumeData', (req, res) => {
         VOLUMEN_SISTEMA_REACTIVO as 'Sistema reactivo,
         VOLUMEN_SISTEMA_DIVERGENTE as 'Sistema divergente,
         VOLUMEN_DESPLAZAMIENTO_LIQUIDO as 'Desplazamiento liqudio',
+        VOLUMEN_GEL_DE_FRACTURA as 'Gel de fractura',
+        VOLUMEN_GEL_LINEAL as 'Gel Lineal',
+        VOLUMEN_MODIFICADOR_PERMEABILIDAD as 'Modificador de Permeabilidad',
+        VOLUMEN_ESPACIADOR as 'Espaciador',
         VOLUMEN_DESPLAZAMIENTO_N2 as 'Desplazamiento N2',
         VOLUMEN_PRECOLCHON_N2 as 'Precolchon N2',
         VOLUMEN_TOTAL_DE_LIQUIDO as 'Total de liquido'
@@ -546,7 +563,8 @@ router.get('/getVolumeData', (req, res) => {
         VOLUMEN_TOTAL_DE_LIQUIDO as 'Total de liquido',
         VOLUMEN_APUNTALANTE as 'Apuntalante',
         VOLUMEN_GEL_DE_FRACTURA as 'Gel de fractura',
-        VOLUMEN_PRECOLCHON_APUNTALANTE as 'Precolchon apuntalante'
+        VOLUMEN_PRECOLCHON_APUNTALANTE as 'Precolchon apuntalante',
+        VOLUMEN_GEL_LINEAL as 'Gel Lineal'
       FROM ResultsApuntalado ie
       WHERE PROPUESTA_ID = ?`
   }
@@ -581,6 +599,10 @@ router.get('/getEstimatedVolumeData', (req, res) => {
         VOLUMEN_SISTEMA_REACTIVO as 'Sistema reactivo,
         VOLUMEN_SISTEMA_DIVERGENTE as 'Sistema divergente,
         VOLUMEN_DESPLAZAMIENTO_LIQUIDO as 'Desplazamiento liqudio',
+        VOLUMEN_GEL_DE_FRACTURA as 'Gel de fractura',
+        VOLUMEN_GEL_LINEAL as 'Gel Lineal',
+        VOLUMEN_MODIFICADOR_PERMEABILIDAD as 'Modificador de Permeabilidad',
+        VOLUMEN_ESPACIADOR as 'Espaciador',
         VOLUMEN_DESPLAZAMIENTO_N2 as 'Desplazamiento N2',
         VOLUMEN_PRECOLCHON_N2 as 'Precolchon N2',
         VOLUMEN_TOTAL_DE_LIQUIDO as 'Total de liquido'
@@ -592,8 +614,12 @@ router.get('/getEstimatedVolumeData', (req, res) => {
       SELECT 
         VOLUMEN_SISTEMA_NO_REACTIVO as 'Sistema no reactivo',
         VOLUMEN_SISTEMA_REACTIVO as 'Sistema reactivo,
-        VOLUMEN_SISTEMA_DIVERGENTE,
+        VOLUMEN_SISTEMA_DIVERGENTE as 'Sistema divergente,
         VOLUMEN_DESPLAZAMIENTO_LIQUIDO as 'Desplazamiento liqudio',
+        VOLUMEN_GEL_DE_FRACTURA as 'Gel de fractura',
+        VOLUMEN_GEL_LINEAL as 'Gel Lineal',
+        VOLUMEN_MODIFICADOR_PERMEABILIDAD as 'Modificador de Permeabilidad',
+        VOLUMEN_ESPACIADOR as 'Espaciador',
         VOLUMEN_DESPLAZAMIENTO_N2 as 'Desplazamiento N2',
         VOLUMEN_PRECOLCHON_N2 as 'Precolchon N2',
         VOLUMEN_TOTAL_DE_LIQUIDO as 'Total de liquido'
@@ -607,7 +633,8 @@ router.get('/getEstimatedVolumeData', (req, res) => {
         VOLUMEN_TOTAL_DE_LIQUIDO as 'Total de liquido',
         VOLUMEN_APUNTALANTE as 'Apuntalante',
         VOLUMEN_GEL_DE_FRACTURA as 'Gel de fractura',
-        VOLUMEN_PRECOLCHON_APUNTALANTE as 'Precolchon apuntalante'
+        VOLUMEN_PRECOLCHON_APUNTALANTE as 'Precolchon apuntalante',
+        VOLUMEN_GEL_LINEAL as 'Gel Lineal'
       FROM IntervencionesApuntalado ie
       WHERE TRANSACTION_ID = ?`
   }

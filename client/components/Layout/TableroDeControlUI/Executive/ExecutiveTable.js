@@ -133,6 +133,26 @@ import { CategoryDist, TrafficLight, Currency, Integer, numWithCommas } from '..
         Cell: Integer,
         minWidth: 150
       },{
+        Header: <div>Gel de Fractura<br/>(m<sup>3</sup>)</div>,
+        accessor: 'gelDeFractura', 
+        Cell: Integer,
+        minWidth: 150
+      },{
+        Header: <div>Gel de Lineal<br/>(m<sup>3</sup>)</div>,
+        accessor: 'gelLineal', 
+        Cell: Integer,
+        minWidth: 150
+      },{
+        Header: <div>Modificador Permeabilidad<br/>(m<sup>3</sup>)</div>,
+        accessor: 'modificadorPermeabilidad', 
+        Cell: Integer,
+        minWidth: 150
+      },{
+        Header: <div>Espaciador<br/>(m<sup>3</sup>)</div>,
+        accessor: 'espaciador', 
+        Cell: Integer,
+        minWidth: 150
+      },{
         Header: <div>Desplazamiento N<sub>2</sub><br/>(m<sup>3</sup>)</div>,
         accessor: 'desplazamientoN2', 
         Cell: Integer,
@@ -150,11 +170,6 @@ import { CategoryDist, TrafficLight, Currency, Integer, numWithCommas } from '..
       },{
         Header: <div>Apuntalante<br/>(sacos)</div>,
         accessor: 'apuntalante', 
-        Cell: Integer,
-        minWidth: 150
-      },{
-        Header: <div>Gel de Fractura<br/>(U.S. gal)</div>,
-        accessor: 'gelDeFractura', 
         Cell: Integer,
         minWidth: 150
       },{

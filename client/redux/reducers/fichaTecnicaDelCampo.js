@@ -1,7 +1,7 @@
 import { Map, fromJS } from 'immutable'
 
 const initialState = Map({ 
-	descubrimientoField: '',
+	descubrimientoField: null,
     fechaDeExplotacionField: null,
     numeroDePozosOperandoField: '',
     pInicialAnoField: '',

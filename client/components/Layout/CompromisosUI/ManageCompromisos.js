@@ -7,7 +7,7 @@ import ReactTable from "react-table";
 import moment from 'moment'
 import ReactHighCharts from 'react-highcharts'
 import Select from 'react-select'
-import Fuse from 'fuse.js'
+import { filter as fuzzy } from 'fuzzaldrin'
 
 moment.locale('es-mx');
 
@@ -363,21 +363,7 @@ const optionsFilterMethod = (filter, row) => {
   return row[filter.id] === filter.value
 }
 
-var fuzzyFilterOptions = {
-  shouldSort: true,
-  threshold: 0.6,
-  location: 0,
-  distance: 100,
-  maxPatternLength: 32,
-  minMatchCharLength: 1,
-  keys: []
-}
-
-const fuzzyFilterMethod = (filter, rows) => {
-  let options = Object.assign({}, fuzzyFilterOptions, { keys: [filter.id] });
-  let fuse = new Fuse(rows, options);
-  return fuse.search(filter.value);
-}
+const fuzzyFilterMethod = (filter, rows) => fuzzy(rows, filter.value, { key: filter.id })
 
 const futureDateFilterMethod = (filter, row) => {
   if (filter.value === "todos") {

@@ -286,7 +286,6 @@ const replaceAll = function(str, search, replacement) {
       ...viewing.props,
       ref: this.selectedChild,
     }
-
     if (objectPath.has(childProps, 'data')) {
       if (childProps.data !== undefined) {
         if (multiplyChartsOnGrouping) {
@@ -423,7 +422,7 @@ const replaceAll = function(str, search, replacement) {
               isOpen={expandTooltip}
               toggle={() => this.setState({ expandTooltip: !expandTooltip })}
             >
-              Expand
+              Expander
             </Tooltip>
           </CardBody>
           <Modal id="plot-blowup" isOpen={modal} toggle={this.handleModalToggle} centered>

@@ -17,6 +17,9 @@ import { KPI } from '../Common/KPIs'
     let apuntalante = []
     let gelDeFractura = []
     let precolchonApuntalante = []
+    let gelLineal = []
+    let modificadorPermeabilidad = []
+    let espaciador = []
 
     let series = []
 
@@ -33,7 +36,9 @@ import { KPI } from '../Common/KPIs'
         i.TOTAL_APUNTALANTE ? apuntalante.push({ x: utc, y: i.TOTAL_APUNTALANTE}) : null
         i.TOTAL_GEL_DE_FRACTURA ? gelDeFractura.push({ x: utc, y: i.TOTAL_GEL_DE_FRACTURA}) : null
         i.TOTAL_PRECOLCHON_APUNTALANTE ? precolchonApuntalante.push({ x: utc, y: i.TOTAL_PRECOLCHON_APUNTALANTE}) : null
-
+        i.TOTAL_GEL_LINEAL ? gelLineal.push({ x: utc, y: i.TOTAL_GEL_LINEAL}) : null
+        i.TOTAL_MODIFICADOR_PERMEABILIDAD ? modificadorPermeabilidad.push({ x: utc, y: i.TOTAL_MODIFICADOR_PERMEABILIDAD}) : null
+        i.TOTAL_ESPACIADOR ? espaciador.push({ x: utc, y: i.TOTAL_ESPACIADOR}) : null
       })
 
 
@@ -61,7 +66,17 @@ import { KPI } from '../Common/KPIs'
       },{
         name: 'Precolchón Apuntalante',
         data: precolchonApuntalante,
-      }]
+      },{
+        name: 'Gel Lineal',
+        data: gelLineal,
+      }, {
+        name: 'Modificador de Permeabilidad',
+        data: modificadorPermeabilidad,
+      }, {
+        name: 'Espaciador',
+        data: espaciador,
+      }, 
+      ]
 
     }
    
