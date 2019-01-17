@@ -2011,10 +2011,10 @@ export const create = async (body, action, cb) => {
                                                                   })
                                                                   historicoTermicoData.forEach(i => {
                                                                       if (action === 'save') {
-                                                                          values.push([wellFormacionID, 'termico', null, null, null, null, null, null, null, null, null, null, null, null, i.beneficioProgramado, i.beneficioOficial, null, null, null, null, null, null, null, null, null, null, null, null, i.ciclo,i.fechaInicio,i.fechaFin,i.Piny,i.Tiny, i.calidad, i.Qiny, i.aguaAcum, null, null, null, null, null, null, i.error, tableError, transactionID])
+                                                                          values.push([wellFormacionID, 'termico', null, null, i.objetivo, null, null, null, null, null, null, null, null, i.beneficioProgramado, i.beneficioOficial, null, null, null, null, null, null, null, null, null, null, null, null, null, i.ciclo,i.fechaInicio,i.fechaFin,i.Piny,i.Tiny, i.calidad, i.Qiny, i.aguaAcum, null, null, null, null, null, null, null, null, i.error, tableError, transactionID])
                                                                       }
                                                                       else {
-                                                                          values.push([wellFormacionID, 'termico', null, null, null, null, null, null, null, null, null, null, null, null, i.beneficioProgramado, i.beneficioOficial, null, null, null, null, null, null, null, null, null, null, null, null, i.ciclo,i.fechaInicio,i.fechaFin,i.Piny,i.Tiny, i.calidad, i.Qiny, i.aguaAcum, null, null, null, null, null, null, transactionID])
+                                                                          values.push([wellFormacionID, 'termico', null, null, i.objetivo, null, null, null, null, null, null, null, null, i.beneficioProgramado, i.beneficioOficial, null, null, null, null, null, null, null, null, null, null, null, null, null, i.ciclo,i.fechaInicio,i.fechaFin,i.Piny,i.Tiny, i.calidad, i.Qiny, i.aguaAcum, null, null, null, null, null, null, null, null, transactionID])
                                                                       }
                                                                       
                                                                   })                                                               
