@@ -12,13 +12,6 @@ import { setFromSaveMecanicoYAparejoDeProduccion, setHasErrorsMecanicoYAparejoDe
   setImgAparejoDeProduccionURL, setDesviacion } from '../../../../redux/actions/pozo'
 import { checkEmpty, checkDate } from '../../../../lib/errorCheckers'
 
-let tratamientoPorOptions = [
-  { label: 'Tubería de Producción (TP)', value: 'Tubería de Producción (TP)' },
-  { label: 'Tubería de Revestimiento-Tubería de Producción (TR-TP)', value: 'Tubería de Revestimiento-Tubería de Producción (TR-TP)' },
-  { label: 'Espacio Anular (EA)', value: 'Espacio Anular (EA)' },
-  { label: 'Espacio Anular-Tuberia de Producción (EA-TP)', value: 'Espacio Anular-Tuberia de Producción (EA-TP)' },
-  { label: 'Tubería Flexible (TF)', value: 'Tubería Flexible (TF)' }
-]
 @autobind class MecanicoYAparejo extends Component {
   constructor(props) {
     super(props)
@@ -270,7 +263,7 @@ let tratamientoPorOptions = [
   }
   
   makeCapacidadForm() {
-    let { setTratamientoPor, setVolumenAparejoDeProduccion, setVolumenCimaDeIntervalo, setVolumenBaseDeIntervalo, setVolumenDeEspacioAnular, formData } = this.props
+    let { setTratamientoPor, setVolumenAparejoDeProduccion, setVolumenCimaDeIntervalo, setVolumenBaseDeIntervalo, setVolumenDeEspacioAnular, formData, tratamientoPorOptions } = this.props
     formData = formData.toJS()
     let { tratamientoPor, volumenAparejoDeProduccion, volumenCimaDeIntervalo, volumenBaseDeIntervalo, volumenDeEspacioAnular} = formData
  
@@ -496,6 +489,7 @@ const mapStateToProps = state => ({
   hasSubmitted: state.getIn(['global', 'hasSubmitted']),
   tipoDeTerminationOptions: state.getIn(['global', 'tipoDeTerminationOptions']),
   tipoDeLinerOptions: state.getIn(['global', 'tipoDeLinerOptions']),
+  tratamientoPorOptions: state.getIn(['global', 'tratamientoPorOptions']),
 })
 
 const mapDispatchToProps = dispatch => ({

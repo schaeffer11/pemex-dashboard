@@ -8,7 +8,7 @@ import AriaModal from 'react-aria-modal'
 
 import { setObjetivo, setAlcances, setTipoDeIntervenciones } from '../../../../redux/actions/intervencionesEstimulacion'
 import { setSubdireccion, setActivo, setCampo, setPozo, setFormacion, setFechaProgramadaIntervencion, setFromSaveFichaTecnicaHighLevel, setHasErrorsFichaTecnicaHighLevel, setIntervencionProgramada } from '../../../../redux/actions/pozo'
-import { setShowForms, setIsLoading, setTransactionID, setSaveName, setCompanyOptions, setJustificationOptions, setLitologiaOptions, setTipoDeTerminationOptions, setTipoDeLinerOptions } from '../../../../redux/actions/global'
+import { setShowForms, setIsLoading, setTransactionID, setSaveName, setCompanyOptions, setJustificationOptions, setLitologiaOptions, setTipoDeTerminationOptions, setTipoDeLinerOptions, setFormacionOptions, setTipoDePozoOptions, setTratamientoPorOptions} from '../../../../redux/actions/global'
 import { InputDate, InputRow, InputRowUnitless, InputRowSelectUnitless, TextAreaUnitless } from '../../Common/InputRow'
 import Notification from '../../Common/Notification'
 import Loading from '../../Common/Loading'
@@ -62,7 +62,7 @@ import ButtonGroup from './ButtonGroup'
   }
 
   componentDidMount(){
-    let { user, hasSubmitted, setCompanyOptions, setJustificationOptions, setLitologiaOptions, setTipoDeTerminationOptions, setTipoDeLinerOptions } = this.props
+    let { user, hasSubmitted, setCompanyOptions, setJustificationOptions, setLitologiaOptions, setTipoDeTerminationOptions, setTipoDeLinerOptions, setFormacionOptions, setTipoDePozoOptions, setTratamientoPorOptions } = this.props
     user = user.toJS()
     const { token, id } = user
     const headers = {
@@ -108,6 +108,24 @@ import ButtonGroup from './ButtonGroup'
       .then( r => {
         setLitologiaOptions(r)
       })
+
+    fetch('/api/getFormacionMap', headers)
+      .then(r => r.json())
+      .then( r => {
+        setFormacionOptions(r)
+      })
+      
+    fetch('/api/getTipoDePozoMap', headers)
+      .then(r => r.json())
+      .then( r => {
+        setTipoDePozoOptions(r)
+      })
+
+    fetch('/api/getTratamientoPorMap', headers)
+      .then(r => r.json())
+      .then( r => {
+        setTratamientoPorOptions(r)
+      }) 
 
     fetch('/api/getTipoDeTerminationMap', headers)
       .then(r => r.json())
@@ -348,34 +366,13 @@ import ButtonGroup from './ButtonGroup'
   }
 
   makeGeneralForm() {
-    let { setSubdireccion, setActivo, setCampo, setPozo, setFormacion, formData, fieldWellOptions, user } = this.props
+    let { setSubdireccion, setActivo, setCampo, setPozo, setFormacion, formData, fieldWellOptions, user, formacionOptions } = this.props
 
     user = user ? user.toJS() : {}
     formData = formData ? formData.toJS() : {}
     
     let { subdireccion, activo, campo, pozo, formacion } = formData
 
-    let formacionOptions = [
-      {label: 'JSO', value: 'JSO'},
-      {label: 'JSK', value: 'JSK'},
-      {label: 'JST', value: 'JST'},
-      {label: 'KI', value: 'KI'},
-      {label: 'KM', value: 'KM'},
-      {label: 'KS', value: 'KS'},
-      {label: 'Paleoceno', value: 'paleoceno'},
-      {label: 'Eoceno', value: 'eoceno'},
-      {label: 'Mioceno', value: 'Mioceno'},
-      {label: 'Mioceno Inferior', value: 'Mioceno Inferior'},
-      {label: 'Mioceno Medio', value: 'Mioceno Medio'},
-      {label: 'Encanto', value: 'Encanto'},
-      {label: 'Concepción Inferior', value: 'Concepción Inferior'},
-      {label: 'Concepción Superior', value: 'Concepción Superior'},
-      {label: 'Filisola', value: 'Filisola'},
-      {label: 'CCE', value: 'CCE'},
-      {label: 'KS-KM-KI', value: 'KS-KM-KI'},
-      {label: 'KS-KM', value: 'KS-KM'},
-      {label: 'KM-KI', value: 'KM-KI'},
-    ]
     let disabled = false
 
     if (user.activoID && user.subdireccionID) {
@@ -721,6 +718,7 @@ const mapStateToProps = state => ({
   interventionFormData: state.get('objetivoYAlcancesIntervencion'),
   forms: state.get('forms'),
   hasSubmitted: state.getIn(['global', 'hasSubmitted']),
+  formacionOptions: state.getIn(['global', 'formacionOptions']),
 })
 
 const testLoadFromSave = (saved) => {
@@ -752,7 +750,10 @@ const mapDispatchToProps = dispatch => ({
   setJustificationOptions: val => dispatch(setJustificationOptions(val)),
   setLitologiaOptions: val => dispatch(setLitologiaOptions(val)),
   setTipoDeTerminationOptions: val => dispatch(setTipoDeTerminationOptions(val)),
-  setTipoDeLinerOptions: val => dispatch(setTipoDeLinerOptions(val))
+  setTipoDeLinerOptions: val => dispatch(setTipoDeLinerOptions(val)),
+  setFormacionOptions: val => dispatch(setFormacionOptions(val)),
+  setTipoDePozoOptions: val => dispatch(setTipoDePozoOptions(val)),
+  setTratamientoPorOptions: val => dispatch(setTratamientoPorOptions(val)),
 })
 
 export default connect(mapStateToProps, mapDispatchToProps)(GeneralData)

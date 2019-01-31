@@ -56,3 +56,6 @@ export const setJustificationOptions = value => ({ type: 'set_justificationOptio
 export const setLitologiaOptions = value => ({ type: 'set_litologiaOptions', value})
 export const setTipoDeTerminationOptions = value => ({ type: 'set_tipoDeTerminationOptions', value})
 export const setTipoDeLinerOptions = value => ({ type: 'set_tipoDeLinerOptions', value})
+export const setFormacionOptions = value => ({ type: 'set_formacionOptions', value})
+export const setTipoDePozoOptions = value => ({ type: 'set_tipoDePozoOptions', value})
+export const setTratamientoPorOptions = value => ({ type: 'set_tratamientoPorOptions', value})

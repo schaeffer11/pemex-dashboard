@@ -492,6 +492,30 @@ router.get('/getLitologiaMap', (req, res) => {
   })
 })
 
+router.get('/getFormacionMap', (req, res) => {
+  const query = `SELECT FORMACION FROM FormacionMap`
+  connection.query(query, (err, results) => {
+    results = results.map(i => ({label: i.FORMACION, value: i.FORMACION}))
+    res.send(results)
+  })
+})
+
+router.get('/getTipoDePozoMap', (req, res) => {
+  const query = `SELECT TIPO_DE_POZO FROM TipoDePozoMap`
+  connection.query(query, (err, results) => {
+    results = results.map(i => ({label: i.TIPO_DE_POZO, value: i.TIPO_DE_POZO}))
+    res.send(results)
+  })
+})
+
+router.get('/getTratamientoPorMap', (req, res) => {
+  const query = `SELECT TRATAMIENTO_POR FROM TratamientoPorMap`
+  connection.query(query, (err, results) => {
+    results = results.map(i => ({label: i.TRATAMIENTO_POR, value: i.TRATAMIENTO_POR}))
+    res.send(results)
+  })
+})
+
 router.get('/getTipoDeTerminationMap', (req, res) => {
   const query = `SELECT TIPO_DE_TERMINATION FROM TipoDeTerminationMap`
   connection.query(query, (err, results) => {

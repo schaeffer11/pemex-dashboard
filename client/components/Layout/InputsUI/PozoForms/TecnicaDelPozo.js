@@ -560,17 +560,11 @@ import { setHasErrorsFichaTecnicaDelPozo, setTipoDeSistemo, setHistorialInterven
 
   makePozoForm() {
     let { fieldWellOptions, pvtWells } = this.state
-    let { tipoDeSistemo, setTipoDePozo, setPws, setPwf, setPwsFecha, setPwfFecha, setDeltaPPerMes, setTyac, setPvt, setAparejoDeProduccion, setProfEmpacador, setProfSensorPYT, setTipoDeSistemo, formData, generalData } = this.props
+    let { tipoDeSistemo, setTipoDePozo, setPws, setPwf, setPwsFecha, setPwfFecha, setDeltaPPerMes, setTyac, setPvt, setAparejoDeProduccion, setProfEmpacador, setProfSensorPYT, setTipoDeSistemo, formData, generalData, tipoDePozoOptions} = this.props
     formData = formData.toJS()
     generalData = generalData.toJS()
     let { campo } = generalData
     let { tipoDePozo, pwsFecha, pwfFecha, pws, pwf, deltaPPerMes, tyac, pvt, aparejoDeProduccion, profEmpacador, profSensorPYT } = formData
-
-    let wellOptions = [
-      { label: 'Productor', value: 'Productor' },
-      { label: 'Inyector', value: 'Inyector' },
-      { label: 'Cerrado', value: 'Cerrado' }
-    ]
 
     let options = [
       { label: 'Ninguna', value: 'none' },
@@ -591,7 +585,7 @@ import { setHasErrorsFichaTecnicaDelPozo, setTipoDeSistemo, setHistorialInterven
           Datos de Pozo
         </div>
         <div className="input-table">
-          <InputRowSelectUnitless header="Tipo de pozo" value={tipoDePozo} callback={(e) => setTipoDePozo(e.value)}  name='tipoDePozo' options={wellOptions} onBlur={this.updateErrors} errors={this.state.errors} />
+          <InputRowSelectUnitless header="Tipo de pozo" value={tipoDePozo} callback={(e) => setTipoDePozo(e.value)}  name='tipoDePozo' options={tipoDePozoOptions} onBlur={this.updateErrors} errors={this.state.errors} />
           <InputRow header="Pws" name='pws' value={pws} onChange={setPws} unit={<div>Kg/cm<sup>2</sup></div>} onBlur={this.updateErrors} errors={this.state.errors} />
           <InputDate header="Pws (fecha)" name='pwsFecha' value={pwsFecha} onChange={setPwsFecha} onBlur={this.updateErrors} errors={this.state.errors} />
           <InputRow header="Pwf" name='pwf' value={pwf} onChange={setPwf} unit={<div>Kg/cm<sup>2</sup></div>} onBlur={this.updateErrors} errors={this.state.errors} />
@@ -702,7 +696,8 @@ const mapStateToProps = state => ({
   hasSubmitted: state.getIn(['global', 'hasSubmitted']),
   generalData: state.get('fichaTecnicaDelPozoHighLevel'),
   tipoDeSistemo: state.getIn(['sistemasArtificialesDeProduccion', 'tipoDeSistemo']),
-  token: state.getIn(['user', 'token'])
+  token: state.getIn(['user', 'token']),
+  tipoDePozoOptions: state.getIn(['global', 'tipoDePozoOptions']),
 })
 
 const mapDispatchToProps = dispatch => ({

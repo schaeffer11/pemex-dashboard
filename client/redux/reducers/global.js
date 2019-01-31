@@ -20,6 +20,9 @@ const initialState = Map({
     litologiaOptions: [],
     tipoDeTerminationOptions: [],
     tipoDeLinerOptions: [],
+    formacionOptions: [],
+    tipoDePozoOptions: [],
+    tratamientoPorOptions: [],
 })
 
 
@@ -55,6 +58,12 @@ const global = (state = initialState, action) => {
       return state.set('tipoDeTerminationOptions', action.value)
     case 'set_tipoDeLinerOptions':
       return state.set('tipoDeLinerOptions', action.value)
+    case 'set_formacionOptions':
+      return state.set('formacionOptions', action.value)
+    case 'set_tipoDePozoOptions':
+      return state.set('tipoDePozoOptions', action.value)
+    case 'set_tratamientoPorOptions':
+      return state.set('tratamientoPorOptions', action.value)
     default:
    		return state
   }
