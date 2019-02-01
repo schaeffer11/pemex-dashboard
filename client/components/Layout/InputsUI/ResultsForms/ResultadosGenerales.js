@@ -86,7 +86,7 @@ import { sortLabels } from '../../../../lib/formatters';
     let { canceled } = this.state
     const { fechaIntervencion, comentariosIntervencion, justificacionIntervencion, wasCancelled } = formData
 
-    let options = [{ label: 'No', value: false},{ label: 'Yes', value: true}]
+    let options = [{ label: 'No', value: false},{ label: 'Sí', value: true}]
 
 
     return (
