@@ -28,7 +28,7 @@
   "author": "Schaeffer Reed",
   "license": "UNLICENSED",
   "dependencies": {
-    "ajv": "^6.5.3",
+    "ajv": "^6.12.3",
     "app-root-path": "^2.1.0",
     "autobind-decorator": "^2.1.0",
     "aws-sdk": "^2.313.0",
